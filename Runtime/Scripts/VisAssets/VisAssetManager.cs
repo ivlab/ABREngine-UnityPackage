@@ -13,26 +13,13 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace IVLab.ABREngine {
-    public class VisAssetManager : MonoBehaviour
+    public class VisAssetManager : IVLab.Utilities.Singleton<VisAssetManager>
     {
         public string appDataPath;
 
         public const string VISASSET_JSON = "artifact.json";
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
-
-        static VisAssetManager _instance;
-        public static VisAssetManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = FindObjectOfType<VisAssetManager>();
-                if (_instance == null)
-                    _instance = new GameObject("Vis Asset Manager").AddComponent<VisAssetManager>();
-                return _instance;
-            }
-        }
 
         void Start() {
             appDataPath = Path.Combine(Application.persistentDataPath, "media", "visassets");
@@ -77,9 +64,6 @@ namespace IVLab.ABREngine {
             }
 
             var guid = new System.Guid(jsonData["uuid"].ToString());
-
-            GameObject visAssetObject = new GameObject(type + " " + jsonData["name"]);
-            visAssetObject.transform.SetParent(transform);
 
             if (type == "colormap")
             {

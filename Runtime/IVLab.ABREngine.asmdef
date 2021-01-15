@@ -1,6 +1,8 @@
 {
     "name": "IVLab.ABREngine",
-    "references": [],
+    "references": [
+        "IVLab.Utilities"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

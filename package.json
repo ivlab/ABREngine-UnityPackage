@@ -3,5 +3,8 @@
     "displayName": "ABR Engine",
     "version": "0.2.0",
     "unity": "2020.1",
-    "description": "Artifact-Based Rendering Engine"
+    "description": "Artifact-Based Rendering Engine",
+    "dependencies": {
+        "edu.umn.cs.ivlab.utilities": "ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git#v0.0.4"
+    }
 }
