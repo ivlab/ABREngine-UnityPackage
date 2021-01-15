@@ -1,5 +1,5 @@
 {
-    "name": "com.ivlab.abrengine",
+    "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
     "version": "0.2.0",
     "unity": "2020.1",

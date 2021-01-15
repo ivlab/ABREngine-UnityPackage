@@ -14,6 +14,8 @@ namespace IVLab.ABREngine
     {
         public Guid Uuid { get; set; }
 
+        public DateTime ImportTime { get; set; }
+
         public VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
 
         public Texture2D Gradient { get; set; } = null;

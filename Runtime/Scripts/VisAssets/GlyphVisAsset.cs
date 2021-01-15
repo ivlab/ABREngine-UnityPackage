@@ -15,6 +15,8 @@ namespace IVLab.ABREngine
     {
         public Guid Uuid { get; set; }
 
+        public DateTime ImportTime { get; set; }
+
         public VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
 
         public List<Mesh> MeshLods { get; set; } = new List<Mesh>();

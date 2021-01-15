@@ -20,6 +20,7 @@ namespace IVLab.ABREngine
     public interface IVisAsset
     {
         Guid Uuid { get; set; }
+        DateTime ImportTime { get; set; }
         VisAssetType VisAssetType { get; }
     }
 }
