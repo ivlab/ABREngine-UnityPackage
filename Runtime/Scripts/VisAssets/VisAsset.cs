@@ -15,6 +15,7 @@ namespace IVLab.ABREngine
         Glyph,
         LineTexture,
         SurfaceTexture,
+        Invalid,
     }
 
     public interface IVisAsset
