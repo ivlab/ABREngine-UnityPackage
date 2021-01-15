@@ -1,0 +1,7 @@
+{
+    "name": "com.ivlab.abrengine",
+    "displayName": "ABR Engine",
+    "version": "0.2.0",
+    "unity": "2020.1",
+    "description": "Artifact-Based Rendering Engine"
+}
