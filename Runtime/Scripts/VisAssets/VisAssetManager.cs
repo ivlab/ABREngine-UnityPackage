@@ -53,6 +53,8 @@ namespace IVLab.ABREngine {
             JObject jsonData = JObject.Parse(reader.ReadToEnd());
             reader.Close();
 
+            var guid = new System.Guid(jsonData["uuid"].ToString());
+
             string type = "";
             if (jsonData.ContainsKey("artifactType"))
             {
@@ -61,9 +63,8 @@ namespace IVLab.ABREngine {
             else if (jsonData.ContainsKey("type"))
             {
                 type = jsonData["type"].ToString();
+                Debug.LogWarning(string.Format("VisAsset {0}: Use of field `type` is deprecated. Use `artifactType` instead.", guid.ToString().Substring(0, 8)));
             }
-
-            var guid = new System.Guid(jsonData["uuid"].ToString());
 
             if (type == "colormap")
             {
