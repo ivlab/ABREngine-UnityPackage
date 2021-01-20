@@ -24,30 +24,30 @@ namespace IVLab.ABREngine {
         void Start() {
             appDataPath = Path.Combine(Application.persistentDataPath, "media", "visassets");
             Directory.CreateDirectory(appDataPath);
-            LoadLibrary();
+            LoadVisAssetPalette();
         }
 
-        public void LoadLibrary()
+        public void LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
 
             foreach (var filePath in files)
             {
-                LoadVisasset(filePath);
+                LoadVisAsset(filePath);
             }
         }
 
-        public void LoadVisasset(Guid visAssetUUID)
+        public void LoadVisAsset(Guid visAssetUUID)
         {
             var visassetPath = Path.Combine(
                 appDataPath,
                 visAssetUUID.ToString(),
                 VISASSET_JSON
             );
-            LoadVisasset(visassetPath);
+            LoadVisAsset(visassetPath);
         }
 
-        public void LoadVisasset(string filePath, bool replaceExisting=false)
+        public void LoadVisAsset(string filePath, bool replaceExisting=false)
         {
             StreamReader reader = new StreamReader(filePath);
             JObject jsonData = JObject.Parse(reader.ReadToEnd());
