@@ -167,33 +167,37 @@ namespace IVLab.ABREngine
                     _visAssets[guid] = visAsset;
                 }
 
-                //     if (type == "line")
-                //     {
-                //         LineTextureVisAsset visAsset = ABRManager.CreateNode<LineTextureVisAsset>(new System.Guid(jsonData["uuid"].ToString()));
-                //         visAsset.ImportTime = DateTime.Now;
+                if (type == "line")
+                {
+                    LineTextureVisAsset visAsset = new LineTextureVisAsset();
+                    visAsset.Uuid = guid;
+                    visAsset.ImportTime = DateTime.Now;
 
-                //         ABRManager.Instance.SetNodeLabel(visAsset, jsonData["name"]?.ToString() ?? "");
+                    var artifactData = jsonData["artifactData"];
 
-                //         var artifactData = jsonData["artifactData"];
-                //         try
-                //         {
-                //             if (artifactData.ContainsKey("horizontal"))
-                //             {
-                //                 var texturePath = VisAssetDataPath(filePath, artifactData["horizontal"].ToString());
+                    string texturePath = "";
+                    try
+                    {
+                        texturePath = VisAssetDataPath(filePath, artifactData["horizontal"].ToString());
+                        if (!File.Exists(texturePath))
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Debug.LogErrorFormat("VisAsset {0} missing horizontal image artifact data", guid.ToString().Substring(0, 8));
+                        throw e;
+                    }
 
-                //                 var textureData = File.ReadAllBytes(texturePath); // ERROR: The name 'File' does not exist in the current context?
-                //                 var texture = new Texture2D(2, 2);
-                //                 texture.LoadImage(textureData);
+                    var textureData = File.ReadAllBytes(texturePath);
+                    var texture = new Texture2D(2, 2);
+                    texture.LoadImage(textureData);
 
-                //                 visAsset.TextureArray = new Texture2D[] { texture };
-                //             }
-                //             else
-                //             {
-                //                 throw (new System.Exception());
-                //             }
-                //         }
-                //         catch (System.Exception e) { Debug.Log("VisAsset not suppported yet: " + type + " (" + jsonData["uuid"].ToString() + ")"); }
-                //     }
+                    visAsset.TextureArray = new Texture2D[] { texture };
+
+                    _visAssets[guid] = visAsset;
+                }
 
 
                 //     if (type == "texture")
