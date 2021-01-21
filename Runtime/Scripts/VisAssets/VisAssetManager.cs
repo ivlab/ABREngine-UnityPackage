@@ -84,161 +84,172 @@ namespace IVLab.ABREngine
                 Debug.LogWarning(string.Format("VisAsset {0}: Use of field `type` is deprecated. Use `artifactType` instead.", guid.ToString().Substring(0, 8)));
             }
 
-            try
+            if (type == "colormap")
             {
-                if (type == "colormap")
+                ColormapVisAsset visAsset;
+                if (replaceExisting && _visAssets.ContainsKey(guid))
                 {
-                    ColormapVisAsset visAsset;
-                    if (replaceExisting && _visAssets.ContainsKey(guid))
-                    {
-                        visAsset = _visAssets[guid] as ColormapVisAsset;
-                    }
-                    else
-                    {
-                        visAsset = new ColormapVisAsset();
-                        visAsset.Uuid = guid;
-                    }
-                    visAsset.ImportTime = DateTime.Now;
-
-                    string relativeColormapPath = jsonData["artifactData"]["colormap"].ToString();
-
-                    string colormapfilePath = Path.Combine(Path.GetDirectoryName(filePath), relativeColormapPath);
-                    Texture2D texture = null;
-
-                    if (File.Exists(colormapfilePath))
-                    {
-                        texture = ColormapUtilities.ColormapFromFile(colormapfilePath);
-                        visAsset.Gradient = texture;
-                    }
-
-                    _visAssets[guid] = visAsset;
+                    visAsset = _visAssets[guid] as ColormapVisAsset;
                 }
-
-                if (type == "glyph")
+                else
                 {
-                    GlyphVisAsset visAsset = new GlyphVisAsset();
+                    visAsset = new ColormapVisAsset();
                     visAsset.Uuid = guid;
-                    visAsset.ImportTime = DateTime.Now;
-
-                    var artifactData = jsonData["artifactData"];
-                    List<JObject> lodsList = null;
-
-                    try
-                    {
-                        lodsList = artifactData["lods"].ToObject<List<JObject>>();
-                    }
-                    catch (ArgumentException)
-                    {
-                        if (artifactData is JArray)
-                        {
-                            Debug.LogWarning(string.Format(
-                                "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
-                                guid.ToString().Substring(0, 8)
-                            ));
-                            lodsList = artifactData.ToObject<List<JObject>>();
-                        }
-                    }
-                    foreach (JObject lodJson in lodsList)
-                    {
-                        var meshPath = VisAssetDataPath(filePath, lodJson["mesh"].ToString());
-                        var normalPath = VisAssetDataPath(filePath, lodJson["normal"].ToString());
-                        GameObject loadedObjGameObject = null;
-                        try
-                        {
-                            loadedObjGameObject = new IVLab.OBJImport.OBJLoader().Load(meshPath);
-                        }
-                        catch (System.Exception e)
-                        {
-                            Debug.LogError(e);
-                        }
-                        loadedObjGameObject.transform.SetParent(transform);
-                        loadedObjGameObject.SetActive(false);
-                        var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
-                        GameObject.Destroy(loadedObjGameObject);
-
-                        var normalData = File.ReadAllBytes(normalPath);
-                        var normalMap = new Texture2D(2, 2);
-                        normalMap.LoadImage(normalData);
-
-                        visAsset.MeshLods.Add(loadedMesh);
-                        visAsset.NormalMapLods.Add(normalMap);
-                    }
-
-                    _visAssets[guid] = visAsset;
                 }
+                visAsset.ImportTime = DateTime.Now;
 
-                if (type == "line")
+                string relativeColormapPath = jsonData["artifactData"]["colormap"].ToString();
+
+                string colormapfilePath = Path.Combine(Path.GetDirectoryName(filePath), relativeColormapPath);
+                Texture2D texture = null;
+
+                if (File.Exists(colormapfilePath))
                 {
-                    LineTextureVisAsset visAsset = new LineTextureVisAsset();
-                    visAsset.Uuid = guid;
-                    visAsset.ImportTime = DateTime.Now;
-
-                    var artifactData = jsonData["artifactData"];
-
-                    string texturePath = "";
-                    try
-                    {
-                        texturePath = VisAssetDataPath(filePath, artifactData["horizontal"].ToString());
-                        if (!File.Exists(texturePath))
-                        {
-                            throw new ArgumentException();
-                        }
-                    }
-                    catch (ArgumentException e)
-                    {
-                        Debug.LogErrorFormat("VisAsset {0} missing horizontal image artifact data", guid.ToString().Substring(0, 8));
-                        throw e;
-                    }
-
-                    var textureData = File.ReadAllBytes(texturePath);
-                    var texture = new Texture2D(2, 2);
-                    texture.LoadImage(textureData);
-
-                    visAsset.TextureArray = new Texture2D[] { texture };
-
-                    _visAssets[guid] = visAsset;
+                    texture = ColormapUtilities.ColormapFromFile(colormapfilePath);
+                    visAsset.Gradient = texture;
                 }
 
-
-                //     if (type == "texture")
-                //     {
-                //         SurfaceTextureVisAsset visAsset = ABRManager.CreateNode<SurfaceTextureVisAsset>(new System.Guid(jsonData["uuid"].ToString()));
-                //         visAsset.ImportTime = DateTime.Now;
-
-                //         ABRManager.Instance.SetNodeLabel(visAsset, jsonData["name"]?.ToString() ?? "");
-
-                //         var artifactData = jsonData["artifactData"];
-                //         try
-                //         {
-                //             if (artifactData.ContainsKey("image"))
-                //             {
-                //                 var texturePath = VisAssetDataPath(filePath, artifactData["image"].ToString());
-
-                //                 var textureData = File.ReadAllBytes(texturePath); // ERROR: The name 'File' does not exist in the current context?
-                //                 var texture = new Texture2D(2, 2);
-                //                 texture.LoadImage(textureData);
-
-                //                 visAsset.TextureArray = new Texture2D[] { texture };
-
-
-                //                 var normalPath = VisAssetDataPath(filePath, artifactData["normalmap"].ToString());
-
-                //                 var normalData = File.ReadAllBytes(normalPath); // ERROR: The name 'File' does not exist in the current context?
-                //                 var normal = new Texture2D(2, 2);
-                //                 normal.LoadImage(normalData);
-
-                //                 visAsset.NormalMapArray = new Texture2D[] { normal };
-                //             }
-                //             else
-                //             {
-                //                 throw (new System.Exception());
-                //             }
-                //         }
-                //         catch (System.Exception e) { Debug.Log("VisAsset not suppported yet: " + jsonData["name"]?.ToString() ?? "Untitled" + " (" + jsonData["uuid"].ToString() + ")"); }
-                //     }
+                _visAssets[guid] = visAsset;
             }
-            catch (System.Exception e)
+
+            if (type == "glyph")
             {
+                GlyphVisAsset visAsset = new GlyphVisAsset();
+                visAsset.Uuid = guid;
+                visAsset.ImportTime = DateTime.Now;
+
+                var artifactData = jsonData["artifactData"];
+                List<JObject> lodsList = null;
+
+                try
+                {
+                    lodsList = artifactData["lods"].ToObject<List<JObject>>();
+                }
+                catch (ArgumentException)
+                {
+                    if (artifactData is JArray)
+                    {
+                        Debug.LogWarning(string.Format(
+                            "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
+                            guid.ToString().Substring(0, 8)
+                        ));
+                        lodsList = artifactData.ToObject<List<JObject>>();
+                    }
+                }
+                foreach (JObject lodJson in lodsList)
+                {
+                    var meshPath = VisAssetDataPath(filePath, lodJson["mesh"].ToString());
+                    var normalPath = VisAssetDataPath(filePath, lodJson["normal"].ToString());
+                    GameObject loadedObjGameObject = null;
+                    try
+                    {
+                        loadedObjGameObject = new IVLab.OBJImport.OBJLoader().Load(meshPath);
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+                    loadedObjGameObject.transform.SetParent(transform);
+                    loadedObjGameObject.SetActive(false);
+                    var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
+                    GameObject.Destroy(loadedObjGameObject);
+
+                    var normalData = File.ReadAllBytes(normalPath);
+                    var normalMap = new Texture2D(2, 2);
+                    normalMap.LoadImage(normalData);
+
+                    visAsset.MeshLods.Add(loadedMesh);
+                    visAsset.NormalMapLods.Add(normalMap);
+                }
+
+                _visAssets[guid] = visAsset;
+            }
+
+            if (type == "line")
+            {
+                LineTextureVisAsset visAsset = new LineTextureVisAsset();
+                visAsset.Uuid = guid;
+                visAsset.ImportTime = DateTime.Now;
+
+                var artifactData = jsonData["artifactData"];
+
+                string texturePath = "";
+                try
+                {
+                    texturePath = VisAssetDataPath(filePath, artifactData["horizontal"].ToString());
+                    if (!File.Exists(texturePath))
+                    {
+                        throw new ArgumentException();
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogErrorFormat("VisAsset {0} missing horizontal image artifact data", guid.ToString().Substring(0, 8));
+                    throw e;
+                }
+
+                var textureData = File.ReadAllBytes(texturePath);
+                var texture = new Texture2D(2, 2);
+                texture.LoadImage(textureData);
+
+                visAsset.TextureArray = new Texture2D[] { texture };
+
+                _visAssets[guid] = visAsset;
+            }
+
+
+            if (type == "texture")
+            {
+                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset();
+                visAsset.Uuid = guid;
+                visAsset.ImportTime = DateTime.Now;
+
+                var artifactData = jsonData["artifactData"];
+
+                string texturePath = "";
+                try
+                {
+                    texturePath = VisAssetDataPath(filePath, artifactData["image"].ToString());
+                    if (!File.Exists(texturePath))
+                    {
+                        throw new ArgumentException();
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogErrorFormat("VisAsset {0} missing image texture", guid.ToString().Substring(0, 8));
+                    throw e;
+                }
+
+                var textureData = File.ReadAllBytes(texturePath);
+                var texture = new Texture2D(2, 2);
+                texture.LoadImage(textureData);
+
+                visAsset.TextureArray = new Texture2D[] { texture };
+
+
+                string normalPath = "";
+                try
+                {
+                    normalPath = VisAssetDataPath(filePath, artifactData["normalmap"].ToString());
+                    if (!File.Exists(normalPath))
+                    {
+                        throw new ArgumentException();
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogErrorFormat("VisAsset {0} missing normal map texture", guid.ToString().Substring(0, 8));
+                    throw e;
+                }
+
+                var normalData = File.ReadAllBytes(normalPath);
+                var normal = new Texture2D(2, 2);
+                normal.LoadImage(normalData);
+
+                visAsset.NormalMapArray = new Texture2D[] { normal };
+
+                _visAssets[guid] = visAsset;
             }
         }
     }
