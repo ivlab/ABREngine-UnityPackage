@@ -1,7 +1,9 @@
 {
     "name": "IVLab.ABREngine",
     "references": [
-        "IVLab.Utilities"
+        "IVLab.Utilities",
+        "IVLab.OBJImport",
+        "Newtonsoft.Json"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
