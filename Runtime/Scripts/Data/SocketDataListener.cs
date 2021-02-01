@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/* SocketDataListener.cs
+ *
+ * Copyright (c) 2021 University of Minnesota
+ * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson
+ * <sethalanjohnson@gmail.com>, Greg Abram <gda@tacc.utexas.edu>
+ *
+ */
+
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
@@ -174,42 +181,6 @@ namespace IVLab.ABREngine
             return ptd;
         }
 
-        static void DecodeBinary(ref BinaryDataHeader bdh, ref BinaryData bd, SocketTextData ptd)
-        {
-            bdh = JsonUtility.FromJson<BinaryDataHeader>(ptd.json);
-            bd = new BinaryData { };
-
-            int offset = 0;
-
-            bd.vertices = new float[3 * bdh.num_points];
-            int nbytes = 3 * bdh.num_points * sizeof(float);
-            Buffer.BlockCopy(ptd.bindata, offset, bd.vertices, 0, nbytes);
-            offset = offset + nbytes;
-
-            bd.index_array = new int[bdh.num_cell_indices];
-            nbytes = bdh.num_cell_indices * sizeof(int);
-            Buffer.BlockCopy(ptd.bindata, offset, bd.index_array, 0, nbytes);
-            offset = offset + nbytes;
-
-            bd.scalar_arrays = new float[bdh.scalarArrayNames.Length][];
-            nbytes = bdh.num_points * sizeof(float);
-            for (int i = 0; i < bdh.scalarArrayNames.Length; i++)
-            {
-                bd.scalar_arrays[i] = new float[bdh.num_points];
-                Buffer.BlockCopy(ptd.bindata, offset, bd.scalar_arrays[i], 0, nbytes);
-                offset = offset + nbytes;
-            }
-
-            bd.vector_arrays = new float[bdh.vectorArrayNames.Length][];
-            nbytes = 3 * bdh.num_points * sizeof(float);
-            for (int i = 0; i < bdh.vectorArrayNames.Length; i++)
-            {
-                bd.vector_arrays[i] = new float[3 * bdh.num_points];
-                Buffer.BlockCopy(ptd.bindata, offset, bd.vector_arrays[i], 0, nbytes);
-                offset = offset + nbytes;
-            }
-        }
-
         public void DoAcceptSocketCallback(IAsyncResult ar)
         {
             TcpListener listener = (TcpListener)ar.AsyncState;
@@ -250,9 +221,9 @@ namespace IVLab.ABREngine
                         {
                             // dataManager.CacheData(textData.label, textData.json, textData.bindata);
 
-                            // Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
-                            // Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
-                            // Dataset dataset = new Dataset(json, b);
+                            Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
+                            Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
+                            Dataset dataset = new Dataset(json, b);
                             // dataManager.HandleDataset(textData.label, dataset, true, handlingDone);
                         });
                 }
