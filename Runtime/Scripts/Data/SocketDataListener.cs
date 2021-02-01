@@ -83,38 +83,13 @@ namespace IVLab.ABREngine
 
 
 
+    [RequireComponent(typeof(DataManager))]
     public class SocketDataListener : Singleton<SocketDataListener>
     {
         public int port = 1900;
 
         [SerializeField]
         public TcpListener listener = null;
-
-        // private DataManager _dataManager;
-
-        // private DataManager dataManager
-        // {
-        //     get
-        //     {
-        //         if (_dataManager == null) _dataManager = GetComponent<DataManager>();
-        //         return _dataManager;
-        //     }
-        // }
-
-        List<Task> handlingTasks = new List<Task>();
-
-        Queue<string> logLines = new Queue<string>();
-
-        void Log(string message)
-        {
-            lock (logLock)
-            {
-                logLines.Enqueue("[" + System.DateTime.UtcNow.ToString("HH:mm:ss:ff") + "]" + message);
-            }
-        }
-
-        [TextArea(25, 25)]
-        public string log;
 
         public void StartServer()
         {
@@ -209,33 +184,25 @@ namespace IVLab.ABREngine
                     // We do, however, need to first log that there's a dataset to handle
                     // to make the update wait for it.
 
-                    BoolReference handlingDone = new BoolReference(false);
-                    // handlingTasks.Add(UntilTrue(() => handlingDone == true));
-
                     await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "ok", cancelToken);
                     Debug.Log("Sent label \"" + textData.label + "\" " + " ok");
 
                     if (textData.label != "")
                         await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                         {
-                            // dataManager.CacheData(textData.label, textData.json, textData.bindata);
-
                             Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
                             Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
                             Dataset dataset = new Dataset(json, b);
-                            // dataManager.HandleDataset(textData.label, dataset, true, handlingDone);
+
+                            DataManager.Instance.ImportDataset(textData.label, ref dataset);
+                            DataManager.Instance.CacheData(textData.label, textData.json, textData.bindata);
                         });
                 }
                 else
                 {
                     Debug.Log("Waiting for all objects to update...");
-                    // await Task.WhenAll(handlingTasks);
-                    // handlingTasks.Clear();
-                    // await SendStringToSocketAsync(client.Client, "up");
                     await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "up", cancelToken);
                     Debug.Log("All objects have been unpacked, Sent label \"" + textData.label + "\" " + " ok");
-                    // dataManager.ReleaseHold();
-                    // await SendStringToSocketAsync(client.Client, "ok");
                     await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "ok", cancelToken);
                     Debug.Log("Sent update ok");
                 }
@@ -257,27 +224,6 @@ namespace IVLab.ABREngine
         private void OnDestroy()
         {
             StopServer();
-        }
-
-        object logLock = new object();
-        // Update is called once per frame
-        void Update()
-        {
-
-            while (logLines.Count > 25)
-            {
-                logLines.Dequeue();
-            }
-
-            log = "";
-            lock (logLock)
-            {
-                foreach (var line in logLines)
-                {
-                    log += line + "\n";
-                }
-            }
-
         }
     }
 }
