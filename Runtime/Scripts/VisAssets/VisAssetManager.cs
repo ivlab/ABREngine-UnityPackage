@@ -1,7 +1,7 @@
 /* VisAssetManager.cs
  *
  * Copyright (c) 2021 University of Minnesota
- * Author: Bridger Herman <herma582@umn.edu>
+ * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
  */
 
