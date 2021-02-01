@@ -101,8 +101,6 @@ namespace IVLab.ABREngine
         //     }
         // }
 
-        Queue<Action> updateActions = new Queue<Action>();
-
         List<Task> handlingTasks = new List<Task>();
 
         Queue<string> logLines = new Queue<string>();
@@ -194,6 +192,7 @@ namespace IVLab.ABREngine
             }
             catch (Exception e)
             {
+                Debug.LogError(e);
                 return;
             }
             Debug.Log("Handling a connection");
@@ -217,7 +216,7 @@ namespace IVLab.ABREngine
                     Debug.Log("Sent label \"" + textData.label + "\" " + " ok");
 
                     if (textData.label != "")
-                        updateActions.Enqueue(() =>
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                         {
                             // dataManager.CacheData(textData.label, textData.json, textData.bindata);
 
@@ -252,6 +251,7 @@ namespace IVLab.ABREngine
         void Start()
         {
             StartServer();
+            UnityThreadScheduler.GetInstance();
         }
 
         private void OnDestroy()
@@ -263,12 +263,6 @@ namespace IVLab.ABREngine
         // Update is called once per frame
         void Update()
         {
-            while (updateActions.Count > 0)
-            {
-                updateActions.Dequeue().Invoke();
-            }
-
-
 
             while (logLines.Count > 25)
             {
