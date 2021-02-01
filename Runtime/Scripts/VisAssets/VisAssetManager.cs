@@ -155,7 +155,8 @@ namespace IVLab.ABREngine
                     GameObject.Destroy(loadedObjGameObject);
 
                     var normalData = File.ReadAllBytes(normalPath);
-                    var normalMap = new Texture2D(2, 2);
+                    // Textures exported by Blender are in Linear color space
+                    var normalMap = new Texture2D(2, 2, textureFormat:TextureFormat.RGBA32, mipChain:true, linear:true);
                     normalMap.LoadImage(normalData);
 
                     visAsset.MeshLods.Add(loadedMesh);
