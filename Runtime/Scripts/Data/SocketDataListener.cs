@@ -131,15 +131,14 @@ namespace IVLab.ABREngine
                     Debug.Log("Sent label \"" + textData.label + "\" " + " ok");
 
                     if (textData.label != "")
-                        await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-                        {
-                            Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
-                            Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
-                            Dataset dataset = new Dataset(json, b);
+                    {
+                        Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
+                        Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
+                        Dataset dataset = new Dataset(json, b);
 
-                            DataManager.Instance.ImportDataset(textData.label, dataset);
-                            DataManager.Instance.CacheData(textData.label, textData.json, textData.bindata);
-                        });
+                        DataManager.Instance.ImportDataset(textData.label, dataset);
+                        DataManager.Instance.CacheData(textData.label, textData.json, textData.bindata);
+                    }
                 }
                 else
                 {
