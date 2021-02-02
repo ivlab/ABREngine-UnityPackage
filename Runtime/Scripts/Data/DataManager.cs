@@ -17,34 +17,36 @@ namespace IVLab.ABREngine
 {
     public class DataManager : Singleton<DataManager>
     {
-        private string dataPath;
+        private string appDataPath;
 
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
 
         void Start()
         {
-            this.dataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
+            this.appDataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
         }
 
-        private FileInfo GetDatasetMetadataFile(string label)
+        public Dataset GetDataset(string dataPath)
         {
-            return new System.IO.FileInfo(System.IO.Path.Combine(this.dataPath, label + ".json"));
-        }
-        private FileInfo GetDatasetBinaryFile(string label)
-        {
-            return new System.IO.FileInfo(System.IO.Path.Combine(this.dataPath, label + ".bin"));
+            return datasets[dataPath];
         }
 
-        public void ImportDataset(string label, Dataset dataset)
+        public void ImportDataset(string dataPath, Dataset dataset)
         {
-            datasets[label] = dataset;
+            if (!DataPath.FollowsConvention(dataPath, DataPath.DataPathType.KeyData))
+            {
+                Debug.LogWarningFormat(
+                    "Label `{0}` does not follow data path convention and" +
+                    "may not be imported correctly.\nUse Convention {1}", dataPath, DataPath.GetConvention());
+            }
+            datasets[dataPath] = dataset;
         }
 
-        public void LoadDatasetFromCache(string label)
+        public void LoadDatasetFromCache(string dataPath)
         {
-            Debug.Log("Loading " + label + " from " + this.dataPath);
+            Debug.Log("Loading " + dataPath + " from " + this.appDataPath);
 
-            FileInfo jsonFile = GetDatasetMetadataFile(label);
+            FileInfo jsonFile = GetDatasetMetadataFile(dataPath);
             string metadataContent = "";
             using (StreamReader file = new StreamReader(jsonFile.FullName))
             {
@@ -53,20 +55,20 @@ namespace IVLab.ABREngine
 
             Dataset.JsonHeader metadata = JsonConvert.DeserializeObject<Dataset.JsonHeader>(metadataContent);
 
-            FileInfo binFile = GetDatasetBinaryFile(label);
+            FileInfo binFile = GetDatasetBinaryFile(dataPath);
             byte[] dataBytes = File.ReadAllBytes(binFile.FullName);
 
             Dataset.BinaryData data = new Dataset.BinaryData(metadata, dataBytes);
 
             Dataset ds = new Dataset(metadata, data);
-            ImportDataset(label, ds);
+            ImportDataset(dataPath, ds);
         }
 
-        public void CacheData(string label, string json, byte[] data)
+        public void CacheData(string dataPath, string json, byte[] data)
         {
-            Debug.Log("Saving " + label + " to " + this.dataPath);
+            Debug.Log("Saving " + dataPath + " to " + this.appDataPath);
 
-            FileInfo jsonFile = GetDatasetMetadataFile(label);
+            FileInfo jsonFile = GetDatasetMetadataFile(dataPath);
 
             if (!jsonFile.Directory.Exists)
             {
@@ -78,11 +80,20 @@ namespace IVLab.ABREngine
                 file.Write(json);
             }
 
-            FileInfo binFile = new FileInfo(Path.Combine(this.dataPath, label + ".bin"));
+            FileInfo binFile = new FileInfo(Path.Combine(this.appDataPath, dataPath + ".bin"));
 
             FileStream fs = File.Create(binFile.FullName);
             fs.Write(data, 0, data.Length);
             fs.Close();
+        }
+
+        private FileInfo GetDatasetMetadataFile(string dataPath)
+        {
+            return new System.IO.FileInfo(System.IO.Path.Combine(this.appDataPath, dataPath + ".json"));
+        }
+        private FileInfo GetDatasetBinaryFile(string dataPath)
+        {
+            return new System.IO.FileInfo(System.IO.Path.Combine(this.appDataPath, dataPath + ".bin"));
         }
     }
 }
