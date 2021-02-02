@@ -137,7 +137,7 @@ namespace IVLab.ABREngine
                             Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
                             Dataset dataset = new Dataset(json, b);
 
-                            DataManager.Instance.ImportDataset(textData.label, ref dataset);
+                            DataManager.Instance.ImportDataset(textData.label, dataset);
                             DataManager.Instance.CacheData(textData.label, textData.json, textData.bindata);
                         });
                 }
