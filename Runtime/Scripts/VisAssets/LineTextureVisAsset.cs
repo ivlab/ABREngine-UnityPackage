@@ -18,21 +18,6 @@ namespace IVLab.ABREngine
 
         public VisAssetType VisAssetType { get; } = VisAssetType.SurfaceTexture;
 
-        public Texture2D[] TextureArray { get; set; } = null;
-
-        public Texture2D[] GetTextureList()
-        {
-            return TextureArray;
-        }
-
-        public Texture2D GetTexture()
-        {
-            if (TextureArray != null && TextureArray.Length > 0)
-            {
-                return TextureArray[0];
-            }
-            else return null;
-        }
-
+        public Texture2D Texture { get; set; } = null;
     }
 }

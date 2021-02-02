@@ -81,7 +81,7 @@ namespace IVLab.ABREngine
             else if (jsonData.ContainsKey("type"))
             {
                 type = jsonData["type"].ToString();
-                Debug.LogWarning(string.Format("VisAsset {0}: Use of field `type` is deprecated. Use `artifactType` instead.", guid.ToString().Substring(0, 8)));
+                Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
             }
 
             if (type == "colormap")
@@ -193,7 +193,7 @@ namespace IVLab.ABREngine
                 var texture = new Texture2D(2, 2);
                 texture.LoadImage(textureData);
 
-                visAsset.TextureArray = new Texture2D[] { texture };
+                visAsset.Texture = texture;
 
                 _visAssets[guid] = visAsset;
             }
@@ -226,7 +226,7 @@ namespace IVLab.ABREngine
                 var texture = new Texture2D(2, 2);
                 texture.LoadImage(textureData);
 
-                visAsset.TextureArray = new Texture2D[] { texture };
+                visAsset.Texture = texture;
 
 
                 string normalPath = "";
@@ -248,7 +248,7 @@ namespace IVLab.ABREngine
                 var normal = new Texture2D(2, 2);
                 normal.LoadImage(normalData);
 
-                visAsset.NormalMapArray = new Texture2D[] { normal };
+                visAsset.NormalMap = normal;
 
                 _visAssets[guid] = visAsset;
             }
