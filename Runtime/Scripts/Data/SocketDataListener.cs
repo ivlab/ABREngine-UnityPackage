@@ -26,63 +26,6 @@ namespace IVLab.ABREngine
         public byte[] bindata;
     }
 
-    [System.Serializable]
-    public class BinaryDataHeader
-    {
-        [SerializeField]
-        public MeshTopology meshTopology;
-
-        [SerializeField]
-        public int num_points;
-
-        [SerializeField]
-        public int num_cells;
-
-        [SerializeField]
-        public int num_cell_indices;
-
-        [SerializeField]
-        public string[] scalarArrayNames;
-
-        [SerializeField]
-        public string[] vectorArrayNames;
-
-        [SerializeField]
-        public Bounds bounds;
-
-        [SerializeField]
-        public float[] scalarMaxes;
-
-        [SerializeField]
-        public float[] scalarMins;
-    }
-
-    public class BinaryData
-    {
-        public float[] vertices;
-        public int[] index_array;
-        public float[][] scalar_arrays;
-        public float[][] vector_arrays;
-    }
-
-    public class BoolReference
-    {
-        public BoolReference(bool b)
-        {
-            this.state = b;
-        }
-        public static implicit operator BoolReference(bool b) { return new BoolReference(b); }
-
-        public static implicit operator bool(BoolReference b)
-        {
-            return b is BoolReference && b.state;
-        }
-
-        public bool state = false;
-    }
-
-
-
     [RequireComponent(typeof(DataManager))]
     public class SocketDataListener : Singleton<SocketDataListener>
     {
