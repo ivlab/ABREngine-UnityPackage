@@ -9,6 +9,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Newtonsoft.Json.Linq;
 
@@ -21,6 +22,8 @@ namespace IVLab.ABREngine
         public const string VISASSET_JSON = "artifact.json";
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
+        
+        public Dictionary<Guid, IVisAsset> VisAssets { get { return _visAssets; }}
 
         void Start()
         {
@@ -156,7 +159,7 @@ namespace IVLab.ABREngine
 
                     var normalData = File.ReadAllBytes(normalPath);
                     // Textures exported by Blender are in Linear color space
-                    var normalMap = new Texture2D(2, 2, textureFormat:TextureFormat.RGBA32, mipChain:true, linear:true);
+                    var normalMap = new Texture2D(2, 2, textureFormat: TextureFormat.RGBA32, mipChain: true, linear: true);
                     normalMap.LoadImage(normalData);
 
                     visAsset.MeshLods.Add(loadedMesh);
