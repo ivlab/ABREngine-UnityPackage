@@ -61,7 +61,6 @@
 			fixed4 _Color;
 			float _Texturescale = 0.5;
 			float _PatternDirectionBlend = 1;
-			float _DataDimension;
 			float _PatternScale;
 			float _PatternSaturation;
 			float _PatternIntensity;
@@ -102,7 +101,7 @@
 			void surf(Input IN, inout SurfaceOutputStandard o)
 			{
 				_Texturescale = _PatternScale;
-				float3 poscoodinates = IN.position.xyz / _DataDimension;
+				float3 poscoodinates = IN.position.xyz;
 				o.Albedo = poscoodinates;
 				// Albedo comes from a texture tinted by color
 				fixed4 variables = IN.color;

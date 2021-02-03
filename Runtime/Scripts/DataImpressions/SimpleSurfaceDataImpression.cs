@@ -20,7 +20,6 @@ namespace IVLab.ABREngine
         public Vector4 scalarMin;
         public Vector4 scalarMax;
         public MeshTopology topology;
-        public float meshScale;
     }
 
 
@@ -54,9 +53,14 @@ namespace IVLab.ABREngine
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
 
+        public SimpleSurfaceDataImpression() : base()
+        {
+            Uuid = Guid.NewGuid();
+        }
+
         public void LoadRenderInfo()
         {
-            if (keyData.Path == null)
+            if (keyData?.Path == null)
             {
                 return;
             }
@@ -103,20 +107,19 @@ namespace IVLab.ABREngine
 
                 };
 
-                // TODO remove this
-                renderInfo.meshScale = 1;
-                if (dataset.bounds.size.magnitude > 10000)
-                    renderInfo.meshScale /= 10000;
-
                 int numCells = dataset.cellIndexCounts.Length;
                 int cellSize = dataset.meshTopology == MeshTopology.Quads ? 4 : 3;
 
                 for (int i = 0; i < sourceVertCount; i++)
-                    renderInfo.vertices[i] = dataset.vertexArray[i] * renderInfo.meshScale;
+                {
+                    renderInfo.vertices[i] = keyData.DataTransform * dataset.vertexArray[i];
+                }
 
                 // Backfaces 
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
-                    renderInfo.vertices[i] = dataset.vertexArray[j] * renderInfo.meshScale;
+                {
+                    renderInfo.vertices[i] = keyData.DataTransform * dataset.vertexArray[j];
+                }
 
                 Vector3[] dataNormals = null;
                 // Vector3[] meshNormals = null;
@@ -270,8 +273,6 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetFloat("_PatternDataMin", SSrenderData.scalarMin[1]);
                 MatPropBlock.SetFloat("_PatternDataMax", SSrenderData.scalarMax[1]);
 
-                // block.SetFloat("_DataDimension", currentGameObject.dataScene.GetDataBounds().size.magnitude * SSrenderData.meshScale);
-                MatPropBlock.SetFloat("_DataDimension", SSrenderData.meshScale);
                 // if (ABRManager.IsValidNode(patternIntensity))
                 // {
                 //     MatPropBlock.SetFloat("_PatternIntensity", patternIntensity.floatVal);
@@ -357,12 +358,6 @@ namespace IVLab.ABREngine
 
                 meshRenderer.SetPropertyBlock(MatPropBlock);
             }
-
-            if (SSrenderData != null && SSrenderData.meshScale > 0)
-            {
-                currentGameObject.transform.localScale = Vector3.one / SSrenderData.meshScale;
-            }
         }
-
     }
 }

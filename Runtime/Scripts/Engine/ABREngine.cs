@@ -23,6 +23,7 @@ namespace IVLab.ABREngine
             dataImpressions.Add(impression);
             GameObject impressionGameObject = new GameObject();
             impressionGameObject.transform.parent = this.transform;
+            impressionGameObject.name = impression.GetType().ToString();
 
             EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
             gameObjectMapping[impression.Uuid] = ego;

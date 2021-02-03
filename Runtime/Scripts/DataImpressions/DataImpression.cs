@@ -71,10 +71,11 @@ namespace IVLab.ABREngine
         public DataImpression()
         {
             MatPropBlock = new MaterialPropertyBlock();
-            Debug.Log(Resources.FindObjectsOfTypeAll(typeof(Material)).Length);
-            Debug.Log(MaterialName);
             ImpressionMaterial = Resources.Load<Material>(MaterialName);
-            Debug.Log(ImpressionMaterial);
+            if (ImpressionMaterial == null)
+            {
+                Debug.LogWarningFormat("Material `{0}` not found for {1}", MaterialName, this.GetType().ToString());
+            }
         }
     }
 

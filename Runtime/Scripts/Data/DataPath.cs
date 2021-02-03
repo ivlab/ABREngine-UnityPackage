@@ -101,10 +101,9 @@ namespace IVLab.ABREngine
             return parts.Length == 4 && parts[2] == pathType.ToString();
         }
 
-        public static string GetConvention()
+        public static string GetConvention(DataPathType pathType)
         {
-            string pathTypeNames = string.Join(", ", Enum.GetNames(typeof(DataPathType)));
-            return string.Format("Organization/Dataset/<{0}>/Name", pathTypeNames);
+            return string.Format("Organization/Dataset/{0}/Name", pathType);
         }
     }
 }

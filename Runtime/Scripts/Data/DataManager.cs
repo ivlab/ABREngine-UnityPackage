@@ -40,30 +40,28 @@ namespace IVLab.ABREngine
 
         public void TryGetDataset(string dataPath, out Dataset dataset)
         {
+            WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             datasets.TryGetValue(dataPath, out dataset);
         }
         public void TryGetScalarVar(string dataPath, out ScalarDataVariable scalarVar)
         {
+            WarnOnDataPathFormat(dataPath, DataPath.DataPathType.ScalarVar);
             scalarVariables.TryGetValue(dataPath, out scalarVar);
         }
         public void TryGetVectorVar(string dataPath, out VectorDataVariable vectorVar)
         {
+            WarnOnDataPathFormat(dataPath, DataPath.DataPathType.VectorVar);
             vectorVariables.TryGetValue(dataPath, out vectorVar);
         }
         public void TryGetKeyData(string dataPath, out IKeyData keyData)
         {
+            WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             keyDataObjects.TryGetValue(dataPath, out keyData);
         }
 
         public void ImportDataset(string dataPath, Dataset dataset)
         {
-            if (!DataPath.FollowsConvention(dataPath, DataPath.DataPathType.KeyData))
-            {
-                Debug.LogWarningFormat(
-                    "Label `{0}` does not follow data path convention and" +
-                    "may not be imported correctly.\nUse Key Data convention {1}", dataPath, DataPath.GetConvention());
-            }
-
+            WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             ImportVariables(dataPath, dataset);
             ImportKeyData(dataPath, dataset);
 
@@ -90,7 +88,7 @@ namespace IVLab.ABREngine
                 metadataContent = file.ReadToEnd();
             }
 
-            Dataset.JsonHeader metadata = JsonConvert.DeserializeObject<Dataset.JsonHeader>(metadataContent);
+            Dataset.JsonHeader metadata = JsonUtility.FromJson<Dataset.JsonHeader>(metadataContent);
 
             FileInfo binFile = GetDatasetBinaryFile(dataPath);
             byte[] dataBytes = File.ReadAllBytes(binFile.FullName);
@@ -178,7 +176,25 @@ namespace IVLab.ABREngine
             string[] args = new string[] { dataPath };
             IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
 
+            Matrix4x4 dataScale = DataScaling.NormalizeDataScale(dataset);
+
+            keyData.DataTransform = dataScale;
+
             keyDataObjects[dataPath] = keyData;
+        }
+
+        // Log a message if the data path doesn't follow convention
+        private void WarnOnDataPathFormat(string dataPath, DataPath.DataPathType dataPathType)
+        {
+            if (!DataPath.FollowsConvention(dataPath, dataPathType))
+            {
+                Debug.LogWarningFormat(
+                    "Label `{0}` does not follow data path convention and " +
+                    "may not be imported correctly.\nUse {1} convention {2}",
+                    dataPath,
+                    dataPathType.ToString(),
+                    DataPath.GetConvention(dataPathType));
+            }
         }
     }
 }
