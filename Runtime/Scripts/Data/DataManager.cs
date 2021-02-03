@@ -5,11 +5,12 @@
  *
  */
 
+using System;
+using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using IVLab.Utilities;
 
@@ -21,6 +22,10 @@ namespace IVLab.ABREngine
 
         // Dictionary of DataPath -> raw datasets that contain the actual data (these are BIG)
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
+
+        // Dictionary of DataPath -> key data objects (paths will match those in
+        // datasets dict)
+        private Dictionary<string, IKeyData> keyDataObjects = new Dictionary<string, IKeyData>();
 
         // Dictionaries of DataPath -> variables that manage min/max values and
         // point to the above datasets
@@ -45,6 +50,10 @@ namespace IVLab.ABREngine
         {
             vectorVariables.TryGetValue(dataPath, out vectorVar);
         }
+        public void TryGetKeyData(string dataPath, out IKeyData keyData)
+        {
+            keyDataObjects.TryGetValue(dataPath, out keyData);
+        }
 
         public void ImportDataset(string dataPath, Dataset dataset)
         {
@@ -56,6 +65,7 @@ namespace IVLab.ABREngine
             }
 
             ImportVariables(dataPath, dataset);
+            ImportKeyData(dataPath, dataset);
 
             datasets[dataPath] = dataset;
         }
@@ -153,6 +163,22 @@ namespace IVLab.ABREngine
                     scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, dataset.GetScalarMax(scalarArrayName));
                 }
             }
+        }
+
+        // Build the key data associations
+        private void ImportKeyData(string dataPath, Dataset dataset)
+        {
+            // Infer the type of data from the topology
+            Type dataType = KeyDataMapping.typeMap[dataset.meshTopology];
+
+            // Use reflection to construct the object (should only match one)
+            ConstructorInfo[] constructors = dataType.GetConstructors();
+
+            // Construct the object with the data path argument
+            string[] args = new string[] { dataPath };
+            IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
+
+            keyDataObjects[dataPath] = keyData;
         }
     }
 }
