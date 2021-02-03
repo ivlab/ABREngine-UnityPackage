@@ -59,10 +59,47 @@ namespace IVLab.ABREngine
             return GetPathParts(dataPath)[3];
         }
 
+        public static string GetOrganizationPath(string dataPath)
+        {
+            return GetPathParts(dataPath)[0];
+        }
+
+        public static string GetDatasetPath(string dataPath)
+        {
+            return Join(GetOrganizationPath(dataPath), GetPathParts(dataPath)[1]);
+        }
+
+        public static string GetPathTypePath(string dataPath)
+        {
+            return Join(GetDatasetPath(dataPath), GetPathParts(dataPath)[2]);
+        }
+
+        public static string GetNamePath(string dataPath)
+        {
+            return Join(GetPathTypePath(dataPath), GetPathParts(dataPath)[3]);
+        }
+
+        public static string Join(string path1, string path2)
+        {
+            if (path1.EndsWith(separator.ToString()))
+            {
+                return path1 + path2;
+            }
+            else
+            {
+                return path1 + separator + path2;
+            }
+        }
+
+        public static string Join(string path1, DataPathType pathType)
+        {
+            return Join(path1, pathType.ToString());
+        }
+
         public static bool FollowsConvention(string label, DataPathType pathType = DataPathType.KeyData)
         {
             var parts = GetPathParts(label);
-            return parts.Length == 4 && parts[3] == pathType.ToString();
+            return parts.Length == 4 && parts[2] == pathType.ToString();
         }
 
         public static string GetConvention()

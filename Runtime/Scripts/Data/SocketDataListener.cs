@@ -108,9 +108,10 @@ namespace IVLab.ABREngine
             {
                 client = listener.EndAcceptTcpClient(ar);
             }
-            catch (Exception e)
+            catch (System.ObjectDisposedException)
             {
-                Debug.LogError(e);
+                // When closing the socket we get a "Cannot access a disposed
+                // object" error
                 return;
             }
             Debug.Log("Handling a connection");

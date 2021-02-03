@@ -7,23 +7,26 @@
 
 namespace IVLab.ABREngine
 {
-    public abstract class KeyData
+    public interface IKeyData
     {
-
+        /// <summary>
+        ///     The DataPath that represents this KeyData
+        /// </summary>
+        string Path { get; }
     }
 
-    public class SurfaceKeyData : KeyData
+    public class SurfaceKeyData : IKeyData
     {
-
+        public string Path { get; }
     }
 
-    public class PointKeyData : KeyData
+    public class PointKeyData : IKeyData
     {
-
+        public string Path { get; }
     }
 
-    public class LineKeyData : KeyData
+    public class LineKeyData : IKeyData
     {
-
+        public string Path { get; }
     }
 }

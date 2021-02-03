@@ -23,18 +23,17 @@ namespace IVLab.ABREngine
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
         
-        public Dictionary<Guid, IVisAsset> VisAssets { get { return _visAssets; }}
-
-        void Start()
+        protected override void Awake()
         {
+            base.Awake();
             appDataPath = Path.Combine(Application.persistentDataPath, "media", "visassets");
             Directory.CreateDirectory(appDataPath);
             LoadVisAssetPalette();
         }
 
-        string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
+        public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
         {
-            return Path.Combine(Path.GetDirectoryName(artifactFilePath), relativeDataPath);
+            _visAssets.TryGetValue(guid, out visAsset);
         }
 
         public void LoadVisAssetPalette()
@@ -255,6 +254,11 @@ namespace IVLab.ABREngine
 
                 _visAssets[guid] = visAsset;
             }
+        }
+
+        private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
+        {
+            return Path.Combine(Path.GetDirectoryName(artifactFilePath), relativeDataPath);
         }
     }
 }
