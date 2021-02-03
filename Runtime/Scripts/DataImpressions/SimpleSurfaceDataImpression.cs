@@ -10,9 +10,8 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class SimpleSurfaceRenderInfo : IDataImpressionRenderInfo
+    class SimpleSurfaceRenderInfo : IDataImpressionRenderInfo
     {
-
         public Vector3[] vertices;
         public int[] indices;
         public Vector3[] normals;
