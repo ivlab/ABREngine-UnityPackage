@@ -30,6 +30,7 @@ namespace IVLab.ABREngine
             ScalarVar,
             VectorVar,
             KeyData,
+            Dataset,
         }
 
         private static char separator = '/';
@@ -98,12 +99,40 @@ namespace IVLab.ABREngine
         public static bool FollowsConvention(string label, DataPathType pathType = DataPathType.KeyData)
         {
             var parts = GetPathParts(label);
-            return parts.Length == 4 && parts[2] == pathType.ToString();
+            if (pathType != DataPathType.Dataset)
+            {
+                return parts.Length == 4 && parts[2] == pathType.ToString();
+            }
+            else
+            {
+                return parts.Length == 2;
+            }
         }
 
         public static string GetConvention(DataPathType pathType)
         {
-            return string.Format("Organization/Dataset/{0}/Name", pathType);
+            if (pathType != DataPathType.Dataset)
+            {
+                return string.Format("Organization/Dataset/{0}/Name", pathType);
+            }
+            else
+            {
+                return "Organization/Dataset";
+            }
+        }
+
+        // Log a message if the data path doesn't follow convention
+        public static void WarnOnDataPathFormat(string dataPath, DataPath.DataPathType dataPathType)
+        {
+            if (!DataPath.FollowsConvention(dataPath, dataPathType))
+            {
+                Debug.LogWarningFormat(
+                    "Label `{0}` does not follow data path convention and " +
+                    "may not be imported correctly.\nUse {1} convention {2}",
+                    dataPath,
+                    dataPathType.ToString(),
+                    DataPath.GetConvention(dataPathType));
+            }
         }
     }
 }
