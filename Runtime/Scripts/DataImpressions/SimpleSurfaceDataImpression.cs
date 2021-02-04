@@ -68,7 +68,7 @@ namespace IVLab.ABREngine
 
             SimpleSurfaceRenderInfo renderInfo = null;
             RawDataset dataset;
-            DataManager.Instance.TryGetDataset(keyData.Path, out dataset);
+            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
             if (dataset == null)
             {

@@ -54,17 +54,10 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            DataManager.Instance.TryGetDataset(keyData.Path, out dataset);
+            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
             // Return the scalar array
-            if (dataset != null)
-            {
-                return dataset.GetScalarArray(varName);
-            }
-            else
-            {
-                return null;
-            }
+            return dataset?.GetScalarArray(varName);
         }
     }
 

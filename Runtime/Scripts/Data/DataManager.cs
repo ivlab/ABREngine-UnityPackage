@@ -38,7 +38,7 @@ namespace IVLab.ABREngine
             this.appDataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
         }
 
-        public void TryGetDataset(string dataPath, out RawDataset dataset)
+        public void TryGetRawDataset(string dataPath, out RawDataset dataset)
         {
             WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             datasets.TryGetValue(dataPath, out dataset);

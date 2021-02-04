@@ -1,4 +1,4 @@
-/* Dataset.cs
+/* RawDataset.cs
  *
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson
