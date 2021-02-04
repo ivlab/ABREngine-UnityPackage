@@ -77,6 +77,10 @@ namespace IVLab.ABREngine
             RawDataset dataset;
             DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
+            string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
+            Dataset containingDataset;
+            DataManager.Instance.TryGetDataset(containingDatasetPath, out containingDataset);
+
             if (dataset == null)
             {
                 renderInfo = new PointRenderInfo
@@ -104,7 +108,7 @@ namespace IVLab.ABREngine
                 };
                 for (int i = 0; i < numPoints; i++)
                 {
-                    renderInfo.positions[i] = keyData.DataTransform * dataset.vertexArray[i];
+                    renderInfo.positions[i] = containingDataset.CurrentDataTransformation * dataset.vertexArray[i].ToHomogeneous();
                 }
 
                 if (colorVariable != null)

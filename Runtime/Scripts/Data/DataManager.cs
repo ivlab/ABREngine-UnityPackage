@@ -40,6 +40,7 @@ namespace IVLab.ABREngine
         {
             base.Awake();
             this.appDataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
+            UnityThreadScheduler.GetInstance();
         }
 
         public void TryGetRawDataset(string dataPath, out RawDataset dataset)
@@ -60,21 +61,25 @@ namespace IVLab.ABREngine
             string datasetPath = DataPath.GetDatasetPath(dataPath);
 
             // See if we have any data from that dataset yet
-            Dataset dataset;
-            TryGetDataset(datasetPath, out dataset);
+            // Needs to be run in main thread because of this.transform
+            UnityThreadScheduler.Instance.KickoffMainThreadWork(() => {
+                Dataset dataset;
+                TryGetDataset(datasetPath, out dataset);
 
-            // If we don't, create the dataset
-            if (dataset == null)
-            {
-                // TODO: import the dataset bounds and center from config
-                dataset = new Dataset(datasetPath, new Bounds(Vector3.zero, 2.0f * Vector3.one), this.transform);
-            }
+                // If we don't, create the dataset
+                if (dataset == null)
+                {
+                    // TODO: import the dataset bounds and center from config
+                    Bounds dataContainer = new Bounds(Vector3.zero, 2.0f * Vector3.one);
+                    dataset = new Dataset(datasetPath, dataContainer, this.transform);
+                }
 
-            datasets[datasetPath] = dataset;
-            rawDatasets[dataPath] = importing;
+                datasets[datasetPath] = dataset;
+                rawDatasets[dataPath] = importing;
 
-            ImportVariables(dataPath, importing, dataset);
-            ImportKeyData(dataPath, importing, dataset);
+                ImportVariables(dataPath, importing, dataset);
+                ImportKeyData(dataPath, importing, dataset);
+            });
         }
 
         public void LoadRawDatasetFromCache(string dataPath)
@@ -185,8 +190,6 @@ namespace IVLab.ABREngine
             IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
 
             Matrix4x4 dataScale = DataScaling.NormalizeDataScale(rawDataset);
-
-            keyData.DataTransform = dataScale;
 
             dataset.AddKeyData(keyData);
         }

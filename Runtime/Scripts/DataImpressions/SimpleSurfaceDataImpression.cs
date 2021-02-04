@@ -70,6 +70,10 @@ namespace IVLab.ABREngine
             RawDataset dataset;
             DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
+            string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
+            Dataset containingDataset;
+            DataManager.Instance.TryGetDataset(containingDatasetPath, out containingDataset);
+
             if (dataset == null)
             {
                 renderInfo = new SimpleSurfaceRenderInfo
@@ -113,13 +117,13 @@ namespace IVLab.ABREngine
 
                 for (int i = 0; i < sourceVertCount; i++)
                 {
-                    renderInfo.vertices[i] = keyData.DataTransform * dataset.vertexArray[i];
+                    renderInfo.vertices[i] = containingDataset.CurrentDataTransformation * dataset.vertexArray[i].ToHomogeneous();
                 }
 
                 // Backfaces 
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                 {
-                    renderInfo.vertices[i] = keyData.DataTransform * dataset.vertexArray[j];
+                    renderInfo.vertices[i] = containingDataset.CurrentDataTransformation * dataset.vertexArray[j].ToHomogeneous();
                 }
 
                 Vector3[] dataNormals = null;

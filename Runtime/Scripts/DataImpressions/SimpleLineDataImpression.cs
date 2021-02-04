@@ -66,6 +66,10 @@ namespace IVLab.ABREngine
             RawDataset dataset;
             DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
+            string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
+            Dataset containingDataset;
+            DataManager.Instance.TryGetDataset(containingDatasetPath, out containingDataset);
+
             if (dataset == null)
             {
                 renderInfo = new SimpleLineRenderInfo
@@ -159,9 +163,9 @@ namespace IVLab.ABREngine
                         var lastPointIndex = (j == 0) ? pointIndex : dataset.indexArray[index - 1];
                         var nextPointIndex = (j == numPoints - 1) ? pointIndex : dataset.indexArray[index + 1];
 
-                        Vector3 point = keyData.DataTransform * dataset.vertexArray[pointIndex];
-                        Vector3 lastPoint = keyData.DataTransform * dataset.vertexArray[lastPointIndex];
-                        Vector3 nextPoint = keyData.DataTransform * dataset.vertexArray[nextPointIndex];
+                        Vector3 point = containingDataset.CurrentDataTransformation * dataset.vertexArray[pointIndex].ToHomogeneous();
+                        Vector3 lastPoint = containingDataset.CurrentDataTransformation * dataset.vertexArray[lastPointIndex].ToHomogeneous();
+                        Vector3 nextPoint = containingDataset.CurrentDataTransformation * dataset.vertexArray[nextPointIndex].ToHomogeneous();
 
                         Vector3 tangent;
                         Vector3 normal;

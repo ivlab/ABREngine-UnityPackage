@@ -29,18 +29,11 @@ namespace IVLab.ABREngine
         ///     The DataPath that represents this KeyData
         /// </summary>
         string Path { get; }
-
-        /// <summary>
-        ///     Transformation matrix that should be applied to this KeyData's
-        ///     elements to make them fit within a particular bounding box
-        /// </summary>
-        Matrix4x4 DataTransform { get; set; }
     }
 
     public class SurfaceKeyData : IKeyData
     {
         public string Path { get; }
-        public Matrix4x4 DataTransform { get; set; } = Matrix4x4.identity;
 
         public SurfaceKeyData(string path)
         {
@@ -51,7 +44,6 @@ namespace IVLab.ABREngine
     public class PointKeyData : IKeyData
     {
         public string Path { get; }
-        public Matrix4x4 DataTransform { get; set; } = Matrix4x4.identity;
 
         public PointKeyData(string path)
         {
@@ -62,7 +54,6 @@ namespace IVLab.ABREngine
     public class LineKeyData : IKeyData
     {
         public string Path { get; }
-        public Matrix4x4 DataTransform { get; set; } = Matrix4x4.identity;
 
         public LineKeyData(string path)
         {
