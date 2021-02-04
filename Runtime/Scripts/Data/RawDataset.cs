@@ -28,7 +28,7 @@ namespace IVLab.ABREngine
     }
 
     [System.Serializable]
-    public class Dataset
+    public class RawDataset
     {
         [SerializeField]
         public Vector3[] vertexArray;
@@ -132,9 +132,9 @@ namespace IVLab.ABREngine
             }
         }
 
-        public Dataset() { }
+        public RawDataset() { }
 
-        public Dataset(JsonHeader jh, BinaryData bd)
+        public RawDataset(JsonHeader jh, BinaryData bd)
         {
             meshTopology = jh.meshTopology;
 

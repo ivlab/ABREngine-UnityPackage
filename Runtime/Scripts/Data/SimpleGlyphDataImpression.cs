@@ -74,7 +74,7 @@ namespace IVLab.ABREngine
 
             PointRenderInfo renderInfo;
 
-            Dataset dataset;
+            RawDataset dataset;
             DataManager.Instance.TryGetDataset(keyData.Path, out dataset);
 
             if (dataset == null)

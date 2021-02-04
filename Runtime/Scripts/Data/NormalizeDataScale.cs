@@ -29,7 +29,7 @@ namespace IVLab.ABREngine
         ///     Scale this dataset down to fit in a particular bounding size
         ///     (meters)
         /// </summary>
-        public static Matrix4x4 NormalizeDataScale(Dataset dataset, float normalizedScaleMeters = 2.0f, bool adjustToCenter = true, bool rotateToTable = false)
+        public static Matrix4x4 NormalizeDataScale(RawDataset dataset, float normalizedScaleMeters = 2.0f, bool adjustToCenter = false, bool rotateToTable = false)
         {
             Bounds bounds = dataset.bounds;
 

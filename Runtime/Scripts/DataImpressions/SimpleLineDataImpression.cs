@@ -63,7 +63,7 @@ namespace IVLab.ABREngine
         {
             SimpleLineRenderInfo renderInfo = null;
 
-            Dataset dataset;
+            RawDataset dataset;
             DataManager.Instance.TryGetDataset(keyData.Path, out dataset);
 
             if (dataset == null)

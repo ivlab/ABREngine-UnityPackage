@@ -133,9 +133,9 @@ namespace IVLab.ABREngine
 
                     if (textData.label != "")
                     {
-                        Dataset.JsonHeader json = JsonUtility.FromJson<Dataset.JsonHeader>(textData.json);
-                        Dataset.BinaryData b = new Dataset.BinaryData(json, textData.bindata);
-                        Dataset dataset = new Dataset(json, b);
+                        RawDataset.JsonHeader json = JsonUtility.FromJson<RawDataset.JsonHeader>(textData.json);
+                        RawDataset.BinaryData b = new RawDataset.BinaryData(json, textData.bindata);
+                        RawDataset dataset = new RawDataset(json, b);
 
                         DataManager.Instance.ImportDataset(textData.label, dataset);
                         DataManager.Instance.CacheData(textData.label, textData.json, textData.bindata);

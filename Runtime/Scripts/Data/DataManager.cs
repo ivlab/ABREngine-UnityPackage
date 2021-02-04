@@ -21,7 +21,7 @@ namespace IVLab.ABREngine
         private string appDataPath;
 
         // Dictionary of DataPath -> raw datasets that contain the actual data (these are BIG)
-        private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
+        private Dictionary<string, RawDataset> datasets = new Dictionary<string, RawDataset>();
 
         // Dictionary of DataPath -> key data objects (paths will match those in
         // datasets dict)
@@ -38,7 +38,7 @@ namespace IVLab.ABREngine
             this.appDataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
         }
 
-        public void TryGetDataset(string dataPath, out Dataset dataset)
+        public void TryGetDataset(string dataPath, out RawDataset dataset)
         {
             WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             datasets.TryGetValue(dataPath, out dataset);
@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
             keyDataObjects.TryGetValue(dataPath, out keyData);
         }
 
-        public void ImportDataset(string dataPath, Dataset dataset)
+        public void ImportDataset(string dataPath, RawDataset dataset)
         {
             WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             ImportVariables(dataPath, dataset);
@@ -88,14 +88,14 @@ namespace IVLab.ABREngine
                 metadataContent = file.ReadToEnd();
             }
 
-            Dataset.JsonHeader metadata = JsonUtility.FromJson<Dataset.JsonHeader>(metadataContent);
+            RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
 
             FileInfo binFile = GetDatasetBinaryFile(dataPath);
             byte[] dataBytes = File.ReadAllBytes(binFile.FullName);
 
-            Dataset.BinaryData data = new Dataset.BinaryData(metadata, dataBytes);
+            RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
 
-            Dataset ds = new Dataset(metadata, data);
+            RawDataset ds = new RawDataset(metadata, data);
             ImportDataset(dataPath, ds);
         }
 
@@ -135,7 +135,7 @@ namespace IVLab.ABREngine
         // `dataPath`
         //
         // This populates the dictionaries scalarVariables and vectorVariables
-        private void ImportVariables(string dataPath, Dataset dataset)
+        private void ImportVariables(string dataPath, RawDataset dataset)
         {
             string datasetPath = DataPath.GetDatasetPath(dataPath);
             string scalarVarRoot = DataPath.Join(datasetPath, DataPath.DataPathType.ScalarVar);
@@ -164,7 +164,7 @@ namespace IVLab.ABREngine
         }
 
         // Build the key data associations
-        private void ImportKeyData(string dataPath, Dataset dataset)
+        private void ImportKeyData(string dataPath, RawDataset dataset)
         {
             // Infer the type of data from the topology
             Type dataType = KeyDataMapping.typeMap[dataset.meshTopology];

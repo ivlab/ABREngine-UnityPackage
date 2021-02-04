@@ -53,7 +53,7 @@ namespace IVLab.ABREngine
             string varName = DataPath.GetName(Path);
 
             // Get the raw dataset
-            Dataset dataset;
+            RawDataset dataset;
             DataManager.Instance.TryGetDataset(keyData.Path, out dataset);
 
             // Return the scalar array
