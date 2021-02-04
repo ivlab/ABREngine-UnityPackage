@@ -52,12 +52,14 @@ namespace IVLab.ABREngine
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
 
+        public void ComputeKeyDataRenderInfo() { }
+
         public SimpleSurfaceDataImpression() : base()
         {
             Uuid = Guid.NewGuid();
         }
 
-        public void LoadRenderInfo()
+        public void ComputeRenderInfo()
         {
             if (keyData?.Path == null)
             {

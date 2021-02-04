@@ -57,7 +57,9 @@ namespace IVLab.ABREngine
             Uuid = Guid.NewGuid();
         }
 
-        public void LoadRenderInfo()
+        public void ComputeKeyDataRenderInfo() { }
+
+        public void ComputeRenderInfo()
         {
             SimpleLineRenderInfo renderInfo = null;
 
@@ -318,6 +320,15 @@ namespace IVLab.ABREngine
                 if (meshRenderer == null)
                     meshRenderer = renderObject.AddComponent<MeshRenderer>();
 
+                int layerID = LayerMask.NameToLayer(LayerName);
+                if (layerID >= 0)
+                {
+                    renderObject.layer = layerID;
+                }
+                else
+                {
+                    Debug.LogWarningFormat("Could not find layer {0} for SimpleLineDataImpression", LayerName);
+                }
 
                 // SET MATERIAL STUFF
 

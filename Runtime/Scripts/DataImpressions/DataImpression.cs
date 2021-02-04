@@ -23,13 +23,29 @@ namespace IVLab.ABREngine
         Guid Uuid { get; }
 
         /// <summary>
+        ///     Performs any pre-calculations necessary to render this
+        ///     particular type of Key Data (for instance, the individual glyph
+        ///     positions for the InstanceMeshRenderer used in glyph rendering)
+        ///
+        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
+        ///     `ApplyToGameObject()` should be run in sequence.
+        /// </summary>
+        void ComputeKeyDataRenderInfo();
+
+        /// <summary>
         ///     Populates rendering information (Geometry) for the
         ///     DataImpression
+        ///
+        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
+        ///     `ApplyToGameObject()` should be run in sequence.
         /// </summary>
-        void LoadRenderInfo();
+        void ComputeRenderInfo();
 
         /// <summary>
         ///     Applies a DataImpression to a particular GameObject
+        ///
+        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
+        ///     `ApplyToGameObject()` should be run in sequence.
         /// </summary>
         void ApplyToGameObject(EncodedGameObject currentGameObject);
     }
@@ -60,6 +76,11 @@ namespace IVLab.ABREngine
         ///     Cache of current rendering information
         /// </summary>
         protected virtual IDataImpressionRenderInfo RenderInfo { get; set; }
+
+        /// <summary>
+        ///     Cache of current KeyData rendering information
+        /// </summary>
+        protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
 
         /// <summary>
         ///     The layer to put this data impression in

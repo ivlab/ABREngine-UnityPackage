@@ -69,4 +69,6 @@ namespace IVLab.ABREngine
             Path = path;
         }
     }
+
+    public interface IKeyDataRenderInfo { }
 }

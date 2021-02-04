@@ -34,7 +34,12 @@ namespace IVLab.ABREngine
         {
             foreach (var impression in dataImpressions)
             {
-                impression.LoadRenderInfo();
+                impression.ComputeKeyDataRenderInfo();
+            }
+
+            foreach (var impression in dataImpressions)
+            {
+                impression.ComputeRenderInfo();
             }
 
             foreach (var impression in dataImpressions)
