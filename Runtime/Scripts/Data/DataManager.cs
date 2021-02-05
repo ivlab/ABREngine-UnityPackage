@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace IVLab.ABREngine
             datasets.TryGetValue(dataPath, out dataset);
         }
 
-        public void ImportRawDataset(string dataPath, RawDataset importing)
+        public async Task ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
@@ -62,7 +63,7 @@ namespace IVLab.ABREngine
 
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
-            UnityThreadScheduler.Instance.KickoffMainThreadWork(() => {
+            await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
                 Dataset dataset;
                 TryGetDataset(datasetPath, out dataset);
 
@@ -82,7 +83,7 @@ namespace IVLab.ABREngine
             });
         }
 
-        public void LoadRawDatasetFromCache(string dataPath)
+        public async Task LoadRawDatasetFromCache(string dataPath)
         {
             FileInfo jsonFile = GetRawDatasetMetadataFile(dataPath);
             if (!jsonFile.Exists)
@@ -104,15 +105,17 @@ namespace IVLab.ABREngine
             RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
 
             FileInfo binFile = GetRawDatasetBinaryFile(dataPath);
-            byte[] dataBytes = File.ReadAllBytes(binFile.FullName);
+            // File.ReadAllBytesAsync doesn't exist in this version (2.0 Standard)
+            // of .NET apparently?
+            byte[] dataBytes = await Task.Run(() => File.ReadAllBytes(binFile.FullName));
 
             RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
 
             RawDataset ds = new RawDataset(metadata, data);
-            ImportRawDataset(dataPath, ds);
+            await ImportRawDataset(dataPath, ds);
         }
 
-        public void CacheRawDataset(string dataPath, string json, byte[] data)
+        public async Task CacheRawDataset(string dataPath, string json, byte[] data)
         {
             Debug.Log("Saving " + dataPath + " to " + this.appDataPath);
 
@@ -131,7 +134,7 @@ namespace IVLab.ABREngine
             FileInfo binFile = new FileInfo(Path.Combine(this.appDataPath, dataPath + ".bin"));
 
             FileStream fs = File.Create(binFile.FullName);
-            fs.Write(data, 0, data.Length);
+            await fs.WriteAsync(data, 0, data.Length);
             fs.Close();
         }
 

@@ -108,11 +108,13 @@ namespace IVLab.ABREngine
 
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
+        /// <summary>
+        ///     By default, there's no dataset. DataImpressions should only have
+        ///     one dataset, and it's up to them individually to enforce that
+        ///     they correctly implement this.
+        /// </summary>
         public virtual Dataset GetDataset()
         {
-            // By default, there's no dataset. DataImpressions should only have
-            // one dataset, and it's up to them individually to enforce that
-            // they correctly implement this.
             return null;
         }
     }

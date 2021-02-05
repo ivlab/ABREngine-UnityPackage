@@ -137,8 +137,8 @@ namespace IVLab.ABREngine
                         RawDataset.BinaryData b = new RawDataset.BinaryData(json, textData.bindata);
                         RawDataset dataset = new RawDataset(json, b);
 
-                        DataManager.Instance.ImportRawDataset(textData.label, dataset);
-                        DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                        await DataManager.Instance.ImportRawDataset(textData.label, dataset);
+                        await DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
                     }
                 }
                 else
