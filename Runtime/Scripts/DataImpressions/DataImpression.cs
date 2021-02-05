@@ -98,9 +98,10 @@ namespace IVLab.ABREngine
         /// </summary>
         protected virtual string LayerName { get; } = "ABR";
 
-        public DataImpression()
+        public DataImpression(Guid uuid)
         {
-            Uuid = Guid.NewGuid();
+            InputIndexer = new ABRInputIndexerModule(this);
+            Uuid = uuid;
             MatPropBlock = new MaterialPropertyBlock();
             ImpressionMaterial = Resources.Load<Material>(MaterialName);
             if (ImpressionMaterial == null)
@@ -108,6 +109,8 @@ namespace IVLab.ABREngine
                 Debug.LogWarningFormat("Material `{0}` not found for {1}", MaterialName, this.GetType().ToString());
             }
         }
+
+        public DataImpression() : this(Guid.NewGuid()) { }
 
         public virtual void ComputeKeyDataRenderInfo() { }
 

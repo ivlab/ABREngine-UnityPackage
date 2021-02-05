@@ -58,17 +58,6 @@ namespace IVLab.ABREngine
                     continue;
                 }
 
-                Type impressionType = impressionTypes[foundIndex];
-
-                // Should only match one
-                ConstructorInfo[] constructors = impressionType.GetConstructors();
-                IDataImpression dataImpression = constructors[0].Invoke(new object[0]) as IDataImpression;
-                ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
-
-                List<ABRInputAttribute> inputs = impressionType.GetFields()
-                    .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
-                    .Where((f) => f != null).ToList();
-
                 Queue<string> visAssetsToLoad = new Queue<string>();
                 Queue<string> rawDataToLoad = new Queue<string>();
                 foreach (var inputValue in impression.Value.inputValues)
@@ -96,6 +85,17 @@ namespace IVLab.ABREngine
                 {
                     await DataManager.Instance.LoadRawDatasetFromCache(rawData);
                 }
+
+
+                // Make the data impression; should only match one type
+                Type impressionType = impressionTypes[foundIndex];
+                ConstructorInfo[] constructors = impressionType.GetConstructors();
+                IDataImpression dataImpression = constructors[0].Invoke(new object[0]) as IDataImpression;
+                ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
+
+                List<ABRInputAttribute> inputs = impressionType.GetFields()
+                    .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
+                    .Where((f) => f != null).ToList();
 
                 // Now that everything is loaded, go ahead and populate the state
                 foreach (var inputValue in impression.Value.inputValues)
@@ -161,13 +161,29 @@ namespace IVLab.ABREngine
                         // Attempt to construct the primitive from the type
                         // provided in the state file
                         Type inputType = Type.GetType(inputValue.Value.inputType);
-                        ConstructorInfo[] inputCtor = inputType.GetConstructors();
+                        ConstructorInfo inputCtor =
+                        inputType.GetConstructor(
+                            BindingFlags.Instance | BindingFlags.Public,
+                            null,
+                            CallingConventions.HasThis,
+                            new Type[] { typeof(string) },
+                            null
+                        );
                         string[] args = new string[] { inputValue.Value.inputValue };
-                        possibleInput = inputCtor[0].Invoke(args) as IABRInput;
+                        possibleInput = inputCtor.Invoke(args) as IABRInput;
                     }
-                    Debug.Log(possibleInput);
+                    else
+                    {
+                        Debug.LogWarningFormat("Unsupported input genre `{0}`", value.inputGenre.ToString());
+                    }
+
+                    if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput))
+                    {
+                        impressionInputs.AssignInput(inputValue.Key, possibleInput);
+                    }
                 }
 
+                ABREngine.Instance.RegisterDataImpression(dataImpression);
             }
         }
     }
