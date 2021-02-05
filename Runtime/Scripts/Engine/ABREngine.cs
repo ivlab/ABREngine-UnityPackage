@@ -46,6 +46,13 @@ namespace IVLab.ABREngine
             {
                 Guid uuid = impression.Uuid;
                 impression.ApplyToGameObject(gameObjectMapping[uuid]);
+
+                // Make sure the parent is assigned properly
+                Dataset dataset = impression.GetDataset();
+                if (dataset != null)
+                {
+                    gameObjectMapping[uuid].gameObject.transform.parent = dataset.DataRoot.transform;
+                }
             }
         }
     }
