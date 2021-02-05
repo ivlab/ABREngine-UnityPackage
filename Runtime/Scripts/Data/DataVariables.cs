@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public interface IDataVariable<T> : IHasDataset
+    public interface IDataVariable<T> : IHasDataset, IABRInput
     {
         /// <summary>
         ///     The DataPath that represents this variable

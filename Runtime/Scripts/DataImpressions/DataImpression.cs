@@ -23,6 +23,11 @@ namespace IVLab.ABREngine
         Guid Uuid { get; }
 
         /// <summary>
+        ///     Used for getting/setting ABRInputs on this DataImpression
+        /// </summary>
+        ABRInputIndexerModule InputIndexer { get; }
+
+        /// <summary>
         ///     Performs any pre-calculations necessary to render this
         ///     particular type of Key Data (for instance, the individual glyph
         ///     positions for the InstanceMeshRenderer used in glyph rendering)
@@ -58,6 +63,8 @@ namespace IVLab.ABREngine
     public class DataImpression : IDataImpression, IHasDataset
     {
         public Guid Uuid { get; }
+
+        public ABRInputIndexerModule InputIndexer { get; }
 
         /// <summary>
         ///     Name of the material to use to render this DataImpression

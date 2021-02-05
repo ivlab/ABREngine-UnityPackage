@@ -28,7 +28,6 @@ namespace IVLab.ABREngine
             base.Awake();
             appDataPath = Path.Combine(Application.persistentDataPath, "media", "visassets");
             Directory.CreateDirectory(appDataPath);
-            LoadVisAssetPalette();
         }
 
         public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)

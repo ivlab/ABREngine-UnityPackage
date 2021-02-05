@@ -37,15 +37,10 @@ namespace IVLab.ABREngine
         public string inputGenre;
     }
 
-    public interface IABRInput<T>
-    {
-        /// <summary>
-        ///     Convert the raw ABR input into something that is usable by the
-        ///     engine
-        ///
-        ///     Usually involves turning the inputValue into a number, path,
-        ///     etc.
-        /// </summary>
-        T FromRawInput(RawABRInput rawInput);
-    }
+    /// <summary>
+    ///     Interface that includes every input to a data impression. For every class
+    ///     that implements this interface, there must be a constructor that takes a
+    ///     single string argument!
+    /// </summary>
+    public interface IABRInput { }
 }

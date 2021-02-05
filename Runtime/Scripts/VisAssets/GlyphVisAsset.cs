@@ -11,13 +11,9 @@ using System.Collections.Generic;
 
 namespace IVLab.ABREngine
 {
-    public class GlyphVisAsset : IVisAsset
+    public class GlyphVisAsset : VisAsset
     {
-        public Guid Uuid { get; set; }
-
-        public DateTime ImportTime { get; set; }
-
-        public VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
+        public override VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
 
         public List<Mesh> MeshLods { get; set; } = new List<Mesh>();
 

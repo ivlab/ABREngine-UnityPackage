@@ -10,13 +10,9 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class ColormapVisAsset : IVisAsset
+    public class ColormapVisAsset : VisAsset
     {
-        public Guid Uuid { get; set; }
-
-        public DateTime ImportTime { get; set; }
-
-        public VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
+        public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
 
         public Texture2D Gradient { get; set; } = null;
 

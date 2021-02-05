@@ -18,10 +18,17 @@ namespace IVLab.ABREngine
         Invalid,
     }
 
-    public interface IVisAsset
+    public interface IVisAsset : IABRInput
     {
         Guid Uuid { get; set; }
-        DateTime ImportTime { get; set; }
+        DateTime ImportTime { get; set;}
         VisAssetType VisAssetType { get; }
+    }
+
+    public class VisAsset : IVisAsset
+    {
+        public Guid Uuid { get; set; }
+        public DateTime ImportTime { get; set; }
+        public virtual VisAssetType VisAssetType { get; }
     }
 }

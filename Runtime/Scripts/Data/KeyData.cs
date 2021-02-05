@@ -23,7 +23,7 @@ namespace IVLab.ABREngine
         };
     }
 
-    public interface IKeyData
+    public interface IKeyData : IABRInput
     {
         /// <summary>
         ///     The DataPath that represents this KeyData

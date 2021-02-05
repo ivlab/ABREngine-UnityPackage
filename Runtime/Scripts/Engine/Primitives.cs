@@ -14,7 +14,7 @@ namespace IVLab.ABREngine
     ///     Representative of a primitive element (usually used in ABR
     ///     Inputs). These should match the primitive input types in the schema.
     /// </summary>
-    public interface IPrimitive
+    public interface IPrimitive : IABRInput
     {
         /// <summary>
         ///     The regex to use to convert this from a string. Group named "value"
