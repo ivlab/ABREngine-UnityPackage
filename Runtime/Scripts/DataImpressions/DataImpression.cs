@@ -13,7 +13,7 @@ namespace IVLab.ABREngine
     /// <summary>
     ///     Public interface for a single ABR visualization layer
     /// </summary>
-    public interface IDataImpression
+    public interface IDataImpression : IHasDataset
     {
         /// <summary>
         ///     Unique identifier for this Data Impression
@@ -55,8 +55,10 @@ namespace IVLab.ABREngine
     ///
     ///     Should contain properties with attributes for all of the inputs
     /// </summary>
-    public class DataImpression
+    public class DataImpression : IDataImpression, IHasDataset
     {
+        public Guid Uuid { get; }
+
         /// <summary>
         ///     Name of the material to use to render this DataImpression
         /// </summary>
@@ -91,12 +93,27 @@ namespace IVLab.ABREngine
 
         public DataImpression()
         {
+            Uuid = Guid.NewGuid();
             MatPropBlock = new MaterialPropertyBlock();
             ImpressionMaterial = Resources.Load<Material>(MaterialName);
             if (ImpressionMaterial == null)
             {
                 Debug.LogWarningFormat("Material `{0}` not found for {1}", MaterialName, this.GetType().ToString());
             }
+        }
+
+        public virtual void ComputeKeyDataRenderInfo() { }
+
+        public virtual void ComputeRenderInfo() { }
+
+        public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
+
+        public virtual Dataset GetDataset()
+        {
+            // By default, there's no dataset. DataImpressions should only have
+            // one dataset, and it's up to them individually to enforce that
+            // they correctly implement this.
+            return null;
         }
     }
 

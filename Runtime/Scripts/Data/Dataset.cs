@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     GameObject to place all Data Impressions under
         /// </summary>
-        public GameObject _dataRoot;
+        public GameObject DataRoot { get; }
 
         public Dataset(string dataPath, Bounds bounds, Transform parent)
         {
@@ -70,8 +70,8 @@ namespace IVLab.ABREngine
             CurrentDataBounds = new Bounds();
             CurrentOriginalDataBounds = new Bounds();
 
-            _dataRoot = new GameObject("Dataset " + dataPath);
-            _dataRoot.transform.parent = parent;
+            DataRoot = new GameObject("Dataset " + dataPath);
+            DataRoot.transform.parent = parent;
         }
 
         public void AddKeyData(IKeyData keyData)
@@ -125,5 +125,15 @@ namespace IVLab.ABREngine
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             keyDataObjects.TryGetValue(dataPath, out keyData);
         }
+    }
+
+    /// <summary>
+    ///     Should be assigned to anything that is associated with a dataset
+    ///     (e.g. KeyData, Variables, and even DataImpressions once they have
+    ///     valid KeyData)
+    /// </summary>
+    public interface IHasDataset
+    {
+        Dataset GetDataset();
     }
 }

@@ -25,8 +25,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
-        public Guid Uuid { get; }
-
         [ABRInput("Key Data", "Key Data")]
         public SurfaceKeyData keyData;
 
@@ -52,14 +50,14 @@ namespace IVLab.ABREngine
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
 
-        public void ComputeKeyDataRenderInfo() { }
-
-        public SimpleSurfaceDataImpression() : base()
+        public override Dataset GetDataset()
         {
-            Uuid = Guid.NewGuid();
+            return keyData?.GetDataset();
         }
 
-        public void ComputeRenderInfo()
+        public override void ComputeKeyDataRenderInfo() { }
+
+        public override void ComputeRenderInfo()
         {
             if (keyData?.Path == null)
             {
@@ -206,7 +204,7 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
         {
             var SSrenderData = RenderInfo as SimpleSurfaceRenderInfo;
 

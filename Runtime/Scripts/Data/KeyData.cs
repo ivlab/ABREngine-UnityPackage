@@ -31,34 +31,37 @@ namespace IVLab.ABREngine
         string Path { get; }
     }
 
-    public class SurfaceKeyData : IKeyData
+    public class KeyData : IKeyData, IHasDataset
     {
         public string Path { get; }
 
-        public SurfaceKeyData(string path)
+        public KeyData(string path)
         {
             Path = path;
+        }
+
+        public Dataset GetDataset()
+        {
+            string datasetPath = DataPath.GetDatasetPath(Path);
+            Dataset dataset;
+            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            return dataset;
         }
     }
 
-    public class PointKeyData : IKeyData
+    public class SurfaceKeyData : KeyData, IKeyData
     {
-        public string Path { get; }
-
-        public PointKeyData(string path)
-        {
-            Path = path;
-        }
+        public SurfaceKeyData(string path) : base(path) { }
     }
 
-    public class LineKeyData : IKeyData
+    public class PointKeyData : KeyData, IKeyData
     {
-        public string Path { get; }
+        public PointKeyData(string path) : base (path) { }
+    }
 
-        public LineKeyData(string path)
-        {
-            Path = path;
-        }
+    public class LineKeyData : KeyData, IKeyData
+    {
+        public LineKeyData(string path) : base(path) { }
     }
 
     public interface IKeyDataRenderInfo { }

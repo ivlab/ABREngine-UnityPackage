@@ -27,10 +27,8 @@ namespace IVLab.ABREngine
     }
 
     [ABRPlateType("Lines")]
-    public class SimpleLineDataImpression : DataImpression, IDataImpression
+    public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
-        public Guid Uuid { get; }
-
         [ABRInput("Key Data", "Key Data")]
         public LineKeyData keyData;
 
@@ -55,14 +53,14 @@ namespace IVLab.ABREngine
         // TODO add the primitive inputs
         // TODO load defaults from schema
 
-        public SimpleLineDataImpression() : base()
+        public override Dataset GetDataset()
         {
-            Uuid = Guid.NewGuid();
+            return keyData?.GetDataset();
         }
 
-        public void ComputeKeyDataRenderInfo() { }
+        public override void ComputeKeyDataRenderInfo() { }
 
-        public void ComputeRenderInfo()
+        public override void ComputeRenderInfo()
         {
             SimpleLineRenderInfo renderInfo = null;
 
@@ -292,7 +290,7 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
         {
             var lineResources = RenderInfo as SimpleLineRenderInfo;
             if (currentGameObject == null || lineResources == null)

@@ -37,8 +37,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        public Guid Uuid { get; }
-
         [ABRInput("Key Data", "Key Data")]
         public PointKeyData keyData;
 
@@ -63,12 +61,12 @@ namespace IVLab.ABREngine
         // TODO add the primitive inputs
         // TODO load defaults from schema
 
-        public SimpleGlyphDataImpression() : base()
+        public override Dataset GetDataset()
         {
-            Uuid = Guid.NewGuid();
+            return keyData?.GetDataset();
         }
 
-        public void ComputeKeyDataRenderInfo()
+        public override void ComputeKeyDataRenderInfo()
         {
             if (keyData?.Path == null)
             {
@@ -193,7 +191,7 @@ namespace IVLab.ABREngine
             KeyDataRenderInfo = renderInfo;
         }
 
-        public void ComputeRenderInfo()
+        public override void ComputeRenderInfo()
         {
             var dataRenderInfo = KeyDataRenderInfo as PointRenderInfo;
 
@@ -221,7 +219,7 @@ namespace IVLab.ABREngine
             RenderInfo = encodingRenderInfo;
         }
 
-        public void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
         {
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
             if (currentGameObject == null)

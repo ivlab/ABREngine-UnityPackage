@@ -37,7 +37,7 @@ namespace IVLab.ABREngine
         T[] GetArray(IKeyData keyData);
     }
 
-    public class ScalarDataVariable : IDataVariable<float>
+    public class ScalarDataVariable : IDataVariable<float>, IHasDataset
     {
         public string Path { get; }
         public float MinValue { get; set; }
@@ -59,9 +59,17 @@ namespace IVLab.ABREngine
             // Return the scalar array
             return dataset?.GetScalarArray(varName);
         }
+
+        public Dataset GetDataset()
+        {
+            string datasetPath = DataPath.GetDatasetPath(Path);
+            Dataset dataset;
+            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            return dataset;
+        }
     }
 
-    public class VectorDataVariable : IDataVariable<Vector3>
+    public class VectorDataVariable : IDataVariable<Vector3>, IHasDataset
     {
         public string Path { get; }
         public Vector3 MinValue { get; set; }
@@ -69,6 +77,14 @@ namespace IVLab.ABREngine
 
         public Vector3[] GetArray(IKeyData keyData) {
             return new Vector3[0];
+        }
+
+        public Dataset GetDataset()
+        {
+            string datasetPath = DataPath.GetDatasetPath(Path);
+            Dataset dataset;
+            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            return dataset;
         }
     }
 }
