@@ -46,6 +46,9 @@ namespace IVLab.ABREngine
         [ABRInput("Texture", "Texture")]
         public LineTextureVisAsset lineTexture;
 
+        [ABRInput("Width", "Width")]
+        public LengthPrimitive lineWidth;
+
         protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
         protected override string LayerName { get; } = "ABR_Line";
 
@@ -87,7 +90,10 @@ namespace IVLab.ABREngine
             {
 
                 float ribbonRotation = 0;
-                float ribbonWidth = 0.01f;
+                float ribbonWidth = lineWidth?.Value ?? 0.01f;
+                // Width appears double what it should be, so decrease to maintain the actual real world distance
+                ribbonWidth /= 2.0f;
+
                 int averageCountN = 5;
                 float curveAngle = 0.0f;
                 // if (ABRManager.IsValidNode(ribbonRotationAngle))

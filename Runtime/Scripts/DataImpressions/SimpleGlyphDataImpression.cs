@@ -54,6 +54,9 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph", "Glyph")]
         public GlyphVisAsset glyph;
 
+        [ABRInput("Glyph Size", "Glyph Size")]
+        public LengthPrimitive glyphSize;
+
         protected override string MaterialName { get; } = "ABR_DataGlyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -205,18 +208,7 @@ namespace IVLab.ABREngine
             };
 
 
-
-            float glyphScaleFraction = 0.05f;
-            // if (ABRManager.IsValidNode(glyphSize))
-            // {
-            //     glyphScaleFraction = glyphSize.floatVal;
-            // }
-
-            // float sceneScale = encodedObject.dataScene.GetDataBounds().size.magnitude;
-
-
-            // float glyphScale = sceneScale * glyphScaleFraction;
-            float glyphScale = glyphScaleFraction;
+            float glyphScale = glyphSize?.Value ?? 0.05f;
 
 
             for (int i = 0; i < numPoints; i++)
