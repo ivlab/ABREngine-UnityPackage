@@ -64,11 +64,11 @@ namespace IVLab.ABREngine
                 {
                     // If the input genre is a key data or a visasset, we need
                     // to load it
-                    if (inputValue.Value.inputGenre == InputGenre.KeyData)
+                    if (inputValue.Value.inputGenre == ABRInputGenre.KeyData)
                     {
                         rawDataToLoad.Enqueue(inputValue.Value.inputValue);
                     }
-                    if (inputValue.Value.inputGenre == InputGenre.VisAsset)
+                    if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset)
                     {
                         visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
                     }
@@ -102,7 +102,7 @@ namespace IVLab.ABREngine
                 {
                     var value = inputValue.Value;
                     IABRInput possibleInput = null;
-                    if (value.inputGenre == InputGenre.KeyData)
+                    if (value.inputGenre == ABRInputGenre.KeyData)
                     {
                         string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                         Dataset dataset;
@@ -121,7 +121,7 @@ namespace IVLab.ABREngine
                         }
                         possibleInput = keyData as IABRInput;
                     }
-                    else if (value.inputGenre == InputGenre.Variable)
+                    else if (value.inputGenre == ABRInputGenre.Variable)
                     {
                         string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                         Dataset dataset;
@@ -145,7 +145,7 @@ namespace IVLab.ABREngine
                             possibleInput = variable as IABRInput;
                         }
                     }
-                    else if (value.inputGenre == InputGenre.VisAsset)
+                    else if (value.inputGenre == ABRInputGenre.VisAsset)
                     {
                         IVisAsset visAsset;
                         VisAssetManager.Instance.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
@@ -156,7 +156,7 @@ namespace IVLab.ABREngine
                         }
                         possibleInput = visAsset as IABRInput;
                     }
-                    else if (value.inputGenre == InputGenre.Primitive)
+                    else if (value.inputGenre == ABRInputGenre.Primitive)
                     {
                         // Attempt to construct the primitive from the type
                         // provided in the state file

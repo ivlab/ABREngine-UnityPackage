@@ -10,7 +10,7 @@ namespace IVLab.ABREngine
     /// <summary>
     ///     Possible genres of a visualization input
     /// </summary>
-    public enum InputGenre
+    public enum ABRInputGenre
     {
         KeyData,
         Variable,
@@ -45,13 +45,14 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     What type of input is it (variable, visasset, etc.)
         /// </summary>
-        public InputGenre inputGenre;
+        public ABRInputGenre inputGenre;
     }
 
     /// <summary>
-    ///     Interface that includes every input to a data impression. For every class
-    ///     that implements this interface, there must be a constructor that takes a
-    ///     single string argument!
+    ///     Interface that includes every input to a data impression. Every type
+    ///     of ABR input should fit into a specific ABRInputGenre.
     /// </summary>
-    public interface IABRInput { }
+    public interface IABRInput {
+        ABRInputGenre Genre { get; }
+    }
 }

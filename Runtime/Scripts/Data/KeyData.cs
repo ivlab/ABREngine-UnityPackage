@@ -33,6 +33,7 @@ namespace IVLab.ABREngine
 
     public class KeyData : IKeyData, IHasDataset
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
         public string Path { get; }
 
         public KeyData(string path)

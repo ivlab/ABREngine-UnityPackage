@@ -39,6 +39,7 @@ namespace IVLab.ABREngine
 
     public class ScalarDataVariable : IDataVariable<float>, IHasDataset
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
         public float MinValue { get; set; }
         public float MaxValue { get; set; }
@@ -71,6 +72,7 @@ namespace IVLab.ABREngine
 
     public class VectorDataVariable : IDataVariable<Vector3>, IHasDataset
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
         public Vector3 MinValue { get; set; }
         public Vector3 MaxValue { get; set; }

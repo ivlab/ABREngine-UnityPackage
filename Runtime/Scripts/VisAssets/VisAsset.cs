@@ -27,6 +27,7 @@ namespace IVLab.ABREngine
 
     public class VisAsset : IVisAsset
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;
         public Guid Uuid { get; set; }
         public DateTime ImportTime { get; set; }
         public virtual VisAssetType VisAssetType { get; }

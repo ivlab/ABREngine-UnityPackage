@@ -50,6 +50,7 @@ namespace IVLab.ABREngine
 
     public class IntegerPrimitive : IIntegerPrimitive
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.Primitive;
         public int Value { get; protected set; }
         public virtual string Units { get; } = "";
         public virtual Regex ParsingRegex { get; } = new Regex(@"(?<value>\d+)(?<units>)", RegexOptions.Compiled);
@@ -77,6 +78,7 @@ namespace IVLab.ABREngine
 
     public class FloatPrimitive : IFloatPrimitive
     {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.Primitive;
         public float Value { get; protected set; }
         public virtual string Units { get; } = "";
         public virtual Regex ParsingRegex { get; } = new Regex(@"(?<value>\d+(\.\d+)?)(?<units>)", RegexOptions.Compiled);
