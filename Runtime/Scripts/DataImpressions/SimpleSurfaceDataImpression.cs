@@ -34,11 +34,24 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color")]
         public ColormapVisAsset colormap;
 
+
         [ABRInput("Pattern Variable", "Pattern")]
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern")]
         public SurfaceTextureVisAsset pattern;
+
+        [ABRInput("Pattern Scale", "Pattern")]
+        public LengthPrimitive patternScale;
+
+        [ABRInput("Pattern Blend", "Pattern")]
+        public PercentPrimitive patternDirectionBlend;
+
+        [ABRInput("Pattern Saturation", "Pattern")]
+        public PercentPrimitive patternSaturation;
+
+        [ABRInput("Pattern Intensity", "Pattern")]
+        public PercentPrimitive patternIntensity;
 
         protected override string MaterialName { get; } = "ABR_DataColoredMesh";
         protected override string LayerName { get; } = "ABR_Surface";
@@ -276,46 +289,11 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetFloat("_PatternDataMin", SSrenderData.scalarMin[1]);
                 MatPropBlock.SetFloat("_PatternDataMax", SSrenderData.scalarMax[1]);
 
-                // if (ABRManager.IsValidNode(patternIntensity))
-                // {
-                //     MatPropBlock.SetFloat("_PatternIntensity", patternIntensity.floatVal);
-
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_PatternIntensity", 1);
-                // }
-                // if (ABRManager.IsValidNode(patternScale))
-                // {
-                //     MatPropBlock.SetFloat("_PatternScale", patternScale.floatVal);
-
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_PatternScale", 1);
-                // }
-
-                // if (ABRManager.IsValidNode(patternDirectionBlend))
-                // {
-                //     MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlend.floatVal);
-
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_PatternDirectionBlend", 1);
-                // }
-
-
-                // if (ABRManager.IsValidNode(patternSaturation))
-                // {
-                //     MatPropBlock.SetFloat("_PatternSaturation", patternSaturation.floatVal);
-
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_PatternSaturation", 1);
-                // }
-
+                // TODO: Get scale to actually correspond to real-world space
+                MatPropBlock.SetFloat("_PatternScale", patternScale?.Value ?? 1.0f);
+                MatPropBlock.SetFloat("_PatternIntensity", patternIntensity?.Value ?? 1.0f);
+                MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlend?.Value ?? 1.0f);
+                MatPropBlock.SetFloat("_PatternSaturation", patternIntensity?.Value ?? 1.0f);
 
                 if (patternVariable != null)
                 {

@@ -38,14 +38,31 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color")]
         public ColormapVisAsset colormap;
 
+
         [ABRInput("Texture Variable", "Texture")]
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture")]
         public LineTextureVisAsset lineTexture;
 
-        [ABRInput("Width", "Width")]
+        [ABRInput("Texture Smooth", "Texture")]
+        public IntegerPrimitive averageCount;
+
+        [ABRInput("Texture Cutoff", "Texture")]
+        public PercentPrimitive textureCutoff;
+
+
+        [ABRInput("Width", "Ribbon")]
         public LengthPrimitive lineWidth;
+
+        [ABRInput("Rotation", "Ribbon")]
+        public AnglePrimitive ribbonRotationAngle;
+
+        [ABRInput("Brightness", "Ribbon")]
+        public PercentPrimitive ribbonBrightness;
+
+        [ABRInput("Curve", "Ribbon")]
+        public AnglePrimitive ribbonCurveAngle;
 
         protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
         protected override string LayerName { get; } = "ABR_Line";
@@ -86,35 +103,15 @@ namespace IVLab.ABREngine
             }
             else
             {
-
-                float ribbonRotation = 0;
-                float ribbonWidth = lineWidth?.Value ?? 0.01f;
                 // Width appears double what it should be, so decrease to maintain the actual real world distance
+                float ribbonWidth = lineWidth?.Value ?? 0.01f;
                 ribbonWidth /= 2.0f;
 
-                int averageCountN = 5;
-                float curveAngle = 0.0f;
-                // if (ABRManager.IsValidNode(ribbonRotationAngle))
-                // {
-                //     ribbonRotation = ribbonRotationAngle.floatVal * 360;
-                // }
-                // if (ABRManager.IsValidNode(thickness))
-                // {
-                //     ribbonWidth = thickness.floatVal;
-                // }
-                // if (ABRManager.IsValidNode(averageCount))
-                // {
-                //     averageCountN = (int)(averageCount.floatVal);
-                // }
-                // if (ABRManager.IsValidNode(ribbonCurveAngle))
-                // {
-                //     curveAngle = (int)(ribbonCurveAngle.floatVal);
-                // }
-                // ribbonWidth = ribbonWidth *
-                // encodedObject.dataScene.GetDataBounds().size.magnitude *
-                // 0.5f;
-                // ribbonWidth = ribbonWidth * dataset.bounds.size.magnitude * 0.5f * keyData.DataTransform.lossyScale.magnitude;
+                int averageCountN = averageCount?.Value ?? 50;
 
+                float curveAngle = ribbonCurveAngle?.Value ?? 0.0f;
+
+                float ribbonRotation = ribbonRotationAngle?.Value ?? 0.0f;
 
 
                 int numLines = 0;

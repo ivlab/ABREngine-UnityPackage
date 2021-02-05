@@ -39,6 +39,42 @@ namespace IVLab.ABREngine
         string Units { get; }
     }
 
+    /// <summary>
+    ///     Represents an integer primitive value
+    /// </summary>
+    public interface IIntegerPrimitive : IPrimitive
+    {
+        int Value { get; }
+        string Units { get; }
+    }
+
+    public class IntegerPrimitive : IIntegerPrimitive
+    {
+        public int Value { get; protected set; }
+        public virtual string Units { get; } = "";
+        public virtual Regex ParsingRegex { get; } = new Regex(@"(?<value>\d+)(?<units>)", RegexOptions.Compiled);
+
+        public IntegerPrimitive()
+        {
+            Value = 0;
+        }
+
+        public IntegerPrimitive(int value)
+        {
+            Value = value;
+        }
+
+        public IntegerPrimitive(string value)
+        {
+            Value = int.Parse(ParsingRegex.Match(value).Groups["value"].ToString());
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString() + Units;
+        }
+    }
+
     public class FloatPrimitive : IFloatPrimitive
     {
         public float Value { get; protected set; }
