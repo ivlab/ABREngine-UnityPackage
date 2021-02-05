@@ -27,6 +27,13 @@ namespace IVLab.ABREngine
         public Vector3[] array;
     }
 
+    /// <summary>
+    ///     The raw data as loaded from an ABR Binary Data file and
+    ///     corresponding JSON header file. This RawDataset defines the
+    ///     specification for each of these files. RawDataset is not to be
+    ///     confused with `Dataset`, which represents a *collection* of
+    ///     RawDatasets which share a coordinate space, key data, and variables.
+    /// </summary>
     [System.Serializable]
     public class RawDataset
     {
@@ -277,6 +284,24 @@ namespace IVLab.ABREngine
             int index;
             scalarDictionary.TryGetValue(name, out index);
             return scalarMaxes[index];
+        }
+
+        // TODO: Not implemented in the data schema yet
+        public Vector3 GetVectorMin(string name)
+        {
+            // int index;
+            // scalarDictionary.TryGetValue(name, out index);
+            // return scalarMins[index];
+            return Vector3.zero;
+        }
+
+        // TODO: Not implemented in the data schema yet
+        public Vector3 GetVectorMax(string name)
+        {
+            // int index;
+            // scalarDictionary.TryGetValue(name, out index);
+            // return scalarMaxes[index];
+            return Vector3.zero;
         }
     }
 

@@ -154,6 +154,8 @@ namespace IVLab.ABREngine
         private void ImportVariables(string dataPath, RawDataset rawDataset, Dataset dataset)
         {
             string datasetPath = DataPath.GetDatasetPath(dataPath);
+
+            // Import all scalar variables
             string scalarVarRoot = DataPath.Join(datasetPath, DataPath.DataPathType.ScalarVar);
             foreach (var scalarArrayName in rawDataset.scalarArrayNames)
             {
@@ -175,6 +177,30 @@ namespace IVLab.ABREngine
                     // include the newly imported rawDataset
                     scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
                     scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
+                }
+            }
+
+            // Import all vector variables
+            string vectorVarRoot = DataPath.Join(datasetPath, DataPath.DataPathType.VectorVar);
+            foreach (var vectorArrayName in rawDataset.vectorArrayNames)
+            {
+                string vectorPath = DataPath.Join(vectorVarRoot, vectorArrayName);
+                VectorDataVariable vectorDataVariable;
+                dataset.TryGetVectorVar(vectorPath, out vectorDataVariable);
+
+                if (vectorDataVariable == null)
+                {
+                    // Create a new vector variable
+                    vectorDataVariable = new VectorDataVariable(vectorPath);
+                    vectorDataVariable.MinValue = rawDataset.GetVectorMin(vectorArrayName);
+                    vectorDataVariable.MaxValue = rawDataset.GetVectorMax(vectorArrayName);
+                    dataset.AddVectorVariable(vectorDataVariable);
+                }
+                else
+                {
+                    // TODO: Not implemented yet
+                    vectorDataVariable.MinValue = Vector3.zero;
+                    vectorDataVariable.MaxValue = Vector3.zero;
                 }
             }
         }

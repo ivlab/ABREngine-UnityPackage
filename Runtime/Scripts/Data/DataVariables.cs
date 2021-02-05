@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public interface IDataVariable<T>
+    public interface IDataVariable<T> : IHasDataset
     {
         /// <summary>
         ///     The DataPath that represents this variable
@@ -75,8 +75,21 @@ namespace IVLab.ABREngine
         public Vector3 MinValue { get; set; }
         public Vector3 MaxValue { get; set; }
 
+        public VectorDataVariable(string path)
+        {
+            Path = path;
+        }
+
         public Vector3[] GetArray(IKeyData keyData) {
-            return new Vector3[0];
+            // Get the actual name of this variable
+            string varName = DataPath.GetName(Path);
+
+            // Get the raw dataset
+            RawDataset dataset;
+            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+
+            // Return the scalar array
+            return dataset?.GetVectorArray(varName);
         }
 
         public Dataset GetDataset()

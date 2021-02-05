@@ -55,6 +55,12 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph Size", "Glyph Size")]
         public LengthPrimitive glyphSize;
 
+        [ABRInput("Forward Variable", "Direction")]
+        public VectorDataVariable forwardVariable;
+
+        [ABRInput("Up Variable", "Direction")]
+        public VectorDataVariable upVariable;
+
         protected override string MaterialName { get; } = "ABR_DataGlyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -124,11 +130,11 @@ namespace IVLab.ABREngine
                 Vector3[] dataForwards = null;
                 Vector3[] dataUp = null;
 
-                // if (ABRManager.IsValidNode(forwardVariable))
-                // {
-                //     dataForwards = forwardVariable.GetVectorArray(dataset);
-                // }
-                // else
+                if (forwardVariable != null)
+                {
+                    dataForwards = forwardVariable.GetArray(keyData);
+                }
+                else
                 {
                     var rand = new System.Random(0);
                     dataForwards = new Vector3[numPoints];
@@ -141,11 +147,11 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                // if (ABRManager.IsValidNode(upVariable))
-                // {
-                //     dataUp = upVariable.GetVectorArray(dataset);
-                // }
-                // else
+                if (upVariable != null)
+                {
+                    dataUp = upVariable.GetArray(keyData);
+                }
+                else
                 {
                     var rand = new System.Random(1);
                     dataUp = new Vector3[numPoints];
@@ -158,19 +164,19 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                // if (ABRManager.IsValidNode(upVariable) && !ABRManager.IsValidNode(forwardVariable))
-                // { // Treat up as the more rigid constraint
-                //     for (int i = 0; i < numPoints; i++)
-                //     {
-                //         Vector3 rightAngleForward = Vector3.Cross(
-                //         Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
-                //         dataUp[i]).normalized;
+                if (upVariable != null && forwardVariable != null)
+                { // Treat up as the more rigid constraint
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector3 rightAngleForward = Vector3.Cross(
+                        Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
+                        dataUp[i]).normalized;
 
-                //         Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
-                //         renderInfo.orientations[i] = orientation;
-                //     }
-                // }
-                // else // Treat forward as the more rigid constraint
+                        Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
+                        renderInfo.orientations[i] = orientation;
+                    }
+                }
+                else // Treat forward as the more rigid constraint
                 {
                     for (int i = 0; i < numPoints; i++)
                     {
