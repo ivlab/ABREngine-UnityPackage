@@ -8,6 +8,17 @@
 namespace IVLab.ABREngine
 {
     /// <summary>
+    ///     Possible genres of a visualization input
+    /// </summary>
+    public enum InputGenre
+    {
+        KeyData,
+        Variable,
+        VisAsset,
+        Primitive,
+    }
+
+    /// <summary>
     ///     Raw string values from a state JSON being passed to ABR
     ///
     ///     Matches `InputValue` definition from ABR State Schema
@@ -34,7 +45,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     What type of input is it (variable, visasset, etc.)
         /// </summary>
-        public string inputGenre;
+        public InputGenre inputGenre;
     }
 
     /// <summary>

@@ -75,25 +75,15 @@ namespace IVLab.ABREngine
                 {
                     // If the input genre is a key data or a visasset, we need
                     // to load it
-                    if (inputValue.Value.inputGenre == "KeyData")
+                    if (inputValue.Value.inputGenre == InputGenre.KeyData)
                     {
                         rawDataToLoad.Enqueue(inputValue.Value.inputValue);
                     }
-                    if (inputValue.Value.inputGenre == "VisAsset")
+                    if (inputValue.Value.inputGenre == InputGenre.VisAsset)
                     {
                         visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
                     }
-                    // Type inputType = Type.GetType(inputValue.Value.inputType);
-                    // Debug.Log(inputType);
-                    // ConstructorInfo[] inputCtor = inputType.GetConstructors();
-                    // string[] args = new string[] { inputValue.Value.inputValue };
-                    // IABRInput input = inputCtor[0].Invoke(args) as IABRInput;
-                    // Debug.Log(input);
                 }
-                // foreach (var input in inputs)
-                // {
-                //     Debug.Log(input.inputName + input.parameterName);
-                // }
 
                 foreach (var visAsset in visAssetsToLoad)
                 {
@@ -105,6 +95,77 @@ namespace IVLab.ABREngine
                 foreach (var rawData in rawDataToLoad)
                 {
                     await DataManager.Instance.LoadRawDatasetFromCache(rawData);
+                }
+
+                // Now that everything is loaded, go ahead and populate the state
+                foreach (var inputValue in impression.Value.inputValues)
+                {
+                    var value = inputValue.Value;
+                    IABRInput possibleInput = null;
+                    if (value.inputGenre == InputGenre.KeyData)
+                    {
+                        string datasetPath = DataPath.GetDatasetPath(value.inputValue);
+                        Dataset dataset;
+                        DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+                        if (dataset == null)
+                        {
+                            Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
+                            continue;
+                        }
+                        IKeyData keyData;
+                        dataset.TryGetKeyData(value.inputValue, out keyData);
+                        if (keyData == null)
+                        {
+                            Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
+                            continue;
+                        }
+                        possibleInput = keyData as IABRInput;
+                    }
+                    else if (value.inputGenre == InputGenre.Variable)
+                    {
+                        string datasetPath = DataPath.GetDatasetPath(value.inputValue);
+                        Dataset dataset;
+                        DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+                        if (dataset == null)
+                        {
+                            Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
+                            continue;
+                        }
+
+                        if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                        {
+                            ScalarDataVariable variable;
+                            dataset.TryGetScalarVar(value.inputValue, out variable);
+                            possibleInput = variable as IABRInput;
+                        }
+                        else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                        {
+                            VectorDataVariable variable;
+                            dataset.TryGetVectorVar(value.inputValue, out variable);
+                            possibleInput = variable as IABRInput;
+                        }
+                    }
+                    else if (value.inputGenre == InputGenre.VisAsset)
+                    {
+                        IVisAsset visAsset;
+                        VisAssetManager.Instance.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
+                        if (visAsset == null)
+                        {
+                            Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
+                            continue;
+                        }
+                        possibleInput = visAsset as IABRInput;
+                    }
+                    else if (value.inputGenre == InputGenre.Primitive)
+                    {
+                        // Attempt to construct the primitive from the type
+                        // provided in the state file
+                        Type inputType = Type.GetType(inputValue.Value.inputType);
+                        ConstructorInfo[] inputCtor = inputType.GetConstructors();
+                        string[] args = new string[] { inputValue.Value.inputValue };
+                        possibleInput = inputCtor[0].Invoke(args) as IABRInput;
+                    }
+                    Debug.Log(possibleInput);
                 }
 
             }
