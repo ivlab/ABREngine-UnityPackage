@@ -5,8 +5,8 @@
  *
  */
 
-using System;
 using System.Threading.Tasks;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
@@ -31,9 +31,9 @@ namespace IVLab.ABREngine
             return parser;
         }
 
-        public async void LoadState(string name)
+        public async Task<JObject> LoadState(string name)
         {
-            string stateText = _loader.GetState(name);
+            string stateText = await UnityThreadScheduler.Instance.RunMainThreadWork(() => _loader.GetState(name));
 
             RawABRState state = JsonConvert.DeserializeObject<RawABRState>(stateText);
 
@@ -93,7 +93,7 @@ namespace IVLab.ABREngine
                 IDataImpression dataImpression = constructors[0].Invoke(new object[0]) as IDataImpression;
                 ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 
-                List<ABRInputAttribute> inputs = impressionType.GetFields()
+                List<ABRInputAttribute> actualInputs = impressionType.GetFields()
                     .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
                     .Where((f) => f != null).ToList();
 
@@ -147,8 +147,11 @@ namespace IVLab.ABREngine
                     }
                     else if (value.inputGenre == ABRInputGenre.VisAsset)
                     {
-                        IVisAsset visAsset;
-                        VisAssetManager.Instance.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
+                        IVisAsset visAsset = null;
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(() => 
+                        {
+                            VisAssetManager.Instance.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
+                        });
                         if (visAsset == null)
                         {
                             Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
@@ -177,7 +180,11 @@ namespace IVLab.ABREngine
                         Debug.LogWarningFormat("Unsupported input genre `{0}`", value.inputGenre.ToString());
                     }
 
-                    if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput))
+                    // Verify that the input matches with the parameter (to
+                    // avoid possible name collisions), and check that it's
+                    // assignable from the possibleInput
+                    var actualInput = actualInputs.First((i) => inputValue.Key == i.inputName && i.parameterName == inputValue.Value.parameterName);
+                    if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput) && actualInput != null)
                     {
                         impressionInputs.AssignInput(inputValue.Key, possibleInput);
                     }
@@ -185,6 +192,8 @@ namespace IVLab.ABREngine
 
                 ABREngine.Instance.RegisterDataImpression(dataImpression);
             }
+
+            return JObject.Parse(stateText);
         }
     }
 
