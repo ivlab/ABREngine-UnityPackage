@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-
+using JsonDiffPatchDotNet;
 using IVLab.Utilities;
 
 namespace IVLab.ABREngine
@@ -31,9 +31,16 @@ namespace IVLab.ABREngine
             return parser;
         }
 
-        public async Task<JObject> LoadState(string name)
+        public async Task<JObject> LoadState(string name, JObject previousState)
         {
             string stateText = await UnityThreadScheduler.Instance.RunMainThreadWork(() => _loader.GetState(name));
+
+            JObject stateJson = JObject.Parse(stateText);
+
+            // Check the diff from the previous state
+            JsonDiffPatch jdp = new JsonDiffPatch();
+            JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
+            JToken impressionsToken = diffFromPrevious?.SelectToken("impressions");
 
             RawABRState state = JsonConvert.DeserializeObject<RawABRState>(stateText);
 
@@ -47,8 +54,19 @@ namespace IVLab.ABREngine
                 .Where((t) => t.IsSubclassOf(dataImpressionType) && t != dataImpressionType)
                 .Select((t) => Type.GetType(t?.FullName))
                 .ToList();
+
             foreach (var impression in state.impressions)
             {
+
+                if (impressionsToken != null)
+                {
+                    // Skip this impression if it doesn't appear in the diff
+                    if (!impressionsToken.ToObject<JObject>().ContainsKey(impression.Key))
+                    {
+                        continue;
+                    }
+                }
+
                 // Find what type of impression to create
                 string plateType = impression.Value.plateType;
                 int foundIndex = impressionTypeStrings.IndexOf(plateType);
@@ -76,21 +94,36 @@ namespace IVLab.ABREngine
 
                 foreach (var visAsset in visAssetsToLoad)
                 {
-                    await UnityThreadScheduler.Instance.RunMainThreadWork(
-                        () => VisAssetManager.Instance.LoadVisAsset(new Guid(visAsset))
-                    );
+                    // See if we already have the VisAsset; if not then load it
+                    var visAssetUUID = new Guid(visAsset);
+                    IVisAsset existing;
+                    VisAssetManager.Instance.TryGetVisAsset(visAssetUUID, out existing);
+                    if (existing == null)
+                    {
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(
+                            () => VisAssetManager.Instance.LoadVisAsset(visAssetUUID)
+                        );
+                    }
                 }
 
                 foreach (var rawData in rawDataToLoad)
                 {
-                    await DataManager.Instance.LoadRawDatasetFromCache(rawData);
+                    // See if we already have the VisAsset; if not then load it
+                    RawDataset existing;
+                    DataManager.Instance.TryGetRawDataset(rawData, out existing);
+                    if (existing == null)
+                    {
+                        await DataManager.Instance.LoadRawDatasetFromCache(rawData);
+                    }
                 }
 
 
                 // Make the data impression; should only match one type
                 Type impressionType = impressionTypes[foundIndex];
-                ConstructorInfo[] constructors = impressionType.GetConstructors();
-                IDataImpression dataImpression = constructors[0].Invoke(new object[0]) as IDataImpression;
+                ConstructorInfo impressionCtor =
+                    impressionType.GetConstructor(new Type[] { typeof(string) });
+                string[] impressionArgs = new string[] { impression.Value.uuid };
+                IDataImpression dataImpression = impressionCtor.Invoke(impressionArgs) as IDataImpression;
                 ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 
                 List<ABRInputAttribute> actualInputs = impressionType.GetFields()
@@ -144,6 +177,11 @@ namespace IVLab.ABREngine
                             dataset.TryGetVectorVar(value.inputValue, out variable);
                             possibleInput = variable as IABRInput;
                         }
+
+                        if (possibleInput == null)
+                        {
+                            Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
+                        }
                     }
                     else if (value.inputGenre == ABRInputGenre.VisAsset)
                     {
@@ -165,15 +203,19 @@ namespace IVLab.ABREngine
                         // provided in the state file
                         Type inputType = Type.GetType(inputValue.Value.inputType);
                         ConstructorInfo inputCtor =
-                        inputType.GetConstructor(
-                            BindingFlags.Instance | BindingFlags.Public,
-                            null,
-                            CallingConventions.HasThis,
-                            new Type[] { typeof(string) },
-                            null
+                            inputType.GetConstructor(
+                                BindingFlags.Instance | BindingFlags.Public,
+                                null,
+                                CallingConventions.HasThis,
+                                new Type[] { typeof(string) },
+                                null
                         );
                         string[] args = new string[] { inputValue.Value.inputValue };
-                        possibleInput = inputCtor.Invoke(args) as IABRInput;
+                        possibleInput = inputCtor?.Invoke(args) as IABRInput;
+                        if (possibleInput == null)
+                        {
+                            Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
+                        }
                     }
                     else
                     {
@@ -193,7 +235,7 @@ namespace IVLab.ABREngine
                 ABREngine.Instance.RegisterDataImpression(dataImpression);
             }
 
-            return JObject.Parse(stateText);
+            return stateJson;
         }
     }
 
@@ -204,13 +246,13 @@ namespace IVLab.ABREngine
     class RawABRState
     {
         public string version;
-        public Dictionary<Guid, RawDataImpression> impressions;
+        public Dictionary<string, RawDataImpression> impressions;
     }
 
     class RawDataImpression
     {
         public string plateType;
-        public Guid uuid;
+        public string uuid;
         public string name;
         public RawRenderingData renderingData;
         public Dictionary<string, RawABRInput> inputValues;

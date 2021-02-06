@@ -60,7 +60,7 @@ namespace IVLab.ABREngine
     ///
     ///     Should contain properties with attributes for all of the inputs
     /// </summary>
-    public class DataImpression : IDataImpression, IHasDataset
+    public abstract class DataImpression : IDataImpression, IHasDataset
     {
         public Guid Uuid { get; }
 
@@ -98,10 +98,16 @@ namespace IVLab.ABREngine
         /// </summary>
         protected virtual string LayerName { get; } = "ABR";
 
-        public DataImpression(Guid uuid)
+        /// <summary>
+        ///     Construct a data impession with a given UUID. Note that this
+        ///     will be called from ABRState and must assume that there's a
+        ///     single string argument with UUID - if you override this
+        ///     constructor bad things might happen.
+        /// </summary>
+        public DataImpression(string uuid)
         {
             InputIndexer = new ABRInputIndexerModule(this);
-            Uuid = uuid;
+            Uuid = new Guid(uuid);
             MatPropBlock = new MaterialPropertyBlock();
             ImpressionMaterial = Resources.Load<Material>(MaterialName);
             if (ImpressionMaterial == null)
@@ -110,7 +116,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        public DataImpression() : this(Guid.NewGuid()) { }
+        public DataImpression() : this(Guid.NewGuid().ToString()) { }
 
         public virtual void ComputeKeyDataRenderInfo() { }
 

@@ -17,7 +17,7 @@ namespace IVLab.ABREngine
     [RequireComponent(typeof(DataManager), typeof(VisAssetManager))]
     public class ABREngine : Singleton<ABREngine>
     {
-        private List<IDataImpression> dataImpressions = new List<IDataImpression>();
+        private Dictionary<Guid, IDataImpression> dataImpressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
         private JObject currentState = null;
@@ -26,15 +26,22 @@ namespace IVLab.ABREngine
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
-        public void RegisterDataImpression(IDataImpression impression)
+        public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite=true)
         {
-            dataImpressions.Add(impression);
-            GameObject impressionGameObject = new GameObject();
-            impressionGameObject.transform.parent = this.transform;
-            impressionGameObject.name = impression.GetType().ToString();
+            if (dataImpressions.ContainsKey(impression.Uuid) && allowOverwrite)
+            {
+                dataImpressions[impression.Uuid] = impression;
+            }
+            else
+            {
+                dataImpressions.Add(impression.Uuid, impression);
+                GameObject impressionGameObject = new GameObject();
+                impressionGameObject.transform.parent = this.transform;
+                impressionGameObject.name = impression.GetType().ToString();
 
-            EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
-            gameObjectMapping[impression.Uuid] = ego;
+                EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
+                gameObjectMapping[impression.Uuid] = ego;
+            }
         }
 
         public void RenderImpressions()
@@ -43,21 +50,21 @@ namespace IVLab.ABREngine
             {
                 foreach (var impression in dataImpressions)
                 {
-                    impression.ComputeKeyDataRenderInfo();
+                    impression.Value.ComputeKeyDataRenderInfo();
                 }
 
                 foreach (var impression in dataImpressions)
                 {
-                    impression.ComputeRenderInfo();
+                    impression.Value.ComputeRenderInfo();
                 }
 
                 foreach (var impression in dataImpressions)
                 {
-                    Guid uuid = impression.Uuid;
-                    impression.ApplyToGameObject(gameObjectMapping[uuid]);
+                    Guid uuid = impression.Key;
+                    impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
 
                     // Make sure the parent is assigned properly
-                    Dataset dataset = impression.GetDataset();
+                    Dataset dataset = impression.Value.GetDataset();
                     if (dataset != null)
                     {
                         gameObjectMapping[uuid].gameObject.transform.parent = dataset.DataRoot.transform;
@@ -79,7 +86,7 @@ namespace IVLab.ABREngine
             }
             UnityThreadScheduler.Instance.KickoffMainThreadWork(async () => {
                 ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
-                JObject tempState = await parser.LoadState(stateName);
+                JObject tempState = await parser.LoadState(stateName, currentState);
                 lock (_stateLock)
                 {
                     currentState = tempState;

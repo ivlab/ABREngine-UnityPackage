@@ -70,6 +70,14 @@ namespace IVLab.ABREngine
         // TODO add the primitive inputs
         // TODO load defaults from schema
 
+        /// <summary>
+        ///     Construct a data impession with a given UUID. Note that this
+        ///     will be called from ABRState and must assume that there's a
+        ///     single string argument with UUID.
+        /// </summary>
+        public SimpleLineDataImpression(string uuid) : base(uuid) { }
+        public SimpleLineDataImpression() : base() { }
+
         public override Dataset GetDataset()
         {
             return keyData?.GetDataset();
@@ -130,7 +138,7 @@ namespace IVLab.ABREngine
                 int pointIndex = 0;
 
                 float[] colorVariableArray = null;
-                if (colorVariable != null)
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     colorVariableArray = colorVariable.GetArray(keyData);
                     renderInfo.scalarMin[0] = colorVariable.MinValue;

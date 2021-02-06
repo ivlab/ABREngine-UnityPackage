@@ -262,6 +262,16 @@ namespace IVLab.ABREngine
             }
         }
 
+        public bool HasScalarArray(string name)
+        {
+            return scalarDictionary.ContainsKey(name);
+        }
+
+        public bool HasVectorArray(string name)
+        {
+            return vectorDictionary.ContainsKey(name);
+        }
+
         public float[] GetScalarArray(string name)
         {
             int index;

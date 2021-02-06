@@ -63,6 +63,14 @@ namespace IVLab.ABREngine
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
 
+        /// <summary>
+        ///     Construct a data impession with a given UUID. Note that this
+        ///     will be called from ABRState and must assume that there's a
+        ///     single string argument with UUID.
+        /// </summary>
+        public SimpleSurfaceDataImpression(string uuid) : base(uuid) { }
+        public SimpleSurfaceDataImpression() : base() { }
+
         public override Dataset GetDataset()
         {
             return keyData?.GetDataset();
@@ -161,7 +169,7 @@ namespace IVLab.ABREngine
 
                 }
 
-                if (colorVariable != null)
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     var colorScalars = colorVariable.GetArray(keyData);
                     for (int i = 0; i < sourceVertCount; i++)
@@ -175,7 +183,7 @@ namespace IVLab.ABREngine
                     renderInfo.scalarMax[0] = colorVariable.MaxValue;
                 }
 
-                if (patternVariable != null)
+                if (patternVariable != null && patternVariable.IsPartOf(keyData))
                 {
                     var scalars = patternVariable.GetArray(keyData);
                     for (int i = 0; i < sourceVertCount; i++)
@@ -289,11 +297,10 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetFloat("_PatternDataMin", SSrenderData.scalarMin[1]);
                 MatPropBlock.SetFloat("_PatternDataMax", SSrenderData.scalarMax[1]);
 
-                // TODO: Get scale to actually correspond to real-world space
                 MatPropBlock.SetFloat("_PatternScale", patternScale?.Value ?? 1.0f);
                 MatPropBlock.SetFloat("_PatternIntensity", patternIntensity?.Value ?? 1.0f);
                 MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlend?.Value ?? 1.0f);
-                MatPropBlock.SetFloat("_PatternSaturation", patternIntensity?.Value ?? 1.0f);
+                MatPropBlock.SetFloat("_PatternSaturation", patternSaturation?.Value ?? 1.0f);
 
                 if (patternVariable != null)
                 {

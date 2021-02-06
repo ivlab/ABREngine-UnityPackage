@@ -35,6 +35,11 @@ namespace IVLab.ABREngine
         ///     Data object
         /// </summary>
         T[] GetArray(IKeyData keyData);
+
+        /// <summary>
+        ///     Determine if this variable is a part of the key data
+        /// </summary>
+        bool IsPartOf(IKeyData keyData);
     }
 
     public class ScalarDataVariable : IDataVariable<float>, IHasDataset
@@ -47,6 +52,18 @@ namespace IVLab.ABREngine
         public ScalarDataVariable(string path)
         {
             Path = path;
+        }
+
+        public bool IsPartOf(IKeyData keyData)
+        {
+            // Get the actual name of this variable
+            string varName = DataPath.GetName(Path);
+
+            // Get the raw dataset
+            RawDataset dataset;
+            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+
+            return dataset.HasScalarArray(varName);
         }
 
         public float[] GetArray(IKeyData keyData) {
@@ -82,6 +99,18 @@ namespace IVLab.ABREngine
             Path = path;
         }
 
+        public bool IsPartOf(IKeyData keyData)
+        {
+            // Get the actual name of this variable
+            string varName = DataPath.GetName(Path);
+
+            // Get the raw dataset
+            RawDataset dataset;
+            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+
+            return dataset.HasVectorArray(varName);
+        }
+
         public Vector3[] GetArray(IKeyData keyData) {
             // Get the actual name of this variable
             string varName = DataPath.GetName(Path);
@@ -90,7 +119,7 @@ namespace IVLab.ABREngine
             RawDataset dataset;
             DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
 
-            // Return the scalar array
+            // Return the vector array
             return dataset?.GetVectorArray(varName);
         }
 

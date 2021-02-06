@@ -67,6 +67,14 @@ namespace IVLab.ABREngine
         // TODO add the primitive inputs
         // TODO load defaults from schema
 
+        /// <summary>
+        ///     Construct a data impession with a given UUID. Note that this
+        ///     will be called from ABRState and must assume that there's a
+        ///     single string argument with UUID.
+        /// </summary>
+        public SimpleGlyphDataImpression(string uuid) : base(uuid) { }
+        public SimpleGlyphDataImpression() : base() { }
+
         public override Dataset GetDataset()
         {
             return keyData?.GetDataset();
@@ -118,7 +126,7 @@ namespace IVLab.ABREngine
                     renderInfo.positions[i] = containingDataset.CurrentDataTransformation * dataset.vertexArray[i].ToHomogeneous();
                 }
 
-                if (colorVariable != null)
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     var colorScalars = colorVariable.GetArray(keyData);
                     for (int i = 0; i < numPoints; i++)
@@ -130,7 +138,7 @@ namespace IVLab.ABREngine
                 Vector3[] dataForwards = null;
                 Vector3[] dataUp = null;
 
-                if (forwardVariable != null)
+                if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
                 {
                     dataForwards = forwardVariable.GetArray(keyData);
                 }
@@ -147,7 +155,7 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                if (upVariable != null)
+                if (upVariable != null && upVariable.IsPartOf(keyData))
                 {
                     dataUp = upVariable.GetArray(keyData);
                 }
