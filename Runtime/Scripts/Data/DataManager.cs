@@ -223,8 +223,6 @@ namespace IVLab.ABREngine
             string[] args = new string[] { dataPath };
             IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
 
-            Matrix4x4 dataScale = DataScaling.NormalizeDataScale(rawDataset);
-
             dataset.AddKeyData(keyData);
         }
     }

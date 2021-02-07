@@ -78,13 +78,7 @@ namespace IVLab.ABREngine
             DataManager.Instance.TryGetRawDataset(keyData.Path, out rawDataset);
             Bounds originalBounds = rawDataset.bounds;
 
-            NormalizeWithinBounds.NormalizeAndExpand(
-                DataContainer,
-                originalBounds,
-                ref CurrentDataBounds,
-                ref CurrentDataTransformation,
-                ref CurrentDataSpaceBounds
-            );
+            RecalculateBounds();
 
             keyDataObjects[keyData.Path] = keyData;
         }

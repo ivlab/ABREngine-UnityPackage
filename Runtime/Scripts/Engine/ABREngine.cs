@@ -20,7 +20,8 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IDataImpression> dataImpressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        private JToken currentState = null;
+        private JToken previouslyLoadedState = null;
+        private string previousStateName = "Untitled";
 
         private object _stateLock = new object();
         private object _stateUpdatingLock = new object();
@@ -63,6 +64,20 @@ namespace IVLab.ABREngine
             gameObjectMapping.Remove(uuid);
         }
 
+        public void ClearState()
+        {
+            foreach (var impression in dataImpressions)
+            {
+                UnregisterDataImpression(impression.Key);
+            }
+        }
+
+        public void ReloadState()
+        {
+            ClearState();
+            LoadStateFromResources(previousStateName);
+        }
+
         public void RenderImpressions()
         {
             lock (_stateLock)
@@ -82,11 +97,18 @@ namespace IVLab.ABREngine
                     Guid uuid = impression.Key;
                     impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
 
-                    // Make sure the parent is assigned properly
                     Dataset dataset = impression.Value.GetDataset();
                     if (dataset != null)
                     {
+                        // Make sure the bounding box is correct
+                        // Mostly matters if there's a live ParaView connection
+                        dataset.RecalculateBounds();
+
+                        // Make sure the parent is assigned properly
                         gameObjectMapping[uuid].gameObject.transform.parent = dataset.DataRoot.transform;
+
+                        // Display the UUID in editor
+                        gameObjectMapping[uuid].SetUuid(uuid);
                     }
                 }
             }
@@ -105,10 +127,11 @@ namespace IVLab.ABREngine
             }
             UnityThreadScheduler.Instance.KickoffMainThreadWork(async () => {
                 ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
-                JToken tempState = await parser.LoadState(stateName, currentState);
+                JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
                 lock (_stateLock)
                 {
-                    currentState = tempState;
+                    previousStateName = stateName;
+                    previouslyLoadedState = tempState;
                 }
                 RenderImpressions();
                 lock (_stateUpdatingLock) 

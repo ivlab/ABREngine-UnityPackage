@@ -242,13 +242,17 @@ namespace IVLab.ABREngine
                         Debug.LogWarningFormat("Unsupported input genre `{0}`", value.inputGenre.ToString());
                     }
 
-                    // Verify that the input matches with the parameter (to
-                    // avoid possible name collisions), and check that it's
-                    // assignable from the possibleInput
-                    var actualInput = actualInputs.First((i) => inputValue.Key == i.inputName && i.parameterName == inputValue.Value.parameterName);
-                    if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput) && actualInput != null)
+                    // Verify that we have something to put in the input
+                    if (possibleInput != null)
                     {
-                        impressionInputs.AssignInput(inputValue.Key, possibleInput);
+                        // Verify that the input matches with the parameter (to
+                        // avoid possible name collisions), and check that it's
+                        // assignable from the possibleInput
+                        var actualInput = actualInputs.First((i) => inputValue.Key == i.inputName && i.parameterName == inputValue.Value.parameterName);
+                        if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput) && actualInput != null)
+                        {
+                            impressionInputs.AssignInput(inputValue.Key, possibleInput);
+                        }
                     }
                 }
 

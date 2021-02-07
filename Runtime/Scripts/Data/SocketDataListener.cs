@@ -139,6 +139,12 @@ namespace IVLab.ABREngine
 
                         await DataManager.Instance.ImportRawDataset(textData.label, dataset);
                         await DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                        // Note: state does not (yet) automatically update when new
+                        // data are received
+                        // await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+                        // {
+                        //     ABREngine.Instance.ReloadState();
+                        // });
                     }
                 }
                 else
