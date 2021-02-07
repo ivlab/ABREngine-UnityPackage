@@ -20,17 +20,29 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IDataImpression> dataImpressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        private JObject currentState = null;
+        private JToken currentState = null;
 
         private object _stateLock = new object();
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
+        public bool HasDataImpression(Guid uuid)
+        {
+            return dataImpressions.ContainsKey(uuid);
+        }
+
         public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite=true)
         {
-            if (dataImpressions.ContainsKey(impression.Uuid) && allowOverwrite)
+            if (dataImpressions.ContainsKey(impression.Uuid))
             {
-                dataImpressions[impression.Uuid] = impression;
+                if (allowOverwrite)
+                {
+                    dataImpressions[impression.Uuid] = impression;
+                }
+                else
+                {
+                    Debug.LogWarningFormat("Skipping register data impression (already exists): {0}", impression.Uuid);
+                }
             }
             else
             {
@@ -42,6 +54,13 @@ namespace IVLab.ABREngine
                 EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
                 gameObjectMapping[impression.Uuid] = ego;
             }
+        }
+
+        public void UnregisterDataImpression(Guid uuid)
+        {
+            dataImpressions.Remove(uuid);
+            Destroy(gameObjectMapping[uuid].gameObject);
+            gameObjectMapping.Remove(uuid);
         }
 
         public void RenderImpressions()
@@ -86,7 +105,7 @@ namespace IVLab.ABREngine
             }
             UnityThreadScheduler.Instance.KickoffMainThreadWork(async () => {
                 ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
-                JObject tempState = await parser.LoadState(stateName, currentState);
+                JToken tempState = await parser.LoadState(stateName, currentState);
                 lock (_stateLock)
                 {
                     currentState = tempState;

@@ -31,16 +31,35 @@ namespace IVLab.ABREngine
             return parser;
         }
 
-        public async Task<JObject> LoadState(string name, JObject previousState)
+        public async Task<JToken> LoadState(string name, JToken previousState)
         {
             string stateText = await UnityThreadScheduler.Instance.RunMainThreadWork(() => _loader.GetState(name));
 
-            JObject stateJson = JObject.Parse(stateText);
+            JToken stateJson = JToken.Parse(stateText);
 
             // Check the diff from the previous state
             JsonDiffPatch jdp = new JsonDiffPatch();
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
-            JToken impressionsToken = diffFromPrevious?.SelectToken("impressions");
+            stateJson = jdp.Patch(previousState, diffFromPrevious);
+            JObject impressionsObject = diffFromPrevious?.SelectToken("impressions")?.ToObject<JObject>();
+
+            if (impressionsObject != null)
+            {
+                foreach (var impression in impressionsObject)
+                {
+                    var impressionDiff = impression.Value;
+                    // The original JsonDiffPatch specifies that when something
+                    // is removed, there will be 2 zeroes.
+                    // https://github.com/benjamine/jsondiffpatch/blob/master/docs/deltas.md
+                    var removed = impressionDiff.Type == JTokenType.Array &&
+                            impressionDiff.ToArray().Where((t) => t.Type ==
+                            JTokenType.Integer).Count((t) => (int) t == 0) == 2;
+                    if (removed)
+                    {
+                        ABREngine.Instance.UnregisterDataImpression(new Guid(impression.Key));
+                    }
+                }
+            }
 
             RawABRState state = JsonConvert.DeserializeObject<RawABRState>(stateText);
 
@@ -58,11 +77,12 @@ namespace IVLab.ABREngine
             foreach (var impression in state.impressions)
             {
 
-                if (impressionsToken != null)
+                if (impressionsObject != null)
                 {
-                    // Skip this impression if it doesn't appear in the diff
-                    if (!impressionsToken.ToObject<JObject>().ContainsKey(impression.Key))
+                    bool changed = impressionsObject.ContainsKey(impression.Key);
+                    if (!changed)
                     {
+                        // Skip this impression if it hasn't been changed
                         continue;
                     }
                 }
