@@ -54,7 +54,7 @@ namespace IVLab.ABREngine
         ///     The bounds of the original, data-scale dataset, which grow as we
         ///     add more datasets
         /// </summary>
-        public Bounds CurrentOriginalDataBounds;
+        public Bounds CurrentDataSpaceBounds;
 
         /// <summary>
         ///     GameObject to place all Data Impressions under
@@ -66,9 +66,7 @@ namespace IVLab.ABREngine
             DataContainer = bounds;
             Path = dataPath;
 
-            CurrentDataTransformation = Matrix4x4.identity;
-            CurrentDataBounds = new Bounds();
-            CurrentOriginalDataBounds = new Bounds();
+            ResetBoundsAndTransformation();
 
             DataRoot = new GameObject("Dataset " + dataPath);
             DataRoot.transform.parent = parent;
@@ -80,22 +78,51 @@ namespace IVLab.ABREngine
             DataManager.Instance.TryGetRawDataset(keyData.Path, out rawDataset);
             Bounds originalBounds = rawDataset.bounds;
 
-            // Get the scale and bounds after trying to fit the dataset within the
-            // DataContainer
-            Bounds containedBounds;
-            Matrix4x4 transform;
-            NormalizeWithinBounds.Normalize(DataContainer, originalBounds, out transform, out containedBounds);
-
-            // If the new bounds would exceed the size of the current data
-            // bounds, reassign the data transform
-            if (originalBounds.size.MaxComponent() > CurrentOriginalDataBounds.size.MaxComponent())
-            {
-                CurrentDataBounds.Encapsulate(containedBounds);
-                CurrentDataTransformation = transform;
-            }
-            CurrentOriginalDataBounds.Encapsulate(originalBounds);
+            NormalizeWithinBounds.NormalizeAndExpand(
+                DataContainer,
+                originalBounds,
+                ref CurrentDataBounds,
+                ref CurrentDataTransformation,
+                ref CurrentDataSpaceBounds
+            );
 
             keyDataObjects[keyData.Path] = keyData;
+        }
+
+        /// <summary>
+        ///     From scratch, recalculate the bounds of this dataset. Start with
+        ///     a zero-size bounding box and expand until it encapsulates all
+        ///     datasets.
+        /// </summary>
+        public void RecalculateBounds()
+        {
+            ResetBoundsAndTransformation();
+
+            foreach (var keyData in keyDataObjects)
+            {
+                RawDataset rawDataset;
+                DataManager.Instance.TryGetRawDataset(keyData.Value.Path, out rawDataset);
+                Bounds originalBounds = rawDataset.bounds;
+
+                if (CurrentDataSpaceBounds.size.magnitude <= float.Epsilon)
+                {
+                    // If the size is zero (first keyData), then start with its
+                    // bounds (make sure to not assume we're including (0, 0, 0) in
+                    // the bounds)
+                    CurrentDataSpaceBounds = originalBounds;
+                    NormalizeWithinBounds.Normalize(DataContainer, originalBounds, out CurrentDataTransformation, out CurrentDataBounds);
+                }
+                else
+                {
+                    NormalizeWithinBounds.NormalizeAndExpand(
+                        DataContainer,
+                        originalBounds,
+                        ref CurrentDataBounds,
+                        ref CurrentDataTransformation,
+                        ref CurrentDataSpaceBounds
+                    );
+                }
+            }
         }
 
         public void AddScalarVariable(ScalarDataVariable scalarVar)
@@ -124,6 +151,13 @@ namespace IVLab.ABREngine
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             keyDataObjects.TryGetValue(dataPath, out keyData);
+        }
+
+        private void ResetBoundsAndTransformation()
+        {
+            CurrentDataTransformation = Matrix4x4.identity;
+            CurrentDataBounds = new Bounds();
+            CurrentDataSpaceBounds = new Bounds();
         }
     }
 

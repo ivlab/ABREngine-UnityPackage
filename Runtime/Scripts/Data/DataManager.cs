@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
@@ -53,6 +54,10 @@ namespace IVLab.ABREngine
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.Dataset);
             datasets.TryGetValue(dataPath, out dataset);
+        }
+        public List<Dataset> GetDatasets()
+        {
+            return datasets.Values.ToList();
         }
 
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
