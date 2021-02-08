@@ -27,6 +27,14 @@ namespace IVLab.ABREngine
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
+        public ABRConfig Config { get; private set; }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Config = new ABRConfig();
+        }
+
         public bool HasDataImpression(Guid uuid)
         {
             return dataImpressions.ContainsKey(uuid);

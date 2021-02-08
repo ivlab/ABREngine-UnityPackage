@@ -289,17 +289,11 @@ namespace IVLab.ABREngine
 
                 imr.instanceMesh = glyph.GetMesh(lod);
                 MatPropBlock.SetTexture("_Normal", glyph.GetNormalMap(lod));
-                //MatPropBlock.SetTexture("_NormalMap",glyph.GetNormalMap());
             }
             else
             {
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                Mesh mesh = sphere.GetComponent<MeshFilter>().mesh;
+                Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
                 imr.instanceMesh = mesh;
-                // imr.instanceMesh = VisAssetManager.GetDefaultGlyphMesh();
-                // MatPropBlock.SetTexture("_Normal", VisAssetManager.GetDefaultNormal());
-
-
             }
 
 
