@@ -60,6 +60,10 @@ namespace IVLab.ABREngine
             GameObject defaultPrefab = GameObject.Instantiate(Resources.Load<GameObject>(Info.defaultPrefabName));
             defaultPrefab.SetActive(false);
 
+            // Load the default bounds
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
             Defaults = new ABRConfigDefaults() {
                 defaultPrefab = defaultPrefab
             };
@@ -134,6 +138,11 @@ namespace IVLab.ABREngine
         ///     The schema that should be loaded
         /// </summary>
         public string schemaName;
+
+        /// <summary>
+        ///     Default bounds for datasets when showing (in Unity world coordinates)
+        /// </summary>
+        public Bounds defaultBounds;
     }
 
     public class ABRConfigDefaults
@@ -142,10 +151,5 @@ namespace IVLab.ABREngine
         ///     Prefab to use for defaults in each data impression
         /// </summary>
         public GameObject defaultPrefab;
-
-        /// <summary>
-        ///     Dictionary of (type -> (string -> string default)) mappings to
-        ///     be used for defaults in data impressions
-        /// </summary>
     }
 }

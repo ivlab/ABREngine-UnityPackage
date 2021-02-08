@@ -75,8 +75,7 @@ namespace IVLab.ABREngine
                 // If we don't, create the dataset
                 if (dataset == null)
                 {
-                    // TODO: import the dataset bounds and center from config
-                    Bounds dataContainer = new Bounds(Vector3.zero, 2.0f * Vector3.one);
+                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds;
                     dataset = new Dataset(datasetPath, dataContainer, this.transform);
                 }
 

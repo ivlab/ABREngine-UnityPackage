@@ -1,5 +1,17 @@
 {
     "version": "0.2.0",
     "schemaName": "ABRSchema_0-2-0",
-    "defaultPrefabName": "DefaultSphere"
+    "defaultPrefabName": "DefaultSphere",
+    "defaultBounds": {
+        "center": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "size": {
+            "x": 2.0,
+            "y": 2.0,
+            "z": 2.0
+        }
+    }
 }
