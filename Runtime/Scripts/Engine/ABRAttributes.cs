@@ -11,6 +11,7 @@ namespace IVLab.ABREngine
     ///     Input attribute used for annotating an ABR input to a data
     ///     impression (VisAsset, DataVariable, etc.)
     /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Field)]
     public class ABRInputAttribute : System.Attribute
     {
         public string inputName;
@@ -26,6 +27,7 @@ namespace IVLab.ABREngine
     ///     Attribute to match up this class with the string plate name from the
     ///     ABR Schema
     /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Class)]
     public class ABRPlateType : System.Attribute
     {
         public string plateType;

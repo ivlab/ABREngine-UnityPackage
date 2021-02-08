@@ -293,7 +293,7 @@
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
                                 "parameterName": { "const": "Glyph Size" },
-                                "inputValue": { "default": "5m" },
+                                "inputValue": { "default": "0.05m" },
                                 "inputGenre": { "const": "Primitive" }
                         }
                     }
@@ -338,20 +338,20 @@
                             "inputGenre": { "const": "VisAsset" }
                         }
                     },
-                    "Width": {
-                        "properties": {
-                            "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
-                            "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "5m" },
-                            "inputGenre": { "const": "Primitive" }
-                        }
-                    },
                     "Texture Cutoff": {
                         "description": "How much of the light part of the line to fill. 0% is black - no fill; 100% is white - fill everything.",
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Texture Cutoff" },
                             "inputValue": { "default": "50%" },
+                            "inputGenre": { "const": "Primitive" }
+                        }
+                    },
+                    "Ribbon Width": {
+                        "properties": {
+                            "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
+                            "parameterName": { "const": "Ribbon" },
+                            "inputValue": { "default": "0.01m" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -373,12 +373,21 @@
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
-                    "Texture Smoothing": {
+                    "Ribbon Brightness": {
+                        "description": "Manual brightness adjustment for the ribbons",
+                        "properties": {
+                            "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
+                            "parameterName": { "const": "Ribbon" },
+                            "inputValue": { "default": "50%" },
+                            "inputGenre": { "const": "Primitive" }
+                        }
+                    },
+                    "Ribbon Smooth": {
                         "description": "How much to smooth the ribbons",
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.IntegerPrimitive" },
-                            "parameterName": { "const": "Ribbon Smoothing" },
-                            "inputValue": { "default": "0%" },
+                            "parameterName": { "const": "Ribbon" },
+                            "inputValue": { "default": "5" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     }

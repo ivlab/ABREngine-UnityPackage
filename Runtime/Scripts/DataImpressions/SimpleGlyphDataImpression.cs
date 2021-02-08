@@ -5,9 +5,7 @@
  *
  */
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 using IVLab.Utilities.GenericObjectPool;
@@ -63,9 +61,6 @@ namespace IVLab.ABREngine
 
         protected override string MaterialName { get; } = "ABR_DataGlyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
-
-        // TODO add the primitive inputs
-        // TODO load defaults from schema
 
         /// <summary>
         ///     Construct a data impession with a given UUID. Note that this
@@ -219,8 +214,15 @@ namespace IVLab.ABREngine
                 colorVariableMax = dataRenderInfo.colorVariableMax
             };
 
+            // Load defaults from configuration / schema
+            ABRConfig config = ABREngine.Instance.Config;
 
-            float glyphScale = glyphSize?.Value ?? 0.05f;
+            // Width appears double what it should be, so decrease to
+            // maintain the actual real world distance
+            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+
+            float glyphScale = glyphSize?.Value ??
+                config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
 
 
             for (int i = 0; i < numPoints; i++)

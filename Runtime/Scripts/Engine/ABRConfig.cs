@@ -5,8 +5,11 @@
  *
  */
 
+using System;
+using System.Reflection;
 using UnityEngine;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
 namespace IVLab.ABREngine
@@ -29,12 +32,17 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     The Json Schema to use for validation of ABR states
         /// </summary>
-        public JSchema Schema { get; private set; }
-
+        public JSchema Schema { get; private set; } 
+ 
         /// <summary>
         ///     Miscellaneous info about the currently-running version of ABR
         /// </summary>
         public ABRConfigInfo Info { get; private set; }
+
+        /// <summary>
+        ///     Schema to use for internally grabbing default values
+        /// </summary>
+        private JObject _schema;
 
         public ABRConfig()
         {
@@ -59,6 +67,54 @@ namespace IVLab.ABREngine
             // Load the schema
             TextAsset schemaContents = Resources.Load<TextAsset>(Info.schemaName);
             Schema = JSchema.Parse(schemaContents.text);
+            if (Schema == null)
+            {
+                Debug.LogErrorFormat("Unable to parse schema `{0}`.", Info.schemaName);
+                return;
+            }
+            if (Schema.Valid ?? false)
+            {
+                Debug.LogErrorFormat("Schema `{0}` is invalid.", Info.schemaName);
+                return;
+            }
+
+            _schema = JObject.Parse(schemaContents.text);
+        }
+
+        /// <summary>
+        ///     Get the default primitive value for a particular data
+        ///     impression's parameter
+        /// </summary>
+        public T GetInputValueDefault<T>(string plateName, string inputName)
+        where T : IPrimitive
+        {
+            if (_schema == null)
+            {
+                Debug.LogErrorFormat("Schema is null, cannot get default value {0}", inputName);
+                return default(T);
+            }
+            string primitiveValue = _schema["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
+            
+            Type inputType = typeof(T);
+            ConstructorInfo inputCtor =
+                inputType.GetConstructor(
+                    BindingFlags.Instance | BindingFlags.Public,
+                    null,
+                    CallingConventions.HasThis,
+                    new Type[] { typeof(string) },
+                    null
+            );
+            string[] args = new string[] { primitiveValue };
+            try
+            {
+                T primitive = (T) inputCtor?.Invoke(args);
+                return primitive;
+            }
+            catch (Exception)
+            {
+                Debug.LogErrorFormat("Unable to create primitive {0} using value `{1}`, using default value", inputType.ToString(), primitiveValue);
+                return default(T);
+            }
         }
     }
 
@@ -86,5 +142,10 @@ namespace IVLab.ABREngine
         ///     Prefab to use for defaults in each data impression
         /// </summary>
         public GameObject defaultPrefab;
+
+        /// <summary>
+        ///     Dictionary of (type -> (string -> string default)) mappings to
+        ///     be used for defaults in data impressions
+        /// </summary>
     }
 }

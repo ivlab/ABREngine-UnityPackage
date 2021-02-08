@@ -44,7 +44,7 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("State is not valid with ABR schema version {0}", ABREngine.Instance.Config.Info.version);
                 foreach (var error in errors)
                 {
-                    Debug.LogErrorFormat("{0}: Line {1} ({1})\n{2}", error.ErrorType, error.LineNumber, error.Path, error.Message);
+                    Debug.LogErrorFormat("{0} Error: Line {1} ({1}):\n    {2}", error.ErrorType, error.LineNumber, error.Path, error.Message);
                     return null;
                 }
             }

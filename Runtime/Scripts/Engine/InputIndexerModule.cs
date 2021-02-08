@@ -67,7 +67,6 @@ namespace IVLab.ABREngine
             get { if (_abrInputIndicesByName == null) _abrInputIndicesByName = IndexABRInputsByName(ABRInputFields); return _abrInputIndicesByName; }
         }
 
-
         public FieldInfo GetInputField(int inputIndex)
         {
             if (inputIndex >= 0)

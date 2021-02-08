@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace IVLab.ABREngine
@@ -42,7 +43,7 @@ namespace IVLab.ABREngine
         public SurfaceTextureVisAsset pattern;
 
         [ABRInput("Pattern Size", "Pattern")]
-        public LengthPrimitive patternScale;
+        public LengthPrimitive patternSize;
 
         [ABRInput("Pattern Seam Blend", "Pattern")]
         public PercentPrimitive patternDirectionBlend;
@@ -56,9 +57,6 @@ namespace IVLab.ABREngine
         protected override string MaterialName { get; } = "ABR_DataColoredMesh";
         protected override string LayerName { get; } = "ABR_Surface";
 
-
-        // TODO add the primitive inputs
-        // TODO load defaults from schema
 
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
@@ -296,11 +294,30 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetFloat("_ColorDataMax", SSrenderData.scalarMax[0]);
                 MatPropBlock.SetFloat("_PatternDataMin", SSrenderData.scalarMin[1]);
                 MatPropBlock.SetFloat("_PatternDataMax", SSrenderData.scalarMax[1]);
+                
+                // Load defaults from configuration / schema
+                ABRConfig config = ABREngine.Instance.Config;
 
-                MatPropBlock.SetFloat("_PatternScale", patternScale?.Value ?? 1.0f);
-                MatPropBlock.SetFloat("_PatternIntensity", patternIntensity?.Value ?? 1.0f);
-                MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlend?.Value ?? 1.0f);
-                MatPropBlock.SetFloat("_PatternSaturation", patternSaturation?.Value ?? 1.0f);
+                // Width appears double what it should be, so decrease to
+                // maintain the actual real world distance
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+
+                float patternSizeOut = patternSize?.Value ??
+                    config.GetInputValueDefault<LengthPrimitive>(plateType, "Pattern Size").Value;
+                    
+                float patternIntensityOut = patternIntensity?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Intensity").Value;
+                    
+                float patternDirectionBlendOut = patternDirectionBlend?.Value ?? 
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Seam Blend").Value;
+
+                float patternSaturationOut = patternSaturation?.Value ?? 
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Saturation").Value;
+
+                MatPropBlock.SetFloat("_PatternScale", patternSizeOut);
+                MatPropBlock.SetFloat("_PatternIntensity", patternIntensityOut);
+                MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlendOut);
+                MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
                 if (patternVariable != null)
                 {

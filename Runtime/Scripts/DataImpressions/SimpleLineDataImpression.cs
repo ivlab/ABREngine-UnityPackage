@@ -5,6 +5,7 @@
  *
  */
 
+using System.Reflection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -45,30 +46,27 @@ namespace IVLab.ABREngine
         [ABRInput("Texture", "Texture")]
         public LineTextureVisAsset lineTexture;
 
-        [ABRInput("Texture Smooth", "Texture")]
-        public IntegerPrimitive averageCount;
-
         [ABRInput("Texture Cutoff", "Texture")]
         public PercentPrimitive textureCutoff;
 
 
-        [ABRInput("Width", "Ribbon")]
+        [ABRInput("Ribbon Smooth", "Ribbon")]
+        public IntegerPrimitive averageCount;
+
+        [ABRInput("Ribbon Width", "Ribbon")]
         public LengthPrimitive lineWidth;
 
-        [ABRInput("Rotation", "Ribbon")]
+        [ABRInput("Ribbon Rotation", "Ribbon")]
         public AnglePrimitive ribbonRotationAngle;
 
-        [ABRInput("Brightness", "Ribbon")]
+        [ABRInput("Ribbon Brightness", "Ribbon")]
         public PercentPrimitive ribbonBrightness;
 
-        [ABRInput("Curve", "Ribbon")]
+        [ABRInput("Ribbon Curve", "Ribbon")]
         public AnglePrimitive ribbonCurveAngle;
 
         protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
         protected override string LayerName { get; } = "ABR_Line";
-
-        // TODO add the primitive inputs
-        // TODO load defaults from schema
 
         /// <summary>
         ///     Construct a data impession with a given UUID. Note that this
@@ -111,16 +109,26 @@ namespace IVLab.ABREngine
             }
             else
             {
-                // Width appears double what it should be, so decrease to maintain the actual real world distance
-                float ribbonWidth = lineWidth?.Value ?? 0.01f;
+                // Load defaults from configuration / schema
+                ABRConfig config = ABREngine.Instance.Config;
+
+                // Width appears double what it should be, so decrease to
+                // maintain the actual real world distance
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+
+                float ribbonWidth = lineWidth?.Value ??
+                    config.GetInputValueDefault<LengthPrimitive>(plateType, "Ribbon Width").Value;
                 ribbonWidth /= 2.0f;
 
-                int averageCountN = averageCount?.Value ?? 50;
+                int averageCountN = averageCount?.Value ??
+                    config.GetInputValueDefault<IntegerPrimitive>(plateType, "Ribbon Smooth").Value;
 
-                float curveAngle = ribbonCurveAngle?.Value ?? 0.0f;
+                float curveAngle = ribbonCurveAngle?.Value ??
+                    config.GetInputValueDefault<AnglePrimitive>(plateType, "Ribbon Curve").Value;
 
-                float ribbonRotation = ribbonRotationAngle?.Value ?? 0.0f;
-
+                float ribbonRotation = ribbonRotationAngle?.Value ??
+                    config.GetInputValueDefault<AnglePrimitive>(plateType, "Ribbon Rotation").Value;
+                    
 
                 int numLines = 0;
                 numLines = dataset.cellIndexCounts.Length;
@@ -374,26 +382,24 @@ namespace IVLab.ABREngine
 
                 meshRenderer.material = ImpressionMaterial;
 
+                // Load defaults from configuration / schema
+                ABRConfig config = ABREngine.Instance.Config;
+
+                // Width appears double what it should be, so decrease to
+                // maintain the actual real world distance
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+
+                float ribbonBrightnessOut = ribbonBrightness?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Ribbon Brightness").Value;
+
+                float textureCutoffOut = textureCutoff?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Texture Cutoff").Value;
+
                 meshRenderer.GetPropertyBlock(MatPropBlock);
                 MatPropBlock.SetColor("_Color", Color.white);
-                // if (ABRManager.IsValidNode(textureCutoff))
-                // {
-                //     MatPropBlock.SetFloat("_TextureCutoff", textureCutoff.floatVal);
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_TextureCutoff", 0.5f);
+                MatPropBlock.SetFloat("_TextureCutoff", textureCutoffOut);
+                MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightnessOut);
 
-                // }
-                // if (ABRManager.IsValidNode(ribbonBrightness))
-                // {
-                //     MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightness.floatVal);
-                // }
-                // else
-                // {
-                    MatPropBlock.SetFloat("_RibbonBrightness", 0.5f);
-
-                // }
                 if (lineTexture != null)
                 {
                     MatPropBlock.SetTexture("_Texture", lineTexture.Texture);
