@@ -38,6 +38,17 @@ namespace IVLab.ABREngine
 
             JToken stateJson = JToken.Parse(stateText);
 
+            IList<ValidationError> errors;
+            if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
+            {
+                Debug.LogErrorFormat("State is not valid with ABR schema version {0}", ABREngine.Instance.Config.Info.version);
+                foreach (var error in errors)
+                {
+                    Debug.LogErrorFormat("{0}: Line {1} ({1})\n{2}", error.ErrorType, error.LineNumber, error.Path, error.Message);
+                    return null;
+                }
+            }
+
             // Check the diff from the previous state
             JsonDiffPatch jdp = new JsonDiffPatch();
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);

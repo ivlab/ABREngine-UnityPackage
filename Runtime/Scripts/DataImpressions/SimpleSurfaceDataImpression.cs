@@ -41,10 +41,10 @@ namespace IVLab.ABREngine
         [ABRInput("Pattern", "Pattern")]
         public SurfaceTextureVisAsset pattern;
 
-        [ABRInput("Pattern Scale", "Pattern")]
+        [ABRInput("Pattern Size", "Pattern")]
         public LengthPrimitive patternScale;
 
-        [ABRInput("Pattern Blend", "Pattern")]
+        [ABRInput("Pattern Seam Blend", "Pattern")]
         public PercentPrimitive patternDirectionBlend;
 
         [ABRInput("Pattern Saturation", "Pattern")]
@@ -332,11 +332,8 @@ namespace IVLab.ABREngine
                     else
                     {
                         MatPropBlock.SetInt("_UsePattern", 0);
-                        // MatPropBlock.SetTexture("_Pattern", VisAssetManager.GetDefaultAlbedo());
-                        // MatPropBlock.SetTexture("_PatternNormal", VisAssetManager.GetDefaultNormal());
                         MatPropBlock.SetTexture("_Pattern", new Texture2D(10, 10));
                         MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
-
                     }
                 }
                 catch (Exception e)

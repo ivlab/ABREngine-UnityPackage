@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 
 namespace IVLab.ABREngine
 {
@@ -25,6 +26,16 @@ namespace IVLab.ABREngine
 
         public ABRConfigDefaults Defaults { get; private set; }
 
+        /// <summary>
+        ///     The Json Schema to use for validation of ABR states
+        /// </summary>
+        public JSchema Schema { get; private set; }
+
+        /// <summary>
+        ///     Miscellaneous info about the currently-running version of ABR
+        /// </summary>
+        public ABRConfigInfo Info { get; private set; }
+
         public ABRConfig()
         {
             TextAsset configContents = Resources.Load<TextAsset>(CONFIG_FILE);
@@ -34,16 +45,20 @@ namespace IVLab.ABREngine
                 configContents = Resources.Load<TextAsset>(CONFIG_FILE_FALLBACK);
             }
 
-            ABRConfigInfo info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
+            Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
             Debug.Log("ABR Config Loaded");
 
             // Load the default prefab
-            GameObject defaultPrefab = GameObject.Instantiate(Resources.Load<GameObject>(info.defaultPrefabName));
+            GameObject defaultPrefab = GameObject.Instantiate(Resources.Load<GameObject>(Info.defaultPrefabName));
             defaultPrefab.SetActive(false);
 
             Defaults = new ABRConfigDefaults() {
                 defaultPrefab = defaultPrefab
             };
+
+            // Load the schema
+            TextAsset schemaContents = Resources.Load<TextAsset>(Info.schemaName);
+            Schema = JSchema.Parse(schemaContents.text);
         }
     }
 

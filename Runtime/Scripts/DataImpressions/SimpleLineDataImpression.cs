@@ -26,7 +26,7 @@ namespace IVLab.ABREngine
         public Vector4 scalarMax;
     }
 
-    [ABRPlateType("Lines")]
+    [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
         [ABRInput("Key Data", "Key Data")]
