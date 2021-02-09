@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph", "Glyph")]
         public GlyphVisAsset glyph;
 
-        [ABRInput("Glyph Size", "Glyph Size")]
+        [ABRInput("Glyph Size", "Glyph")]
         public LengthPrimitive glyphSize;
 
         [ABRInput("Forward Variable", "Direction")]

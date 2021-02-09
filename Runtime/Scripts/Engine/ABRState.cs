@@ -24,11 +24,11 @@ namespace IVLab.ABREngine
         private IABRStateLoader _loader;
 
         public static ABRStateParser GetParser<T>()
-        where T : ResourceStateFileLoader
+        where T : IABRStateLoader, new()
         {
-            ResourceStateFileLoader loader = new ResourceStateFileLoader();
+            T loader = new T();
             ABRStateParser parser = new ABRStateParser();
-            parser._loader = loader as T;
+            parser._loader = (T) loader;
             return parser;
         }
 
@@ -271,6 +271,22 @@ namespace IVLab.ABREngine
                 ABREngine.Instance.RegisterDataImpression(dataImpression);
             }
 
+            // Adjust the datasets to their positions defined in the state
+            foreach (var datasetPath in state.scene.datasetTransforms)
+            {
+                Dataset dataset;
+                DataManager.Instance.TryGetDataset(datasetPath.Key, out dataset);
+                if (dataset != null)
+                {
+                    dataset.DataRoot.transform.position = datasetPath.Value.position;
+                    dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
+                }
+                else
+                {
+                    Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
+                }
+            }
+
             return stateJson;
         }
     }
@@ -283,6 +299,7 @@ namespace IVLab.ABREngine
     {
         public string version;
         public Dictionary<string, RawDataImpression> impressions;
+        public RawScene scene;
     }
 
     class RawDataImpression
@@ -292,6 +309,18 @@ namespace IVLab.ABREngine
         public string name;
         public RawRenderingData renderingData;
         public Dictionary<string, RawABRInput> inputValues;
+    }
+
+    class RawScene
+    {
+        public Dictionary<string, RawDatasetTransform> datasetTransforms;
+    }
+
+    class RawDatasetTransform
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        // Not including scale because that would mess with artifacts
     }
 
     class RawRenderingData { }

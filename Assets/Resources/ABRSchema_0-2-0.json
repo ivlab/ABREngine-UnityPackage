@@ -26,8 +26,21 @@
         "scene": {
             "type": "object",
             "description": "Any additional info about the scene (lights, camera, transforms, etc.)",
-            "patternProperties": {
-                ".+": {}
+            "properties": {
+                "datasetTransforms": {
+                    "type": "object",
+                    "description": "Transform of datasets in the scene",
+                    "$comment": "Unfortunately necessary to specify DataPath regex here",
+                    "patternProperties": {
+                        "^(\\w+)\/(\\w+)$": { 
+                            "type": "object",
+                            "properties": {
+                                "position": { "$ref": "#/definitions/UnityObjects/Vector3" },
+                                "rotation": { "$ref": "#/definitions/UnityObjects/Quaternion" }
+                            }
+                        }
+                    }
+                }
             }
         },
 
@@ -248,6 +261,28 @@
             }
         },
 
+        "UnityObjects": {
+            "Vector3": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "z": { "type": "number" }
+                }
+            },
+            "Quaternion": {
+                "type": "object",
+                "required": ["x", "y", "z", "w"],
+                "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "z": { "type": "number" },
+                    "w": { "type": "number" }
+                }
+            }
+        },
+
         "Plates": {
             "Glyphs": {
                 "$comment": "Update Plates whenever you add a new plate type. Inputs should have a `inputType` and `parameterName`.",
@@ -292,7 +327,7 @@
                     "Glyph Size": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
-                                "parameterName": { "const": "Glyph Size" },
+                                "parameterName": { "const": "Glyph" },
                                 "inputValue": { "default": "0.05m" },
                                 "inputGenre": { "const": "Primitive" }
                         }

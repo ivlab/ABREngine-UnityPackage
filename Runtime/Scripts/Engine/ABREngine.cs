@@ -62,6 +62,8 @@ namespace IVLab.ABREngine
 
                 EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
                 gameObjectMapping[impression.Uuid] = ego;
+
+                PrepareImpression(impression);
             }
         }
 
@@ -105,19 +107,7 @@ namespace IVLab.ABREngine
                     Guid uuid = impression.Key;
                     impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
 
-                    Dataset dataset = impression.Value.GetDataset();
-                    if (dataset != null)
-                    {
-                        // Make sure the bounding box is correct
-                        // Mostly matters if there's a live ParaView connection
-                        dataset.RecalculateBounds();
-
-                        // Make sure the parent is assigned properly
-                        gameObjectMapping[uuid].gameObject.transform.parent = dataset.DataRoot.transform;
-
-                        // Display the UUID in editor
-                        gameObjectMapping[uuid].SetUuid(uuid);
-                    }
+                    PrepareImpression(impression.Value);
                 }
             }
         }
@@ -147,6 +137,23 @@ namespace IVLab.ABREngine
                     stateUpdating = false;
                 }
             });
+        }
+
+        private void PrepareImpression(IDataImpression impression)
+        {
+            Dataset dataset = impression.GetDataset();
+            if (dataset != null)
+            {
+                // Make sure the bounding box is correct
+                // Mostly matters if there's a live ParaView connection
+                dataset.RecalculateBounds();
+
+                // Make sure the parent is assigned properly
+                gameObjectMapping[impression.Uuid].gameObject.transform.parent = dataset.DataRoot.transform;
+
+                // Display the UUID in editor
+                gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);
+            }
         }
     }
 }
