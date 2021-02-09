@@ -149,7 +149,7 @@ namespace IVLab.ABREngine
                 dataset.RecalculateBounds();
 
                 // Make sure the parent is assigned properly
-                gameObjectMapping[impression.Uuid].gameObject.transform.parent = dataset.DataRoot.transform;
+                gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(dataset.DataRoot.transform, false);
 
                 // Display the UUID in editor
                 gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);

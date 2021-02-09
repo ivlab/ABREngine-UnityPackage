@@ -272,18 +272,21 @@ namespace IVLab.ABREngine
             }
 
             // Adjust the datasets to their positions defined in the state
-            foreach (var datasetPath in state.scene.datasetTransforms)
+            if (state.scene != null)
             {
-                Dataset dataset;
-                DataManager.Instance.TryGetDataset(datasetPath.Key, out dataset);
-                if (dataset != null)
+                foreach (var datasetPath in state.scene.datasetTransforms)
                 {
-                    dataset.DataRoot.transform.position = datasetPath.Value.position;
-                    dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
-                }
-                else
-                {
-                    Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
+                    Dataset dataset;
+                    DataManager.Instance.TryGetDataset(datasetPath.Key, out dataset);
+                    if (dataset != null)
+                    {
+                        dataset.DataRoot.transform.position = datasetPath.Value.position;
+                        dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
+                    }
+                    else
+                    {
+                        Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
+                    }
                 }
             }
 
