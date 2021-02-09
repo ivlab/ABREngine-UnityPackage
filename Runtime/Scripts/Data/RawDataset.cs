@@ -153,6 +153,12 @@ namespace IVLab.ABREngine
                 vertexArray[i][2] = bd.vertices[i * 3 + 2];
             }
 
+            if ((int)meshTopology == 100)
+            {
+                Debug.LogWarning("Voxels not yet supported, converting to points");
+                meshTopology = MeshTopology.Points;
+            }
+
             long numIndices = 0;
             if (meshTopology == MeshTopology.Points)
                 numIndices = jh.num_cells;

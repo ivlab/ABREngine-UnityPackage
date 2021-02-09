@@ -137,8 +137,15 @@ namespace IVLab.ABREngine
                         RawDataset.BinaryData b = new RawDataset.BinaryData(json, textData.bindata);
                         RawDataset dataset = new RawDataset(json, b);
 
-                        await DataManager.Instance.ImportRawDataset(textData.label, dataset);
-                        await DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                        try
+                        {
+                            await DataManager.Instance.ImportRawDataset(textData.label, dataset);
+                            await DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e);
+                        }
                         // Note: state does not (yet) automatically update when new
                         // data are received
                         // await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
