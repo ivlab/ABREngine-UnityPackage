@@ -3,6 +3,7 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
+ * Should be kept in sync with the DataPath.py found in ABRUtilities repo
  */
 
 using System;
@@ -27,10 +28,10 @@ namespace IVLab.ABREngine
     {
         public enum DataPathType
         {
-            ScalarVar,
-            VectorVar,
-            KeyData,
-            Dataset,
+            ScalarVar = 0,
+            VectorVar = 1,
+            KeyData = 2,
+            Dataset = 3,
         }
 
         private static char separator = '/';
@@ -93,7 +94,15 @@ namespace IVLab.ABREngine
 
         public static string Join(string path1, DataPathType pathType)
         {
-            return Join(path1, pathType.ToString());
+            if (FollowsConvention(path1, DataPathType.Dataset))
+            {
+                return Join(path1, pathType.ToString());
+            }
+            else
+            {
+                Debug.LogWarning("Refusing to join non-dataset path with DataPathType");
+                return path1;
+            }
         }
 
         public static bool FollowsConvention(string label, DataPathType pathType = DataPathType.KeyData)
