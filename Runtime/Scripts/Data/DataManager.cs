@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
+using System.Net.Http;
 using UnityEngine;
-
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+
 using IVLab.Utilities;
 
 namespace IVLab.ABREngine
@@ -117,6 +119,35 @@ namespace IVLab.ABREngine
 
             RawDataset ds = new RawDataset(metadata, data);
             await ImportRawDataset(dataPath, ds);
+        }
+
+        public async Task LoadRawDatasetFromURL(string dataPath, string url)
+        {
+            Debug.Log("Loading " + dataPath + " from " + url);
+            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
+
+            HttpResponseMessage metadataResponse = await ABREngine.client.GetAsync(url + "/metadata/" + dataPath);
+            metadataResponse.EnsureSuccessStatusCode();
+            string responseBody = await metadataResponse.Content.ReadAsStringAsync();
+
+            JToken metadataJson = JObject.Parse(responseBody)["metadata"];
+            RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
+
+            HttpResponseMessage dataResponse = await ABREngine.client.GetAsync(url + "/data/" + dataPath);
+            metadataResponse.EnsureSuccessStatusCode();
+            byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
+
+            try
+            {
+                RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
+                RawDataset ds = new RawDataset(metadata, data);
+                await ImportRawDataset(dataPath, ds);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
         }
 
         public async Task CacheRawDataset(string dataPath, string json, byte[] data)

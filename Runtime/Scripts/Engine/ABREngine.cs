@@ -6,6 +6,7 @@
  */
 
 using System.Threading.Tasks;
+using System.Net.Http;
 using System;
 using System.Collections.Generic;
 using IVLab.Utilities;
@@ -29,6 +30,8 @@ namespace IVLab.ABREngine
 
         public ABRConfig Config { get; private set; }
 
+        public static readonly HttpClient client = new HttpClient();
+
         protected override void Awake()
         {
             base.Awake();
@@ -38,6 +41,11 @@ namespace IVLab.ABREngine
         public bool HasDataImpression(Guid uuid)
         {
             return dataImpressions.ContainsKey(uuid);
+        }
+
+        public IDataImpression GetDataImpression(Guid uuid)
+        {
+            return dataImpressions[uuid];
         }
 
         public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite=true)
