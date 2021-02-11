@@ -126,19 +126,19 @@ namespace IVLab.ABREngine
             Debug.Log("Loading " + dataPath + " from " + url);
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
 
-            HttpResponseMessage metadataResponse = await ABREngine.client.GetAsync(url + "/metadata/" + dataPath);
-            metadataResponse.EnsureSuccessStatusCode();
-            string responseBody = await metadataResponse.Content.ReadAsStringAsync();
-
-            JToken metadataJson = JObject.Parse(responseBody)["metadata"];
-            RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
-
-            HttpResponseMessage dataResponse = await ABREngine.client.GetAsync(url + "/data/" + dataPath);
-            metadataResponse.EnsureSuccessStatusCode();
-            byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
-
             try
             {
+                HttpResponseMessage metadataResponse = await ABREngine.client.GetAsync(url + "/metadata/" + dataPath);
+                metadataResponse.EnsureSuccessStatusCode();
+                string responseBody = await metadataResponse.Content.ReadAsStringAsync();
+
+                JToken metadataJson = JObject.Parse(responseBody)["metadata"];
+                RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
+
+                HttpResponseMessage dataResponse = await ABREngine.client.GetAsync(url + "/data/" + dataPath);
+                metadataResponse.EnsureSuccessStatusCode();
+                byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
+
                 RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
                 RawDataset ds = new RawDataset(metadata, data);
                 await ImportRawDataset(dataPath, ds);
