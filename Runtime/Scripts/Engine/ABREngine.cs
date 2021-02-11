@@ -30,7 +30,7 @@ namespace IVLab.ABREngine
 
         public ABRConfig Config { get; private set; }
 
-        public static readonly HttpClient client = new HttpClient();
+        public static readonly HttpClient httpClient = new HttpClient();
 
         protected override void Awake()
         {
@@ -90,12 +90,6 @@ namespace IVLab.ABREngine
             }
         }
 
-        public void ReloadState()
-        {
-            ClearState();
-            LoadStateFromResources(previousStateName);
-        }
-
         public void RenderImpressions()
         {
             lock (_stateLock)
@@ -120,7 +114,8 @@ namespace IVLab.ABREngine
             }
         }
 
-        public void LoadStateFromResources(string stateName)
+        public void LoadState<T>(string stateName)
+        where T: IABRStateLoader, new()
         {
             // Kick off a task to load the new state, and make sure it's all in
             // the main thread. TODO there's definitely a better way to do this
@@ -132,7 +127,7 @@ namespace IVLab.ABREngine
                 stateUpdating = true;
             }
             UnityThreadScheduler.Instance.KickoffMainThreadWork(async () => {
-                ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
+                ABRStateParser parser = ABRStateParser.GetParser<T>();
                 JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
                 lock (_stateLock)
                 {

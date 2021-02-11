@@ -34,9 +34,7 @@ namespace IVLab.ABREngine
 
         public async Task<JToken> LoadState(string name, JToken previousState)
         {
-            string stateText = await UnityThreadScheduler.Instance.RunMainThreadWork(() => _loader.GetState(name));
-
-            JToken stateJson = JToken.Parse(stateText);
+            JToken stateJson = await _loader.GetState(name);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
@@ -44,7 +42,7 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("State is not valid with ABR schema version {0}", ABREngine.Instance.Config.Info.version);
                 foreach (var error in errors)
                 {
-                    Debug.LogErrorFormat("{0} Error: Line {1} ({1}):\n    {2}", error.ErrorType, error.LineNumber, error.Path, error.Message);
+                    Debug.LogErrorFormat("Error '{0}': Line {1} ({2}):\n    {3}", error.ErrorType, error.LineNumber, error.Path, error.Message);
                     return null;
                 }
             }
@@ -73,7 +71,7 @@ namespace IVLab.ABREngine
                 }
             }
 
-            RawABRState state = JsonConvert.DeserializeObject<RawABRState>(stateText);
+            RawABRState state = stateJson.ToObject<RawABRState>();
 
             var assembly = Assembly.GetExecutingAssembly();
             Type dataImpressionType = typeof(DataImpression);
