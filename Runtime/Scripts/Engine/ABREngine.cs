@@ -28,6 +28,8 @@ namespace IVLab.ABREngine
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
+        private StateSubscriber _notifier;
+
         public ABRConfig Config { get; private set; }
 
         public static readonly HttpClient httpClient = new HttpClient();
@@ -36,6 +38,12 @@ namespace IVLab.ABREngine
         {
             base.Awake();
             Config = new ABRConfig();
+            _notifier = new StateSubscriber();
+        }
+
+        void OnDestroy()
+        {
+            _notifier.Stop();
         }
 
         public bool HasDataImpression(Guid uuid)
