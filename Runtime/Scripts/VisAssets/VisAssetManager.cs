@@ -26,6 +26,7 @@ namespace IVLab.ABREngine
         public VisAssetManager(string visassetPath)
         {
             this.appDataPath = visassetPath;
+            Directory.CreateDirectory(this.appDataPath);
             Debug.Log("VisAsset Path: " + appDataPath);
         }
 

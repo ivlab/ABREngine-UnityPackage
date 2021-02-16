@@ -43,7 +43,7 @@ namespace IVLab.ABREngine
         public string DataPath {
             get
             {
-                if (_notifier.serverIsLocal)
+                if (_notifier != null && _notifier.serverIsLocal)
                 {
                     return _notifier.subscriberInfo.localDataPath;
                 }

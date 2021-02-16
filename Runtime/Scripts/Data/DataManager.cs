@@ -43,6 +43,7 @@ namespace IVLab.ABREngine
         public DataManager(string datasetPath)
         {
             this.appDataPath = datasetPath;
+            Directory.CreateDirectory(this.appDataPath);
             Debug.Log("Dataset Path: " + appDataPath);
         }
 
