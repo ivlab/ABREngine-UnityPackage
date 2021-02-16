@@ -38,12 +38,15 @@ namespace IVLab.ABREngine
         {
             base.Awake();
             Config = new ABRConfig();
-            _notifier = new StateSubscriber();
+            if (Config.Info.serverAddress != null)
+            {
+                _notifier = new StateSubscriber(Config.Info.serverAddress);
+            }
         }
 
         void OnDestroy()
         {
-            _notifier.Stop();
+            _notifier?.Stop();
         }
 
         public bool HasDataImpression(Guid uuid)

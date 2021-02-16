@@ -46,14 +46,42 @@ namespace IVLab.ABREngine
 
         public ABRConfig()
         {
-            TextAsset configContents = Resources.Load<TextAsset>(CONFIG_FILE);
-            if (configContents == null)
-            {
-                // Config not found, revert to default
-                configContents = Resources.Load<TextAsset>(CONFIG_FILE_FALLBACK);
-            }
+            TextAsset configContents = Resources.Load<TextAsset>(CONFIG_FILE_FALLBACK);
+            TextAsset configCustomizations = Resources.Load<TextAsset>(CONFIG_FILE);
 
             Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
+            ABRConfigInfo customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(configCustomizations?.text ?? "");
+
+            // Overwrite the defaults if they're provided
+            if (customizations?.version != null)
+            {
+                Info.version = customizations.version;
+            }
+            if (customizations?.defaultPrefabName != null)
+            {
+                Info.defaultPrefabName = customizations.defaultPrefabName;
+            }
+            if (customizations?.schemaName != null)
+            {
+                Info.schemaName = customizations.schemaName;
+            }
+            if (customizations?.defaultBounds != null)
+            {
+                Info.defaultBounds = customizations.defaultBounds;
+            }
+            if (customizations?.serverAddress != null)
+            {
+                Info.serverAddress = customizations.serverAddress;
+            }
+            if (customizations?.dataServer != null)
+            {
+                Info.dataServer = customizations.dataServer;
+            }
+            if (customizations?.visAssetServer != null)
+            {
+                Info.visAssetServer = customizations.visAssetServer;
+            }
+
             Debug.Log("ABR Config Loaded");
 
             // Load the default prefab
@@ -143,6 +171,28 @@ namespace IVLab.ABREngine
         ///     Default bounds for datasets when showing (in Unity world coordinates)
         /// </summary>
         public Bounds defaultBounds;
+
+        /// <summary>
+        ///     What server to connect to, if any. If provided, ABR will try to
+        ///     register with the server immediately upon startup.
+        /// </summary>
+        public string serverAddress;
+
+        /// <summary>
+        ///     What server to obtain VisAssets from, if any. If none provided,
+        ///     ABR will assume that everything is in Unity's persistentData
+        ///     path. If server is provided and resource doesn't exist in
+        ///     persistentData, it will be downloaded.
+        /// </summary>
+        public string visAssetServer;
+
+        /// <summary>
+        ///     What server to obtain data from, if any. If none provided,
+        ///     ABR will assume that everything is in Unity's persistentData
+        ///     path. If server is provided and resource doesn't exist in
+        ///     persistentData, it will be downloaded.
+        /// </summary>
+        public string dataServer;
     }
 
     public class ABRConfigDefaults

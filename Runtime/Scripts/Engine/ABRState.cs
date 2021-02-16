@@ -51,7 +51,6 @@ namespace IVLab.ABREngine
             JsonDiffPatch jdp = new JsonDiffPatch();
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
             stateJson = jdp.Patch(previousState, diffFromPrevious);
-            Debug.Log(diffFromPrevious);
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
             // If it's an array, that means it's either been deleted or created
@@ -88,6 +87,10 @@ namespace IVLab.ABREngine
             }
 
             RawABRState state = stateJson.ToObject<RawABRState>();
+            if (state == null || state.impressions == null)
+            {
+                return null;
+            }
 
             var assembly = Assembly.GetExecutingAssembly();
             Type dataImpressionType = typeof(DataImpression);

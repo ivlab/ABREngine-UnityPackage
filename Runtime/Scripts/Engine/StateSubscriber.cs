@@ -27,8 +27,6 @@ namespace IVLab.ABREngine
         /// How long to wait before determining that the client is dead (milliseconds)
         private const int TIMEOUT = 2000;
 
-        private const string SERVER = "127.0.0.1:8000";
-
         /// Connection to the design server
         private TcpClient _client;
 
@@ -47,18 +45,28 @@ namespace IVLab.ABREngine
         }
         private SubscriberInfo _subscriberInfo;
 
-        public StateSubscriber()
+        private string _serverAddress;
+
+        public StateSubscriber(string serverAddress)
         {
+            _serverAddress = serverAddress;
             Task.Run(async () =>
             {
-                HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync("http://" + SERVER + "/api/subscribe", new ByteArrayContent(new byte[0]));
-                subMsg.EnsureSuccessStatusCode();
-                string msg = await subMsg.Content.ReadAsStringAsync();
-                this._subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
-                this._client = new TcpClient(_subscriberInfo.address, _subscriberInfo.port);
-                this._running = true;
-                this._receiverThread = new Thread(new ThreadStart(this.Receiver));
-                this._receiverThread.Start();
+                try
+                {
+                    HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
+                    subMsg.EnsureSuccessStatusCode();
+                    string msg = await subMsg.Content.ReadAsStringAsync();
+                    this._subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
+                    this._client = new TcpClient(_subscriberInfo.address, _subscriberInfo.port);
+                    this._running = true;
+                    this._receiverThread = new Thread(new ThreadStart(this.Receiver));
+                    this._receiverThread.Start();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
             });
         }
 
@@ -69,7 +77,7 @@ namespace IVLab.ABREngine
             this._running = false;
             Task.Run(async () =>
             {
-                await ABREngine.httpClient.PostAsync("http://" + SERVER + "/api/unsubscribe/" + _subscriberInfo.uuid, new ByteArrayContent(new byte[0]));
+                await ABREngine.httpClient.PostAsync(_serverAddress + "/api/unsubscribe/" + _subscriberInfo.uuid, new ByteArrayContent(new byte[0]));
             });
 
             this._receiverThread?.Join();
@@ -89,7 +97,7 @@ namespace IVLab.ABREngine
                 string updateMsg = await StreamMethods.ReadStringFromStreamAsync(this._client.GetStream(), ct);
                 // when we get here, we've received a message and can update
                 // state!
-                ABREngine.Instance.LoadState<HttpStateFileLoader>("http://" + SERVER + "/api/state");
+                ABREngine.Instance.LoadState<HttpStateFileLoader>(_serverAddress + "/api/state");
             }
         }
     }
