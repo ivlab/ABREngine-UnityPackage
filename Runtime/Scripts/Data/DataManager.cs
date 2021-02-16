@@ -76,7 +76,7 @@ namespace IVLab.ABREngine
                 // If we don't, create the dataset
                 if (dataset == null)
                 {
-                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds;
+                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
                 }
 

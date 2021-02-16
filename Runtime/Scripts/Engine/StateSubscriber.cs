@@ -54,36 +54,29 @@ namespace IVLab.ABREngine
 
         public async Task Init()
         {
-            try
-            {
-                // TODO: Add authentication
-                HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
-                subMsg.EnsureSuccessStatusCode();
-                string msg = await subMsg.Content.ReadAsStringAsync();
-                this.subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
+            // TODO: Add authentication
+            HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
+            subMsg.EnsureSuccessStatusCode();
+            string msg = await subMsg.Content.ReadAsStringAsync();
+            this.subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
 
-                // Check to see if we're running on the same machine as the
-                // server.
-                bool sameMachine = System.IO.Directory.Exists(subscriberInfo.localDataPath);
-                if (sameMachine && subscriberInfo.localDataPath != null)
-                {
-                    serverIsLocal = true;
-                    Debug.Log("Connected to local state server " + subscriberInfo.address);
-                }
-                else
-                {
-                    Debug.Log("Connected to remote state server " + subscriberInfo.address);
-                }
-
-                this._client = new TcpClient(subscriberInfo.address, subscriberInfo.port);
-                this._running = true;
-                this._receiverThread = new Thread(new ThreadStart(this.Receiver));
-                this._receiverThread.Start();
-            }
-            catch (Exception e)
+            // Check to see if we're running on the same machine as the
+            // server.
+            bool sameMachine = System.IO.Directory.Exists(subscriberInfo.localDataPath);
+            if (sameMachine && subscriberInfo.localDataPath != null)
             {
-                Debug.LogError(e);
+                serverIsLocal = true;
+                Debug.Log("Connected to local state server " + subscriberInfo.address);
             }
+            else
+            {
+                Debug.Log("Connected to remote state server " + subscriberInfo.address);
+            }
+
+            this._client = new TcpClient(subscriberInfo.address, subscriberInfo.port);
+            this._running = true;
+            this._receiverThread = new Thread(new ThreadStart(this.Receiver));
+            this._receiverThread.Start();
         }
 
         // Tell the Server we've disconnected, then clean up connections and threads

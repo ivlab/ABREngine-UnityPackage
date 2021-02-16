@@ -33,7 +33,8 @@ namespace IVLab.ABREngine
         public DataManager Data { get; private set; }
         public SocketDataListener DataListener { get; private set; }
 
-        public string persistentDataPath = null;
+        // Save this for threading purposes (can't be accessed from non-main-thread)
+        private string persistentDataPath = null;
 
         /// <summary>
         ///     If the Engine is connected to a local server, use that server's
@@ -48,7 +49,7 @@ namespace IVLab.ABREngine
                 }
                 else
                 {
-                    return Path.Combine(Application.persistentDataPath, "media");
+                    return Path.Combine(persistentDataPath, "media");
                 }
             }
         }
@@ -65,15 +66,33 @@ namespace IVLab.ABREngine
             Config = new ABRConfig();
             Task.Run(async () =>
             {
-                if (Config.Info.serverAddress != null)
+                try
                 {
-                    _notifier = new StateSubscriber(Config.Info.serverAddress);
-                    await _notifier.Init();
+                    if (Config.Info.serverAddress != null)
+                    {
+                            _notifier = new StateSubscriber(Config.Info.serverAddress);
+                            await _notifier.Init();
+                    }
                 }
-                VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"));
-                Data = new DataManager(Path.Combine(DataPath, "datasets"));
-                DataListener = new SocketDataListener();
-                DataListener.StartServer();
+                catch (Exception)
+                {
+                    Debug.LogError("Unable to connect to state server " + Config.Info.serverAddress);
+                }
+
+                try
+                {
+                    VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"));
+                    Data = new DataManager(Path.Combine(DataPath, "datasets"));
+                    if (Config.Info.dataListenerPort != null)
+                    {
+                        DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
+                        DataListener.StartServer();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
             });
         }
 

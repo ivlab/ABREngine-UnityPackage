@@ -81,7 +81,12 @@ namespace IVLab.ABREngine
             {
                 Info.visAssetServer = customizations.visAssetServer;
             }
+            if (customizations?.dataListenerPort != null)
+            {
+                Info.dataListenerPort = customizations.dataListenerPort;
+            }
 
+            // Debug.Log("ABR Config Loaded\n" + Info.ToString());
             Debug.Log("ABR Config Loaded");
 
             // Load the default prefab
@@ -170,11 +175,11 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Default bounds for datasets when showing (in Unity world coordinates)
         /// </summary>
-        public Bounds defaultBounds;
+        public Bounds? defaultBounds;
 
         /// <summary>
         ///     What server to connect to, if any. If provided, ABR will try to
-        ///     register with the server immediately upon startup.
+        ///     register with the server immediately upon startup. Default: null
         /// </summary>
         public string serverAddress;
 
@@ -182,7 +187,7 @@ namespace IVLab.ABREngine
         ///     What server to obtain VisAssets from, if any. If none provided,
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in
-        ///     persistentData, it will be downloaded.
+        ///     persistentData, it will be downloaded. Default: null
         /// </summary>
         public string visAssetServer;
 
@@ -190,9 +195,23 @@ namespace IVLab.ABREngine
         ///     What server to obtain data from, if any. If none provided,
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in
-        ///     persistentData, it will be downloaded.
+        ///     persistentData, it will be downloaded. Default: null
         /// </summary>
         public string dataServer;
+
+        /// <summary>
+        ///     Port to listen for data on, if any. Useful if, for instance, you want to
+        ///     have a live connection to ParaView that pushes data into ABR. Default:
+        ///     null
+        /// </summary>
+        public int? dataListenerPort;
+
+        public override string ToString()
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
+        }
     }
 
     public class ABRConfigDefaults

@@ -28,10 +28,15 @@ namespace IVLab.ABREngine
 
     public class SocketDataListener
     {
-        public int port = 1900;
+        public int port;
 
         [SerializeField]
         public TcpListener listener = null;
+
+        public SocketDataListener(int port)
+        {
+            this.port = port;
+        }
 
         public void StartServer()
         {
@@ -40,6 +45,7 @@ namespace IVLab.ABREngine
             listener.Start();
             listener.BeginAcceptTcpClient(
                 new System.AsyncCallback(DoAcceptSocketCallback), listener);
+            Debug.Log("Listening for data on port " + port);
         }
 
         public void StopServer()
