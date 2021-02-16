@@ -7,6 +7,7 @@
 
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.IO;
 using System;
 using System.Collections.Generic;
 using IVLab.Utilities;
@@ -15,7 +16,6 @@ using Newtonsoft.Json.Linq;
 
 namespace IVLab.ABREngine
 {
-    [RequireComponent(typeof(DataManager), typeof(VisAssetManager))]
     public class ABREngine : Singleton<ABREngine>
     {
         private Dictionary<Guid, IDataImpression> dataImpressions = new Dictionary<Guid, IDataImpression>();
@@ -29,6 +29,29 @@ namespace IVLab.ABREngine
         private bool stateUpdating = false;
 
         private StateSubscriber _notifier;
+        public VisAssetManager VisAssets { get; private set; }
+        public DataManager Data { get; private set; }
+        public SocketDataListener DataListener { get; private set; }
+
+        public string persistentDataPath = null;
+
+        /// <summary>
+        ///     If the Engine is connected to a local server, use that server's
+        ///     data path, otherwise use our persistent data path.
+        /// </summary>
+        public string DataPath {
+            get
+            {
+                if (_notifier.serverIsLocal)
+                {
+                    return _notifier.subscriberInfo.localDataPath;
+                }
+                else
+                {
+                    return Path.Combine(Application.persistentDataPath, "media");
+                }
+            }
+        }
 
         public ABRConfig Config { get; private set; }
 
@@ -36,17 +59,28 @@ namespace IVLab.ABREngine
 
         protected override void Awake()
         {
+            UnityThreadScheduler.GetInstance();
+            persistentDataPath = Application.persistentDataPath;
             base.Awake();
             Config = new ABRConfig();
-            if (Config.Info.serverAddress != null)
+            Task.Run(async () =>
             {
-                _notifier = new StateSubscriber(Config.Info.serverAddress);
-            }
+                if (Config.Info.serverAddress != null)
+                {
+                    _notifier = new StateSubscriber(Config.Info.serverAddress);
+                    await _notifier.Init();
+                }
+                VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"));
+                Data = new DataManager(Path.Combine(DataPath, "datasets"));
+                DataListener = new SocketDataListener();
+                DataListener.StartServer();
+            });
         }
 
         void OnDestroy()
         {
             _notifier?.Stop();
+            DataListener.StopServer();
         }
 
         public bool HasDataImpression(Guid uuid)

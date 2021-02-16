@@ -146,11 +146,11 @@ namespace IVLab.ABREngine
                     // See if we already have the VisAsset; if not then load it
                     var visAssetUUID = new Guid(visAsset);
                     IVisAsset existing;
-                    VisAssetManager.Instance.TryGetVisAsset(visAssetUUID, out existing);
+                    ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
                     if (existing == null)
                     {
                         await UnityThreadScheduler.Instance.RunMainThreadWork(
-                            () => VisAssetManager.Instance.LoadVisAsset(visAssetUUID)
+                            () => ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID)
                         );
                     }
                 }
@@ -159,10 +159,10 @@ namespace IVLab.ABREngine
                 {
                     // See if we already have the VisAsset; if not then load it
                     RawDataset existing;
-                    DataManager.Instance.TryGetRawDataset(rawData, out existing);
+                    ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
                     if (existing == null)
                     {
-                        await DataManager.Instance.LoadRawDatasetFromCache(rawData);
+                        await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
                     }
                 }
 
@@ -188,7 +188,7 @@ namespace IVLab.ABREngine
                     {
                         string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                         Dataset dataset;
-                        DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+                        ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
                         if (dataset == null)
                         {
                             Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
@@ -207,7 +207,7 @@ namespace IVLab.ABREngine
                     {
                         string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                         Dataset dataset;
-                        DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+                        ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
                         if (dataset == null)
                         {
                             Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
@@ -237,7 +237,7 @@ namespace IVLab.ABREngine
                         IVisAsset visAsset = null;
                         await UnityThreadScheduler.Instance.RunMainThreadWork(() => 
                         {
-                            VisAssetManager.Instance.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
+                            ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
                         });
                         if (visAsset == null)
                         {
@@ -294,7 +294,7 @@ namespace IVLab.ABREngine
                 foreach (var datasetPath in state.scene.datasetTransforms)
                 {
                     Dataset dataset;
-                    DataManager.Instance.TryGetDataset(datasetPath.Key, out dataset);
+                    ABREngine.Instance.Data.TryGetDataset(datasetPath.Key, out dataset);
                     if (dataset != null)
                     {
                         dataset.DataRoot.transform.position = datasetPath.Value.position;

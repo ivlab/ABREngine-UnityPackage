@@ -45,7 +45,7 @@ namespace IVLab.ABREngine
         {
             string datasetPath = DataPath.GetDatasetPath(Path);
             Dataset dataset;
-            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
             return dataset;
         }
     }

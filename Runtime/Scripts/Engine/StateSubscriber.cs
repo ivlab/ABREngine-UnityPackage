@@ -5,12 +5,10 @@
  *
  */
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System;
-using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -37,37 +35,55 @@ namespace IVLab.ABREngine
         /// Threads to listen for data across the socket
         private Thread _receiverThread;
 
-        class SubscriberInfo
+        public class SubscriberInfo
         {
             public string address;
             public int port;
             public string uuid;
+            public string localDataPath;
         }
-        private SubscriberInfo _subscriberInfo;
+        public SubscriberInfo subscriberInfo;
+        public bool serverIsLocal = false;
 
         private string _serverAddress;
 
         public StateSubscriber(string serverAddress)
         {
             _serverAddress = serverAddress;
-            Task.Run(async () =>
+        }
+
+        public async Task Init()
+        {
+            try
             {
-                try
+                // TODO: Add authentication
+                HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
+                subMsg.EnsureSuccessStatusCode();
+                string msg = await subMsg.Content.ReadAsStringAsync();
+                this.subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
+
+                // Check to see if we're running on the same machine as the
+                // server.
+                bool sameMachine = System.IO.Directory.Exists(subscriberInfo.localDataPath);
+                if (sameMachine && subscriberInfo.localDataPath != null)
                 {
-                    HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
-                    subMsg.EnsureSuccessStatusCode();
-                    string msg = await subMsg.Content.ReadAsStringAsync();
-                    this._subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
-                    this._client = new TcpClient(_subscriberInfo.address, _subscriberInfo.port);
-                    this._running = true;
-                    this._receiverThread = new Thread(new ThreadStart(this.Receiver));
-                    this._receiverThread.Start();
+                    serverIsLocal = true;
+                    Debug.Log("Connected to local state server " + subscriberInfo.address);
                 }
-                catch (Exception e)
+                else
                 {
-                    Debug.LogError(e);
+                    Debug.Log("Connected to remote state server " + subscriberInfo.address);
                 }
-            });
+
+                this._client = new TcpClient(subscriberInfo.address, subscriberInfo.port);
+                this._running = true;
+                this._receiverThread = new Thread(new ThreadStart(this.Receiver));
+                this._receiverThread.Start();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         // Tell the Server we've disconnected, then clean up connections and threads
@@ -77,7 +93,7 @@ namespace IVLab.ABREngine
             this._running = false;
             Task.Run(async () =>
             {
-                await ABREngine.httpClient.PostAsync(_serverAddress + "/api/unsubscribe/" + _subscriberInfo.uuid, new ByteArrayContent(new byte[0]));
+                await ABREngine.httpClient.PostAsync(_serverAddress + "/api/unsubscribe/" + subscriberInfo.uuid, new ByteArrayContent(new byte[0]));
             });
 
             this._receiverThread?.Join();

@@ -75,7 +75,7 @@ namespace IVLab.ABREngine
         public void AddKeyData(IKeyData keyData)
         {
             RawDataset rawDataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out rawDataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
             Bounds originalBounds = rawDataset.bounds;
 
             RecalculateBounds();
@@ -95,7 +95,7 @@ namespace IVLab.ABREngine
             foreach (var keyData in keyDataObjects)
             {
                 RawDataset rawDataset;
-                DataManager.Instance.TryGetRawDataset(keyData.Value.Path, out rawDataset);
+                ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
                 Bounds originalBounds = rawDataset.bounds;
 
                 if (CurrentDataSpaceBounds.size.magnitude <= float.Epsilon)

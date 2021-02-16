@@ -26,8 +26,7 @@ namespace IVLab.ABREngine
         public byte[] bindata;
     }
 
-    [RequireComponent(typeof(DataManager))]
-    public class SocketDataListener : Singleton<SocketDataListener>
+    public class SocketDataListener
     {
         public int port = 1900;
 
@@ -139,8 +138,8 @@ namespace IVLab.ABREngine
 
                         try
                         {
-                            await DataManager.Instance.ImportRawDataset(textData.label, dataset);
-                            await DataManager.Instance.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                            await ABREngine.Instance.Data.ImportRawDataset(textData.label, dataset);
+                            await ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
                         }
                         catch (Exception e)
                         {
@@ -167,19 +166,6 @@ namespace IVLab.ABREngine
             listener.BeginAcceptSocket(
                new System.AsyncCallback(DoAcceptSocketCallback), listener);
 
-        }
-
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            StartServer();
-            UnityThreadScheduler.GetInstance();
-        }
-
-        private void OnDestroy()
-        {
-            StopServer();
         }
     }
 }

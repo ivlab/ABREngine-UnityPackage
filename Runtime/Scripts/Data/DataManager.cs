@@ -20,7 +20,7 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
-    public class DataManager : Singleton<DataManager>
+    public class DataManager
     {
         private string appDataPath;
 
@@ -40,11 +40,10 @@ namespace IVLab.ABREngine
         // data and variables for a particular dataset
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
 
-        protected override void Awake()
+        public DataManager(string datasetPath)
         {
-            base.Awake();
-            this.appDataPath = Path.Combine(Application.persistentDataPath, "media", "datasets");
-            UnityThreadScheduler.GetInstance();
+            this.appDataPath = datasetPath;
+            Debug.Log("Dataset Path: " + appDataPath);
         }
 
         public void TryGetRawDataset(string dataPath, out RawDataset dataset)
@@ -78,7 +77,7 @@ namespace IVLab.ABREngine
                 if (dataset == null)
                 {
                     Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds;
-                    dataset = new Dataset(datasetPath, dataContainer, this.transform);
+                    dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
                 }
 
                 datasets[datasetPath] = dataset;

@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 namespace IVLab.ABREngine
 {
-    public class VisAssetManager : IVLab.Utilities.Singleton<VisAssetManager>
+    public class VisAssetManager
     {
         public string appDataPath;
 
@@ -23,11 +23,10 @@ namespace IVLab.ABREngine
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
         
-        protected override void Awake()
+        public VisAssetManager(string visassetPath)
         {
-            base.Awake();
-            appDataPath = Path.Combine(Application.persistentDataPath, "media", "visassets");
-            Directory.CreateDirectory(appDataPath);
+            this.appDataPath = visassetPath;
+            Debug.Log("VisAsset Path: " + appDataPath);
         }
 
         public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
@@ -150,7 +149,7 @@ namespace IVLab.ABREngine
                     {
                         Debug.LogError(e);
                     }
-                    loadedObjGameObject.transform.SetParent(transform);
+                    loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
                     loadedObjGameObject.SetActive(false);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
                     GameObject.Destroy(loadedObjGameObject);

@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
             return dataset.HasScalarArray(varName);
         }
@@ -72,7 +72,7 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
             // Return the scalar array
             return dataset?.GetScalarArray(varName);
@@ -82,7 +82,7 @@ namespace IVLab.ABREngine
         {
             string datasetPath = DataPath.GetDatasetPath(Path);
             Dataset dataset;
-            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
             return dataset;
         }
     }
@@ -106,7 +106,7 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
             return dataset.HasVectorArray(varName);
         }
@@ -117,7 +117,7 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
             // Return the vector array
             return dataset?.GetVectorArray(varName);
@@ -127,7 +127,7 @@ namespace IVLab.ABREngine
         {
             string datasetPath = DataPath.GetDatasetPath(Path);
             Dataset dataset;
-            DataManager.Instance.TryGetDataset(datasetPath, out dataset);
+            ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
             return dataset;
         }
     }

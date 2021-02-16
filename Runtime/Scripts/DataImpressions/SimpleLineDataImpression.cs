@@ -88,11 +88,11 @@ namespace IVLab.ABREngine
             SimpleLineRenderInfo renderInfo = null;
 
             RawDataset dataset;
-            DataManager.Instance.TryGetRawDataset(keyData.Path, out dataset);
+            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
             string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
             Dataset containingDataset;
-            DataManager.Instance.TryGetDataset(containingDatasetPath, out containingDataset);
+            ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
 
             if (dataset == null)
             {
