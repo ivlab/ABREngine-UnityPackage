@@ -6,6 +6,8 @@
  */
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -72,6 +74,10 @@ namespace IVLab.ABREngine
             if (customizations?.serverAddress != null)
             {
                 Info.serverAddress = customizations.serverAddress;
+            }
+            if (customizations?.statePathOnServer != null)
+            {
+                Info.statePathOnServer = customizations.statePathOnServer;
             }
             if (customizations?.dataServer != null)
             {
@@ -153,6 +159,21 @@ namespace IVLab.ABREngine
                 return default(T);
             }
         }
+
+        /// <summary>
+        ///     Obtain a full list of all inputs available to this plate
+        /// </summary>
+        public string[] GetInputNames(string plateName)
+        {
+            if (_schema == null)
+            {
+                Debug.LogErrorFormat("Schema is null, cannot get input names for {0}", plateName);
+                return new string[0];
+            }
+            Dictionary<string, JToken> inputList = _schema["definitions"]["Plates"][plateName]["properties"].ToObject<Dictionary<string, JToken>>();
+            return inputList.Keys.ToArray();
+        }
+
     }
 
     public class ABRConfigInfo
@@ -182,6 +203,12 @@ namespace IVLab.ABREngine
         ///     register with the server immediately upon startup. Default: null
         /// </summary>
         public string serverAddress;
+
+        /// <summary>
+        ///     State url to fetch on the server; will be concatenated with
+        ///     serverAddress
+        /// </summary>
+        public string statePathOnServer;
 
         /// <summary>
         ///     What server to obtain VisAssets from, if any. If none provided,

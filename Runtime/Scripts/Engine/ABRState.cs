@@ -117,7 +117,7 @@ namespace IVLab.ABREngine
                 }
 
                 // Find what type of impression to create
-                string plateType = impression.Value.plateType;
+                string plateType = impression.Value?.plateType;
                 int foundIndex = impressionTypeStrings.IndexOf(plateType);
                 if (foundIndex < 0)
                 {
@@ -127,17 +127,20 @@ namespace IVLab.ABREngine
 
                 Queue<string> visAssetsToLoad = new Queue<string>();
                 Queue<string> rawDataToLoad = new Queue<string>();
-                foreach (var inputValue in impression.Value.inputValues)
+                if (impression.Value?.inputValues != null)
                 {
-                    // If the input genre is a key data or a visasset, we need
-                    // to load it
-                    if (inputValue.Value.inputGenre == ABRInputGenre.KeyData)
+                    foreach (var inputValue in impression.Value.inputValues)
                     {
-                        rawDataToLoad.Enqueue(inputValue.Value.inputValue);
-                    }
-                    if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset)
-                    {
-                        visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
+                        // If the input genre is a key data or a visasset, we need
+                        // to load it
+                        if (inputValue.Value.inputGenre == ABRInputGenre.KeyData)
+                        {
+                            rawDataToLoad.Enqueue(inputValue.Value.inputValue);
+                        }
+                        if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset)
+                        {
+                            visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
+                        }
                     }
                 }
 
@@ -157,7 +160,7 @@ namespace IVLab.ABREngine
 
                 foreach (var rawData in rawDataToLoad)
                 {
-                    // See if we already have the VisAsset; if not then load it
+                    // See if we already have the Raw Dataset; if not then load it
                     RawDataset existing;
                     ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
                     if (existing == null)
@@ -180,107 +183,115 @@ namespace IVLab.ABREngine
                     .Where((f) => f != null).ToList();
 
                 // Now that everything is loaded, go ahead and populate the state
-                foreach (var inputValue in impression.Value.inputValues)
+                if (impression.Value?.inputValues != null)
                 {
-                    var value = inputValue.Value;
-                    IABRInput possibleInput = null;
-                    if (value.inputGenre == ABRInputGenre.KeyData)
+                    foreach (var inputName in ABREngine.Instance.Config.GetInputNames(plateType))
                     {
-                        string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                        Dataset dataset;
-                        ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                        if (dataset == null)
+                        RawABRInput value = null;
+                        if (impression.Value.inputValues.ContainsKey(inputName))
                         {
-                            Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                            continue;
+                            value  = impression.Value.inputValues[inputName];
                         }
-                        IKeyData keyData;
-                        dataset.TryGetKeyData(value.inputValue, out keyData);
-                        if (keyData == null)
+                        IABRInput possibleInput = null;
+                        if (value?.inputGenre == ABRInputGenre.KeyData)
                         {
-                            Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
-                            continue;
+                            string datasetPath = DataPath.GetDatasetPath(value.inputValue);
+                            Dataset dataset;
+                            ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
+                            if (dataset == null)
+                            {
+                                Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
+                                continue;
+                            }
+                            IKeyData keyData;
+                            dataset.TryGetKeyData(value.inputValue, out keyData);
+                            if (keyData == null)
+                            {
+                                Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
+                                continue;
+                            }
+                            possibleInput = keyData as IABRInput;
                         }
-                        possibleInput = keyData as IABRInput;
-                    }
-                    else if (value.inputGenre == ABRInputGenre.Variable)
-                    {
-                        string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                        Dataset dataset;
-                        ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                        if (dataset == null)
+                        else if (value?.inputGenre == ABRInputGenre.Variable)
                         {
-                            Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                            continue;
+                            string datasetPath = DataPath.GetDatasetPath(value.inputValue);
+                            Dataset dataset;
+                            ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
+                            if (dataset == null)
+                            {
+                                Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
+                                continue;
+                            }
+
+                            if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                            {
+                                ScalarDataVariable variable;
+                                dataset.TryGetScalarVar(value.inputValue, out variable);
+                                possibleInput = variable as IABRInput;
+                            }
+                            else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                            {
+                                VectorDataVariable variable;
+                                dataset.TryGetVectorVar(value.inputValue, out variable);
+                                possibleInput = variable as IABRInput;
+                            }
+
+                            if (possibleInput == null)
+                            {
+                                Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
+                            }
+                        }
+                        else if (value?.inputGenre == ABRInputGenre.VisAsset)
+                        {
+                            IVisAsset visAsset = null;
+                            await UnityThreadScheduler.Instance.RunMainThreadWork(() => 
+                            {
+                                ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
+                            });
+                            if (visAsset == null)
+                            {
+                                Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
+                                continue;
+                            }
+                            possibleInput = visAsset as IABRInput;
+                        }
+                        else if (value?.inputGenre == ABRInputGenre.Primitive)
+                        {
+                            // Attempt to construct the primitive from the type
+                            // provided in the state file
+                            Type inputType = Type.GetType(value.inputType);
+                            ConstructorInfo inputCtor =
+                                inputType.GetConstructor(
+                                    BindingFlags.Instance | BindingFlags.Public,
+                                    null,
+                                    CallingConventions.HasThis,
+                                    new Type[] { typeof(string) },
+                                    null
+                            );
+                            string[] args = new string[] { value.inputValue };
+                            possibleInput = inputCtor?.Invoke(args) as IABRInput;
+                            if (possibleInput == null)
+                            {
+                                Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
+                            }
                         }
 
-                        if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                        // Verify that we have something to put in the input
+                        if (possibleInput != null)
                         {
-                            ScalarDataVariable variable;
-                            dataset.TryGetScalarVar(value.inputValue, out variable);
-                            possibleInput = variable as IABRInput;
+                            // Verify that the input matches with the parameter (to
+                            // avoid possible name collisions), and check that it's
+                            // assignable from the possibleInput
+                            var actualInput = actualInputs.First((i) => inputName == i.inputName && i.parameterName == value.parameterName);
+                            if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
+                            {
+                                impressionInputs.AssignInput(inputName, possibleInput);
+                            }
                         }
-                        else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                        else
                         {
-                            VectorDataVariable variable;
-                            dataset.TryGetVectorVar(value.inputValue, out variable);
-                            possibleInput = variable as IABRInput;
-                        }
-
-                        if (possibleInput == null)
-                        {
-                            Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
-                        }
-                    }
-                    else if (value.inputGenre == ABRInputGenre.VisAsset)
-                    {
-                        IVisAsset visAsset = null;
-                        await UnityThreadScheduler.Instance.RunMainThreadWork(() => 
-                        {
-                            ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
-                        });
-                        if (visAsset == null)
-                        {
-                            Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
-                            continue;
-                        }
-                        possibleInput = visAsset as IABRInput;
-                    }
-                    else if (value.inputGenre == ABRInputGenre.Primitive)
-                    {
-                        // Attempt to construct the primitive from the type
-                        // provided in the state file
-                        Type inputType = Type.GetType(inputValue.Value.inputType);
-                        ConstructorInfo inputCtor =
-                            inputType.GetConstructor(
-                                BindingFlags.Instance | BindingFlags.Public,
-                                null,
-                                CallingConventions.HasThis,
-                                new Type[] { typeof(string) },
-                                null
-                        );
-                        string[] args = new string[] { inputValue.Value.inputValue };
-                        possibleInput = inputCtor?.Invoke(args) as IABRInput;
-                        if (possibleInput == null)
-                        {
-                            Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarningFormat("Unsupported input genre `{0}`", value.inputGenre.ToString());
-                    }
-
-                    // Verify that we have something to put in the input
-                    if (possibleInput != null)
-                    {
-                        // Verify that the input matches with the parameter (to
-                        // avoid possible name collisions), and check that it's
-                        // assignable from the possibleInput
-                        var actualInput = actualInputs.First((i) => inputValue.Key == i.inputName && i.parameterName == inputValue.Value.parameterName);
-                        if (impressionInputs.CanAssignInput(inputValue.Key, possibleInput) && actualInput != null)
-                        {
-                            impressionInputs.AssignInput(inputValue.Key, possibleInput);
+                            // If not, then assign the input to null
+                            impressionInputs.AssignInput(inputName, null);
                         }
                     }
                 }

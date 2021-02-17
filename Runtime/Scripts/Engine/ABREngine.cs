@@ -40,7 +40,8 @@ namespace IVLab.ABREngine
         ///     If the Engine is connected to a local server, use that server's
         ///     data path, otherwise use our persistent data path.
         /// </summary>
-        public string DataPath {
+        public string DataPath
+        {
             get
             {
                 if (_notifier != null && _notifier.serverIsLocal)
@@ -70,8 +71,8 @@ namespace IVLab.ABREngine
                 {
                     if (Config.Info.serverAddress != null)
                     {
-                            _notifier = new StateSubscriber(Config.Info.serverAddress);
-                            await _notifier.Init();
+                        _notifier = new StateSubscriber(Config.Info.serverAddress);
+                        await _notifier.Init();
                     }
                 }
                 catch (Exception)
@@ -93,6 +94,15 @@ namespace IVLab.ABREngine
                 {
                     Debug.LogError(e);
                 }
+
+                // Fetch the state from the server, if we're connected
+                if (Config.Info.serverAddress != null &&
+                        _notifier != null &&
+                        Config.Info.statePathOnServer != null
+                )
+                {
+                    LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
+                }
             });
         }
 
@@ -112,7 +122,7 @@ namespace IVLab.ABREngine
             return dataImpressions[uuid];
         }
 
-        public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite=true)
+        public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite = true)
         {
             if (dataImpressions.ContainsKey(impression.Uuid))
             {
@@ -154,6 +164,7 @@ namespace IVLab.ABREngine
             }
         }
 
+        [FunctionDebugger]
         public void RenderImpressions()
         {
             lock (_stateLock)
@@ -179,18 +190,19 @@ namespace IVLab.ABREngine
         }
 
         public void LoadState<T>(string stateName)
-        where T: IABRStateLoader, new()
+        where T : IABRStateLoader, new()
         {
             // Kick off a task to load the new state, and make sure it's all in
             // the main thread. TODO there's definitely a better way to do this
             // and optimize what needs to be in the main thread and what
             // doesn't. Currently takes about 10 frames to get from here to the
             // end of the `RenderImpressions()` call.
-            lock (_stateUpdatingLock) 
+            lock (_stateUpdatingLock)
             {
                 stateUpdating = true;
             }
-            UnityThreadScheduler.Instance.KickoffMainThreadWork(async () => {
+            UnityThreadScheduler.Instance.KickoffMainThreadWork(async () =>
+            {
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
                 JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
                 lock (_stateLock)
@@ -199,7 +211,7 @@ namespace IVLab.ABREngine
                     previouslyLoadedState = tempState;
                 }
                 RenderImpressions();
-                lock (_stateUpdatingLock) 
+                lock (_stateUpdatingLock)
                 {
                     stateUpdating = false;
                 }

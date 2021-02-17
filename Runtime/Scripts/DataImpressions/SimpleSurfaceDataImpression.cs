@@ -78,20 +78,9 @@ namespace IVLab.ABREngine
 
         public override void ComputeRenderInfo()
         {
-            if (keyData?.Path == null)
-            {
-                return;
-            }
-
             SimpleSurfaceRenderInfo renderInfo = null;
-            RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
-            string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
-            Dataset containingDataset;
-            ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
-
-            if (dataset == null)
+            if (keyData == null)
             {
                 renderInfo = new SimpleSurfaceRenderInfo
                 {
@@ -104,6 +93,13 @@ namespace IVLab.ABREngine
             }
             else
             {
+                RawDataset dataset;
+                ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
+
+                string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
+                Dataset containingDataset;
+                ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
+
                 int sourceVertCount = dataset.vertexArray.Length;
                 int sourceIndexCount = dataset.indexArray.Length;
 
@@ -241,7 +237,6 @@ namespace IVLab.ABREngine
             if (meshFilter == null)
             {
                 meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
-
             }
             if (meshRenderer == null)
             {

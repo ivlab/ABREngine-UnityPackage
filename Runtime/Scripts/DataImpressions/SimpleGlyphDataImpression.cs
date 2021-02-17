@@ -84,14 +84,7 @@ namespace IVLab.ABREngine
 
             PointRenderInfo renderInfo;
 
-            RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
-
-            string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
-            Dataset containingDataset;
-            ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
-
-            if (dataset == null)
+            if (keyData == null)
             {
                 renderInfo = new PointRenderInfo
                 {
@@ -99,11 +92,19 @@ namespace IVLab.ABREngine
                     orientations = new Quaternion[0],
                     scalars = new Vector4[0],
                     colorVariableMin = 0,
-                    colorVariableMax = 0
+                    colorVariableMax = 0,
+                    bounds = new Bounds()
                 };
             }
             else
             {
+                RawDataset dataset;
+                ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
+
+                string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
+                Dataset containingDataset;
+                ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
+
                 float colorMin, colorMax;
                 colorMin = colorVariable?.MinValue ?? 0.0f;
                 colorMax = colorVariable?.MaxValue ?? 0.0f;
@@ -114,7 +115,7 @@ namespace IVLab.ABREngine
                     orientations = new Quaternion[numPoints],
                     scalars = new Vector4[numPoints],
                     colorVariableMin = colorMin,
-                    colorVariableMax = colorMax
+                    colorVariableMax = colorMax,
                 };
                 for (int i = 0; i < numPoints; i++)
                 {
@@ -193,9 +194,8 @@ namespace IVLab.ABREngine
                     }
                 }
 
-
+                renderInfo.bounds = dataset?.bounds ?? new Bounds();
             }
-            renderInfo.bounds = dataset?.bounds ?? new Bounds();
 
             KeyDataRenderInfo = renderInfo;
         }
@@ -203,6 +203,9 @@ namespace IVLab.ABREngine
         public override void ComputeRenderInfo()
         {
             var dataRenderInfo = KeyDataRenderInfo as PointRenderInfo;
+            if (dataRenderInfo == null) {
+                return;
+            }
 
             int numPoints = dataRenderInfo.scalars.Length;
 
@@ -258,7 +261,6 @@ namespace IVLab.ABREngine
             {
                 mr = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-
 
 
             if (colormap != null)
