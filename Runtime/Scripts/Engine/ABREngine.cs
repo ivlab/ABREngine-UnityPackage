@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using IVLab.Utilities;
 using UnityEngine;
@@ -158,9 +159,10 @@ namespace IVLab.ABREngine
 
         public void ClearState()
         {
-            foreach (var impression in dataImpressions)
+            List<Guid> toRemove = dataImpressions.Keys.ToList();
+            foreach (var impressionUuid in toRemove)
             {
-                UnregisterDataImpression(impression.Key);
+                UnregisterDataImpression(impressionUuid);
             }
         }
 
