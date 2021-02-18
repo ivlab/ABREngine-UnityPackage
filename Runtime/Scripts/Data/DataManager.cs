@@ -105,7 +105,7 @@ namespace IVLab.ABREngine
             string metadataContent = "";
             using (StreamReader file = new StreamReader(jsonFile.FullName))
             {
-                metadataContent = file.ReadToEnd();
+                metadataContent = await file.ReadToEndAsync();
             }
 
             RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);

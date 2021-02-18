@@ -167,25 +167,36 @@ namespace IVLab.ABREngine
         [FunctionDebugger]
         public void RenderImpressions()
         {
-            lock (_stateLock)
+            try
             {
-                foreach (var impression in dataImpressions)
+                lock (_stateLock)
                 {
-                    impression.Value.ComputeKeyDataRenderInfo();
-                }
+                    foreach (var impression in dataImpressions)
+                    {
+                        PrepareImpression(impression.Value);
+                    }
 
-                foreach (var impression in dataImpressions)
-                {
-                    impression.Value.ComputeRenderInfo();
-                }
+                    foreach (var impression in dataImpressions)
+                    {
+                        impression.Value.ComputeKeyDataRenderInfo();
+                    }
 
-                foreach (var impression in dataImpressions)
-                {
-                    Guid uuid = impression.Key;
-                    impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                    foreach (var impression in dataImpressions)
+                    {
+                        impression.Value.ComputeRenderInfo();
+                    }
 
-                    PrepareImpression(impression.Value);
+                    foreach (var impression in dataImpressions)
+                    {
+                        Guid uuid = impression.Key;
+                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error while rendering impressions");
+                Debug.LogError(e);
             }
         }
 
