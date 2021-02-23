@@ -5,9 +5,5 @@
     "unity": "2020.1",
     "description": "Artifact-Based Rendering Engine",
     "dependencies": {
-        "edu.umn.cs.ivlab.newtonsoft.json": "ssh://git@github.umn.edu/ivlab-cs/NewtonsoftJson-UnityPackage.git#v12.0.3",
-        "edu.umn.cs.ivlab.newtonsoft.json.schema": "ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git#v3.0.13",
-        "edu.umn.cs.ivlab.objimport": "ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git#v2.0.2",
-        "edu.umn.cs.ivlab.jsondiffpatch": "ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git#v2.3.0"
     }
 }
