@@ -242,6 +242,12 @@ namespace IVLab.ABREngine
 
                 // Make sure the parent is assigned properly
                 gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(dataset.DataRoot.transform, false);
+                
+                // Unsure why this needs to be explicitly set but here it is,
+                // zeroing position and rotation so each data impression encoded
+                // game object is centered on the dataset...
+                gameObjectMapping[impression.Uuid].gameObject.transform.localPosition = Vector3.zero;
+                gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
 
                 // Display the UUID in editor
                 gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);

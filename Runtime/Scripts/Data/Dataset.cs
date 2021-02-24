@@ -66,10 +66,11 @@ namespace IVLab.ABREngine
             DataContainer = bounds;
             Path = dataPath;
 
+            DataRoot = new GameObject("Dataset " + dataPath);
+            DataRoot.transform.SetParent(parent, false);
+
             ResetBoundsAndTransformation();
 
-            DataRoot = new GameObject("Dataset " + dataPath);
-            DataRoot.transform.parent = parent;
         }
 
         public void AddKeyData(IKeyData keyData)
