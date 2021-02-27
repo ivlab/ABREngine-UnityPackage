@@ -101,9 +101,7 @@ namespace IVLab.ABREngine
                 RawDataset dataset;
                 ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
-                string containingDatasetPath = DataPath.GetDatasetPath(keyData.Path);
-                Dataset containingDataset;
-                ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
+                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
                 float colorMin, colorMax;
                 colorMin = colorVariable?.MinValue ?? 0.0f;
@@ -119,7 +117,7 @@ namespace IVLab.ABREngine
                 };
                 for (int i = 0; i < numPoints; i++)
                 {
-                    renderInfo.positions[i] = containingDataset.CurrentDataTransformation * dataset.vertexArray[i].ToHomogeneous();
+                    renderInfo.positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
                 }
 
                 if (colorVariable != null && colorVariable.IsPartOf(keyData))

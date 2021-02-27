@@ -300,23 +300,24 @@ namespace IVLab.ABREngine
             }
 
             // Adjust the datasets to their positions defined in the state
-            if (state.scene != null)
-            {
-                foreach (var datasetPath in state.scene.datasetTransforms)
-                {
-                    Dataset dataset;
-                    ABREngine.Instance.Data.TryGetDataset(datasetPath.Key, out dataset);
-                    if (dataset != null)
-                    {
-                        dataset.DataRoot.transform.position = datasetPath.Value.position;
-                        dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
-                    }
-                    else
-                    {
-                        Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
-                    }
-                }
-            }
+            // TODO
+            // if (state.scene != null)
+            // {
+            //     foreach (var datasetPath in state.scene.datasetTransforms)
+            //     {
+            //         Dataset dataset;
+            //         ABREngine.Instance.Data.TryGetDataset(datasetPath.Key, out dataset);
+            //         if (dataset != null)
+            //         {
+            //             dataset.DataRoot.transform.position = datasetPath.Value.position;
+            //             dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
+            //         }
+            //         else
+            //         {
+            //             Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
+            //         }
+            //     }
+            // }
 
             return stateJson;
         }

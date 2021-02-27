@@ -105,9 +105,7 @@ namespace IVLab.ABREngine
                 RawDataset dataset;
                 ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset);
 
-                string containingDatasetPath = DataPath.GetDatasetPath(keyData?.Path);
-                Dataset containingDataset;
-                ABREngine.Instance.Data.TryGetDataset(containingDatasetPath, out containingDataset);
+                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
                 // Load defaults from configuration / schema
                 ABRConfig config = ABREngine.Instance.Config;
@@ -180,9 +178,9 @@ namespace IVLab.ABREngine
                         var lastPointIndex = (j == 0) ? pointIndex : dataset.indexArray[index - 1];
                         var nextPointIndex = (j == numPoints - 1) ? pointIndex : dataset.indexArray[index + 1];
 
-                        Vector3 point = containingDataset.CurrentDataTransformation * dataset.vertexArray[pointIndex].ToHomogeneous();
-                        Vector3 lastPoint = containingDataset.CurrentDataTransformation * dataset.vertexArray[lastPointIndex].ToHomogeneous();
-                        Vector3 nextPoint = containingDataset.CurrentDataTransformation * dataset.vertexArray[nextPointIndex].ToHomogeneous();
+                        Vector3 point = group.GroupToDataMatrix * dataset.vertexArray[pointIndex].ToHomogeneous();
+                        Vector3 lastPoint = group.GroupToDataMatrix * dataset.vertexArray[lastPointIndex].ToHomogeneous();
+                        Vector3 nextPoint = group.GroupToDataMatrix * dataset.vertexArray[nextPointIndex].ToHomogeneous();
 
                         Vector3 tangent;
                         Vector3 normal;

@@ -19,8 +19,7 @@ namespace IVLab.ABREngine
 {
     public class ABREngine : Singleton<ABREngine>
     {
-        private Dictionary<Guid, IDataImpression> dataImpressions = new Dictionary<Guid, IDataImpression>();
-        private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
+        private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
         private JToken previouslyLoadedState = null;
         private string previousStateName = "Untitled";
@@ -36,6 +35,8 @@ namespace IVLab.ABREngine
 
         // Save this for threading purposes (can't be accessed from non-main-thread)
         private string persistentDataPath = null;
+
+        private DataImpressionGroup _defaultGroup = null;
 
         /// <summary>
         ///     If the Engine is connected to a local server, use that server's
@@ -65,7 +66,14 @@ namespace IVLab.ABREngine
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             base.Awake();
+
+            // Initialize the configuration from ABRConfig.json
             Config = new ABRConfig();
+
+            // Initialize the default DataImpressionGroup (where impressions go
+            // when they have no dataset)
+            _defaultGroup = AddDataImpressionGroup("Default");
+
             Task.Run(async () =>
             {
                 try
@@ -110,88 +118,159 @@ namespace IVLab.ABREngine
         void OnDestroy()
         {
             _notifier?.Stop();
-            DataListener.StopServer();
+            DataListener?.StopServer();
         }
 
         public bool HasDataImpression(Guid uuid)
         {
-            return dataImpressions.ContainsKey(uuid);
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .Where((v) => v.HasDataImpression(uuid)).ToList().Count > 0;
         }
 
         public IDataImpression GetDataImpression(Guid uuid)
         {
-            return dataImpressions[uuid];
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .First((v) => v.HasDataImpression(uuid))
+                .GetDataImpression(uuid);
         }
 
-        public void RegisterDataImpression(IDataImpression impression, bool allowOverwrite = true)
+        public DataImpressionGroup AddDataImpressionGroup(string name)
         {
-            if (dataImpressions.ContainsKey(impression.Uuid))
+            DataImpressionGroup group = new DataImpressionGroup(name, Config.Info.defaultBounds.Value, this.transform);
+            dataImpressionGroups[group.Uuid] = group;
+            return group;
+        }
+
+        public void RemoveDataImpressionGroup(Guid uuid)
+        {
+            Debug.LogFormat("Removing data impression group {0}", uuid);
+            dataImpressionGroups[uuid].Clear();
+            Destroy(dataImpressionGroups[uuid].GroupRoot);
+            dataImpressionGroups.Remove(uuid);
+        }
+
+        public Dictionary<Guid, DataImpressionGroup> GetDataImpressionGroups()
+        {
+            return dataImpressionGroups;
+        }
+
+        /// <summary>
+        ///     Get the group a particular data impression
+        /// </summary>
+        public DataImpressionGroup GetGroupFromImpression(IDataImpression dataImpression)
+        {
+            try
             {
-                if (allowOverwrite)
+                return dataImpressionGroups
+                    .Select((kv) => kv.Value)
+                    .First((v) => v.HasDataImpression(dataImpression.Uuid));
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///     Register a new data impression, or replace an existing one. If the
+        ///     data impression has a dataset, defaults to creating a new
+        ///     DataImpressionGroup with that dataset. If we create a new
+        ///     DataImpressionGroup, we need to move/delete the impression from the
+        ///     old group.
+        /// </summary>
+        public void RegisterDataImpression(IDataImpression dataImpression, bool allowOverwrite = true)
+        {
+            Dataset ds = dataImpression.GetDataset();
+            if (ds != null)
+            {
+                // See if it's a part of a group already
+                DataImpressionGroup oldGroup = GetGroupFromImpression(dataImpression);
+
+                // Find an existing DataImpressionGroup with the same dataset, if any
+                DataImpressionGroup newGroup = null;
+                foreach (var group in dataImpressionGroups)
                 {
-                    dataImpressions[impression.Uuid] = impression;
+                    if (group.Value.GetDataset()?.Path == ds.Path)
+                    {
+                        // Add it to the first one we find, if we find one
+                        newGroup = group.Value;
+                    }
                 }
-                else
+
+                // If the new and old groups are different, remove from old group
+                bool oldGroupEmpty = false;
+                if (oldGroup != null && newGroup != null && newGroup.Uuid != oldGroup.Uuid)
                 {
-                    Debug.LogWarningFormat("Skipping register data impression (already exists): {0}", impression.Uuid);
+                    oldGroupEmpty = oldGroup.RemoveDataImpression(dataImpression.Uuid);
                 }
+
+                // If the old group is empty, remove it
+                if (oldGroupEmpty && oldGroup.Uuid != _defaultGroup.Uuid)
+                {
+                    RemoveDataImpressionGroup(oldGroup.Uuid);
+                }
+
+                // Create a new group if it doesn't exist
+                if (newGroup == null)
+                {
+                    newGroup = AddDataImpressionGroup(ds.Path);
+                }
+                newGroup.AddDataImpression(dataImpression, allowOverwrite);
             }
             else
             {
-                dataImpressions.Add(impression.Uuid, impression);
-                GameObject impressionGameObject = new GameObject();
-                impressionGameObject.transform.parent = this.transform;
-                impressionGameObject.name = impression.GetType().ToString();
-
-                EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
-                gameObjectMapping[impression.Uuid] = ego;
-
-                PrepareImpression(impression);
+                // If there's no data yet, put it in the default group
+                _defaultGroup.AddDataImpression(dataImpression, allowOverwrite);
             }
         }
 
         public void UnregisterDataImpression(Guid uuid)
         {
-            dataImpressions.Remove(uuid);
-            Destroy(gameObjectMapping[uuid].gameObject);
-            gameObjectMapping.Remove(uuid);
+            var toRemove = new List<Guid>();
+            foreach (var group in dataImpressionGroups)
+            {
+                // Remove the impression from any groups its in (should only be one)
+                group.Value.RemoveDataImpression(uuid);
+
+                // Also remove the group if it becomes empty, unless it's the default group
+                if (group.Value.GetDataImpressions().Count == 0 && group.Key != _defaultGroup.Uuid)
+                {
+                    toRemove.Add(group.Key);
+                }
+            }
+
+            foreach (var guid in toRemove)
+            {
+                RemoveDataImpressionGroup(guid);
+            }
         }
 
         public void ClearState()
         {
-            List<Guid> toRemove = dataImpressions.Keys.ToList();
-            foreach (var impressionUuid in toRemove)
+            List<Guid> toRemove = new List<Guid>();
+            foreach (var group in dataImpressionGroups)
             {
-                UnregisterDataImpression(impressionUuid);
+                group.Value.Clear();
+                toRemove.Add(group.Key);
+            }
+            foreach (var r in toRemove)
+            {
+                dataImpressionGroups.Remove(r);
             }
         }
 
         [FunctionDebugger]
-        public void RenderImpressions()
+        public void Render()
         {
             try
             {
                 lock (_stateLock)
                 {
-                    foreach (var impression in dataImpressions)
+                    foreach (var group in dataImpressionGroups)
                     {
-                        PrepareImpression(impression.Value);
-                    }
-
-                    foreach (var impression in dataImpressions)
-                    {
-                        impression.Value.ComputeKeyDataRenderInfo();
-                    }
-
-                    foreach (var impression in dataImpressions)
-                    {
-                        impression.Value.ComputeRenderInfo();
-                    }
-
-                    foreach (var impression in dataImpressions)
-                    {
-                        Guid uuid = impression.Key;
-                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        group.Value.RenderImpressions();
                     }
                 }
             }
@@ -223,7 +302,7 @@ namespace IVLab.ABREngine
                     previousStateName = stateName;
                     previouslyLoadedState = tempState;
                 }
-                RenderImpressions();
+                Render();
                 lock (_stateUpdatingLock)
                 {
                     stateUpdating = false;
@@ -231,27 +310,5 @@ namespace IVLab.ABREngine
             });
         }
 
-        private void PrepareImpression(IDataImpression impression)
-        {
-            Dataset dataset = impression.GetDataset();
-            if (dataset != null)
-            {
-                // Make sure the bounding box is correct
-                // Mostly matters if there's a live ParaView connection
-                dataset.RecalculateBounds();
-
-                // Make sure the parent is assigned properly
-                gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(dataset.DataRoot.transform, false);
-                
-                // Unsure why this needs to be explicitly set but here it is,
-                // zeroing position and rotation so each data impression encoded
-                // game object is centered on the dataset...
-                gameObjectMapping[impression.Uuid].gameObject.transform.localPosition = Vector3.zero;
-                gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
-
-                // Display the UUID in editor
-                gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);
-            }
-        }
     }
 }

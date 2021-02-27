@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -28,49 +27,19 @@ namespace IVLab.ABREngine
         private Dictionary<string, VectorDataVariable> vectorVariables = new Dictionary<string, VectorDataVariable>();
 
         /// <summary>
-        ///     Room-scale (Unity rendering space) bounds that all data should
-        ///     be contained within
-        /// </summary>
-        public Bounds DataContainer { get; }
-
-        /// <summary>
         ///     Path of this dataset (should conform to DataPath)
         /// </summary>
         public string Path { get; }
 
         /// <summary>
-        ///     Transformation from the original data space into the room-scale
-        ///     bounds
-        /// </summary>
-        public Matrix4x4 CurrentDataTransformation;
-
-        /// <summary>
-        ///     The actual bounds (contained within DataContainer) of the
-        ///     room-scale dataset
-        /// </summary>
-        public Bounds CurrentDataBounds;
-
-        /// <summary>
         ///     The bounds of the original, data-scale dataset, which grow as we
         ///     add more datasets
         /// </summary>
-        public Bounds CurrentDataSpaceBounds;
-
-        /// <summary>
-        ///     GameObject to place all Data Impressions under
-        /// </summary>
-        public GameObject DataRoot { get; }
+        public Bounds DataSpaceBounds;
 
         public Dataset(string dataPath, Bounds bounds, Transform parent)
         {
-            DataContainer = bounds;
             Path = dataPath;
-
-            DataRoot = new GameObject("Dataset " + dataPath);
-            DataRoot.transform.SetParent(parent, false);
-
-            ResetBoundsAndTransformation();
-
         }
 
         public void AddKeyData(IKeyData keyData)
@@ -79,45 +48,7 @@ namespace IVLab.ABREngine
             ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
             Bounds originalBounds = rawDataset.bounds;
 
-            RecalculateBounds();
-
             keyDataObjects[keyData.Path] = keyData;
-        }
-
-        /// <summary>
-        ///     From scratch, recalculate the bounds of this dataset. Start with
-        ///     a zero-size bounding box and expand until it encapsulates all
-        ///     datasets.
-        /// </summary>
-        public void RecalculateBounds()
-        {
-            ResetBoundsAndTransformation();
-
-            foreach (var keyData in keyDataObjects)
-            {
-                RawDataset rawDataset;
-                ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
-                Bounds originalBounds = rawDataset.bounds;
-
-                if (CurrentDataSpaceBounds.size.magnitude <= float.Epsilon)
-                {
-                    // If the size is zero (first keyData), then start with its
-                    // bounds (make sure to not assume we're including (0, 0, 0) in
-                    // the bounds)
-                    CurrentDataSpaceBounds = originalBounds;
-                    NormalizeWithinBounds.Normalize(DataContainer, originalBounds, out CurrentDataTransformation, out CurrentDataBounds);
-                }
-                else
-                {
-                    NormalizeWithinBounds.NormalizeAndExpand(
-                        DataContainer,
-                        originalBounds,
-                        ref CurrentDataBounds,
-                        ref CurrentDataTransformation,
-                        ref CurrentDataSpaceBounds
-                    );
-                }
-            }
         }
 
         public void AddScalarVariable(ScalarDataVariable scalarVar)
@@ -148,11 +79,9 @@ namespace IVLab.ABREngine
             keyDataObjects.TryGetValue(dataPath, out keyData);
         }
 
-        private void ResetBoundsAndTransformation()
+        public Dictionary<string, IKeyData> GetAllKeyData()
         {
-            CurrentDataTransformation = Matrix4x4.identity;
-            CurrentDataBounds = new Bounds();
-            CurrentDataSpaceBounds = new Bounds();
+            return keyDataObjects;
         }
     }
 
