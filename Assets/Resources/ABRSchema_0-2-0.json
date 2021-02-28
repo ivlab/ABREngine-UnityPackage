@@ -27,16 +27,24 @@
             "type": "object",
             "description": "Any additional info about the scene (lights, camera, transforms, etc.)",
             "properties": {
-                "datasetTransforms": {
+                "impressionGroups": {
                     "type": "object",
-                    "description": "Transform of datasets in the scene",
-                    "$comment": "Unfortunately necessary to specify DataPath regex here",
+                    "description": "Data impression groups in the scene; each group can have its own transform and bounds",
+                    "$comment": "Unfortunately necessary to specify UUID regex here",
                     "patternProperties": {
-                        "^(\\w+)\/(\\w+)$": { 
+                        "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}$": { 
                             "type": "object",
+                            "required": ["impressions", "uuid", "name", "containerBounds", "rootPosition", "rootRotation"],
                             "properties": {
-                                "position": { "$ref": "#/definitions/UnityObjects/Vector3" },
-                                "rotation": { "$ref": "#/definitions/UnityObjects/Quaternion" }
+                                "impressions": {
+                                    "type": "array",
+                                    "items": { "type": "string", "format": "uuid" }
+                                },
+                                "uuid": { "type": "string", "format": "uuid" },
+                                "name": { "type": "string" },
+                                "containerBounds": { "$ref": "#/definitions/UnityObjects/Bounds" },
+                                "rootPosition": { "$ref": "#/definitions/UnityObjects/Vector3" },
+                                "rootRotation": { "$ref": "#/definitions/UnityObjects/Quaternion" }
                             }
                         }
                     }
@@ -47,8 +55,30 @@
         "uiData": {
             "type": "object",
             "description": "Any additional info about user interfaces (artist UI, legend UI, physician UI, ...)",
-            "patternProperties": {
-                ".+": {}
+            "properties": {
+                "compose": {
+                    "type": "object",
+                    "description": "Data for the ABR Compose UI",
+                    "properties": {
+                        "impressionData": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}$": {
+                                    "type": "object",
+                                    "properties": {
+                                        "position": {
+                                            "type": "object",
+                                            "properties": {
+                                                "x": { "type": "number" },
+                                                "y": { "type": "number" }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
 
@@ -279,6 +309,14 @@
                     "y": { "type": "number" },
                     "z": { "type": "number" },
                     "w": { "type": "number" }
+                }
+            },
+            "Bounds": {
+                "type": "object",
+                "required": ["center", "size"],
+                "properties": {
+                    "center": { "$ref": "#/definitions/UnityObjects/Vector3" },
+                    "size": { "$ref": "#/definitions/UnityObjects/Vector3" }
                 }
             }
         },

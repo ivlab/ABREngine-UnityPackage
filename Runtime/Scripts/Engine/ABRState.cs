@@ -296,28 +296,37 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                ABREngine.Instance.RegisterDataImpression(dataImpression);
-            }
+                // Put the impressions in their proper groups, if any
+                bool registered = false;
+                if (state.scene != null)
+                {
+                    foreach (var group in state.scene.impressionGroups)
+                    {
+                        if (group.Value.impressions.Contains(dataImpression.Uuid))
+                        {
+                            DataImpressionGroup g = ABREngine.Instance.GetDataImpressionGroup(group.Value.uuid);
+                            if (g == null)
+                            {
+                                g = ABREngine.Instance.AddDataImpressionGroup(
+                                    group.Value.name,
+                                    group.Value.uuid,
+                                    group.Value.containerBounds,
+                                    group.Value.rootPosition,
+                                    group.Value.rootRotation
+                                );
+                            }
+                            ABREngine.Instance.RegisterDataImpression(dataImpression, g, true);
+                            registered = true;
+                        }
+                    }
+                }
 
-            // Adjust the datasets to their positions defined in the state
-            // TODO
-            // if (state.scene != null)
-            // {
-            //     foreach (var datasetPath in state.scene.datasetTransforms)
-            //     {
-            //         Dataset dataset;
-            //         ABREngine.Instance.Data.TryGetDataset(datasetPath.Key, out dataset);
-            //         if (dataset != null)
-            //         {
-            //             dataset.DataRoot.transform.position = datasetPath.Value.position;
-            //             dataset.DataRoot.transform.rotation = datasetPath.Value.rotation;
-            //         }
-            //         else
-            //         {
-            //             Debug.LogWarningFormat("Dataset `{0}` not found, not adjusting transform", datasetPath.Key);
-            //         }
-            //     }
-            // }
+                // If no groups specified, let the Engine handle it
+                if (!registered)
+                {
+                    ABREngine.Instance.RegisterDataImpression(dataImpression, true);
+                }
+            }
 
             return stateJson;
         }
@@ -345,13 +354,17 @@ namespace IVLab.ABREngine
 
     class RawScene
     {
-        public Dictionary<string, RawDatasetTransform> datasetTransforms;
+        public Dictionary<string, RawImpressionGroup> impressionGroups;
     }
 
-    class RawDatasetTransform
+    class RawImpressionGroup
     {
-        public Vector3 position;
-        public Quaternion rotation;
+        public List<Guid> impressions;
+        public string name;
+        public Guid uuid;
+        public Bounds containerBounds;
+        public Vector3 rootPosition;
+        public Quaternion rootRotation;
         // Not including scale because that would mess with artifacts
     }
 

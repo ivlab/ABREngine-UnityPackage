@@ -138,7 +138,12 @@ namespace IVLab.ABREngine
 
         public DataImpressionGroup AddDataImpressionGroup(string name)
         {
-            DataImpressionGroup group = new DataImpressionGroup(name, Config.Info.defaultBounds.Value, this.transform);
+            return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+        }
+
+        public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
+        {
+            DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
             dataImpressionGroups[group.Uuid] = group;
             return group;
         }
@@ -154,6 +159,24 @@ namespace IVLab.ABREngine
         public Dictionary<Guid, DataImpressionGroup> GetDataImpressionGroups()
         {
             return dataImpressionGroups;
+        }
+
+        public DataImpressionGroup GetDataImpressionGroup(Guid uuid)
+        {
+            DataImpressionGroup g = null;
+            if (dataImpressionGroups.TryGetValue(uuid, out g))
+            {
+                return g;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public bool HasDataImpressionGroup(Guid uuid)
+        {
+            return dataImpressionGroups.ContainsKey(uuid);
         }
 
         /// <summary>
@@ -174,11 +197,33 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        ///     Add a new data impression, but add it to a specific group ID.
+        /// </summary>
+        public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        {
+            // Create a new group if it doesn't exist
+            if (newGroup == null)
+            {
+                // Name it according to the impression's dataset, if there is one
+                Dataset ds = dataImpression.GetDataset();
+                if (ds?.Path != null)
+                {
+                    newGroup = AddDataImpressionGroup(ds.Path);
+                }
+                else
+                {
+                    newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                }
+            }
+            newGroup.AddDataImpression(dataImpression, allowOverwrite);
+        }
+
+
+        /// <summary>
         ///     Register a new data impression, or replace an existing one. If the
-        ///     data impression has a dataset, defaults to creating a new
-        ///     DataImpressionGroup with that dataset. If we create a new
-        ///     DataImpressionGroup, we need to move/delete the impression from the
-        ///     old group.
+        ///     data impression has a dataset, defaults to placing it inside the
+        ///     existing group with the same dataset, or creating a new
+        ///     DataImpressionGroup with that dataset if no group exists yet.
         /// </summary>
         public void RegisterDataImpression(IDataImpression dataImpression, bool allowOverwrite = true)
         {
@@ -212,12 +257,7 @@ namespace IVLab.ABREngine
                     RemoveDataImpressionGroup(oldGroup.Uuid);
                 }
 
-                // Create a new group if it doesn't exist
-                if (newGroup == null)
-                {
-                    newGroup = AddDataImpressionGroup(ds.Path);
-                }
-                newGroup.AddDataImpression(dataImpression, allowOverwrite);
+                RegisterDataImpression(dataImpression, newGroup, allowOverwrite);
             }
             else
             {

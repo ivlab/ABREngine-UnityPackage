@@ -54,14 +54,19 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
         public DataImpressionGroup(string name, Bounds bounds, Transform parent)
+            : this(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent) { }
+
+        public DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
         {
-            Uuid = Guid.NewGuid();
+            Uuid = uuid;
             Name = name;
 
             GroupContainer = bounds;
 
             GroupRoot = new GameObject("DataImpressionGroup " + name);
             GroupRoot.transform.SetParent(parent, false);
+            GroupRoot.transform.localPosition = position;
+            GroupRoot.transform.localRotation = rotation;
 
             ResetBoundsAndTransformation();
             Debug.LogFormat("Added DataImpressionGroup {0}", name);
