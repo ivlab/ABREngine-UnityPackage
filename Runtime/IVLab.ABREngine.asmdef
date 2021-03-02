@@ -3,7 +3,7 @@
     "references": [
         "IVLab.Utilities",
         "IVLab.OBJImport",
-        "JsonDiffPatchDotNet",
+        "JsonDiffPatchDotNet"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
