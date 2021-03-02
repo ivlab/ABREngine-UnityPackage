@@ -87,7 +87,7 @@ namespace IVLab.ABREngine
         {
             SimpleLineRenderInfo renderInfo = null;
 
-            if (keyData == null)
+            if (keyData == null || RenderHints.visible == false)
             {
                 renderInfo = new SimpleLineRenderInfo
                 {

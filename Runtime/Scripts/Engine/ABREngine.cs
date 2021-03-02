@@ -33,6 +33,10 @@ namespace IVLab.ABREngine
         public DataManager Data { get; private set; }
         public SocketDataListener DataListener { get; private set; }
 
+        // Delegate callback for when state is updated
+        public delegate void StateChangeDelegate(JToken state);
+        public StateChangeDelegate OnStateChanged;
+
         // Save this for threading purposes (can't be accessed from non-main-thread)
         private string persistentDataPath = null;
 
@@ -130,10 +134,17 @@ namespace IVLab.ABREngine
 
         public IDataImpression GetDataImpression(Guid uuid)
         {
-            return dataImpressionGroups
-                .Select((kv) => kv.Value)
-                .First((v) => v.HasDataImpression(uuid))
-                .GetDataImpression(uuid);
+            try
+            {
+                return dataImpressionGroups
+                    .Select((kv) => kv.Value)
+                    .First((v) => v.HasDataImpression(uuid))
+                    .GetDataImpression(uuid);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
 
         public DataImpressionGroup AddDataImpressionGroup(string name)
@@ -188,7 +199,7 @@ namespace IVLab.ABREngine
             {
                 return dataImpressionGroups
                     .Select((kv) => kv.Value)
-                    .First((v) => v.HasDataImpression(dataImpression.Uuid));
+                    .First((v) => dataImpression != null && v.HasDataImpression(dataImpression.Uuid));
             }
             catch (InvalidOperationException)
             {
@@ -215,7 +226,7 @@ namespace IVLab.ABREngine
                     newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 }
             }
-            newGroup.AddDataImpression(dataImpression, allowOverwrite);
+            MoveImpressionToGroup(dataImpression, newGroup, allowOverwrite);
         }
 
 
@@ -230,9 +241,6 @@ namespace IVLab.ABREngine
             Dataset ds = dataImpression.GetDataset();
             if (ds != null)
             {
-                // See if it's a part of a group already
-                DataImpressionGroup oldGroup = GetGroupFromImpression(dataImpression);
-
                 // Find an existing DataImpressionGroup with the same dataset, if any
                 DataImpressionGroup newGroup = null;
                 foreach (var group in dataImpressionGroups)
@@ -242,19 +250,6 @@ namespace IVLab.ABREngine
                         // Add it to the first one we find, if we find one
                         newGroup = group.Value;
                     }
-                }
-
-                // If the new and old groups are different, remove from old group
-                bool oldGroupEmpty = false;
-                if (oldGroup != null && newGroup != null && newGroup.Uuid != oldGroup.Uuid)
-                {
-                    oldGroupEmpty = oldGroup.RemoveDataImpression(dataImpression.Uuid);
-                }
-
-                // If the old group is empty, remove it
-                if (oldGroupEmpty && oldGroup.Uuid != _defaultGroup.Uuid)
-                {
-                    RemoveDataImpressionGroup(oldGroup.Uuid);
                 }
 
                 RegisterDataImpression(dataImpression, newGroup, allowOverwrite);
@@ -285,6 +280,27 @@ namespace IVLab.ABREngine
             {
                 RemoveDataImpressionGroup(guid);
             }
+        }
+
+        public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        {
+            // See if it's a part of a group already
+            DataImpressionGroup oldGroup = GetGroupFromImpression(dataImpression);
+
+            // If the new and old groups are different, remove from old group
+            bool oldGroupEmpty = false;
+            if (oldGroup != null && newGroup != null && newGroup.Uuid != oldGroup.Uuid)
+            {
+                oldGroupEmpty = oldGroup.RemoveDataImpression(dataImpression.Uuid);
+            }
+
+            // If the old group is empty, remove it
+            if (oldGroupEmpty && oldGroup.Uuid != _defaultGroup.Uuid)
+            {
+                RemoveDataImpressionGroup(oldGroup.Uuid);
+            }
+
+            newGroup.AddDataImpression(dataImpression, allowOverwrite);
         }
 
         public void ClearState()
@@ -347,6 +363,7 @@ namespace IVLab.ABREngine
                 {
                     stateUpdating = false;
                 }
+                OnStateChanged(previouslyLoadedState);
             });
         }
 

@@ -78,6 +78,35 @@
                             }
                         }
                     }
+                },
+                "dataQuery": {
+                    "type": "object",
+                    "description": "Data for the data querying UI",
+                    "properties": {
+                        "mode": {
+                            "type": "object",
+                            "properties": {
+                                "modeName": {
+                                    "type": "string",
+                                    "enum": ["Slices", "Streams"]
+                                },
+                                "modeContext": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                }
+                            }
+                        },
+                        "slices": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}){1}$": {
+                                    "inputDataPath": { "$ref": "#/definitions/InputStringTypes/DataPath" },
+                                    "point1": { "$ref": "#/definitions/UnityObjects/Vector3" },
+                                    "point2": { "$ref": "#/definitions/UnityObjects/Vector3" }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -261,7 +290,7 @@
             "DataPath": {
                 "type": "string",
                 "$comment": "Update whenever a new data source is added to the data server. Eventually should pull this bit of schema from the data server.",
-                "pattern": "^(\\w+)\/(\\w+)\/(KeyData|ScalarVar|VectorVar)\/\\w+$"
+                "pattern": "^([^/]+)\/([^/]+)\/(KeyData|ScalarVar|VectorVar)\/([^/]+)$"
             },
 
             "PrimitiveFloat": {

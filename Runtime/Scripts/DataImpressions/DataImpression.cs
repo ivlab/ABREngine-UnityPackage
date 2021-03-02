@@ -99,6 +99,12 @@ namespace IVLab.ABREngine
         protected virtual string LayerName { get; } = "ABR";
 
         /// <summary>
+        ///     Any hints to provide the rendering engine, such as if the impression
+        ///     should be hidden
+        /// </summary>
+        public virtual RenderHints RenderHints { get; set; } = new RenderHints();
+
+        /// <summary>
         ///     Construct a data impession with a given UUID. Note that this
         ///     will be called from ABRState and must assume that there's a
         ///     single string argument with UUID - if you override this
@@ -137,4 +143,12 @@ namespace IVLab.ABREngine
 
 
     public interface IDataImpressionRenderInfo { }
+
+    /// <summary>
+    ///     Hints for rendering, such as whether a data impression should be hidden
+    /// </summary>
+    public class RenderHints
+    {
+        public bool visible = true;
+    }
 }
