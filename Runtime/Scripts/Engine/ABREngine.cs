@@ -147,6 +147,21 @@ namespace IVLab.ABREngine
             }
         }
 
+        public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
+        {
+            try
+            {
+                return dataImpressionGroups
+                    .Select((kv) => kv.Value)
+                    .First((v) => v.HasEncodedGameObject(impressionGuid))
+                    .GetEncodedGameObject(impressionGuid);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
         public DataImpressionGroup AddDataImpressionGroup(string name)
         {
             return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
@@ -363,7 +378,10 @@ namespace IVLab.ABREngine
                 {
                     stateUpdating = false;
                 }
-                OnStateChanged(previouslyLoadedState);
+                if (OnStateChanged != null)
+                {
+                    OnStateChanged(previouslyLoadedState);
+                }
             });
         }
 
