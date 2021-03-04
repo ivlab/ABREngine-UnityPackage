@@ -59,6 +59,8 @@ namespace IVLab.ABREngine
         [ABRInput("Up Variable", "Direction")]
         public VectorDataVariable upVariable;
 
+        public int glyphLod = 1;
+
         protected override string MaterialName { get; } = "ABR_DataGlyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -281,7 +283,7 @@ namespace IVLab.ABREngine
             }
             imr.bounds = SSrenderData?.bounds ?? new Bounds();
 
-            int lod = 1;
+            int lod = glyphLod;
             // if (ABRManager.IsValidNode(glyphLod))
             // {
             //     lod = (int)glyphLod.floatVal;
