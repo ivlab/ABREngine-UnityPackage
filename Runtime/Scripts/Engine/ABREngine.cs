@@ -147,6 +147,15 @@ namespace IVLab.ABREngine
             }
         }
 
+        public List<T> GetDataImpressionsOfType<T>()
+        where T : IDataImpression
+        {
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .Select((grp) => grp.GetDataImpressionsOfType<T>())
+                .Aggregate((all, imps) => all.Concat(imps).ToList());
+        }
+
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
         {
             try

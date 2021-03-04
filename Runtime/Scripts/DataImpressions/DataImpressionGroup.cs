@@ -132,6 +132,15 @@ namespace IVLab.ABREngine
             return dataImpression;
         }
 
+        public List<T> GetDataImpressionsOfType<T>()
+        where T : IDataImpression
+        {
+            return _impressions
+                .Select((kv) => kv.Value)
+                .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
+                .Select((imp) => (T) imp).ToList();
+        }
+
         public bool HasDataImpression(Guid uuid)
         {
             return _impressions.ContainsKey(uuid);
