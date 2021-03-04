@@ -137,6 +137,18 @@ namespace IVLab.ABREngine
             return _impressions.ContainsKey(uuid);
         }
 
+        public EncodedGameObject GetEncodedGameObject(Guid uuid)
+        {
+            EncodedGameObject dataImpression = null;
+            gameObjectMapping.TryGetValue(uuid, out dataImpression);
+            return dataImpression;
+        }
+
+        public bool HasEncodedGameObject(Guid uuid)
+        {
+            return gameObjectMapping.ContainsKey(uuid);
+        }
+
         public Dictionary<Guid, IDataImpression> GetDataImpressions()
         {
             return _impressions;
