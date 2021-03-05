@@ -37,9 +37,9 @@ namespace IVLab.ABREngine
             visAssetLoader = new FilePathVisAssetLoader(this.appDataPath);
 
             _loadResourceVisAssets = loadResourceVisAssets;
-            // resourceVisAssetLoader = 
             if (loadResourceVisAssets)
             {
+                resourceVisAssetLoader = new ResourceVisAssetLoader();
                 Debug.Log("Allowing VisAsset loading from Resources/media/visassets");
             }
         }
@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
             {
                 try
                 {
-                    string uuid = Path.GetDirectoryName(filePath);
+                    string uuid = Path.GetFileName(filePath);
                     LoadVisAsset(new Guid(uuid));
                     success += 1;
                 }
