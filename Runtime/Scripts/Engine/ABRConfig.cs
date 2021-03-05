@@ -91,6 +91,10 @@ namespace IVLab.ABREngine
             {
                 Info.dataListenerPort = customizations.dataListenerPort;
             }
+            if (customizations?.loadResourceVisAssets != null)
+            {
+                Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
+            }
 
             // Debug.Log("ABR Config Loaded\n" + Info.ToString());
             Debug.Log("ABR Config Loaded");
@@ -217,6 +221,11 @@ namespace IVLab.ABREngine
         ///     persistentData, it will be downloaded. Default: null
         /// </summary>
         public string visAssetServer;
+
+        /// <summary>
+        ///     Load any visassets located in Resources/media/visassets
+        /// </summary>
+        public bool loadResourceVisAssets;
 
         /// <summary>
         ///     What server to obtain data from, if any. If none provided,

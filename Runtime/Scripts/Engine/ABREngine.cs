@@ -95,7 +95,7 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"));
+                    VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"), Config.Info.loadResourceVisAssets);
                     Data = new DataManager(Path.Combine(DataPath, "datasets"));
                     if (Config.Info.dataListenerPort != null)
                     {
