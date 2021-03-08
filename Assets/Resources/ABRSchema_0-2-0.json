@@ -52,6 +52,28 @@
             }
         },
 
+        "dataRanges": {
+            "type": "object",
+            "description": "Ranges for variables in the state (scalar, vector, etc.)",
+            "properties": {
+                "scalarRanges": {
+                    "type": "object",
+                    "description": "Ranges for scalar variables",
+                    "$comment": "Unfortunately must explicitly specify DataPath key here",
+                    "patternProperties": { 
+                        "^([^/]+)\/([^/]+)\/(ScalarVar)\/([^/]+)$": {
+                            "type": "object",
+                            "description": "Minimum and maximum for a scalar variable",
+                            "properties": {
+                                "min": { "type": "number" },
+                                "max": { "type": "number" }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         "uiData": {
             "type": "object",
             "description": "Any additional info about user interfaces (artist UI, legend UI, physician UI, ...)",
