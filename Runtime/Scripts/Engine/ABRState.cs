@@ -169,6 +169,24 @@ namespace IVLab.ABREngine
                     }
                 }
 
+                // Change any variable ranges that appear in the state
+                if (state.dataRanges?.scalarRanges != null)
+                {
+                    foreach (var scalarRange in state.dataRanges.scalarRanges)
+                    {
+                        // Get the variable
+                        string scalarPath = scalarRange.Key;
+                        DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
+                        Dataset dataset;
+                        ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset);
+                        ScalarDataVariable variable;
+                        dataset.TryGetScalarVar(scalarPath, out variable);
+
+                        // Assign the min/max value from the state
+                        variable.MinValue = scalarRange.Value.min;
+                        variable.MaxValue = scalarRange.Value.max;
+                    }
+                }
 
                 // Make the data impression; should only match one type
                 Type impressionType = impressionTypes[foundIndex];
@@ -341,6 +359,7 @@ namespace IVLab.ABREngine
         public string version;
         public Dictionary<string, RawDataImpression> impressions;
         public RawScene scene;
+        public RawDataRanges dataRanges;
     }
 
     class RawDataImpression
@@ -355,6 +374,17 @@ namespace IVLab.ABREngine
     class RawScene
     {
         public Dictionary<string, RawImpressionGroup> impressionGroups;
+    }
+
+    class RawDataRanges
+    {
+        public class RawRange<T>
+        {
+            public T min;
+            public T max;
+        }
+
+        public Dictionary<string, RawRange<float>> scalarRanges;
     }
 
     class RawImpressionGroup

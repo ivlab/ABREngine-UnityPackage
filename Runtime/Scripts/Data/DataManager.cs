@@ -213,6 +213,9 @@ namespace IVLab.ABREngine
                     scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
                     scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
                 }
+
+                scalarDataVariable.OriginalMinValue = scalarDataVariable.MinValue;
+                scalarDataVariable.OriginalMaxValue = scalarDataVariable.MaxValue;
             }
 
             // Import all vector variables
@@ -237,6 +240,9 @@ namespace IVLab.ABREngine
                     vectorDataVariable.MinValue = Vector3.zero;
                     vectorDataVariable.MaxValue = Vector3.zero;
                 }
+
+                vectorDataVariable.OriginalMinValue = vectorDataVariable.MinValue;
+                vectorDataVariable.OriginalMaxValue = vectorDataVariable.MaxValue;
             }
         }
 

@@ -31,6 +31,18 @@ namespace IVLab.ABREngine
         T MaxValue { get; set; }
 
         /// <summary>
+        ///     Save the original min value in case the user wants to reset it
+        ///     later.
+        /// </summary>
+        T OriginalMinValue { get; set; }
+
+        /// <summary>
+        ///     Save the original max value in case the user wants to reset it
+        ///     later.
+        /// </summary>
+        T OriginalMaxValue { get; set; }
+
+        /// <summary>
         ///     Get the actual data values in the context of this particular Key
         ///     Data object
         /// </summary>
@@ -48,6 +60,9 @@ namespace IVLab.ABREngine
         public string Path { get; }
         public float MinValue { get; set; }
         public float MaxValue { get; set; }
+
+        public float OriginalMinValue { get; set; }
+        public float OriginalMaxValue { get; set; }
 
         public ScalarDataVariable(string path)
         {
@@ -93,6 +108,9 @@ namespace IVLab.ABREngine
         public string Path { get; }
         public Vector3 MinValue { get; set; }
         public Vector3 MaxValue { get; set; }
+
+        public Vector3 OriginalMinValue { get; set; }
+        public Vector3 OriginalMaxValue { get; set; }
 
         public VectorDataVariable(string path)
         {

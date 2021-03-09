@@ -23,12 +23,25 @@ namespace IVLab.ABREngine
         public const string VISASSET_JSON = "artifact.json";
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
+
+        private IVisAssetLoader visAssetLoader;
+
+        private IVisAssetLoader resourceVisAssetLoader;
+        private bool _loadResourceVisAssets;
         
-        public VisAssetManager(string visassetPath)
+        public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
         {
             this.appDataPath = visassetPath;
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("VisAsset Path: " + appDataPath);
+            visAssetLoader = new FilePathVisAssetLoader(this.appDataPath);
+
+            _loadResourceVisAssets = loadResourceVisAssets;
+            if (loadResourceVisAssets)
+            {
+                resourceVisAssetLoader = new ResourceVisAssetLoader();
+                Debug.Log("Allowing VisAsset loading from Resources/media/visassets");
+            }
         }
 
         public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
@@ -46,7 +59,8 @@ namespace IVLab.ABREngine
             {
                 try
                 {
-                    LoadVisAsset(filePath);
+                    string uuid = Path.GetFileName(filePath);
+                    LoadVisAsset(new Guid(uuid));
                     success += 1;
                 }
                 catch (Exception e)
@@ -57,208 +71,30 @@ namespace IVLab.ABREngine
             Debug.LogFormat("Successfully loaded {0}/{1} VisAssets", success, files.Length);
         }
 
-        public void LoadVisAsset(Guid visAssetUUID)
+        public void LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
-            var visassetPath = Path.Combine(
-                appDataPath,
-                visAssetUUID.ToString(),
-                VISASSET_JSON
-            );
-            LoadVisAsset(visassetPath);
-        }
-
-        public void LoadVisAsset(string filePath, bool replaceExisting = false)
-        {
-            StreamReader reader = new StreamReader(filePath);
-            JObject jsonData = JObject.Parse(reader.ReadToEnd());
-            reader.Close();
-
-            var guid = new System.Guid(jsonData["uuid"].ToString());
-
-            string type = "";
-            if (jsonData.ContainsKey("artifactType"))
+            if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
-                type = jsonData["artifactType"].ToString();
-            }
-            else if (jsonData.ContainsKey("type"))
-            {
-                type = jsonData["type"].ToString();
-                Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
+                Debug.LogWarningFormat("Refusing to replace VisAsset {0} which is already imported", visAssetUUID);
+                return;
             }
 
-            if (type == "colormap")
+            IVisAsset visAsset = null;
+            if (_loadResourceVisAssets)
             {
-                ColormapVisAsset visAsset;
-                if (replaceExisting && _visAssets.ContainsKey(guid))
-                {
-                    visAsset = _visAssets[guid] as ColormapVisAsset;
-                }
-                else
-                {
-                    visAsset = new ColormapVisAsset();
-                    visAsset.Uuid = guid;
-                }
-                visAsset.ImportTime = DateTime.Now;
-
-                string relativeColormapPath = jsonData["artifactData"]["colormap"].ToString();
-
-                string colormapfilePath = Path.Combine(Path.GetDirectoryName(filePath), relativeColormapPath);
-                Texture2D texture = null;
-
-                if (File.Exists(colormapfilePath))
-                {
-                    texture = ColormapUtilities.ColormapFromFile(colormapfilePath);
-                    visAsset.Gradient = texture;
-                }
-
-                _visAssets[guid] = visAsset;
+                visAsset = resourceVisAssetLoader.LoadVisAsset(visAssetUUID);
             }
 
-            if (type == "glyph")
+            // If we haven't loaded it from resources, get it from disk
+            if (visAsset == null)
             {
-                GlyphVisAsset visAsset = new GlyphVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
-                var artifactData = jsonData["artifactData"];
-                List<JObject> lodsList = null;
-
-                try
-                {
-                    lodsList = artifactData["lods"].ToObject<List<JObject>>();
-                }
-                catch (ArgumentException)
-                {
-                    if (artifactData is JArray)
-                    {
-                        Debug.LogWarning(string.Format(
-                            "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
-                            guid.ToString().Substring(0, 8)
-                        ));
-                        lodsList = artifactData.ToObject<List<JObject>>();
-                    }
-                }
-                foreach (JObject lodJson in lodsList)
-                {
-                    var meshPath = VisAssetDataPath(filePath, lodJson["mesh"].ToString());
-                    var normalPath = VisAssetDataPath(filePath, lodJson["normal"].ToString());
-                    GameObject loadedObjGameObject = null;
-                    try
-                    {
-                        loadedObjGameObject = new IVLab.OBJImport.OBJLoader().Load(meshPath);
-                    }
-                    catch (System.Exception e)
-                    {
-                        Debug.LogError(e);
-                    }
-                    loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
-                    loadedObjGameObject.SetActive(false);
-                    var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
-                    GameObject.Destroy(loadedObjGameObject);
-
-                    var normalData = File.ReadAllBytes(normalPath);
-                    // Textures exported by Blender are in Linear color space
-                    var normalMap = new Texture2D(2, 2, textureFormat: TextureFormat.RGBA32, mipChain: true, linear: true);
-                    normalMap.LoadImage(normalData);
-
-                    visAsset.MeshLods.Add(loadedMesh);
-                    visAsset.NormalMapLods.Add(normalMap);
-                }
-
-                _visAssets[guid] = visAsset;
+                visAsset = visAssetLoader.LoadVisAsset(visAssetUUID);
             }
 
-            if (type == "line")
+            if (visAsset != null)
             {
-                LineTextureVisAsset visAsset = new LineTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
-                var artifactData = jsonData["artifactData"];
-
-                string texturePath = "";
-                try
-                {
-                    texturePath = VisAssetDataPath(filePath, artifactData["horizontal"].ToString());
-                    if (!File.Exists(texturePath))
-                    {
-                        throw new ArgumentException();
-                    }
-                }
-                catch (ArgumentException e)
-                {
-                    Debug.LogErrorFormat("VisAsset {0} missing horizontal image artifact data", guid.ToString().Substring(0, 8));
-                    throw e;
-                }
-
-                var textureData = File.ReadAllBytes(texturePath);
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(textureData);
-
-                visAsset.Texture = texture;
-
-                _visAssets[guid] = visAsset;
+                _visAssets[visAssetUUID] = visAsset;
             }
-
-
-            if (type == "texture")
-            {
-                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
-                var artifactData = jsonData["artifactData"];
-
-                string texturePath = "";
-                try
-                {
-                    texturePath = VisAssetDataPath(filePath, artifactData["image"].ToString());
-                    if (!File.Exists(texturePath))
-                    {
-                        throw new ArgumentException();
-                    }
-                }
-                catch (ArgumentException e)
-                {
-                    Debug.LogErrorFormat("VisAsset {0} missing image texture", guid.ToString().Substring(0, 8));
-                    throw e;
-                }
-
-                var textureData = File.ReadAllBytes(texturePath);
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(textureData);
-
-                visAsset.Texture = texture;
-
-
-                string normalPath = "";
-                try
-                {
-                    normalPath = VisAssetDataPath(filePath, artifactData["normalmap"].ToString());
-                    if (!File.Exists(normalPath))
-                    {
-                        throw new ArgumentException();
-                    }
-                }
-                catch (ArgumentException e)
-                {
-                    Debug.LogErrorFormat("VisAsset {0} missing normal map texture", guid.ToString().Substring(0, 8));
-                    throw e;
-                }
-
-                var normalData = File.ReadAllBytes(normalPath);
-                var normal = new Texture2D(2, 2);
-                normal.LoadImage(normalData);
-
-                visAsset.NormalMap = normal;
-
-                _visAssets[guid] = visAsset;
-            }
-        }
-
-        private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
-        {
-            return Path.Combine(Path.GetDirectoryName(artifactFilePath), relativeDataPath);
         }
     }
 }
