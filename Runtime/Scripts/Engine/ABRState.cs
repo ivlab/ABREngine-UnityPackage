@@ -34,6 +34,9 @@ namespace IVLab.ABREngine
 
         public async Task<JToken> LoadState(string name, JToken previousState)
         {
+            await ABREngine.Instance.WaitUntilInitialized();
+            UnityThreadScheduler.GetInstance();
+
             JToken stateJson = await _loader.GetState(name);
 
             IList<ValidationError> errors;

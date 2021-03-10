@@ -237,15 +237,16 @@ namespace IVLab.ABREngine
 
         public IVisAsset LoadVisAsset(Guid uuid)
         {
-            // StreamReader reader = new StreamReader(filePath);
-            // JObject jsonData = JObject.Parse(reader.ReadToEnd());
-            // reader.Close();
             string resourcePath = Path.Combine(
                 RESOURCES_PATH,
                 uuid.ToString(),
                 VISASSET_JSON
             );
             TextAsset artifactJson = Resources.Load<TextAsset>(resourcePath);
+            if (artifactJson == null)
+            {
+                return null;
+            }
             JObject jsonData = JObject.Parse(artifactJson.text);
 
             var guid = new System.Guid(jsonData["uuid"].ToString());

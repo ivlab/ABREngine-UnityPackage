@@ -387,20 +387,27 @@ namespace IVLab.ABREngine
             UnityThreadScheduler.Instance.KickoffMainThreadWork(async () =>
             {
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
-                JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
-                lock (_stateLock)
+                try
                 {
-                    previousStateName = stateName;
-                    previouslyLoadedState = tempState;
+                    JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
+                    lock (_stateLock)
+                    {
+                        previousStateName = stateName;
+                        previouslyLoadedState = tempState;
+                    }
+                    Render();
+                    lock (_stateUpdatingLock)
+                    {
+                        stateUpdating = false;
+                    }
+                    if (OnStateChanged != null)
+                    {
+                        OnStateChanged(previouslyLoadedState);
+                    }
                 }
-                Render();
-                lock (_stateUpdatingLock)
+                catch (Exception e)
                 {
-                    stateUpdating = false;
-                }
-                if (OnStateChanged != null)
-                {
-                    OnStateChanged(previouslyLoadedState);
+                    Debug.LogError(e);
                 }
             });
         }

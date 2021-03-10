@@ -79,21 +79,28 @@ namespace IVLab.ABREngine
                 return;
             }
 
-            IVisAsset visAsset = null;
-            if (_loadResourceVisAssets)
+            try
             {
-                visAsset = resourceVisAssetLoader.LoadVisAsset(visAssetUUID);
-            }
+                IVisAsset visAsset = null;
+                if (_loadResourceVisAssets)
+                {
+                    visAsset = resourceVisAssetLoader.LoadVisAsset(visAssetUUID);
+                }
 
-            // If we haven't loaded it from resources, get it from disk
-            if (visAsset == null)
-            {
-                visAsset = visAssetLoader.LoadVisAsset(visAssetUUID);
-            }
+                // If we haven't loaded it from resources, get it from disk
+                if (visAsset == null)
+                {
+                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID);
+                }
 
-            if (visAsset != null)
+                if (visAsset != null)
+                {
+                    _visAssets[visAssetUUID] = visAsset;
+                }
+            }
+            catch (Exception e)
             {
-                _visAssets[visAssetUUID] = visAsset;
+                Debug.LogError(e);
             }
         }
     }
