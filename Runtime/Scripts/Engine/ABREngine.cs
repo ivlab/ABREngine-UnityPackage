@@ -42,6 +42,8 @@ namespace IVLab.ABREngine
 
         private DataImpressionGroup _defaultGroup = null;
 
+        private bool _initialized = false;
+
         /// <summary>
         ///     If the Engine is connected to a local server, use that server's
         ///     data path, otherwise use our persistent data path.
@@ -116,7 +118,16 @@ namespace IVLab.ABREngine
                 {
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
                 }
+                _initialized = true;
             });
+        }
+
+        public async Task WaitUntilInitialized()
+        {
+            while (!_initialized)
+            {
+                await Task.Delay(10);
+            }
         }
 
         void OnDestroy()
