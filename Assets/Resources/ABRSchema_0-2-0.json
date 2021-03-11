@@ -318,17 +318,17 @@
             "PrimitiveFloat": {
                 "type": "string",
                 "description": "Floating point number",
-                "pattern": "^\\d+(.\\d+)?$"
+                "pattern": "^-?\\d+(.\\d+)?$"
             },
             "PrimitivePercentage": {
                 "type": "string",
                 "description": "Floating point percentage",
-                "pattern": "^\\d+.?\\d+?%$"
+                "pattern": "^-?\\d+.?\\d+?%$"
             },
             "PrimitiveDistance": {
                 "type": "string",
                 "description": "Floating point distance (metric units)",
-                "pattern": "^\\d+(.\\d+)?(m)$"
+                "pattern": "^-?\\d+(.\\d+)?(m)$"
             },
             "PrimitiveBoolean": {
                 "type": "string",
@@ -338,7 +338,7 @@
             "PrimitiveAngle": {
                 "type": "string",
                 "description": "Angle measure in degrees",
-                "pattern": "^\\d+.?\\d+?deg$"
+                "pattern": "^-?\\d+.?\\d+?deg$"
             }
         },
 
