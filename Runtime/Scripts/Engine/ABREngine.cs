@@ -317,6 +317,20 @@ namespace IVLab.ABREngine
             }
         }
 
+        public IDataImpression DuplicateDataImpression(Guid uuid)
+        {
+            return DuplicateDataImpression(GetDataImpression(uuid));
+        }
+
+        public IDataImpression DuplicateDataImpression(IDataImpression dataImpression)
+        {
+            Guid newImpressionID = Guid.NewGuid();
+            IDataImpression newDataImpression = dataImpression.Copy();
+            newDataImpression.Uuid = newImpressionID;
+            RegisterDataImpression(newDataImpression);
+            return newDataImpression;
+        }
+
         public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // See if it's a part of a group already

@@ -20,7 +20,7 @@ namespace IVLab.ABREngine
         ///
         ///     Assigned on object creation
         /// </summary>
-        Guid Uuid { get; }
+        Guid Uuid { get; set; }
 
         /// <summary>
         ///     Used for getting/setting ABRInputs on this DataImpression
@@ -62,7 +62,7 @@ namespace IVLab.ABREngine
     /// </summary>
     public abstract class DataImpression : IDataImpression, IHasDataset
     {
-        public Guid Uuid { get; }
+        public Guid Uuid { get; set; }
 
         public ABRInputIndexerModule InputIndexer { get; }
 
