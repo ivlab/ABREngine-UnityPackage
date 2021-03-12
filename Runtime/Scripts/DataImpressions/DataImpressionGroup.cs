@@ -141,6 +141,13 @@ namespace IVLab.ABREngine
                 .Select((imp) => (T) imp).ToList();
         }
 
+        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        {
+            return _impressions
+                .Select((kv) => kv.Value)
+                .Where((imp) => imp.HasTag(tag)).ToList();
+        }
+
         public bool HasDataImpression(Guid uuid)
         {
             return _impressions.ContainsKey(uuid);

@@ -167,6 +167,14 @@ namespace IVLab.ABREngine
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
 
+        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        {
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .Select((grp) => grp.GetDataImpressionsWithTag(tag))
+                .Aggregate((all, imps) => all.Concat(imps).ToList());
+        }
+
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
         {
             try

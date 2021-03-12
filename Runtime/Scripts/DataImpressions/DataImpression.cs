@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace IVLab.ABREngine
@@ -58,6 +59,12 @@ namespace IVLab.ABREngine
         ///     Copy a data impression, giving a new Uuid
         /// </summary>
         IDataImpression Copy();
+
+        /// <summary>
+        ///     Return if this data impression has a particular string tag (for
+        ///     external purposes only, the engine currently does nothing with tags)
+        /// </summary>
+        bool HasTag(string tagName);
     }
 
     /// <summary>
@@ -70,6 +77,12 @@ namespace IVLab.ABREngine
         public Guid Uuid { get; set; }
 
         public ABRInputIndexerModule InputIndexer { get; }
+
+        /// <summary>
+        ///     A list of tags that this data impression has - solely used for
+        ///     external purposes (the engine does nothing with them)
+        /// </summary>
+        public List<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         ///     Name of the material to use to render this DataImpression
@@ -127,6 +140,11 @@ namespace IVLab.ABREngine
             }
         }
 
+        public bool HasTag(string tag)
+        {
+            return Tags.Contains(tag);
+        }
+
         public DataImpression() : this(Guid.NewGuid().ToString()) { }
 
         public virtual void ComputeKeyDataRenderInfo() { }
@@ -142,6 +160,7 @@ namespace IVLab.ABREngine
         public virtual IDataImpression Copy()
         {
             DataImpression di = (DataImpression) this.MemberwiseClone();
+            di.Tags = new List<string>(di.Tags);
             foreach (var inputName in InputIndexer.InputNames)
             {
                 IABRInput thisValue = InputIndexer.GetInputValue(inputName);
