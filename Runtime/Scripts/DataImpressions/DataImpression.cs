@@ -53,6 +53,11 @@ namespace IVLab.ABREngine
         ///     `ApplyToGameObject()` should be run in sequence.
         /// </summary>
         void ApplyToGameObject(EncodedGameObject currentGameObject);
+
+        /// <summary>
+        ///     Copy a data impression, giving a new Uuid
+        /// </summary>
+        IDataImpression Copy();
     }
 
     /// <summary>
@@ -129,6 +134,16 @@ namespace IVLab.ABREngine
         public virtual void ComputeRenderInfo() { }
 
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
+
+        /// <summary>
+        ///     This is meaningless because DataImpressions are virtual
+        /// </summary>
+        public IDataImpression Copy()
+        {
+            DataImpression di = this.MemberwiseClone() as DataImpression;
+            di.Uuid = Guid.NewGuid();
+            return di as IDataImpression;
+        }
 
         /// <summary>
         ///     By default, there's no dataset. DataImpressions should only have

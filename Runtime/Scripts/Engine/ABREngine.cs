@@ -324,9 +324,7 @@ namespace IVLab.ABREngine
 
         public IDataImpression DuplicateDataImpression(IDataImpression dataImpression)
         {
-            Guid newImpressionID = Guid.NewGuid();
             IDataImpression newDataImpression = dataImpression.Copy();
-            newDataImpression.Uuid = newImpressionID;
             RegisterDataImpression(newDataImpression);
             return newDataImpression;
         }
