@@ -136,11 +136,17 @@ namespace IVLab.ABREngine
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
         /// <summary>
-        ///     This is meaningless because DataImpressions are virtual
+        ///     Unknown why it's necessary to copy each input individually, but here
+        ///     we are.
         /// </summary>
-        public IDataImpression Copy()
+        public virtual IDataImpression Copy()
         {
-            DataImpression di = this.MemberwiseClone() as DataImpression;
+            DataImpression di = (DataImpression) this.MemberwiseClone();
+            foreach (var inputName in InputIndexer.InputNames)
+            {
+                IABRInput thisValue = InputIndexer.GetInputValue(inputName);
+                di.InputIndexer.AssignInput(inputName, thisValue);
+            }
             di.Uuid = Guid.NewGuid();
             return di as IDataImpression;
         }
