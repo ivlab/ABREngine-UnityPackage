@@ -74,30 +74,34 @@
 #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
 
 				c = colorBuffer[unity_InstanceID];
+#else
+				c = _Color;
+#endif
+
 				float vColor = c.r;
 
 				float vColorNorm = clamp(Remap(vColor, _ColorDataMin, _ColorDataMax, 0, 1), 0, 0.99);
 
 				if (_UseColorMap == 1)
 				{
-					o.Albedo =  tex2D(_ColorMap, float2(vColorNorm,0.25 ));
+					o.Albedo = tex2D(_ColorMap, float2(vColorNorm, 0.25));
 				}
 				else
 				{
-					o.Albedo = _Color.rgb;
+					o.Albedo = 1;
 				}
 
-#endif
 
 				o.Metallic = 0;
-				o.Smoothness = 0.0;
+				// o.Smoothness = 0.0;
 				float4 map1 = tex2D(_Normal, IN.uv_MainTex);
 				//map1.a = sqrt(map1.r) * 2 - 1;
 				//map1.a = map1.a * 0.5 + 0.54;
 				//map1.g = sqrt(map1.g) * 2 - 1;
 				//map1.g = map1.g * 0.5 + 0.54;
 				//
-				map1.b = map1.g;
+				// Unsure why this needed to be flipped at one point, but it no longer needs to be...
+				// map1.b = map1.g;
 				//map1.r = 1;
 				o.Normal = UnpackNormal(map1);
 				o.Alpha = 1;

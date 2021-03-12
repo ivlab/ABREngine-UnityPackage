@@ -32,6 +32,8 @@ public class InstancedMeshRenderer : MonoBehaviour
 
     public MaterialPropertyBlock block;
 
+    public bool useInstanced = true;
+
     void OnEnable()
     {
         argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
@@ -66,7 +68,18 @@ public class InstancedMeshRenderer : MonoBehaviour
         //if (strategy != null)
         //    strategy.SetMaterialBlock(block);
         // Render
-        Graphics.DrawMeshInstancedIndirect(instanceMesh, subMeshIndex, instanceMaterial, transformedBounds, argsBuffer, 0, block, ShadowCastingMode.On, true,gameObject.layer);
+        if (useInstanced)
+        {
+            Graphics.DrawMeshInstancedIndirect(instanceMesh, subMeshIndex, instanceMaterial, transformedBounds, argsBuffer, 0, block, ShadowCastingMode.On, true,gameObject.layer);
+        }
+        else
+        {
+            for(int i = 0; i < instanceLocalTransforms.Length; i++)
+            {
+                block.SetColor("_Color", colors[i]);
+                Graphics.DrawMesh(instanceMesh, transform.localToWorldMatrix* instanceLocalTransforms[i], instanceMaterial, 0, null, 0, block);
+            }
+        }
     }
 
     //void OnGUI()
