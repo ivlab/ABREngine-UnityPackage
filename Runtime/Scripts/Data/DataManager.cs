@@ -210,8 +210,11 @@ namespace IVLab.ABREngine
                 {
                     // If this variable was already there, adjust its bounds to
                     // include the newly imported rawDataset
-                    scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
-                    scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
+                    if (!scalarDataVariable.CustomizedRange)
+                    {
+                        scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
+                        scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
+                    }
                 }
 
                 scalarDataVariable.OriginalMinValue = scalarDataVariable.MinValue;

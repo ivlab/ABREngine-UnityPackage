@@ -188,6 +188,7 @@ namespace IVLab.ABREngine
                         // Assign the min/max value from the state
                         variable.MinValue = scalarRange.Value.min;
                         variable.MaxValue = scalarRange.Value.max;
+                        variable.CustomizedRange = true;
                     }
                 }
 

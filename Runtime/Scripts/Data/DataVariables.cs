@@ -43,6 +43,11 @@ namespace IVLab.ABREngine
         T OriginalMaxValue { get; set; }
 
         /// <summary>
+        ///     Have this var's ranges been customized?
+        /// </summary>
+        bool CustomizedRange { get; set; }
+
+        /// <summary>
         ///     Get the actual data values in the context of this particular Key
         ///     Data object
         /// </summary>
@@ -63,6 +68,8 @@ namespace IVLab.ABREngine
 
         public float OriginalMinValue { get; set; }
         public float OriginalMaxValue { get; set; }
+
+        public bool CustomizedRange { get; set; }
 
         public ScalarDataVariable(string path)
         {
@@ -111,6 +118,8 @@ namespace IVLab.ABREngine
 
         public Vector3 OriginalMinValue { get; set; }
         public Vector3 OriginalMaxValue { get; set; }
+
+        public bool CustomizedRange { get; set; }
 
         public VectorDataVariable(string path)
         {
