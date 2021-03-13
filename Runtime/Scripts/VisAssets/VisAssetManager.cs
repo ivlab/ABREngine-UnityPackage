@@ -28,7 +28,7 @@ namespace IVLab.ABREngine
 
         private IVisAssetLoader resourceVisAssetLoader;
         private bool _loadResourceVisAssets;
-        
+
         public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
         {
             this.appDataPath = visassetPath;

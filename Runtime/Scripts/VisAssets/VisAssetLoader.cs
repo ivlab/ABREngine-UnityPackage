@@ -321,15 +321,23 @@ namespace IVLab.ABREngine
                     {
                         Debug.LogError(e);
                     }
-                    loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
-                    loadedObjGameObject.SetActive(false);
-                    var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().sharedMesh;
-                    GameObject.Destroy(loadedObjGameObject);
+                    try
+                    {
 
-                    Texture2D normalMap = Resources.Load<Texture2D>(normalPath);
+                        loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
+                        loadedObjGameObject.SetActive(false);
+                        var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().sharedMesh;
+                        GameObject.Destroy(loadedObjGameObject);
 
-                    visAsset.MeshLods.Add(loadedMesh);
-                    visAsset.NormalMapLods.Add(normalMap);
+                        Texture2D normalMap = Resources.Load<Texture2D>(normalPath);
+
+                        visAsset.MeshLods.Add(loadedMesh);
+                        visAsset.NormalMapLods.Add(normalMap);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e);
+                    }
                 }
 
                 return visAsset;
@@ -393,6 +401,7 @@ namespace IVLab.ABREngine
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
         {
             string relPathNoExt = Path.GetFileNameWithoutExtension(relativeDataPath);
+            relPathNoExt = Path.Combine(Path.GetDirectoryName(relativeDataPath), relPathNoExt);
             return Path.Combine(Path.GetDirectoryName(artifactFilePath), relPathNoExt);
         }
     }
