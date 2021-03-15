@@ -18,7 +18,7 @@ namespace IVLab.ABREngine
 {
     public interface IABRStateLoader
     {
-        Task<JToken> GetState(string name);
+        Task<JObject> GetState(string name);
 
         Task SaveState(string serializedState);
     }
@@ -27,7 +27,7 @@ namespace IVLab.ABREngine
     {
         public ResourceStateFileLoader() { }
 
-        public async Task<JToken> GetState(string fileName)
+        public async Task<JObject> GetState(string fileName)
         {
             TextAsset textAsset = null;
             await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
@@ -48,12 +48,12 @@ namespace IVLab.ABREngine
     {
         public HttpStateFileLoader() { }
 
-        public async Task<JToken> GetState(string url)
+        public async Task<JObject> GetState(string url)
         {
             HttpResponseMessage stateResponse = await ABREngine.httpClient.GetAsync(url);
             stateResponse.EnsureSuccessStatusCode();
             string fullStateJson = await stateResponse.Content.ReadAsStringAsync();
-            return JObject.Parse(fullStateJson)["state"];
+            return JObject.Parse(fullStateJson)["state"].ToObject<JObject>();
         }
 
         public async Task SaveState(string serializedState)

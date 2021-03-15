@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using IVLab.Utilities;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace IVLab.ABREngine
 {
@@ -21,7 +22,7 @@ namespace IVLab.ABREngine
     {
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
-        private JToken previouslyLoadedState = null;
+        private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
 
         private object _stateLock = new object();
@@ -34,7 +35,7 @@ namespace IVLab.ABREngine
         public SocketDataListener DataListener { get; private set; }
 
         // Delegate callback for when state is updated
-        public delegate void StateChangeDelegate(JToken state);
+        public delegate void StateChangeDelegate(JObject state);
         public StateChangeDelegate OnStateChanged;
 
         // Save this for threading purposes (can't be accessed from non-main-thread)
@@ -447,7 +448,7 @@ namespace IVLab.ABREngine
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
                 try
                 {
-                    JToken tempState = await parser.LoadState(stateName, previouslyLoadedState);
+                    JObject tempState = await parser.LoadState(stateName, previouslyLoadedState);
                     lock (_stateLock)
                     {
                         previousStateName = stateName;
@@ -480,8 +481,16 @@ namespace IVLab.ABREngine
                 Debug.Log("Saving State");
                 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
-                    string state = parser.SerializeState();
-                    await loader.SaveState(state);
+                    try
+                    {
+                        string state = parser.SerializeState(previouslyLoadedState);
+
+                        await loader.SaveState(state);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
                     Debug.Log("Finished saving state");
                 });
             }

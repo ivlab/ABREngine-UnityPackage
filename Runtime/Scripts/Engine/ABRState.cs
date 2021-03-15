@@ -32,12 +32,12 @@ namespace IVLab.ABREngine
             return parser;
         }
 
-        public async Task<JToken> LoadState(string name, JToken previousState)
+        public async Task<JObject> LoadState(string name, JObject previousState)
         {
             await ABREngine.Instance.WaitUntilInitialized();
             UnityThreadScheduler.GetInstance();
 
-            JToken stateJson = await _loader.GetState(name);
+            JObject stateJson = await _loader.GetState(name);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
@@ -53,7 +53,7 @@ namespace IVLab.ABREngine
             // Check the diff from the previous state
             JsonDiffPatch jdp = new JsonDiffPatch();
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
-            stateJson = jdp.Patch(previousState, diffFromPrevious);
+            stateJson = jdp.Patch(previousState, diffFromPrevious).ToObject<JObject>();
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
             // If it's an array, that means it's either been deleted or created
@@ -306,6 +306,12 @@ namespace IVLab.ABREngine
                     }
                 }
 
+                // Add any rendering hints
+                if (impression.Value.renderHints != null)
+                {
+                    (dataImpression as DataImpression).RenderHints.visible = impression.Value.renderHints.visible;
+                }
+
                 // Put the impressions in their proper groups, if any
                 bool registered = false;
                 if (state.scene != null)
@@ -364,8 +370,10 @@ namespace IVLab.ABREngine
             return stateJson;
         }
 
-        public string SerializeState()
+        public string SerializeState(JObject previousState)
         {
+            try
+            {
             var assembly = Assembly.GetExecutingAssembly();
 
             RawABRState saveState = new RawABRState();
@@ -399,7 +407,9 @@ namespace IVLab.ABREngine
                     // Retrieve easy values
                     saveImpression.uuid = impression.Uuid.ToString();
                     saveImpression.name = "DataImpression"; // TODO
-                    saveImpression.renderingData = new RawRenderingData(); // TODO
+                    saveImpression.renderHints = new RawRenderHints {
+                        visible = (impression as DataImpression).RenderHints.visible
+                    };
 
                     // Retrieve the plate type
                     saveImpression.plateType = assembly.GetTypes()
@@ -438,7 +448,7 @@ namespace IVLab.ABREngine
                                         min = inputVar.MinValue,
                                         max = inputVar.MaxValue,
                                     };
-                                    saveRanges.scalarRanges.Add(inputVar.Path, scalarRange);
+                                    saveRanges.scalarRanges[inputVar.Path] = scalarRange;
                                 }
                             }
                         }
@@ -446,10 +456,10 @@ namespace IVLab.ABREngine
 
                     saveImpression.inputValues = saveInputs;
                     saveGroup.impressions.Add(impression.Uuid);
-                    saveState.impressions.Add(impression.Uuid.ToString(), saveImpression);
+                    saveState.impressions[impression.Uuid.ToString()] = saveImpression;
                 }
 
-                saveScene.impressionGroups.Add(saveGroup.uuid.ToString(), saveGroup);
+                saveScene.impressionGroups[saveGroup.uuid.ToString()] = saveGroup;
             }
 
             saveState.scene = saveScene;
@@ -459,7 +469,19 @@ namespace IVLab.ABREngine
             settings.NullValueHandling = NullValueHandling.Ignore;
             settings.Formatting = Formatting.Indented;
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
+            if (previousState.ContainsKey("uiData"))
+            {
+                saveState.uiData = previousState["uiData"];
+            }
+
             return JsonConvert.SerializeObject(saveState, settings);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return null;
+            }
         }
     }
 
@@ -473,6 +495,7 @@ namespace IVLab.ABREngine
         public Dictionary<string, RawDataImpression> impressions;
         public RawScene scene;
         public RawDataRanges dataRanges;
+        public JToken uiData; // data for UIs, not messing with it at all
     }
 
     class RawDataImpression
@@ -480,7 +503,7 @@ namespace IVLab.ABREngine
         public string plateType;
         public string uuid;
         public string name;
-        public RawRenderingData renderingData;
+        public RawRenderHints renderHints;
         public Dictionary<string, RawABRInput> inputValues;
     }
 
@@ -511,5 +534,8 @@ namespace IVLab.ABREngine
         // Not including scale because that would mess with artifacts
     }
 
-    class RawRenderingData { }
+    class RawRenderHints
+    {
+        public bool visible;
+    }
 }
