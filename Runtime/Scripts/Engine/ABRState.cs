@@ -132,17 +132,17 @@ namespace IVLab.ABREngine
                 Queue<string> rawDataToLoad = new Queue<string>();
                 if (impression.Value?.inputValues != null)
                 {
-                    foreach (var inputValue in impression.Value.inputValues)
+                    foreach (var inputValue in impression.Value.inputValues.Values)
                     {
                         // If the input genre is a key data or a visasset, we need
                         // to load it
-                        if (inputValue.Value.inputGenre == ABRInputGenre.KeyData.ToString("G"))
+                        if (inputValue.inputGenre == ABRInputGenre.KeyData.ToString("G"))
                         {
-                            rawDataToLoad.Enqueue(inputValue.Value.inputValue);
+                            rawDataToLoad.Enqueue(inputValue.inputValue);
                         }
-                        if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
+                        if (inputValue.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
                         {
-                            visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
+                            visAssetsToLoad.Enqueue(inputValue.inputValue);
                         }
                     }
                 }
@@ -168,27 +168,15 @@ namespace IVLab.ABREngine
                     ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
                     if (existing == null)
                     {
-                        await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
-                    }
-                }
-
-                // Change any variable ranges that appear in the state
-                if (state.dataRanges?.scalarRanges != null)
-                {
-                    foreach (var scalarRange in state.dataRanges.scalarRanges)
-                    {
-                        // Get the variable
-                        string scalarPath = scalarRange.Key;
-                        DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
-                        Dataset dataset;
-                        ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset);
-                        ScalarDataVariable variable;
-                        dataset.TryGetScalarVar(scalarPath, out variable);
-
-                        // Assign the min/max value from the state
-                        variable.MinValue = scalarRange.Value.min;
-                        variable.MaxValue = scalarRange.Value.max;
-                        variable.CustomizedRange = true;
+                        // Load from data server, if there is one
+                        if (ABREngine.Instance.Config.Info.dataServer != null)
+                        {
+                            await ABREngine.Instance.Data.LoadRawDatasetFromURL(rawData, ABREngine.Instance.Config.Info.dataServer);
+                        }
+                        else
+                        {
+                            await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
+                        }
                     }
                 }
 
@@ -347,6 +335,29 @@ namespace IVLab.ABREngine
                 if (!registered)
                 {
                     ABREngine.Instance.RegisterDataImpression(dataImpression, true);
+                }
+            }
+
+            // Change any variable ranges that appear in the state
+            foreach (var impression in state.impressions)
+            {
+                if (state.dataRanges?.scalarRanges != null)
+                {
+                    foreach (var scalarRange in state.dataRanges.scalarRanges)
+                    {
+                        // Get the variable
+                        string scalarPath = scalarRange.Key;
+                        DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
+                        Dataset dataset;
+                        ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset);
+                        ScalarDataVariable variable;
+                        dataset.TryGetScalarVar(scalarPath, out variable);
+
+                        // Assign the min/max value from the state
+                        variable.MinValue = scalarRange.Value.min;
+                        variable.MaxValue = scalarRange.Value.max;
+                        variable.CustomizedRange = true;
+                    }
                 }
             }
 

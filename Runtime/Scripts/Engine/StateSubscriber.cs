@@ -105,8 +105,8 @@ namespace IVLab.ABREngine
                 CancellationToken ct = new CancellationToken();
                 string updateMsg = await StreamMethods.ReadStringFromStreamAsync(this._client.GetStream(), ct);
                 // when we get here, we've received a message and can update
-                // state!
-                ABREngine.Instance.LoadState<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                // state (if not paused)!
+                await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
             }
         }
     }
