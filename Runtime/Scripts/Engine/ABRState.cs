@@ -136,11 +136,11 @@ namespace IVLab.ABREngine
                     {
                         // If the input genre is a key data or a visasset, we need
                         // to load it
-                        if (inputValue.Value.inputGenre == ABRInputGenre.KeyData)
+                        if (inputValue.Value.inputGenre == ABRInputGenre.KeyData.ToString("G"))
                         {
                             rawDataToLoad.Enqueue(inputValue.Value.inputValue);
                         }
-                        if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset)
+                        if (inputValue.Value.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
                         {
                             visAssetsToLoad.Enqueue(inputValue.Value.inputValue);
                         }
@@ -215,7 +215,7 @@ namespace IVLab.ABREngine
                             value  = impression.Value.inputValues[inputName];
                         }
                         IABRInput possibleInput = null;
-                        if (value?.inputGenre == ABRInputGenre.KeyData)
+                        if (value?.inputGenre == ABRInputGenre.KeyData.ToString("G"))
                         {
                             string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                             Dataset dataset;
@@ -234,7 +234,7 @@ namespace IVLab.ABREngine
                             }
                             possibleInput = keyData as IABRInput;
                         }
-                        else if (value?.inputGenre == ABRInputGenre.Variable)
+                        else if (value?.inputGenre == ABRInputGenre.Variable.ToString("G"))
                         {
                             string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                             Dataset dataset;
@@ -263,7 +263,7 @@ namespace IVLab.ABREngine
                                 Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
                             }
                         }
-                        else if (value?.inputGenre == ABRInputGenre.VisAsset)
+                        else if (value?.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
                         {
                             IVisAsset visAsset = null;
                             await UnityThreadScheduler.Instance.RunMainThreadWork(() => 
@@ -277,7 +277,7 @@ namespace IVLab.ABREngine
                             }
                             possibleInput = visAsset as IABRInput;
                         }
-                        else if (value?.inputGenre == ABRInputGenre.Primitive)
+                        else if (value?.inputGenre == ABRInputGenre.Primitive.ToString("G"))
                         {
                             // Attempt to construct the primitive from the type
                             // provided in the state file
@@ -351,6 +351,104 @@ namespace IVLab.ABREngine
             }
 
             return stateJson;
+        }
+
+        public string SaveState()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            RawABRState saveState = new RawABRState();
+            saveState.impressions = new Dictionary<string, RawDataImpression>();
+            saveState.version = "0.2.0";
+            RawScene saveScene = new RawScene {
+                impressionGroups = new Dictionary<string, RawImpressionGroup>()
+            };
+            RawDataRanges saveRanges = new RawDataRanges {
+                scalarRanges = new Dictionary<string, RawDataRanges.RawRange<float>>()
+            };
+
+            // Populate data impressions and groups
+            foreach (var group in ABREngine.Instance.GetDataImpressionGroups().Values)
+            {
+                RawImpressionGroup saveGroup = new RawImpressionGroup();
+
+                // Save the group info
+                saveGroup.name = group.Name;
+                saveGroup.rootPosition = group.GroupRoot.transform.localPosition;
+                saveGroup.rootRotation = group.GroupRoot.transform.localRotation;
+                saveGroup.containerBounds = group.GroupContainer;
+                saveGroup.uuid = group.Uuid;
+                saveGroup.impressions = new List<Guid>();
+
+                // Go through each impression
+                foreach (var impression in group.GetDataImpressions().Values)
+                {
+                    RawDataImpression saveImpression = new RawDataImpression();
+
+                    // Retrieve easy values
+                    saveImpression.uuid = impression.Uuid.ToString();
+                    saveImpression.name = "DataImpression"; // TODO
+                    saveImpression.renderingData = new RawRenderingData(); // TODO
+
+                    // Retrieve the plate type
+                    saveImpression.plateType = assembly.GetTypes()
+                        .First((t) => t == impression.GetType())
+                        .GetCustomAttribute<ABRPlateType>().plateType;
+
+                    // Retrieve inputs
+                    ABRInputIndexerModule impressionInputs = impression.InputIndexer;
+                    string[] inputNames = impressionInputs.InputNames;
+                    Dictionary<string, RawABRInput> saveInputs = new Dictionary<string, RawABRInput>();
+
+                    List<ABRInputAttribute> actualInputs = impression
+                        .GetType()
+                        .GetFields()
+                        .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
+                        .Where((f) => f != null).ToList();
+
+                    foreach (var inputName in inputNames)
+                    {
+                        IABRInput input = impressionInputs.GetInputValue(inputName);
+                        if (input != null)
+                        {
+                            RawABRInput saveInput = input.GetRawABRInput();
+                            saveInput.parameterName = actualInputs
+                                .First((i) => i.inputName == inputName).parameterName;
+                            saveInputs[inputName] = saveInput;
+
+                            // If it's a variable, gather the custom min/max if
+                            // they've been changed
+                            if (input.GetType() == typeof(ScalarDataVariable))
+                            {
+                                ScalarDataVariable inputVar = input as ScalarDataVariable;
+                                if (inputVar.CustomizedRange)
+                                {
+                                    RawDataRanges.RawRange<float> scalarRange = new RawDataRanges.RawRange<float> {
+                                        min = inputVar.MinValue,
+                                        max = inputVar.MaxValue,
+                                    };
+                                    saveRanges.scalarRanges.Add(inputVar.Path, scalarRange);
+                                }
+                            }
+                        }
+                    }
+
+                    saveImpression.inputValues = saveInputs;
+                    saveGroup.impressions.Add(impression.Uuid);
+                    saveState.impressions.Add(impression.Uuid.ToString(), saveImpression);
+                }
+
+                saveScene.impressionGroups.Add(saveGroup.uuid.ToString(), saveGroup);
+            }
+
+            saveState.scene = saveScene;
+            saveState.dataRanges = saveRanges;
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+            settings.Formatting = Formatting.Indented;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            return JsonConvert.SerializeObject(saveState, settings);
         }
     }
 

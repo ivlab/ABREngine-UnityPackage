@@ -31,5 +31,15 @@ namespace IVLab.ABREngine
         public Guid Uuid { get; set; }
         public DateTime ImportTime { get; set; }
         public virtual VisAssetType VisAssetType { get; }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput {
+                inputType = this.GetType().ToString(),
+                inputValue = this.Uuid.ToString(),
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
+        }
     }
 }

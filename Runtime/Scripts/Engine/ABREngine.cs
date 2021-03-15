@@ -460,5 +460,10 @@ namespace IVLab.ABREngine
             });
         }
 
+        public string SaveState()
+        {
+            ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
+            return parser.SaveState();
+        }
     }
 }

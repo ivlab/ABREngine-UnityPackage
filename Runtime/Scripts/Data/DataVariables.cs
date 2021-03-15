@@ -107,6 +107,16 @@ namespace IVLab.ABREngine
             ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
             return dataset;
         }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput {
+                inputType = this.GetType().ToString(),
+                inputValue = Path,
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
+        }
     }
 
     public class VectorDataVariable : IDataVariable<Vector3>, IHasDataset
@@ -156,6 +166,16 @@ namespace IVLab.ABREngine
             Dataset dataset;
             ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
             return dataset;
+        }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput {
+                inputType = this.GetType().ToString(),
+                inputValue = Path,
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
         }
     }
 }

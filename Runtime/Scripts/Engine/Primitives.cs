@@ -74,6 +74,16 @@ namespace IVLab.ABREngine
         {
             return Value.ToString() + Units;
         }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput {
+                inputType = this.GetType().ToString(),
+                inputValue = this.ToString(),
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
+        }
     }
 
     public class FloatPrimitive : IFloatPrimitive
@@ -101,6 +111,16 @@ namespace IVLab.ABREngine
         public override string ToString()
         {
             return Value.ToString() + Units;
+        }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput {
+                inputType = this.GetType().ToString(),
+                inputValue = this.ToString(),
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
         }
     }
 

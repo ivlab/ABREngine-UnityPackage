@@ -45,7 +45,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     What type of input is it (variable, visasset, etc.)
         /// </summary>
-        public ABRInputGenre inputGenre;
+        public string inputGenre;
     }
 
     /// <summary>
@@ -54,5 +54,7 @@ namespace IVLab.ABREngine
     /// </summary>
     public interface IABRInput {
         ABRInputGenre Genre { get; }
+
+        RawABRInput GetRawABRInput();
     }
 }
