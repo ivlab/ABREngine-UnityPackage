@@ -167,7 +167,7 @@
                     "description": "User-defined name of the data impression (i.e. 'blue ocean')",
                     "default": "Data Impression"
                 },
-                "renderingData": {
+                "renderHints": {
                     "type": "object",
                     "description": "Additional data that can/should be used when rendering, such as visibility of the impression",
                     "$comment": "TODO"
