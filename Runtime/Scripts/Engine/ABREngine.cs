@@ -428,11 +428,20 @@ namespace IVLab.ABREngine
             // and optimize what needs to be in the main thread and what
             // doesn't. Currently takes about 10 frames to get from here to the
             // end of the `RenderImpressions()` call.
+            UnityThreadScheduler.Instance.KickoffMainThreadWork(async () =>
+            {
+                await LoadStateAsync<T>(stateName);
+            });
+        }
+
+        public async Task LoadStateAsync<T>(string stateName)
+        where T : IABRStateLoader, new()
+        {
             lock (_stateUpdatingLock)
             {
                 stateUpdating = true;
             }
-            UnityThreadScheduler.Instance.KickoffMainThreadWork(async () =>
+            await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
                 try
