@@ -5,6 +5,8 @@
  *
  */
 
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using UnityEngine;
@@ -17,6 +19,8 @@ namespace IVLab.ABREngine
     public interface IABRStateLoader
     {
         Task<JToken> GetState(string name);
+
+        Task SaveState(string serializedState);
     }
 
     public class ResourceStateFileLoader : IABRStateLoader
@@ -33,6 +37,11 @@ namespace IVLab.ABREngine
             });
             return JObject.Parse(textAsset?.text);
         }
+
+        public async Task SaveState(string serializedState)
+        {
+            throw new NotImplementedException("States cannot be saved to Resources folder");
+        }
     }
 
     public class HttpStateFileLoader : IABRStateLoader
@@ -45,6 +54,14 @@ namespace IVLab.ABREngine
             stateResponse.EnsureSuccessStatusCode();
             string fullStateJson = await stateResponse.Content.ReadAsStringAsync();
             return JObject.Parse(fullStateJson)["state"];
+        }
+
+        public async Task SaveState(string serializedState)
+        {
+            string stateUrl = ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer;
+            ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(serializedState));
+            HttpResponseMessage stateResponse = await ABREngine.httpClient.PutAsync(stateUrl, content);
+            stateResponse.EnsureSuccessStatusCode();
         }
     }
 }

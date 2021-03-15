@@ -462,8 +462,21 @@ namespace IVLab.ABREngine
 
         public string SaveState()
         {
-            ABRStateParser parser = ABRStateParser.GetParser<ResourceStateFileLoader>();
-            return parser.SaveState();
+            HttpStateFileLoader loader = new HttpStateFileLoader();
+            ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
+            string state = parser.SerializeState();
+            try
+            {
+                Task.Run(async () => 
+                {
+                    await loader.SaveState(state);
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            return state;
         }
     }
 }

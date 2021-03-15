@@ -353,7 +353,7 @@ namespace IVLab.ABREngine
             return stateJson;
         }
 
-        public string SaveState()
+        public string SerializeState()
         {
             var assembly = Assembly.GetExecutingAssembly();
 
