@@ -441,6 +441,7 @@ namespace IVLab.ABREngine
             {
                 stateUpdating = true;
             }
+            Debug.Log("Loading State " + stateName);
             await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
@@ -461,6 +462,7 @@ namespace IVLab.ABREngine
                     {
                         OnStateChanged(previouslyLoadedState);
                     }
+                    Debug.Log("Finished Loading State");
                 }
                 catch (Exception e)
                 {
@@ -469,23 +471,24 @@ namespace IVLab.ABREngine
             });
         }
 
-        public string SaveState()
+        public async Task SaveStateAsync()
         {
             HttpStateFileLoader loader = new HttpStateFileLoader();
             ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
-            string state = parser.SerializeState();
             try
             {
-                Task.Run(async () => 
+                Debug.Log("Saving State");
+                await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
+                    string state = parser.SerializeState();
                     await loader.SaveState(state);
+                    Debug.Log("Finished saving state");
                 });
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
             }
-            return state;
         }
     }
 }
