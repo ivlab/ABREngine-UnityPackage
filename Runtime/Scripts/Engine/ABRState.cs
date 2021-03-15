@@ -312,6 +312,12 @@ namespace IVLab.ABREngine
                     (dataImpression as DataImpression).RenderHints.visible = impression.Value.renderHints.visible;
                 }
 
+                // Add any tags
+                if (impression.Value.tags != null)
+                {
+                    (dataImpression as DataImpression).Tags = impression.Value.tags;
+                }
+
                 // Put the impressions in their proper groups, if any
                 bool registered = false;
                 if (state.scene != null)
@@ -410,6 +416,7 @@ namespace IVLab.ABREngine
                     saveImpression.renderHints = new RawRenderHints {
                         visible = (impression as DataImpression).RenderHints.visible
                     };
+                    saveImpression.tags = (impression as DataImpression).Tags;
 
                     // Retrieve the plate type
                     saveImpression.plateType = assembly.GetTypes()
@@ -504,6 +511,7 @@ namespace IVLab.ABREngine
         public string uuid;
         public string name;
         public RawRenderHints renderHints;
+        public List<string> tags;
         public Dictionary<string, RawABRInput> inputValues;
     }
 

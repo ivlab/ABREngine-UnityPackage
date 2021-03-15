@@ -76,7 +76,7 @@ namespace IVLab.ABREngine
     {
         public Guid Uuid { get; set; }
 
-        public ABRInputIndexerModule InputIndexer { get; }
+        public ABRInputIndexerModule InputIndexer { get; set; }
 
         /// <summary>
         ///     A list of tags that this data impression has - solely used for
@@ -160,12 +160,8 @@ namespace IVLab.ABREngine
         public virtual IDataImpression Copy()
         {
             DataImpression di = (DataImpression) this.MemberwiseClone();
+            di.InputIndexer = new ABRInputIndexerModule(di);
             di.Tags = new List<string>(di.Tags);
-            foreach (var inputName in InputIndexer.InputNames)
-            {
-                IABRInput thisValue = InputIndexer.GetInputValue(inputName);
-                di.InputIndexer.AssignInput(inputName, thisValue);
-            }
             di.Uuid = Guid.NewGuid();
             return di as IDataImpression;
         }

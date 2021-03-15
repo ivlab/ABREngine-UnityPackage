@@ -28,7 +28,6 @@ namespace IVLab.ABREngine
         string[] _abrInputNames = null;
 
 
-
         static BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
         protected static FieldInfo[] GetABRInputFields(object target)
         {
