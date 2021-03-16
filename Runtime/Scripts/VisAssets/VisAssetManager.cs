@@ -24,9 +24,8 @@ namespace IVLab.ABREngine
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
 
-        private IVisAssetLoader visAssetLoader;
+        private VisAssetLoader visAssetLoader;
 
-        private IVisAssetLoader resourceVisAssetLoader;
         private bool _loadResourceVisAssets;
 
         public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
@@ -34,14 +33,9 @@ namespace IVLab.ABREngine
             this.appDataPath = visassetPath;
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("VisAsset Path: " + appDataPath);
-            visAssetLoader = new FilePathVisAssetLoader(this.appDataPath);
+            visAssetLoader = new VisAssetLoader();
 
             _loadResourceVisAssets = loadResourceVisAssets;
-            if (loadResourceVisAssets)
-            {
-                resourceVisAssetLoader = new ResourceVisAssetLoader();
-                Debug.Log("Allowing VisAsset loading from Resources/media/visassets");
-            }
         }
 
         public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
@@ -84,13 +78,13 @@ namespace IVLab.ABREngine
                 IVisAsset visAsset = null;
                 if (_loadResourceVisAssets)
                 {
-                    visAsset = resourceVisAssetLoader.LoadVisAsset(visAssetUUID);
+                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID, new ResourceVisAssetFetcher());
                 }
 
                 // If we haven't loaded it from resources, get it from disk
                 if (visAsset == null)
                 {
-                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID);
+                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID, new FilePathVisAssetFetcher(this.appDataPath));
                 }
 
                 if (visAsset != null)
