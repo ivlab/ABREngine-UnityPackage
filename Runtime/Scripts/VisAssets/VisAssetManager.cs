@@ -9,6 +9,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 
 using Newtonsoft.Json.Linq;
@@ -25,6 +26,7 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
 
         private VisAssetLoader visAssetLoader;
+        private List<IVisAssetFetcher> visAssetFetchers = new List<IVisAssetFetcher>();
 
         private bool _loadResourceVisAssets;
 
@@ -34,8 +36,20 @@ namespace IVLab.ABREngine
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("VisAsset Path: " + appDataPath);
             visAssetLoader = new VisAssetLoader();
+            visAssetFetchers.Add(new FilePathVisAssetFetcher(this.appDataPath));
 
             _loadResourceVisAssets = loadResourceVisAssets;
+            if (loadResourceVisAssets)
+            {
+                Debug.Log("Allowing loading of VisAssets from Resources folder");
+                visAssetFetchers.Add(new ResourceVisAssetFetcher());
+            }
+
+            if (ABREngine.Instance.Config.Info.visAssetServer != null)
+            {
+                Debug.Log("Allowing loading of VisAssets from " + ABREngine.Instance.Config.Info.visAssetServer);
+                visAssetFetchers.Add(new HttpVisAssetFetcher(ABREngine.Instance.Config.Info.visAssetServer, this.appDataPath));
+            }
         }
 
         public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
@@ -43,7 +57,7 @@ namespace IVLab.ABREngine
             _visAssets.TryGetValue(guid, out visAsset);
         }
 
-        public void LoadVisAssetPalette()
+        public async Task LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
             Debug.LogFormat("Loading VisAsset Palette ({0} VisAssets)", files.Length);
@@ -54,7 +68,7 @@ namespace IVLab.ABREngine
                 try
                 {
                     string uuid = Path.GetFileName(filePath);
-                    LoadVisAsset(new Guid(uuid));
+                    await LoadVisAsset(new Guid(uuid));
                     success += 1;
                 }
                 catch (Exception e)
@@ -65,7 +79,7 @@ namespace IVLab.ABREngine
             Debug.LogFormat("Successfully loaded {0}/{1} VisAssets", success, files.Length);
         }
 
-        public void LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
+        public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
@@ -75,16 +89,17 @@ namespace IVLab.ABREngine
 
             try
             {
+                // Try to fetch the visasset in terms of each fetcher's priority
                 IVisAsset visAsset = null;
-                if (_loadResourceVisAssets)
+                foreach (IVisAssetFetcher fetcher in visAssetFetchers)
                 {
-                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID, new ResourceVisAssetFetcher());
-                }
+                    visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
 
-                // If we haven't loaded it from resources, get it from disk
-                if (visAsset == null)
-                {
-                    visAsset = visAssetLoader.LoadVisAsset(visAssetUUID, new FilePathVisAssetFetcher(this.appDataPath));
+                    // If we've found it, stop looking
+                    if (visAsset != null)
+                    {
+                        break;
+                    }
                 }
 
                 if (visAsset != null)

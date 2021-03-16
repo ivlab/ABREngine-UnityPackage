@@ -91,9 +91,10 @@ namespace IVLab.ABREngine
                         await _notifier.Init();
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     Debug.LogError("Unable to connect to state server " + Config.Info.serverAddress);
+                    Debug.LogError(e);
                 }
 
                 try

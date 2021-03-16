@@ -155,9 +155,7 @@ namespace IVLab.ABREngine
                     ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
                     if (existing == null)
                     {
-                        await UnityThreadScheduler.Instance.RunMainThreadWork(
-                            () => ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID)
-                        );
+                        await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                     }
                 }
 
