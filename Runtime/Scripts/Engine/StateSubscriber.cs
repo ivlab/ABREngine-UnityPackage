@@ -46,6 +46,10 @@ namespace IVLab.ABREngine
         public bool serverIsLocal = false;
 
         private string _serverAddress;
+        class NotifierTarget
+        {
+            public string target;
+        }
 
         public StateSubscriber(string serverAddress)
         {
@@ -106,7 +110,11 @@ namespace IVLab.ABREngine
                 string updateMsg = await StreamMethods.ReadStringFromStreamAsync(this._client.GetStream(), ct);
                 // when we get here, we've received a message and can update
                 // state (if not paused)!
-                await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                NotifierTarget target = JsonConvert.DeserializeObject<NotifierTarget>(updateMsg);
+                if (target.target == "state")
+                {
+                    await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                }
             }
         }
     }
