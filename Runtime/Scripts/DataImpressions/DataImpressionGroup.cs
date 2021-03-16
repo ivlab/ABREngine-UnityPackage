@@ -245,23 +245,14 @@ namespace IVLab.ABREngine
             {
                 foreach (var impression in _impressions)
                 {
-                    PrepareImpression(impression.Value);
-                }
-
-                foreach (var impression in _impressions)
-                {
-                    impression.Value.ComputeKeyDataRenderInfo();
-                }
-
-                foreach (var impression in _impressions)
-                {
-                    impression.Value.ComputeRenderInfo();
-                }
-
-                foreach (var impression in _impressions)
-                {
-                    Guid uuid = impression.Key;
-                    impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                    if (impression.Value.RenderHints.changed)
+                    {
+                        PrepareImpression(impression.Value);
+                        impression.Value.ComputeKeyDataRenderInfo();
+                        impression.Value.ComputeRenderInfo();
+                        Guid uuid = impression.Key;
+                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                    }
                 }
             }
             catch (Exception e)

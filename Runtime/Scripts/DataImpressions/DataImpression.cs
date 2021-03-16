@@ -65,6 +65,12 @@ namespace IVLab.ABREngine
         ///     external purposes only, the engine currently does nothing with tags)
         /// </summary>
         bool HasTag(string tagName);
+
+        /// <summary>
+        ///     Any hints to provide the rendering engine, such as if the impression
+        ///     should be hidden
+        /// </summary>
+        RenderHints RenderHints { get; set; }
     }
 
     /// <summary>
@@ -77,6 +83,8 @@ namespace IVLab.ABREngine
         public Guid Uuid { get; set; }
 
         public ABRInputIndexerModule InputIndexer { get; set; }
+
+        public RenderHints RenderHints { get; set; } = new RenderHints();
 
         /// <summary>
         ///     A list of tags that this data impression has - solely used for
@@ -115,12 +123,6 @@ namespace IVLab.ABREngine
         ///     Warning: layer must exist in the Unity project!
         /// </summary>
         protected virtual string LayerName { get; } = "ABR";
-
-        /// <summary>
-        ///     Any hints to provide the rendering engine, such as if the impression
-        ///     should be hidden
-        /// </summary>
-        public virtual RenderHints RenderHints { get; set; } = new RenderHints();
 
         /// <summary>
         ///     Construct a data impession with a given UUID. Note that this
@@ -185,6 +187,14 @@ namespace IVLab.ABREngine
     /// </summary>
     public class RenderHints
     {
+        /// <summary>
+        ///     Has the impression been changed since the last render (needs to be re-rendered?)
+        /// </summary>
+        public bool changed = false;
+
+        /// <summary>
+        ///     Should the impression be displayed on screen?
+        /// </summary>
         public bool visible = true;
     }
 }

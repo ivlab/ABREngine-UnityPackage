@@ -307,8 +307,11 @@ namespace IVLab.ABREngine
                 // Add any rendering hints
                 if (impression.Value.renderHints != null)
                 {
-                    (dataImpression as DataImpression).RenderHints.visible = impression.Value.renderHints.visible;
+                    dataImpression.RenderHints = impression.Value.renderHints;
                 }
+
+                // Signify that this impression has been changed so it can be re-rendered
+                dataImpression.RenderHints.changed = true;
 
                 // Add any tags
                 if (impression.Value.tags != null)
@@ -411,9 +414,7 @@ namespace IVLab.ABREngine
                     // Retrieve easy values
                     saveImpression.uuid = impression.Uuid.ToString();
                     saveImpression.name = "DataImpression"; // TODO
-                    saveImpression.renderHints = new RawRenderHints {
-                        visible = (impression as DataImpression).RenderHints.visible
-                    };
+                    saveImpression.renderHints = impression.RenderHints;
                     saveImpression.tags = (impression as DataImpression).Tags;
 
                     // Retrieve the plate type
@@ -508,7 +509,7 @@ namespace IVLab.ABREngine
         public string plateType;
         public string uuid;
         public string name;
-        public RawRenderHints renderHints;
+        public RenderHints renderHints;
         public List<string> tags;
         public Dictionary<string, RawABRInput> inputValues;
     }
@@ -538,10 +539,5 @@ namespace IVLab.ABREngine
         public Vector3 rootPosition;
         public Quaternion rootRotation;
         // Not including scale because that would mess with artifacts
-    }
-
-    class RawRenderHints
-    {
-        public bool visible;
     }
 }
