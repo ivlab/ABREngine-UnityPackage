@@ -53,18 +53,13 @@ namespace IVLab.ABREngine
             // Check the diff from the previous state
             JsonDiffPatch jdp = new JsonDiffPatch();
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
-            stateJson = jdp.Patch(previousState, diffFromPrevious).ToObject<JObject>();
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
             // If it's an array, that means it's either been deleted or created
             if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Array)
             {
-                // if (allImpressionsDiff.ToArray().Where((t) => t.Type ==
-                // JTokenType.Integer).Count((t) => (int) t == 0) == 2)
-                // {
-                    ABREngine.Instance.ClearState();
-                    return stateJson;
-                // }
+                ABREngine.Instance.ClearState();
+                return stateJson;
             }
             else
             {
@@ -108,7 +103,6 @@ namespace IVLab.ABREngine
 
             foreach (var impression in state.impressions)
             {
-
                 if (impressionsObject != null)
                 {
                     bool changed = impressionsObject.ContainsKey(impression.Key);

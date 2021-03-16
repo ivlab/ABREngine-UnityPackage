@@ -69,7 +69,6 @@ namespace IVLab.ABREngine
             GroupRoot.transform.localRotation = rotation;
 
             ResetBoundsAndTransformation();
-            Debug.LogFormat("Added DataImpressionGroup {0}", name);
         }
 
         public void AddDataImpression(IDataImpression impression, bool allowOverwrite = true)
@@ -252,6 +251,7 @@ namespace IVLab.ABREngine
                         impression.Value.ComputeRenderInfo();
                         Guid uuid = impression.Key;
                         impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        impression.Value.RenderHints.changed = false;
                     }
                 }
             }

@@ -206,7 +206,6 @@ namespace IVLab.ABREngine
 
         public void RemoveDataImpressionGroup(Guid uuid)
         {
-            Debug.LogFormat("Removing data impression group {0}", uuid);
             dataImpressionGroups[uuid].Clear();
             Destroy(dataImpressionGroups[uuid].GroupRoot);
             dataImpressionGroups.Remove(uuid);
@@ -443,7 +442,6 @@ namespace IVLab.ABREngine
             {
                 stateUpdating = true;
             }
-            Debug.Log("Loading State " + stateName);
             await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
                 ABRStateParser parser = ABRStateParser.GetParser<T>();
@@ -464,7 +462,6 @@ namespace IVLab.ABREngine
                     {
                         OnStateChanged(previouslyLoadedState);
                     }
-                    Debug.Log("Finished Loading State");
                 }
                 catch (Exception e)
                 {
@@ -479,7 +476,6 @@ namespace IVLab.ABREngine
             ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
             try
             {
-                Debug.Log("Saving State");
                 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
                     try
@@ -492,7 +488,6 @@ namespace IVLab.ABREngine
                     {
                         Debug.LogError(e);
                     }
-                    Debug.Log("Finished saving state");
                 });
             }
             catch (Exception e)

@@ -96,7 +96,6 @@ namespace IVLab.ABREngine
                 Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
             }
 
-            // Debug.Log("ABR Config Loaded\n" + Info.ToString());
             Debug.Log("ABR Config Loaded");
 
             // Load the default prefab
