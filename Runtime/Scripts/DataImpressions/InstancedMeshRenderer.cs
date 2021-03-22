@@ -70,7 +70,8 @@ public class InstancedMeshRenderer : MonoBehaviour
         // Render
         if (useInstanced)
         {
-            Graphics.DrawMeshInstancedIndirect(instanceMesh, subMeshIndex, instanceMaterial, transformedBounds, argsBuffer, 0, block, ShadowCastingMode.On, true,gameObject.layer);
+            // Graphics.DrawMeshInstancedIndirect(instanceMesh, subMeshIndex, instanceMaterial, transformedBounds, argsBuffer, 0, block, ShadowCastingMode.On, true,gameObject.layer);
+            Graphics.DrawMeshInstancedProcedural(instanceMesh, subMeshIndex, instanceMaterial, transformedBounds, instanceCount, block, ShadowCastingMode.On, true,gameObject.layer);
         }
         else
         {

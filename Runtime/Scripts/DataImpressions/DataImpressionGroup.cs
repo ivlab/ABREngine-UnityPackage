@@ -237,7 +237,6 @@ namespace IVLab.ABREngine
             }
         }
 
-        [FunctionDebugger]
         public void RenderImpressions()
         {
             try

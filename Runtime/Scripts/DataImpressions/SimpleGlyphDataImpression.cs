@@ -148,6 +148,7 @@ namespace IVLab.ABREngine
                             (float)rand.NextDouble() * 2 - 1,
                             (float)rand.NextDouble() * 2 - 1,
                             (float)rand.NextDouble() * 2 - 1);
+                        // dataForwards[i] = new Vector3(0, 0, 1);
                     }
                 }
 
@@ -165,6 +166,7 @@ namespace IVLab.ABREngine
                             (float)rand.NextDouble() * 2 - 1,
                             (float)rand.NextDouble() * 2 - 1,
                             (float)rand.NextDouble() * 2 - 1);
+                        // dataUp[i] = new Vector3(0, 1, 0);
                     }
                 }
 

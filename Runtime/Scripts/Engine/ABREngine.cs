@@ -401,7 +401,6 @@ namespace IVLab.ABREngine
             }
         }
 
-        [FunctionDebugger]
         public void Render()
         {
             try
