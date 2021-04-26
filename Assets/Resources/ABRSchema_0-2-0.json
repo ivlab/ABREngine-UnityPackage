@@ -308,7 +308,7 @@
             "PrimitivePercentage": {
                 "type": "string",
                 "description": "Floating point percentage",
-                "pattern": "^-?\\d+.?(\\d+)?%$"
+                "pattern": "^-?\\d+(.\\d+)?(%)$"
             },
             "PrimitiveDistance": {
                 "type": "string",
@@ -323,7 +323,7 @@
             "PrimitiveAngle": {
                 "type": "string",
                 "description": "Angle measure in degrees",
-                "pattern": "^-?\\d+.?\\d+?deg$"
+                "pattern": "^-?\\d+(.\\d+)?(deg)$"
             }
         },
 

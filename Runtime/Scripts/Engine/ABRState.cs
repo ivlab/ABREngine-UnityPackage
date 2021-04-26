@@ -160,14 +160,14 @@ namespace IVLab.ABREngine
                     ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
                     if (existing == null)
                     {
-                        // Load from data server, if there is one
-                        if (ABREngine.Instance.Config.Info.dataServer != null)
+                        // Try to grab from cache
+                        await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
+                        ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
+
+                        // If not found in cache, load from data server, if there is one
+                        if (ABREngine.Instance.Config.Info.dataServer != null && existing == null)
                         {
                             await ABREngine.Instance.Data.LoadRawDatasetFromURL(rawData, ABREngine.Instance.Config.Info.dataServer);
-                        }
-                        else
-                        {
-                            await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
                         }
                     }
                 }
