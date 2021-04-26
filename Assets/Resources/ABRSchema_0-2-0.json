@@ -107,7 +107,8 @@
                     "properties": {
                         "mode": {
                             "type": "string",
-                            "enum": ["Slices", "Streams"]
+                            "enum": ["Slices", "Streams"],
+                            "default": "Slices"
                         },
                         "timestep": {
                             "type": "number"
@@ -307,7 +308,7 @@
             "PrimitivePercentage": {
                 "type": "string",
                 "description": "Floating point percentage",
-                "pattern": "^-?\\d+.?\\d+?%$"
+                "pattern": "^-?\\d+.?(\\d+)?%$"
             },
             "PrimitiveDistance": {
                 "type": "string",
