@@ -353,7 +353,7 @@ namespace IVLab.ABREngine
             string texturePath = "";
             try
             {
-                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["image"].ToString());
+                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["image"].ToString());
                 if (!File.Exists(texturePath))
                 {
                     throw new ArgumentException();
@@ -380,7 +380,7 @@ namespace IVLab.ABREngine
             string texturePath = "";
             try
             {
-                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["normalmap"].ToString());
+                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["normalmap"].ToString());
                 if (!File.Exists(texturePath))
                 {
                     throw new ArgumentException();
