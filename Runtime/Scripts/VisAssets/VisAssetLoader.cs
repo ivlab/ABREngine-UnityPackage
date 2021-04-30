@@ -326,7 +326,7 @@ namespace IVLab.ABREngine
             string texturePath = "";
             try
             {
-                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["horizontal"].ToString());
+                texturePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["horizontal"].ToString());
                 if (!File.Exists(texturePath))
                 {
                     throw new ArgumentException();
@@ -467,21 +467,21 @@ namespace IVLab.ABREngine
         public async Task<Texture2D> GetLineTexture(Guid uuid)
         {
             JObject artifactJson = await GetArtifactJson(uuid);
-            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["horizontal"].ToString());
+            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["horizontal"].ToString());
             return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
         }
 
         public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
         {
             JObject artifactJson = await GetArtifactJson(uuid);
-            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["image"].ToString());
+            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["image"].ToString());
             return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
         }
 
         public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
         {
             JObject artifactJson = await GetArtifactJson(uuid);
-            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["normalmap"].ToString());
+            var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["normalmap"].ToString());
             return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
         }
     }
