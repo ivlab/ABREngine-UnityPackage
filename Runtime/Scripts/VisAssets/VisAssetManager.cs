@@ -23,6 +23,8 @@ namespace IVLab.ABREngine
 
         public const string VISASSET_JSON = "artifact.json";
 
+        public JObject LocalVisAssets { get; set; }
+
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
 
         private VisAssetLoader visAssetLoader;
@@ -36,8 +38,14 @@ namespace IVLab.ABREngine
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("VisAsset Path: " + appDataPath);
             visAssetLoader = new VisAssetLoader();
+
+            // First, try to fetch VisAssets from Local (state) VisAssets
+            visAssetFetchers.Add(new StateLocalVisAssetFetcher());
+
+            // Then, try the file system...
             visAssetFetchers.Add(new FilePathVisAssetFetcher(this.appDataPath));
 
+            // Afterwards, try the resources folder if desired
             _loadResourceVisAssets = loadResourceVisAssets;
             if (loadResourceVisAssets)
             {
@@ -45,6 +53,7 @@ namespace IVLab.ABREngine
                 visAssetFetchers.Add(new ResourceVisAssetFetcher());
             }
 
+            // ... and lastly check out the VisAsset server, if present
             if (ABREngine.Instance.Config.Info.visAssetServer != null)
             {
                 Debug.Log("Allowing loading of VisAssets from " + ABREngine.Instance.Config.Info.visAssetServer);
@@ -93,7 +102,14 @@ namespace IVLab.ABREngine
                 IVisAsset visAsset = null;
                 foreach (IVisAssetFetcher fetcher in visAssetFetchers)
                 {
-                    visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
+                    try
+                    {
+                        visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
 
                     // If we've found it, stop looking
                     if (visAsset != null)

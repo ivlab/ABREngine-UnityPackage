@@ -487,6 +487,99 @@ namespace IVLab.ABREngine
     }
 
 
+    /// <summary>
+    ///     Fetch a VisAsset from the currently loaded ABR state. Currently only valid for ColormapVisAssets.
+    /// </summary>
+    public class StateLocalVisAssetFetcher : IVisAssetFetcher
+    {
+        // string GetArtifactJsonPath(Guid uuid);
+        // Task<JObject> GetArtifactJson(Guid uuid);
+        // Task<Texture2D> GetColormapTexture(Guid uuid);
+        // Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson);
+        // Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
+        // Task<Texture2D> GetLineTexture(Guid uuid);
+        // Task<Texture2D> GetSurfaceTexture(Guid uuid);
+        // Task<Texture2D> GetSurfaceNormalMap(Guid uuid);
+        // public const string VISASSET_JSON = "artifact";
+        // public const string RESOURCES_PATH = "media/visassets/";
+        public const string VISASSET_STATE = "localVisAssets";
+        public const string VISASSET_JSON = "artifactJson";
+        public const string ARTIFACT_DATA = "artifactDataContents";
+
+        public string GetArtifactJsonPath(Guid uuid)
+        {
+            throw new NotImplementedException("StateLocal VisAssets don't have a path");
+        }
+
+        public async Task<JObject> GetArtifactJson(Guid uuid)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                    if (!visAssets.ContainsKey(uuid.ToString()))
+                    {
+                        return null as JObject;
+                    }
+                    return visAssets[uuid.ToString()][VISASSET_JSON].ToObject<JObject>();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return null as JObject;
+                }
+            });
+        }
+
+        public async Task<Texture2D> GetColormapTexture(Guid uuid)
+        {
+            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+            {
+                try
+                {
+                    JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                    if (!visAssets.ContainsKey(uuid.ToString()))
+                    {
+                        return null;
+                    }
+                    string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
+                    Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML, 1024, 100);
+                    return texture;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                    return null;
+                }
+            });
+        }
+
+        public async Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson)
+        {
+            return await Task.Run(() => null as GameObject);
+        }
+
+        public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
+        {
+            return await Task.Run(() => null as Texture2D);
+        }
+
+        public async Task<Texture2D> GetLineTexture(Guid uuid)
+        {
+            return await Task.Run(() => null as Texture2D);
+        }
+
+        public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
+        {
+            return await Task.Run(() => null as Texture2D);
+        }
+
+        public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
+        {
+            return await Task.Run(() => null as Texture2D);
+        }
+    }
 
 
 
@@ -501,7 +594,16 @@ namespace IVLab.ABREngine
 
         public async Task<IVisAsset> LoadVisAsset(Guid uuid, IVisAssetFetcher _fetcher)
         {
-            JObject jsonData = await _fetcher.GetArtifactJson(uuid);
+            JObject jsonData = null;
+            try
+            {
+                jsonData = await _fetcher.GetArtifactJson(uuid);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
             // Abort if there was no artifact.json
             if (jsonData == null)
             {

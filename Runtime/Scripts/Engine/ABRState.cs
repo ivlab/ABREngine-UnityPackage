@@ -90,6 +90,13 @@ namespace IVLab.ABREngine
                 return null;
             }
 
+
+            // Populate the visasset manager with any local visassets
+            if (stateJson.ContainsKey("localVisAssets"))
+            {
+                ABREngine.Instance.VisAssets.LocalVisAssets = stateJson["localVisAssets"].ToObject<JObject>();
+            }
+
             var assembly = Assembly.GetExecutingAssembly();
             Type dataImpressionType = typeof(DataImpression);
             List<string> impressionTypeStrings = assembly.GetTypes()
