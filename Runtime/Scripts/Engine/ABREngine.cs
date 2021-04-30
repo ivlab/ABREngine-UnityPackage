@@ -22,6 +22,7 @@ namespace IVLab.ABREngine
     {
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
+        public JObject State { get { return previouslyLoadedState; }}
         private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
 
