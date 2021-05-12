@@ -404,7 +404,8 @@ namespace IVLab.ABREngine
                     }
 
                     lightComponent.intensity = light.intensity;
-                    lightComponent.type = light.type;
+                    lightComponent.type = LightType.Directional;
+                    lightComponent.shadows = LightShadows.None;
                 }
             }
 
@@ -419,9 +420,10 @@ namespace IVLab.ABREngine
 
             RawABRState saveState = new RawABRState();
             saveState.impressions = new Dictionary<string, RawDataImpression>();
-            saveState.version = "0.2.0";
+            saveState.version = previousState["version"].ToString();
             RawScene saveScene = new RawScene {
-                impressionGroups = new Dictionary<string, RawImpressionGroup>()
+                impressionGroups = new Dictionary<string, RawImpressionGroup>(),
+                lighting = new List<RawLight>()
             };
             RawDataRanges saveRanges = new RawDataRanges {
                 scalarRanges = new Dictionary<string, RawDataRanges.RawRange<float>>()
@@ -446,8 +448,16 @@ namespace IVLab.ABREngine
                     RawDataImpression saveImpression = new RawDataImpression();
 
                     // Retrieve easy values
-                    saveImpression.uuid = impression.Uuid.ToString();
-                    saveImpression.name = "DataImpression"; // TODO
+                    string guid = impression.Uuid.ToString();
+                    saveImpression.uuid = guid;
+                    if (previousState["impressions"].ToObject<JObject>().ContainsKey(guid))
+                    {
+                        saveImpression.name = previousState["impressions"][guid]["name"].ToString();
+                    }
+                    else
+                    {
+                        saveImpression.name = "DataImpression";
+                    }
                     saveImpression.renderHints = impression.RenderHints;
                     saveImpression.tags = (impression as DataImpression).Tags;
 
@@ -502,6 +512,22 @@ namespace IVLab.ABREngine
                 saveScene.impressionGroups[saveGroup.uuid.ToString()] = saveGroup;
             }
 
+            // Update the lights
+            GameObject lightParent = GameObject.Find("ABRLightParent");
+            if (lightParent != null)
+            {
+                foreach (Transform light in lightParent.transform)
+                {
+                    Light l = light.GetComponent<Light>();
+                    saveScene.lighting.Add(new RawLight {
+                        name = light.gameObject.name,
+                        intensity = l.intensity,
+                        position = light.localPosition,
+                        rotation = light.localRotation,
+                    });
+                }
+            }
+
             saveState.scene = saveScene;
             saveState.dataRanges = saveRanges;
 
@@ -540,7 +566,6 @@ namespace IVLab.ABREngine
 
     class RawLight
     {
-        public LightType type;
         public string name;
         public float intensity;
         public Vector3 position;
