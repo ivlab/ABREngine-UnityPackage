@@ -54,6 +54,22 @@
                             }
                         }
                     }
+                },
+                "lighting": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "enum": [ "Directional", "Point" ]
+                            },
+                            "name": { "type": "string" },
+                            "intensity": { "type": "number" },
+                            "position": { "$ref": "#/definitions/UnityObjects/Vector3" },
+                            "rotation": { "$ref": "#/definitions/UnityObjects/Quaternion" }
+                        }
+                    }
                 }
             }
         },

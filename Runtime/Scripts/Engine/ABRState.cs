@@ -322,7 +322,7 @@ namespace IVLab.ABREngine
 
                 // Put the impressions in their proper groups, if any
                 bool registered = false;
-                if (state.scene != null)
+                if (state?.scene?.impressionGroups != null)
                 {
                     foreach (var group in state.scene.impressionGroups)
                     {
@@ -372,6 +372,39 @@ namespace IVLab.ABREngine
                         variable.MaxValue = scalarRange.Value.max;
                         variable.CustomizedRange = true;
                     }
+                }
+            }
+
+            // Create/update lights, carefully select/create by name
+            if (state?.scene?.lighting != null)
+            {
+                GameObject lightParent = GameObject.Find("ABRLightParent");
+                if (lightParent == null)
+                {
+                    lightParent = new GameObject("ABRLightParent");
+                    lightParent.transform.parent = GameObject.Find("ABREngine").transform;
+                }
+
+                foreach (var light in state.scene.lighting)
+                {
+                    GameObject existing = GameObject.Find("ABRLightParent/" + light.name);
+                    if (existing == null)
+                    {
+                        existing = new GameObject(light.name);
+                        existing.transform.parent = lightParent.transform;
+                    }
+
+                    existing.transform.localPosition = light.position;
+                    existing.transform.localRotation = light.rotation;
+
+                    Light lightComponent;
+                    if (!existing.TryGetComponent<Light>(out lightComponent))
+                    {
+                        lightComponent = existing.AddComponent<Light>();
+                    }
+
+                    lightComponent.intensity = light.intensity;
+                    lightComponent.type = light.type;
                 }
             }
 
@@ -505,6 +538,15 @@ namespace IVLab.ABREngine
         public JToken uiData; // data for UIs, not messing with it at all
     }
 
+    class RawLight
+    {
+        public LightType type;
+        public string name;
+        public float intensity;
+        public Vector3 position;
+        public Quaternion rotation;
+    }
+
     class RawDataImpression
     {
         public string plateType;
@@ -518,6 +560,7 @@ namespace IVLab.ABREngine
     class RawScene
     {
         public Dictionary<string, RawImpressionGroup> impressionGroups;
+        public List<RawLight> lighting;
     }
 
     class RawDataRanges
