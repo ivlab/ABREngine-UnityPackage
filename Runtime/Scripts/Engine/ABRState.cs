@@ -387,7 +387,7 @@ namespace IVLab.ABREngine
 
                 foreach (var light in state.scene.lighting)
                 {
-                    GameObject existing = GameObject.Find("ABRLightParent/" + light.name);
+                    GameObject existing = GameObject.Find(light.name);
                     if (existing == null)
                     {
                         existing = new GameObject(light.name);
@@ -541,6 +541,16 @@ namespace IVLab.ABREngine
                 saveState.uiData = previousState["uiData"];
             }
 
+            if (previousState.ContainsKey("localVisAssets"))
+            {
+                saveState.localVisAssets = previousState["localVisAssets"];
+            }
+
+            if (previousState.ContainsKey("name"))
+            {
+                saveState.name = previousState["name"].ToString();
+            }
+
             return JsonConvert.SerializeObject(saveState, settings);
             }
             catch (Exception e)
@@ -562,6 +572,8 @@ namespace IVLab.ABREngine
         public RawScene scene;
         public RawDataRanges dataRanges;
         public JToken uiData; // data for UIs, not messing with it at all
+        public JToken localVisAssets; // custom vis assets, not messing with them at all
+        public string name;
     }
 
     class RawLight
