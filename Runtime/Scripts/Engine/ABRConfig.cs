@@ -125,6 +125,7 @@ namespace IVLab.ABREngine
             }
 
             _schema = JObject.Parse(schemaContents.text);
+            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["const"]);
         }
 
         /// <summary>
