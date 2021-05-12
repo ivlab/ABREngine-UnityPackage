@@ -14,6 +14,12 @@
             "const": "0.2.0"
         },
 
+        "name": {
+            "type": "string",
+            "description": "Name of this state (e.g. FR14-eve)",
+            "default": "Untitled"
+        },
+
         "impressions": {
             "type": "object",
             "description": "The data impressions that a user has created",
@@ -90,10 +96,16 @@
                                     "properties": {
                                         "position": {
                                             "type": "object",
+                                            "description": "Position of this data impression on the browser page",
                                             "properties": {
                                                 "x": { "type": "number" },
                                                 "y": { "type": "number" }
                                             }
+                                        },
+                                        "collapsed": {
+                                            "description": "Should the data impression be expanded or not?",
+                                            "type": "boolean",
+                                            "default": false
                                         }
                                     }
                                 }
@@ -214,17 +226,7 @@
                 "inputValue": {
                     "type": "string",
                     "description": "Null, UUID, primitive, or resolvable path where the input can be found. Should be a string.",
-                    "default": "null",
-                    "oneOf": [
-                        { "$ref": "#/definitions/InputStringTypes/Null" },
-                        { "$ref": "#/definitions/InputStringTypes/PrimitiveFloat" },
-                        { "$ref": "#/definitions/InputStringTypes/PrimitivePercentage" },
-                        { "$ref": "#/definitions/InputStringTypes/PrimitiveDistance" },
-                        { "$ref": "#/definitions/InputStringTypes/PrimitiveBoolean" },
-                        { "$ref": "#/definitions/InputStringTypes/PrimitiveAngle" },
-                        { "$ref": "#/definitions/InputStringTypes/UUID" },
-                        { "$ref": "#/definitions/InputStringTypes/DataPath" }
-                    ]
+                    "default": "null"
                 },
                 "parameterName": {
                     "type": "string",
@@ -302,30 +304,35 @@
                 "pattern": "^([^/]+)\/([^/]+)\/(KeyData|ScalarVar|VectorVar)\/([^/]+)$"
             },
 
-            "PrimitiveFloat": {
+            "FloatPrimitive": {
                 "type": "string",
                 "description": "Floating point number",
                 "pattern": "^-?\\d+(.\\d+)?$"
             },
-            "PrimitivePercentage": {
+            "PercentPrimitive": {
                 "type": "string",
                 "description": "Floating point percentage",
                 "pattern": "^-?\\d+(.\\d+)?(%)$"
             },
-            "PrimitiveDistance": {
+            "LengthPrimitive": {
                 "type": "string",
                 "description": "Floating point distance (metric units)",
                 "pattern": "^-?\\d+(.\\d+)?(m)$"
             },
-            "PrimitiveBoolean": {
+            "BooleanPrimitive": {
                 "type": "string",
                 "description": "Boolean",
                 "pattern": "^(true)|(false)$"
             },
-            "PrimitiveAngle": {
+            "AnglePrimitive": {
                 "type": "string",
                 "description": "Angle measure in degrees",
                 "pattern": "^-?\\d+(.\\d+)?(deg)$"
+            },
+            "IntegerPrimitive": {
+                "type": "string",
+                "description": "Whole number",
+                "pattern": "^-?\\d+$"
             }
         },
 
@@ -369,43 +376,48 @@
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.PointKeyData" },
                                 "parameterName": { "const": "Key Data" },
-                                "inputGenre": { "const": "KeyData" }
+                                "inputGenre": { "const": "KeyData" },
+                                "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Color Variable": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                                 "parameterName": { "const": "Color" },
-                                "inputGenre": { "const": "Variable" }
+                                "inputGenre": { "const": "Variable" },
+                                "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Colormap": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.ColormapVisAsset" },
                                 "parameterName": { "const": "Color" },
-                                "inputGenre": { "const": "VisAsset" }
+                                "inputGenre": { "const": "VisAsset" },
+                                "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Glyph Variable": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                                 "parameterName": { "const": "Glyph" },
-                                "inputGenre": { "const": "Variable" }
+                                "inputGenre": { "const": "Variable" },
+                                "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Glyph": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.GlyphVisAsset" },
                                 "parameterName": { "const": "Glyph" },
-                                "inputGenre": { "const": "VisAsset" }
+                                "inputGenre": { "const": "VisAsset" },
+                                "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Glyph Size": {
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
                                 "parameterName": { "const": "Glyph" },
-                                "inputValue": { "default": "0.05m" },
-                                "inputGenre": { "const": "Primitive" }
+                                "inputGenre": { "const": "Primitive" },
+                                "inputValue": { "default": "0.05m", "$ref": "#/definitions/InputStringTypes/LengthPrimitive" }
                         }
                     }
                 },
@@ -418,35 +430,40 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.LineKeyData" },
                             "parameterName": { "const": "Key Data"},
-                            "inputGenre": { "const": "KeyData" }
+                            "inputGenre": { "const": "KeyData" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Color Variable": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                             "parameterName": { "const": "Color" },
-                            "inputGenre": { "const": "Variable" }
+                            "inputGenre": { "const": "Variable" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Colormap": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ColormapVisAsset" },
                             "parameterName": { "const": "Color" },
-                            "inputGenre": { "const": "VisAsset" }
+                            "inputGenre": { "const": "VisAsset" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Texture Variable": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                             "parameterName": { "const": "Texture" },
-                            "inputGenre": { "const": "Variable" }
+                            "inputGenre": { "const": "Variable" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Texture": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.LineTextureVisAsset" },
                             "parameterName": { "const": "Texture" },
-                            "inputGenre": { "const": "VisAsset" }
+                            "inputGenre": { "const": "VisAsset" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Texture Cutoff": {
@@ -454,7 +471,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Texture" },
-                            "inputValue": { "default": "50%" },
+                            "inputValue": { "default": "50%", "$ref": "#/definitions/InputStringTypes/PercentPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -462,7 +479,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
                             "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "0.01m" },
+                            "inputValue": { "default": "0.01m", "$ref": "#/definitions/InputStringTypes/LengthPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -471,7 +488,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.AnglePrimitive" },
                             "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "0deg" },
+                            "inputValue": { "default": "0deg", "$ref": "#/definitions/InputStringTypes/AnglePrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -480,7 +497,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.AnglePrimitive" },
                             "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "0deg" },
+                            "inputValue": { "default": "0deg", "$ref": "#/definitions/InputStringTypes/AnglePrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -489,7 +506,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "50%" },
+                            "inputValue": { "default": "50%", "$ref": "#/definitions/InputStringTypes/PercentPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -498,7 +515,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.IntegerPrimitive" },
                             "parameterName": { "const": "Ribbon" },
-                            "inputValue": { "default": "5" },
+                            "inputValue": { "default": "5", "$ref": "#/definitions/InputStringTypes/IntegerPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     }
@@ -512,42 +529,47 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.SurfaceKeyData" },
                             "parameterName": { "const": "Key Data" },
-                            "inputGenre": { "const": "KeyData" }
+                            "inputGenre": { "const": "KeyData" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Color Variable": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                             "parameterName": { "const": "Color" },
-                            "inputGenre": { "const": "Variable" }
+                            "inputGenre": { "const": "Variable" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Colormap": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ColormapVisAsset" },
                             "parameterName": { "const": "Color" },
-                            "inputGenre": { "const": "VisAsset" }
+                            "inputGenre": { "const": "VisAsset" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Pattern Variable": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.ScalarDataVariable" },
                             "parameterName": { "const": "Pattern" },
-                            "inputGenre": { "const": "Variable" }
+                            "inputGenre": { "const": "Variable" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/DataPath" }
                         }
                     },
                     "Pattern": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.SurfaceTextureVisAsset" },
                             "parameterName": { "const": "Pattern" },
-                            "inputGenre": { "const": "VisAsset" }
+                            "inputGenre": { "const": "VisAsset" },
+                            "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
                     "Pattern Size": {
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.LengthPrimitive" },
                             "parameterName": { "const": "Pattern" },
-                            "inputValue": { "default": "1m" },
+                            "inputValue": { "default": "1m", "$ref": "#/definitions/InputStringTypes/LengthPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -556,7 +578,10 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Pattern" },
-                            "inputValue": { "default": "100%" },
+                            "inputValue": { 
+                                "$ref": "#/definitions/InputStringTypes/PercentPrimitive",
+                                "default": "100%"
+                            },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -565,7 +590,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Pattern" },
-                            "inputValue": { "default": "100%" },
+                            "inputValue": { "default": "100%", "$ref": "#/definitions/InputStringTypes/PercentPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     },
@@ -574,7 +599,7 @@
                         "properties": {
                             "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
                             "parameterName": { "const": "Pattern" },
-                            "inputValue": { "default": "100%" },
+                            "inputValue": { "default": "100%", "$ref": "#/definitions/InputStringTypes/PercentPrimitive" },
                             "inputGenre": { "const": "Primitive" }
                         }
                     }
