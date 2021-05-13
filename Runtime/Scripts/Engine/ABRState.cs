@@ -158,6 +158,12 @@ namespace IVLab.ABREngine
                     {
                         await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                     }
+
+                    // Re-import if it's a LocalVisAsset
+                    if (existing != null && ABREngine.Instance.VisAssets.LocalVisAssets.ContainsKey(existing.Uuid.ToString()))
+                    {
+                        await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
+                    }
                 }
 
                 foreach (var rawData in rawDataToLoad)
