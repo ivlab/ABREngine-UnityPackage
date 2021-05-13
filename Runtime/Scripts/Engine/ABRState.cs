@@ -160,7 +160,10 @@ namespace IVLab.ABREngine
                     }
 
                     // Re-import if it's a LocalVisAsset
-                    if (existing != null && ABREngine.Instance.VisAssets.LocalVisAssets.ContainsKey(existing.Uuid.ToString()))
+                    if (existing != null
+                        && ABREngine.Instance.VisAssets.LocalVisAssets != null
+                        && ABREngine.Instance.VisAssets.LocalVisAssets.ContainsKey(existing.Uuid.ToString())
+                    )
                     {
                         await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
                     }
