@@ -518,7 +518,7 @@ namespace IVLab.ABREngine
                 try
                 {
                     JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
-                    if (!visAssets.ContainsKey(uuid.ToString()))
+                    if (visAssets == null || !visAssets.ContainsKey(uuid.ToString()))
                     {
                         return null as JObject;
                     }
