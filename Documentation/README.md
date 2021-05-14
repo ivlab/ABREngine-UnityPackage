@@ -1,6 +1,6 @@
 # Auto-generating documentation for ABREngine-UnityPackage
 
-[**View the ABREngine Documentation**](https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api)
+[**View the ABREngine Documentation**](https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.html)
 
 Documentation is generated using
 [DocFx](https://dotnet.github.io/docfx/index.html). There's a [handy

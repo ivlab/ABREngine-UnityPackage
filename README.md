@@ -34,7 +34,7 @@ ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git
 ## Documentation
 
 [Auto-generated documentation for the UnityPackage is
-available](https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api). To
+available](https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.html). To
 re-generate the documentation,
  follow the instructions in the
 [Documentation](./Documentation) folder.
