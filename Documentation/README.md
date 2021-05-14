@@ -24,7 +24,9 @@ Run the following command from the root of this repo:
 Windows:
 
 ```
-docfx.exe Documentation/docfx.json
+docfx.exe Documentation/docfx.json --serve
 ```
 
 (You may need to replace `docfx.exe` with the absolute path `C:\Absolute\Path\To\docfx.exe`)
+
+Then go to a browser at http://localhost:8080 to view the docs
