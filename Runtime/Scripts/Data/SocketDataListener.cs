@@ -151,11 +151,23 @@ namespace IVLab.ABREngine
                         {
                             Debug.LogError(e);
                         }
+
+                        foreach (var ds in ABREngine.Instance.Data.GetDatasets())
+                        {
+                            foreach (var keydata in ds.GetAllKeyData())
+                            {
+                                Debug.Log(keydata.Value.Path + " " + keydata.Value.GetHashCode());
+                            }
+                        }
                         // Note: state does not (yet) automatically update when new
                         // data are received
-                        // await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-                        // {
-                        //     ABREngine.Instance.ReloadState();
+                        // A HACK until ABRStateLoaders become more generic
+                        if (ABREngine.Instance.Config.Info.serverAddress != null &&
+                                ABREngine.Instance.Config.Info.statePathOnServer != null
+                        )
+                        {
+                            ABREngine.Instance.LoadState<HttpStateFileLoader>(ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                        }
                         // });
                     }
                 }
