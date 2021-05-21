@@ -10,7 +10,7 @@
     "changefreq": "weekly"
   },
   "homepages": [],
-  "source_base_path": "C:/Users/scoot/dev/SculptingVisApp/Packages/ABREngine-UnityPackage/Documentation",
+  "source_base_path": "C:/Users/bridger/dev/SculptingVisApp/Packages/ABREngine-UnityPackage/Documentation",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -76,7 +76,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ABRConfigInfo.html",
-          "hash": "nv5BOSEMiNziOWQPLI0Mf56cleDiU+PHyJ9dDyQHW6A="
+          "hash": "h0HVnAIdEBU97brNrXnBRkIvlzm3xMk+bhJxQLeU6Zs="
         }
       },
       "is_incremental": false,
@@ -100,7 +100,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ABREngine.html",
-          "hash": "8WsatmDqEVz5V32rvl9h2sDbQuez9zJE9kDxqMw8+ug="
+          "hash": "0nz9cZw36WSXjSjXMqL6GjdFhGmofLre7isB/JnXoj0="
         }
       },
       "is_incremental": false,
@@ -796,7 +796,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html",
-          "hash": "KXsCmAKrK56rXzu8ikYd2pomPhop9dG7GM9NQ6Y7KXM="
+          "hash": "qdIhEX4VRN/oi8GDsUcgH9TKoW+80sqvJqJMVHa5Ctw="
         }
       },
       "is_incremental": false,
@@ -808,7 +808,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.StateSubscriber.html",
-          "hash": "B3ttOMxq58PRd8/DBdiqqS13UqyBeBCXgAQL5ZxpB1g="
+          "hash": "31O70Hp52gwxirf5e+bh1tVA1qhnCbTgK94rTCRa+8g="
         }
       },
       "is_incremental": false,
@@ -938,17 +938,19 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": true,
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
+          "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 74,
-          "skipped_file_count": 74
+          "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
           "can_incremental": false,

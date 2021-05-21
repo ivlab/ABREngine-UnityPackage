@@ -228,6 +228,12 @@ references:
   commentId: F:IVLab.ABREngine.ABRConfigInfo.loadResourceVisAssets
   fullName: IVLab.ABREngine.ABRConfigInfo.loadResourceVisAssets
   nameWithType: ABRConfigInfo.loadResourceVisAssets
+- uid: IVLab.ABREngine.ABRConfigInfo.mediaPath
+  name: mediaPath
+  href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_mediaPath
+  commentId: F:IVLab.ABREngine.ABRConfigInfo.mediaPath
+  fullName: IVLab.ABREngine.ABRConfigInfo.mediaPath
+  nameWithType: ABRConfigInfo.mediaPath
 - uid: IVLab.ABREngine.ABRConfigInfo.schemaName
   name: schemaName
   href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_schemaName
@@ -246,6 +252,12 @@ references:
   commentId: F:IVLab.ABREngine.ABRConfigInfo.statePathOnServer
   fullName: IVLab.ABREngine.ABRConfigInfo.statePathOnServer
   nameWithType: ABRConfigInfo.statePathOnServer
+- uid: IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
+  name: stateSubscriberPort
+  href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_stateSubscriberPort
+  commentId: F:IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
+  fullName: IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
+  nameWithType: ABRConfigInfo.stateSubscriberPort
 - uid: IVLab.ABREngine.ABRConfigInfo.ToString
   name: ToString()
   href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_ToString
@@ -361,19 +373,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.DataListener
   nameWithType: ABREngine.DataListener
-- uid: IVLab.ABREngine.ABREngine.DataPath
-  name: DataPath
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DataPath
-  commentId: P:IVLab.ABREngine.ABREngine.DataPath
-  fullName: IVLab.ABREngine.ABREngine.DataPath
-  nameWithType: ABREngine.DataPath
-- uid: IVLab.ABREngine.ABREngine.DataPath*
-  name: DataPath
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DataPath_
-  commentId: Overload:IVLab.ABREngine.ABREngine.DataPath
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ABREngine.DataPath
-  nameWithType: ABREngine.DataPath
 - uid: IVLab.ABREngine.ABREngine.DuplicateDataImpression(IVLab.ABREngine.IDataImpression)
   name: DuplicateDataImpression(IDataImpression)
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DuplicateDataImpression_IVLab_ABREngine_IDataImpression_
@@ -563,6 +562,19 @@ references:
   fullName.vb: IVLab.ABREngine.ABREngine.LoadStateAsync(Of T)(System.String)
   nameWithType: ABREngine.LoadStateAsync<T>(String)
   nameWithType.vb: ABREngine.LoadStateAsync(Of T)(String)
+- uid: IVLab.ABREngine.ABREngine.MediaPath
+  name: MediaPath
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_MediaPath
+  commentId: P:IVLab.ABREngine.ABREngine.MediaPath
+  fullName: IVLab.ABREngine.ABREngine.MediaPath
+  nameWithType: ABREngine.MediaPath
+- uid: IVLab.ABREngine.ABREngine.MediaPath*
+  name: MediaPath
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_MediaPath_
+  commentId: Overload:IVLab.ABREngine.ABREngine.MediaPath
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ABREngine.MediaPath
+  nameWithType: ABREngine.MediaPath
 - uid: IVLab.ABREngine.ABREngine.MoveImpressionToGroup(IVLab.ABREngine.IDataImpression,IVLab.ABREngine.DataImpressionGroup,System.Boolean)
   name: MoveImpressionToGroup(IDataImpression, DataImpressionGroup, Boolean)
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_MoveImpressionToGroup_IVLab_ABREngine_IDataImpression_IVLab_ABREngine_DataImpressionGroup_System_Boolean_
@@ -5220,12 +5232,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.StateSubscriber.Init
   nameWithType: StateSubscriber.Init
-- uid: IVLab.ABREngine.StateSubscriber.serverIsLocal
-  name: serverIsLocal
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_serverIsLocal
-  commentId: F:IVLab.ABREngine.StateSubscriber.serverIsLocal
-  fullName: IVLab.ABREngine.StateSubscriber.serverIsLocal
-  nameWithType: StateSubscriber.serverIsLocal
 - uid: IVLab.ABREngine.StateSubscriber.Stop
   name: Stop()
   href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_Stop
@@ -5257,24 +5263,12 @@ references:
   commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.address
   fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.address
   nameWithType: StateSubscriber.SubscriberInfo.address
-- uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo.localDataPath
-  name: localDataPath
-  href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html#IVLab_ABREngine_StateSubscriber_SubscriberInfo_localDataPath
-  commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.localDataPath
-  fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.localDataPath
-  nameWithType: StateSubscriber.SubscriberInfo.localDataPath
 - uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
   name: port
   href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html#IVLab_ABREngine_StateSubscriber_SubscriberInfo_port
   commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
   fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
   nameWithType: StateSubscriber.SubscriberInfo.port
-- uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo.uuid
-  name: uuid
-  href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html#IVLab_ABREngine_StateSubscriber_SubscriberInfo_uuid
-  commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.uuid
-  fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.uuid
-  nameWithType: StateSubscriber.SubscriberInfo.uuid
 - uid: IVLab.ABREngine.SurfaceKeyData
   name: SurfaceKeyData
   href: api/IVLab.ABREngine.SurfaceKeyData.html
