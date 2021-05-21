@@ -30,3 +30,8 @@ docfx.exe Documentation/docfx.json --serve
 (You may need to replace `docfx.exe` with the absolute path `C:\Absolute\Path\To\docfx.exe`)
 
 Then go to a browser at http://localhost:8080 to view the docs
+
+**Note:** After you generate, the docs, *before* you commit them, make sure to
+*enter the Unity editor at least once so that the corresponding .meta files are
+*generated and your end users don't end up with hundreds of errors about missing
+*.meta files!
