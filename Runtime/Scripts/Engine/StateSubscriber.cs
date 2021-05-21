@@ -39,12 +39,8 @@ namespace IVLab.ABREngine
         {
             public string address;
             public int port;
-            public string uuid;
-            public string localDataPath;
         }
         public SubscriberInfo subscriberInfo;
-        public bool serverIsLocal = false;
-
         private string _serverAddress;
         class NotifierTarget
         {
@@ -58,29 +54,27 @@ namespace IVLab.ABREngine
 
         public async Task Init()
         {
-            // TODO: Add authentication
-            HttpResponseMessage subMsg = await ABREngine.httpClient.PostAsync(_serverAddress + "/api/subscribe", new ByteArrayContent(new byte[0]));
-            subMsg.EnsureSuccessStatusCode();
-            string msg = await subMsg.Content.ReadAsStringAsync();
-            this.subscriberInfo = JsonConvert.DeserializeObject<SubscriberInfo>(msg);
+            string serverIP = new Uri(ABREngine.Instance.Config.Info.serverAddress).Host;
+            this.subscriberInfo = new SubscriberInfo {
+                address = serverIP,
+                port = ABREngine.Instance.Config.Info.stateSubscriberPort.Value
+            };
 
-            // Check to see if we're running on the same machine as the
-            // server.
-            bool sameMachine = System.IO.Directory.Exists(subscriberInfo.localDataPath);
-            if (sameMachine && subscriberInfo.localDataPath != null)
-            {
-                serverIsLocal = true;
-                Debug.Log("Connected to local state server " + subscriberInfo.address);
-            }
-            else
-            {
-                Debug.Log("Connected to remote state server " + subscriberInfo.address);
-            }
+            Debug.Log("Connected to remote state server " + subscriberInfo.address);
 
-            this._client = new TcpClient(subscriberInfo.address, subscriberInfo.port);
-            this._running = true;
-            this._receiverThread = new Thread(new ThreadStart(this.Receiver));
-            this._receiverThread.Start();
+            try
+            {
+                Debug.LogFormat("Trying to connect to state subscriber notifier socket on {0}:{1}", subscriberInfo.address, subscriberInfo.port);
+                this._client = new TcpClient(subscriberInfo.address, subscriberInfo.port);
+                this._running = true;
+                Debug.Log("State subscriber notifier socket listening on port " + subscriberInfo.port);
+                this._receiverThread = new Thread(new ThreadStart(this.Receiver));
+                this._receiverThread.Start();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         // Tell the Server we've disconnected, then clean up connections and threads
@@ -88,11 +82,6 @@ namespace IVLab.ABREngine
         {
             this._receiving = false;
             this._running = false;
-            Task.Run(async () =>
-            {
-                await ABREngine.httpClient.PostAsync(_serverAddress + "/api/unsubscribe/" + subscriberInfo.uuid, new ByteArrayContent(new byte[0]));
-            });
-
             this._receiverThread?.Join();
         }
 

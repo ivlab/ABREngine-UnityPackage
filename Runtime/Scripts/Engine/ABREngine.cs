@@ -47,16 +47,16 @@ namespace IVLab.ABREngine
         private bool _initialized = false;
 
         /// <summary>
-        ///     If the Engine is connected to a local server, use that server's
-        ///     data path, otherwise use our persistent data path.
+        ///     If a specific media path is provided, use that. Otherwise, use
+        ///     our persistent data path.
         /// </summary>
-        public string DataPath
+        public string MediaPath
         {
             get
             {
-                if (_notifier != null && _notifier.serverIsLocal)
+                if (Config.Info.mediaPath != null)
                 {
-                    return _notifier.subscriberInfo.localDataPath;
+                    return Path.GetFullPath(Config.Info.mediaPath);
                 }
                 else
                 {
@@ -100,8 +100,8 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(DataPath, "visassets"), Config.Info.loadResourceVisAssets);
-                    Data = new DataManager(Path.Combine(DataPath, "datasets"));
+                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, "visassets"), Config.Info.loadResourceVisAssets);
+                    Data = new DataManager(Path.Combine(MediaPath, "datasets"));
                     if (Config.Info.dataListenerPort != null)
                     {
                         DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
@@ -133,7 +133,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        void OnDestroy()
+        void OnDisable()
         {
             _notifier?.Stop();
             DataListener?.StopServer();

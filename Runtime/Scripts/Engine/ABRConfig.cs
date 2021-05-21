@@ -91,9 +91,17 @@ namespace IVLab.ABREngine
             {
                 Info.dataListenerPort = customizations.dataListenerPort;
             }
+            if (customizations?.stateSubscriberPort != null)
+            {
+                Info.stateSubscriberPort = customizations.stateSubscriberPort;
+            }
             if (customizations?.loadResourceVisAssets != null)
             {
                 Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
+            }
+            if (customizations?.mediaPath != null)
+            {
+                Info.mediaPath = customizations.mediaPath;
             }
 
             Debug.Log("ABR Config Loaded");
@@ -215,6 +223,12 @@ namespace IVLab.ABREngine
         public string statePathOnServer;
 
         /// <summary>
+        ///     Observer pattern state subscriber information port (connect to
+        ///     socket on a particular host). Default: null
+        /// </summary>
+        public int? stateSubscriberPort;
+
+        /// <summary>
         ///     What server to obtain VisAssets from, if any. If none provided,
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in
@@ -241,6 +255,12 @@ namespace IVLab.ABREngine
         ///     null
         /// </summary>
         public int? dataListenerPort;
+
+        /// <summary>
+        ///     Local path to look for datasets and visassets at. Default:
+        ///     Application.persistentDataPath
+        /// </summary>
+        public string mediaPath;
 
         public override string ToString()
         {
