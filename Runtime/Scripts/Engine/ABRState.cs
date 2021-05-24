@@ -416,6 +416,16 @@ namespace IVLab.ABREngine
                     lightComponent.type = LightType.Directional;
                     lightComponent.shadows = LightShadows.None;
                 }
+
+                List<string> lightsInState = state.scene.lighting.Select((l) => l.name).ToList();
+
+                foreach (Transform light in lightParent.transform)
+                {
+                    if (!lightsInState.Contains(light.gameObject.name))
+                    {
+                        GameObject.Destroy(light.gameObject);
+                    }
+                }
             }
 
             return stateJson;
@@ -537,6 +547,8 @@ namespace IVLab.ABREngine
                 }
             }
 
+            saveScene.backgroundColor = "#" + ColorUtility.ToHtmlStringRGB(Camera.main.backgroundColor);
+
             saveState.scene = saveScene;
             saveState.dataRanges = saveRanges;
 
@@ -607,6 +619,7 @@ namespace IVLab.ABREngine
     {
         public Dictionary<string, RawImpressionGroup> impressionGroups;
         public List<RawLight> lighting;
+        public string backgroundColor;
     }
 
     class RawDataRanges

@@ -70,6 +70,10 @@
                             "rotation": { "$ref": "#/definitions/UnityObjects/Quaternion" }
                         }
                     }
+                },
+                "backgroundColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
                 }
             }
         },
