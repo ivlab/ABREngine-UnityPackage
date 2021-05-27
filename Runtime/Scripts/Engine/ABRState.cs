@@ -551,7 +551,7 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                saveScene.backgroundColor = "#" + ColorUtility.ToHtmlStringRGB(Camera.main.backgroundColor);
+                saveScene.backgroundColor = IVLab.Utilities.ColorUtilities.ColorToHex(Camera.main.backgroundColor);
 
                 saveState.scene = saveScene;
                 saveState.dataRanges = saveRanges;
