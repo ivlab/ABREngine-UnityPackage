@@ -333,6 +333,9 @@ namespace IVLab.ABREngine
             imr.instanceMaterial = ImpressionMaterial;
 
             imr.cachedInstanceCount = -1;
+
+            // Enable/disable the instanced mesh renderer in accordance with the "visible" flag
+            imr.enabled = RenderHints.visible;
         }
     }
 }
