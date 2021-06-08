@@ -80,7 +80,7 @@ namespace IVLab.ABREngine
         {
             SimpleSurfaceRenderInfo renderInfo = null;
 
-            if (keyData == null)
+            if (keyData == null || RenderHints.visible == false)
             {
                 renderInfo = new SimpleSurfaceRenderInfo
                 {
@@ -251,8 +251,6 @@ namespace IVLab.ABREngine
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleSurfaceDataImpression", LayerName);
             }
 
-            // Enable/disable the mesh renderer in accordance with the "visible" flag
-            meshRenderer.enabled = RenderHints.visible;
 
             currentGameObject.name = this + " surface Mesh";
 
