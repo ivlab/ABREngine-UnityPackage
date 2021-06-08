@@ -86,7 +86,7 @@ namespace IVLab.ABREngine
 
             PointRenderInfo renderInfo;
 
-            if (keyData == null || RenderHints.visible == false)
+            if (keyData == null)
             {
                 renderInfo = new PointRenderInfo
                 {
@@ -264,7 +264,6 @@ namespace IVLab.ABREngine
                 mr = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
 
-
             if (colormap != null)
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
@@ -333,6 +332,9 @@ namespace IVLab.ABREngine
             imr.instanceMaterial = ImpressionMaterial;
 
             imr.cachedInstanceCount = -1;
+
+            // Enable/disable the instanced mesh renderer in accordance with the "visible" flag
+            imr.enabled = RenderHints.visible;
         }
     }
 }
