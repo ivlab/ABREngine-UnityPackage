@@ -86,7 +86,7 @@ namespace IVLab.ABREngine
 
             PointRenderInfo renderInfo;
 
-            if (keyData == null || RenderHints.visible == false)
+            if (keyData == null)
             {
                 renderInfo = new PointRenderInfo
                 {

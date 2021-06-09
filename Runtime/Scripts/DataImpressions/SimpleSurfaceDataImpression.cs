@@ -80,7 +80,7 @@ namespace IVLab.ABREngine
         {
             SimpleSurfaceRenderInfo renderInfo = null;
 
-            if (keyData == null || RenderHints.visible == false)
+            if (keyData == null)
             {
                 renderInfo = new SimpleSurfaceRenderInfo
                 {
