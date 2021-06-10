@@ -87,7 +87,7 @@ namespace IVLab.ABREngine
         {
             SimpleLineRenderInfo renderInfo = null;
 
-            if (keyData == null || RenderHints.visible == false)
+            if (keyData == null)
             {
                 renderInfo = new SimpleLineRenderInfo
                 {
@@ -348,6 +348,9 @@ namespace IVLab.ABREngine
                 {
                     Debug.LogWarningFormat("Could not find layer {0} for SimpleLineDataImpression", LayerName);
                 }
+
+                // Enable/disable the mesh renderer in accordance with the "visible" flag
+                meshRenderer.enabled = RenderHints.visible;
 
                 // SET MATERIAL STUFF
 
