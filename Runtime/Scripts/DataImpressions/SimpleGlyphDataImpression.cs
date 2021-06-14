@@ -8,7 +8,7 @@
 using System.Reflection;
 using UnityEngine;
 
-using IVLab.Utilities.GenericObjectPool;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {

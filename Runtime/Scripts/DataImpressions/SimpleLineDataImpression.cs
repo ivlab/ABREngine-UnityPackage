@@ -11,7 +11,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-using IVLab.Utilities.GenericObjectPool;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {

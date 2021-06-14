@@ -1,7 +1,7 @@
 {
-    "name": "IVLab.ABREngine",
+    "name": "IVLab.ABREngine.Runtime",
     "references": [
-        "IVLab.Utilities",
+        "IVLab.Utilities.Runtime",
         "IVLab.OBJImport",
         "JsonDiffPatchDotNet"
     ],
