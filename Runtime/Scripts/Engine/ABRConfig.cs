@@ -91,10 +91,6 @@ namespace IVLab.ABREngine
             {
                 Info.dataListenerPort = customizations.dataListenerPort;
             }
-            if (customizations?.stateSubscriberPort != null)
-            {
-                Info.stateSubscriberPort = customizations.stateSubscriberPort;
-            }
             if (customizations?.loadResourceVisAssets != null)
             {
                 Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
@@ -214,19 +210,13 @@ namespace IVLab.ABREngine
         ///     What server to connect to, if any. If provided, ABR will try to
         ///     register with the server immediately upon startup. Default: null
         /// </summary>
-        public string serverAddress;
+        public Uri serverAddress;
 
         /// <summary>
         ///     State url to fetch on the server; will be concatenated with
-        ///     serverAddress
+        ///     serverAddress. Note: Do not include a leading slash!
         /// </summary>
         public string statePathOnServer;
-
-        /// <summary>
-        ///     Observer pattern state subscriber information port (connect to
-        ///     socket on a particular host). Default: null
-        /// </summary>
-        public int? stateSubscriberPort;
 
         /// <summary>
         ///     What server to obtain VisAssets from, if any. If none provided,
