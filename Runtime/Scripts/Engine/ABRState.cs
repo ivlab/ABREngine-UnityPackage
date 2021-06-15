@@ -55,6 +55,7 @@ namespace IVLab.ABREngine
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
+
             // If it's an array, that means it's either been deleted or created
             if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Array)
             {
@@ -84,12 +85,13 @@ namespace IVLab.ABREngine
                 }
             }
 
+            // Generate ABR states from both the previous and current state json objects
+            RawABRState previousABRState = previousState?.ToObject<RawABRState>();
             RawABRState state = stateJson.ToObject<RawABRState>();
             if (state == null)
             {
                 return null;
             }
-
 
             // Populate the visasset manager with any local visassets
             if (stateJson.ContainsKey("localVisAssets"))
@@ -133,6 +135,7 @@ namespace IVLab.ABREngine
 
                     Queue<string> visAssetsToLoad = new Queue<string>();
                     Queue<string> rawDataToLoad = new Queue<string>();
+
                     if (impression.Value?.inputValues != null)
                     {
                         foreach (var inputValue in impression.Value.inputValues.Values)
@@ -201,7 +204,6 @@ namespace IVLab.ABREngine
                     List<ABRInputAttribute> actualInputs = impressionType.GetFields()
                         .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
                         .Where((f) => f != null).ToList();
-
                     // Now that everything is loaded, go ahead and populate the state
                     if (impression.Value?.inputValues != null)
                     {
@@ -306,7 +308,7 @@ namespace IVLab.ABREngine
                                 if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
                                 {
                                     impressionInputs.AssignInput(inputName, possibleInput);
-                                }
+                                }     
                             }
                             else
                             {
@@ -322,8 +324,64 @@ namespace IVLab.ABREngine
                         dataImpression.RenderHints = impression.Value.renderHints;
                     }
 
-                    // Signify that this impression has been changed so it can be re-rendered
-                    dataImpression.RenderHints.changed = true;
+                    // Attempt to find the previous version of the current impression in the previous abr state 
+                    RawDataImpression previousImpression = null;
+                    if (previousABRState?.impressions != null)
+                    {
+                        foreach (var prevImpression in previousABRState.impressions)
+                        {
+                            if (prevImpression.Value?.uuid == impression.Value?.uuid)
+                            {
+                                previousImpression = prevImpression.Value;
+                                break;
+                            }
+                        }
+                    }
+                    // Enable the visibility changed flag if the previous visibility of the impression is different 
+                    // from the current visibility
+                    bool? previousVisibility = previousImpression?.renderHints?.Visible;
+                    bool? currentVisibility = impression.Value?.renderHints?.Visible;
+                    if (previousVisibility != currentVisibility)
+                    {
+                        dataImpression.RenderHints.VisibilityChanged = true;
+                    }
+                    // Forcefully disable the visibility changed flag otherwise (this is done to counteract the automatic
+                    // enabling of "VisibilityChanged" that occurs when visibility is set to false from the loading
+                    // of a json state object)
+                    else
+                    {
+                        dataImpression.RenderHints.VisibilityChanged = false;
+                    }
+                    // Obtain the input values of the previous version of the current impression, if it exists
+                    Dictionary<string, RawABRInput> previousInputValues = previousImpression?.inputValues;
+                    // Compare the previous input values to the current input values of the impression 
+                    // and enable "Changed" flags for any differences
+                    foreach (var inputName in ABREngine.Instance.Config.GetInputNames(plateType))
+                    {
+                        RawABRInput currentInput = null;
+                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(inputName))
+                        {
+                            currentInput = impression.Value.inputValues[inputName];
+                        }
+                        RawABRInput previousInput = null;
+                        if (previousInputValues != null && previousInputValues.ContainsKey(inputName))
+                        {
+                            previousInput = previousInputValues[inputName];
+                        }
+                        // If the input values are different a change has occured
+                        if (currentInput?.inputValue != previousInput?.inputValue)
+                        {
+                            // Enable changed flags according to the input that was changed
+                            if (inputName == "Key Data" || (inputName.Contains("Ribbon") && inputName != "Ribbon Brightness"))
+                            {
+                                dataImpression.RenderHints.DataChanged = true;
+                            }
+                            else
+                            {
+                                dataImpression.RenderHints.StyleChanged = true;
+                            }
+                        }
+                    }
 
                     // Add any tags
                     if (impression.Value.tags != null)

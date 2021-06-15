@@ -338,6 +338,7 @@ namespace IVLab.ABREngine
                 var meshRenderer = renderObject.GetComponent<MeshRenderer>();
                 if (meshRenderer == null)
                     meshRenderer = renderObject.AddComponent<MeshRenderer>();
+                meshRenderer.enabled = RenderHints.Visible;
 
                 int layerID = LayerMask.NameToLayer(LayerName);
                 if (layerID >= 0)
@@ -349,18 +350,15 @@ namespace IVLab.ABREngine
                     Debug.LogWarningFormat("Could not find layer {0} for SimpleLineDataImpression", LayerName);
                 }
 
-                // Enable/disable the mesh renderer in accordance with the "visible" flag
-                meshRenderer.enabled = RenderHints.visible;
-
                 // SET MATERIAL STUFF
 
 
 
                 // build mesh from dataset arrays
-                Mesh mesh = renderObject.GetComponent<MeshFilter>().mesh;
+                // Mesh mesh = renderObject.GetComponent<MeshFilter>().mesh;
                 //if(mesh == null)
                 //{
-                mesh = meshFilter.mesh;
+                Mesh mesh = meshFilter.mesh;
                 if (mesh == null) mesh = new Mesh();
                 mesh.name = "LRS:368@" + DateTime.Now.ToString();
                 //}
@@ -425,8 +423,151 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetInt("_UseColorMap", 0);
                 }
                 meshRenderer.SetPropertyBlock(MatPropBlock);
+            }
+        }
 
+        // Updates line styling based on scalars, color, texture and ribbon brightness,
+        // but none of the other ribbon attributes (width, rotation, curve, smooth)
+        // since those involve actually rebuilding geometry
+        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        {
+            // Exit immediately if the game object or key data does not exist
+            if (currentGameObject == null || keyData == null)
+            {
+                return;
+            }
 
+            // Load the lines' dataset in order to obtain some key information about them 
+            // (how many lines there are, how many points they are made out of, etc.)
+            RawDataset dataset;
+            ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset);
+            int numLines = dataset.cellIndexCounts.Length;
+
+            // Initialize variables to track scalar "styling" changes
+            Color[][] scalars = new Color[numLines][];
+            Vector4 scalarMax = Vector4.zero;
+            Vector4 scalarMin = Vector4.zero;
+            float[] colorVariableArray = null;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                colorVariableArray = colorVariable.GetArray(keyData);
+                scalarMin[0] = colorVariable.MinValue;
+                scalarMax[0] = colorVariable.MaxValue;
+            }
+
+            // Iterate through all line renderers and update their stylings
+            for (int i = 0; i < numLines; i++)
+            {
+                // Get the current line renderer gameobject
+                GameObject renderObject = currentGameObject.transform.GetChild(i).gameObject;
+                // Obtain its mesh renderer and filter components
+                MeshFilter meshFilter = renderObject?.GetComponent<MeshFilter>();
+                MeshRenderer meshRenderer = renderObject?.GetComponent<MeshRenderer>();
+                // If either of them do not exist, exit as this impression has likely not been
+                // fully initialized with KeyData yet
+                if (meshFilter == null || meshRenderer == null)
+                {
+                    return;
+                }
+
+                // We should be able to access the mesh now
+                Mesh mesh = meshFilter.mesh;
+
+                // Using the info provided by the dataset, determine the total number of points and vertices
+                int numPoints = dataset.cellIndexCounts[i];
+                int numVerts = numPoints * 4;
+
+                // Initialize and update the scalar data container for the current mesh / line
+                // with whatever "styling" changes have occured to scalars
+                scalars[i] = new Color[numVerts];
+                int indexOffset = dataset.cellIndexOffsets[i];
+                int indexEnd = indexOffset + numPoints;
+                for (int index = indexOffset, j = 0; index < indexEnd; index++, j++)
+                {
+                    Vector4 scalar = Vector4.zero;
+
+                    if (colorVariableArray != null)
+                    {
+                        scalar[0] = colorVariableArray[index];
+                    }
+
+                    int indexTopFront = j * 4 + 0;
+                    int indexTopBack = j * 4 + 1;
+                    int indexBottomFront = j * 4 + 2;
+                    int indexBottomBack = j * 4 + 3;
+
+                    scalars[i][indexTopFront] = scalar;
+                    scalars[i][indexTopBack] = scalar;
+                    scalars[i][indexBottomFront] = scalar;
+                    scalars[i][indexBottomBack] = scalar;
+                }
+
+                // Apply the "styling" changes to the mesh itself
+                mesh.name = "LRS:368@" + DateTime.Now.ToString();
+                mesh.colors = scalars[i];
+                mesh.UploadMeshData(false);
+                meshFilter.mesh = mesh;
+
+                // Apply changes to the mesh's shader / material
+
+                // Load defaults from configuration / schema
+                ABRConfig config = ABREngine.Instance.Config;
+
+                // Width appears double what it should be, so decrease to
+                // maintain the actual real world distance
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+
+                float ribbonBrightnessOut = ribbonBrightness?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Ribbon Brightness").Value;
+
+                float textureCutoffOut = textureCutoff?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Texture Cutoff").Value;
+
+                meshRenderer.GetPropertyBlock(MatPropBlock);
+                MatPropBlock.SetColor("_Color", Color.white);
+                MatPropBlock.SetFloat("_TextureCutoff", textureCutoffOut);
+                MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightnessOut);
+
+                if (lineTexture != null)
+                {
+                    MatPropBlock.SetTexture("_Texture", lineTexture.Texture);
+                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.Texture.width / (float)lineTexture.Texture.height);
+                    MatPropBlock.SetInt("_UseLineTexture", 1);
+
+                }
+                else
+                {
+                    MatPropBlock.SetInt("_UseLineTexture", 0);
+
+                }
+                MatPropBlock.SetFloat("_ColorDataMin", scalarMin[0]);
+                MatPropBlock.SetFloat("_ColorDataMax", scalarMax[0]);
+                if (colormap?.GetColorGradient() != null)
+                {
+                    MatPropBlock.SetInt("_UseColorMap", 1);
+                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                }
+                else
+                {
+                    MatPropBlock.SetInt("_UseColorMap", 0);
+                }
+                meshRenderer.SetPropertyBlock(MatPropBlock);
+            }
+        }
+
+        public override void SetVisibility(EncodedGameObject currentGameObject, bool visible)
+        {
+            if (currentGameObject == null)
+            {
+                return;
+            }
+            for (int i = 0; i < currentGameObject.transform.childCount; i++)
+            {
+                MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
+                if (mr != null)
+                {
+                    mr.enabled = visible;
+                }
             }
         }
     }

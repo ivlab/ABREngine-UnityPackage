@@ -243,14 +243,36 @@ namespace IVLab.ABREngine
             {
                 foreach (var impression in _impressions)
                 {
-                    if (impression.Value.RenderHints.changed)
+                    // Fully compute render info and apply it to the impression object
+                    // if (key) data was changed
+                    if (impression.Value.RenderHints.DataChanged)
                     {
+                        Debug.Log("Data Changed");
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeKeyDataRenderInfo();
                         impression.Value.ComputeRenderInfo();
                         Guid uuid = impression.Key;
                         impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
-                        impression.Value.RenderHints.changed = false;
+                        impression.Value.RenderHints.DataChanged = false;
+                        impression.Value.RenderHints.StyleChanged = false;
+                    }
+                    // Compute and apply style info to the impression object if its
+                    // styling has changed (but only if we haven't already performed 
+                    // data changed computations since those inherently update styling)
+                    else if (impression.Value.RenderHints.StyleChanged)
+                    {
+                        Debug.Log("Style Changed");
+                        Guid uuid = impression.Key;
+                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
+                        impression.Value.RenderHints.StyleChanged = false;
+                    }
+                    // Set the visibility of the impression if it has been changed
+                    if (impression.Value.RenderHints.VisibilityChanged)
+                    {
+                        Debug.Log("Visibility Changed");
+                        Guid uuid = impression.Key;
+                        impression.Value.SetVisibility(gameObjectMapping[uuid], impression.Value.RenderHints.Visible);
+                        impression.Value.RenderHints.VisibilityChanged = false;
                     }
                 }
             }
