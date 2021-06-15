@@ -29,6 +29,7 @@ namespace IVLab.ABREngine
 
         public async Task<JObject> GetState(string fileName)
         {
+            Debug.LogFormat("Loading state from resources: {0}", fileName);
             TextAsset textAsset = null;
             await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
             {
@@ -50,6 +51,7 @@ namespace IVLab.ABREngine
 
         public async Task<JObject> GetState(string url)
         {
+            Debug.LogFormat("Loading state from {0}", url);
             HttpResponseMessage stateResponse = await ABREngine.httpClient.GetAsync(url);
             stateResponse.EnsureSuccessStatusCode();
             string fullStateJson = await stateResponse.Content.ReadAsStringAsync();
@@ -59,6 +61,7 @@ namespace IVLab.ABREngine
         public async Task SaveState(string serializedState)
         {
             string stateUrl = ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer;
+            Debug.LogFormat("Saving state to {0}", stateUrl);
             ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(serializedState));
             HttpResponseMessage stateResponse = await ABREngine.httpClient.PutAsync(stateUrl, content);
             stateResponse.EnsureSuccessStatusCode();

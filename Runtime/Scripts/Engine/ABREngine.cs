@@ -30,7 +30,7 @@ namespace IVLab.ABREngine
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
-        private StateSubscriber _notifier;
+        private Notifier _notifier;
         public VisAssetManager VisAssets { get; private set; }
         public DataManager Data { get; private set; }
         public SocketDataListener DataListener { get; private set; }
@@ -88,7 +88,7 @@ namespace IVLab.ABREngine
                 {
                     if (Config.Info.serverAddress != null)
                     {
-                        _notifier = new StateSubscriber(Config.Info.serverAddress);
+                        _notifier = new Notifier(Config.Info.serverAddress);
                         await _notifier.Init();
                     }
                 }
