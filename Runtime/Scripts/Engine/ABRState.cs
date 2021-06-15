@@ -428,6 +428,11 @@ namespace IVLab.ABREngine
                 }
             }
 
+            if (state?.scene?.backgroundColor != null)
+            {
+                Camera.main.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
+            }
+
             return stateJson;
         }
 
