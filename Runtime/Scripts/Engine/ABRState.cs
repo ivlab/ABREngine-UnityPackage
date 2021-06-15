@@ -356,27 +356,27 @@ namespace IVLab.ABREngine
                     Dictionary<string, RawABRInput> previousInputValues = previousImpression?.inputValues;
                     // Compare the previous input values to the current input values of the impression 
                     // and enable "Changed" flags for any differences
-                    foreach (var inputName in ABREngine.Instance.Config.GetInputNames(plateType))
+                    foreach (var input in actualInputs)
                     {
                         RawABRInput currentInput = null;
-                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(inputName))
+                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(input.inputName))
                         {
-                            currentInput = impression.Value.inputValues[inputName];
+                            currentInput = impression.Value.inputValues[input.inputName];
                         }
                         RawABRInput previousInput = null;
-                        if (previousInputValues != null && previousInputValues.ContainsKey(inputName))
+                        if (previousInputValues != null && previousInputValues.ContainsKey(input.inputName))
                         {
-                            previousInput = previousInputValues[inputName];
+                            previousInput = previousInputValues[input.inputName];
                         }
                         // If the input values are different a change has occured
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
-                            // Enable changed flags according to the input that was changed
-                            if (inputName == "Key Data" || (inputName.Contains("Ribbon") && inputName != "Ribbon Brightness"))
+                            // Enable changed flags according to the input that was changed                      
+                            if (input.updateLevel == "Data")
                             {
                                 dataImpression.RenderHints.DataChanged = true;
                             }
-                            else
+                            else if (input.updateLevel == "Style")
                             {
                                 dataImpression.RenderHints.StyleChanged = true;
                             }

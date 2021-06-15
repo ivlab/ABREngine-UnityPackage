@@ -30,39 +30,39 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
-        [ABRInput("Key Data", "Key Data")]
+        [ABRInput("Key Data", "Key Data", "Data")]
         public LineKeyData keyData;
 
-        [ABRInput("Color Variable", "Color")]
+        [ABRInput("Color Variable", "Color", "Style")]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color")]
+        [ABRInput("Colormap", "Color", "Style")]
         public ColormapVisAsset colormap;
 
 
-        [ABRInput("Texture Variable", "Texture")]
+        [ABRInput("Texture Variable", "Texture", "Style")]
         public ScalarDataVariable lineTextureVariable;
 
-        [ABRInput("Texture", "Texture")]
+        [ABRInput("Texture", "Texture", "Style")]
         public LineTextureVisAsset lineTexture;
 
-        [ABRInput("Texture Cutoff", "Texture")]
+        [ABRInput("Texture Cutoff", "Texture", "Style")]
         public PercentPrimitive textureCutoff;
 
 
-        [ABRInput("Ribbon Smooth", "Ribbon")]
+        [ABRInput("Ribbon Smooth", "Ribbon", "Data")]
         public IntegerPrimitive averageCount;
 
-        [ABRInput("Ribbon Width", "Ribbon")]
+        [ABRInput("Ribbon Width", "Ribbon", "Data")]
         public LengthPrimitive lineWidth;
 
-        [ABRInput("Ribbon Rotation", "Ribbon")]
+        [ABRInput("Ribbon Rotation", "Ribbon", "Data")]
         public AnglePrimitive ribbonRotationAngle;
 
-        [ABRInput("Ribbon Brightness", "Ribbon")]
+        [ABRInput("Ribbon Brightness", "Ribbon", "Style")]
         public PercentPrimitive ribbonBrightness;
 
-        [ABRInput("Ribbon Curve", "Ribbon")]
+        [ABRInput("Ribbon Curve", "Ribbon", "Data")]
         public AnglePrimitive ribbonCurveAngle;
 
         protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
@@ -555,7 +555,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void SetVisibility(EncodedGameObject currentGameObject, bool visible)
+        public override void UpdateVisibility(EncodedGameObject currentGameObject)
         {
             if (currentGameObject == null)
             {
@@ -566,7 +566,7 @@ namespace IVLab.ABREngine
                 MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
                 if (mr != null)
                 {
-                    mr.enabled = visible;
+                    mr.enabled = RenderHints.Visible;
                 }
             }
         }

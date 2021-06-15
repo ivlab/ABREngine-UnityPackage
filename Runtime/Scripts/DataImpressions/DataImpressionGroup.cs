@@ -247,7 +247,6 @@ namespace IVLab.ABREngine
                     // if (key) data was changed
                     if (impression.Value.RenderHints.DataChanged)
                     {
-                        Debug.Log("Data Changed");
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeKeyDataRenderInfo();
                         impression.Value.ComputeRenderInfo();
@@ -261,7 +260,6 @@ namespace IVLab.ABREngine
                     // data changed computations since those inherently update styling)
                     else if (impression.Value.RenderHints.StyleChanged)
                     {
-                        Debug.Log("Style Changed");
                         Guid uuid = impression.Key;
                         impression.Value.UpdateStyling(gameObjectMapping[uuid]);
                         impression.Value.RenderHints.StyleChanged = false;
@@ -269,9 +267,8 @@ namespace IVLab.ABREngine
                     // Set the visibility of the impression if it has been changed
                     if (impression.Value.RenderHints.VisibilityChanged)
                     {
-                        Debug.Log("Visibility Changed");
                         Guid uuid = impression.Key;
-                        impression.Value.SetVisibility(gameObjectMapping[uuid], impression.Value.RenderHints.Visible);
+                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
                         impression.Value.RenderHints.VisibilityChanged = false;
                     }
                 }

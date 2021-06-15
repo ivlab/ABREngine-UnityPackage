@@ -16,10 +16,13 @@ namespace IVLab.ABREngine
     {
         public string inputName;
         public string parameterName;
-        public ABRInputAttribute(string inputName, string parameterName)
+        // Which level of update (e.g. data, style, etc) this input necessitates if changed.
+        public string updateLevel;
+        public ABRInputAttribute(string inputName, string parameterName, string updateLevel)
         {
             this.inputName = inputName;
             this.parameterName = parameterName;
+            this.updateLevel = updateLevel;
         }
     }
 

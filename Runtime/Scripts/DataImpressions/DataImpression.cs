@@ -61,9 +61,9 @@ namespace IVLab.ABREngine
         void UpdateStyling(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Sets the visibility of an impression
+        ///     Updates the visibility of an impression
         /// </summary>
-        void SetVisibility(EncodedGameObject currentGameObject, bool visible);
+        void UpdateVisibility(EncodedGameObject currentGameObject);
 
         /// <summary>
         ///     Copy a data impression, giving a new Uuid
@@ -167,7 +167,7 @@ namespace IVLab.ABREngine
 
         public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
 
-        public virtual void SetVisibility(EncodedGameObject currentGameObject, bool visible) { }
+        public virtual void UpdateVisibility(EncodedGameObject currentGameObject) { }
 
         /// <summary>
         ///     Unknown why it's necessary to copy each input individually, but here

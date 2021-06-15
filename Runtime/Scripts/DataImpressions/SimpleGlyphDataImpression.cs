@@ -35,28 +35,28 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data")]
+        [ABRInput("Key Data", "Key Data", "Data")]
         public PointKeyData keyData;
 
-        [ABRInput("Color Variable", "Color")]
+        [ABRInput("Color Variable", "Color", "Style")]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color")]
+        [ABRInput("Colormap", "Color", "Style")]
         public ColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph")]
+        [ABRInput("Glyph Variable", "Glyph", "Style")]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph")]
+        [ABRInput("Glyph", "Glyph", "Style")]
         public GlyphVisAsset glyph;
 
-        [ABRInput("Glyph Size", "Glyph")]
+        [ABRInput("Glyph Size", "Glyph", "Style")]
         public LengthPrimitive glyphSize;
 
-        [ABRInput("Forward Variable", "Direction")]
+        [ABRInput("Forward Variable", "Direction", "Style")]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction")]
+        [ABRInput("Up Variable", "Direction", "Style")]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;
@@ -418,12 +418,12 @@ namespace IVLab.ABREngine
             imr.cachedInstanceCount = -1;
         }
 
-        public override void SetVisibility(EncodedGameObject currentGameObject, bool visible)
+        public override void UpdateVisibility(EncodedGameObject currentGameObject)
         {
             InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
             if (imr != null)
             {
-                imr.enabled = visible;
+                imr.enabled = RenderHints.Visible;
             }
         }
     }

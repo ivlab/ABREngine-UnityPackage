@@ -26,32 +26,32 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data")]
+        [ABRInput("Key Data", "Key Data", "Data")]
         public SurfaceKeyData keyData;
 
-        [ABRInput("Color Variable", "Color")]
+        [ABRInput("Color Variable", "Color", "Style")]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color")]
+        [ABRInput("Colormap", "Color", "Style")]
         public ColormapVisAsset colormap;
 
 
-        [ABRInput("Pattern Variable", "Pattern")]
+        [ABRInput("Pattern Variable", "Pattern", "Style")]
         public ScalarDataVariable patternVariable;
 
-        [ABRInput("Pattern", "Pattern")]
+        [ABRInput("Pattern", "Pattern", "Style")]
         public SurfaceTextureVisAsset pattern;
 
-        [ABRInput("Pattern Size", "Pattern")]
+        [ABRInput("Pattern Size", "Pattern", "Style")]
         public LengthPrimitive patternSize;
 
-        [ABRInput("Pattern Seam Blend", "Pattern")]
+        [ABRInput("Pattern Seam Blend", "Pattern", "Style")]
         public PercentPrimitive patternDirectionBlend;
 
-        [ABRInput("Pattern Saturation", "Pattern")]
+        [ABRInput("Pattern Saturation", "Pattern", "Style")]
         public PercentPrimitive patternSaturation;
 
-        [ABRInput("Pattern Intensity", "Pattern")]
+        [ABRInput("Pattern Intensity", "Pattern", "Style")]
         public PercentPrimitive patternIntensity;
 
         protected override string MaterialName { get; } = "ABR_DataColoredMesh";
@@ -494,12 +494,12 @@ namespace IVLab.ABREngine
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
-        public override void SetVisibility(EncodedGameObject currentGameObject, bool visible)
+        public override void UpdateVisibility(EncodedGameObject currentGameObject)
         {
             MeshRenderer mr = currentGameObject?.GetComponent<MeshRenderer>();
             if (mr != null)
             {
-                mr.enabled = visible;
+                mr.enabled = RenderHints.Visible;
             }
         }
     }

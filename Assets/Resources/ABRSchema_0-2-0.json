@@ -190,7 +190,16 @@
                     "type": "object",
                     "description": "Additional data that can/should be used when rendering, such as visibility of the impression",
                     "properties": {
-                        "visible": {
+                        "DataChanged": {
+                            "type": "boolean"
+                        },
+						"StyleChanged": {
+                            "type": "boolean"
+                        },
+                        "VisibilityChanged": {
+                            "type": "boolean"
+                        },
+						"Visible": {
                             "type": "boolean"
                         }
                     }
