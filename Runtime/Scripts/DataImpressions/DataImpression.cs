@@ -56,6 +56,16 @@ namespace IVLab.ABREngine
         void ApplyToGameObject(EncodedGameObject currentGameObject);
 
         /// <summary>
+        ///     Updates the "styling" of an impression
+        /// </summary>
+        void UpdateStyling(EncodedGameObject currentGameObject);
+
+        /// <summary>
+        ///     Updates the visibility of an impression
+        /// </summary>
+        void UpdateVisibility(EncodedGameObject currentGameObject);
+
+        /// <summary>
         ///     Copy a data impression, giving a new Uuid
         /// </summary>
         IDataImpression Copy();
@@ -155,6 +165,10 @@ namespace IVLab.ABREngine
 
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
+        public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
+
+        public virtual void UpdateVisibility(EncodedGameObject currentGameObject) { }
+
         /// <summary>
         ///     Unknown why it's necessary to copy each input individually, but here
         ///     we are.
@@ -190,11 +204,38 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool changed = false;
+        public bool DataChanged { get; set; } = false;
 
         /// <summary>
-        ///     Should the impression be displayed on screen?
+        ///     Has the style of the impression been changed
         /// </summary>
-        public bool visible = true;
+        public bool StyleChanged { get; set; } = false;
+
+        /// <summary>
+        ///     Has the visibility of the impression been changed (mesh renderer needs to be toggled)
+        /// </summary>
+        public bool VisibilityChanged { get; set; } = false;
+
+        /// <summary>
+        ///    Whether or not the impression is visible
+        /// </summary>
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+            set
+            {
+                // Toggle the "VisibilityChanged" flag if the new value different from the old
+                if (visible != value)
+                {
+                    VisibilityChanged = true;
+                    visible = value;
+                }
+            }
+        }
+
+        private bool visible = true;
     }
 }

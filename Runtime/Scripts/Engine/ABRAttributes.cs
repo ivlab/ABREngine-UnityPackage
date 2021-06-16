@@ -7,6 +7,12 @@
 
 namespace IVLab.ABREngine
 {
+    public enum UpdateLevel
+    {
+        Data,
+        Style
+    }
+
     /// <summary>
     ///     Input attribute used for annotating an ABR input to a data
     ///     impression (VisAsset, DataVariable, etc.)
@@ -16,10 +22,13 @@ namespace IVLab.ABREngine
     {
         public string inputName;
         public string parameterName;
-        public ABRInputAttribute(string inputName, string parameterName)
+        // Which level of update (e.g. data, style, etc) this input necessitates if changed.
+        public UpdateLevel updateLevel;
+        public ABRInputAttribute(string inputName, string parameterName, UpdateLevel updateLevel)
         {
             this.inputName = inputName;
             this.parameterName = parameterName;
+            this.updateLevel = updateLevel;
         }
     }
 

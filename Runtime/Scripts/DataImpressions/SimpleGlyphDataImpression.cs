@@ -35,28 +35,28 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data")]
+        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public PointKeyData keyData;
 
-        [ABRInput("Color Variable", "Color")]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color")]
+        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public ColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph")]
+        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph")]
+        [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
         public GlyphVisAsset glyph;
 
-        [ABRInput("Glyph Size", "Glyph")]
+        [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
-        [ABRInput("Forward Variable", "Direction")]
+        [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction")]
+        [ABRInput("Up Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;
@@ -283,6 +283,7 @@ namespace IVLab.ABREngine
             {
                 imr = currentGameObject.gameObject.AddComponent<InstancedMeshRenderer>();
             }
+            imr.enabled = RenderHints.Visible;
             imr.bounds = SSrenderData?.bounds ?? new Bounds();
 
             int lod = glyphLod;
@@ -325,7 +326,6 @@ namespace IVLab.ABREngine
             else
             {
                 imr.instanceLocalTransforms = new Matrix4x4[0];
-
             }
 
             imr.block = MatPropBlock;
@@ -333,9 +333,98 @@ namespace IVLab.ABREngine
             imr.instanceMaterial = ImpressionMaterial;
 
             imr.cachedInstanceCount = -1;
+        }
 
-            // Enable/disable the instanced mesh renderer in accordance with the "visible" flag
-            imr.enabled = RenderHints.visible;
+        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        {
+            // Exit immediately if the game object or instanced mesh renderer relevant to this
+            // impression do not yet exist
+            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
+            if (imr == null)
+            {
+                return;
+            }
+
+            // Determine the number of points / glyphs via the number of transforms the
+            // instanced mesh renderer is currently tracking
+            int numPoints = imr.instanceLocalTransforms.Length;
+
+            // We might as well exit if there are no glyphs to update
+            if (numPoints <= 0)
+            {
+                return;
+            }
+
+            // Rescale the glyphs depending on their current "Glyph Size" input
+            ABRConfig config = ABREngine.Instance.Config;
+            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+            float curGlyphScale = glyphSize?.Value ??
+                config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
+            // However, don't waste time rescaling the glyphs if the scale hasn't actually changed
+            // (If at some point we are no longer scaling all glyphs evenly and equally, this trick
+            // to determine if the scale changed will likely no longer function correctly)
+            float prevGlyphScale = imr.instanceLocalTransforms[0].GetColumn(0).magnitude;
+            if (!Mathf.Approximately(prevGlyphScale, curGlyphScale))
+            {
+                for (int i = 0; i < imr.instanceLocalTransforms.Length; i++)
+                {
+                    imr.instanceLocalTransforms[i] *= Matrix4x4.Scale(Vector3.one * curGlyphScale / prevGlyphScale);
+                }
+            }
+
+            // Update the instanced mesh renderer to use the currently selected glyph
+            if (glyph != null)
+            {
+                imr.instanceMesh = glyph.GetMesh(glyphLod);
+                MatPropBlock.SetTexture("_Normal", glyph.GetNormalMap(glyphLod));
+            }
+            else
+            {
+                Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
+                imr.instanceMesh = mesh;
+            }
+
+            // Initialize variables to track scalar "styling" changes
+            Vector4[] scalars = new Vector4[numPoints];
+            float colorVariableMin = colorVariable?.MinValue ?? 0.0f;
+            float colorVariableMax = colorVariable?.MaxValue ?? 0.0f;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                var colorScalars = colorVariable.GetArray(keyData);
+                for (int i = 0; i < numPoints; i++)
+                    scalars[i][0] = colorScalars[i];
+            }
+
+            // Apply scalar changes to the instanced mesh renderer
+            imr.colors = scalars;
+
+            // Apply changes to the mesh's shader / material
+            MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
+            MatPropBlock.SetFloat("_ColorDataMax", colorVariableMax);
+            MatPropBlock.SetColor("_Color", Color.white);
+
+            if (colormap?.GetColorGradient() != null)
+            {
+                MatPropBlock.SetInt("_UseColorMap", 1);
+                MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+            }
+            else
+            {
+                MatPropBlock.SetInt("_UseColorMap", 0);
+            }
+
+            imr.block = MatPropBlock;
+
+            imr.cachedInstanceCount = -1;
+        }
+
+        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        {
+            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
+            if (imr != null)
+            {
+                imr.enabled = RenderHints.Visible;
+            }
         }
     }
 }
