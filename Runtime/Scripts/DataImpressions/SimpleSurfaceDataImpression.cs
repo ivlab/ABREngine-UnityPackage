@@ -26,32 +26,32 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data", "Data")]
+        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public SurfaceKeyData keyData;
 
-        [ABRInput("Color Variable", "Color", "Style")]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color", "Style")]
+        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public ColormapVisAsset colormap;
 
 
-        [ABRInput("Pattern Variable", "Pattern", "Style")]
+        [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
-        [ABRInput("Pattern", "Pattern", "Style")]
+        [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
         public SurfaceTextureVisAsset pattern;
 
-        [ABRInput("Pattern Size", "Pattern", "Style")]
+        [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
-        [ABRInput("Pattern Seam Blend", "Pattern", "Style")]
+        [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternDirectionBlend;
 
-        [ABRInput("Pattern Saturation", "Pattern", "Style")]
+        [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
 
-        [ABRInput("Pattern Intensity", "Pattern", "Style")]
+        [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
         protected override string MaterialName { get; } = "ABR_DataColoredMesh";

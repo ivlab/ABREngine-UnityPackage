@@ -35,28 +35,28 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data", "Data")]
+        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public PointKeyData keyData;
 
-        [ABRInput("Color Variable", "Color", "Style")]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color", "Style")]
+        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public ColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph", "Style")]
+        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph", "Style")]
+        [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
         public GlyphVisAsset glyph;
 
-        [ABRInput("Glyph Size", "Glyph", "Style")]
+        [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
-        [ABRInput("Forward Variable", "Direction", "Style")]
+        [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction", "Style")]
+        [ABRInput("Up Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;

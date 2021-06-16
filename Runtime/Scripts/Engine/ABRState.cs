@@ -308,7 +308,7 @@ namespace IVLab.ABREngine
                                 if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
                                 {
                                     impressionInputs.AssignInput(inputName, possibleInput);
-                                }     
+                                }
                             }
                             else
                             {
@@ -372,11 +372,11 @@ namespace IVLab.ABREngine
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
                             // Enable changed flags according to the input that was changed                      
-                            if (input.updateLevel == "Data")
+                            if (input.updateLevel == UpdateLevel.Data)
                             {
                                 dataImpression.RenderHints.DataChanged = true;
                             }
-                            else if (input.updateLevel == "Style")
+                            else if (input.updateLevel == UpdateLevel.Style)
                             {
                                 dataImpression.RenderHints.StyleChanged = true;
                             }

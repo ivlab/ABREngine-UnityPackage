@@ -30,39 +30,39 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
-        [ABRInput("Key Data", "Key Data", "Data")]
+        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public LineKeyData keyData;
 
-        [ABRInput("Color Variable", "Color", "Style")]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color", "Style")]
+        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public ColormapVisAsset colormap;
 
 
-        [ABRInput("Texture Variable", "Texture", "Style")]
+        [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
-        [ABRInput("Texture", "Texture", "Style")]
+        [ABRInput("Texture", "Texture", UpdateLevel.Style)]
         public LineTextureVisAsset lineTexture;
 
-        [ABRInput("Texture Cutoff", "Texture", "Style")]
+        [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
 
 
-        [ABRInput("Ribbon Smooth", "Ribbon", "Data")]
+        [ABRInput("Ribbon Smooth", "Ribbon", UpdateLevel.Data)]
         public IntegerPrimitive averageCount;
 
-        [ABRInput("Ribbon Width", "Ribbon", "Data")]
+        [ABRInput("Ribbon Width", "Ribbon", UpdateLevel.Data)]
         public LengthPrimitive lineWidth;
 
-        [ABRInput("Ribbon Rotation", "Ribbon", "Data")]
+        [ABRInput("Ribbon Rotation", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonRotationAngle;
 
-        [ABRInput("Ribbon Brightness", "Ribbon", "Style")]
+        [ABRInput("Ribbon Brightness", "Ribbon", UpdateLevel.Style)]
         public PercentPrimitive ribbonBrightness;
 
-        [ABRInput("Ribbon Curve", "Ribbon", "Data")]
+        [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
 
         protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
@@ -355,14 +355,9 @@ namespace IVLab.ABREngine
 
 
                 // build mesh from dataset arrays
-                // Mesh mesh = renderObject.GetComponent<MeshFilter>().mesh;
-                //if(mesh == null)
-                //{
                 Mesh mesh = meshFilter.mesh;
                 if (mesh == null) mesh = new Mesh();
                 mesh.name = "LRS:368@" + DateTime.Now.ToString();
-                //}
-
 
                 mesh.Clear();
                 mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
