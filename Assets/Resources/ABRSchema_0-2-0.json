@@ -193,13 +193,13 @@
                         "DataChanged": {
                             "type": "boolean"
                         },
-						"StyleChanged": {
+                        "StyleChanged": {
                             "type": "boolean"
                         },
                         "VisibilityChanged": {
                             "type": "boolean"
                         },
-						"Visible": {
+                        "Visible": {
                             "type": "boolean"
                         }
                     }
