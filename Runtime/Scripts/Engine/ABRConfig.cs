@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Net.Http;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
@@ -28,6 +29,11 @@ namespace IVLab.ABREngine
         ///     Fall back to the defaults located in this package
         /// </summary>
         public const string CONFIG_FILE_FALLBACK = "ABRConfigDefault";
+
+        /// <summary>
+        /// Where to find the Schema online
+        /// </summary>
+        public const string SCHEMA_URL = "https://raw.githubusercontent.com/ivlab/abr-schema/master/ABRSchema_0-2-0.json";
 
         public ABRConfigDefaults Defaults { get; private set; }
 
@@ -115,8 +121,14 @@ namespace IVLab.ABREngine
             };
 
             // Load the schema
-            TextAsset schemaContents = Resources.Load<TextAsset>(Info.schemaName);
-            Schema = JSchema.Parse(schemaContents.text);
+            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(SCHEMA_URL).Result;
+            if (!resp.IsSuccessStatusCode)
+            {
+                Debug.LogErrorFormat("Unable to load schema from {0}", SCHEMA_URL);
+                return;
+            }
+            string schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
                 Debug.LogErrorFormat("Unable to parse schema `{0}`.", Info.schemaName);
@@ -128,8 +140,8 @@ namespace IVLab.ABREngine
                 return;
             }
 
-            _schema = JObject.Parse(schemaContents.text);
-            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["const"]);
+            _schema = JObject.Parse(schemaContents);
+            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["default"]);
         }
 
         /// <summary>
