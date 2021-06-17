@@ -303,7 +303,7 @@ namespace IVLab.ABREngine
         {
             string artifactJsonPath = GetArtifactJsonPath(uuid);
             var meshPath = VisAssetDataPath(artifactJsonPath, lodJson["mesh"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => new IVLab.OBJImport.OBJLoader().Load(meshPath));
+            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => new IVLab.OBJImport.OBJLoader().Load(meshPath, true));
         }
 
         public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
