@@ -214,8 +214,12 @@ namespace IVLab.ABREngine
         ///     a zero-size bounding box and expand until it encapsulates all
         ///     datasets.
         /// </summary>
-        public void RecalculateBounds()
+        /// <returns>
+        /// Returns a boolean whether or not the bounds have changed since last recalculation
+        /// </returns>
+        public bool RecalculateBounds()
         {
+            float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
             Dataset ds = GetDataset();
@@ -227,6 +231,7 @@ namespace IVLab.ABREngine
                     ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
                     Bounds originalBounds = rawDataset.bounds;
 
+                    bool expand = false;
                     if (ds.DataSpaceBounds.size.magnitude <= float.Epsilon)
                     {
                         // If the size is zero (first keyData), then start with its
@@ -237,7 +242,7 @@ namespace IVLab.ABREngine
                     }
                     else
                     {
-                        NormalizeWithinBounds.NormalizeAndExpand(
+                        expand = NormalizeWithinBounds.NormalizeAndExpand(
                             GroupContainer,
                             originalBounds,
                             ref GroupBounds,
@@ -247,6 +252,8 @@ namespace IVLab.ABREngine
                     }
                 }
             }
+
+            return currentBoundsSize - GroupBounds.size.magnitude < float.Epsilon;
         }
 
         public void RenderImpressions()
@@ -255,13 +262,13 @@ namespace IVLab.ABREngine
             {
                 // Make sure the bounding box is correct
                 // Mostly matters if there's a live ParaView connection
-                RecalculateBounds();
+                bool boundsChanged = RecalculateBounds();
 
                 foreach (var impression in _impressions)
                 {
                     // Fully compute render info and apply it to the impression object
                     // if (key) data was changed
-                    if (impression.Value.RenderHints.DataChanged)
+                    if (boundsChanged || impression.Value.RenderHints.DataChanged)
                     {
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeKeyDataRenderInfo();
