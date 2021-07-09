@@ -253,6 +253,10 @@ namespace IVLab.ABREngine
         {
             try
             {
+                // Make sure the bounding box is correct
+                // Mostly matters if there's a live ParaView connection
+                RecalculateBounds();
+
                 foreach (var impression in _impressions)
                 {
                     // Fully compute render info and apply it to the impression object
@@ -305,10 +309,6 @@ namespace IVLab.ABREngine
 
         private void PrepareImpression(IDataImpression impression)
         {
-            // Make sure the bounding box is correct
-            // Mostly matters if there's a live ParaView connection
-            RecalculateBounds();
-
             // Make sure the parent is assigned properly
             gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(GroupRoot.transform, false);
             
