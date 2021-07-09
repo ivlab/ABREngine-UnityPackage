@@ -219,7 +219,6 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
-            BBoxVis.Instance.Clear();
             float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
@@ -265,7 +264,6 @@ namespace IVLab.ABREngine
                             ref ds.DataSpaceBounds
                         );
                     }
-                    BBoxVis.Instance.AddBBox(keyData.Path, GroupBounds, GroupRoot.transform.localToWorldMatrix);
                 }
             }
 
