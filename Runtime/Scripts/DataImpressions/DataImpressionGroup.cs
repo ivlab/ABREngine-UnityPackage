@@ -219,16 +219,32 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
+            BBoxVis.Instance.Clear();
             float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
             Dataset ds = GetDataset();
             if (ds != null)
             {
-                foreach (var keyData in ds.GetAllKeyData())
+                // Build a list of keydata that are actually being used
+                List<string> activeKeyDataPaths = new List<string>();
+                foreach (IDataImpression impression in GetDataImpressions().Values)
                 {
+                    string keyDataPath = impression.InputIndexer.GetInputValue("Key Data")?.GetRawABRInput().inputValue;
+                    if (keyDataPath != null && DataPath.GetDatasetPath(keyDataPath) == ds.Path)
+                    {
+                        activeKeyDataPaths.Add(keyDataPath);
+                    }
+                }
+
+                foreach (IKeyData keyData in ds.GetAllKeyData().Values)
+                {
+                    if (!activeKeyDataPaths.Contains(keyData.Path))
+                    {
+                        continue;
+                    }
                     RawDataset rawDataset;
-                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
+                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
                     Bounds originalBounds = rawDataset.bounds;
 
                     bool expand = false;
@@ -250,10 +266,11 @@ namespace IVLab.ABREngine
                             ref ds.DataSpaceBounds
                         );
                     }
+                    BBoxVis.Instance.AddBBox(keyData.Path, GroupBounds, GroupRoot.transform.localToWorldMatrix);
                 }
             }
 
-            return currentBoundsSize - GroupBounds.size.magnitude < float.Epsilon;
+            return Mathf.Abs(currentBoundsSize - GroupBounds.size.magnitude) > float.Epsilon;
         }
 
         public void RenderImpressions()
