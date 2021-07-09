@@ -247,7 +247,6 @@ namespace IVLab.ABREngine
                     ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
                     Bounds originalBounds = rawDataset.bounds;
 
-                    bool expand = false;
                     if (ds.DataSpaceBounds.size.magnitude <= float.Epsilon)
                     {
                         // If the size is zero (first keyData), then start with its
@@ -258,7 +257,7 @@ namespace IVLab.ABREngine
                     }
                     else
                     {
-                        expand = NormalizeWithinBounds.NormalizeAndExpand(
+                        NormalizeWithinBounds.NormalizeAndExpand(
                             GroupContainer,
                             originalBounds,
                             ref GroupBounds,
