@@ -110,7 +110,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Remove data impression, returning if this data impression group is
+        ///     Remove data impression, returning true if this data impression group is
         ///     empty after the removal of such impression.
         /// </summary>
         public bool RemoveDataImpression(Guid uuid)
