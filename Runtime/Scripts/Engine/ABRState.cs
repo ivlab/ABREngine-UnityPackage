@@ -368,7 +368,7 @@ namespace IVLab.ABREngine
                         {
                             previousInput = previousInputValues[input.inputName];
                         }
-                        // If the input values are different a change has occured
+                        // If the input values are different a change has occurred
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
                             // Enable changed flags according to the input that was changed                      
@@ -381,6 +381,37 @@ namespace IVLab.ABREngine
                                 dataImpression.RenderHints.StyleChanged = true;
                             }
                         }
+                    }
+                    // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
+                    // - scalar range changed for the color variable of this impression:
+                    bool scalarRangeChanged = false;
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Color Variable") &&
+                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Color Variable"))
+                    {
+                        string scalarPath = impression.Value.inputValues["Color Variable"].inputValue;
+                        string prevScalarPath = previousImpression.inputValues["Color Variable"].inputValue;
+                        if (state?.dataRanges?.scalarRanges?.ContainsKey(scalarPath) == true && previousABRState?.dataRanges?.scalarRanges?.ContainsKey(prevScalarPath) == true)
+                        {
+                            // Scalar range has changed if its min or max has changed
+                            scalarRangeChanged = state?.dataRanges?.scalarRanges?[scalarPath]?.min != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.min ||
+                                                 state?.dataRanges?.scalarRanges?[scalarPath]?.max != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.max;
+                        }
+                    }
+                    // OR
+                    // - local vis asset colormap used by this impression had its contents changed:
+                    bool colormapChanged = false;
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap") &&
+                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Colormap"))
+                    {
+                        string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
+                        string prevColormapUuid = previousImpression.inputValues["Colormap"].inputValue;
+                        // Colormap has changed if its contents have changed
+                        colormapChanged = state?.localVisAssets?[colormapUuid]?.ToString() != previousABRState?.localVisAssets?[prevColormapUuid]?.ToString();
+                    }       
+                    // Toggle the "style changed" flag accordingly
+                    if (scalarRangeChanged || colormapChanged)
+                    {
+                        dataImpression.RenderHints.StyleChanged = true;
                     }
 
                     // Add any tags
