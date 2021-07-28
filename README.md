@@ -25,7 +25,7 @@ ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git
 
 ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git
 
-ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git#v0.1.0
+ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git#66d99e7cd811c67f68677c6da84c55c179a14b25
 ```
 
 

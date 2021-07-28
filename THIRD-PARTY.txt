@@ -1,0 +1,9 @@
+THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
+
+This project incorporates components from the projects listed below.
+
+1. Newtonsoft JSON (https://github.com/JamesNK/Newtonsoft.Json)
+2. Newtonsoft JSON Schema (https://github.com/JamesNK/Newtonsoft.Json.Schema)
+3. Runtime OBJ importer
+(https://assetstore.unity.com/packages/tools/modeling/runtime-obj-importer-49547)
+4. JSON diff patch (https://github.com/wbish/jsondiffpatch.net)
