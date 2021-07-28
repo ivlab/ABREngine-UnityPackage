@@ -313,7 +313,12 @@ namespace IVLab.ABREngine
             }
             else
             {
-                // If there's no data yet, put it in the default group
+                // It's possible that this impression previously had key data, in which case we must
+                // remove and unregister it from whatever group it was a part of due to that key data
+                // now that it has none
+                UnregisterDataImpression(dataImpression.Uuid);
+                
+                // Since there's no data, put it in the default group
                 _defaultGroup.AddDataImpression(dataImpression, allowOverwrite);
             }
         }
@@ -324,10 +329,10 @@ namespace IVLab.ABREngine
             foreach (var group in dataImpressionGroups)
             {
                 // Remove the impression from any groups its in (should only be one)
-                group.Value.RemoveDataImpression(uuid);
+                bool groupIsEmpty = group.Value.RemoveDataImpression(uuid);
 
                 // Also remove the group if it becomes empty, unless it's the default group
-                if (group.Value.GetDataImpressions().Count == 0 && group.Key != _defaultGroup.Uuid)
+                if (groupIsEmpty && group.Key != _defaultGroup.Uuid)
                 {
                     toRemove.Add(group.Key);
                 }
