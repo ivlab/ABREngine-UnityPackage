@@ -340,7 +340,7 @@ namespace IVLab.ABREngine
             gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
 
             // Display the UUID in editor
-            gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);
+            gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;
         }
     }
 }
