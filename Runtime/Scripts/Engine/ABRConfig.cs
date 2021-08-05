@@ -72,50 +72,17 @@ namespace IVLab.ABREngine
             Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
             ABRConfigInfo customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(configCustomizations?.text ?? "");
 
-            // Overwrite the defaults if they're provided
-            if (customizations?.version != null)
+            // Dynamically load any customizations if they're provided
+            var assembly = Assembly.GetExecutingAssembly();
+            Type configInfoType = typeof(ABRConfigInfo);
+            FieldInfo[] allFields = configInfoType.GetFields();
+            foreach (FieldInfo fieldInfo in allFields)
             {
-                Info.version = customizations.version;
-            }
-            if (customizations?.defaultPrefabName != null)
-            {
-                Info.defaultPrefabName = customizations.defaultPrefabName;
-            }
-            if (customizations?.schemaName != null)
-            {
-                Info.schemaName = customizations.schemaName;
-            }
-            if (customizations?.defaultBounds != null)
-            {
-                Info.defaultBounds = customizations.defaultBounds;
-            }
-            if (customizations?.serverAddress != null)
-            {
-                Info.serverAddress = customizations.serverAddress;
-            }
-            if (customizations?.statePathOnServer != null)
-            {
-                Info.statePathOnServer = customizations.statePathOnServer;
-            }
-            if (customizations?.dataServer != null)
-            {
-                Info.dataServer = customizations.dataServer;
-            }
-            if (customizations?.visAssetServer != null)
-            {
-                Info.visAssetServer = customizations.visAssetServer;
-            }
-            if (customizations?.dataListenerPort != null)
-            {
-                Info.dataListenerPort = customizations.dataListenerPort;
-            }
-            if (customizations?.loadResourceVisAssets != null)
-            {
-                Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
-            }
-            if (customizations?.mediaPath != null)
-            {
-                Info.mediaPath = customizations.mediaPath;
+                object customizedValue = fieldInfo.GetValue(customizations);
+                if (customizedValue != null)
+                {
+                    fieldInfo.SetValue(Info, customizedValue);
+                }
             }
 
             Debug.Log("ABR Config Loaded");
