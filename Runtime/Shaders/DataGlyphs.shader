@@ -44,7 +44,7 @@ Shader "Instanced/InstancedSurfaceShader" {
 			};
 
 		#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-			StructuredBuffer<float4> colorBuffer;
+			StructuredBuffer<float4> renderInfoBuffer;
 			StructuredBuffer<float4x4> transformBuffer;
 			StructuredBuffer<float4x4> transformBufferInverse;
 
@@ -80,29 +80,33 @@ Shader "Instanced/InstancedSurfaceShader" {
 
 			half _Glossiness;
 			half _Metallic;
-			float4 _Color;
+			float4 _RenderInfo;
 			int _UseColorMap;
 			sampler2D _ColorMap;
 			float _ColorDataMin;
 			float _ColorDataMax;
 			void surf(Input IN, inout SurfaceOutputStandard o) {
-				fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
-				o.Albedo = _Color;
-
+				// Initialize render info
+				fixed4 renderInfo;
 #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-
-				c = colorBuffer[unity_InstanceID];
+				renderInfo = renderInfoBuffer[unity_InstanceID];
 #else
-				c = _Color;
+				renderInfo = _RenderInfo;
 #endif
+				// Alpha channel of render info determines whether or not to render this glyph:
+				// a >= 0 -> render
+				// a < 0  -> discard
+				if (renderInfo.a < 0)
+					discard;
 
-				float vColor = c.r;
+				// Red channel of render info provides scalar value for this glyph
+				float scalarValue = renderInfo.r;
 
-				float vColorNorm = clamp(Remap(vColor, _ColorDataMin, _ColorDataMax, 0, 1), 0, 0.99);
-
+				// Normalizing scalar allows us to use it for colormap-texture lookup 
+				float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0, 0.99);
 				if (_UseColorMap == 1)
 				{
-					o.Albedo = tex2D(_ColorMap, float2(vColorNorm, 0.25));
+					o.Albedo = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));
 				}
 				else
 				{
