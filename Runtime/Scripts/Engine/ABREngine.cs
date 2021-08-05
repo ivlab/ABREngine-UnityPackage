@@ -133,6 +133,12 @@ namespace IVLab.ABREngine
                 {
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
                 }
+
+                // If a state in resources is specified, load it
+                if (Config.Info.loadStateOnStart != null)
+                {
+                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                }
                 _initialized = true;
             });
         }

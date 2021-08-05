@@ -243,6 +243,12 @@ namespace IVLab.ABREngine
         /// </summary>
         public string mediaPath;
 
+        /// <summary>
+        /// Load a state from resources on ABREngine startup
+        /// </summary>
+        public string loadStateOnStart;
+
+
         public override string ToString()
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
