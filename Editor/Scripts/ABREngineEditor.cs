@@ -29,6 +29,7 @@ namespace IVLab.ABREngine
     {
         private bool configToggleState = false;
         private bool visassetToggleState = false;
+        private bool datasetsToggleState = false;
 
         public override void OnInspectorGUI()
         {
@@ -84,6 +85,23 @@ namespace IVLab.ABREngine
                         }
                     }
                     GUILayout.Space(10);
+                }
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            List<Dataset> datasets = ABREngine.Instance.Data.GetDatasets();
+            datasetsToggleState = EditorGUILayout.BeginFoldoutHeaderGroup(datasetsToggleState, "Datasets: " + datasets.Count);
+            if (datasetsToggleState)
+            {
+                EditorGUILayout.LabelField("Loaded Datasets:");
+                foreach (Dataset ds in datasets)
+                {
+                    EditorGUILayout.LabelField(ds.Path);
+                    Dictionary<string, IKeyData> allKeyData = ds.GetAllKeyData();
+                    foreach (IKeyData kd in allKeyData.Values)
+                    {
+                        EditorGUILayout.LabelField("  " + DataPath.GetName(kd.Path));
+                    }
                 }
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
