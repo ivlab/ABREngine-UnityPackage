@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -25,6 +27,9 @@ namespace IVLab.ABREngine
     [CustomEditor(typeof(ABREngine))]
     public class ABREngineEditor : Editor
     {
+        private bool configToggleState = false;
+        private bool visassetToggleState = false;
+
         public override void OnInspectorGUI()
         {
             // Setup
@@ -45,9 +50,50 @@ namespace IVLab.ABREngine
 
             EditorGUILayout.LabelField("ABR Engine is Running");
 
+            List<Guid> visassets = ABREngine.Instance.VisAssets.GetVisAssets();
+            visassetToggleState = EditorGUILayout.BeginFoldoutHeaderGroup(visassetToggleState, "VisAssets: " + visassets.Count);
+            if (visassetToggleState)
+            {
+                EditorGUILayout.LabelField("Loaded VisAssets:");
+                foreach (Guid uuid in visassets)
+                {
+                    IVisAsset va = null;
+                    ABREngine.Instance.VisAssets.TryGetVisAsset(uuid, out va);
+                    if (va != null)
+                    {
+                        EditorGUILayout.LabelField("  " + uuid.ToString());
+                        EditorGUILayout.LabelField("    Type: " + va.VisAssetType);
+                        GUILayoutOption[] previewOptions = {
+                            GUILayout.Width(EditorGUIUtility.currentViewWidth),
+                            GUILayout.Height(30)
+                        };
+                        switch (va.VisAssetType)
+                        {
+                            case VisAssetType.Colormap:
+                                GUILayout.Box(((ColormapVisAsset) va).Gradient, previewOptions);
+                                break;
+                            case VisAssetType.LineTexture:
+                                GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
+                                break;
+                            case VisAssetType.SurfaceTexture:
+                                GUILayout.Box(((SurfaceTextureVisAsset) va).Texture, previewOptions);
+                                break;
+                            case VisAssetType.Glyph:
+                                GUILayout.Label("[No preview]");
+                                break;
+                        }
+                    }
+                    GUILayout.Space(10);
+                }
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
             // Display currently loaded ABR Configuration
-            EditorGUILayout.BeginFoldoutHeaderGroup(false, "ABR Configuration");
-            EditorGUILayout.TextArea(ABREngine.Instance.Config.Info.ToString());
+            configToggleState = EditorGUILayout.BeginFoldoutHeaderGroup(configToggleState, "ABR Configuration");
+            if (configToggleState)
+            {
+                EditorGUILayout.TextArea(ABREngine.Instance.Config.Info.ToString());
+            }
             EditorGUILayout.EndFoldoutHeaderGroup();
         }
     }
