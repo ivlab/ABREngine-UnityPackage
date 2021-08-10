@@ -91,8 +91,8 @@ namespace IVLab.ABREngine
             Config = new ABRConfig();
 
             // Initialize the default DataImpressionGroup (where impressions go
-            // when they have no dataset)
-            _defaultGroup = AddDataImpressionGroup("Default");
+            // when they have no dataset) - guid zeroed out
+            _defaultGroup = AddDataImpressionGroup("Default", new Guid());
 
             Task.Run(async () =>
             {
@@ -210,6 +210,11 @@ namespace IVLab.ABREngine
             return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
+        public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid)
+        {
+            return AddDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+        }
+
         public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
         {
             DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
@@ -237,6 +242,18 @@ namespace IVLab.ABREngine
                 return g;
             }
             else
+            {
+                return null;
+            }
+        }
+
+        public DataImpressionGroup GetDataImpressionGroupByDataset(Dataset ds)
+        {
+            try
+            {
+                return dataImpressionGroups.Values.First((g) => g.GetDataset()?.Path == ds?.Path);
+            }
+            catch (InvalidOperationException)
             {
                 return null;
             }
@@ -270,17 +287,29 @@ namespace IVLab.ABREngine
         public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // Create a new group if it doesn't exist
-            if (newGroup == null)
+            // OR, if it's in the default group but now has a dataset, move it to its proper group
+            if (newGroup == null || newGroup == _defaultGroup)
             {
-                // Name it according to the impression's dataset, if there is one
+                // First, check if there's already a group associated with this dataset
                 Dataset ds = dataImpression.GetDataset();
-                if (ds?.Path != null)
+                DataImpressionGroup dsGroup = GetDataImpressionGroupByDataset(ds);
+                // If so, add it to that group
+                if (dsGroup != null)
                 {
-                    newGroup = AddDataImpressionGroup(ds.Path);
+                    newGroup = dsGroup;
                 }
+                // If not, proceed to make a new group
                 else
                 {
-                    newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    // Name it according to the impression's dataset, if there is one
+                    if (ds?.Path != null)
+                    {
+                        newGroup = AddDataImpressionGroup(ds.Path);
+                    }
+                    else
+                    {
+                        newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    }
                 }
             }
             MoveImpressionToGroup(dataImpression, newGroup, allowOverwrite);

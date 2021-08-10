@@ -214,17 +214,36 @@ namespace IVLab.ABREngine
         ///     a zero-size bounding box and expand until it encapsulates all
         ///     datasets.
         /// </summary>
-        public void RecalculateBounds()
+        /// <returns>
+        /// Returns a boolean whether or not the bounds have changed since last recalculation
+        /// </returns>
+        public bool RecalculateBounds()
         {
+            float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
             Dataset ds = GetDataset();
             if (ds != null)
             {
-                foreach (var keyData in ds.GetAllKeyData())
+                // Build a list of keydata that are actually being used
+                List<string> activeKeyDataPaths = new List<string>();
+                foreach (IDataImpression impression in GetDataImpressions().Values)
                 {
+                    string keyDataPath = impression.InputIndexer.GetInputValue("Key Data")?.GetRawABRInput().inputValue;
+                    if (keyDataPath != null && DataPath.GetDatasetPath(keyDataPath) == ds.Path)
+                    {
+                        activeKeyDataPaths.Add(keyDataPath);
+                    }
+                }
+
+                foreach (IKeyData keyData in ds.GetAllKeyData().Values)
+                {
+                    if (!activeKeyDataPaths.Contains(keyData.Path))
+                    {
+                        continue;
+                    }
                     RawDataset rawDataset;
-                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
+                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
                     Bounds originalBounds = rawDataset.bounds;
 
                     if (ds.DataSpaceBounds.size.magnitude <= float.Epsilon)
@@ -247,17 +266,23 @@ namespace IVLab.ABREngine
                     }
                 }
             }
+
+            return Mathf.Abs(currentBoundsSize - GroupBounds.size.magnitude) > float.Epsilon;
         }
 
         public void RenderImpressions()
         {
             try
             {
+                // Make sure the bounding box is correct
+                // Mostly matters if there's a live ParaView connection
+                bool boundsChanged = RecalculateBounds();
+
                 foreach (var impression in _impressions)
                 {
                     // Fully compute render info and apply it to the impression object
                     // if (key) data was changed
-                    if (impression.Value.RenderHints.DataChanged)
+                    if (boundsChanged || impression.Value.RenderHints.DataChanged)
                     {
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeKeyDataRenderInfo();
@@ -305,10 +330,6 @@ namespace IVLab.ABREngine
 
         private void PrepareImpression(IDataImpression impression)
         {
-            // Make sure the bounding box is correct
-            // Mostly matters if there's a live ParaView connection
-            RecalculateBounds();
-
             // Make sure the parent is assigned properly
             gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(GroupRoot.transform, false);
             
