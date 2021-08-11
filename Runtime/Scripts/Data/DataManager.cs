@@ -74,6 +74,13 @@ namespace IVLab.ABREngine
             return datasets.Values.ToList();
         }
 
+        public async Task LoadRawDataset<T>(string dataPath)
+        where T : IDataLoader, new()
+        {
+            RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
+            await ImportRawDataset(dataPath, ds);
+        }
+
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
@@ -97,67 +104,6 @@ namespace IVLab.ABREngine
                 ImportVariables(dataPath, importing, dataset);
                 ImportKeyData(dataPath, importing, dataset);
             });
-        }
-
-        public async Task LoadRawDatasetFromCache(string dataPath)
-        {
-            FileInfo jsonFile = GetRawDatasetMetadataFile(dataPath);
-            if (!jsonFile.Exists)
-            {
-                Debug.LogErrorFormat("Data path {0} does not exist!", jsonFile.ToString());
-                return;
-            }
-            else
-            {
-                Debug.Log("Loading " + dataPath + " from " + this.appDataPath);
-            }
-
-            string metadataContent = "";
-            using (StreamReader file = new StreamReader(jsonFile.FullName))
-            {
-                metadataContent = await file.ReadToEndAsync();
-            }
-
-            RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
-
-            FileInfo binFile = GetRawDatasetBinaryFile(dataPath);
-            // File.ReadAllBytesAsync doesn't exist in this version (2.0 Standard)
-            // of .NET apparently?
-            byte[] dataBytes = await Task.Run(() => File.ReadAllBytes(binFile.FullName));
-
-            RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-
-            RawDataset ds = new RawDataset(metadata, data);
-            await ImportRawDataset(dataPath, ds);
-        }
-
-        public async Task LoadRawDatasetFromURL(string dataPath, string url)
-        {
-            Debug.Log("Loading " + dataPath + " from " + url);
-            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-
-            try
-            {
-                HttpResponseMessage metadataResponse = await ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                string responseBody = await metadataResponse.Content.ReadAsStringAsync();
-
-                JToken metadataJson = JObject.Parse(responseBody)["metadata"];
-                RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
-
-                HttpResponseMessage dataResponse = await ABREngine.httpClient.GetAsync(url + "/data/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
-
-                RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-                RawDataset ds = new RawDataset(metadata, data);
-                await ImportRawDataset(dataPath, ds);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-
         }
 
         public async Task CacheRawDataset(string dataPath, string json, byte[] data)
