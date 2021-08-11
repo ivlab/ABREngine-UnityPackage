@@ -37,6 +37,7 @@ namespace IVLab.ABREngine
         public JObject State { get { return previouslyLoadedState; }}
         private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
+        private ABRStateParser stateParser = null;
 
         private object _stateLock = new object();
         private object _stateUpdatingLock = new object();
@@ -86,6 +87,9 @@ namespace IVLab.ABREngine
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             base.Awake();
+
+            // Initialize state parser
+            stateParser = new ABRStateParser();
 
             // Initialize the configuration from ABRConfig.json
             Config = new ABRConfig();
@@ -496,10 +500,9 @@ namespace IVLab.ABREngine
             }
             await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
-                ABRStateParser parser = ABRStateParser.GetParser<T>();
                 try
                 {
-                    JObject tempState = await parser.LoadState(stateName, previouslyLoadedState);
+                    JObject tempState = await stateParser.LoadState<T>(stateName, previouslyLoadedState);
                     lock (_stateLock)
                     {
                         previousStateName = stateName;
@@ -522,17 +525,17 @@ namespace IVLab.ABREngine
             });
         }
 
-        public async Task SaveStateAsync()
+        public async Task SaveStateAsync<T>()
+        where T : IABRStateLoader, new()
         {
-            HttpStateFileLoader loader = new HttpStateFileLoader();
-            ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
+            T loader = new T();
             try
             {
                 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
                     try
                     {
-                        string state = parser.SerializeState(previouslyLoadedState);
+                        string state = stateParser.SerializeState(previouslyLoadedState);
 
                         await loader.SaveState(state);
                     }

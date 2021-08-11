@@ -33,23 +33,13 @@ namespace IVLab.ABREngine
 {
     public class ABRStateParser
     {
-        private IABRStateLoader _loader;
-
-        public static ABRStateParser GetParser<T>()
+        public async Task<JObject> LoadState<T>(string name, JObject previousState)
         where T : IABRStateLoader, new()
-        {
-            T loader = new T();
-            ABRStateParser parser = new ABRStateParser();
-            parser._loader = (T)loader;
-            return parser;
-        }
-
-        public async Task<JObject> LoadState(string name, JObject previousState)
         {
             await ABREngine.Instance.WaitUntilInitialized();
             UnityThreadScheduler.GetInstance();
 
-            JObject stateJson = await _loader.GetState(name);
+            JObject stateJson = await (new T()).GetState(name);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
