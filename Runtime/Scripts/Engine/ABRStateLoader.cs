@@ -30,9 +30,9 @@ namespace IVLab.ABREngine
 {
     public interface IABRStateLoader
     {
-        Task<JObject> GetState(string name);
+        Task<JObject> GetState(string stateText);
 
-        Task SaveState(string serializedState);
+        Task SaveState(string name, string serializedState);
     }
 
     public class ResourceStateFileLoader : IABRStateLoader
@@ -51,7 +51,7 @@ namespace IVLab.ABREngine
             return JObject.Parse(textAsset?.text);
         }
 
-        public async Task SaveState(string serializedState)
+        public async Task SaveState(string name, string serializedState)
         {
             throw new NotImplementedException("States cannot be saved to Resources folder");
         }
@@ -63,20 +63,59 @@ namespace IVLab.ABREngine
 
         public async Task<JObject> GetState(string url)
         {
-            Debug.LogFormat("Loading state from {0}", url);
             HttpResponseMessage stateResponse = await ABREngine.httpClient.GetAsync(url);
             stateResponse.EnsureSuccessStatusCode();
             string fullStateJson = await stateResponse.Content.ReadAsStringAsync();
             return JObject.Parse(fullStateJson)["state"].ToObject<JObject>();
         }
 
-        public async Task SaveState(string serializedState)
+        public async Task SaveState(string name, string serializedState)
         {
             string stateUrl = ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer;
-            Debug.LogFormat("Saving state to {0}", stateUrl);
             ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(serializedState));
             HttpResponseMessage stateResponse = await ABREngine.httpClient.PutAsync(stateUrl, content);
             stateResponse.EnsureSuccessStatusCode();
+        }
+    }
+
+    public class TextStateFileLoader : IABRStateLoader
+    {
+        public TextStateFileLoader() { }
+
+        public async Task<JObject> GetState(string jsonText)
+        {
+            return await Task.Run(() => JObject.Parse(jsonText));
+        }
+
+        public async Task SaveState(string name, string serializedState)
+        {
+            throw new NotImplementedException("States cannot be saved to text");
+        }
+    }
+
+    public class PathStateFileLoader : IABRStateLoader
+    {
+        private string rootPath;
+        public PathStateFileLoader(string rootPath)
+        {
+            this.rootPath = rootPath;
+        }
+
+        public async Task<JObject> GetState(string stateFileName)
+        {
+            using (StreamReader reader = new StreamReader(Path.Combine(rootPath, stateFileName)))
+            {
+                string stateText = await reader.ReadToEndAsync();
+                return JObject.Parse(stateText);
+            }
+        }
+
+        public async Task SaveState(string name, string serializedState)
+        {
+            using (StreamWriter writer = new StreamWriter(Path.Combine(rootPath, name)))
+            {
+                await writer.WriteAsync(serializedState);
+            }
         }
     }
 }
