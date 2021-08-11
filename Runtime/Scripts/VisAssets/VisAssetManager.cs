@@ -73,9 +73,9 @@ namespace IVLab.ABREngine
             }
         }
 
-        public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
+        public bool TryGetVisAsset(Guid guid, out IVisAsset visAsset)
         {
-            _visAssets.TryGetValue(guid, out visAsset);
+            return _visAssets.TryGetValue(guid, out visAsset);
         }
 
         public async Task LoadVisAssetPalette()

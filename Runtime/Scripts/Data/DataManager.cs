@@ -59,15 +59,15 @@ namespace IVLab.ABREngine
             Debug.Log("Dataset Path: " + appDataPath);
         }
 
-        public void TryGetRawDataset(string dataPath, out RawDataset dataset)
+        public bool TryGetRawDataset(string dataPath, out RawDataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-            rawDatasets.TryGetValue(dataPath, out dataset);
+            return rawDatasets.TryGetValue(dataPath, out dataset);
         }
-        public void TryGetDataset(string dataPath, out Dataset dataset)
+        public bool TryGetDataset(string dataPath, out Dataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.Dataset);
-            datasets.TryGetValue(dataPath, out dataset);
+            return datasets.TryGetValue(dataPath, out dataset);
         }
         public List<Dataset> GetDatasets()
         {
