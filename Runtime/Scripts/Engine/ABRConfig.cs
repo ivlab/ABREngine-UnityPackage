@@ -61,6 +61,11 @@ namespace IVLab.ABREngine
             /// Dataset folder within media folder
             /// </summary>
             public const string DatasetFolder = "datasets";
+
+            /// <summary>
+            /// Name of VisAsset JSON specifier
+            /// </summary>
+            public const string VisAssetJson = "artifact.json";
         }
 
         public ABRConfigDefaults Defaults { get; private set; }

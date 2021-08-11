@@ -116,8 +116,8 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, "visassets"), Config.Info.loadResourceVisAssets);
-                    Data = new DataManager(Path.Combine(MediaPath, "datasets"));
+                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder), Config.Info.loadResourceVisAssets);
+                    Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
                     if (Config.Info.dataListenerPort != null)
                     {
                         DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
