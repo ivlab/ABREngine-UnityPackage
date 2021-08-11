@@ -37,10 +37,10 @@ namespace IVLab.ABREngine
             if (!EditorApplication.isPlaying)
             {
                 EditorGUILayout.LabelField("ABR Engine is Paused");
-                TextAsset configFile = Resources.Load<TextAsset>(ABRConfig.CONFIG_FILE);
+                TextAsset configFile = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFile);
                 if (configFile != null)
                 {
-                    EditorGUILayout.LabelField("Found config: " + ABRConfig.CONFIG_FILE);
+                    EditorGUILayout.LabelField("Found config: " + ABRConfig.Consts.ConfigFile);
                 }
                 else
                 {
