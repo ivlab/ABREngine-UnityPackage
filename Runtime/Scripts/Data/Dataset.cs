@@ -57,10 +57,11 @@ namespace IVLab.ABREngine
         public void AddKeyData(IKeyData keyData)
         {
             RawDataset rawDataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
-            Bounds originalBounds = rawDataset.bounds;
-
-            keyDataObjects[keyData.Path] = keyData;
+            if (ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset))
+            {
+                Bounds originalBounds = rawDataset.bounds;
+                keyDataObjects[keyData.Path] = keyData;
+            }
         }
 
         public void AddScalarVariable(ScalarDataVariable scalarVar)

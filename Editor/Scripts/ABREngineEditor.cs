@@ -59,8 +59,7 @@ namespace IVLab.ABREngine
                 foreach (Guid uuid in visassets)
                 {
                     IVisAsset va = null;
-                    ABREngine.Instance.VisAssets.TryGetVisAsset(uuid, out va);
-                    if (va != null)
+                    if (ABREngine.Instance.VisAssets.TryGetVisAsset(uuid, out va))
                     {
                         EditorGUILayout.LabelField("  " + uuid.ToString());
                         EditorGUILayout.LabelField("    Type: " + va.VisAssetType);

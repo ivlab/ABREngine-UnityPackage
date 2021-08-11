@@ -106,7 +106,10 @@ namespace IVLab.ABREngine
             else
             {
                 RawDataset dataset;
-                ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
+                if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
+                {
+                    return;
+                }
 
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 

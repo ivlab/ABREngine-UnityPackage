@@ -95,9 +95,14 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
-
-            return dataset.HasScalarArray(varName);
+            if (ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset))
+            {
+                return dataset.HasScalarArray(varName);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public float[] GetArray(IKeyData keyData) {
@@ -155,9 +160,14 @@ namespace IVLab.ABREngine
 
             // Get the raw dataset
             RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
-
-            return dataset.HasVectorArray(varName);
+            if (ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset))
+            {
+                return dataset.HasVectorArray(varName);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public Vector3[] GetArray(IKeyData keyData) {

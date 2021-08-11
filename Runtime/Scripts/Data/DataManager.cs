@@ -83,11 +83,9 @@ namespace IVLab.ABREngine
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
             await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                Dataset dataset;
-                TryGetDataset(datasetPath, out dataset);
-
                 // If we don't, create the dataset
-                if (dataset == null)
+                Dataset dataset;
+                if (!TryGetDataset(datasetPath, out dataset))
                 {
                     Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
@@ -208,9 +206,7 @@ namespace IVLab.ABREngine
             {
                 string scalarPath = DataPath.Join(scalarVarRoot, scalarArrayName);
                 ScalarDataVariable scalarDataVariable;
-                dataset.TryGetScalarVar(scalarPath, out scalarDataVariable);
-
-                if (scalarDataVariable == null)
+                if (!dataset.TryGetScalarVar(scalarPath, out scalarDataVariable))
                 {
                     // Create a new scalar variable
                     scalarDataVariable = new ScalarDataVariable(scalarPath);
@@ -239,9 +235,7 @@ namespace IVLab.ABREngine
             {
                 string vectorPath = DataPath.Join(vectorVarRoot, vectorArrayName);
                 VectorDataVariable vectorDataVariable;
-                dataset.TryGetVectorVar(vectorPath, out vectorDataVariable);
-
-                if (vectorDataVariable == null)
+                if (!dataset.TryGetVectorVar(vectorPath, out vectorDataVariable))
                 {
                     // Create a new vector variable
                     vectorDataVariable = new VectorDataVariable(vectorPath);
