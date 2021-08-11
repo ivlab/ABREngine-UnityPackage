@@ -24,7 +24,14 @@ using UnityEngine.Rendering;
 public class InstancedMeshRenderer : MonoBehaviour
 {
     public Matrix4x4[] instanceLocalTransforms;
-    public Vector4[] colors;
+    // Contains render info for each instance:
+    // x = scalar value - used in shader to apply color per instance
+    // y = 
+    // z = 
+    // a = whether or not instance should be rendered (a >= 0 -> RENDER, a < 0 -> DISCARD)
+    public Vector4[] renderInfo;
+    // Ratio of instances that are actually being rendered (not discarded) out of all instances
+    public float instanceDensity = 1.0f;
     public int instanceCount = 100000;
     public Mesh instanceMesh;
     public Material instanceMaterial;
@@ -33,7 +40,7 @@ public class InstancedMeshRenderer : MonoBehaviour
 
     public int cachedInstanceCount = -1;
     private int cachedSubMeshIndex = -1;
-    private ComputeBuffer colorBuffer;
+    private ComputeBuffer renderInfoBuffer;
     private ComputeBuffer transformBuffer;
     private ComputeBuffer transformBufferInverse;
 
@@ -89,7 +96,7 @@ public class InstancedMeshRenderer : MonoBehaviour
         {
             for(int i = 0; i < instanceLocalTransforms.Length; i++)
             {
-                block.SetColor("_Color", colors[i]);
+                block.SetColor("_RenderInfo", renderInfo[i]);
                 Graphics.DrawMesh(instanceMesh, transform.localToWorldMatrix* instanceLocalTransforms[i], instanceMaterial, 0, null, 0, block);
             }
         }
@@ -113,9 +120,9 @@ public class InstancedMeshRenderer : MonoBehaviour
             subMeshIndex = Mathf.Clamp(subMeshIndex, 0, instanceMesh.subMeshCount - 1);
 
         // Positions
-        if (colorBuffer != null)
-            colorBuffer.Release();
-        colorBuffer = new ComputeBuffer(instanceCount, 4 * 4);
+        if (renderInfoBuffer != null)
+            renderInfoBuffer.Release();
+        renderInfoBuffer = new ComputeBuffer(instanceCount, 4 * 4);
 
         if (transformBuffer != null)
             transformBuffer.Release();
@@ -132,17 +139,17 @@ public class InstancedMeshRenderer : MonoBehaviour
         {
             instanceLocalTransformsInverse[i] = instanceLocalTransforms[i].inverse;
         }
-        if (colors != null)
-            colorBuffer.SetData(colors);
+        if (renderInfo != null)
+            renderInfoBuffer.SetData(renderInfo);
         transformBuffer.SetData(instanceLocalTransforms);
         transformBufferInverse.SetData(instanceLocalTransformsInverse);
-        colorBuffer.SetData(colors);
+        renderInfoBuffer.SetData(renderInfo);
 
 
 
         block.SetBuffer("transformBuffer", transformBuffer);
         block.SetBuffer("transformBufferInverse", transformBufferInverse);
-        block.SetBuffer("colorBuffer", colorBuffer);
+        block.SetBuffer("renderInfoBuffer", renderInfoBuffer);
 
         // Indirect args
         if (instanceMesh != null)
@@ -164,9 +171,9 @@ public class InstancedMeshRenderer : MonoBehaviour
 
     void OnDisable()
     {
-        if (colorBuffer != null)
-            colorBuffer.Release();
-        colorBuffer = null;
+        if (renderInfoBuffer != null)
+            renderInfoBuffer.Release();
+        renderInfoBuffer = null;
 
         if (transformBuffer != null)
             transformBuffer.Release();

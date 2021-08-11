@@ -65,6 +65,9 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
+        [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
+        public PercentPrimitive glyphDensity;
+
         [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable forwardVariable;
 
@@ -324,7 +327,22 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetColor("_Color", Color.white);
 
                 imr.instanceLocalTransforms = SSrenderData.transforms;
-                imr.colors = SSrenderData.scalars;
+
+                // Initialize "render info" -- stores scalar values and info on whether
+                // or not glyphs should be rendered
+                Vector4[] glyphRenderInfo = SSrenderData.scalars;
+                // Get the glyph density
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                float glyphDensityOut = glyphDensity?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
+                glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
+                // Sample based on density
+                SampleGlyphs(glyphRenderInfo, (int)(glyphRenderInfo.Length * glyphDensityOut));
+                // Apply scalar/density changes to the instanced mesh renderer
+                imr.instanceDensity = glyphDensityOut;
+                imr.renderInfo = glyphRenderInfo;
+
                 if (colormap?.GetColorGradient() != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
@@ -396,19 +414,42 @@ namespace IVLab.ABREngine
                 imr.instanceMesh = mesh;
             }
 
+            // Initialize "render info" -- stores scalar values and info on whether
+            // or not glyphs should be rendered
+            Vector4[] glyphRenderInfo = new Vector4[numPoints];
+
+            // Re-sample based on glyph density, if it has changed
+            float glyphDensityOut = glyphDensity?.Value ??
+                config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
+            glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
+            if (imr.instanceDensity != glyphDensityOut)
+            {
+                // Sample number of glyphs based on density
+                int sampleSize = (int)(numPoints * glyphDensityOut);
+                SampleGlyphs(glyphRenderInfo, sampleSize);
+            }
+            // If the glyph density hasn't changed, use the previous sample of glyphs
+            else if (imr.renderInfo?.Length == glyphRenderInfo.Length)
+            {
+                glyphRenderInfo = imr.renderInfo;
+            }
+
             // Initialize variables to track scalar "styling" changes
-            Vector4[] scalars = new Vector4[numPoints];
             float colorVariableMin = colorVariable?.MinValue ?? 0.0f;
             float colorVariableMax = colorVariable?.MaxValue ?? 0.0f;
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 var colorScalars = colorVariable.GetArray(keyData);
                 for (int i = 0; i < numPoints; i++)
-                    scalars[i][0] = colorScalars[i];
+                {
+                    // Set the scalar value of the glyph used to apply colormap in shader
+                    glyphRenderInfo[i][0] = colorScalars[i];
+                }
             }
 
-            // Apply scalar changes to the instanced mesh renderer
-            imr.colors = scalars;
+            // Apply scalar/density changes to the instanced mesh renderer
+            imr.instanceDensity = glyphDensityOut;
+            imr.renderInfo = glyphRenderInfo;
 
             // Apply changes to the mesh's shader / material
             MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
@@ -436,6 +477,47 @@ namespace IVLab.ABREngine
             if (imr != null)
             {
                 imr.enabled = RenderHints.Visible;
+            }
+        }
+
+        // Samples k glyphs, modifying glyph render info so that only they will be rendered
+        // Uses reservoir sampling: (https://www.geeksforgeeks.org/reservoir-sampling/)
+        private void SampleGlyphs(Vector4[] glyphRenderInfo, int k)
+        {
+            // Total number of glyphs
+            int n = glyphRenderInfo.Length;
+
+            // Index for elements in renderInfo
+            int i;
+
+            // Indices into renderInfo array for the glyphs that have been selected
+            int[] idxReservoir = new int[k];
+
+
+            // Select first k glyphs to begin
+            for (i = 0; i < k; i++)
+            {
+                idxReservoir[i] = i;
+                glyphRenderInfo[i][3] = 1;  // render the glyph
+            }
+
+            // Iterate through the remaining glyphs
+            for (; i < n; i++)
+            {
+                int j = Random.Range(0, i + 1);
+                // Replace previous selections if the randomly
+                // picked index is smaller than k
+                if (j < k)
+                {
+                    glyphRenderInfo[idxReservoir[j]][3] = -1;  // discard the glyph
+                    idxReservoir[j] = i;
+                    glyphRenderInfo[i][3] = 1;  // render the glyph
+                }
+                // Otherwise unselect the glyph
+                else
+                {
+                    glyphRenderInfo[i][3] = -1;  // discard the glyph
+                }
             }
         }
     }
