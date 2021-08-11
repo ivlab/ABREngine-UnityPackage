@@ -429,7 +429,7 @@ namespace IVLab.ABREngine
         {
             int dotIndex = ABRConfig.Consts.VisAssetJson.IndexOf('.');
             VisAssetJson = ABRConfig.Consts.VisAssetJson.Substring(0, dotIndex);
-            ResourcePath = Path.Combine(ABREngine.Instance.Config.Info.mediaPath, ABRConfig.Consts.VisAssetFolder);
+            ResourcePath = ABRConfig.Consts.VisAssetFolder;
         }
 
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
