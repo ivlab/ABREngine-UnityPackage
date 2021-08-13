@@ -76,8 +76,8 @@ namespace IVLab.ABREngine
         public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
 
-        public DataRange<float> Range { get; set; }
-        public DataRange<float> OriginalRange { get; set; }
+        public DataRange<float> Range { get; set; } = new DataRange<float>();
+        public DataRange<float> OriginalRange { get; set; } = new DataRange<float>();
         public bool CustomizedRange { get; set; }
         public List<DataRange<float>> SpecificRanges { get; set; }
 
@@ -139,8 +139,8 @@ namespace IVLab.ABREngine
         public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
 
-        public DataRange<Vector3> Range { get; set; }
-        public DataRange<Vector3> OriginalRange { get; set; }
+        public DataRange<Vector3> Range { get; set; } = new DataRange<Vector3>();
+        public DataRange<Vector3> OriginalRange { get; set; } = new DataRange<Vector3>();
         public bool CustomizedRange { get; set; }
         public List<DataRange<Vector3>> SpecificRanges { get; set; }
 

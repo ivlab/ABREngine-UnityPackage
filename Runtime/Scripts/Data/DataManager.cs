@@ -156,8 +156,8 @@ namespace IVLab.ABREngine
                 {
                     // Create a new scalar variable
                     scalarDataVariable = new ScalarDataVariable(scalarPath);
-                    scalarDataVariable.MinValue = rawDataset.GetScalarMin(scalarArrayName);
-                    scalarDataVariable.MaxValue = rawDataset.GetScalarMax(scalarArrayName);
+                    scalarDataVariable.Range.min = rawDataset.GetScalarMin(scalarArrayName);
+                    scalarDataVariable.Range.max = rawDataset.GetScalarMax(scalarArrayName);
                     dataset.AddScalarVariable(scalarDataVariable);
                 }
                 else
@@ -166,13 +166,13 @@ namespace IVLab.ABREngine
                     // include the newly imported rawDataset
                     if (!scalarDataVariable.CustomizedRange)
                     {
-                        scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
-                        scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
+                        scalarDataVariable.Range.min = Mathf.Min(scalarDataVariable.Range.min, rawDataset.GetScalarMin(scalarArrayName));
+                        scalarDataVariable.Range.max = Mathf.Max(scalarDataVariable.Range.max, rawDataset.GetScalarMax(scalarArrayName));
                     }
                 }
 
-                scalarDataVariable.OriginalMinValue = scalarDataVariable.MinValue;
-                scalarDataVariable.OriginalMaxValue = scalarDataVariable.MaxValue;
+                scalarDataVariable.OriginalRange.min = scalarDataVariable.Range.min;
+                scalarDataVariable.OriginalRange.max = scalarDataVariable.Range.max;
             }
 
             // Import all vector variables
@@ -185,19 +185,19 @@ namespace IVLab.ABREngine
                 {
                     // Create a new vector variable
                     vectorDataVariable = new VectorDataVariable(vectorPath);
-                    vectorDataVariable.MinValue = rawDataset.GetVectorMin(vectorArrayName);
-                    vectorDataVariable.MaxValue = rawDataset.GetVectorMax(vectorArrayName);
+                    vectorDataVariable.Range.min = rawDataset.GetVectorMin(vectorArrayName);
+                    vectorDataVariable.Range.max = rawDataset.GetVectorMax(vectorArrayName);
                     dataset.AddVectorVariable(vectorDataVariable);
                 }
                 else
                 {
                     // TODO: Not implemented yet
-                    vectorDataVariable.MinValue = Vector3.zero;
-                    vectorDataVariable.MaxValue = Vector3.zero;
+                    vectorDataVariable.Range.min = Vector3.zero;
+                    vectorDataVariable.Range.max = Vector3.zero;
                 }
 
-                vectorDataVariable.OriginalMinValue = vectorDataVariable.MinValue;
-                vectorDataVariable.OriginalMaxValue = vectorDataVariable.MaxValue;
+                vectorDataVariable.OriginalRange.min = vectorDataVariable.Range.min;
+                vectorDataVariable.OriginalRange.max = vectorDataVariable.Range.max;
             }
         }
 

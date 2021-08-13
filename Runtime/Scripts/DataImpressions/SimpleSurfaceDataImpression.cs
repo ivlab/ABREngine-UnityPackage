@@ -186,8 +186,8 @@ namespace IVLab.ABREngine
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][0] = colorScalars[j];
 
-                    renderInfo.scalarMin[0] = colorVariable.MinValue;
-                    renderInfo.scalarMax[0] = colorVariable.MaxValue;
+                    renderInfo.scalarMin[0] = colorVariable.Range.min;
+                    renderInfo.scalarMax[0] = colorVariable.Range.max;
                 }
 
                 if (patternVariable != null && patternVariable.IsPartOf(keyData))
@@ -200,8 +200,8 @@ namespace IVLab.ABREngine
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][1] = scalars[j];
 
-                    renderInfo.scalarMin[1] = patternVariable.MinValue;
-                    renderInfo.scalarMax[1] = patternVariable.MaxValue;
+                    renderInfo.scalarMin[1] = patternVariable.Range.min;
+                    renderInfo.scalarMax[1] = patternVariable.Range.max;
 
                 }
 
@@ -410,8 +410,8 @@ namespace IVLab.ABREngine
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                     scalars[i][0] = colorScalars[j];
 
-                scalarMin[0] = colorVariable.MinValue;
-                scalarMax[0] = colorVariable.MaxValue;
+                scalarMin[0] = colorVariable.Range.min;
+                scalarMax[0] = colorVariable.Range.max;
             }
 
             // Record changes to pattern scalars if any occured
@@ -425,8 +425,8 @@ namespace IVLab.ABREngine
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                     scalars[i][1] = patternScalars[j];
 
-                scalarMin[1] = patternVariable.MinValue;
-                scalarMax[1] = patternVariable.MaxValue;
+                scalarMin[1] = patternVariable.Range.min;
+                scalarMax[1] = patternVariable.Range.max;
             }
 
             // Update the mesh to match recorded scalar changes

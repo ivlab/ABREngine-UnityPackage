@@ -124,8 +124,8 @@ namespace IVLab.ABREngine
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
                 float colorMin, colorMax;
-                colorMin = colorVariable?.MinValue ?? 0.0f;
-                colorMax = colorVariable?.MaxValue ?? 0.0f;
+                colorMin = colorVariable?.Range.min ?? 0.0f;
+                colorMax = colorVariable?.Range.max ?? 0.0f;
                 int numPoints = dataset.vertexArray.Length;
                 renderInfo = new PointRenderInfo
                 {
@@ -438,8 +438,9 @@ namespace IVLab.ABREngine
             }
 
             // Initialize variables to track scalar "styling" changes
-            float colorVariableMin = colorVariable?.MinValue ?? 0.0f;
-            float colorVariableMax = colorVariable?.MaxValue ?? 0.0f;
+            Vector4[] scalars = new Vector4[numPoints];
+            float colorVariableMin = colorVariable?.Range.min ?? 0.0f;
+            float colorVariableMax = colorVariable?.Range.max ?? 0.0f;
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 var colorScalars = colorVariable.GetArray(keyData);

@@ -162,8 +162,8 @@ namespace IVLab.ABREngine
                 if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     colorVariableArray = colorVariable.GetArray(keyData);
-                    renderInfo.scalarMin[0] = colorVariable.MinValue;
-                    renderInfo.scalarMax[0] = colorVariable.MaxValue;
+                    renderInfo.scalarMin[0] = colorVariable.Range.min;
+                    renderInfo.scalarMax[0] = colorVariable.Range.max;
                 }
 
                 for (int i = 0; i < numLines; i++)
@@ -464,8 +464,8 @@ namespace IVLab.ABREngine
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 colorVariableArray = colorVariable.GetArray(keyData);
-                scalarMin[0] = colorVariable.MinValue;
-                scalarMax[0] = colorVariable.MaxValue;
+                scalarMin[0] = colorVariable.Range.min;
+                scalarMax[0] = colorVariable.Range.max;
             }
 
             // Iterate through all line renderers and update their stylings
