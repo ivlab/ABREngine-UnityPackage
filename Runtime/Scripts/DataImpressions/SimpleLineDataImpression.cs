@@ -162,8 +162,18 @@ namespace IVLab.ABREngine
                 if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     colorVariableArray = colorVariable.GetArray(keyData);
-                    renderInfo.scalarMin[0] = colorVariable.Range.min;
-                    renderInfo.scalarMax[0] = colorVariable.Range.max;
+
+                    // Get keydata-specific range, if there is one
+                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                    {
+                        renderInfo.scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
+                        renderInfo.scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
+                    }
+                    else
+                    {
+                        renderInfo.scalarMin[0] = colorVariable.Range.min;
+                        renderInfo.scalarMax[0] = colorVariable.Range.max;
+                    }
                 }
 
                 for (int i = 0; i < numLines; i++)
@@ -464,8 +474,17 @@ namespace IVLab.ABREngine
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 colorVariableArray = colorVariable.GetArray(keyData);
-                scalarMin[0] = colorVariable.Range.min;
-                scalarMax[0] = colorVariable.Range.max;
+                // Get keydata-specific range, if there is one
+                if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                {
+                    scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
+                    scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    scalarMin[0] = colorVariable.Range.min;
+                    scalarMax[0] = colorVariable.Range.max;
+                }
             }
 
             // Iterate through all line renderers and update their stylings
