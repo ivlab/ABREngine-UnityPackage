@@ -246,12 +246,14 @@ namespace IVLab.ABREngine
                                 {
                                     ScalarDataVariable variable;
                                     dataset.TryGetScalarVar(value.inputValue, out variable);
+                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
                                 else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
+                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
 
@@ -381,28 +383,7 @@ namespace IVLab.ABREngine
                     }
                     // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
                     // - scalar range changed for the color variable of this impression:
-                    bool scalarRangeChanged = false;
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Color Variable") &&
-                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Color Variable"))
-                    {
-                        string scalarPath = impression.Value.inputValues["Color Variable"].inputValue;
-                        string keyDataPath = impression.Value.inputValues["Key Data"].inputValue;
-                        string prevScalarPath = previousImpression.inputValues["Color Variable"].inputValue;
-                        string prevKeyDataPath = previousImpression.inputValues["Key Data"].inputValue;
-                        if (state?.dataRanges?.scalarRanges?.ContainsKey(scalarPath) == true && previousABRState?.dataRanges?.scalarRanges?.ContainsKey(prevScalarPath) == true)
-                        {
-                            // Global scalar range has changed if its min or max has changed
-                            scalarRangeChanged = state?.dataRanges?.scalarRanges?[scalarPath]?.min != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.min ||
-                                                 state?.dataRanges?.scalarRanges?[scalarPath]?.max != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.max;
-                        }
-                        if (state?.dataRanges?.specificScalarRanges?.ContainsKey(keyDataPath) == true && previousABRState?.dataRanges?.specificScalarRanges?.ContainsKey(prevKeyDataPath) == true)
-                        {
-                            // Keydata-specific scalar range has changed if its min or max has changed
-                            scalarRangeChanged = scalarRangeChanged ||
-                                    state?.dataRanges?.specificScalarRanges?[keyDataPath][scalarPath]?.min != previousABRState?.dataRanges?.specificScalarRanges?[prevKeyDataPath][prevScalarPath]?.min ||
-                                    state?.dataRanges?.specificScalarRanges?[keyDataPath][scalarPath]?.max != previousABRState?.dataRanges?.specificScalarRanges?[prevKeyDataPath][prevScalarPath]?.max;
-                        }
-                    }
+                    bool scalarRangeChanged = state?.dataRanges?.Equals(previousABRState?.dataRanges) == false;
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
@@ -502,29 +483,6 @@ namespace IVLab.ABREngine
                                     // Add this key data to the list of specific data ranges (which override the above globally-defined ranges)
                                     variable.SpecificRanges[keyDataRange.Key] = scalarRange.Value;
                                     variable.CustomizedRange = true;
-
-                                    // Also remove any specific scalar ranges for this variable that are no longer in the state
-                                    List<string> kdToRemove = new List<string>();
-                                    foreach (var specRangeKeyData in variable.SpecificRanges.Keys)
-                                    {
-                                        if (state.dataRanges.specificScalarRanges.ContainsKey(specRangeKeyData))
-                                        {
-                                            if (!state.dataRanges.specificScalarRanges[specRangeKeyData].ContainsKey(scalarRange.Key))
-                                            {
-                                                kdToRemove.Add(specRangeKeyData);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            kdToRemove.Add(specRangeKeyData);
-                                        }
-                                    }
-
-                                    foreach (string kd in kdToRemove)
-                                    {
-                                        variable.SpecificRanges.Remove(kd);
-                                        Debug.Log("removed specific range " + kd);
-                                    }
                                 }
                             }
                         }
@@ -801,19 +759,31 @@ namespace IVLab.ABREngine
 
         public bool Equals(RawDataRanges other)
         {
+            if (other == null)
+            {
+                // Debug.Log("other was null");
+                return false;
+            }
             // First, go through scalarRanges
             if (this.scalarRanges != null)
             {
+                if (other.scalarRanges == null)
+                {
+                    // Debug.Log("other.scalarRanges was null");
+                    return false;
+                }
                 foreach (var path in this.scalarRanges)
                 {
                     if (!other.scalarRanges.ContainsKey(path.Key))
                     {
+                        // Debug.Log("other.scalarRanges didn't have scalar " + path.Key);
                         return false;
                     }
                     else
                     {
                         if (!this.scalarRanges[path.Key].Equals(other.scalarRanges[path.Key]))
                         {
+                            // Debug.LogFormat("other.scalarRanges key {0} didn't match {1}", other.scalarRanges[path.Key], this.scalarRanges[path.Key]);
                             return false;
                         }
                     }
@@ -823,10 +793,16 @@ namespace IVLab.ABREngine
             // Then, go through specificScalarRanges
             if (this.specificScalarRanges != null)
             {
+                if (other.specificScalarRanges != null)
+                {
+                    // Debug.Log("other.specificScalarRanges was null");
+                    return false;
+                }
                 foreach (var kdPath in this.specificScalarRanges)
                 {
                     if (!other.specificScalarRanges.ContainsKey(kdPath.Key))
                     {
+                        // Debug.Log("other.specificScalarRanges didn't have keydata path " + kdPath.Key);
                         return false;
                     }
                     else
@@ -837,12 +813,14 @@ namespace IVLab.ABREngine
                         {
                             if (!otherRanges.ContainsKey(path.Key))
                             {
+                                // Debug.Log("otherRanges didn't have scalar path " + path.Key);
                                 return false;
                             }
                             else
                             {
                                 if (!thisRanges[path.Key].Equals(otherRanges[path.Key]))
                                 {
+                                    // Debug.LogFormat("otherRanges key {0} didn't match {1}", otherRanges[path.Key], thisRanges[path.Key]);
                                     return false;
                                 }
                             }
