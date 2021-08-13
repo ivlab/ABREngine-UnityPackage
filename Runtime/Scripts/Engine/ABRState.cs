@@ -492,7 +492,7 @@ namespace IVLab.ABREngine
                                 if (dataset.TryGetScalarVar(scalarRange.Key, out variable))
                                 {
                                     // Add this key data to the list of specific data ranges (which override the above globally-defined ranges)
-                                    variable.SpecificRanges.Add(keyDataRange.Key, scalarRange.Value);
+                                    variable.SpecificRanges[keyDataRange.Key] = scalarRange.Value;
                                     variable.CustomizedRange = true;
 
                                     // Also remove any specific scalar ranges for this variable that are no longer in the state
@@ -515,6 +515,7 @@ namespace IVLab.ABREngine
                                     foreach (string kd in kdToRemove)
                                     {
                                         variable.SpecificRanges.Remove(kd);
+                                        Debug.Log("removed specific range " + kd);
                                     }
                                 }
                             }
@@ -591,7 +592,8 @@ namespace IVLab.ABREngine
                 };
                 RawDataRanges saveRanges = new RawDataRanges
                 {
-                    scalarRanges = new Dictionary<string, DataRange<float>>()
+                    scalarRanges = new Dictionary<string, DataRange<float>>(),
+                    specificScalarRanges = new Dictionary<string, Dictionary<string, DataRange<float>>>()
                 };
 
                 // Populate data impressions and groups
@@ -659,13 +661,20 @@ namespace IVLab.ABREngine
                                     ScalarDataVariable inputVar = input as ScalarDataVariable;
                                     if (inputVar.CustomizedRange)
                                     {
-                                        DataRange<float> scalarRange = new DataRange<float>
+                                        saveRanges.scalarRanges[inputVar.Path] = inputVar.Range;
+                                        foreach (var specificRange in inputVar.SpecificRanges)
                                         {
-                                            min = inputVar.Range.min,
-                                            max = inputVar.Range.max,
-                                        };
-                                        saveRanges.scalarRanges[inputVar.Path] = scalarRange;
-                                        // TODO: update keydata-specific scalar ranges
+                                            if (saveRanges.specificScalarRanges.ContainsKey(specificRange.Key))
+                                            {
+                                                saveRanges.specificScalarRanges[specificRange.Key][inputVar.Path] = specificRange.Value;
+                                            }
+                                            else
+                                            {
+                                                var tmp = new Dictionary<string, DataRange<float>>();
+                                                tmp.Add(inputVar.Path, inputVar.Range);
+                                                saveRanges.specificScalarRanges.Add(specificRange.Key, tmp);
+                                            }
+                                        }
                                     }
                                 }
                             }

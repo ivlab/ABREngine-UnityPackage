@@ -24,6 +24,11 @@ public class DataRange<T>
 {
     public T min;
     public T max;
+
+    public override string ToString()
+    {
+        return string.Format("DataRange({0}, {1})", min, max);
+    }
 }
 
 namespace IVLab.ABREngine
