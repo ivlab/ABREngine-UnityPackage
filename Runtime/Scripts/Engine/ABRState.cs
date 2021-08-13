@@ -793,6 +793,65 @@ namespace IVLab.ABREngine
 
         public Dictionary<string, DataRange<float>> scalarRanges;
         public Dictionary<string, Dictionary<string, DataRange<float>>> specificScalarRanges;
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as RawDataRanges);
+        }
+
+        public bool Equals(RawDataRanges other)
+        {
+            // First, go through scalarRanges
+            if (this.scalarRanges != null)
+            {
+                foreach (var path in this.scalarRanges)
+                {
+                    if (!other.scalarRanges.ContainsKey(path.Key))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (!this.scalarRanges[path.Key].Equals(other.scalarRanges[path.Key]))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            // Then, go through specificScalarRanges
+            if (this.specificScalarRanges != null)
+            {
+                foreach (var kdPath in this.specificScalarRanges)
+                {
+                    if (!other.specificScalarRanges.ContainsKey(kdPath.Key))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        var thisRanges = this.specificScalarRanges[kdPath.Key];
+                        var otherRanges = other.specificScalarRanges[kdPath.Key];
+                        foreach (var path in thisRanges)
+                        {
+                            if (!otherRanges.ContainsKey(path.Key))
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                if (!thisRanges[path.Key].Equals(otherRanges[path.Key]))
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
     }
 
     class RawImpressionGroup

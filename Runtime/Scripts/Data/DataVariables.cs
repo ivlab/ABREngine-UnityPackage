@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +25,22 @@ public class DataRange<T>
 {
     public T min;
     public T max;
+
+    public override bool Equals(object obj)
+    {
+        return this.Equals(obj as DataRange<T>);
+    }
+
+    public bool Equals(DataRange<T> other)
+    {
+        return this.max.Equals(other.max) && this.min.Equals(other.min);
+    }
+
+    public override int GetHashCode()
+    {
+        // HashCode is not available in the version of .NET Unity uses
+        return min.GetHashCode() + max.GetHashCode();
+    }
 
     public override string ToString()
     {
