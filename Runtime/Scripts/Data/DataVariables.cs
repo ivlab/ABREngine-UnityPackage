@@ -55,9 +55,9 @@ namespace IVLab.ABREngine
         bool CustomizedRange { get; set; }
 
         /// <summary>
-        /// List of keyData paths that have specific ranges for this variable
+        /// Dictionary of keyData paths that have specific ranges for this variable
         /// </summary>
-        List<DataRange<T>> SpecificRanges { get; set; }
+        Dictionary<string, DataRange<T>> SpecificRanges { get; set; }
 
         /// <summary>
         ///     Get the actual data values in the context of this particular Key
@@ -79,7 +79,7 @@ namespace IVLab.ABREngine
         public DataRange<float> Range { get; set; } = new DataRange<float>();
         public DataRange<float> OriginalRange { get; set; } = new DataRange<float>();
         public bool CustomizedRange { get; set; }
-        public List<DataRange<float>> SpecificRanges { get; set; }
+        public Dictionary<string, DataRange<float>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<float>>();
 
         public ScalarDataVariable(string path)
         {
@@ -142,7 +142,7 @@ namespace IVLab.ABREngine
         public DataRange<Vector3> Range { get; set; } = new DataRange<Vector3>();
         public DataRange<Vector3> OriginalRange { get; set; } = new DataRange<Vector3>();
         public bool CustomizedRange { get; set; }
-        public List<DataRange<Vector3>> SpecificRanges { get; set; }
+        public Dictionary<string, DataRange<Vector3>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<Vector3>>();
 
         public VectorDataVariable(string path)
         {

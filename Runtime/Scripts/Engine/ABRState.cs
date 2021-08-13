@@ -392,6 +392,7 @@ namespace IVLab.ABREngine
                             // Scalar range has changed if its min or max has changed
                             scalarRangeChanged = state?.dataRanges?.scalarRanges?[scalarPath]?.min != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.min ||
                                                  state?.dataRanges?.scalarRanges?[scalarPath]?.max != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.max;
+                            // TODO: Also account for a keydata specific range changing
                         }
                     }
                     // OR
@@ -453,21 +454,70 @@ namespace IVLab.ABREngine
             // Change any variable ranges that appear in the state
             if (state.dataRanges?.scalarRanges != null)
             {
+                // If it's a scalar var, set the globally-defined range in the data variable.
                 foreach (var scalarRange in state.dataRanges.scalarRanges)
                 {
-                    // Get the variable
                     string scalarPath = scalarRange.Key;
-                    DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
-                    Dataset dataset;
-                    if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset))
+                    if (DataPath.FollowsConvention(scalarPath, DataPath.DataPathType.ScalarVar))
                     {
-                        ScalarDataVariable variable;
-                        if (dataset.TryGetScalarVar(scalarPath, out variable))
+                        Dataset dataset;
+                        if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset))
                         {
-                            // Assign the min/max value from the state
-                            variable.MinValue = scalarRange.Value.min;
-                            variable.MaxValue = scalarRange.Value.max;
-                            variable.CustomizedRange = true;
+                            ScalarDataVariable variable;
+                            if (dataset.TryGetScalarVar(scalarPath, out variable))
+                            {
+                                // Assign the min/max value from the state
+                                variable.Range.min = scalarRange.Value.min;
+                                variable.Range.max = scalarRange.Value.max;
+                                variable.CustomizedRange = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (state.dataRanges?.specificScalarRanges != null)
+            {
+                // If it's key data, dig deeper to find this scalar var's actual range
+                foreach (var keyDataRange in state.dataRanges.specificScalarRanges)
+                {
+                    string keydataPath = keyDataRange.Key;
+                    if (DataPath.FollowsConvention(keydataPath, DataPath.DataPathType.KeyData))
+                    {
+                        foreach (var scalarRange in keyDataRange.Value)
+                        {
+                            Dataset dataset;
+                            if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarRange.Key), out dataset))
+                            {
+                                ScalarDataVariable variable;
+                                if (dataset.TryGetScalarVar(scalarRange.Key, out variable))
+                                {
+                                    // Add this key data to the list of specific data ranges (which override the above globally-defined ranges)
+                                    variable.SpecificRanges.Add(keyDataRange.Key, scalarRange.Value);
+                                    variable.CustomizedRange = true;
+
+                                    // Also remove any specific scalar ranges for this variable that are no longer in the state
+                                    List<string> kdToRemove = new List<string>();
+                                    foreach (var specRangeKeyData in variable.SpecificRanges.Keys)
+                                    {
+                                        if (state.dataRanges.specificScalarRanges.ContainsKey(specRangeKeyData))
+                                        {
+                                            if (!state.dataRanges.specificScalarRanges[specRangeKeyData].ContainsKey(scalarRange.Key))
+                                            {
+                                                kdToRemove.Add(specRangeKeyData);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            kdToRemove.Add(specRangeKeyData);
+                                        }
+                                    }
+
+                                    foreach (string kd in kdToRemove)
+                                    {
+                                        variable.SpecificRanges.Remove(kd);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -541,7 +591,7 @@ namespace IVLab.ABREngine
                 };
                 RawDataRanges saveRanges = new RawDataRanges
                 {
-                    scalarRanges = new Dictionary<string, RawDataRanges.RawRange<float>>()
+                    scalarRanges = new Dictionary<string, DataRange<float>>()
                 };
 
                 // Populate data impressions and groups
@@ -609,12 +659,13 @@ namespace IVLab.ABREngine
                                     ScalarDataVariable inputVar = input as ScalarDataVariable;
                                     if (inputVar.CustomizedRange)
                                     {
-                                        RawDataRanges.RawRange<float> scalarRange = new RawDataRanges.RawRange<float>
+                                        DataRange<float> scalarRange = new DataRange<float>
                                         {
-                                            min = inputVar.MinValue,
-                                            max = inputVar.MaxValue,
+                                            min = inputVar.Range.min,
+                                            max = inputVar.Range.max,
                                         };
                                         saveRanges.scalarRanges[inputVar.Path] = scalarRange;
+                                        // TODO: update keydata-specific scalar ranges
                                     }
                                 }
                             }
@@ -722,13 +773,9 @@ namespace IVLab.ABREngine
 
     class RawDataRanges
     {
-        public class RawRange<T>
-        {
-            public T min;
-            public T max;
-        }
 
-        public Dictionary<string, RawRange<float>> scalarRanges;
+        public Dictionary<string, DataRange<float>> scalarRanges;
+        public Dictionary<string, Dictionary<string, DataRange<float>>> specificScalarRanges;
     }
 
     class RawImpressionGroup
