@@ -386,13 +386,21 @@ namespace IVLab.ABREngine
                         previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Color Variable"))
                     {
                         string scalarPath = impression.Value.inputValues["Color Variable"].inputValue;
+                        string keyDataPath = impression.Value.inputValues["Key Data"].inputValue;
                         string prevScalarPath = previousImpression.inputValues["Color Variable"].inputValue;
+                        string prevKeyDataPath = previousImpression.inputValues["Key Data"].inputValue;
                         if (state?.dataRanges?.scalarRanges?.ContainsKey(scalarPath) == true && previousABRState?.dataRanges?.scalarRanges?.ContainsKey(prevScalarPath) == true)
                         {
-                            // Scalar range has changed if its min or max has changed
+                            // Global scalar range has changed if its min or max has changed
                             scalarRangeChanged = state?.dataRanges?.scalarRanges?[scalarPath]?.min != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.min ||
                                                  state?.dataRanges?.scalarRanges?[scalarPath]?.max != previousABRState?.dataRanges?.scalarRanges?[prevScalarPath]?.max;
-                            // TODO: Also account for a keydata specific range changing
+                        }
+                        if (state?.dataRanges?.specificScalarRanges?.ContainsKey(keyDataPath) == true && previousABRState?.dataRanges?.specificScalarRanges?.ContainsKey(prevKeyDataPath) == true)
+                        {
+                            // Keydata-specific scalar range has changed if its min or max has changed
+                            scalarRangeChanged = scalarRangeChanged ||
+                                    state?.dataRanges?.specificScalarRanges?[keyDataPath][scalarPath]?.min != previousABRState?.dataRanges?.specificScalarRanges?[prevKeyDataPath][prevScalarPath]?.min ||
+                                    state?.dataRanges?.specificScalarRanges?[keyDataPath][scalarPath]?.max != previousABRState?.dataRanges?.specificScalarRanges?[prevKeyDataPath][prevScalarPath]?.max;
                         }
                     }
                     // OR
