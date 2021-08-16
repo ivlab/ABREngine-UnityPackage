@@ -270,7 +270,7 @@ namespace IVLab.ABREngine
             RenderInfo = encodingRenderInfo;
         }
 
-        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject(EncodedGameObject currentGameObject)
         {
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
             if (currentGameObject == null)
@@ -278,6 +278,7 @@ namespace IVLab.ABREngine
                 return;
             }
 
+            // Ensure there's an ABR layer for this object
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
@@ -288,96 +289,28 @@ namespace IVLab.ABREngine
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleGlyphDataImpression", LayerName);
             }
 
-            MeshRenderer mr = currentGameObject.GetComponent<MeshRenderer>();
-            if (mr == null)
+            // Create mesh renderer and instanced mesh renderer
+            MeshRenderer mr = null;
+            InstancedMeshRenderer imr = null;
+            if (!currentGameObject.TryGetComponent<MeshRenderer>(out mr))
             {
                 mr = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-
-
-            if (colormap != null)
-            {
-                MatPropBlock.SetInt("_UseColorMap", 1);
-                MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
-            }
-            else
-            {
-                MatPropBlock.SetInt("_UseColorMap", 0);
-
-            }
-
-
-
-            InstancedMeshRenderer imr = currentGameObject.GetComponent<InstancedMeshRenderer>();
-            if (imr == null)
+            if (!currentGameObject.TryGetComponent<InstancedMeshRenderer>(out imr))
             {
                 imr = currentGameObject.gameObject.AddComponent<InstancedMeshRenderer>();
             }
-            imr.enabled = RenderHints.Visible;
-            imr.bounds = SSrenderData?.bounds ?? new Bounds();
 
-            int lod = glyphLod;
-            // if (ABRManager.IsValidNode(glyphLod))
-            // {
-            //     lod = (int)glyphLod.floatVal;
-            // }
-            if (glyph != null)
-            {
-
-                imr.instanceMesh = glyph.GetMesh(lod);
-                MatPropBlock.SetTexture("_Normal", glyph.GetNormalMap(lod));
-            }
-            else
-            {
-                Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
-                imr.instanceMesh = mesh;
-            }
-
-
-
+            // Setup instanced rendering based on computed geometry
             if (SSrenderData != null)
             {
-                MatPropBlock.SetFloat("_ColorDataMin", SSrenderData.colorVariableMin);
-                MatPropBlock.SetFloat("_ColorDataMax", SSrenderData.colorVariableMax);
-                MatPropBlock.SetColor("_Color", Color.white);
-
+                imr.bounds = SSrenderData.bounds;
                 imr.instanceLocalTransforms = SSrenderData.transforms;
-
-                // Initialize "render info" -- stores scalar values and info on whether
-                // or not glyphs should be rendered
-                Vector4[] glyphRenderInfo = SSrenderData.scalars;
-                // Get the glyph density
-                ABRConfig config = ABREngine.Instance.Config;
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-                float glyphDensityOut = glyphDensity?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
-                glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
-                // Sample based on density
-                SampleGlyphs(glyphRenderInfo, (int)(glyphRenderInfo.Length * glyphDensityOut));
-                // Apply scalar/density changes to the instanced mesh renderer
-                imr.instanceDensity = glyphDensityOut;
-                imr.renderInfo = glyphRenderInfo;
-
-                if (colormap?.GetColorGradient() != null)
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 0);
-                }
+                imr.renderInfo = SSrenderData.scalars;
+                imr.instanceMaterial = ImpressionMaterial;
+                imr.block = MatPropBlock;
+                imr.cachedInstanceCount = -1;
             }
-            else
-            {
-                imr.instanceLocalTransforms = new Matrix4x4[0];
-            }
-
-            imr.block = MatPropBlock;
-
-            imr.instanceMaterial = ImpressionMaterial;
-
-            imr.cachedInstanceCount = -1;
         }
 
         public override void UpdateStyling(EncodedGameObject currentGameObject)
