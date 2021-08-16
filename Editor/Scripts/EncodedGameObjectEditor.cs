@@ -1,7 +1,7 @@
-/* EncodedGameObject.cs
+/* EncodedGameObjectEditor.cs
  *
  * Copyright (c) 2021 University of Minnesota
- * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
+ * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using UnityEngine;
+using UnityEditor;
 
 namespace IVLab.ABREngine
 {
-    public class EncodedGameObject : MonoBehaviour
+    [CustomEditor(typeof(EncodedGameObject))]
+    public class EncodedGameObjectEditor : Editor
     {
-        public Guid Uuid { get; set; }
+        public override void OnInspectorGUI()
+        {
+            // Setup (get uuid, data impression)
+            EncodedGameObject script = (EncodedGameObject) target;
+            IDataImpression impression = ABREngine.Instance.GetDataImpression(script.Uuid);
+
+            EditorGUILayout.LabelField(impression.GetType().Name);
+            EditorGUILayout.LabelField("UUID: " + impression.Uuid);
+        }
     }
 }

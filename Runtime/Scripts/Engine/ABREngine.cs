@@ -37,6 +37,7 @@ namespace IVLab.ABREngine
         public JObject State { get { return previouslyLoadedState; }}
         private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
+        private ABRStateParser stateParser = null;
 
         private object _stateLock = new object();
         private object _stateUpdatingLock = new object();
@@ -87,6 +88,9 @@ namespace IVLab.ABREngine
             persistentDataPath = Application.persistentDataPath;
             base.Awake();
 
+            // Initialize state parser
+            stateParser = new ABRStateParser();
+
             // Initialize the configuration from ABRConfig.json
             Config = new ABRConfig();
 
@@ -112,8 +116,8 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, "visassets"), Config.Info.loadResourceVisAssets);
-                    Data = new DataManager(Path.Combine(MediaPath, "datasets"));
+                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder), Config.Info.loadResourceVisAssets);
+                    Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
                     if (Config.Info.dataListenerPort != null)
                     {
                         DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
@@ -132,6 +136,12 @@ namespace IVLab.ABREngine
                 )
                 {
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
+                }
+
+                // If a state in resources is specified, load it
+                if (Config.Info.loadStateOnStart != null)
+                {
+                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
                 }
                 _initialized = true;
             });
@@ -490,10 +500,9 @@ namespace IVLab.ABREngine
             }
             await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
-                ABRStateParser parser = ABRStateParser.GetParser<T>();
                 try
                 {
-                    JObject tempState = await parser.LoadState(stateName, previouslyLoadedState);
+                    JObject tempState = await stateParser.LoadState<T>(stateName, previouslyLoadedState);
                     lock (_stateLock)
                     {
                         previousStateName = stateName;
@@ -516,19 +525,19 @@ namespace IVLab.ABREngine
             });
         }
 
-        public async Task SaveStateAsync()
+        public async Task SaveStateAsync<T>()
+        where T : IABRStateLoader, new()
         {
-            HttpStateFileLoader loader = new HttpStateFileLoader();
-            ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
+            T loader = new T();
             try
             {
                 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
                     try
                     {
-                        string state = parser.SerializeState(previouslyLoadedState);
+                        string state = stateParser.SerializeState(previouslyLoadedState);
 
-                        await loader.SaveState(state);
+                        await loader.SaveState(previousStateName, state);
                     }
                     catch (Exception e)
                     {

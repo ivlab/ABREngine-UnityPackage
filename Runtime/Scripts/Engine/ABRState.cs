@@ -33,23 +33,13 @@ namespace IVLab.ABREngine
 {
     public class ABRStateParser
     {
-        private IABRStateLoader _loader;
-
-        public static ABRStateParser GetParser<T>()
+        public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
-        {
-            T loader = new T();
-            ABRStateParser parser = new ABRStateParser();
-            parser._loader = (T)loader;
-            return parser;
-        }
-
-        public async Task<JObject> LoadState(string name, JObject previousState)
         {
             await ABREngine.Instance.WaitUntilInitialized();
             UnityThreadScheduler.GetInstance();
 
-            JObject stateJson = await _loader.GetState(name);
+            JObject stateJson = await (new T()).GetState(stateText);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
@@ -170,8 +160,7 @@ namespace IVLab.ABREngine
                         // See if we already have the VisAsset; if not then load it
                         var visAssetUUID = new Guid(visAsset);
                         IVisAsset existing;
-                        ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
-                        if (existing == null)
+                        if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
                             await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                         }
@@ -190,17 +179,15 @@ namespace IVLab.ABREngine
                     {
                         // See if we already have the Raw Dataset; if not then load it
                         RawDataset existing;
-                        ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
-                        if (existing == null)
+                        if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                         {
-                            // Try to grab from cache
-                            await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
-                            ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
+                            // Try to grab from media dir
+                            await ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
 
                             // If not found in cache, load from data server, if there is one
-                            if (ABREngine.Instance.Config.Info.dataServer != null && existing == null)
+                            if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                             {
-                                await ABREngine.Instance.Data.LoadRawDatasetFromURL(rawData, ABREngine.Instance.Config.Info.dataServer);
+                                await ABREngine.Instance.Data.LoadRawDataset<HttpDataLoader>(rawData);
                             }
                         }
                     }
@@ -238,8 +225,7 @@ namespace IVLab.ABREngine
                                     continue;
                                 }
                                 IKeyData keyData;
-                                dataset.TryGetKeyData(value.inputValue, out keyData);
-                                if (keyData == null)
+                                if (!dataset.TryGetKeyData(value.inputValue, out keyData))
                                 {
                                     Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
                                     continue;
@@ -250,8 +236,7 @@ namespace IVLab.ABREngine
                             {
                                 string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                                 Dataset dataset;
-                                ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                                if (dataset == null)
+                                if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset))
                                 {
                                     Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
                                     continue;
@@ -474,14 +459,17 @@ namespace IVLab.ABREngine
                     string scalarPath = scalarRange.Key;
                     DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
                     Dataset dataset;
-                    ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset);
-                    ScalarDataVariable variable;
-                    dataset.TryGetScalarVar(scalarPath, out variable);
-
-                    // Assign the min/max value from the state
-                    variable.MinValue = scalarRange.Value.min;
-                    variable.MaxValue = scalarRange.Value.max;
-                    variable.CustomizedRange = true;
+                    if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset))
+                    {
+                        ScalarDataVariable variable;
+                        if (dataset.TryGetScalarVar(scalarPath, out variable))
+                        {
+                            // Assign the min/max value from the state
+                            variable.MinValue = scalarRange.Value.min;
+                            variable.MaxValue = scalarRange.Value.max;
+                            variable.CustomizedRange = true;
+                        }
+                    }
                 }
             }
 

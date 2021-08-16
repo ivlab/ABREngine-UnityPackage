@@ -73,9 +73,9 @@ namespace IVLab.ABREngine
             }
         }
 
-        public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)
+        public bool TryGetVisAsset(Guid guid, out IVisAsset visAsset)
         {
-            _visAssets.TryGetValue(guid, out visAsset);
+            return _visAssets.TryGetValue(guid, out visAsset);
         }
 
         public async Task LoadVisAssetPalette()
@@ -139,6 +139,14 @@ namespace IVLab.ABREngine
             {
                 Debug.LogError(e);
             }
+        }
+
+        /// <summary>
+        /// Get the UUIDs of every VisAsset that's been imported into ABR
+        /// </summary>
+        public List<Guid> GetVisAssets()
+        {
+            return _visAssets.Keys.ToList();
         }
     }
 }

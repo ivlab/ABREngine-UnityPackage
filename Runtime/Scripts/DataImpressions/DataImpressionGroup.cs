@@ -243,7 +243,10 @@ namespace IVLab.ABREngine
                         continue;
                     }
                     RawDataset rawDataset;
-                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
+                    if (!ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset))
+                    {
+                        continue;
+                    }
                     Bounds originalBounds = rawDataset.bounds;
 
                     if (ds.DataSpaceBounds.size.magnitude <= float.Epsilon)
@@ -340,7 +343,7 @@ namespace IVLab.ABREngine
             gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
 
             // Display the UUID in editor
-            gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);
+            gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;
         }
     }
 }

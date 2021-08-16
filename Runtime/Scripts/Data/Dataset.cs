@@ -57,10 +57,11 @@ namespace IVLab.ABREngine
         public void AddKeyData(IKeyData keyData)
         {
             RawDataset rawDataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset);
-            Bounds originalBounds = rawDataset.bounds;
-
-            keyDataObjects[keyData.Path] = keyData;
+            if (ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset))
+            {
+                Bounds originalBounds = rawDataset.bounds;
+                keyDataObjects[keyData.Path] = keyData;
+            }
         }
 
         public void AddScalarVariable(ScalarDataVariable scalarVar)
@@ -75,20 +76,20 @@ namespace IVLab.ABREngine
             vectorVariables[vectorVar.Path] = vectorVar;
         }
 
-        public void TryGetScalarVar(string dataPath, out ScalarDataVariable scalarVar)
+        public bool TryGetScalarVar(string dataPath, out ScalarDataVariable scalarVar)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.ScalarVar);
-            scalarVariables.TryGetValue(dataPath, out scalarVar);
+            return scalarVariables.TryGetValue(dataPath, out scalarVar);
         }
-        public void TryGetVectorVar(string dataPath, out VectorDataVariable vectorVar)
+        public bool TryGetVectorVar(string dataPath, out VectorDataVariable vectorVar)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.VectorVar);
-            vectorVariables.TryGetValue(dataPath, out vectorVar);
+            return vectorVariables.TryGetValue(dataPath, out vectorVar);
         }
-        public void TryGetKeyData(string dataPath, out IKeyData keyData)
+        public bool TryGetKeyData(string dataPath, out IKeyData keyData)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-            keyDataObjects.TryGetValue(dataPath, out keyData);
+            return keyDataObjects.TryGetValue(dataPath, out keyData);
         }
 
         public Dictionary<string, IKeyData> GetAllKeyData()

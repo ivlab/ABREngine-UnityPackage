@@ -20,5 +20,6 @@
     "loadResourceVisAssets": false,
     "dataServer": null,
     "dataListenerPort": null,
-    "mediaPath": null
+    "mediaPath": null,
+    "loadStateOnStart": null
 }

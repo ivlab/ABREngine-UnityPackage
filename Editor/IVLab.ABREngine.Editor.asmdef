@@ -1,0 +1,16 @@
+{
+    "name": "IVLab.ABREngine.Editor",
+    "references": [
+        "IVLab.ABREngine.Runtime",
+        "IVLab.Utilities.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

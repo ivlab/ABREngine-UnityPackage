@@ -59,19 +59,26 @@ namespace IVLab.ABREngine
             Debug.Log("Dataset Path: " + appDataPath);
         }
 
-        public void TryGetRawDataset(string dataPath, out RawDataset dataset)
+        public bool TryGetRawDataset(string dataPath, out RawDataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-            rawDatasets.TryGetValue(dataPath, out dataset);
+            return rawDatasets.TryGetValue(dataPath, out dataset);
         }
-        public void TryGetDataset(string dataPath, out Dataset dataset)
+        public bool TryGetDataset(string dataPath, out Dataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.Dataset);
-            datasets.TryGetValue(dataPath, out dataset);
+            return datasets.TryGetValue(dataPath, out dataset);
         }
         public List<Dataset> GetDatasets()
         {
             return datasets.Values.ToList();
+        }
+
+        public async Task LoadRawDataset<T>(string dataPath)
+        where T : IDataLoader, new()
+        {
+            RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
+            await ImportRawDataset(dataPath, ds);
         }
 
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
@@ -83,11 +90,9 @@ namespace IVLab.ABREngine
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
             await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                Dataset dataset;
-                TryGetDataset(datasetPath, out dataset);
-
                 // If we don't, create the dataset
-                if (dataset == null)
+                Dataset dataset;
+                if (!TryGetDataset(datasetPath, out dataset))
                 {
                     Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
@@ -99,67 +104,6 @@ namespace IVLab.ABREngine
                 ImportVariables(dataPath, importing, dataset);
                 ImportKeyData(dataPath, importing, dataset);
             });
-        }
-
-        public async Task LoadRawDatasetFromCache(string dataPath)
-        {
-            FileInfo jsonFile = GetRawDatasetMetadataFile(dataPath);
-            if (!jsonFile.Exists)
-            {
-                Debug.LogErrorFormat("Data path {0} does not exist!", jsonFile.ToString());
-                return;
-            }
-            else
-            {
-                Debug.Log("Loading " + dataPath + " from " + this.appDataPath);
-            }
-
-            string metadataContent = "";
-            using (StreamReader file = new StreamReader(jsonFile.FullName))
-            {
-                metadataContent = await file.ReadToEndAsync();
-            }
-
-            RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
-
-            FileInfo binFile = GetRawDatasetBinaryFile(dataPath);
-            // File.ReadAllBytesAsync doesn't exist in this version (2.0 Standard)
-            // of .NET apparently?
-            byte[] dataBytes = await Task.Run(() => File.ReadAllBytes(binFile.FullName));
-
-            RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-
-            RawDataset ds = new RawDataset(metadata, data);
-            await ImportRawDataset(dataPath, ds);
-        }
-
-        public async Task LoadRawDatasetFromURL(string dataPath, string url)
-        {
-            Debug.Log("Loading " + dataPath + " from " + url);
-            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-
-            try
-            {
-                HttpResponseMessage metadataResponse = await ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                string responseBody = await metadataResponse.Content.ReadAsStringAsync();
-
-                JToken metadataJson = JObject.Parse(responseBody)["metadata"];
-                RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
-
-                HttpResponseMessage dataResponse = await ABREngine.httpClient.GetAsync(url + "/data/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
-
-                RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-                RawDataset ds = new RawDataset(metadata, data);
-                await ImportRawDataset(dataPath, ds);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-
         }
 
         public async Task CacheRawDataset(string dataPath, string json, byte[] data)
@@ -208,9 +152,7 @@ namespace IVLab.ABREngine
             {
                 string scalarPath = DataPath.Join(scalarVarRoot, scalarArrayName);
                 ScalarDataVariable scalarDataVariable;
-                dataset.TryGetScalarVar(scalarPath, out scalarDataVariable);
-
-                if (scalarDataVariable == null)
+                if (!dataset.TryGetScalarVar(scalarPath, out scalarDataVariable))
                 {
                     // Create a new scalar variable
                     scalarDataVariable = new ScalarDataVariable(scalarPath);
@@ -239,9 +181,7 @@ namespace IVLab.ABREngine
             {
                 string vectorPath = DataPath.Join(vectorVarRoot, vectorArrayName);
                 VectorDataVariable vectorDataVariable;
-                dataset.TryGetVectorVar(vectorPath, out vectorDataVariable);
-
-                if (vectorDataVariable == null)
+                if (!dataset.TryGetVectorVar(vectorPath, out vectorDataVariable))
                 {
                     // Create a new vector variable
                     vectorDataVariable = new VectorDataVariable(vectorPath);

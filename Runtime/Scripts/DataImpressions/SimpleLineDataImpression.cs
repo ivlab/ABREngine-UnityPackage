@@ -115,7 +115,10 @@ namespace IVLab.ABREngine
             else
             {
                 RawDataset dataset;
-                ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset);
+                if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
+                {
+                    return;
+                }
 
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
@@ -447,7 +450,10 @@ namespace IVLab.ABREngine
             // Load the lines' dataset in order to obtain some key information about them 
             // (how many lines there are, how many points they are made out of, etc.)
             RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset);
+            if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
+            {
+                return;
+            }
             int numLines = dataset.cellIndexCounts.Length;
 
             // Initialize variables to track scalar "styling" changes
