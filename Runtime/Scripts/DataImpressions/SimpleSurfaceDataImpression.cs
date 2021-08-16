@@ -29,8 +29,6 @@ namespace IVLab.ABREngine
         public int[] indices;
         public Vector3[] normals;
         public Color[] scalars;
-        public Vector4 scalarMin;
-        public Vector4 scalarMax;
         public MeshTopology topology;
     }
 
@@ -132,8 +130,6 @@ namespace IVLab.ABREngine
                     indices = new int[numIndices],
                     scalars = new Color[numPoints],
                     normals = null,
-                    scalarMin = Vector4.zero,
-                    scalarMax = Vector4.zero,
                     topology = dataset.meshTopology
 
                 };
@@ -185,18 +181,6 @@ namespace IVLab.ABREngine
                     // Back faces
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][0] = colorScalars[j];
-
-                    // Get keydata-specific range, if there is one
-                    if (colorVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
-                        renderInfo.scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.Range.min;
-                        renderInfo.scalarMax[0] = colorVariable.Range.max;
-                    }
                 }
 
                 if (patternVariable != null && patternVariable.IsPartOf(keyData))
@@ -208,18 +192,6 @@ namespace IVLab.ABREngine
                     // Back faces
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][1] = scalars[j];
-
-                    // Get keydata-specific range, if there is one
-                    if (patternVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
-                    {
-                        renderInfo.scalarMin[1] = patternVariable.SpecificRanges[keyData.Path].min;
-                        renderInfo.scalarMax[1] = patternVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        renderInfo.scalarMin[1] = patternVariable.Range.min;
-                        renderInfo.scalarMax[1] = patternVariable.Range.max;
-                    }
                 }
 
                 for (int c = 0, i = 0; c < numCells; c++)
