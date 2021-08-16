@@ -64,7 +64,7 @@ namespace IVLab.ABREngine
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
-        protected override string MaterialName { get; } = "ABR_DataColoredMesh";
+        protected override string MaterialName { get; } = "ABR_Surface";
         protected override string LayerName { get; } = "ABR_Surface";
 
 

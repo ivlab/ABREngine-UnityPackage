@@ -74,7 +74,7 @@ namespace IVLab.ABREngine
         [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
 
-        protected override string MaterialName { get; } = "ABR_DataTextureRibbon";
+        protected override string MaterialName { get; } = "ABR_Ribbon";
         protected override string LayerName { get; } = "ABR_Line";
 
         /// <summary>

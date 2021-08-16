@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
 
         public int glyphLod = 1;
 
-        protected override string MaterialName { get; } = "ABR_DataGlyphs";
+        protected override string MaterialName { get; } = "ABR_Glyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
