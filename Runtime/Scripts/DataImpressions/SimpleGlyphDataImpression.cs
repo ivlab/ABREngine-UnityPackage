@@ -29,17 +29,6 @@ namespace IVLab.ABREngine
         public Bounds bounds;
     }
 
-    public class PointRenderInfo : IKeyDataRenderInfo
-    {
-        public Vector3[] positions;
-        public Quaternion[] orientations;
-        public Vector4[] scalars;
-        public float colorVariableMin;
-        public float colorVariableMax;
-        public Bounds bounds;
-    }
-
-
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
