@@ -34,9 +34,6 @@ namespace IVLab.ABREngine
         public Vector3[][] normals;
         public Color[][] scalars;
         public Vector2[][] uvs;
-
-        public Vector4 scalarMin;
-        public Vector4 scalarMax;
     }
 
     [ABRPlateType("Ribbons")]
@@ -108,8 +105,6 @@ namespace IVLab.ABREngine
                     scalars = new Color[0][],
                     normals = new Vector3[0][],
                     uvs = new Vector2[0][],
-                    scalarMax = Vector4.zero,
-                    scalarMin = Vector4.zero
                 };
             }
             else
@@ -152,8 +147,6 @@ namespace IVLab.ABREngine
                     scalars = new Color[numLines][],
                     normals = new Vector3[numLines][],
                     uvs = new Vector2[numLines][],
-                    scalarMax = Vector4.zero,
-                    scalarMin = Vector4.zero
                 };
 
                 int pointIndex = 0;
@@ -162,18 +155,6 @@ namespace IVLab.ABREngine
                 if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     colorVariableArray = colorVariable.GetArray(keyData);
-
-                    // Get keydata-specific range, if there is one
-                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
-                        renderInfo.scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.Range.min;
-                        renderInfo.scalarMax[0] = colorVariable.Range.max;
-                    }
                 }
 
                 for (int i = 0; i < numLines; i++)
