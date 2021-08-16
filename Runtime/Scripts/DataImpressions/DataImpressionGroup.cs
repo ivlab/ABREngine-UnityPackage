@@ -291,7 +291,9 @@ namespace IVLab.ABREngine
                         impression.Value.ComputeKeyDataRenderInfo();
                         impression.Value.ComputeRenderInfo();
                         Guid uuid = impression.Key;
-                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        // impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        impression.Value.SetupGameObject(gameObjectMapping[uuid]);
+                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
                         impression.Value.RenderHints.DataChanged = false;
                         impression.Value.RenderHints.StyleChanged = false;
                     }

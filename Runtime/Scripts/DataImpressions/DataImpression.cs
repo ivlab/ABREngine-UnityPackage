@@ -67,6 +67,8 @@ namespace IVLab.ABREngine
         /// </summary>
         void ApplyToGameObject(EncodedGameObject currentGameObject);
 
+        void SetupGameObject(EncodedGameObject currentGameObject);
+
         /// <summary>
         ///     Updates the "styling" of an impression
         /// </summary>
@@ -174,6 +176,8 @@ namespace IVLab.ABREngine
         public virtual void ComputeKeyDataRenderInfo() { }
 
         public virtual void ComputeRenderInfo() { }
+
+        public virtual void SetupGameObject(EncodedGameObject currentGameObject) { }
 
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
