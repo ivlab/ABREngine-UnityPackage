@@ -79,114 +79,121 @@ namespace IVLab.ABREngine
 
         public override void ComputeGeometry()
         {
-            if (keyData?.Path == null)
+            if (keyData == null)
             {
-                return;
-            }
-
-            RawDataset dataset;
-            if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
-            {
-                return;
-            }
-            DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
-
-            int numPoints = dataset.vertexArray.Length;
-
-            // Compute positions for each point, in room (Unity) space
-            Vector3[] positions = new Vector3[numPoints];
-            for (int i = 0; i < numPoints; i++)
-            {
-                positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
-            }
-
-            // Get up and forwards vectors at each point
-            Vector3[] dataForwards = null;
-            Vector3[] dataUp = null;
-            if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
-            {
-                dataForwards = forwardVariable.GetArray(keyData);
+                RenderInfo = new SimpleGlyphRenderInfo
+                {
+                    transforms = new Matrix4x4[0],
+                    scalars = new Vector4[0],
+                    bounds = new Bounds(),
+                };
             }
             else
             {
-                var rand = new System.Random(0);
-                dataForwards = new Vector3[numPoints];
+                RawDataset dataset;
+                if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
+                {
+                    return;
+                }
+                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
+
+                int numPoints = dataset.vertexArray.Length;
+
+                // Compute positions for each point, in room (Unity) space
+                Vector3[] positions = new Vector3[numPoints];
                 for (int i = 0; i < numPoints; i++)
                 {
-                    dataForwards[i] = new Vector3(
-                        (float)rand.NextDouble() * 2 - 1,
-                        (float)rand.NextDouble() * 2 - 1,
-                        (float)rand.NextDouble() * 2 - 1);
-                    // dataForwards[i] = new Vector3(0, 0, 1);
+                    positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
                 }
-            }
 
-            if (upVariable != null && upVariable.IsPartOf(keyData))
-            {
-                dataUp = upVariable.GetArray(keyData);
-            }
-            else
-            {
-                var rand = new System.Random(1);
-                dataUp = new Vector3[numPoints];
+                // Get up and forwards vectors at each point
+                Vector3[] dataForwards = null;
+                Vector3[] dataUp = null;
+                if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
+                {
+                    dataForwards = forwardVariable.GetArray(keyData);
+                }
+                else
+                {
+                    var rand = new System.Random(0);
+                    dataForwards = new Vector3[numPoints];
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        dataForwards[i] = new Vector3(
+                            (float)rand.NextDouble() * 2 - 1,
+                            (float)rand.NextDouble() * 2 - 1,
+                            (float)rand.NextDouble() * 2 - 1);
+                        // dataForwards[i] = new Vector3(0, 0, 1);
+                    }
+                }
+
+                if (upVariable != null && upVariable.IsPartOf(keyData))
+                {
+                    dataUp = upVariable.GetArray(keyData);
+                }
+                else
+                {
+                    var rand = new System.Random(1);
+                    dataUp = new Vector3[numPoints];
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        dataUp[i] = new Vector3(
+                            (float)rand.NextDouble() * 2 - 1,
+                            (float)rand.NextDouble() * 2 - 1,
+                            (float)rand.NextDouble() * 2 - 1);
+                        // dataUp[i] = new Vector3(0, 1, 0);
+                    }
+                }
+
+                // Compute orientations for each point
+                Quaternion[] orientations = new Quaternion[numPoints];
+                if (upVariable != null && forwardVariable != null)
+                { // Treat up as the more rigid constraint
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector3 rightAngleForward = Vector3.Cross(
+                            Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
+                            dataUp[i]
+                        ).normalized;
+
+                        Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
+                        orientations[i] = orientation;
+                    }
+                }
+                else // Treat forward as the more rigid constraint
+                {
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        Vector3 rightAngleUp = Vector3.Cross(
+                            Vector3.Cross(dataForwards[i], dataUp[i]).normalized,
+                            dataForwards[i]
+                        ).normalized;
+
+                        Quaternion orientation = Quaternion.LookRotation(dataForwards[i], rightAngleUp) * Quaternion.Euler(0, 180, 0);
+                        orientations[i] = orientation;
+                    }
+                }
+
+                var encodingRenderInfo = new SimpleGlyphRenderInfo()
+                {
+                    transforms = new Matrix4x4[numPoints],
+                    scalars = new Vector4[numPoints]
+                };
+
+                // Get glyph scale and apply to instance mesh renderer transform
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                float glyphScale = glyphSize?.Value ??
+                    config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
+
                 for (int i = 0; i < numPoints; i++)
                 {
-                    dataUp[i] = new Vector3(
-                        (float)rand.NextDouble() * 2 - 1,
-                        (float)rand.NextDouble() * 2 - 1,
-                        (float)rand.NextDouble() * 2 - 1);
-                    // dataUp[i] = new Vector3(0, 1, 0);
+                    encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
                 }
+                // Apply room-space bounds to renderer
+                encodingRenderInfo.bounds = group.GroupBounds;
+                RenderInfo = encodingRenderInfo;
             }
-
-            // Compute orientations for each point
-            Quaternion[] orientations = new Quaternion[numPoints];
-            if (upVariable != null && forwardVariable != null)
-            { // Treat up as the more rigid constraint
-                for (int i = 0; i < numPoints; i++)
-                {
-                    Vector3 rightAngleForward = Vector3.Cross(
-                        Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
-                        dataUp[i]
-                    ).normalized;
-
-                    Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
-                    orientations[i] = orientation;
-                }
-            }
-            else // Treat forward as the more rigid constraint
-            {
-                for (int i = 0; i < numPoints; i++)
-                {
-                    Vector3 rightAngleUp = Vector3.Cross(
-                        Vector3.Cross(dataForwards[i], dataUp[i]).normalized,
-                        dataForwards[i]
-                    ).normalized;
-
-                    Quaternion orientation = Quaternion.LookRotation(dataForwards[i], rightAngleUp) * Quaternion.Euler(0, 180, 0);
-                    orientations[i] = orientation;
-                }
-            }
-
-            var encodingRenderInfo = new SimpleGlyphRenderInfo()
-            {
-                transforms = new Matrix4x4[numPoints],
-                scalars = new Vector4[numPoints]
-            };
-
-            // Get glyph scale and apply to instance mesh renderer transform
-            ABRConfig config = ABREngine.Instance.Config;
-            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-            float glyphScale = glyphSize?.Value ??
-                config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
-
-            for (int i = 0; i < numPoints; i++)
-            {
-                encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
-            }
-            // Apply room-space bounds to renderer
-            encodingRenderInfo.bounds = group.GroupBounds;
-            RenderInfo = encodingRenderInfo;
         }
 
         public override void SetupGameObject(EncodedGameObject currentGameObject)
