@@ -326,13 +326,22 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject(EncodedGameObject currentGameObject)
         {
             var lineResources = RenderInfo as SimpleLineRenderInfo;
             if (currentGameObject == null || lineResources == null)
             {
                 return;
             }
+
+            // Find ABR Layer
+            int layerID = LayerMask.NameToLayer(LayerName);
+            if (layerID < 0)
+            {
+                Debug.LogWarningFormat("Could not find layer {0} for SimpleLineDataImpression", LayerName);
+            }
+
+            // Create a new GameObject for each line in the data, and return any unused ones to the pool
             int numLines = lineResources?.indices?.Length ?? 0;
             while (currentGameObject.transform.childCount < numLines)
             {
@@ -352,37 +361,31 @@ namespace IVLab.ABREngine
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
 
+            // Create mesh filters and renderers for each line
             for (int i = 0; i < numLines; i++)
             {
-
                 var renderObject = currentGameObject.transform.GetChild(i).gameObject;
-                var meshFilter = renderObject.GetComponent<MeshFilter>();
-                if (meshFilter == null)
+                MeshFilter meshFilter = null;
+                MeshRenderer meshRenderer = null;
+                if (!renderObject.TryGetComponent<MeshFilter>(out meshFilter))
+                {
                     meshFilter = renderObject.AddComponent<MeshFilter>();
+                }
 
-                var meshRenderer = renderObject.GetComponent<MeshRenderer>();
-                if (meshRenderer == null)
+                if (!renderObject.TryGetComponent<MeshRenderer>(out meshRenderer))
+                {
                     meshRenderer = renderObject.AddComponent<MeshRenderer>();
-                meshRenderer.enabled = RenderHints.Visible;
+                }
 
-                int layerID = LayerMask.NameToLayer(LayerName);
                 if (layerID >= 0)
                 {
                     renderObject.layer = layerID;
                 }
-                else
-                {
-                    Debug.LogWarningFormat("Could not find layer {0} for SimpleLineDataImpression", LayerName);
-                }
 
-                // SET MATERIAL STUFF
-
-
-
-                // build mesh from dataset arrays
+                // Build line mesh from computed geometry info
                 Mesh mesh = meshFilter.mesh;
                 if (mesh == null) mesh = new Mesh();
-                mesh.name = "LRS:368@" + DateTime.Now.ToString();
+                mesh.name = "SL:392@" + DateTime.Now.ToString();
 
                 mesh.Clear();
                 mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
@@ -393,56 +396,10 @@ namespace IVLab.ABREngine
                 mesh.uv = lineResources.uvs[i];
 
                 mesh.SetIndices(lineResources.indices[i], MeshTopology.Triangles, 0);
-
                 mesh.UploadMeshData(false);
 
-
                 meshFilter.mesh = mesh;
-
                 meshRenderer.material = ImpressionMaterial;
-
-                // Load defaults from configuration / schema
-                ABRConfig config = ABREngine.Instance.Config;
-
-                // Width appears double what it should be, so decrease to
-                // maintain the actual real world distance
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
-                float ribbonBrightnessOut = ribbonBrightness?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Ribbon Brightness").Value;
-
-                float textureCutoffOut = textureCutoff?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Texture Cutoff").Value;
-
-                meshRenderer.GetPropertyBlock(MatPropBlock);
-                MatPropBlock.SetColor("_Color", Color.white);
-                MatPropBlock.SetFloat("_TextureCutoff", textureCutoffOut);
-                MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightnessOut);
-
-                if (lineTexture != null)
-                {
-                    MatPropBlock.SetTexture("_Texture", lineTexture.Texture);
-                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.Texture.width / (float)lineTexture.Texture.height);
-                    MatPropBlock.SetInt("_UseLineTexture", 1);
-
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseLineTexture", 0);
-
-                }
-                MatPropBlock.SetFloat("_ColorDataMin", lineResources.scalarMin[0]);
-                MatPropBlock.SetFloat("_ColorDataMax", lineResources.scalarMax[0]);
-                if (colormap?.GetColorGradient() != null)
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 0);
-                }
-                meshRenderer.SetPropertyBlock(MatPropBlock);
             }
         }
 

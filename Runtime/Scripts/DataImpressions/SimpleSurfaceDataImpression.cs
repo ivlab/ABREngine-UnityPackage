@@ -266,7 +266,6 @@ namespace IVLab.ABREngine
             {
                 meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-            meshRenderer.enabled = RenderHints.Visible;
 
             // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
@@ -287,7 +286,7 @@ namespace IVLab.ABREngine
                 Mesh mesh = meshFilter.mesh;
                 if (mesh == null) mesh = new Mesh();
                 mesh.Clear();
-                mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
+                mesh.name = "SS:289@" + System.DateTime.Now.ToString();
 
                 mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 mesh.vertices = SSrenderData.vertices;
