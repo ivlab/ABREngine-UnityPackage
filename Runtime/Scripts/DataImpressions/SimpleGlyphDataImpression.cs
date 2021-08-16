@@ -88,7 +88,7 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeRenderInfo()
+        public override void ComputeGeometry()
         {
             if (keyData?.Path == null)
             {
@@ -104,7 +104,7 @@ namespace IVLab.ABREngine
 
             int numPoints = dataset.vertexArray.Length;
 
-            // Compute positions for each point
+            // Compute positions for each point, in room (Unity) space
             Vector3[] positions = new Vector3[numPoints];
             for (int i = 0; i < numPoints; i++)
             {
@@ -195,7 +195,8 @@ namespace IVLab.ABREngine
             {
                 encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
             }
-            encodingRenderInfo.bounds = dataset.bounds;
+            // Apply room-space bounds to renderer
+            encodingRenderInfo.bounds = group.GroupBounds;
             RenderInfo = encodingRenderInfo;
         }
 

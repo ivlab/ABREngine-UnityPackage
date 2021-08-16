@@ -90,9 +90,7 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeKeyDataRenderInfo() { }
-
-        public override void ComputeRenderInfo()
+        public override void ComputeGeometry()
         {
             SimpleLineRenderInfo renderInfo = null;
 

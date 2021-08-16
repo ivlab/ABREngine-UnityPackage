@@ -41,41 +41,25 @@ namespace IVLab.ABREngine
         ABRInputIndexerModule InputIndexer { get; }
 
         /// <summary>
-        ///     Performs any pre-calculations necessary to render this
-        ///     particular type of Key Data (for instance, the individual glyph
-        ///     positions for the InstanceMeshRenderer used in glyph rendering)
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
-        /// </summary>
-        void ComputeKeyDataRenderInfo();
-
-        /// <summary>
         ///     Populates rendering information (Geometry) for the
         ///     DataImpression
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
         /// </summary>
-        void ComputeRenderInfo();
+        void ComputeGeometry();
 
         /// <summary>
-        ///     Applies a DataImpression to a particular GameObject
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
+        ///     Takes geometric rendering information computed in
+        ///     `ComputeGeometry()` and sets up proper game object(s) and components
+        ///     for this Data Impression.
         /// </summary>
-        void ApplyToGameObject(EncodedGameObject currentGameObject);
-
         void SetupGameObject(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Updates the "styling" of an impression
+        ///     Updates the "styling" of an impression by sending each styling parameter to the shader
         /// </summary>
         void UpdateStyling(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Updates the visibility of an impression
+        ///     Updates the visibility of an impression (hidden or shown)
         /// </summary>
         void UpdateVisibility(EncodedGameObject currentGameObject);
 
@@ -173,13 +157,9 @@ namespace IVLab.ABREngine
 
         public DataImpression() : this(Guid.NewGuid().ToString()) { }
 
-        public virtual void ComputeKeyDataRenderInfo() { }
-
-        public virtual void ComputeRenderInfo() { }
+        public virtual void ComputeGeometry() { }
 
         public virtual void SetupGameObject(EncodedGameObject currentGameObject) { }
-
-        public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
         public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
 
