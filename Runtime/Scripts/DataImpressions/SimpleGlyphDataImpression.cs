@@ -20,16 +20,12 @@
 using System.Reflection;
 using UnityEngine;
 
-using IVLab.Utilities;
-
 namespace IVLab.ABREngine
 {
     class SimpleGlyphRenderInfo : IDataImpressionRenderInfo
     {
         public Matrix4x4[] transforms;
         public Vector4[] scalars;
-        public float colorVariableMin;
-        public float colorVariableMax;
         public Bounds bounds;
     }
 
@@ -92,181 +88,114 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeKeyDataRenderInfo()
+        public override void ComputeRenderInfo()
         {
             if (keyData?.Path == null)
             {
                 return;
             }
 
-            PointRenderInfo renderInfo;
-
-            if (keyData == null)
+            RawDataset dataset;
+            if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
             {
-                renderInfo = new PointRenderInfo
-                {
-                    positions = new Vector3[0],
-                    orientations = new Quaternion[0],
-                    scalars = new Vector4[0],
-                    colorVariableMin = 0,
-                    colorVariableMax = 0,
-                    bounds = new Bounds()
-                };
+                return;
+            }
+            DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
+
+            int numPoints = dataset.vertexArray.Length;
+
+            // Compute positions for each point
+            Vector3[] positions = new Vector3[numPoints];
+            for (int i = 0; i < numPoints; i++)
+            {
+                positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
+            }
+
+            // Get up and forwards vectors at each point
+            Vector3[] dataForwards = null;
+            Vector3[] dataUp = null;
+            if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
+            {
+                dataForwards = forwardVariable.GetArray(keyData);
             }
             else
             {
-                RawDataset dataset;
-                if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
-                {
-                    return;
-                }
-
-                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
-
-                float colorMin = 0.0f;
-                float colorMax = 0.0f;
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
-                {
-                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
-                    {
-                        colorMin = colorVariable.SpecificRanges[keyData.Path].min;
-                        colorMax = colorVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        colorMin = colorVariable.Range.min;
-                        colorMax = colorVariable.Range.max;
-                    }
-                }
-                int numPoints = dataset.vertexArray.Length;
-                renderInfo = new PointRenderInfo
-                {
-                    positions = new Vector3[numPoints],
-                    orientations = new Quaternion[numPoints],
-                    scalars = new Vector4[numPoints],
-                    colorVariableMin = colorMin,
-                    colorVariableMax = colorMax,
-                };
+                var rand = new System.Random(0);
+                dataForwards = new Vector3[numPoints];
                 for (int i = 0; i < numPoints; i++)
                 {
-                    renderInfo.positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
+                    dataForwards[i] = new Vector3(
+                        (float)rand.NextDouble() * 2 - 1,
+                        (float)rand.NextDouble() * 2 - 1,
+                        (float)rand.NextDouble() * 2 - 1);
+                    // dataForwards[i] = new Vector3(0, 0, 1);
                 }
+            }
 
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            if (upVariable != null && upVariable.IsPartOf(keyData))
+            {
+                dataUp = upVariable.GetArray(keyData);
+            }
+            else
+            {
+                var rand = new System.Random(1);
+                dataUp = new Vector3[numPoints];
+                for (int i = 0; i < numPoints; i++)
                 {
-                    var colorScalars = colorVariable.GetArray(keyData);
-                    for (int i = 0; i < numPoints; i++)
-                        renderInfo.scalars[i][0] = colorScalars[i];
-
+                    dataUp[i] = new Vector3(
+                        (float)rand.NextDouble() * 2 - 1,
+                        (float)rand.NextDouble() * 2 - 1,
+                        (float)rand.NextDouble() * 2 - 1);
+                    // dataUp[i] = new Vector3(0, 1, 0);
                 }
-                else { } // Leave the scalars as 0
+            }
 
-                Vector3[] dataForwards = null;
-                Vector3[] dataUp = null;
-
-                if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
+            // Compute orientations for each point
+            Quaternion[] orientations = new Quaternion[numPoints];
+            if (upVariable != null && forwardVariable != null)
+            { // Treat up as the more rigid constraint
+                for (int i = 0; i < numPoints; i++)
                 {
-                    dataForwards = forwardVariable.GetArray(keyData);
-                }
-                else
-                {
-                    var rand = new System.Random(0);
-                    dataForwards = new Vector3[numPoints];
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        dataForwards[i] = new Vector3(
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1);
-                        // dataForwards[i] = new Vector3(0, 0, 1);
-                    }
-                }
-
-                if (upVariable != null && upVariable.IsPartOf(keyData))
-                {
-                    dataUp = upVariable.GetArray(keyData);
-                }
-                else
-                {
-                    var rand = new System.Random(1);
-                    dataUp = new Vector3[numPoints];
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        dataUp[i] = new Vector3(
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1);
-                        // dataUp[i] = new Vector3(0, 1, 0);
-                    }
-                }
-
-                if (upVariable != null && forwardVariable != null)
-                { // Treat up as the more rigid constraint
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        Vector3 rightAngleForward = Vector3.Cross(
+                    Vector3 rightAngleForward = Vector3.Cross(
                         Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
-                        dataUp[i]).normalized;
+                        dataUp[i]
+                    ).normalized;
 
-                        Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
-                        renderInfo.orientations[i] = orientation;
-                    }
+                    Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
+                    orientations[i] = orientation;
                 }
-                else // Treat forward as the more rigid constraint
+            }
+            else // Treat forward as the more rigid constraint
+            {
+                for (int i = 0; i < numPoints; i++)
                 {
-                    for (int i = 0; i < numPoints; i++)
-                    {
+                    Vector3 rightAngleUp = Vector3.Cross(
+                        Vector3.Cross(dataForwards[i], dataUp[i]).normalized,
+                        dataForwards[i]
+                    ).normalized;
 
-                        Vector3 rightAngleUp = Vector3.Cross(
-                            Vector3.Cross(dataForwards[i], dataUp[i]).normalized,
-                            dataForwards[i]).normalized;
-
-                        Quaternion orientation = Quaternion.LookRotation(dataForwards[i], rightAngleUp) * Quaternion.Euler(0, 180, 0);
-                        renderInfo.orientations[i] = orientation;
-                    }
+                    Quaternion orientation = Quaternion.LookRotation(dataForwards[i], rightAngleUp) * Quaternion.Euler(0, 180, 0);
+                    orientations[i] = orientation;
                 }
-
-                renderInfo.bounds = dataset?.bounds ?? new Bounds();
             }
-
-            KeyDataRenderInfo = renderInfo;
-        }
-
-        public override void ComputeRenderInfo()
-        {
-            var dataRenderInfo = KeyDataRenderInfo as PointRenderInfo;
-            if (dataRenderInfo == null) {
-                return;
-            }
-
-            int numPoints = dataRenderInfo.scalars.Length;
 
             var encodingRenderInfo = new SimpleGlyphRenderInfo()
             {
                 transforms = new Matrix4x4[numPoints],
-                scalars = dataRenderInfo.scalars,
-                colorVariableMin = dataRenderInfo.colorVariableMin,
-                colorVariableMax = dataRenderInfo.colorVariableMax
+                scalars = new Vector4[numPoints]
             };
 
-            // Load defaults from configuration / schema
+            // Get glyph scale and apply to instance mesh renderer transform
             ABRConfig config = ABREngine.Instance.Config;
-
-            // Width appears double what it should be, so decrease to
-            // maintain the actual real world distance
             string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
             float glyphScale = glyphSize?.Value ??
                 config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
 
-
             for (int i = 0; i < numPoints; i++)
             {
-
-                encodingRenderInfo.transforms[i] = Matrix4x4.TRS(dataRenderInfo.positions[i], dataRenderInfo.orientations[i], Vector3.one * glyphScale);
-
+                encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
             }
-            encodingRenderInfo.bounds = dataRenderInfo.bounds;
+            encodingRenderInfo.bounds = dataset.bounds;
             RenderInfo = encodingRenderInfo;
         }
 
