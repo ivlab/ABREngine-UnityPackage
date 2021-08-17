@@ -22,7 +22,13 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class SurfaceTextureVisAsset : VisAsset
+    public interface ISurfaceTextureVisAsset
+    {
+        Texture2D Texture { get; set; }
+        Texture2D NormalMap { get; set; }
+    }
+
+    public class SurfaceTextureVisAsset : VisAsset, ISurfaceTextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.SurfaceTexture;
 
