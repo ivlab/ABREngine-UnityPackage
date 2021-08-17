@@ -87,5 +87,10 @@ namespace IVLab.ABREngine
         public LineKeyData(string path) : base(path) { }
     }
 
+    public class VolumeKeyData : KeyData, IKeyData
+    {
+        public VolumeKeyData(string path) : base(path) { }
+    }
+
     public interface IKeyDataRenderInfo { }
 }

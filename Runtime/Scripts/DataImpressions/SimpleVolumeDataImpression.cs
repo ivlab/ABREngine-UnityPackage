@@ -38,7 +38,7 @@ namespace IVLab.ABREngine
 	public class SimpleVolumeDataImpression : DataImpression, IDataImpression
 	{
 		[ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-		public PointKeyData keyData;
+		public VolumeKeyData keyData;
 
 		[ABRInput("Color Variable", "Color", UpdateLevel.Style)]
 		public ScalarDataVariable colorVariable;
@@ -416,8 +416,8 @@ namespace IVLab.ABREngine
 				prevControlPoint = nextControlPoint;
 				prevValue = new FloatPrimitive(opacitymap.Values[i]).Value;
 			}
-            // Fill remaining pixels with black
-            for (int p = prevControlPoint; p < width; p++)
+			// Fill remaining pixels with black
+			for (int p = prevControlPoint; p < width; p++)
 			{
 				pixelColors[p] = (p == prevControlPoint) ? new Color(prevValue, prevValue, prevValue) : Color.black;
 			}
@@ -431,7 +431,7 @@ namespace IVLab.ABREngine
 				}
 			}
 
-            // Apply pixels to shader
+			// Apply pixels to shader
 			result.SetPixels(pixelColors);
 			result.Apply(false);
 
