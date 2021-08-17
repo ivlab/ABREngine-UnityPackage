@@ -37,6 +37,21 @@ namespace IVLab.ABREngine
         VisAssetType VisAssetType { get; }
     }
 
+    public interface IVisAssetGradient<T> : IVisAsset
+    {
+        /// <summary>
+        /// Get the VisAsset at a particular index in the gradient (e.g. get the
+        /// 3rd glyph in this set)
+        /// </summary>
+        T Get(int index);
+
+        /// <summary>
+        /// Get the VisAsset a particular percentage of the way through the
+        /// gradient (e.g. get the glyph that's at 50% through the gradient)
+        /// </summary>
+        T Get(float percentage);
+    }
+
     public class VisAsset : IVisAsset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;
