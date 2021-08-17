@@ -186,8 +186,17 @@ namespace IVLab.ABREngine
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][0] = colorScalars[j];
 
-                    renderInfo.scalarMin[0] = colorVariable.MinValue;
-                    renderInfo.scalarMax[0] = colorVariable.MaxValue;
+                    // Get keydata-specific range, if there is one
+                    if (colorVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
+                    {
+                        renderInfo.scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
+                        renderInfo.scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
+                    }
+                    else
+                    {
+                        renderInfo.scalarMin[0] = colorVariable.Range.min;
+                        renderInfo.scalarMax[0] = colorVariable.Range.max;
+                    }
                 }
 
                 if (patternVariable != null && patternVariable.IsPartOf(keyData))
@@ -200,9 +209,17 @@ namespace IVLab.ABREngine
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][1] = scalars[j];
 
-                    renderInfo.scalarMin[1] = patternVariable.MinValue;
-                    renderInfo.scalarMax[1] = patternVariable.MaxValue;
-
+                    // Get keydata-specific range, if there is one
+                    if (patternVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
+                    {
+                        renderInfo.scalarMin[1] = patternVariable.SpecificRanges[keyData.Path].min;
+                        renderInfo.scalarMax[1] = patternVariable.SpecificRanges[keyData.Path].max;
+                    }
+                    else
+                    {
+                        renderInfo.scalarMin[1] = patternVariable.Range.min;
+                        renderInfo.scalarMax[1] = patternVariable.Range.max;
+                    }
                 }
 
                 for (int c = 0, i = 0; c < numCells; c++)
@@ -410,8 +427,17 @@ namespace IVLab.ABREngine
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                     scalars[i][0] = colorScalars[j];
 
-                scalarMin[0] = colorVariable.MinValue;
-                scalarMax[0] = colorVariable.MaxValue;
+                // Get keydata-specific range, if there is one
+                if (colorVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
+                {
+                    scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
+                    scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    scalarMin[0] = colorVariable.Range.min;
+                    scalarMax[0] = colorVariable.Range.max;
+                }
             }
 
             // Record changes to pattern scalars if any occured
@@ -425,8 +451,17 @@ namespace IVLab.ABREngine
                 for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                     scalars[i][1] = patternScalars[j];
 
-                scalarMin[1] = patternVariable.MinValue;
-                scalarMax[1] = patternVariable.MaxValue;
+                // Get keydata-specific range, if there is one
+                if (patternVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
+                {
+                    scalarMin[1] = patternVariable.SpecificRanges[keyData.Path].min;
+                    scalarMax[1] = patternVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    scalarMin[1] = patternVariable.Range.min;
+                    scalarMax[1] = patternVariable.Range.max;
+                }
             }
 
             // Update the mesh to match recorded scalar changes

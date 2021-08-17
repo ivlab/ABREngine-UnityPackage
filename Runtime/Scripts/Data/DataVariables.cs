@@ -17,7 +17,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+public class DataRange<T>
+{
+    public T min;
+    public T max;
+
+    public override bool Equals(object obj)
+    {
+        return this.Equals(obj as DataRange<T>);
+    }
+
+    public bool Equals(DataRange<T> other)
+    {
+        return this.max.Equals(other.max) && this.min.Equals(other.min);
+    }
+
+    public override int GetHashCode()
+    {
+        // HashCode is not available in the version of .NET Unity uses
+        return min.GetHashCode() + max.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return string.Format("DataRange({0}, {1})", min, max);
+    }
+}
 
 namespace IVLab.ABREngine
 {
@@ -29,35 +58,28 @@ namespace IVLab.ABREngine
         string Path { get; }
 
         /// <summary>
-        ///     MinValue is calculated by the DataManager when it imports a new
-        ///     dataset. MinValue is the smallest value encountered across every
-        ///     instance of this variable, across all datasets.
+        ///     Range is calculated by the DataManager when it imports a new
+        ///     dataset. Range is calculated from the smallest/largest values
+        ///     encountered across every instance of this variable, across all
+        ///     datasets.
         /// </summary>
-        T MinValue { get; set; }
+        DataRange<T> Range { get; set; }
 
         /// <summary>
-        ///     MaxValue is calculated by the DataManager when it imports a new
-        ///     dataset. MaxValue is the largest value encountered across every
-        ///     instance of this variable, across all datasets.
-        /// </summary>
-        T MaxValue { get; set; }
-
-        /// <summary>
-        ///     Save the original min value in case the user wants to reset it
+        ///     Save the original range in case the user wants to reset it
         ///     later.
         /// </summary>
-        T OriginalMinValue { get; set; }
-
-        /// <summary>
-        ///     Save the original max value in case the user wants to reset it
-        ///     later.
-        /// </summary>
-        T OriginalMaxValue { get; set; }
+        DataRange<T> OriginalRange { get; set; }
 
         /// <summary>
         ///     Have this var's ranges been customized?
         /// </summary>
         bool CustomizedRange { get; set; }
+
+        /// <summary>
+        /// Dictionary of keyData paths that have specific ranges for this variable
+        /// </summary>
+        Dictionary<string, DataRange<T>> SpecificRanges { get; set; }
 
         /// <summary>
         ///     Get the actual data values in the context of this particular Key
@@ -75,13 +97,11 @@ namespace IVLab.ABREngine
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
-        public float MinValue { get; set; }
-        public float MaxValue { get; set; }
 
-        public float OriginalMinValue { get; set; }
-        public float OriginalMaxValue { get; set; }
-
+        public DataRange<float> Range { get; set; } = new DataRange<float>();
+        public DataRange<float> OriginalRange { get; set; } = new DataRange<float>();
         public bool CustomizedRange { get; set; }
+        public Dictionary<string, DataRange<float>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<float>>();
 
         public ScalarDataVariable(string path)
         {
@@ -140,13 +160,11 @@ namespace IVLab.ABREngine
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.Variable;
         public string Path { get; }
-        public Vector3 MinValue { get; set; }
-        public Vector3 MaxValue { get; set; }
 
-        public Vector3 OriginalMinValue { get; set; }
-        public Vector3 OriginalMaxValue { get; set; }
-
+        public DataRange<Vector3> Range { get; set; } = new DataRange<Vector3>();
+        public DataRange<Vector3> OriginalRange { get; set; } = new DataRange<Vector3>();
         public bool CustomizedRange { get; set; }
+        public Dictionary<string, DataRange<Vector3>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<Vector3>>();
 
         public VectorDataVariable(string path)
         {

@@ -123,9 +123,21 @@ namespace IVLab.ABREngine
 
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
-                float colorMin, colorMax;
-                colorMin = colorVariable?.MinValue ?? 0.0f;
-                colorMax = colorVariable?.MaxValue ?? 0.0f;
+                float colorMin = 0.0f;
+                float colorMax = 0.0f;
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
+                {
+                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                    {
+                        colorMin = colorVariable.SpecificRanges[keyData.Path].min;
+                        colorMax = colorVariable.SpecificRanges[keyData.Path].max;
+                    }
+                    else
+                    {
+                        colorMin = colorVariable.Range.min;
+                        colorMax = colorVariable.Range.max;
+                    }
+                }
                 int numPoints = dataset.vertexArray.Length;
                 renderInfo = new PointRenderInfo
                 {
@@ -438,8 +450,25 @@ namespace IVLab.ABREngine
             }
 
             // Initialize variables to track scalar "styling" changes
-            float colorVariableMin = colorVariable?.MinValue ?? 0.0f;
-            float colorVariableMax = colorVariable?.MaxValue ?? 0.0f;
+            Vector4[] scalars = new Vector4[numPoints];
+
+            // Get keydata-specific range, if there is one
+            float colorVariableMin = 0.0f;
+            float colorVariableMax = 0.0f;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                {
+                    colorVariableMin = colorVariable.SpecificRanges[keyData.Path].min;
+                    colorVariableMax = colorVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    colorVariableMin = colorVariable.Range.min;
+                    colorVariableMax = colorVariable.Range.max;
+                }
+            }
+
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 var colorScalars = colorVariable.GetArray(keyData);
