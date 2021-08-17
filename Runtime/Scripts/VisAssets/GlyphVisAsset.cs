@@ -23,7 +23,13 @@ using System.Collections.Generic;
 
 namespace IVLab.ABREngine
 {
-    public class GlyphVisAsset : VisAsset
+    public interface IGlyphVisAsset
+    {
+        Mesh GetMesh(int lod);
+        Texture2D GetNormalMap(int lod);
+    }
+
+    public class GlyphVisAsset : VisAsset, IGlyphVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
 

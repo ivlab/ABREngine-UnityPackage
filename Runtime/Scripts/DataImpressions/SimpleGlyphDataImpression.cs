@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable glyphVariable;
 
         [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
-        public GlyphVisAsset glyph;
+        public IGlyphVisAsset glyph;
 
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
