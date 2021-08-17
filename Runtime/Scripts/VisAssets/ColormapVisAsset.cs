@@ -22,7 +22,12 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class ColormapVisAsset : VisAsset
+    public interface IColormapVisAsset
+    {
+        Texture2D GetColorGradient();
+    }
+
+    public class ColormapVisAsset : VisAsset, IColormapVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
 
