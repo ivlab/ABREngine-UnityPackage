@@ -84,6 +84,10 @@ namespace IVLab.ABREngine
 
         protected override void Awake()
         {
+            // Enable depth texture write on main cam so that volume rendering
+            // functions correctly
+            Camera.main.depthTextureMode = DepthTextureMode.Depth;
+
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             base.Awake();
