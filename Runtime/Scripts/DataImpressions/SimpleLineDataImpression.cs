@@ -67,7 +67,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
-        public LineTextureVisAsset lineTexture;
+        public ILineTextureVisAsset lineTexture;
 
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;

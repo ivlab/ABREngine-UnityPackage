@@ -22,7 +22,12 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class LineTextureVisAsset : VisAsset
+    public interface ILineTextureVisAsset
+    {
+        Texture2D Texture { get; set; }
+    }
+
+    public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.LineTexture;
 
