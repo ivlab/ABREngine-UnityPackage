@@ -565,8 +565,8 @@ namespace IVLab.ABREngine
                     lightParent = new GameObject("ABRLightParent");
                     lightParent.transform.parent = GameObject.Find("ABREngine").transform;
                 }
-                if (lightParent.GetComponent<LightManager>() == null)
-                    lightParent.AddComponent<LightManager>();
+                if (lightParent.GetComponent<VolumeLightManager>() == null)
+                    lightParent.AddComponent<VolumeLightManager>();
 
                 foreach (var light in state.scene.lighting)
                 {

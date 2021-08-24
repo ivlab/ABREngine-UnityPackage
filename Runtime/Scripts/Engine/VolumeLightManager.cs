@@ -1,4 +1,4 @@
-/* LightManager.cs
+/* VolumeLightManager.cs
  *
  * Copyright (c) 2021 University of Minnesota
  * Author: Matthias Broske <brosk014@umn.edu>
@@ -21,7 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightManager : MonoBehaviour
+public class VolumeLightManager : MonoBehaviour
 {
     private Material volumeMaterial;
     private Vector4[] lightViewSpaceDirections = new Vector4[3];
