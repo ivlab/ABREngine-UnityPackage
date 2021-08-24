@@ -22,7 +22,7 @@ Shader "ABR/DataVolume"
 {
 	Properties
 	{
-		// __ Inspector visible inputs for testing purposes ___________________
+		// __ Inspector visible inputs for debugging purposes _________________
 		_VolumeTexture("Volume Texture", 3D) = "white" {}
 		[MaterialToggle] _UseColorMap("Use Color Map", Float) = 1
 		_ColorMap("Color Map Texture", 2D) = "" {}
@@ -34,6 +34,7 @@ Shader "ABR/DataVolume"
 		_ColorDataMin("Color Data Min", Float) = 0.0
 		_ColorDataMax("Color Data Max", Float) = 1.0
 		_VolumeBrightness("Brightness", Float) = 0.1
+		[MaterialToggle] _UseLighting("Use Lighting", Float) = 1
 	}
 		
 	SubShader
@@ -81,6 +82,9 @@ Shader "ABR/DataVolume"
 
 			// A bunch of RGBA voxels (rgb = gradient, a = scalar data value)
 			sampler3D _VolumeTexture;
+			// Bounds of the mesh the volume is being rendered on
+			float3 _Center;
+			float3 _Extents;
 			// Color/opacity map toggles
 			int _UseColorMap;
 			int _UseOpacityMap;
@@ -97,6 +101,8 @@ Shader "ABR/DataVolume"
 			float _OpacityMultiplier;
 			// Intensity of ambient lighting
 			float _VolumeBrightness;
+			// Diffuse lighting toggle
+			int _UseLighting;
 			// Number of lights
 			int _LightCount;
 			// Array of view space light positions
@@ -119,13 +125,23 @@ Shader "ABR/DataVolume"
 				return range.z + (dataValue - range.x) * (range.w - range.z) / (range.y - range.x);
 			}
 
+			// Remaps vector from data range to 0-1
+			float3 RemapVector01(float3 dataValue, float3 dataRange[2])
+			{
+				return float3(
+					Remap(dataValue.x, float4(dataRange[0].x, dataRange[1].x, 0, 1)),
+					Remap(dataValue.y, float4(dataRange[0].y, dataRange[1].y, 0, 1)),
+					Remap(dataValue.z, float4(dataRange[0].z, dataRange[1].z, 0, 1))
+				);
+			}
+
 			// Calculates minimum distance and maximum distance for a ray to
-			// Intersect a particular rectangular prism volume
+			// intersect a particular rectangular prism volume
 			//
 			// orig = ray origin (where camera is in model space)
 			// invdir = inv direction the ray is coming from (camera origin to model)
-			// sign =
-			// bounds =
+			// sign = indicates direction in each axis
+			// bounds = min/max of rectangular prism
 			float2  Intersect(float3 orig, float3 invdir, int3 sign, float3 bounds[2]) {
 
 				float tmin, tmax, tymin, tymax, tzmin, tzmax;
@@ -201,11 +217,15 @@ Shader "ABR/DataVolume"
 				float obstacleDepth = LinearEyeDepth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, screenUV)));
 
 				// Create a bounding box that intersection tests can be run on
-				float scale = 2;
-				float3 bounds[2] = {{-scale*0.5,-scale*0.5,-scale*0.5},{scale*0.5,scale*0.5,scale*0.5}};
+				float3 bounds[2] = { {_Center - _Extents}, {_Center + _Extents} };
 
 				// Determine the depth in world space at which the current view ray intersects and exits the bounding box
-				float2 minmax = Intersect(i.modelSpaceCameraPos,1.0 / direction,int3(direction.x < 0 ? 1 : 0, direction.y < 0 ? 1 : 0, direction.z < 0 ? 1 : 0),bounds);
+				float2 minmax = Intersect(
+					i.modelSpaceCameraPos,
+					1.0 / direction,
+					int3(direction.x < 0 ? 1 : 0, direction.y < 0 ? 1 : 0, direction.z < 0 ? 1 : 0),
+					bounds
+				);
 				float frontDepth = minmax.x;
 				float backDepth = minmax.y;
 
@@ -221,14 +241,6 @@ Shader "ABR/DataVolume"
 				float3 frontCoord = direction * frontDepth + i.modelSpaceCameraPos;
 				float3 backCoord = direction * backDepth + i.modelSpaceCameraPos;
 
-				// Shift up to 0-1 (so that these can be used as direct texture lookup coordinates)
-				frontCoord = frontCoord + 0.5 * scale;
-				backCoord = backCoord + 0.5 * scale;
-
-				// Initialize variable to track current position inside of bounding box,
-				// which can equivalently be used as 3D texture lookup
-				float3 uvw;
-
 				// Number of "slices" in the volume
 				int stepCount = 200;
 
@@ -242,11 +254,8 @@ Shader "ABR/DataVolume"
 				// Final color to return
 				fixed4 col = float4(0,1,0,1);
 
-					// Debugging
-					//float4 X = tex3D(_VolumeTexture,backCoord + 0.1);
-					//col.rgb = X.rgb;
-					//return col;
-
+				// Length of the diagonal of the box
+				float diagonal = 2 * sqrt(_Extents.x*_Extents.x + _Extents.y*_Extents.y + _Extents.z*_Extents.z);
 				// Distance traveled along the direction vector into the bounding box
 				float traveled = 0;
 				// Iteration step progress, caps iteration to max step count
@@ -280,20 +289,21 @@ Shader "ABR/DataVolume"
 					///////////////////////////////////////////////////////////
 
 					// Calculate the distance traveled into the bounding box
-					// (1.5 ~= maximum distance one might need to travel from corner to corner of cube)
-					traveled = progress / (float)stepCount * 1.5;
+					// (0.9 -> decrease step size since rarely looking down full diagonal)
+					traveled = progress / (float)stepCount * diagonal * 0.9;
 
 					// Update current position in the bounding box
-					// (= lookup uvw for 3d texture)
-					uvw = frontCoord + traveled * dir;
+					float3 pos = frontCoord + traveled * dir;
 
-					//float3 uvNw = float3(uvw.x,uvw.y,1 - uvw.z); RH -> LH conversion ?
+					// Remap the position to uvw-coords into volume texture
+					float3 uvw = RemapVector01(pos, bounds);
+
 					// Sample the 3D texture to obtain the scalar value and gradients at this point,
 					// remapping the data value so that it lies in 0 -> 1 and can therefore be used for texture lookup
-					float4 V = tex3D(_VolumeTexture, uvw / scale);
+					float4 V = tex3D(_VolumeTexture, uvw);
 					float dataValue = Remap(V.a, float4(_ColorDataMin, _ColorDataMax, 0, 1));
 
-					// Continue if full distance traversed or remapped data value close to 0
+					// Continue if full distance traversed
 					if (traveled > len)// || dataValue < 0.001) //|| (uvw.x <=_plane2min.x || uvw.x >= _plane2max.x || uvw.y <= _plane2min.y || uvw.y >= _plane2max.y || uvw.z <= _plane2min.z || uvw.z >= _plane2max.z) )
 					    continue;
 
@@ -305,7 +315,7 @@ Shader "ABR/DataVolume"
 					float4 transferColor = _UseColorMap ? tex2D(_ColorMap, clamp(dataValue, 0, 1)) : _Color;
 					float4 transferOpacity = _UseOpacityMap ? tex2D(_OpacityMap, clamp(dataValue, 0, 1)) : _Opacity;
 					// Calculate single alpha value based on brightness of opacity map
-					float alpha = transferOpacity.r * _OpacityMultiplier; //clamp((transferOpacity.r * 0.3 + transferOpacity.g * 0.59 + transferOpacity.b * 0.11) * _OpacityMultiplier, 0, 1);
+					float alpha = clamp(transferOpacity.r * _OpacityMultiplier, 0, 1);
 
 					// Combine transfer color and opacity to get a full source color
 					float4 src = float4(transferColor.rgb, alpha);
@@ -314,15 +324,6 @@ Shader "ABR/DataVolume"
 					// Calculate lighting (performed in view/eye space)
 					///////////////////////////////////////////////////////////
 
-					// Setup
-					// ========================================================
-
-					// Unit vector for normal, transformed from object to view space
-					// (since gradient points in direction of greatest increase, we negate to get desired normal)
-					float3 n = normalize(mul(UNITY_MATRIX_IT_MV, float4(V.xyz, 0)).xyz);
-					// Unit vector from current frag to eye point, in view space
-					float3 e = normalize(-i.viewPosition.xyz);
-
 					// Blinn Phong lighting calculation
 					// ========================================================
 
@@ -330,42 +331,40 @@ Shader "ABR/DataVolume"
 					float3 litColor = _VolumeBrightness * src.rgb;
 
 					// Diffuse + specular for each light
-					for (int lightIdx = 0; lightIdx < _LightCount; lightIdx++) {
+					if (_UseLighting)
+					{
+						// Unit vector for normal, transformed from object to view space
+						float3 n = normalize(mul(UNITY_MATRIX_IT_MV, float4(V.xyz, 0)).xyz);
+						// Unit vector from current frag to eye point, in view space
+						float3 e = normalize(-i.viewPosition.xyz);
 
-						// Unit vector from frag to light, in view space
-						float3 l = normalize(_ViewSpaceLightDirections[lightIdx]);
+						for (int lightIdx = 0; lightIdx < _LightCount; lightIdx++) {
 
-						// Halfway vector, in view space
-						float h = normalize(l + e);
+							// Unit vector from frag to light, in view space
+							float3 l = normalize(_ViewSpaceLightDirections[lightIdx]);
 
-						// Compute diffuse contribution
-						float diffuse = _LightIntensities[lightIdx] * clamp(dot(n, l), 0, 1);
-						// Compute specular contribution
-						//float specular = 0.1f * pow(max(dot(h, n), 0.0), 8);
+							// Halfway vector, in view space
+							float h = normalize(l + e);
 
-						litColor += src.rgb * diffuse;
+							// Compute diffuse contribution
+							float diffuse = _LightIntensities[lightIdx] * clamp(dot(n, l), 0, 1);
+							// Compute specular contribution
+							//float specular = 0.1f * pow(max(dot(h, n), 0.0), 8);
+
+							litColor += src.rgb * diffuse;
+						}
 					}
 
 					// Apply
 					// ========================================================
 					src.rgb = litColor; // + specular;
 
-					// Start with white
-					//float3 c = float3(1,1,1);
-
-					//fixed4 col = T;
-					// Tint the color based on transfer function color
-					// if(_useColormap)
-					//c *= T.xyz;
-					// else
-					// 	c *= _Color;
-
 					///////////////////////////////////////////////////////////
 					// Color blending
 					///////////////////////////////////////////////////////////
 
 					// Blend front to back
-					src.rgb *= src.a;//clamp(c*src.a, 0, 1); // pre-multiply alpha
+					src.rgb *= src.a; // pre-multiply alpha
 					dst = (1.0f - dst.a) * src + dst; // accumulate
 
 					// if (dst.a > 1)
