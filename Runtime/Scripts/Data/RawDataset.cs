@@ -84,6 +84,9 @@ namespace IVLab.ABREngine
         public Bounds bounds;
 
         [SerializeField]
+        public Vector3Int dimensions;
+
+        [SerializeField]
         public MeshTopology meshTopology = MeshTopology.Points;
 
         public class JsonHeader
