@@ -29,11 +29,9 @@ namespace IVLab.ABREngine
     class SimpleVolumeRenderInfo : IDataImpressionRenderInfo
     {
         public Texture3D voxelTex;
-        public Color[] scalars;
         public float colorVariableMin;
         public float colorVariableMax;
         public Bounds bounds;
-        public Vector3Int dimensions;
     }
 
     [ABRPlateType("Volumes")]
@@ -43,7 +41,7 @@ namespace IVLab.ABREngine
         public PointKeyData keyData;
 
 
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Data)]
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
@@ -90,11 +88,9 @@ namespace IVLab.ABREngine
                 renderInfo = new SimpleVolumeRenderInfo
                 {
                     voxelTex = null,
-                    scalars = new Color[0],
                     colorVariableMin = 0,
                     colorVariableMax = 0,
-                    bounds = new Bounds(),
-                    dimensions = Vector3Int.zero
+                    bounds = new Bounds()
                 };
             }
             else
@@ -103,74 +99,76 @@ namespace IVLab.ABREngine
                 RawDataset dataset;
                 ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
 
-                // Determine the number of voxels in key data
-                int sourceVoxelCount = dataset.vertexArray.Length;
-
                 // Initialize render info
                 renderInfo = new SimpleVolumeRenderInfo
                 {
-                    scalars = new Color[sourceVoxelCount],
                     colorVariableMin = 0,
                     colorVariableMax = 0,
-                    bounds = dataset.bounds,
-                    dimensions = dataset.dimensions
+                    bounds = dataset.bounds
                 };
 
                 // Initialize color scalars
+                Color[] scalars = null;
                 if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
                     var colorScalars = colorVariable.GetArray(keyData);
-                    for (int i = 0; i < sourceVoxelCount; i++)
-                        renderInfo.scalars[i][0] = colorScalars[i];
+                    scalars = new Color[colorScalars.Length];
+                    for (int i = 0; i < colorScalars.Length; i++)
+                        scalars[i][0] = colorScalars[i];
 
                     renderInfo.colorVariableMin = colorVariable.MinValue;
                     renderInfo.colorVariableMax = colorVariable.MaxValue;
                 }
 
-                // Setup the new texture
+                // Setup the 3D volume texture
+                Vector3Int dimensions = dataset.dimensions;
                 renderInfo.voxelTex = new Texture3D(
-                    renderInfo.dimensions.x,
-                    renderInfo.dimensions.y,
-                    renderInfo.dimensions.z,
+                    dimensions.x,
+                    dimensions.y,
+                    dimensions.z,
                     TextureFormat.RGBAFloat,
                     false
                 );
                 renderInfo.voxelTex.wrapMode = TextureWrapMode.Clamp;
 
-                // Set the pixels of the new texture
-                Color[] pixels = new Color[renderInfo.dimensions.x * renderInfo.dimensions.y * renderInfo.dimensions.z];
-                for (int z = 0; z < renderInfo.dimensions.z; z++)
+                // Only fully initialize 3D texture if there are scalars to create it out of
+                if (scalars != null)
                 {
-                    int zMinusOneOffset = z == 0 ? 0 : (z - 1) * renderInfo.dimensions.y * renderInfo.dimensions.x;
-                    int zOffset = z * renderInfo.dimensions.y * renderInfo.dimensions.x;
-                    int zPlusOneOffset = z == renderInfo.dimensions.z - 1 ? (renderInfo.dimensions.z - 1) * renderInfo.dimensions.y * renderInfo.dimensions.x : (z + 1) * renderInfo.dimensions.y * renderInfo.dimensions.x;
-                    int zOffsetFlipped = (renderInfo.dimensions.z - z - 1) * renderInfo.dimensions.y * renderInfo.dimensions.x;
-                    for (int y = 0; y < renderInfo.dimensions.y; y++)
+                    // Set the pixels of the 3D texture
+                    Color[] pixels = new Color[dimensions.x * dimensions.y * dimensions.z];
+                    for (int z = 0; z < dimensions.z; z++)
                     {
-                        int yMinusOneOffset = y == 0 ? 0 : (y - 1) * renderInfo.dimensions.x;
-                        int yOffset = y * renderInfo.dimensions.x;
-                        int yPlusOneOffset = y == renderInfo.dimensions.y - 1 ? (renderInfo.dimensions.y - 1) * renderInfo.dimensions.x : (y + 1) * renderInfo.dimensions.x;
-                        for (int x = 0; x < renderInfo.dimensions.x; x++)
+                        int zMinusOneOffset = z == 0 ? 0 : (z - 1) * dimensions.y * dimensions.x;
+                        int zOffset = z * dimensions.y * dimensions.x;
+                        int zPlusOneOffset = z == dimensions.z - 1 ? (dimensions.z - 1) * dimensions.y * dimensions.x : (z + 1) * dimensions.y * dimensions.x;
+                        int zOffsetFlipped = (dimensions.z - z - 1) * dimensions.y * dimensions.x;
+                        for (int y = 0; y < dimensions.y; y++)
                         {
-                            int xMinusOneOffset = x == 0 ? 0 : x - 1;
-                            int xOffset = x;
-                            int xPlusOneOffset = x == renderInfo.dimensions.x - 1 ? renderInfo.dimensions.x - 1 : x + 1;
-                            // Compute partial derivatives in x, y and z
-                            float xPartial = (renderInfo.scalars[xPlusOneOffset + yOffset + zOffset][0] - renderInfo.scalars[xMinusOneOffset + yOffset + zOffset][0]) / 2.0f;
-                            float yPartial = (renderInfo.scalars[xOffset + yPlusOneOffset + zOffset][0] - renderInfo.scalars[xOffset + yMinusOneOffset + zOffset][0]) / 2.0f;
-                            float zPartial = (renderInfo.scalars[xOffset + yOffset + zPlusOneOffset][0] - renderInfo.scalars[xOffset + yOffset + zMinusOneOffset][0]) / 2.0f;
-                            // Compute scalar data value
-                            float d = renderInfo.scalars[xOffset + yOffset + zOffset][0];
-                            // Store gradient in color rgb and data in alpha
-                            // (flip z to account for RH -> LH coordinate system conversion)
-                            pixels[xOffset + yOffset + zOffsetFlipped] = new Color(xPartial, yPartial, -zPartial, d);
+                            int yMinusOneOffset = y == 0 ? 0 : (y - 1) * dimensions.x;
+                            int yOffset = y * dimensions.x;
+                            int yPlusOneOffset = y == dimensions.y - 1 ? (dimensions.y - 1) * dimensions.x : (y + 1) * dimensions.x;
+                            for (int x = 0; x < dimensions.x; x++)
+                            {
+                                int xMinusOneOffset = x == 0 ? 0 : x - 1;
+                                int xOffset = x;
+                                int xPlusOneOffset = x == dimensions.x - 1 ? dimensions.x - 1 : x + 1;
+                                // Compute partial derivatives in x, y and z
+                                float xPartial = (scalars[xPlusOneOffset + yOffset + zOffset][0] - scalars[xMinusOneOffset + yOffset + zOffset][0]) / 2.0f;
+                                float yPartial = (scalars[xOffset + yPlusOneOffset + zOffset][0] - scalars[xOffset + yMinusOneOffset + zOffset][0]) / 2.0f;
+                                float zPartial = (scalars[xOffset + yOffset + zPlusOneOffset][0] - scalars[xOffset + yOffset + zMinusOneOffset][0]) / 2.0f;
+                                // Compute scalar data value
+                                float d = scalars[xOffset + yOffset + zOffset][0];
+                                // Store gradient in color rgb and data in alpha
+                                // (flip z to account for RH -> LH coordinate system conversion)
+                                pixels[xOffset + yOffset + zOffsetFlipped] = new Color(xPartial, yPartial, -zPartial, d);
+                            }
                         }
                     }
-                }
-                renderInfo.voxelTex.SetPixels(pixels);
+                    renderInfo.voxelTex.SetPixels(pixels);
 
-                // Apply changes to the texture
-                renderInfo.voxelTex.Apply();
+                    // Apply changes to the 3D texture
+                    renderInfo.voxelTex.Apply();
+                }
             }
             RenderInfo = renderInfo;
         }
@@ -254,7 +252,6 @@ namespace IVLab.ABREngine
                 mesh.vertices = verts;
                 mesh.triangles = tris;
                 mesh.Optimize();
-                mesh.RecalculateNormals();
                 meshFilter.mesh = mesh;
                 meshFilter.mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
 
@@ -336,27 +333,6 @@ namespace IVLab.ABREngine
             Mesh mesh = meshFilter.mesh;
             mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
 
-            // Determine the number of voxels in the dataset
-            RawDataset dataset;
-            ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
-            int sourceVoxelCount = dataset.vertexArray.Length;
-
-            // Initialize variables to track scalar "styling" changes
-            Color[] scalars = new Color[sourceVoxelCount];
-            float colorVariableMin = 0;
-            float colorVariableMax = 0;
-
-            // Record changes to color scalars if any occurred
-            if (colorVariable != null && colorVariable.IsPartOf(keyData))
-            {
-                var colorScalars = colorVariable.GetArray(keyData);
-                for (int i = 0; i < sourceVoxelCount; i++)
-                    scalars[i][0] = colorScalars[i];
-
-                colorVariableMin = colorVariable.MinValue;
-                colorVariableMax = colorVariable.MaxValue;
-            }
-
             // Get the material
             meshRenderer.material = ImpressionMaterial;
             meshRenderer.GetPropertyBlock(MatPropBlock);
@@ -371,6 +347,15 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 0);
 
+            }
+
+            float colorVariableMin = 0;
+            float colorVariableMax = 0;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+
+                colorVariableMin = colorVariable.MinValue;
+                colorVariableMax = colorVariable.MaxValue;
             }
             MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
             MatPropBlock.SetFloat("_ColorDataMax", colorVariableMax);

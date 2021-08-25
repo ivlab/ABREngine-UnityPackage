@@ -98,6 +98,7 @@ namespace IVLab.ABREngine
             public string[] scalarArrayNames;
             public string[] vectorArrayNames;
             public Bounds bounds;
+            public int[] dimensions;
             public float[] scalarMaxes;
             public float[] scalarMins;
         }
@@ -112,11 +113,16 @@ namespace IVLab.ABREngine
             public void Decode(JsonHeader bdh, byte[] bytes)
             {
                 int offset = 0;
+                int nbytes;
 
-                vertices = new float[3 * bdh.num_points];
-                int nbytes = 3 * bdh.num_points * sizeof(float);
-                Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
-                offset = offset + nbytes;
+                // No vertices stored in binary for volumes
+                if ((int)bdh.meshTopology != 100)
+                {
+                    vertices = new float[3 * bdh.num_points];
+                    nbytes = 3 * bdh.num_points * sizeof(float);
+                    Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
+                    offset = offset + nbytes;
+                }
 
                 index_array = new int[bdh.num_cell_indices];
                 nbytes = bdh.num_cell_indices * sizeof(int);
@@ -160,18 +166,20 @@ namespace IVLab.ABREngine
         {
             meshTopology = jh.meshTopology;
 
-            vertexArray = new Vector3[jh.num_points];
-            for (int i = 0; i < jh.num_points; i++)
-            {
-                vertexArray[i][0] = bd.vertices[i * 3 + 0];
-                vertexArray[i][1] = bd.vertices[i * 3 + 1];
-                vertexArray[i][2] = bd.vertices[i * 3 + 2];
-            }
-
             if ((int)meshTopology == 100)
             {
-                Debug.LogWarning("Voxels not yet supported, converting to points");
+                dimensions = new Vector3Int(jh.dimensions[0], jh.dimensions[1], jh.dimensions[2]);
                 meshTopology = MeshTopology.Points;
+            }
+            else
+            {
+                vertexArray = new Vector3[jh.num_points];
+                for (int i = 0; i < jh.num_points; i++)
+                {
+                    vertexArray[i][0] = bd.vertices[i * 3 + 0];
+                    vertexArray[i][1] = bd.vertices[i * 3 + 1];
+                    vertexArray[i][2] = bd.vertices[i * 3 + 2];
+                }
             }
 
             long numIndices = 0;

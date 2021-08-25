@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: ABR_DataVolume
   m_Shader: {fileID: 4800000, guid: 310749beb02de824b9eb237b15cf08c4, type: 3}
-  m_ShaderKeywords: _USECOLORMAP_ON
+  m_ShaderKeywords: _USECOLORMAP_ON _USELIGHTING_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -83,7 +83,7 @@ Material:
     - _AmbientLightIntensity: 0.1
     - _BumpScale: 1
     - _ColorDataMax: 119.27
-    - _ColorDataMin: 37
+    - _ColorDataMin: 0.06
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -103,6 +103,7 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseColorMap: 1
+    - _UseLighting: 1
     - _UseOpacityMap: 0
     - _VolumeBrightness: 0.75
     - _WindQuality: 0
