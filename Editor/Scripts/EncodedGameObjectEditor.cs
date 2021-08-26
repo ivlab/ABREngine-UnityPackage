@@ -1,7 +1,7 @@
-/* ColormapVisAsset.cs
+/* EncodedGameObjectEditor.cs
  *
  * Copyright (c) 2021 University of Minnesota
- * Author: Bridger Herman <herma582@umn.edu>
+ * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using UnityEngine;
+using UnityEditor;
 
 namespace IVLab.ABREngine
 {
-    public class ColormapVisAsset : VisAsset
+    [CustomEditor(typeof(EncodedGameObject))]
+    public class EncodedGameObjectEditor : Editor
     {
-        public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
-
-        public Texture2D Gradient { get; set; } = null;
-
-        public Color GetColorInterp(float interpAmount)
+        public override void OnInspectorGUI()
         {
-            return Gradient.GetPixelBilinear(interpAmount, 0.5f);
-        }
+            // Setup (get uuid, data impression)
+            EncodedGameObject script = (EncodedGameObject) target;
+            IDataImpression impression = ABREngine.Instance.GetDataImpression(script.Uuid);
 
-        public Texture2D GetColorGradient()
-        {
-            return Gradient;
+            EditorGUILayout.LabelField(impression.GetType().Name);
+            EditorGUILayout.LabelField("UUID: " + impression.Uuid);
         }
     }
 }

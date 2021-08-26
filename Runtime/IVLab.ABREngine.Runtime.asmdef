@@ -1,0 +1,17 @@
+{
+    "name": "IVLab.ABREngine.Runtime",
+    "references": [
+        "IVLab.Utilities.Runtime",
+        "IVLab.OBJImport",
+        "JsonDiffPatchDotNet"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

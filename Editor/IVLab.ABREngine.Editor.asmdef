@@ -1,9 +1,8 @@
 {
-    "name": "IVLab.ABREngine",
+    "name": "IVLab.ABREngine.Editor",
     "references": [
-        "IVLab.Utilities",
-        "IVLab.OBJImport",
-        "JsonDiffPatchDotNet"
+        "IVLab.ABREngine.Runtime",
+        "IVLab.Utilities.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,6 +2,18 @@
  *
  * Copyright (c) 2021, University of Minnesota
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System.Collections.Generic;
@@ -31,14 +43,15 @@ namespace IVLab.ABREngine
 
     public class HttpVisAssetFetcher : IVisAssetFetcher
     {
-        public const string VISASSET_JSON = "artifact.json";
         private string _serverUrl;
         private string _appDataPath;
         private FilePathVisAssetFetcher _fpFetcher;
         private Dictionary<Guid, JObject> _artifactJsonCache = new Dictionary<Guid, JObject>();
+        public string VisAssetJson { get; }
 
         public HttpVisAssetFetcher(string serverUrl, string appDataPath)
         {
+            VisAssetJson = ABRConfig.Consts.VisAssetJson;
             _serverUrl = serverUrl;
             if (!_serverUrl.EndsWith("/"))
             {
@@ -50,7 +63,7 @@ namespace IVLab.ABREngine
 
         public string GetArtifactJsonPath(Guid uuid)
         {
-            return GetArtifactPath(uuid) +  "/" + VISASSET_JSON;
+            return GetArtifactPath(uuid) +  "/" + VisAssetJson;
         }
 
         public string GetArtifactPath(Guid uuid)
@@ -63,7 +76,7 @@ namespace IVLab.ABREngine
             return Path.Combine(
                 _appDataPath,
                 uuid.ToString(),
-                VISASSET_JSON
+                VisAssetJson
             );
         }
 
@@ -148,7 +161,7 @@ namespace IVLab.ABREngine
             bool success = await CheckExistsAndDownload(artifactJsonUrl, artifactJsonPath);
             if (!success)
             {
-                failed.Add(VISASSET_JSON);
+                failed.Add(VisAssetJson);
                 return failed; // Cannot continue without artifact json
             }
 
@@ -240,22 +253,23 @@ namespace IVLab.ABREngine
 
     public class FilePathVisAssetFetcher : IVisAssetFetcher
     {
-        public const string VISASSET_JSON = "artifact.json";
         private Dictionary<Guid, JObject> _artifactJsonCache = new Dictionary<Guid, JObject>();
         private string _appDataPath;
+        public string VisAssetJson { get; }
+
+        public FilePathVisAssetFetcher(string appDataPath)
+        {
+            _appDataPath = appDataPath;
+            VisAssetJson = ABRConfig.Consts.VisAssetJson;
+        }
 
         public string GetArtifactJsonPath(Guid uuid)
         {
             return Path.Combine(
                 _appDataPath,
                 uuid.ToString(),
-                VISASSET_JSON
+                VisAssetJson
             );
-        }
-
-        public FilePathVisAssetFetcher(string appDataPath)
-        {
-            _appDataPath = appDataPath;
         }
 
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
@@ -303,7 +317,7 @@ namespace IVLab.ABREngine
         {
             string artifactJsonPath = GetArtifactJsonPath(uuid);
             var meshPath = VisAssetDataPath(artifactJsonPath, lodJson["mesh"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => new IVLab.OBJImport.OBJLoader().Load(meshPath));
+            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => new IVLab.OBJImport.OBJLoader().Load(meshPath, true));
         }
 
         public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
@@ -408,8 +422,15 @@ namespace IVLab.ABREngine
 
     public class ResourceVisAssetFetcher : IVisAssetFetcher
     {
-        public const string VISASSET_JSON = "artifact";
-        public const string RESOURCES_PATH = "media/visassets/";
+        public string VisAssetJson { get; }
+        public string ResourcePath { get; }
+
+        public ResourceVisAssetFetcher()
+        {
+            int dotIndex = ABRConfig.Consts.VisAssetJson.IndexOf('.');
+            VisAssetJson = ABRConfig.Consts.VisAssetJson.Substring(0, dotIndex);
+            ResourcePath = ABRConfig.Consts.VisAssetFolder;
+        }
 
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
         {
@@ -421,9 +442,9 @@ namespace IVLab.ABREngine
         public string GetArtifactJsonPath(Guid uuid)
         {
             return Path.Combine(
-                RESOURCES_PATH,
+                ResourcePath,
                 uuid.ToString(),
-                VISASSET_JSON
+                VisAssetJson
             );
         }
 

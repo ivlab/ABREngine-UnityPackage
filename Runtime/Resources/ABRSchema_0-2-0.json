@@ -11,7 +11,7 @@
         "version": {
             "type": "string",
             "description": "Version of the model (semantic version, update this when updating the model)",
-            "const": "0.2.0-beta"
+            "const": "0.2.0"
         },
 
         "name": {
@@ -190,7 +190,16 @@
                     "type": "object",
                     "description": "Additional data that can/should be used when rendering, such as visibility of the impression",
                     "properties": {
-                        "visible": {
+                        "DataChanged": {
+                            "type": "boolean"
+                        },
+                        "StyleChanged": {
+                            "type": "boolean"
+                        },
+                        "VisibilityChanged": {
+                            "type": "boolean"
+                        },
+                        "Visible": {
                             "type": "boolean"
                         }
                     }

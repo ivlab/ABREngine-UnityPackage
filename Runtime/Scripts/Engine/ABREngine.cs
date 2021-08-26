@@ -3,6 +3,18 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System.Threading.Tasks;
@@ -25,12 +37,13 @@ namespace IVLab.ABREngine
         public JObject State { get { return previouslyLoadedState; }}
         private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
+        private ABRStateParser stateParser = null;
 
         private object _stateLock = new object();
         private object _stateUpdatingLock = new object();
         private bool stateUpdating = false;
 
-        private StateSubscriber _notifier;
+        private Notifier _notifier;
         public VisAssetManager VisAssets { get; private set; }
         public DataManager Data { get; private set; }
         public SocketDataListener DataListener { get; private set; }
@@ -75,12 +88,15 @@ namespace IVLab.ABREngine
             persistentDataPath = Application.persistentDataPath;
             base.Awake();
 
+            // Initialize state parser
+            stateParser = new ABRStateParser();
+
             // Initialize the configuration from ABRConfig.json
             Config = new ABRConfig();
 
             // Initialize the default DataImpressionGroup (where impressions go
-            // when they have no dataset)
-            _defaultGroup = AddDataImpressionGroup("Default");
+            // when they have no dataset) - guid zeroed out
+            _defaultGroup = AddDataImpressionGroup("Default", new Guid());
 
             Task.Run(async () =>
             {
@@ -88,7 +104,7 @@ namespace IVLab.ABREngine
                 {
                     if (Config.Info.serverAddress != null)
                     {
-                        _notifier = new StateSubscriber(Config.Info.serverAddress);
+                        _notifier = new Notifier(Config.Info.serverAddress);
                         await _notifier.Init();
                     }
                 }
@@ -100,8 +116,8 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, "visassets"), Config.Info.loadResourceVisAssets);
-                    Data = new DataManager(Path.Combine(MediaPath, "datasets"));
+                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder), Config.Info.loadResourceVisAssets);
+                    Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
                     if (Config.Info.dataListenerPort != null)
                     {
                         DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
@@ -120,6 +136,12 @@ namespace IVLab.ABREngine
                 )
                 {
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
+                }
+
+                // If a state in resources is specified, load it
+                if (Config.Info.loadStateOnStart != null)
+                {
+                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
                 }
                 _initialized = true;
             });
@@ -198,6 +220,11 @@ namespace IVLab.ABREngine
             return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
+        public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid)
+        {
+            return AddDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+        }
+
         public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
         {
             DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
@@ -225,6 +252,18 @@ namespace IVLab.ABREngine
                 return g;
             }
             else
+            {
+                return null;
+            }
+        }
+
+        public DataImpressionGroup GetDataImpressionGroupByDataset(Dataset ds)
+        {
+            try
+            {
+                return dataImpressionGroups.Values.First((g) => g.GetDataset()?.Path == ds?.Path);
+            }
+            catch (InvalidOperationException)
             {
                 return null;
             }
@@ -258,17 +297,29 @@ namespace IVLab.ABREngine
         public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // Create a new group if it doesn't exist
-            if (newGroup == null)
+            // OR, if it's in the default group but now has a dataset, move it to its proper group
+            if (newGroup == null || newGroup == _defaultGroup)
             {
-                // Name it according to the impression's dataset, if there is one
+                // First, check if there's already a group associated with this dataset
                 Dataset ds = dataImpression.GetDataset();
-                if (ds?.Path != null)
+                DataImpressionGroup dsGroup = GetDataImpressionGroupByDataset(ds);
+                // If so, add it to that group
+                if (dsGroup != null)
                 {
-                    newGroup = AddDataImpressionGroup(ds.Path);
+                    newGroup = dsGroup;
                 }
+                // If not, proceed to make a new group
                 else
                 {
-                    newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    // Name it according to the impression's dataset, if there is one
+                    if (ds?.Path != null)
+                    {
+                        newGroup = AddDataImpressionGroup(ds.Path);
+                    }
+                    else
+                    {
+                        newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    }
                 }
             }
             MoveImpressionToGroup(dataImpression, newGroup, allowOverwrite);
@@ -301,7 +352,12 @@ namespace IVLab.ABREngine
             }
             else
             {
-                // If there's no data yet, put it in the default group
+                // It's possible that this impression previously had key data, in which case we must
+                // remove and unregister it from whatever group it was a part of due to that key data
+                // now that it has none
+                UnregisterDataImpression(dataImpression.Uuid);
+                
+                // Since there's no data, put it in the default group
                 _defaultGroup.AddDataImpression(dataImpression, allowOverwrite);
             }
         }
@@ -312,10 +368,10 @@ namespace IVLab.ABREngine
             foreach (var group in dataImpressionGroups)
             {
                 // Remove the impression from any groups its in (should only be one)
-                group.Value.RemoveDataImpression(uuid);
+                bool groupIsEmpty = group.Value.RemoveDataImpression(uuid);
 
                 // Also remove the group if it becomes empty, unless it's the default group
-                if (group.Value.GetDataImpressions().Count == 0 && group.Key != _defaultGroup.Uuid)
+                if (groupIsEmpty && group.Key != _defaultGroup.Uuid)
                 {
                     toRemove.Add(group.Key);
                 }
@@ -444,10 +500,9 @@ namespace IVLab.ABREngine
             }
             await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
             {
-                ABRStateParser parser = ABRStateParser.GetParser<T>();
                 try
                 {
-                    JObject tempState = await parser.LoadState(stateName, previouslyLoadedState);
+                    JObject tempState = await stateParser.LoadState<T>(stateName, previouslyLoadedState);
                     lock (_stateLock)
                     {
                         previousStateName = stateName;
@@ -470,19 +525,19 @@ namespace IVLab.ABREngine
             });
         }
 
-        public async Task SaveStateAsync()
+        public async Task SaveStateAsync<T>()
+        where T : IABRStateLoader, new()
         {
-            HttpStateFileLoader loader = new HttpStateFileLoader();
-            ABRStateParser parser = ABRStateParser.GetParser<HttpStateFileLoader>();
+            T loader = new T();
             try
             {
                 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                 {
                     try
                     {
-                        string state = parser.SerializeState(previouslyLoadedState);
+                        string state = stateParser.SerializeState(previouslyLoadedState);
 
-                        await loader.SaveState(state);
+                        await loader.SaveState(previousStateName, state);
                     }
                     catch (Exception e)
                     {

@@ -3,6 +3,18 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System;
@@ -47,19 +59,26 @@ namespace IVLab.ABREngine
             Debug.Log("Dataset Path: " + appDataPath);
         }
 
-        public void TryGetRawDataset(string dataPath, out RawDataset dataset)
+        public bool TryGetRawDataset(string dataPath, out RawDataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-            rawDatasets.TryGetValue(dataPath, out dataset);
+            return rawDatasets.TryGetValue(dataPath, out dataset);
         }
-        public void TryGetDataset(string dataPath, out Dataset dataset)
+        public bool TryGetDataset(string dataPath, out Dataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.Dataset);
-            datasets.TryGetValue(dataPath, out dataset);
+            return datasets.TryGetValue(dataPath, out dataset);
         }
         public List<Dataset> GetDatasets()
         {
             return datasets.Values.ToList();
+        }
+
+        public async Task LoadRawDataset<T>(string dataPath)
+        where T : IDataLoader, new()
+        {
+            RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
+            await ImportRawDataset(dataPath, ds);
         }
 
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
@@ -71,11 +90,9 @@ namespace IVLab.ABREngine
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
             await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                Dataset dataset;
-                TryGetDataset(datasetPath, out dataset);
-
                 // If we don't, create the dataset
-                if (dataset == null)
+                Dataset dataset;
+                if (!TryGetDataset(datasetPath, out dataset))
                 {
                     Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
@@ -87,67 +104,6 @@ namespace IVLab.ABREngine
                 ImportVariables(dataPath, importing, dataset);
                 ImportKeyData(dataPath, importing, dataset);
             });
-        }
-
-        public async Task LoadRawDatasetFromCache(string dataPath)
-        {
-            FileInfo jsonFile = GetRawDatasetMetadataFile(dataPath);
-            if (!jsonFile.Exists)
-            {
-                Debug.LogErrorFormat("Data path {0} does not exist!", jsonFile.ToString());
-                return;
-            }
-            else
-            {
-                Debug.Log("Loading " + dataPath + " from " + this.appDataPath);
-            }
-
-            string metadataContent = "";
-            using (StreamReader file = new StreamReader(jsonFile.FullName))
-            {
-                metadataContent = await file.ReadToEndAsync();
-            }
-
-            RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
-
-            FileInfo binFile = GetRawDatasetBinaryFile(dataPath);
-            // File.ReadAllBytesAsync doesn't exist in this version (2.0 Standard)
-            // of .NET apparently?
-            byte[] dataBytes = await Task.Run(() => File.ReadAllBytes(binFile.FullName));
-
-            RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-
-            RawDataset ds = new RawDataset(metadata, data);
-            await ImportRawDataset(dataPath, ds);
-        }
-
-        public async Task LoadRawDatasetFromURL(string dataPath, string url)
-        {
-            Debug.Log("Loading " + dataPath + " from " + url);
-            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
-
-            try
-            {
-                HttpResponseMessage metadataResponse = await ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                string responseBody = await metadataResponse.Content.ReadAsStringAsync();
-
-                JToken metadataJson = JObject.Parse(responseBody)["metadata"];
-                RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
-
-                HttpResponseMessage dataResponse = await ABREngine.httpClient.GetAsync(url + "/data/" + dataPath);
-                metadataResponse.EnsureSuccessStatusCode();
-                byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
-
-                RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-                RawDataset ds = new RawDataset(metadata, data);
-                await ImportRawDataset(dataPath, ds);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-
         }
 
         public async Task CacheRawDataset(string dataPath, string json, byte[] data)
@@ -196,14 +152,12 @@ namespace IVLab.ABREngine
             {
                 string scalarPath = DataPath.Join(scalarVarRoot, scalarArrayName);
                 ScalarDataVariable scalarDataVariable;
-                dataset.TryGetScalarVar(scalarPath, out scalarDataVariable);
-
-                if (scalarDataVariable == null)
+                if (!dataset.TryGetScalarVar(scalarPath, out scalarDataVariable))
                 {
                     // Create a new scalar variable
                     scalarDataVariable = new ScalarDataVariable(scalarPath);
-                    scalarDataVariable.MinValue = rawDataset.GetScalarMin(scalarArrayName);
-                    scalarDataVariable.MaxValue = rawDataset.GetScalarMax(scalarArrayName);
+                    scalarDataVariable.Range.min = rawDataset.GetScalarMin(scalarArrayName);
+                    scalarDataVariable.Range.max = rawDataset.GetScalarMax(scalarArrayName);
                     dataset.AddScalarVariable(scalarDataVariable);
                 }
                 else
@@ -212,13 +166,13 @@ namespace IVLab.ABREngine
                     // include the newly imported rawDataset
                     if (!scalarDataVariable.CustomizedRange)
                     {
-                        scalarDataVariable.MinValue = Mathf.Min(scalarDataVariable.MinValue, rawDataset.GetScalarMin(scalarArrayName));
-                        scalarDataVariable.MaxValue = Mathf.Max(scalarDataVariable.MaxValue, rawDataset.GetScalarMax(scalarArrayName));
+                        scalarDataVariable.Range.min = Mathf.Min(scalarDataVariable.Range.min, rawDataset.GetScalarMin(scalarArrayName));
+                        scalarDataVariable.Range.max = Mathf.Max(scalarDataVariable.Range.max, rawDataset.GetScalarMax(scalarArrayName));
                     }
                 }
 
-                scalarDataVariable.OriginalMinValue = scalarDataVariable.MinValue;
-                scalarDataVariable.OriginalMaxValue = scalarDataVariable.MaxValue;
+                scalarDataVariable.OriginalRange.min = scalarDataVariable.Range.min;
+                scalarDataVariable.OriginalRange.max = scalarDataVariable.Range.max;
             }
 
             // Import all vector variables
@@ -227,25 +181,23 @@ namespace IVLab.ABREngine
             {
                 string vectorPath = DataPath.Join(vectorVarRoot, vectorArrayName);
                 VectorDataVariable vectorDataVariable;
-                dataset.TryGetVectorVar(vectorPath, out vectorDataVariable);
-
-                if (vectorDataVariable == null)
+                if (!dataset.TryGetVectorVar(vectorPath, out vectorDataVariable))
                 {
                     // Create a new vector variable
                     vectorDataVariable = new VectorDataVariable(vectorPath);
-                    vectorDataVariable.MinValue = rawDataset.GetVectorMin(vectorArrayName);
-                    vectorDataVariable.MaxValue = rawDataset.GetVectorMax(vectorArrayName);
+                    vectorDataVariable.Range.min = rawDataset.GetVectorMin(vectorArrayName);
+                    vectorDataVariable.Range.max = rawDataset.GetVectorMax(vectorArrayName);
                     dataset.AddVectorVariable(vectorDataVariable);
                 }
                 else
                 {
                     // TODO: Not implemented yet
-                    vectorDataVariable.MinValue = Vector3.zero;
-                    vectorDataVariable.MaxValue = Vector3.zero;
+                    vectorDataVariable.Range.min = Vector3.zero;
+                    vectorDataVariable.Range.max = Vector3.zero;
                 }
 
-                vectorDataVariable.OriginalMinValue = vectorDataVariable.MinValue;
-                vectorDataVariable.OriginalMaxValue = vectorDataVariable.MaxValue;
+                vectorDataVariable.OriginalRange.min = vectorDataVariable.Range.min;
+                vectorDataVariable.OriginalRange.max = vectorDataVariable.Range.max;
             }
         }
 

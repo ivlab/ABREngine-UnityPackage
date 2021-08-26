@@ -19,15 +19,13 @@ NOTE: Currently in Unity, these need to be manually installed. Go to *Window > P
 Manager > + > git package...* and paste each of these URLs *before* you paste the ABREngine's URL.
 
 ```
-ssh://git@github.umn.edu/ivlab-cs/NewtonsoftJson-UnityPackage.git#v12.0.3
+ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git
 
-ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git#v3.0.13
+ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git
 
-ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git#v2.0.2
+ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git
 
-ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git#v2.3.0
-
-ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git
+ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git#66d99e7cd811c67f68677c6da84c55c179a14b25
 ```
 
 

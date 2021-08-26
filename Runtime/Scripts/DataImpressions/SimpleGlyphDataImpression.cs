@@ -3,12 +3,24 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System.Reflection;
 using UnityEngine;
 
-using IVLab.Utilities.GenericObjectPool;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -35,28 +47,31 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        [ABRInput("Key Data", "Key Data")]
+        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public PointKeyData keyData;
 
-        [ABRInput("Color Variable", "Color")]
+        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
-        [ABRInput("Colormap", "Color")]
+        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public ColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph")]
+        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph")]
+        [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
         public GlyphVisAsset glyph;
 
-        [ABRInput("Glyph Size", "Glyph")]
+        [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
-        [ABRInput("Forward Variable", "Direction")]
+        [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
+        public PercentPrimitive glyphDensity;
+
+        [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction")]
+        [ABRInput("Up Variable", "Direction", UpdateLevel.Style)]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;
@@ -101,13 +116,28 @@ namespace IVLab.ABREngine
             else
             {
                 RawDataset dataset;
-                ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out dataset);
+                if (!ABREngine.Instance.Data.TryGetRawDataset(keyData?.Path, out dataset))
+                {
+                    return;
+                }
 
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
-                float colorMin, colorMax;
-                colorMin = colorVariable?.MinValue ?? 0.0f;
-                colorMax = colorVariable?.MaxValue ?? 0.0f;
+                float colorMin = 0.0f;
+                float colorMax = 0.0f;
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
+                {
+                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                    {
+                        colorMin = colorVariable.SpecificRanges[keyData.Path].min;
+                        colorMax = colorVariable.SpecificRanges[keyData.Path].max;
+                    }
+                    else
+                    {
+                        colorMin = colorVariable.Range.min;
+                        colorMax = colorVariable.Range.max;
+                    }
+                }
                 int numPoints = dataset.vertexArray.Length;
                 renderInfo = new PointRenderInfo
                 {
@@ -283,6 +313,7 @@ namespace IVLab.ABREngine
             {
                 imr = currentGameObject.gameObject.AddComponent<InstancedMeshRenderer>();
             }
+            imr.enabled = RenderHints.Visible;
             imr.bounds = SSrenderData?.bounds ?? new Bounds();
 
             int lod = glyphLod;
@@ -311,7 +342,22 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetColor("_Color", Color.white);
 
                 imr.instanceLocalTransforms = SSrenderData.transforms;
-                imr.colors = SSrenderData.scalars;
+
+                // Initialize "render info" -- stores scalar values and info on whether
+                // or not glyphs should be rendered
+                Vector4[] glyphRenderInfo = SSrenderData.scalars;
+                // Get the glyph density
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                float glyphDensityOut = glyphDensity?.Value ??
+                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
+                glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
+                // Sample based on density
+                SampleGlyphs(glyphRenderInfo, (int)(glyphRenderInfo.Length * glyphDensityOut));
+                // Apply scalar/density changes to the instanced mesh renderer
+                imr.instanceDensity = glyphDensityOut;
+                imr.renderInfo = glyphRenderInfo;
+
                 if (colormap?.GetColorGradient() != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
@@ -325,7 +371,6 @@ namespace IVLab.ABREngine
             else
             {
                 imr.instanceLocalTransforms = new Matrix4x4[0];
-
             }
 
             imr.block = MatPropBlock;
@@ -333,9 +378,179 @@ namespace IVLab.ABREngine
             imr.instanceMaterial = ImpressionMaterial;
 
             imr.cachedInstanceCount = -1;
+        }
 
-            // Enable/disable the instanced mesh renderer in accordance with the "visible" flag
-            imr.enabled = RenderHints.visible;
+        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        {
+            // Exit immediately if the game object or instanced mesh renderer relevant to this
+            // impression do not yet exist
+            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
+            if (imr == null)
+            {
+                return;
+            }
+
+            // Determine the number of points / glyphs via the number of transforms the
+            // instanced mesh renderer is currently tracking
+            int numPoints = imr.instanceLocalTransforms.Length;
+
+            // We might as well exit if there are no glyphs to update
+            if (numPoints <= 0)
+            {
+                return;
+            }
+
+            // Rescale the glyphs depending on their current "Glyph Size" input
+            ABRConfig config = ABREngine.Instance.Config;
+            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+            float curGlyphScale = glyphSize?.Value ??
+                config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
+            // However, don't waste time rescaling the glyphs if the scale hasn't actually changed
+            // (If at some point we are no longer scaling all glyphs evenly and equally, this trick
+            // to determine if the scale changed will likely no longer function correctly)
+            float prevGlyphScale = imr.instanceLocalTransforms[0].GetColumn(0).magnitude;
+            if (!Mathf.Approximately(prevGlyphScale, curGlyphScale))
+            {
+                for (int i = 0; i < imr.instanceLocalTransforms.Length; i++)
+                {
+                    imr.instanceLocalTransforms[i] *= Matrix4x4.Scale(Vector3.one * curGlyphScale / prevGlyphScale);
+                }
+            }
+
+            // Update the instanced mesh renderer to use the currently selected glyph
+            if (glyph != null)
+            {
+                imr.instanceMesh = glyph.GetMesh(glyphLod);
+                MatPropBlock.SetTexture("_Normal", glyph.GetNormalMap(glyphLod));
+            }
+            else
+            {
+                Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
+                imr.instanceMesh = mesh;
+            }
+
+            // Initialize "render info" -- stores scalar values and info on whether
+            // or not glyphs should be rendered
+            Vector4[] glyphRenderInfo = new Vector4[numPoints];
+
+            // Re-sample based on glyph density, if it has changed
+            float glyphDensityOut = glyphDensity?.Value ??
+                config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
+            glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
+            if (imr.instanceDensity != glyphDensityOut)
+            {
+                // Sample number of glyphs based on density
+                int sampleSize = (int)(numPoints * glyphDensityOut);
+                SampleGlyphs(glyphRenderInfo, sampleSize);
+            }
+            // If the glyph density hasn't changed, use the previous sample of glyphs
+            else if (imr.renderInfo?.Length == glyphRenderInfo.Length)
+            {
+                glyphRenderInfo = imr.renderInfo;
+            }
+
+            // Initialize variables to track scalar "styling" changes
+            Vector4[] scalars = new Vector4[numPoints];
+
+            // Get keydata-specific range, if there is one
+            float colorVariableMin = 0.0f;
+            float colorVariableMax = 0.0f;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
+                {
+                    colorVariableMin = colorVariable.SpecificRanges[keyData.Path].min;
+                    colorVariableMax = colorVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    colorVariableMin = colorVariable.Range.min;
+                    colorVariableMax = colorVariable.Range.max;
+                }
+            }
+
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                var colorScalars = colorVariable.GetArray(keyData);
+                for (int i = 0; i < numPoints; i++)
+                {
+                    // Set the scalar value of the glyph used to apply colormap in shader
+                    glyphRenderInfo[i][0] = colorScalars[i];
+                }
+            }
+
+            // Apply scalar/density changes to the instanced mesh renderer
+            imr.instanceDensity = glyphDensityOut;
+            imr.renderInfo = glyphRenderInfo;
+
+            // Apply changes to the mesh's shader / material
+            MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
+            MatPropBlock.SetFloat("_ColorDataMax", colorVariableMax);
+            MatPropBlock.SetColor("_Color", Color.white);
+
+            if (colormap?.GetColorGradient() != null)
+            {
+                MatPropBlock.SetInt("_UseColorMap", 1);
+                MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+            }
+            else
+            {
+                MatPropBlock.SetInt("_UseColorMap", 0);
+            }
+
+            imr.block = MatPropBlock;
+
+            imr.cachedInstanceCount = -1;
+        }
+
+        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        {
+            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
+            if (imr != null)
+            {
+                imr.enabled = RenderHints.Visible;
+            }
+        }
+
+        // Samples k glyphs, modifying glyph render info so that only they will be rendered
+        // Uses reservoir sampling: (https://www.geeksforgeeks.org/reservoir-sampling/)
+        private void SampleGlyphs(Vector4[] glyphRenderInfo, int k)
+        {
+            // Total number of glyphs
+            int n = glyphRenderInfo.Length;
+
+            // Index for elements in renderInfo
+            int i;
+
+            // Indices into renderInfo array for the glyphs that have been selected
+            int[] idxReservoir = new int[k];
+
+
+            // Select first k glyphs to begin
+            for (i = 0; i < k; i++)
+            {
+                idxReservoir[i] = i;
+                glyphRenderInfo[i][3] = 1;  // render the glyph
+            }
+
+            // Iterate through the remaining glyphs
+            for (; i < n; i++)
+            {
+                int j = Random.Range(0, i + 1);
+                // Replace previous selections if the randomly
+                // picked index is smaller than k
+                if (j < k)
+                {
+                    glyphRenderInfo[idxReservoir[j]][3] = -1;  // discard the glyph
+                    idxReservoir[j] = i;
+                    glyphRenderInfo[i][3] = 1;  // render the glyph
+                }
+                // Otherwise unselect the glyph
+                else
+                {
+                    glyphRenderInfo[i][3] = -1;  // discard the glyph
+                }
+            }
         }
     }
 }

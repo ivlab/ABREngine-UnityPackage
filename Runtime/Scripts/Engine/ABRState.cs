@@ -3,6 +3,18 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System.Threading.Tasks;
@@ -21,23 +33,13 @@ namespace IVLab.ABREngine
 {
     public class ABRStateParser
     {
-        private IABRStateLoader _loader;
-
-        public static ABRStateParser GetParser<T>()
+        public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
-        {
-            T loader = new T();
-            ABRStateParser parser = new ABRStateParser();
-            parser._loader = (T)loader;
-            return parser;
-        }
-
-        public async Task<JObject> LoadState(string name, JObject previousState)
         {
             await ABREngine.Instance.WaitUntilInitialized();
             UnityThreadScheduler.GetInstance();
 
-            JObject stateJson = await _loader.GetState(name);
+            JObject stateJson = await (new T()).GetState(stateText);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
@@ -55,6 +57,7 @@ namespace IVLab.ABREngine
             JToken diffFromPrevious = jdp?.Diff(previousState, stateJson);
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
+
             // If it's an array, that means it's either been deleted or created
             if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Array)
             {
@@ -84,12 +87,13 @@ namespace IVLab.ABREngine
                 }
             }
 
+            // Generate ABR states from both the previous and current state json objects
+            RawABRState previousABRState = previousState?.ToObject<RawABRState>();
             RawABRState state = stateJson.ToObject<RawABRState>();
             if (state == null)
             {
                 return null;
             }
-
 
             // Populate the visasset manager with any local visassets
             if (stateJson.ContainsKey("localVisAssets"))
@@ -133,6 +137,7 @@ namespace IVLab.ABREngine
 
                     Queue<string> visAssetsToLoad = new Queue<string>();
                     Queue<string> rawDataToLoad = new Queue<string>();
+
                     if (impression.Value?.inputValues != null)
                     {
                         foreach (var inputValue in impression.Value.inputValues.Values)
@@ -155,8 +160,7 @@ namespace IVLab.ABREngine
                         // See if we already have the VisAsset; if not then load it
                         var visAssetUUID = new Guid(visAsset);
                         IVisAsset existing;
-                        ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
-                        if (existing == null)
+                        if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
                             await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                         }
@@ -175,17 +179,15 @@ namespace IVLab.ABREngine
                     {
                         // See if we already have the Raw Dataset; if not then load it
                         RawDataset existing;
-                        ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
-                        if (existing == null)
+                        if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                         {
-                            // Try to grab from cache
-                            await ABREngine.Instance.Data.LoadRawDatasetFromCache(rawData);
-                            ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing);
+                            // Try to grab from media dir
+                            await ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
 
                             // If not found in cache, load from data server, if there is one
-                            if (ABREngine.Instance.Config.Info.dataServer != null && existing == null)
+                            if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                             {
-                                await ABREngine.Instance.Data.LoadRawDatasetFromURL(rawData, ABREngine.Instance.Config.Info.dataServer);
+                                await ABREngine.Instance.Data.LoadRawDataset<HttpDataLoader>(rawData);
                             }
                         }
                     }
@@ -201,7 +203,6 @@ namespace IVLab.ABREngine
                     List<ABRInputAttribute> actualInputs = impressionType.GetFields()
                         .Select((f) => f.GetCustomAttribute<ABRInputAttribute>())
                         .Where((f) => f != null).ToList();
-
                     // Now that everything is loaded, go ahead and populate the state
                     if (impression.Value?.inputValues != null)
                     {
@@ -224,8 +225,7 @@ namespace IVLab.ABREngine
                                     continue;
                                 }
                                 IKeyData keyData;
-                                dataset.TryGetKeyData(value.inputValue, out keyData);
-                                if (keyData == null)
+                                if (!dataset.TryGetKeyData(value.inputValue, out keyData))
                                 {
                                     Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
                                     continue;
@@ -236,8 +236,7 @@ namespace IVLab.ABREngine
                             {
                                 string datasetPath = DataPath.GetDatasetPath(value.inputValue);
                                 Dataset dataset;
-                                ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                                if (dataset == null)
+                                if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset))
                                 {
                                     Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
                                     continue;
@@ -247,12 +246,14 @@ namespace IVLab.ABREngine
                                 {
                                     ScalarDataVariable variable;
                                     dataset.TryGetScalarVar(value.inputValue, out variable);
+                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
                                 else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
+                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
 
@@ -322,8 +323,83 @@ namespace IVLab.ABREngine
                         dataImpression.RenderHints = impression.Value.renderHints;
                     }
 
-                    // Signify that this impression has been changed so it can be re-rendered
-                    dataImpression.RenderHints.changed = true;
+                    // Attempt to find the previous version of the current impression in the previous abr state 
+                    RawDataImpression previousImpression = null;
+                    if (previousABRState?.impressions != null)
+                    {
+                        foreach (var prevImpression in previousABRState.impressions)
+                        {
+                            if (prevImpression.Value?.uuid == impression.Value?.uuid)
+                            {
+                                previousImpression = prevImpression.Value;
+                                break;
+                            }
+                        }
+                    }
+                    // Enable the visibility changed flag if the previous visibility of the impression is different 
+                    // from the current visibility
+                    bool? previousVisibility = previousImpression?.renderHints?.Visible;
+                    bool? currentVisibility = impression.Value?.renderHints?.Visible;
+                    if (previousVisibility != currentVisibility)
+                    {
+                        dataImpression.RenderHints.VisibilityChanged = true;
+                    }
+                    // Forcefully disable the visibility changed flag otherwise (this is done to counteract the automatic
+                    // enabling of "VisibilityChanged" that occurs when visibility is set to false from the loading
+                    // of a json state object)
+                    else
+                    {
+                        dataImpression.RenderHints.VisibilityChanged = false;
+                    }
+                    // Obtain the input values of the previous version of the current impression, if it exists
+                    Dictionary<string, RawABRInput> previousInputValues = previousImpression?.inputValues;
+                    // Compare the previous input values to the current input values of the impression 
+                    // and enable "Changed" flags for any differences
+                    foreach (var input in actualInputs)
+                    {
+                        RawABRInput currentInput = null;
+                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(input.inputName))
+                        {
+                            currentInput = impression.Value.inputValues[input.inputName];
+                        }
+                        RawABRInput previousInput = null;
+                        if (previousInputValues != null && previousInputValues.ContainsKey(input.inputName))
+                        {
+                            previousInput = previousInputValues[input.inputName];
+                        }
+                        // If the input values are different a change has occurred
+                        if (currentInput?.inputValue != previousInput?.inputValue)
+                        {
+                            // Enable changed flags according to the input that was changed                      
+                            if (input.updateLevel == UpdateLevel.Data)
+                            {
+                                dataImpression.RenderHints.DataChanged = true;
+                            }
+                            else if (input.updateLevel == UpdateLevel.Style)
+                            {
+                                dataImpression.RenderHints.StyleChanged = true;
+                            }
+                        }
+                    }
+                    // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
+                    // - scalar range changed for the color variable of this impression:
+                    bool scalarRangeChanged = state?.dataRanges?.Equals(previousABRState?.dataRanges) == false;
+                    // OR
+                    // - local vis asset colormap used by this impression had its contents changed:
+                    bool colormapChanged = false;
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap") &&
+                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Colormap"))
+                    {
+                        string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
+                        string prevColormapUuid = previousImpression.inputValues["Colormap"].inputValue;
+                        // Colormap has changed if its contents have changed
+                        colormapChanged = state?.localVisAssets?[colormapUuid]?.ToString() != previousABRState?.localVisAssets?[prevColormapUuid]?.ToString();
+                    }       
+                    // Toggle the "style changed" flag accordingly
+                    if (scalarRangeChanged || colormapChanged)
+                    {
+                        dataImpression.RenderHints.StyleChanged = true;
+                    }
 
                     // Add any tags
                     if (impression.Value.tags != null)
@@ -367,20 +443,50 @@ namespace IVLab.ABREngine
             // Change any variable ranges that appear in the state
             if (state.dataRanges?.scalarRanges != null)
             {
+                // If it's a scalar var, set the globally-defined range in the data variable.
                 foreach (var scalarRange in state.dataRanges.scalarRanges)
                 {
-                    // Get the variable
                     string scalarPath = scalarRange.Key;
-                    DataPath.WarnOnDataPathFormat(scalarPath, DataPath.DataPathType.ScalarVar);
-                    Dataset dataset;
-                    ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset);
-                    ScalarDataVariable variable;
-                    dataset.TryGetScalarVar(scalarPath, out variable);
-
-                    // Assign the min/max value from the state
-                    variable.MinValue = scalarRange.Value.min;
-                    variable.MaxValue = scalarRange.Value.max;
-                    variable.CustomizedRange = true;
+                    if (DataPath.FollowsConvention(scalarPath, DataPath.DataPathType.ScalarVar))
+                    {
+                        Dataset dataset;
+                        if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarPath), out dataset))
+                        {
+                            ScalarDataVariable variable;
+                            if (dataset.TryGetScalarVar(scalarPath, out variable))
+                            {
+                                // Assign the min/max value from the state
+                                variable.Range.min = scalarRange.Value.min;
+                                variable.Range.max = scalarRange.Value.max;
+                                variable.CustomizedRange = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (state.dataRanges?.specificScalarRanges != null)
+            {
+                // If it's key data, dig deeper to find this scalar var's actual range
+                foreach (var keyDataRange in state.dataRanges.specificScalarRanges)
+                {
+                    string keydataPath = keyDataRange.Key;
+                    if (DataPath.FollowsConvention(keydataPath, DataPath.DataPathType.KeyData))
+                    {
+                        foreach (var scalarRange in keyDataRange.Value)
+                        {
+                            Dataset dataset;
+                            if (ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(scalarRange.Key), out dataset))
+                            {
+                                ScalarDataVariable variable;
+                                if (dataset.TryGetScalarVar(scalarRange.Key, out variable))
+                                {
+                                    // Add this key data to the list of specific data ranges (which override the above globally-defined ranges)
+                                    variable.SpecificRanges[keyDataRange.Key] = scalarRange.Value;
+                                    variable.CustomizedRange = true;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -428,6 +534,11 @@ namespace IVLab.ABREngine
                 }
             }
 
+            if (state?.scene?.backgroundColor != null)
+            {
+                Camera.main.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
+            }
+
             return stateJson;
         }
 
@@ -447,7 +558,8 @@ namespace IVLab.ABREngine
                 };
                 RawDataRanges saveRanges = new RawDataRanges
                 {
-                    scalarRanges = new Dictionary<string, RawDataRanges.RawRange<float>>()
+                    scalarRanges = new Dictionary<string, DataRange<float>>(),
+                    specificScalarRanges = new Dictionary<string, Dictionary<string, DataRange<float>>>()
                 };
 
                 // Populate data impressions and groups
@@ -515,12 +627,20 @@ namespace IVLab.ABREngine
                                     ScalarDataVariable inputVar = input as ScalarDataVariable;
                                     if (inputVar.CustomizedRange)
                                     {
-                                        RawDataRanges.RawRange<float> scalarRange = new RawDataRanges.RawRange<float>
+                                        saveRanges.scalarRanges[inputVar.Path] = inputVar.Range;
+                                        foreach (var specificRange in inputVar.SpecificRanges)
                                         {
-                                            min = inputVar.MinValue,
-                                            max = inputVar.MaxValue,
-                                        };
-                                        saveRanges.scalarRanges[inputVar.Path] = scalarRange;
+                                            if (saveRanges.specificScalarRanges.ContainsKey(specificRange.Key))
+                                            {
+                                                saveRanges.specificScalarRanges[specificRange.Key][inputVar.Path] = specificRange.Value;
+                                            }
+                                            else
+                                            {
+                                                var tmp = new Dictionary<string, DataRange<float>>();
+                                                tmp.Add(inputVar.Path, inputVar.Range);
+                                                saveRanges.specificScalarRanges.Add(specificRange.Key, tmp);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -628,13 +748,88 @@ namespace IVLab.ABREngine
 
     class RawDataRanges
     {
-        public class RawRange<T>
+
+        public Dictionary<string, DataRange<float>> scalarRanges;
+        public Dictionary<string, Dictionary<string, DataRange<float>>> specificScalarRanges;
+
+        public override bool Equals(object obj)
         {
-            public T min;
-            public T max;
+            return this.Equals(obj as RawDataRanges);
         }
 
-        public Dictionary<string, RawRange<float>> scalarRanges;
+        public bool Equals(RawDataRanges other)
+        {
+            if (other == null)
+            {
+                // Debug.Log("other was null");
+                return false;
+            }
+            // First, go through scalarRanges
+            if (this.scalarRanges != null)
+            {
+                if (other.scalarRanges == null)
+                {
+                    // Debug.Log("other.scalarRanges was null");
+                    return false;
+                }
+                foreach (var path in this.scalarRanges)
+                {
+                    if (!other.scalarRanges.ContainsKey(path.Key))
+                    {
+                        // Debug.Log("other.scalarRanges didn't have scalar " + path.Key);
+                        return false;
+                    }
+                    else
+                    {
+                        if (!this.scalarRanges[path.Key].Equals(other.scalarRanges[path.Key]))
+                        {
+                            // Debug.LogFormat("other.scalarRanges key {0} didn't match {1}", other.scalarRanges[path.Key], this.scalarRanges[path.Key]);
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            // Then, go through specificScalarRanges
+            if (this.specificScalarRanges != null)
+            {
+                if (other.specificScalarRanges != null)
+                {
+                    // Debug.Log("other.specificScalarRanges was null");
+                    return false;
+                }
+                foreach (var kdPath in this.specificScalarRanges)
+                {
+                    if (!other.specificScalarRanges.ContainsKey(kdPath.Key))
+                    {
+                        // Debug.Log("other.specificScalarRanges didn't have keydata path " + kdPath.Key);
+                        return false;
+                    }
+                    else
+                    {
+                        var thisRanges = this.specificScalarRanges[kdPath.Key];
+                        var otherRanges = other.specificScalarRanges[kdPath.Key];
+                        foreach (var path in thisRanges)
+                        {
+                            if (!otherRanges.ContainsKey(path.Key))
+                            {
+                                // Debug.Log("otherRanges didn't have scalar path " + path.Key);
+                                return false;
+                            }
+                            else
+                            {
+                                if (!thisRanges[path.Key].Equals(otherRanges[path.Key]))
+                                {
+                                    // Debug.LogFormat("otherRanges key {0} didn't match {1}", otherRanges[path.Key], thisRanges[path.Key]);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
     }
 
     class RawImpressionGroup

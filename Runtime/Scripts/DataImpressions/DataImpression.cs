@@ -3,6 +3,18 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System;
@@ -54,6 +66,16 @@ namespace IVLab.ABREngine
         ///     `ApplyToGameObject()` should be run in sequence.
         /// </summary>
         void ApplyToGameObject(EncodedGameObject currentGameObject);
+
+        /// <summary>
+        ///     Updates the "styling" of an impression
+        /// </summary>
+        void UpdateStyling(EncodedGameObject currentGameObject);
+
+        /// <summary>
+        ///     Updates the visibility of an impression
+        /// </summary>
+        void UpdateVisibility(EncodedGameObject currentGameObject);
 
         /// <summary>
         ///     Copy a data impression, giving a new Uuid
@@ -155,6 +177,10 @@ namespace IVLab.ABREngine
 
         public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
 
+        public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
+
+        public virtual void UpdateVisibility(EncodedGameObject currentGameObject) { }
+
         /// <summary>
         ///     Unknown why it's necessary to copy each input individually, but here
         ///     we are.
@@ -190,11 +216,38 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool changed = false;
+        public bool DataChanged { get; set; } = false;
 
         /// <summary>
-        ///     Should the impression be displayed on screen?
+        ///     Has the style of the impression been changed
         /// </summary>
-        public bool visible = true;
+        public bool StyleChanged { get; set; } = false;
+
+        /// <summary>
+        ///     Has the visibility of the impression been changed (mesh renderer needs to be toggled)
+        /// </summary>
+        public bool VisibilityChanged { get; set; } = false;
+
+        /// <summary>
+        ///    Whether or not the impression is visible
+        /// </summary>
+        public bool Visible
+        {
+            get
+            {
+                return visible;
+            }
+            set
+            {
+                // Toggle the "VisibilityChanged" flag if the new value different from the old
+                if (visible != value)
+                {
+                    VisibilityChanged = true;
+                    visible = value;
+                }
+            }
+        }
+
+        private bool visible = true;
     }
 }

@@ -3,9 +3,22 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System;
+using System.Net.Http;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
@@ -19,15 +32,41 @@ namespace IVLab.ABREngine
     public class ABRConfig
     {
         /// <summary>
-        ///     Look for a file of this name in any Resources folder and load it
-        ///     as the config
+        /// Global access to constants in the ABR Engine
         /// </summary>
-        public const string CONFIG_FILE = "ABRConfig";
+        public static class Consts
+        {
+            /// <summary>
+            ///     Look for a file of this name in any Resources folder and load it
+            ///     as the config
+            /// </summary>
+            public const string ConfigFile = "ABRConfig";
 
-        /// <summary>
-        ///     Fall back to the defaults located in this package
-        /// </summary>
-        public const string CONFIG_FILE_FALLBACK = "ABRConfigDefault";
+            /// <summary>
+            ///     Fall back to the defaults located in this package
+            /// </summary>
+            public const string ConfigFileFallback = "ABRConfigDefault";
+
+            /// <summary>
+            /// Where to find the Schema online
+            /// </summary>
+            public const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/ABRSchema_0-2-0.json";
+
+            /// <summary>
+            /// VisAsset folder within media folder
+            /// </summary>
+            public const string VisAssetFolder = "visassets";
+
+            /// <summary>
+            /// Dataset folder within media folder
+            /// </summary>
+            public const string DatasetFolder = "datasets";
+
+            /// <summary>
+            /// Name of VisAsset JSON specifier
+            /// </summary>
+            public const string VisAssetJson = "artifact.json";
+        }
 
         public ABRConfigDefaults Defaults { get; private set; }
 
@@ -48,60 +87,23 @@ namespace IVLab.ABREngine
 
         public ABRConfig()
         {
-            TextAsset configContents = Resources.Load<TextAsset>(CONFIG_FILE_FALLBACK);
-            TextAsset configCustomizations = Resources.Load<TextAsset>(CONFIG_FILE);
+            TextAsset configContents = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFileFallback);
+            TextAsset configCustomizations = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFile);
 
             Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
             ABRConfigInfo customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(configCustomizations?.text ?? "");
 
-            // Overwrite the defaults if they're provided
-            if (customizations?.version != null)
+            // Dynamically load any customizations if they're provided
+            var assembly = Assembly.GetExecutingAssembly();
+            Type configInfoType = typeof(ABRConfigInfo);
+            FieldInfo[] allFields = configInfoType.GetFields();
+            foreach (FieldInfo fieldInfo in allFields)
             {
-                Info.version = customizations.version;
-            }
-            if (customizations?.defaultPrefabName != null)
-            {
-                Info.defaultPrefabName = customizations.defaultPrefabName;
-            }
-            if (customizations?.schemaName != null)
-            {
-                Info.schemaName = customizations.schemaName;
-            }
-            if (customizations?.defaultBounds != null)
-            {
-                Info.defaultBounds = customizations.defaultBounds;
-            }
-            if (customizations?.serverAddress != null)
-            {
-                Info.serverAddress = customizations.serverAddress;
-            }
-            if (customizations?.statePathOnServer != null)
-            {
-                Info.statePathOnServer = customizations.statePathOnServer;
-            }
-            if (customizations?.dataServer != null)
-            {
-                Info.dataServer = customizations.dataServer;
-            }
-            if (customizations?.visAssetServer != null)
-            {
-                Info.visAssetServer = customizations.visAssetServer;
-            }
-            if (customizations?.dataListenerPort != null)
-            {
-                Info.dataListenerPort = customizations.dataListenerPort;
-            }
-            if (customizations?.stateSubscriberPort != null)
-            {
-                Info.stateSubscriberPort = customizations.stateSubscriberPort;
-            }
-            if (customizations?.loadResourceVisAssets != null)
-            {
-                Info.loadResourceVisAssets = customizations.loadResourceVisAssets;
-            }
-            if (customizations?.mediaPath != null)
-            {
-                Info.mediaPath = customizations.mediaPath;
+                object customizedValue = fieldInfo.GetValue(customizations);
+                if (customizedValue != null)
+                {
+                    fieldInfo.SetValue(Info, customizedValue);
+                }
             }
 
             Debug.Log("ABR Config Loaded");
@@ -119,8 +121,14 @@ namespace IVLab.ABREngine
             };
 
             // Load the schema
-            TextAsset schemaContents = Resources.Load<TextAsset>(Info.schemaName);
-            Schema = JSchema.Parse(schemaContents.text);
+            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(ABRConfig.Consts.SchemaUrl).Result;
+            if (!resp.IsSuccessStatusCode)
+            {
+                Debug.LogErrorFormat("Unable to load schema from {0}", ABRConfig.Consts.SchemaUrl);
+                return;
+            }
+            string schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
                 Debug.LogErrorFormat("Unable to parse schema `{0}`.", Info.schemaName);
@@ -132,8 +140,8 @@ namespace IVLab.ABREngine
                 return;
             }
 
-            _schema = JObject.Parse(schemaContents.text);
-            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["const"]);
+            _schema = JObject.Parse(schemaContents);
+            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["default"]);
         }
 
         /// <summary>
@@ -214,19 +222,13 @@ namespace IVLab.ABREngine
         ///     What server to connect to, if any. If provided, ABR will try to
         ///     register with the server immediately upon startup. Default: null
         /// </summary>
-        public string serverAddress;
+        public Uri serverAddress;
 
         /// <summary>
         ///     State url to fetch on the server; will be concatenated with
-        ///     serverAddress
+        ///     serverAddress. Note: Do not include a leading slash!
         /// </summary>
         public string statePathOnServer;
-
-        /// <summary>
-        ///     Observer pattern state subscriber information port (connect to
-        ///     socket on a particular host). Default: null
-        /// </summary>
-        public int? stateSubscriberPort;
 
         /// <summary>
         ///     What server to obtain VisAssets from, if any. If none provided,
@@ -261,6 +263,12 @@ namespace IVLab.ABREngine
         ///     Application.persistentDataPath
         /// </summary>
         public string mediaPath;
+
+        /// <summary>
+        /// Load a state from resources on ABREngine startup
+        /// </summary>
+        public string loadStateOnStart;
+
 
         public override string ToString()
         {

@@ -3,10 +3,28 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 namespace IVLab.ABREngine
 {
+    public enum UpdateLevel
+    {
+        Data,
+        Style
+    }
+
     /// <summary>
     ///     Input attribute used for annotating an ABR input to a data
     ///     impression (VisAsset, DataVariable, etc.)
@@ -16,10 +34,13 @@ namespace IVLab.ABREngine
     {
         public string inputName;
         public string parameterName;
-        public ABRInputAttribute(string inputName, string parameterName)
+        // Which level of update (e.g. data, style, etc) this input necessitates if changed.
+        public UpdateLevel updateLevel;
+        public ABRInputAttribute(string inputName, string parameterName, UpdateLevel updateLevel)
         {
             this.inputName = inputName;
             this.parameterName = parameterName;
+            this.updateLevel = updateLevel;
         }
     }
 

@@ -3,6 +3,18 @@
  * Copyright (c) 2021 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 using System;
@@ -110,7 +122,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Remove data impression, returning if this data impression group is
+        ///     Remove data impression, returning true if this data impression group is
         ///     empty after the removal of such impression.
         /// </summary>
         public bool RemoveDataImpression(Guid uuid)
@@ -202,17 +214,39 @@ namespace IVLab.ABREngine
         ///     a zero-size bounding box and expand until it encapsulates all
         ///     datasets.
         /// </summary>
-        public void RecalculateBounds()
+        /// <returns>
+        /// Returns a boolean whether or not the bounds have changed since last recalculation
+        /// </returns>
+        public bool RecalculateBounds()
         {
+            float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
             Dataset ds = GetDataset();
             if (ds != null)
             {
-                foreach (var keyData in ds.GetAllKeyData())
+                // Build a list of keydata that are actually being used
+                List<string> activeKeyDataPaths = new List<string>();
+                foreach (IDataImpression impression in GetDataImpressions().Values)
                 {
+                    string keyDataPath = impression.InputIndexer.GetInputValue("Key Data")?.GetRawABRInput().inputValue;
+                    if (keyDataPath != null && DataPath.GetDatasetPath(keyDataPath) == ds.Path)
+                    {
+                        activeKeyDataPaths.Add(keyDataPath);
+                    }
+                }
+
+                foreach (IKeyData keyData in ds.GetAllKeyData().Values)
+                {
+                    if (!activeKeyDataPaths.Contains(keyData.Path))
+                    {
+                        continue;
+                    }
                     RawDataset rawDataset;
-                    ABREngine.Instance.Data.TryGetRawDataset(keyData.Value.Path, out rawDataset);
+                    if (!ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset))
+                    {
+                        continue;
+                    }
                     Bounds originalBounds = rawDataset.bounds;
 
                     if (ds.DataSpaceBounds.size.magnitude <= float.Epsilon)
@@ -235,22 +269,47 @@ namespace IVLab.ABREngine
                     }
                 }
             }
+
+            return Mathf.Abs(currentBoundsSize - GroupBounds.size.magnitude) > float.Epsilon;
         }
 
         public void RenderImpressions()
         {
             try
             {
+                // Make sure the bounding box is correct
+                // Mostly matters if there's a live ParaView connection
+                bool boundsChanged = RecalculateBounds();
+
                 foreach (var impression in _impressions)
                 {
-                    if (impression.Value.RenderHints.changed)
+                    // Fully compute render info and apply it to the impression object
+                    // if (key) data was changed
+                    if (boundsChanged || impression.Value.RenderHints.DataChanged)
                     {
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeKeyDataRenderInfo();
                         impression.Value.ComputeRenderInfo();
                         Guid uuid = impression.Key;
                         impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
-                        impression.Value.RenderHints.changed = false;
+                        impression.Value.RenderHints.DataChanged = false;
+                        impression.Value.RenderHints.StyleChanged = false;
+                    }
+                    // Compute and apply style info to the impression object if its
+                    // styling has changed (but only if we haven't already performed 
+                    // data changed computations since those inherently update styling)
+                    else if (impression.Value.RenderHints.StyleChanged)
+                    {
+                        Guid uuid = impression.Key;
+                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
+                        impression.Value.RenderHints.StyleChanged = false;
+                    }
+                    // Set the visibility of the impression if it has been changed
+                    if (impression.Value.RenderHints.VisibilityChanged)
+                    {
+                        Guid uuid = impression.Key;
+                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
+                        impression.Value.RenderHints.VisibilityChanged = false;
                     }
                 }
             }
@@ -274,10 +333,6 @@ namespace IVLab.ABREngine
 
         private void PrepareImpression(IDataImpression impression)
         {
-            // Make sure the bounding box is correct
-            // Mostly matters if there's a live ParaView connection
-            RecalculateBounds();
-
             // Make sure the parent is assigned properly
             gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(GroupRoot.transform, false);
             
@@ -288,7 +343,7 @@ namespace IVLab.ABREngine
             gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
 
             // Display the UUID in editor
-            gameObjectMapping[impression.Uuid].SetUuid(impression.Uuid);
+            gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;
         }
     }
 }
