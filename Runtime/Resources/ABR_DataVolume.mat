@@ -101,6 +101,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StepCount: 200
     - _UVSec: 0
     - _UseColorMap: 1
     - _UseLighting: 1
