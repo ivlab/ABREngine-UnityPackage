@@ -35,7 +35,7 @@ Shader "ABR/DataVolume"
 		_ColorDataMax("Color Data Max", Float) = 1.0
 		_VolumeBrightness("Brightness", Float) = 0.1
 		[MaterialToggle] _UseLighting("Use Lighting", Float) = 1
-		_StepCount("Quality", Int) = 200
+		_StepCount("Step Count", Int) = 200
 	}
 		
 	SubShader
