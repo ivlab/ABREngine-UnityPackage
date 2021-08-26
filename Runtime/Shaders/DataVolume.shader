@@ -35,6 +35,7 @@ Shader "ABR/DataVolume"
 		_ColorDataMax("Color Data Max", Float) = 1.0
 		_VolumeBrightness("Brightness", Float) = 0.1
 		[MaterialToggle] _UseLighting("Use Lighting", Float) = 1
+		_StepCount("Quality", Int) = 200
 	}
 		
 	SubShader
@@ -109,6 +110,8 @@ Shader "ABR/DataVolume"
 			float3 _ViewSpaceLightDirections[3];
 			// Array of light intensities
 			float _LightIntensities[3];
+			// Max number of steps traversed into the volume
+			int _StepCount;
 			// Depth texture for intersection with opaque objects
 			// (written to automatically when camera's DepthTextureMode
 			// is set to Depth)
@@ -241,9 +244,6 @@ Shader "ABR/DataVolume"
 				float3 frontCoord = direction * frontDepth + i.modelSpaceCameraPos;
 				float3 backCoord = direction * backDepth + i.modelSpaceCameraPos;
 
-				// Number of "slices" in the volume
-				int stepCount = 200;
-
 				// Find the direction vector and distance between front and back ray intersection within volume
 				float3 dist = backCoord - frontCoord;
 				float len = length(dist);
@@ -280,9 +280,8 @@ Shader "ABR/DataVolume"
 					progress += R;
 				}
 
-				// Loop for step count
-				[unroll(200)] // expand for loop out to stepCount
-				for (; progress <= stepCount; progress += 1) {
+				// Loop for step count (number of slices)
+				for (; progress <= _StepCount; progress += 1) {
 
 					///////////////////////////////////////////////////////////
 					// Traverse the volume and read its scalar data
@@ -290,7 +289,7 @@ Shader "ABR/DataVolume"
 
 					// Calculate the distance traveled into the bounding box
 					// (0.9 -> decrease step size since rarely looking down full diagonal)
-					traveled = progress / (float)stepCount * diagonal * 0.9;
+					traveled = progress / (float)_StepCount * diagonal * 0.9;
 
 					// Update current position in the bounding box
 					float3 pos = frontCoord + traveled * dir;
@@ -300,7 +299,7 @@ Shader "ABR/DataVolume"
 
 					// Sample the 3D texture to obtain the scalar value and gradients at this point,
 					// remapping the data value so that it lies in 0 -> 1 and can therefore be used for texture lookup
-					float4 V = tex3D(_VolumeTexture, uvw);
+					float4 V = tex3Dlod(_VolumeTexture, float4(uvw, 0));
 					float dataValue = Remap(V.a, float4(_ColorDataMin, _ColorDataMax, 0, 1));
 
 					// Continue if full distance traversed
@@ -312,10 +311,10 @@ Shader "ABR/DataVolume"
 					///////////////////////////////////////////////////////////
 
 					// Look up the transfer function color and opacity
-					float4 transferColor = _UseColorMap ? tex2D(_ColorMap, clamp(dataValue, 0, 1)) : _Color;
-					float4 transferOpacity = _UseOpacityMap ? tex2D(_OpacityMap, clamp(dataValue, 0, 1)) : _Opacity;
+					float4 transferColor = _UseColorMap ? tex2Dlod(_ColorMap, clamp(dataValue, 0, 1)) : _Color;
+					float4 transferOpacity = _UseOpacityMap ? tex2Dlod(_OpacityMap, clamp(dataValue, 0, 1)) : _Opacity;
 					// Calculate single alpha value based on brightness of opacity map
-					float alpha = clamp(transferOpacity.r * _OpacityMultiplier, 0, 1);
+					float alpha = clamp(transferOpacity.r * _OpacityMultiplier / _StepCount * 100, 0, 1);
 
 					// Combine transfer color and opacity to get a full source color
 					float4 src = float4(transferColor.rgb, alpha);
