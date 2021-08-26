@@ -29,8 +29,8 @@ namespace IVLab.ABREngine
     class SimpleVolumeRenderInfo : IDataImpressionRenderInfo
     {
         public Texture3D voxelTex;
-        public float colorVariableMin;
-        public float colorVariableMax;
+        public Vector3[] vertices;
+        public int[] triangles;
         public Bounds bounds;
     }
 
@@ -77,9 +77,7 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeKeyDataRenderInfo() { }
-
-        public override void ComputeRenderInfo()
+        public override void ComputeGeometry()
         {
             SimpleVolumeRenderInfo renderInfo = null;
 
@@ -88,8 +86,8 @@ namespace IVLab.ABREngine
                 renderInfo = new SimpleVolumeRenderInfo
                 {
                     voxelTex = null,
-                    colorVariableMin = 0,
-                    colorVariableMax = 0,
+                    vertices = new Vector3[0],
+                    triangles = new int[0],
                     bounds = new Bounds()
                 };
             }
@@ -102,9 +100,41 @@ namespace IVLab.ABREngine
                 // Initialize render info
                 renderInfo = new SimpleVolumeRenderInfo
                 {
-                    colorVariableMin = 0,
-                    colorVariableMax = 0,
                     bounds = dataset.bounds
+                };
+
+                // Resize the bounds of the volume to fit the rest of the data in the group
+                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
+                Vector3 min = group.GroupToDataMatrix * renderInfo.bounds.min.ToHomogeneous();
+                Vector3 max = group.GroupToDataMatrix * renderInfo.bounds.max.ToHomogeneous();
+                renderInfo.bounds.SetMinMax(min, max);
+
+                // Use new bounds to construct mesh geometry volume will be rendered on
+                Vector3 center = renderInfo.bounds.center;
+                Vector3 extents = renderInfo.bounds.extents;
+                renderInfo.vertices = new Vector3[8] {
+                    center + new Vector3(-extents.x, -extents.y, -extents.z),
+                    center + new Vector3(extents.x, -extents.y, -extents.z),
+                    center + new Vector3(extents.x, extents.y, -extents.z),
+                    center + new Vector3(-extents.x, extents.y, -extents.z),
+                    center + new Vector3(-extents.x, extents.y, extents.z),
+                    center + new Vector3(extents.x, extents.y, extents.z),
+                    center + new Vector3(extents.x, -extents.y, extents.z),
+                    center + new Vector3(-extents.x, -extents.y, extents.z)
+                };
+                renderInfo.triangles = new int[36] {
+                    0, 2, 1, //face front
+                    0, 3, 2,
+                    2, 3, 4, //face top
+                    2, 4, 5,
+                    1, 2, 5, //face right
+                    1, 5, 6,
+                    0, 7, 4, //face left
+                    0, 4, 3,
+                    5, 4, 7, //face back
+                    5, 7, 6,
+                    0, 6, 7, //face bottom
+                    0, 1, 6
                 };
 
                 // Initialize color scalars
@@ -115,9 +145,6 @@ namespace IVLab.ABREngine
                     scalars = new Color[colorScalars.Length];
                     for (int i = 0; i < colorScalars.Length; i++)
                         scalars[i][0] = colorScalars[i];
-
-                    renderInfo.colorVariableMin = colorVariable.MinValue;
-                    renderInfo.colorVariableMax = colorVariable.MaxValue;
                 }
 
                 // Setup the 3D volume texture
@@ -173,33 +200,26 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void ApplyToGameObject(EncodedGameObject currentGameObject) {
-            // Obtain the now populated render info
-            var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;
-
+        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        {
             if (currentGameObject == null)
             {
                 return;
             }
 
-            // Get/add mesh-related components
-            MeshFilter meshFilter;
-            MeshRenderer meshRenderer;
-
-            meshFilter = currentGameObject.GetComponent<MeshFilter>();
-            meshRenderer = currentGameObject.GetComponent<MeshRenderer>();
-
-            if (meshFilter == null)
+            // Setup mesh renderer and mesh filter
+            MeshFilter meshFilter = null;
+            MeshRenderer meshRenderer = null;
+            if (!currentGameObject.TryGetComponent<MeshFilter>(out meshFilter))
             {
                 meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
             }
-            if (meshRenderer == null)
+            if (!currentGameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
             {
                 meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-            meshRenderer.enabled = RenderHints.Visible;
 
-            // Set layer and name
+            // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
@@ -211,107 +231,27 @@ namespace IVLab.ABREngine
             }
             currentGameObject.name = this + " volume";
 
-            // Apply render data
+            // Populate volume mesh from calculated geometry
+            var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;
             if (volumeRenderData != null)
             {
-                // Resize the bounds of the volume to fit the rest of the data in the group
-                DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
-                Vector3 min = group.GroupToDataMatrix * volumeRenderData.bounds.min.ToHomogeneous();
-                Vector3 max = group.GroupToDataMatrix * volumeRenderData.bounds.max.ToHomogeneous();
-                volumeRenderData.bounds.SetMinMax(min, max);
-
-                // Use new bounds to construct mesh volume will be rendered on
-                Vector3 center = volumeRenderData.bounds.center;
-                Vector3 extents = volumeRenderData.bounds.extents;
-                Vector3[] verts = {
-                    center + new Vector3(-extents.x, -extents.y, -extents.z),
-                    center + new Vector3(extents.x, -extents.y, -extents.z),
-                    center + new Vector3(extents.x, extents.y, -extents.z),
-                    center + new Vector3(-extents.x, extents.y, -extents.z),
-                    center + new Vector3(-extents.x, extents.y, extents.z),
-                    center + new Vector3(extents.x, extents.y, extents.z),
-                    center + new Vector3(extents.x, -extents.y, extents.z),
-                    center + new Vector3(-extents.x, -extents.y, extents.z)
-                };
-                int[] tris = {
-                    0, 2, 1, //face front
-                    0, 3, 2,
-                    2, 3, 4, //face top
-                    2, 4, 5,
-                    1, 2, 5, //face right
-                    1, 5, 6,
-                    0, 7, 4, //face left
-                    0, 4, 3,
-                    5, 4, 7, //face back
-                    5, 7, 6,
-                    0, 6, 7, //face bottom
-                    0, 1, 6
-                };
                 Mesh mesh = meshFilter.mesh;
+                if (mesh == null) mesh = new Mesh();
                 mesh.Clear();
-                mesh.vertices = verts;
-                mesh.triangles = tris;
-                mesh.Optimize();
-                meshFilter.mesh = mesh;
                 meshFilter.mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
 
+                mesh.vertices = volumeRenderData.vertices;
+                mesh.triangles = volumeRenderData.triangles;
+                mesh.Optimize();
 
-                // Set/get the volume rendering material
+                meshFilter.mesh = mesh;
+
+                // Apply the voxel texture to the mesh
                 meshRenderer.material = ImpressionMaterial;
                 meshRenderer.GetPropertyBlock(MatPropBlock);
-
-                // Set the the voxel texture
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);
-
-                // Set the bounds
                 MatPropBlock.SetVector("_Center", volumeRenderData.bounds.center);
                 MatPropBlock.SetVector("_Extents", volumeRenderData.bounds.extents);
-
-                // Set the colormap
-                if (colormap != null)
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 0);
-
-                }
-                MatPropBlock.SetFloat("_ColorDataMin", volumeRenderData.colorVariableMin);
-                MatPropBlock.SetFloat("_ColorDataMax", volumeRenderData.colorVariableMax);
-
-                // Set the opacitymap
-                if (opacitymap != null)
-                {
-                    MatPropBlock.SetInt("_UseOpacityMap", 1);
-                    MatPropBlock.SetTexture("_OpacityMap", GenerateOpacityMap());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseOpacityMap", 0);
-
-                }
-
-                ABRConfig config = ABREngine.Instance.Config;
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
-                // Set the brightness
-                float volumeBrightnessOut = volumeBrightness?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Brightness").Value;
-                MatPropBlock.SetFloat("_VolumeBrightness", volumeBrightnessOut);
-
-                // Set the opacity multiplier
-                float volumeOpacityMultiplierOut = volumeOpacityMultiplier?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Opacity Multiplier").Value;
-                MatPropBlock.SetFloat("_OpacityMultiplier", volumeOpacityMultiplierOut);
-
-                // Set the lighting toggle
-                bool volumeLightingOut = volumeLighting?.Value ??
-                    config.GetInputValueDefault<BooleanPrimitive>(plateType, "Volume Lighting").Value;
-                MatPropBlock.SetInt("_UseLighting", volumeLightingOut ? 1 : 0);
-
-                // Apply the material properties
                 meshRenderer.SetPropertyBlock(MatPropBlock);
             }
         }
@@ -331,13 +271,42 @@ namespace IVLab.ABREngine
 
             // The mesh we wish to update the styling of (which we expect to exist if we've made it this far)
             Mesh mesh = meshFilter.mesh;
-            mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
 
-            // Get the material
-            meshRenderer.material = ImpressionMaterial;
+            // Record changes to color scalars if any occurred
+            float colorVariableMin = 0;
+            float colorVariableMax = 0;
+            if (colorVariable != null && colorVariable.IsPartOf(keyData))
+            {
+                // Get keydata-specific range, if there is one
+                if (colorVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
+                {
+                    colorVariableMin = colorVariable.SpecificRanges[keyData.Path].min;
+                    colorVariableMax = colorVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    colorVariableMin = colorVariable.Range.min;
+                    colorVariableMax = colorVariable.Range.max;
+                }
+            }
+
+            // Load defaults from configuration / schema
+            ABRConfig config = ABREngine.Instance.Config;
+            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+            float volumeBrightnessOut = volumeBrightness?.Value ??
+                config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Brightness").Value;
+            float volumeOpacityMultiplierOut = volumeOpacityMultiplier?.Value ??
+                config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Opacity Multiplier").Value;
+            bool volumeLightingOut = volumeLighting?.Value ??
+                config.GetInputValueDefault<BooleanPrimitive>(plateType, "Volume Lighting").Value;
+
+            // Apply changes to the mesh's shader / material
             meshRenderer.GetPropertyBlock(MatPropBlock);
-
-            // Update the colormap
+            MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
+            MatPropBlock.SetFloat("_ColorDataMax", colorVariableMax);
+            MatPropBlock.SetFloat("_VolumeBrightness", volumeBrightnessOut);
+            MatPropBlock.SetFloat("_OpacityMultiplier", volumeOpacityMultiplierOut);
+            MatPropBlock.SetInt("_UseLighting", volumeLightingOut ? 1 : 0);
             if (colormap != null)
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
@@ -348,19 +317,6 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetInt("_UseColorMap", 0);
 
             }
-
-            float colorVariableMin = 0;
-            float colorVariableMax = 0;
-            if (colorVariable != null && colorVariable.IsPartOf(keyData))
-            {
-
-                colorVariableMin = colorVariable.MinValue;
-                colorVariableMax = colorVariable.MaxValue;
-            }
-            MatPropBlock.SetFloat("_ColorDataMin", colorVariableMin);
-            MatPropBlock.SetFloat("_ColorDataMax", colorVariableMax);
-
-            // Update the opacitymap
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
@@ -372,25 +328,6 @@ namespace IVLab.ABREngine
 
             }
 
-            ABRConfig config = ABREngine.Instance.Config;
-            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
-            // Update the brightness
-            float volumeBrightnessOut = volumeBrightness?.Value ??
-                config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Brightness").Value;
-            MatPropBlock.SetFloat("_VolumeBrightness", volumeBrightnessOut);
-
-            // Update the opacity multiplier
-            float volumeOpacityMultiplierOut = volumeOpacityMultiplier?.Value ??
-                config.GetInputValueDefault<PercentPrimitive>(plateType, "Volume Opacity Multiplier").Value;
-            MatPropBlock.SetFloat("_OpacityMultiplier", volumeOpacityMultiplierOut);
-
-            // Update the lighting toggle
-            bool volumeLightingOut = volumeLighting?.Value ??
-                config.GetInputValueDefault<BooleanPrimitive>(plateType, "Volume Lighting").Value;
-            MatPropBlock.SetInt("_UseLighting", volumeLightingOut ? 1 : 0);
-
-            // Apply the material properties
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
