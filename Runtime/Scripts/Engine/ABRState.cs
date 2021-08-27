@@ -418,48 +418,22 @@ namespace IVLab.ABREngine
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap") &&
-                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Colormap"))
+                    JToken colormapDiff = diffFromPrevious?.SelectToken("localVisAssets");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
                     {
                         string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
-                        string prevColormapUuid = previousImpression.inputValues["Colormap"].inputValue;
-                        // Colormap has changed if its contents have changed
-                        colormapChanged = state?.localVisAssets?[colormapUuid]?.ToString() != previousABRState?.localVisAssets?[prevColormapUuid]?.ToString();
+                        if (colormapDiff?.SelectToken(colormapUuid) != null)
+                            colormapChanged = true;
                     }
                     // OR
                     // - opacity map primitive gradient attached to this impression was changed -
                     bool opacityMapChanged = false;
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap") &&
-                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Opacitymap"))
+                    JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
                     {
                         IntegerPrimitive inputValue = new IntegerPrimitive(impression.Value.inputValues["Opacitymap"].inputValue);
-                        IntegerPrimitive prevInputValue = new IntegerPrimitive(previousImpression.inputValues["Opacitymap"].inputValue);
-                        try
-                        {
-                            List<float> points = state?.primitiveGradients?[inputValue.Value]?.points;
-                            List<string> values = state?.primitiveGradients?[inputValue.Value]?.values;
-                            List<float> prevPoints = previousABRState?.primitiveGradients?[prevInputValue.Value]?.points;
-                            List<string> prevValues = previousABRState?.primitiveGradients?[prevInputValue.Value]?.values;
-                            if (points?.Count != prevPoints?.Count || values?.Count != prevValues?.Count)
-                            {
-                                opacityMapChanged = true;
-                            }
-                            else
-                            {
-                                for (int i = 0; i < points?.Count; i++)
-                                {
-                                    if (!points[i].Equals(prevPoints[i]) || !values[i].Equals(prevValues[i]))
-                                    {
-                                        opacityMapChanged = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        catch (ArgumentOutOfRangeException)
-                        {
-                            Debug.LogError("Invalid Primitive Gradient input: index out of range.");
-                        }
+                        if (primitiveGradientDiff?.SelectToken(inputValue.Value.ToString()) != null)
+                            opacityMapChanged = true;
                     }
                     // Toggle the "style changed" flag accordingly
                     if (scalarRangeChanged || colormapChanged || opacityMapChanged)
