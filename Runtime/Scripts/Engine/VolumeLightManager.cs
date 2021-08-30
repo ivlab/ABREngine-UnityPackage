@@ -29,7 +29,7 @@ public class VolumeLightManager : MonoBehaviour
 
     private void Start()
     {
-        volumeMaterial = Resources.Load<Material>("ABR_DataVolume");
+        volumeMaterial = Resources.Load<Material>("ABR_Volume");
     }
 
     // Update is called once per frame

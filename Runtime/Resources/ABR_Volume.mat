@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ABR_DataVolume
+  m_Name: ABR_Volume
   m_Shader: {fileID: 4800000, guid: 310749beb02de824b9eb237b15cf08c4, type: 3}
   m_ShaderKeywords: _USECOLORMAP_ON _USELIGHTING_ON
   m_LightmapFlags: 4

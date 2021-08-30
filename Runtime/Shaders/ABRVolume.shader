@@ -1,6 +1,4 @@
-/* DataVolume.shader
- *
- * Copyright (c) 2021 University of Minnesota
+/* Copyright (c) 2021 University of Minnesota
  * Authors: Matthias Broske <brosk014@umn.edu>, Bridger Herman <herma582@umn.edu>, 
  * Seth Johnson <sethalanjohnson@gmail.com>
  *
@@ -18,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-Shader "ABR/DataVolume"
+Shader "ABR/Volume"
 {
 	Properties
 	{

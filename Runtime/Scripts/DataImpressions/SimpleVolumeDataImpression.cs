@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
         public BooleanPrimitive volumeLighting;
 
 
-        protected override string MaterialName { get; } = "ABR_DataVolume";
+        protected override string MaterialName { get; } = "ABR_Volume";
         protected override string LayerName { get; } = "ABR_Volume";
 
         /// <summary>
