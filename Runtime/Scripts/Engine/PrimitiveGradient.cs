@@ -31,7 +31,7 @@ namespace IVLab.ABREngine
 
     public interface IPrimitiveGradient : IABRInput
     {
-        IntegerPrimitive InputValue { get; }
+        Guid InputValue { get; }
         float[] Points { get; }
         string[] Values { get; }
     }
@@ -39,11 +39,11 @@ namespace IVLab.ABREngine
     public class PrimitiveGradient : IPrimitiveGradient
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.PrimitiveGradient;
-        public IntegerPrimitive InputValue { get; }
+        public Guid InputValue { get; }
         public float[] Points { get; }
         public string[] Values { get; }
 
-        public PrimitiveGradient(IntegerPrimitive inputValue, float[] points, string[] values)
+        public PrimitiveGradient(Guid inputValue, float[] points, string[] values)
         {
             InputValue = inputValue;
             Points = points;
@@ -55,112 +55,10 @@ namespace IVLab.ABREngine
             return new RawABRInput
             {
                 inputType = this.GetType().ToString(),
-                inputValue = InputValue.Value.ToString("G"),
+                inputValue = InputValue.ToString("G"),
                 parameterName = "",// TODO
                 inputGenre = Genre.ToString("G")
             };
         }
     }
-
-    /*
-    public enum PrimitiveGradientType
-    {
-        Opacitymap
-    }
-
-    public interface IFloatPrimitiveGradient : IPrimitiveGradient
-    {
-
-    }
-
-    public class FloatPrimitiveGradient : PrimitiveGradient
-    {
-
-    }
-    public class PercentPrimitive : FloatPrimitiveGradient
-    {
-
-    }
-    public class BooleanPrimitive : PrimitiveGradient
-    {
-
-    }
-    public class LengthPrimitive : FloatPrimitiveGradient
-    {
-
-    }
-    public class AnglePrimitive : FloatPrimitiveGradient
-    {
-
-    }
-    public class IntegerPrimitive : PrimitiveGradient
-    {
-
-    }*/
-
-    /*public class OpacityMapPrimitiveGradient : PrimitiveGradient
-    {
-        private int width = 1024;
-        private int height = 100;
-
-        public OpacityMapPrimitiveGradient(IntegerPrimitive inputValue, float[] points, float[] values) : 
-            base(inputValue, points, values)
-        {
-            if (points.Length == 0 || values.Length == 0)
-            {
-                Gradient = null;
-                return;
-            }
-
-            Gradient = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            Gradient.wrapMode = TextureWrapMode.Clamp;
-            Gradient.filterMode = FilterMode.Bilinear;  // Is bilinear going to cause problems?
-
-            // Sort the points/values array
-            Array.Sort(points, values);
-
-            Color[] pixelColors = new Color[width * height];
-
-            // fill colors with zero until first control point
-            int firstControlPoint = (int)(width * points[0]);
-            for (int p = 0; p < firstControlPoint; p++)
-            {
-                pixelColors[p] = Color.black;
-            }
-            // interpolate
-            int prevControlPoint = firstControlPoint;
-            float prevValue = values[0];
-            for (int i = 1; i < points.Length; i++)
-            {
-                int nextControlPoint = (int) (width * points[i]);
-                float nextValue = values[i];
-                for (int p = prevControlPoint; p < nextControlPoint; p++)
-                {
-                    float lerpValue = Mathf.Lerp(prevValue, nextValue, ((float)(p - prevControlPoint) / (nextControlPoint - prevControlPoint)));
-                    pixelColors[p] = new Color(lerpValue, lerpValue, lerpValue);
-                }
-                prevControlPoint = nextControlPoint;
-                prevValue = values[i];
-            }
-            // fill colors with zero until end of texture
-            for (int p = prevControlPoint; p < width; p++)
-            {
-                pixelColors[p] = (p == prevControlPoint) ? new Color(prevValue, prevValue, prevValue) : Color.black;
-            }
-
-            // fill in the rest of the pixel colors
-            for (int i = 1; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    pixelColors[i * width + j] = pixelColors[(i - 1) * width + j];
-                }
-            }
-
-            Gradient.SetPixels(pixelColors);
-            Gradient.Apply(false);
-        }
-
-        public Texture2D Gradient { get; set; } = null;
-    }*/
 }

@@ -302,9 +302,9 @@ namespace IVLab.ABREngine
                                 // Attempt to construct a primitive gradient
                                 try
                                 {
-                                    IntegerPrimitive inputValue = new IntegerPrimitive(value.inputValue);
-                                    int? pointsLength = state?.primitiveGradients?[inputValue.Value]?.points?.Count;
-                                    int? valuesLength = state?.primitiveGradients?[inputValue.Value]?.values?.Count;
+                                    string uuid = value.inputValue;
+                                    int? pointsLength = state?.primitiveGradients?[uuid]?.points?.Count;
+                                    int? valuesLength = state?.primitiveGradients?[uuid]?.values?.Count;
                                     if (pointsLength != valuesLength || pointsLength == null || valuesLength == null)
                                     {
                                         Debug.LogError("Invalid Primitive Gradient: \"points\" and \"values\" arrays must have same length" +
@@ -316,15 +316,15 @@ namespace IVLab.ABREngine
                                         string[] values = new string[(int)valuesLength];
                                         for (int i = 0; i < pointsLength; i++)
                                         {
-                                            points[i] = state.primitiveGradients[inputValue.Value].points[i];
-                                            values[i] = state.primitiveGradients[inputValue.Value].values[i];
+                                            points[i] = state.primitiveGradients[uuid].points[i];
+                                            values[i] = state.primitiveGradients[uuid].values[i];
                                         }
-                                        possibleInput = new PrimitiveGradient(inputValue, points, values) as IABRInput;
+                                        possibleInput = new PrimitiveGradient(new Guid(uuid), points, values) as IABRInput;
                                     }
                                 }
-                                catch (ArgumentOutOfRangeException)
+                                catch (KeyNotFoundException)
                                 {
-                                    Debug.LogError("Invalid Primitive Gradient input: index out of range.");
+                                    Debug.LogErrorFormat("Invalid Primitive Gradient input: Primitive gradient with uuid {0} does not exist.", value.inputValue);
                                 }
                             }
 
@@ -431,8 +431,8 @@ namespace IVLab.ABREngine
                     JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
                     if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
                     {
-                        IntegerPrimitive inputValue = new IntegerPrimitive(impression.Value.inputValues["Opacitymap"].inputValue);
-                        if (primitiveGradientDiff?.SelectToken(inputValue.Value.ToString()) != null)
+                        string primitiveGradientUuid = impression.Value.inputValues["Opacitymap"].inputValue;
+                        if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
                             opacityMapChanged = true;
                     }
                     // Toggle the "style changed" flag accordingly
@@ -760,7 +760,7 @@ namespace IVLab.ABREngine
         public RawDataRanges dataRanges;
         public JToken uiData; // data for UIs, not messing with it at all
         public JToken localVisAssets; // custom vis assets, not messing with them at all
-        public List<RawPrimitiveGradient> primitiveGradients; 
+        public Dictionary<string, RawPrimitiveGradient> primitiveGradients; 
         public string name;
     }
 
