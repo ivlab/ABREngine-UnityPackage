@@ -137,16 +137,6 @@ namespace IVLab.ABREngine
                     0, 1, 6
                 };
 
-                // Initialize color scalars
-                Color[] scalars = null;
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
-                {
-                    var colorScalars = colorVariable.GetArray(keyData);
-                    scalars = new Color[colorScalars.Length];
-                    for (int i = 0; i < colorScalars.Length; i++)
-                        scalars[i][0] = colorScalars[i];
-                }
-
                 // Setup the 3D volume texture
                 Vector3Int dimensions = dataset.dimensions;
                 renderInfo.voxelTex = new Texture3D(
@@ -159,8 +149,9 @@ namespace IVLab.ABREngine
                 renderInfo.voxelTex.wrapMode = TextureWrapMode.Clamp;
 
                 // Only fully initialize 3D texture if there are scalars to create it out of
-                if (scalars != null)
+                if (colorVariable != null && colorVariable.IsPartOf(keyData))
                 {
+                    var colorScalars = colorVariable.GetArray(keyData);
                     // Set the pixels of the 3D texture
                     Color[] pixels = new Color[dimensions.x * dimensions.y * dimensions.z];
                     for (int z = 0; z < dimensions.z; z++)
@@ -180,11 +171,11 @@ namespace IVLab.ABREngine
                                 int xOffset = x;
                                 int xPlusOneOffset = x == dimensions.x - 1 ? dimensions.x - 1 : x + 1;
                                 // Compute partial derivatives in x, y and z
-                                float xPartial = (scalars[xPlusOneOffset + yOffset + zOffset][0] - scalars[xMinusOneOffset + yOffset + zOffset][0]) / 2.0f;
-                                float yPartial = (scalars[xOffset + yPlusOneOffset + zOffset][0] - scalars[xOffset + yMinusOneOffset + zOffset][0]) / 2.0f;
-                                float zPartial = (scalars[xOffset + yOffset + zPlusOneOffset][0] - scalars[xOffset + yOffset + zMinusOneOffset][0]) / 2.0f;
+                                float xPartial = (colorScalars[xPlusOneOffset + yOffset + zOffset] - colorScalars[xMinusOneOffset + yOffset + zOffset]) / 2.0f;
+                                float yPartial = (colorScalars[xOffset + yPlusOneOffset + zOffset] - colorScalars[xOffset + yMinusOneOffset + zOffset]) / 2.0f;
+                                float zPartial = (colorScalars[xOffset + yOffset + zPlusOneOffset] - colorScalars[xOffset + yOffset + zMinusOneOffset]) / 2.0f;
                                 // Compute scalar data value
-                                float d = scalars[xOffset + yOffset + zOffset][0];
+                                float d = colorScalars[xOffset + yOffset + zOffset];
                                 // Store gradient in color rgb and data in alpha
                                 // (flip z to account for RH -> LH coordinate system conversion)
                                 pixels[xOffset + yOffset + zOffsetFlipped] = new Color(xPartial, yPartial, -zPartial, d);
