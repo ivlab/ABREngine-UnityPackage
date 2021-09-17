@@ -38,7 +38,7 @@ namespace IVLab.ABREngine
     public class SimpleVolumeDataImpression : DataImpression, IDataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public PointKeyData keyData;
+        public VolumeKeyData keyData;
 
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Data)]

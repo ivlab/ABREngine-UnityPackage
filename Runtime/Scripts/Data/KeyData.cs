@@ -25,13 +25,14 @@ namespace IVLab.ABREngine
 {
     public static class KeyDataMapping
     {
-        public static Dictionary<MeshTopology, Type> typeMap = new Dictionary<MeshTopology, Type>()
+        public static Dictionary<DataTopology, Type> typeMap = new Dictionary<DataTopology, Type>()
         {
-            { MeshTopology.Points, typeof(PointKeyData) },
-            { MeshTopology.Triangles, typeof(SurfaceKeyData) },
-            { MeshTopology.Quads, typeof(SurfaceKeyData) },
-            { MeshTopology.Lines, typeof(LineKeyData) },
-            { MeshTopology.LineStrip, typeof(LineKeyData) },
+            { DataTopology.Points, typeof(PointKeyData) },
+            { DataTopology.Triangles, typeof(SurfaceKeyData) },
+            { DataTopology.Quads, typeof(SurfaceKeyData) },
+            { DataTopology.Lines, typeof(LineKeyData) },
+            { DataTopology.LineStrip, typeof(LineKeyData) },
+            { DataTopology.Voxels, typeof(VolumeKeyData) }
         };
     }
 
