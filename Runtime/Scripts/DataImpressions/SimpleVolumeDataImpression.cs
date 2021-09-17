@@ -358,18 +358,18 @@ namespace IVLab.ABREngine
             }
             // Interpolate between values for all control points
             int prevControlPoint = firstControlPoint;
-            float prevValue = new FloatPrimitive(opacitymap.Values[0]).Value;
+            float prevValue = new PercentPrimitive(opacitymap.Values[0]).Value;
             for (int i = 1; i < opacitymap.Points.Length; i++)
             {
                 int nextControlPoint = (int)(width * opacitymap.Points[i]);
-                float nextValue = new FloatPrimitive(opacitymap.Values[i]).Value;
+                float nextValue = new PercentPrimitive(opacitymap.Values[i]).Value;
                 for (int p = prevControlPoint; p < nextControlPoint; p++)
                 {
                     float lerpValue = Mathf.Lerp(prevValue, nextValue, ((float)(p - prevControlPoint) / (nextControlPoint - prevControlPoint)));
                     pixelColors[p] = new Color(lerpValue, lerpValue, lerpValue);
                 }
                 prevControlPoint = nextControlPoint;
-                prevValue = new FloatPrimitive(opacitymap.Values[i]).Value;
+                prevValue = new PercentPrimitive(opacitymap.Values[i]).Value;
             }
             // Fill remaining pixels with black
             for (int p = prevControlPoint; p < width; p++)
