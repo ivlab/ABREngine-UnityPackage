@@ -55,7 +55,7 @@ namespace IVLab.ABREngine
             return new RawABRInput
             {
                 inputType = this.GetType().ToString(),
-                inputValue = InputValue.ToString("G"),
+                inputValue = InputValue.ToString(),
                 parameterName = "",// TODO
                 inputGenre = Genre.ToString("G")
             };
