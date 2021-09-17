@@ -288,10 +288,11 @@ namespace IVLab.ABREngine
                     if (boundsChanged || impression.Value.RenderHints.DataChanged)
                     {
                         PrepareImpression(impression.Value);
-                        impression.Value.ComputeKeyDataRenderInfo();
-                        impression.Value.ComputeRenderInfo();
+                        impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
-                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        impression.Value.SetupGameObject(gameObjectMapping[uuid]);
+                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
+                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
                         impression.Value.RenderHints.DataChanged = false;
                         impression.Value.RenderHints.StyleChanged = false;
                     }

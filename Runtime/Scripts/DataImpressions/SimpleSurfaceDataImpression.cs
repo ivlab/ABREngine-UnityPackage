@@ -29,8 +29,6 @@ namespace IVLab.ABREngine
         public int[] indices;
         public Vector3[] normals;
         public Color[] scalars;
-        public Vector4 scalarMin;
-        public Vector4 scalarMax;
         public MeshTopology topology;
     }
 
@@ -66,7 +64,7 @@ namespace IVLab.ABREngine
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
-        protected override string MaterialName { get; } = "ABR_DataColoredMesh";
+        protected override string MaterialName { get; } = "ABR_Surface";
         protected override string LayerName { get; } = "ABR_Surface";
 
 
@@ -86,9 +84,7 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeKeyDataRenderInfo() { }
-
-        public override void ComputeRenderInfo()
+        public override void ComputeGeometry()
         {
             SimpleSurfaceRenderInfo renderInfo = null;
 
@@ -132,8 +128,6 @@ namespace IVLab.ABREngine
                     indices = new int[numIndices],
                     scalars = new Color[numPoints],
                     normals = null,
-                    scalarMin = Vector4.zero,
-                    scalarMax = Vector4.zero,
                     topology = dataset.meshTopology
 
                 };
@@ -185,18 +179,6 @@ namespace IVLab.ABREngine
                     // Back faces
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][0] = colorScalars[j];
-
-                    // Get keydata-specific range, if there is one
-                    if (colorVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.SpecificRanges[keyData.Path].min;
-                        renderInfo.scalarMax[0] = colorVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        renderInfo.scalarMin[0] = colorVariable.Range.min;
-                        renderInfo.scalarMax[0] = colorVariable.Range.max;
-                    }
                 }
 
                 if (patternVariable != null && patternVariable.IsPartOf(keyData))
@@ -208,18 +190,6 @@ namespace IVLab.ABREngine
                     // Back faces
                     for (int i = sourceVertCount, j = 0; i < numPoints; i++, j++)
                         renderInfo.scalars[i][1] = scalars[j];
-
-                    // Get keydata-specific range, if there is one
-                    if (patternVariable?.SpecificRanges.ContainsKey(keyData.Path) == true)
-                    {
-                        renderInfo.scalarMin[1] = patternVariable.SpecificRanges[keyData.Path].min;
-                        renderInfo.scalarMax[1] = patternVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        renderInfo.scalarMin[1] = patternVariable.Range.min;
-                        renderInfo.scalarMax[1] = patternVariable.Range.max;
-                    }
                 }
 
                 for (int c = 0, i = 0; c < numCells; c++)
@@ -248,31 +218,26 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject(EncodedGameObject currentGameObject)
         {
-            var SSrenderData = RenderInfo as SimpleSurfaceRenderInfo;
-
             if (currentGameObject == null)
             {
                 return;
             }
 
-            MeshFilter meshFilter;
-            MeshRenderer meshRenderer;
-
-            meshFilter = currentGameObject.GetComponent<MeshFilter>();
-            meshRenderer = currentGameObject.GetComponent<MeshRenderer>();
-
-            if (meshFilter == null)
+            // Setup mesh renderer and mesh filter
+            MeshFilter meshFilter = null;
+            MeshRenderer meshRenderer = null;
+            if (!currentGameObject.TryGetComponent<MeshFilter>(out meshFilter))
             {
                 meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
             }
-            if (meshRenderer == null)
+            if (!currentGameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
             {
                 meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-            meshRenderer.enabled = RenderHints.Visible;
 
+            // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
@@ -282,15 +247,16 @@ namespace IVLab.ABREngine
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleSurfaceDataImpression", LayerName);
             }
-
             currentGameObject.name = this + " surface Mesh";
 
+            // Populate surface mesh from calculated geometry
+            var SSrenderData = RenderInfo as SimpleSurfaceRenderInfo;
             if (SSrenderData != null)
             {
                 Mesh mesh = meshFilter.mesh;
                 if (mesh == null) mesh = new Mesh();
                 mesh.Clear();
-                mesh.name = "SSS:278@" + System.DateTime.Now.ToString();
+                mesh.name = "SS:289@" + System.DateTime.Now.ToString();
 
                 mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 mesh.vertices = SSrenderData.vertices;
@@ -299,7 +265,6 @@ namespace IVLab.ABREngine
                 if (SSrenderData.normals != null)
                 {
                     mesh.normals = SSrenderData.normals;
-
                 }
                 else
                 {
@@ -309,80 +274,7 @@ namespace IVLab.ABREngine
                 mesh.UploadMeshData(false);
 
                 meshFilter.mesh = mesh;
-
                 meshRenderer.material = ImpressionMaterial;
-
-                meshRenderer.GetPropertyBlock(MatPropBlock);
-                MatPropBlock.SetColor("_Color", Color.white);
-                MatPropBlock.SetFloat("_ColorDataMin", SSrenderData.scalarMin[0]);
-                MatPropBlock.SetFloat("_ColorDataMax", SSrenderData.scalarMax[0]);
-                MatPropBlock.SetFloat("_PatternDataMin", SSrenderData.scalarMin[1]);
-                MatPropBlock.SetFloat("_PatternDataMax", SSrenderData.scalarMax[1]);
-                
-                // Load defaults from configuration / schema
-                ABRConfig config = ABREngine.Instance.Config;
-
-                // Width appears double what it should be, so decrease to
-                // maintain the actual real world distance
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
-                float patternSizeOut = patternSize?.Value ??
-                    config.GetInputValueDefault<LengthPrimitive>(plateType, "Pattern Size").Value;
-                    
-                float patternIntensityOut = patternIntensity?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Intensity").Value;
-                    
-                float patternDirectionBlendOut = patternDirectionBlend?.Value ?? 
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Seam Blend").Value;
-
-                float patternSaturationOut = patternSaturation?.Value ?? 
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Saturation").Value;
-
-                MatPropBlock.SetFloat("_PatternScale", patternSizeOut);
-                MatPropBlock.SetFloat("_PatternIntensity", patternIntensityOut);
-                MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlendOut);
-                MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
-
-                if (patternVariable != null)
-                {
-                    MatPropBlock.SetInt("_UsePatternVariable", 1);
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UsePatternVariable", 0);
-
-                }
-                if (colormap?.GetColorGradient() != null)
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 0);
-                }
-                try
-                {
-                    if (pattern?.Texture != null)
-                    {
-                        MatPropBlock.SetInt("_UsePattern", 1);
-                        MatPropBlock.SetTexture("_Pattern", pattern?.Texture);
-                        MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
-
-                    }
-                    else
-                    {
-                        MatPropBlock.SetInt("_UsePattern", 0);
-                        MatPropBlock.SetTexture("_Pattern", new Texture2D(10, 10));
-                        MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
-
-                meshRenderer.SetPropertyBlock(MatPropBlock);
             }
         }
 
