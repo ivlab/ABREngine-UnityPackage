@@ -350,15 +350,16 @@ namespace IVLab.ABREngine
 
             Color[] pixelColors = new Color[width * height];
 
-            // Fill pixels with black until first control point
+            // Fill pixels with first control point's color up to first control point
             int firstControlPoint = (int)(width * opacitymap.Points[0]);
+            float firstControlPointValue = new PercentPrimitive(opacitymap.Values[0]).Value;
             for (int p = 0; p < firstControlPoint; p++)
             {
-                pixelColors[p] = Color.black;
+                pixelColors[p] = new Color(firstControlPointValue, firstControlPointValue, firstControlPointValue);
             }
             // Interpolate between values for all control points
             int prevControlPoint = firstControlPoint;
-            float prevValue = new PercentPrimitive(opacitymap.Values[0]).Value;
+            float prevValue = firstControlPointValue;
             for (int i = 1; i < opacitymap.Points.Length; i++)
             {
                 int nextControlPoint = (int)(width * opacitymap.Points[i]);
@@ -371,10 +372,10 @@ namespace IVLab.ABREngine
                 prevControlPoint = nextControlPoint;
                 prevValue = new PercentPrimitive(opacitymap.Values[i]).Value;
             }
-            // Fill remaining pixels with black
+            // Fill remaining pixels with final control point's color
             for (int p = prevControlPoint; p < width; p++)
             {
-                pixelColors[p] = (p == prevControlPoint) ? new Color(prevValue, prevValue, prevValue) : Color.black;
+                pixelColors[p] = new Color(prevValue, prevValue, prevValue);
             }
 
             // Repeat in each row for the rest of the texture
