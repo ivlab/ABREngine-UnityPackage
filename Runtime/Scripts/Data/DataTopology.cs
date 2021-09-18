@@ -1,7 +1,7 @@
 /* DataTopology.cs
  *
  * Copyright (c) 2021, University of Minnesota
- * Author: Bridger Herman <herma582@umn.edu>
+ * Author: Matthias Broske <brosk014@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
+ 
 using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Extension of Unity's MeshTopology enum that defines more 
+    /// generic "data" topology, including voxels.
+    /// </summary>
     public enum DataTopology
     {
         Triangles = 0,

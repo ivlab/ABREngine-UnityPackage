@@ -87,7 +87,7 @@ namespace IVLab.ABREngine
         public Vector3Int dimensions;
 
         [SerializeField]
-        public DataTopology meshTopology = DataTopology.Points;
+        public DataTopology dataTopology = DataTopology.Points;
 
         public class JsonHeader
         {
@@ -164,9 +164,9 @@ namespace IVLab.ABREngine
 
         public RawDataset(JsonHeader jh, BinaryData bd)
         {
-            meshTopology = jh.meshTopology;
+            dataTopology = jh.meshTopology;
 
-            if (meshTopology == DataTopology.Voxels)
+            if (dataTopology == DataTopology.Voxels)
             {
                 dimensions = new Vector3Int(jh.dimensions[0], jh.dimensions[1], jh.dimensions[2]);
             }
@@ -182,7 +182,7 @@ namespace IVLab.ABREngine
             }
 
             long numIndices = 0;
-            if (meshTopology == DataTopology.Points || meshTopology == DataTopology.Voxels)
+            if (dataTopology == DataTopology.Points || dataTopology == DataTopology.Voxels)
                 numIndices = jh.num_cells;
             else
             {

@@ -205,7 +205,7 @@ namespace IVLab.ABREngine
         private void ImportKeyData(string dataPath, RawDataset rawDataset, Dataset dataset)
         {
             // Infer the type of data from the topology
-            Type dataType = KeyDataMapping.typeMap[rawDataset.meshTopology];
+            Type dataType = KeyDataMapping.typeMap[rawDataset.dataTopology];
 
             // Use reflection to construct the object (should only match one)
             ConstructorInfo[] constructors = dataType.GetConstructors();
