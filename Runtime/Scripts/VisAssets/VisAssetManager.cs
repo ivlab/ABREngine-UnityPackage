@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
@@ -147,6 +148,28 @@ namespace IVLab.ABREngine
         public List<Guid> GetVisAssets()
         {
             return _visAssets.Keys.ToList();
+        }
+
+        /// <summary>
+        /// Obtain the default visasset for a particular type, if there is one.
+        /// </summary>
+        public IVisAsset GetDefault<T>()
+        where T: IVisAsset
+        {
+            Type t = typeof(T);
+            if (t.IsAssignableFrom(typeof(ColormapVisAsset)))
+            {
+                // Define a black-to-white colormap
+                string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
+                Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
+                ColormapVisAsset cmap = new ColormapVisAsset();
+                cmap.Gradient = cmapTex;
+                return cmap;
+            }
+            else
+            {
+                throw new NotImplementedException($"Default {t.ToString()} is not implemented");
+            }
         }
     }
 }
