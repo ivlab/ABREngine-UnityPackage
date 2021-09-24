@@ -20,6 +20,7 @@
 using System;
 using System.Net.Http;
 using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -37,13 +38,13 @@ namespace IVLab.ABREngine
         public static class Consts
         {
             /// <summary>
-            ///     Look for a file of this name in any Resources folder and load it
-            ///     as the config
+            ///     User configuration file to be placed in the StreamingAssets
+            ///     folder (editor) or Data folder (build)
             /// </summary>
-            public const string ConfigFile = "ABRConfig";
+            public const string ConfigFile = "ABRConfig.json";
 
             /// <summary>
-            ///     Fall back to the defaults located in this package
+            ///     Fall back to the defaults located in this package (Located in ABREngine Resources folder)
             /// </summary>
             public const string ConfigFileFallback = "ABRConfigDefault";
 
@@ -87,11 +88,19 @@ namespace IVLab.ABREngine
 
         public ABRConfig()
         {
-            TextAsset configContents = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFileFallback);
-            TextAsset configCustomizations = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFile);
+            string configFolder = Application.streamingAssetsPath;
+            string configUserFile = Path.Combine(configFolder, ABRConfig.Consts.ConfigFile);
 
+            // Load defaults from ABREngine Resources
+            TextAsset configContents = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFileFallback);
             Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
-            ABRConfigInfo customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(configCustomizations?.text ?? "");
+
+            // Load any customizations the user has made
+            ABRConfigInfo customizations = new ABRConfigInfo();
+            using (StreamReader reader = new StreamReader(configUserFile))
+            {
+                customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
+            }
 
             // Dynamically load any customizations if they're provided
             var assembly = Assembly.GetExecutingAssembly();
