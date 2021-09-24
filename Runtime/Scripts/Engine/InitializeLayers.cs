@@ -19,6 +19,7 @@
 
 // Inspiration from: https://forum.unity.com/threads/adding-layer-by-script.41970/
 
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
@@ -99,3 +100,4 @@ namespace IVLab.ABREngine
         }
     }
 }
+#endif
