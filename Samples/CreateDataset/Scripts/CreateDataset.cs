@@ -31,11 +31,19 @@ namespace IVLab.ABREngine.Examples
     {
         private const string datasetPath = "ABR/Examples";
         private const string keyDataName = "Cube";
+        private const string scalarVar = "XAxis";
         private string KeyDataPath
         {
             get
             {
                 return DataPath.Join(DataPath.Join(datasetPath, DataPath.DataPathType.KeyData), keyDataName);
+            }
+        }
+        private string ScalarVarPath
+        {
+            get
+            {
+                return DataPath.Join(DataPath.Join(datasetPath, DataPath.DataPathType.ScalarVar), scalarVar);
             }
         }
 
@@ -81,9 +89,18 @@ namespace IVLab.ABREngine.Examples
                 return;
             }
 
+            ScalarDataVariable sv = null;
+            if (!ds.TryGetScalarVar(ScalarVarPath, out sv))
+            {
+                Debug.LogError("Dataset does not have variable " + ScalarVarPath);
+                return;
+            }
+
             await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
                 SimpleSurfaceDataImpression di = new SimpleSurfaceDataImpression();
                 di.keyData = kd as SurfaceKeyData;
+                di.colorVariable = sv;
+                di.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
 
                 ABREngine.Instance.RegisterDataImpression(di);
             });
@@ -97,13 +114,22 @@ namespace IVLab.ABREngine.Examples
             RawDataset ds = new RawDataset();
 
             ds.vectorArrays = new SerializableVectorArray[0];
-            ds.scalarArrays = new SerializableFloatArray[0];
             ds.vectorArrayNames = new string[0];
-            ds.scalarArrayNames = new string[0];
-            ds.scalarMins = new float[0];
-            ds.scalarMaxes = new float[0];
             ds.meshTopology = MeshTopology.Triangles;
             ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+
+            ds.scalarArrayNames = new string[] { scalarVar };
+            ds.scalarMins = new float[] { -2.0f };
+            ds.scalarMaxes = new float[] { 2.0f };
+            ds.scalarArrays = new SerializableFloatArray[1];
+            ds.scalarArrays[0] = new SerializableFloatArray();
+            ds.scalarArrays[0].array = new float[] {
+                // Bottom verts
+                -2, 2, -2, 2,
+
+                // Top verts
+                -2, 2, -2, 2,
+            };
 
             // Construct the vertices
             Vector3[] vertices = {
