@@ -5,5 +5,12 @@
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
     "dependencies": {
-    }
+    },
+    "samples": [
+        {
+            "displayName": "Dataset Creation",
+            "description": "Contains a sample scene and script to manually create and load a raw ABR dataset",
+            "path": "Samples/CreateDataset"
+        }
+    ]
 }
