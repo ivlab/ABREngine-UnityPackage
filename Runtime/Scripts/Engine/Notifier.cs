@@ -19,12 +19,15 @@
 
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -42,9 +45,14 @@ namespace IVLab.ABREngine
         /// Is the connection thread running?
         private bool _running = false;
         private bool _receiving = false;
+        private bool _sending = false;
 
-        /// Threads to listen for data across the socket
+        /// Threads to listen for data across the WebSocket
         private Thread _receiverThread;
+        private Thread _senderThread;
+
+        /// Queue of messages (bytes) to send to websocket
+        private ConcurrentQueue<byte[]> _outgoingQueue = new ConcurrentQueue<byte[]>();
 
         /// Cancellation token for async operations
         CancellationTokenSource cts;
@@ -83,6 +91,8 @@ namespace IVLab.ABREngine
                     Debug.Log("State subscriber notifier WebSocket listening");
                     this._receiverThread = new Thread(new ThreadStart(this.Receiver));
                     this._receiverThread.Start();
+                    this._senderThread = new Thread(new ThreadStart(this.Sender));
+                    this._senderThread.Start();
                 }
                 else
                 {
@@ -99,6 +109,7 @@ namespace IVLab.ABREngine
         public void Stop()
         {
             this._receiving = false;
+            this._sending = false;
             this._running = false;
             this._receiverThread?.Join();
         }
@@ -113,17 +124,59 @@ namespace IVLab.ABREngine
             this._receiving = true;
             while (this._receiving && this._running)
             {
-                var rcvBytes = new byte[128];
+                var rcvBytes = new byte[256];
                 var rcvBuffer = new ArraySegment<byte>(rcvBytes);
-                while (true)
+                WebSocketReceiveResult rcvResult = await this._client.ReceiveAsync(rcvBuffer, cts.Token);
+                byte[] msgBytes = rcvBuffer.Skip(rcvBuffer.Offset).Take(rcvResult.Count).ToArray();
+                string rcvMsg = Encoding.UTF8.GetString(msgBytes);
+                NotifierTarget target = JsonConvert.DeserializeObject<NotifierTarget>(rcvMsg);
+                if (target.target == "state")
                 {
-                    WebSocketReceiveResult rcvResult = await this._client.ReceiveAsync(rcvBuffer, cts.Token);
-                    byte[] msgBytes = rcvBuffer.Skip(rcvBuffer.Offset).Take(rcvResult.Count).ToArray();
-                    string rcvMsg = Encoding.UTF8.GetString(msgBytes);
-                    NotifierTarget target = JsonConvert.DeserializeObject<NotifierTarget>(rcvMsg);
-                    if (target.target == "state")
+                    // Load the state,
+                    await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+
+                    // ... then immediately send back a thumbnail of what we just rendered
+                    // 0. Try and get the Screenshot component
+                    byte[] thumbnail = null;
+                    Screenshot scr = null;
+                    await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                     {
-                        await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                        if (Camera.main.TryGetComponent<Screenshot>(out scr))
+                        {
+                            // 1. Capture the screen bytes in LateUpdate
+                            thumbnail = scr.CaptureView(128, 128, false, -1);
+                        }
+                    });
+
+                    if (thumbnail != null)
+                    {
+                        // 2. Serialize it
+                        string b64ThumbStr = System.Convert.ToBase64String(thumbnail);
+
+                        JObject output = new JObject();
+                        output.Add("target", "thumbnail");
+                        output.Add("content", b64ThumbStr);
+
+                        byte[] finalOut = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(output));
+
+                        // 3. Send to server
+                        this._outgoingQueue.Enqueue(finalOut);
+                    }
+                }
+            }
+        }
+
+        async void Sender()
+        {
+            this._sending = true;
+            while (this._sending && this._running)
+            {
+                while (!this._outgoingQueue.IsEmpty) {
+                    byte[] outgoingMessage = null;
+                    this._outgoingQueue.TryDequeue(out outgoingMessage);
+                    if (outgoingMessage != null)
+                    {
+                        await this._client.SendAsync(new ArraySegment<byte>(outgoingMessage), WebSocketMessageType.Text, true, cts.Token);
                     }
                 }
             }
