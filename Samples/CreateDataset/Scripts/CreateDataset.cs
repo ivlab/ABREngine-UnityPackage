@@ -25,7 +25,8 @@ namespace IVLab.ABREngine.Examples
 {
     /// <summary>
     /// This example creates a simple cube dataset with one variable, loads it
-    /// into ABR, and displays a single data impression with the cube.
+    /// into ABR, and displays a single data impression with the cube. Attach
+    /// this component to a GameObject to load the example dataset.
     /// </summary>
     public class CreateDataset : MonoBehaviour
     {
@@ -49,10 +50,14 @@ namespace IVLab.ABREngine.Examples
 
         void Start()
         {
+            ABREngine.GetInstance();
             Task.Run(async () =>
             {
                 try
                 {
+                    // Initialize the ABREngine
+                    await ABREngine.Instance.WaitUntilInitialized();
+
                     await CreateCube();
                     Debug.Log("Loaded Cube");
 
