@@ -248,11 +248,6 @@ namespace IVLab.ABREngine
         public string visAssetServer;
 
         /// <summary>
-        ///     Load any visassets located in Resources/media/visassets
-        /// </summary>
-        public bool loadResourceVisAssets;
-
-        /// <summary>
         ///     What server to obtain data from, if any. If none provided,
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in

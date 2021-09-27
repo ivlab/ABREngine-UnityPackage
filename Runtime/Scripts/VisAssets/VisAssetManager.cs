@@ -45,7 +45,7 @@ namespace IVLab.ABREngine
 
         private bool _loadResourceVisAssets;
 
-        public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
+        public VisAssetManager(string visassetPath)
         {
             this.appDataPath = visassetPath;
             Directory.CreateDirectory(this.appDataPath);
@@ -58,13 +58,8 @@ namespace IVLab.ABREngine
             // Then, try the file system...
             visAssetFetchers.Add(new FilePathVisAssetFetcher(this.appDataPath));
 
-            // Afterwards, try the resources folder if desired
-            _loadResourceVisAssets = loadResourceVisAssets;
-            if (loadResourceVisAssets)
-            {
-                Debug.Log("Allowing loading of VisAssets from Resources folder");
-                visAssetFetchers.Add(new ResourceVisAssetFetcher());
-            }
+            // Afterwards, try the resources folder
+            visAssetFetchers.Add(new ResourceVisAssetFetcher());
 
             // ... and lastly check out the VisAsset server, if present
             if (ABREngine.Instance.Config.Info.visAssetServer != null)
