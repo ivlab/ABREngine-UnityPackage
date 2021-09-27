@@ -24,6 +24,7 @@ using System.IO;
 using System.Net.Http;
 
 using Newtonsoft.Json.Linq;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -99,6 +100,50 @@ namespace IVLab.ABREngine
 
                 RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
                 return new RawDataset(metadata, data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Load data from resources folder. NOTE: The actual data files (.bin) must
+    /// have their file extension changed to .txt in order to be recognized.
+    /// When data are imported, the identity of each is lost so we must guess
+    /// which is which - currently guessing the larger of the two files is the
+    /// "Data" and the smaller is "Metadata".
+    /// </summary>
+    public class ResourcesDataLoader : IDataLoader
+    {
+        public async Task<RawDataset> TryLoadDataAsync(string dataPath)
+        {
+            Debug.Log("Loading " + dataPath + " from Resources");
+            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
+
+            try
+            {
+                return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+                {
+
+                    // Fetch both files from resources
+                    TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
+                    if (metadataData == null || metadataData.Length != 2)
+                    {
+                        throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
+                    }
+
+                    string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
+                    JObject metadata = JObject.Parse(metadataJson);
+                    RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
+
+                    byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
+                    RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
+
+                    return new RawDataset(meta, data);
+                });
             }
             catch (Exception e)
             {
