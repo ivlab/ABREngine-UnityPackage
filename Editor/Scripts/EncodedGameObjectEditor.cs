@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace IVLab.ABREngine
@@ -35,3 +36,4 @@ namespace IVLab.ABREngine
         }
     }
 }
+#endif

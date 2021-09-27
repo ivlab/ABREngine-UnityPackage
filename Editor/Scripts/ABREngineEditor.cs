@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if UNITY_EDITOR
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -115,3 +117,4 @@ namespace IVLab.ABREngine
         }
     }
 }
+#endif
