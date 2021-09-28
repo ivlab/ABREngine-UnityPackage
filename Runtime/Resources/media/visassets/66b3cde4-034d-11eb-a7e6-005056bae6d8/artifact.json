@@ -1,0 +1,13 @@
+{
+    "artifactData": {
+        "colormap": "colormap.xml"
+    },
+    "artist": "Francesca Samsel",
+    "class": "hue cycle",
+    "family": "Orange",
+    "hidden": false,
+    "preview": "thumbnail.png",
+    "tags": [],
+    "type": "colormap",
+    "uuid": "66b3cde4-034d-11eb-a7e6-005056bae6d8"
+}
