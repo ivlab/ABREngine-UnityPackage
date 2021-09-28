@@ -78,7 +78,11 @@ namespace IVLab.ABREngine
         where T : IDataLoader, new()
         {
             RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
-            await ImportRawDataset(dataPath, ds);
+            // Only import if there are actual data present
+            if (ds != null)
+            {
+                await ImportRawDataset(dataPath, ds);
+            }
         }
 
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
@@ -90,19 +94,26 @@ namespace IVLab.ABREngine
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
             await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                // If we don't, create the dataset
-                Dataset dataset;
-                if (!TryGetDataset(datasetPath, out dataset))
+                try
                 {
-                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
-                    dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
+                    // If we don't, create the dataset
+                    Dataset dataset;
+                    if (!TryGetDataset(datasetPath, out dataset))
+                    {
+                        Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
+                        dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
+                    }
+
+                    datasets[datasetPath] = dataset;
+                    rawDatasets[dataPath] = importing;
+
+                    ImportVariables(dataPath, importing, dataset);
+                    ImportKeyData(dataPath, importing, dataset);
                 }
-
-                datasets[datasetPath] = dataset;
-                rawDatasets[dataPath] = importing;
-
-                ImportVariables(dataPath, importing, dataset);
-                ImportKeyData(dataPath, importing, dataset);
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
             });
         }
 

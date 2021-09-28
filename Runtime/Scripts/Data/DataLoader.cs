@@ -43,6 +43,11 @@ namespace IVLab.ABREngine
     {
         public async Task<RawDataset> TryLoadDataAsync(string dataPath)
         {
+            if (ABREngine.Instance.Config.Info.mediaPath == null)
+            {
+                return null;
+            }
+
             string mediaDir = Path.GetFullPath(ABREngine.Instance.Config.Info.mediaPath);
             FileInfo jsonFile = new FileInfo(Path.Combine(mediaDir, ABRConfig.Consts.DatasetFolder, dataPath) + ".json");
             if (!jsonFile.Exists)
