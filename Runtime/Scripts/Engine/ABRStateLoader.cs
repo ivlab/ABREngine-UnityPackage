@@ -95,24 +95,20 @@ namespace IVLab.ABREngine
 
     public class PathStateFileLoader : IABRStateLoader
     {
-        private string rootPath;
-        public PathStateFileLoader(string rootPath)
-        {
-            this.rootPath = rootPath;
-        }
+        public PathStateFileLoader() { }
 
-        public async Task<JObject> GetState(string stateFileName)
+        public async Task<JObject> GetState(string stateFilePath)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(rootPath, stateFileName)))
+            using (StreamReader reader = new StreamReader(stateFilePath))
             {
                 string stateText = await reader.ReadToEndAsync();
                 return JObject.Parse(stateText);
             }
         }
 
-        public async Task SaveState(string name, string serializedState)
+        public async Task SaveState(string outPath, string serializedState)
         {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(rootPath, name)))
+            using (StreamWriter writer = new StreamWriter(outPath))
             {
                 await writer.WriteAsync(serializedState);
             }
