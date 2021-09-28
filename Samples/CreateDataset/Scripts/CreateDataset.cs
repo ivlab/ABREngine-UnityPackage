@@ -76,7 +76,8 @@ namespace IVLab.ABREngine.Examples
         }
 
         /// <summary>
-        /// Create a data impression to render the cube
+        /// Create a data impression to render the cube. See the CreateState.cs
+        /// file for a more complete example of creating a state.
         /// </summary>
         private async Task CreateDataImpression()
         {

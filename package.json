@@ -8,8 +8,13 @@
     },
     "samples": [
         {
+            "displayName": "State Creation",
+            "description": "Contains a script to manually create a state using commands from the ABREngine.",
+            "path": "Samples/CreateState"
+        },
+        {
             "displayName": "Dataset Creation",
-            "description": "Contains a sample scene and script to manually create and load a raw ABR dataset",
+            "description": "Contains a script to manually create and load a raw ABR dataset",
             "path": "Samples/CreateDataset"
         }
     ]
