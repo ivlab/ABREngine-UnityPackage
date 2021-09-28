@@ -27,7 +27,7 @@ namespace IVLab.ABREngine.Examples
 {
     /// <summary>
     /// In this example, we construct an ABR state from scratch using API calls
-    /// in to the ABR Engine.
+    /// in to the ABR Engine. This example assumes a blank ABR Configuration.
     ///
     /// This state assumes that the following VisAssets are available (which
     /// they should be, in Runtime/Resources/media/visassets):
