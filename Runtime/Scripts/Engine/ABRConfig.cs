@@ -102,9 +102,12 @@ namespace IVLab.ABREngine
 
             // Load any customizations the user has made
             ABRConfigInfo customizations = new ABRConfigInfo();
-            using (StreamReader reader = new StreamReader(configUserFile))
+            if (File.Exists(configUserFile))
             {
-                customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
+                using (StreamReader reader = new StreamReader(configUserFile))
+                {
+                    customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
+                }
             }
 
             // Dynamically load any customizations if they're provided
