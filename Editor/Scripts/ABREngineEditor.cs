@@ -102,6 +102,11 @@ namespace IVLab.ABREngine
                     foreach (IKeyData kd in allKeyData.Values)
                     {
                         EditorGUILayout.LabelField("  " + DataPath.GetName(kd.Path));
+                        RawDataset rawDs = null;
+                        if (ABREngine.Instance.Data.TryGetRawDataset(kd.Path, out rawDs))
+                        {
+                            EditorGUILayout.LabelField($"  {rawDs.vertexArray.Length} vertices");
+                        }
                     }
                 }
             }
