@@ -83,6 +83,10 @@ namespace IVLab.ABREngine
             {
                 await ImportRawDataset(dataPath, ds);
             }
+            else
+            {
+                Debug.LogError("Unable to load Raw Dataset " + dataPath);
+            }
         }
 
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
