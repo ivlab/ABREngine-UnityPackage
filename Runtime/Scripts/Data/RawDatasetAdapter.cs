@@ -34,7 +34,7 @@ namespace IVLab.ABREngine
         /// Load data from the data source.
         /// </summary>
         /// <param name="filePath">Data source file</param>
-        public static RawDataset FromObj(string filePath)
+        public static RawDataset ObjToSurface(string filePath)
         {
             OBJLoader loader = new OBJLoader();
             GameObject surfaceData = loader.Load(filePath, true);
@@ -60,6 +60,7 @@ namespace IVLab.ABREngine
             ds.cellIndexCounts = new int[mesh.triangles.Length / 3];
             ds.cellIndexOffsets = new int[mesh.triangles.Length / 3];
 
+            GameObject.Destroy(surfaceData);
             return ds;
         }
     }
