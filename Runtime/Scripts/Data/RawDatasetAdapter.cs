@@ -69,14 +69,28 @@ namespace IVLab.ABREngine
         /// Define a Line dataset from a bunch of points
         /// </summary>
         /// <param name="points">Points in a line - will be treated as a LineStrip</param>
-        public static RawDataset PointsToLine(List<Vector3> points)
+        public static RawDataset PointsToLine(List<Vector3> points, bool preserveRelationToOrigin)
         {
+            // Compute the bounding box of the entire line
+            Bounds lineBounds = new Bounds();
+            foreach (Vector3 point in points)
+            {
+                if (!float.IsNaN(point.x) && !float.IsNaN(point.y) && !float.IsNaN(point.z))
+                {
+                    lineBounds.Encapsulate(point);
+                }
+            }
+            if (preserveRelationToOrigin)
+            {
+                lineBounds.Encapsulate(Vector3.zero);
+            }
+
             RawDataset ds = new RawDataset();
+            ds.meshTopology = MeshTopology.LineStrip;
+            ds.bounds = lineBounds;
 
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
-            ds.meshTopology = MeshTopology.LineStrip;
-            ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
 
             ds.scalarArrayNames = new string[0];
             ds.scalarMins = new float[0];
@@ -94,7 +108,7 @@ namespace IVLab.ABREngine
             int segmentStartIndex = 0;
             for (int i = 0; i < vertices.Length; i++)
             {
-                if (!float.IsNaN(points[i].x) && !float.IsNaN(points[i].y) && !float.IsNaN(points[i].z)) 
+                if (!float.IsNaN(points[i].x) && !float.IsNaN(points[i].y) && !float.IsNaN(points[i].z))
                 {
                     if (segmentCount == 0)
                     {
