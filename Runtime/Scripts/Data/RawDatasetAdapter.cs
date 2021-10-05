@@ -63,5 +63,73 @@ namespace IVLab.ABREngine
             GameObject.Destroy(surfaceData);
             return ds;
         }
+
+
+        /// <summary>
+        /// Define a Line dataset from a bunch of points
+        /// </summary>
+        /// <param name="points">Points in a line - will be treated as a LineStrip</param>
+        public static RawDataset PointsToLine(List<Vector3> points)
+        {
+            RawDataset ds = new RawDataset();
+
+            ds.vectorArrays = new SerializableVectorArray[0];
+            ds.vectorArrayNames = new string[0];
+            ds.meshTopology = MeshTopology.LineStrip;
+            ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+
+            ds.scalarArrayNames = new string[0];
+            ds.scalarMins = new float[0];
+            ds.scalarMaxes = new float[0];
+            ds.scalarArrays = new SerializableFloatArray[0];
+
+            // Build the ribbon (line strip)'s vertices. Create several segments of
+            // a ribbon if there are NaNs, instead of connecting through the NaN.
+            Vector3[] vertices = new Vector3[points.Count];
+            int[] indices = new int[points.Count];
+            List<int> segmentCounts = new List<int>();
+            List<int> segmentStartIndices = new List<int>();
+            int lineIndex = 0;
+            int segmentCount = 0;
+            int segmentStartIndex = 0;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                if (!float.IsNaN(points[i].x) && !float.IsNaN(points[i].y) && !float.IsNaN(points[i].z)) 
+                {
+                    if (segmentCount == 0)
+                    {
+                        segmentStartIndex = lineIndex;
+                    }
+                    vertices[lineIndex] = points[i];
+                    indices[lineIndex] = lineIndex;
+                    lineIndex += 1;
+                    segmentCount += 1;
+                }
+                else
+                {
+                    if (segmentCount > 0)
+                    {
+                        segmentCounts.Add(segmentCount);
+                        segmentStartIndices.Add(segmentStartIndex);
+                        segmentCount = 0;
+                    }
+                }
+            }
+
+            // Add the last segment
+            if (segmentCount > 0)
+            {
+                segmentCounts.Add(segmentCount);
+                segmentStartIndices.Add(segmentStartIndex);
+                segmentCount = 0;
+            }
+            ds.vertexArray = vertices;
+            ds.indexArray = indices;
+
+            ds.cellIndexCounts = segmentCounts.ToArray();
+            ds.cellIndexOffsets = segmentStartIndices.ToArray();
+
+            return ds;
+        }
     }
 }
