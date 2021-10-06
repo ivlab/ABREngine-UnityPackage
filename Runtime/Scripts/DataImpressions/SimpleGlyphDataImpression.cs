@@ -67,10 +67,10 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
         public PercentPrimitive glyphDensity;
 
-        [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
+        [ABRInput("Forward Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction", UpdateLevel.Style)]
+        [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;
