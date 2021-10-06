@@ -91,6 +91,26 @@ namespace IVLab.ABREngine
         public ABRConfigDefaults Defaults { get; private set; }
 
         /// <summary>
+        /// The actual path that ABRConfig.json is located at, if any
+        /// </summary>
+        public string ABRConfigFile
+        {
+            get
+            {
+                string configFolder = Application.streamingAssetsPath;
+                string configUserFile = Path.Combine(configFolder, ABRConfig.Consts.ConfigFile);
+                if (File.Exists(configUserFile))
+                {
+                    return configUserFile;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         ///     The Json Schema to use for validation of ABR states
         /// </summary>
         public JSchema Schema { get; private set; } 
@@ -107,18 +127,15 @@ namespace IVLab.ABREngine
 
         public ABRConfig()
         {
-            string configFolder = Application.streamingAssetsPath;
-            string configUserFile = Path.Combine(configFolder, ABRConfig.Consts.ConfigFile);
-
             // Load defaults from ABREngine Resources
             TextAsset configContents = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFileFallback);
             Info = JsonConvert.DeserializeObject<ABRConfigInfo>(configContents.text);
 
             // Load any customizations the user has made
             ABRConfigInfo customizations = new ABRConfigInfo();
-            if (File.Exists(configUserFile))
+            if (ABRConfigFile != null)
             {
-                using (StreamReader reader = new StreamReader(configUserFile))
+                using (StreamReader reader = new StreamReader(ABRConfigFile))
                 {
                     customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
                 }

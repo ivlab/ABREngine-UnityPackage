@@ -170,7 +170,7 @@ namespace IVLab.ABREngine
 
         private DataImpressionGroup _defaultGroup = null;
 
-        private bool _initialized = false;
+        public bool IsInitialized { get; private set; } = false;
 
         /// <summary>
         /// Media path where all datasets and visassets are located. If the
@@ -280,7 +280,7 @@ namespace IVLab.ABREngine
                         Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
                     }
                 }
-                _initialized = true;
+                IsInitialized = true;
             });
         }
 
@@ -312,7 +312,7 @@ namespace IVLab.ABREngine
         /// </example>
         public async Task WaitUntilInitialized()
         {
-            while (!_initialized)
+            while (!IsInitialized)
             {
                 await Task.Delay(10);
             }
