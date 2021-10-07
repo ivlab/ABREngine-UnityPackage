@@ -32,6 +32,52 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Manager where all datasets, key data, and variables live. This class
+    /// makes the connection between Datasets and RawDatasets. This class is
+    /// useful for obtaining any KeyData and Variables needed to apply to Data
+    /// Impressions.
+    /// </summary>
+    /// <example>
+    /// Key data and variables can be loaded directly from the data manager:
+    /// <code>
+    /// // Load an example dataset
+    /// await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>("Test/Test/KeyData/Example");
+    /// // Load the high-level dataset that both Contour and Points are contained within
+    /// Dataset ds = null;
+    /// if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))
+    /// {
+    ///     Debug.LogError("Unable to load dataset " + datasetPath);
+    ///     return;
+    /// }
+    /// 
+    /// KeyData kd = null;
+    /// // Populate the key data objects from dataset
+    /// if (!ds.TryGetKeyData("Test/Test/KeyData/Example", out kd))
+    /// {
+    ///     Debug.LogError("Key data not found in dataset");
+    ///     return;
+    /// }
+    /// 
+    /// ScalarDataVariable s = null;
+    /// // Populate the variables from dataset
+    /// if (!ds.TryGetScalarVar("Test/Test/ScalarVar/ExampleVar", out s))
+    /// {
+    ///     Debug.LogError("Dataset does not have variable");
+    ///     return;
+    /// }
+    /// </code>
+    /// Additionally, the actual raw data can be loaded from the data manager.
+    /// Generally this is not necessary, simply using the high-level variables
+    /// above in conjunction with Data Impressions is usually sufficient.
+    /// <code>
+    /// RawDataset rds = null;
+    /// if (ABREngine.Instance.Data.TryGetRawDataset("Test/Test/KeyData/Example", out rds))
+    /// {
+    ///     float[] var = rds.GetScalarArray("ExampleVar");
+    /// }
+    /// </code>
+    /// </example>
     public class DataManager
     {
         private string appDataPath;

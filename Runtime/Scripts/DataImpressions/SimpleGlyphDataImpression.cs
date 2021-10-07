@@ -29,6 +29,20 @@ namespace IVLab.ABREngine
         public Bounds bounds;
     }
 
+    /// <summary>
+    /// A "Glyphs" data impression that uses hand-sculpted geometry to depict point data.
+    /// </summary>
+    /// <example>
+    /// An example of creating a single glyph data impression and setting its colormap, color variable, and glyph could be:
+    /// <code>
+    /// SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
+    /// gi.keyData = points as PointKeyData;
+    /// gi.colorVariable = yAxis;
+    /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    /// gi.glyph = glyph as GlyphVisAsset;
+    /// ABREngine.Instance.RegisterDataImpression(gi);
+    /// </code>
+    /// </example>
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {

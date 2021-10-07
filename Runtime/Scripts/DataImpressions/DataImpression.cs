@@ -41,30 +41,30 @@ namespace IVLab.ABREngine
         ABRInputIndexerModule InputIndexer { get; }
 
         /// <summary>
-        ///     1. Populates rendering information (Geometry) for the
+        ///     1. Populate rendering information (Geometry) for the
         ///     DataImpression. This is triggered by the `DataImpressionGroup`
-        ///     when an `UpdateLevel.Data` happens. This step is *expensive*.
+        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
         /// </summary>
         void ComputeGeometry();
 
         /// <summary>
-        ///     2. Takes geometric rendering information computed in
+        ///     2. Take geometric rendering information computed in
         ///     `ComputeGeometry()` and sets up proper game object(s) and
         ///     components for this Data Impression. Transfers geometry into
         ///     Unity format (e.g. a `Mesh`). No geometric computations should
-        ///     happen in this method.
+        ///     happen in this method, and it should generally be *lightweight*.
         /// </summary>
         void SetupGameObject(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     3. Updates the "styling" of an impression by sending each
+        ///     3. Update the "styling" of an impression by sending each
         ///     styling parameter to the shader. Occasionally will need to set
-        ///     per-vertex items like transforms, etc.
+        ///     per-vertex items like transforms. This method should generally be *lightweight*.
         /// </summary>
         void UpdateStyling(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Updates the visibility of an impression (hidden or shown)
+        ///     Update the visibility of an impression (hidden or shown)
         /// </summary>
         void UpdateVisibility(EncodedGameObject currentGameObject);
 

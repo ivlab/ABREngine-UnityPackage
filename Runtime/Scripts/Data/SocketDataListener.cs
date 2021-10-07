@@ -38,6 +38,11 @@ namespace IVLab.ABREngine
         public byte[] bindata;
     }
 
+    /// <summary>
+    /// Listener for incoming upstream data, for example, from a Send2ABR plugin
+    /// for ParaView. Operation of this class is controlled by the ABRConfig
+    /// option `dataListenerPort`.
+    /// </summary>
     public class SocketDataListener
     {
         public int port;

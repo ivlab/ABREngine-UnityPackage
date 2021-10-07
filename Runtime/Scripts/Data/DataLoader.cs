@@ -27,6 +27,9 @@ using Newtonsoft.Json.Linq;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Generic interface to fetch a `RawDataset` from somewhere
+    /// </summary>
     public interface IDataLoader
     {
         /// <summary>

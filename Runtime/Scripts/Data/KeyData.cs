@@ -23,6 +23,9 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Mapping between topologies / types of geometry and actual key data
+    /// </summary>
     public static class KeyDataMapping
     {
         public static Dictionary<MeshTopology, Type> typeMap = new Dictionary<MeshTopology, Type>()
@@ -43,6 +46,9 @@ namespace IVLab.ABREngine
         string Path { get; }
     }
 
+    /// <summary>
+    /// Lightweight container for a data object
+    /// </summary>
     public class KeyData : IKeyData, IHasDataset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
