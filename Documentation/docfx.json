@@ -21,13 +21,16 @@
         "globalMetadata": {
             "_appTitle": "ABREngine",
             "_appFooter": "ABREngine",
+            "_appLogoPath": "resources/IVLab.svg",
+            "_appFaviconPath": "resources/favicon.ico",
             "_enableSearch": true
         },
         "content": [
             {
                 "files": [
                     "toc.yml",
-                    "index.md"
+                    "index.md",
+                    "abr-config.md"
                 ]
             },
             {
