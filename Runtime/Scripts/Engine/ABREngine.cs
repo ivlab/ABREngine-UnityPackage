@@ -30,6 +30,64 @@ using Newtonsoft.Json;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The ABREngine class is the main operational MonoBehaviour Singleton for
+    /// the ABREngine-UnityPackage. It is in charge of kicking off all startup
+    /// processes for ABR, including setting up connections with the server, the
+    /// data listener, VisAssets and Data managers, etc.
+    /// </summary>
+    /// <example>
+    /// Most methods of the ABREngine can be accessed through its singleton
+    /// `Instance` without needing to do a `GetComponent`:
+    /// <code>
+    /// string mediaPath = ABREngine.Instance.MediaPath;
+    /// </code>
+    /// </example>
+    /// <remarks>
+    /// Many of the methods in the ABREngine must be run from Unity's Main
+    /// Thread. For simple scenes this is not a problem, but when you start to
+    /// integrate with an ABR Server things become more difficult. The general
+    /// guideline is - if anything interacts directly with Unity, it should go
+    /// in the main thread using `IVLab.Utilities.UnityThreadScheduler`. See the
+    /// following example for information on how to properly handle asynchrony
+    /// in ABR.
+    /// </remarks>
+    /// <example>
+    /// Applications built on ABR should make heavy use of C#'s
+    /// `System.Threading.Task` framework and
+    /// `IVLab.Utilities.UnityThreadScheduler`. Here's a simple example that
+    /// loads in the ABREngine, loads a state, and displays a single data
+    /// impression.
+    /// <code>
+    /// using System.Threading.Tasks;
+    /// using UnityEngine;
+    /// using IVLab.ABREngine;
+    /// using IVLab.Utilities;
+    ///
+    /// public class SimpleABRExample : MonoBehaviour
+    /// {
+    ///     void Start()
+    ///     {
+    ///         Task.Run(async () =>
+    ///         {
+    ///             await ABREngine.GetInstance().WaitUntilInitialized();
+    ///
+    ///             // By this point, the ABREngine is initialized and we can load a state.
+    ///             await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
+    ///
+    ///             // At this point, all the data impressions, visassets, and data have been loaded into ABR, so we can retrieve them.
+    ///             SimpleGlyphDataImpression gi = ABREngine.Instance.GetDataImpression(new Guid("48cca33b-e1ae-4998-a0d1-2eee1e75e07d")) as SimpleGlyphDataImpression;
+    ///
+    ///             // Now that we have the impression, we can modify its contents (e.g. remove the colormap)
+    ///             gi.colormap = null;
+    ///
+    ///             // Lastly, render the data impressions.... but this MUST be done in the Unity Main thread.
+    ///             UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
+    ///         });
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
     public class ABREngine : Singleton<ABREngine>
     {
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();

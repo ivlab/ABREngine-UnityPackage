@@ -30,6 +30,20 @@ using Newtonsoft.Json.Schema;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The ABRConfig class provides access throughtout ABR to everything that
+    /// is loaded in from a user's / developer's ABRConfig.json file. This is
+    /// mainly useful for modifying the behaviour of the ABREngine internally,
+    /// but can be occasionally helpful in other situations - for instance, if a
+    /// developer needs to get access to the default bounding box / container
+    /// that ABR is using.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// Bounds defaultBounds = ABREngine.Instance.Config.Info.defaultBounds.Value;
+    /// // ... do something fancy based on `defaultBounds`
+    /// </code>
+    /// </example>
     public class ABRConfig
     {
         /// <summary>
