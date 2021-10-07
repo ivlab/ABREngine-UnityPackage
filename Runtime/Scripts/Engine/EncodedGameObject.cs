@@ -22,6 +22,9 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// An EncodedGameObject connects a DataImpression with a Unity Game Object.
+    /// </summary>
     public class EncodedGameObject : MonoBehaviour
     {
         public Guid Uuid { get; set; }

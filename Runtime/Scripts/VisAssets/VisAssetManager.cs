@@ -29,6 +29,30 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The VisAssetManager is where all VisAssets are stored within the
+    /// ABREngine. VisAssets can be loaded and fetched from various sources
+    /// defined in `VisAssetFetchers`.
+    /// </summary>
+    /// <example>
+    /// VisAssets can be loaded manually - be mindful of async programming:
+    /// <code>
+    /// // Initialize the ABR Engine
+    /// await ABREngine.GetInstance().WaitUntilInitialized();
+    /// 
+    /// Guid cmapUuid = new Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
+    /// 
+    /// // Load a VisAsset (must be done in Main Thread!)
+    /// await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+    /// {
+    ///     await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
+    /// });
+    /// 
+    /// // Get the actual cmap visasset
+    /// ColormapVisAsset cmap = null;
+    /// ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);
+    /// </code>
+    /// </example>
     public class VisAssetManager
     {
         public string appDataPath;

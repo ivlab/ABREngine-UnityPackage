@@ -28,13 +28,26 @@ using Newtonsoft.Json.Linq;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Generic state loader for ABR. Implementations should allow both
+    /// retrieving a state (`GetState`) and saving a state (`SaveState`).
+    /// </summary>
     public interface IABRStateLoader
     {
+        /// <summary>
+        /// Load a state based on some text (perhaps a JSON string, a file path, or URL)
+        /// </summary>
         Task<JObject> GetState(string stateText);
 
+        /// <summmary>
+        /// Save a serialized JSON state with a particular name
+        /// </summary>
         Task SaveState(string name, string serializedState);
     }
 
+    /// <summary>
+    /// Load a state from any Resources folder within Unity (within any Package or Asset)
+    /// </summary>
     public class ResourceStateFileLoader : IABRStateLoader
     {
         public ResourceStateFileLoader() { }
@@ -57,6 +70,9 @@ namespace IVLab.ABREngine
         }
     }
 
+    /// <summary>
+    /// Save/Load a state from a web URL
+    /// </summary>
     public class HttpStateFileLoader : IABRStateLoader
     {
         public HttpStateFileLoader() { }
@@ -78,6 +94,9 @@ namespace IVLab.ABREngine
         }
     }
 
+    /// <summary>
+    /// Load a state from a serialized JSON string
+    /// </summary>
     public class TextStateFileLoader : IABRStateLoader
     {
         public TextStateFileLoader() { }
@@ -93,6 +112,9 @@ namespace IVLab.ABREngine
         }
     }
 
+    /// <summary>
+    /// Save/Load a state to a JSON file somewhere on disk
+    /// </summary>
     public class PathStateFileLoader : IABRStateLoader
     {
         private string rootPath;

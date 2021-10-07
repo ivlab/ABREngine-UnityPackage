@@ -27,6 +27,10 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Convenience class to avoid having to repeatedly manage reflection when
+    /// adjusting ABR inputs to Data Impressions.
+    /// </summary>
     public class ABRInputIndexerModule
     {
         DataImpression targetObject = null;
