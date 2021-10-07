@@ -155,7 +155,7 @@ namespace IVLab.ABREngine
                 {
                     var colorScalars = colorVariable.GetArray(keyData);
                     // Set the pixels of the 3D texture
-                    Color[] pixels = new Color[dimensions.x * dimensions.y * dimensions.z];
+                    var pixels = renderInfo.voxelTex.GetPixelData<Color>(0);
                     for (int z = 0; z < dimensions.z; z++)
                     {
                         int zMinusOneOffset = z == 0 ? 0 : (z - 1) * dimensions.y * dimensions.x;
@@ -184,7 +184,6 @@ namespace IVLab.ABREngine
                             }
                         }
                     }
-                    renderInfo.voxelTex.SetPixels(pixels);
 
                     // Apply changes to the 3D texture
                     renderInfo.voxelTex.Apply();
@@ -314,7 +313,14 @@ namespace IVLab.ABREngine
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
-                MatPropBlock.SetTexture("_OpacityMap", GenerateOpacityMap());
+                if (MatPropBlock.GetTexture("_OpacityMap") == null)
+                {
+                    Texture2D opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
+                    opacityMapTexture.wrapMode = TextureWrapMode.Clamp;
+                    opacityMapTexture.filterMode = FilterMode.Bilinear;
+                    MatPropBlock.SetTexture("_OpacityMap", opacityMapTexture);
+                }
+                UpdateOpacityMap((Texture2D)MatPropBlock.GetTexture("_OpacityMap"));
             }
             else
             {
@@ -334,27 +340,17 @@ namespace IVLab.ABREngine
             }
         }
 
-        private Texture2D GenerateOpacityMap()
+        // Updates the opacity map texture by re-setting its pixels
+        private void UpdateOpacityMap(Texture2D opacityMapTexture)
         {
-            int width = 1024;
-            int height = 10;
-
-            if (opacitymap.Points.Length == 0 || opacitymap.Values.Length == 0)
-            {
-                return new Texture2D(0, 0);
-            }
-
-            Texture2D result = new Texture2D(width, height, TextureFormat.RGBA32, false);
-            result.wrapMode = TextureWrapMode.Clamp;
-            result.filterMode = FilterMode.Bilinear;  // Is bilinear filtering going to cause problems?
-
             // Sort the points/values array
             Array.Sort(opacitymap.Points, opacitymap.Values);
 
-            Color[] pixelColors = new Color[width * height];
+            // Initialize array to store pixel colors
+            var pixelColors = new Color[opacityMapTexture.width * opacityMapTexture.height];
 
             // Fill pixels with first control point's color up to first control point
-            int firstControlPoint = (int)(width * opacitymap.Points[0]);
+            int firstControlPoint = (int)(opacityMapTexture.width * opacitymap.Points[0]);
             float firstControlPointValue = new PercentPrimitive(opacitymap.Values[0]).Value;
             for (int p = 0; p < firstControlPoint; p++)
             {
@@ -365,7 +361,7 @@ namespace IVLab.ABREngine
             float prevValue = firstControlPointValue;
             for (int i = 1; i < opacitymap.Points.Length; i++)
             {
-                int nextControlPoint = (int)(width * opacitymap.Points[i]);
+                int nextControlPoint = (int)(opacityMapTexture.width * opacitymap.Points[i]);
                 float nextValue = new PercentPrimitive(opacitymap.Values[i]).Value;
                 for (int p = prevControlPoint; p < nextControlPoint; p++)
                 {
@@ -376,25 +372,23 @@ namespace IVLab.ABREngine
                 prevValue = new PercentPrimitive(opacitymap.Values[i]).Value;
             }
             // Fill remaining pixels with final control point's color
-            for (int p = prevControlPoint; p < width; p++)
+            for (int p = prevControlPoint; p < opacityMapTexture.width; p++)
             {
                 pixelColors[p] = new Color(prevValue, prevValue, prevValue);
             }
 
             // Repeat in each row for the rest of the texture
-            for (int i = 1; i < height; i++)
+            for (int i = 1; i < opacityMapTexture.height; i++)
             {
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < opacityMapTexture.width; j++)
                 {
-                    pixelColors[i * width + j] = pixelColors[(i - 1) * width + j];
+                    pixelColors[i * opacityMapTexture.width + j] = pixelColors[(i - 1) * opacityMapTexture.width + j];
                 }
             }
 
-            // Apply pixels to shader
-            result.SetPixels(pixelColors);
-            result.Apply(false);
-
-            return result;
+            // Apply updated pixels to texture
+            opacityMapTexture.SetPixels(pixelColors);
+            opacityMapTexture.Apply(false);
         }
     }
 }
