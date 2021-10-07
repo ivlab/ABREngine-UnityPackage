@@ -241,6 +241,7 @@ namespace IVLab.ABREngine
                 // Apply the voxel texture to the mesh
                 meshRenderer.material = ImpressionMaterial;
                 meshRenderer.GetPropertyBlock(MatPropBlock);
+                Texture3D.DestroyImmediate(MatPropBlock.GetTexture("_VolumeTexture"));
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);
                 MatPropBlock.SetVector("_Center", volumeRenderData.bounds.center);
                 MatPropBlock.SetVector("_Extents", volumeRenderData.bounds.extents);
