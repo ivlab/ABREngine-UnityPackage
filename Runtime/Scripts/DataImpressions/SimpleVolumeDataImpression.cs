@@ -32,6 +32,7 @@ namespace IVLab.ABREngine
         public Vector3[] vertices;
         public int[] triangles;
         public Bounds bounds;
+        public float stepCount;
     }
 
     [ABRPlateType("Volumes")]
@@ -138,6 +139,7 @@ namespace IVLab.ABREngine
                 };
 
                 // Setup the 3D volume texture
+                renderInfo.stepCount = dataset.dimensions.magnitude;
                 Vector3Int dimensions = dataset.dimensions;
                 renderInfo.voxelTex = new Texture3D(
                     dimensions.x,
@@ -243,6 +245,7 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);
                 MatPropBlock.SetVector("_Center", volumeRenderData.bounds.center);
                 MatPropBlock.SetVector("_Extents", volumeRenderData.bounds.extents);
+                MatPropBlock.SetFloat("_StepCount", volumeRenderData.stepCount);
                 meshRenderer.SetPropertyBlock(MatPropBlock);
             }
         }

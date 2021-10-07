@@ -33,7 +33,7 @@ Shader "ABR/Volume"
 		_ColorDataMax("Color Data Max", Float) = 1.0
 		_VolumeBrightness("Brightness", Float) = 0.1
 		[MaterialToggle] _UseLighting("Use Lighting", Float) = 1
-		_StepCount("Step Count", Int) = 200
+		_StepCount("Step Count", Float) = 200
 	}
 		
 	SubShader
@@ -109,7 +109,7 @@ Shader "ABR/Volume"
 			// Array of light intensities
 			float _LightIntensities[3];
 			// Max number of steps traversed into the volume
-			int _StepCount;
+			float _StepCount;
 			// Depth texture for intersection with opaque objects
 			// (written to automatically when camera's DepthTextureMode
 			// is set to Depth)
@@ -286,8 +286,7 @@ Shader "ABR/Volume"
 					///////////////////////////////////////////////////////////
 
 					// Calculate the distance traveled into the bounding box
-					// (0.9 -> decrease step size since rarely looking down full diagonal)
-					traveled = progress / (float)_StepCount * diagonal * 0.9;
+					traveled = progress / _StepCount * diagonal;
 
 					// Update current position in the bounding box
 					float3 pos = frontCoord + traveled * dir;
@@ -300,9 +299,9 @@ Shader "ABR/Volume"
 					float4 V = tex3Dlod(_VolumeTexture, float4(uvw, 0));
 					float dataValue = Remap(V.a, float4(_ColorDataMin, _ColorDataMax, 0, 1));
 
-					// Continue if full distance traversed
-					if (traveled > len)// || dataValue < 0.001) //|| (uvw.x <=_plane2min.x || uvw.x >= _plane2max.x || uvw.y <= _plane2min.y || uvw.y >= _plane2max.y || uvw.z <= _plane2min.z || uvw.z >= _plane2max.z) )
-					    continue;
+					// Break early if full distance traversed
+					if (traveled > len)
+						break;
 
 					///////////////////////////////////////////////////////////
 					// Apply transfer function to determine color
@@ -311,7 +310,9 @@ Shader "ABR/Volume"
 					// Look up the transfer function color and opacity
 					float4 transferColor = _UseColorMap ? tex2Dlod(_ColorMap, clamp(dataValue, 0, 1)) : _Color;
 					float4 transferOpacity = _UseOpacityMap ? tex2Dlod(_OpacityMap, clamp(dataValue, 0, 1)) : _Opacity;
-					// Calculate single alpha value based on brightness of opacity map
+					// Compute alpha value based on transfer function opacity and opacity multiplier
+					// (we divide by _StepCount here for better styling consistency between volumes of different sizes
+					// as well as consistency of visualizations in case step count calculation changes in future)
 					float alpha = clamp(transferOpacity.r * _OpacityMultiplier / _StepCount * 100, 0, 1);
 
 					// Combine transfer color and opacity to get a full source color
@@ -327,26 +328,19 @@ Shader "ABR/Volume"
 					// Ambient
 					float3 litColor = _VolumeBrightness * src.rgb;
 
-					// Diffuse + specular for each light
+					// Diffuse for each light
 					if (_UseLighting)
 					{
 						// Unit vector for normal, transformed from object to view space
 						float3 n = normalize(mul(UNITY_MATRIX_IT_MV, float4(V.xyz, 0)).xyz);
-						// Unit vector from current frag to eye point, in view space
-						float3 e = normalize(-i.viewPosition.xyz);
 
 						for (int lightIdx = 0; lightIdx < _LightCount; lightIdx++) {
 
 							// Unit vector from frag to light, in view space
 							float3 l = normalize(_ViewSpaceLightDirections[lightIdx]);
 
-							// Halfway vector, in view space
-							float h = normalize(l + e);
-
 							// Compute diffuse contribution
 							float diffuse = _LightIntensities[lightIdx] * clamp(dot(n, l), 0, 1);
-							// Compute specular contribution
-							//float specular = 0.1f * pow(max(dot(h, n), 0.0), 8);
 
 							litColor += src.rgb * diffuse;
 						}
@@ -354,7 +348,7 @@ Shader "ABR/Volume"
 
 					// Apply
 					// ========================================================
-					src.rgb = litColor; // + specular;
+					src.rgb = litColor;
 
 					///////////////////////////////////////////////////////////
 					// Color blending
@@ -364,8 +358,9 @@ Shader "ABR/Volume"
 					src.rgb *= src.a; // pre-multiply alpha
 					dst = (1.0f - dst.a) * src + dst; // accumulate
 
-					// if (dst.a > 1)
-					// 	break;
+					// Break early if pixel is already fully opaque
+					if (dst.a >= 1)
+						break;
 				}
 
 				// Build the final color
