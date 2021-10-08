@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace IVLab.ABREngine
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -88,25 +88,46 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.ABRConfig.html">ABRConfig</a></h4>
-      <section></section>
+      <section><p>The ABRConfig class provides access throughtout ABR to everything that
+is loaded in from a user&apos;s / developer&apos;s ABRConfig.json file. This is
+mainly useful for modifying the behaviour of the ABREngine internally,
+but can be occasionally helpful in other situations - for instance, if a
+developer needs to get access to the default bounding box / container
+that ABR is using.</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.ABRConfig.Consts.html">ABRConfig.Consts</a></h4>
+      <section><p>Global access to constants in the ABR Engine</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRConfigDefaults.html">ABRConfigDefaults</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRConfigInfo.html">ABRConfigInfo</a></h4>
-      <section></section>
+      <section><p>These options, when declared in an <code>ABRConfig.json</code> file, change the
+behaviour of the ABREngine. JSON naming convention is analagous to field
+names seen here.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ABREngine.html">ABREngine</a></h4>
-      <section></section>
+      <section><p>The ABREngine class is the main operational MonoBehaviour Singleton for
+the ABREngine-UnityPackage. It is in charge of kicking off all startup
+processes for ABR, including setting up connections with the server, the
+data listener, VisAssets and Data managers, etc.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRInputAttribute.html">ABRInputAttribute</a></h4>
       <section><p>Input attribute used for annotating an ABR input to a data
 impression (VisAsset, DataVariable, etc.)</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRInputIndexerModule.html">ABRInputIndexerModule</a></h4>
-      <section></section>
+      <section><p>Convenience class to avoid having to repeatedly manage reflection when
+adjusting ABR inputs to Data Impressions.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRPlateType.html">ABRPlateType</a></h4>
       <section><p>Attribute to match up this class with the string plate name from the
 ABR Schema</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.ABRStateParser.html">ABRStateParser</a></h4>
-      <section></section>
+      <section><p>The ABRStateParser takes a (text) ABR state from JSON and loads its
+components into Unity, or takes the current state of objects in the
+Unity scene and translates it back into text.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.AnglePrimitive.html">AnglePrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></h4>
@@ -116,9 +137,19 @@ ABR Schema</p>
 <p>Should contain properties with attributes for all of the inputs</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a></h4>
-      <section></section>
+      <section><p>A DataImpressionGroup is, as the name suggests, a group of data
+impressions within ABR. DataImpressionGroups are contained within a
+defined bounding box, and automatically rescale all of their data to
+stay within this container. Each time a new key data object is loaded
+into a data impression in this group, the GroupToDataMatrix and
+GroupBounds are updated.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.DataManager.html">DataManager</a></h4>
-      <section></section>
+      <section><p>Manager where all datasets, key data, and variables live. This class
+makes the connection between Datasets and RawDatasets. This class is
+useful for obtaining any KeyData and Variables needed to apply to Data
+Impressions.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.DataPath.html">DataPath</a></h4>
       <section><p>A path to a data source, be it a KeyData object, a Scalar Variable,
 a Vector Variable, or something else.</p>
@@ -126,40 +157,64 @@ a Vector Variable, or something else.</p>
 <p>Example: TACC/GulfOfMexico/KeyData/bathymetry</p>
 <p>Example: TACC/GulfOfMexico/ScalarVar/temperature</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.DataRange-1.html">DataRange&lt;T&gt;</a></h4>
+      <section><p>Range descriptor for a variable, including a min and max.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.Dataset.html">Dataset</a></h4>
       <section><p>Lightweight container for a collection of KeyData objects and variables that
 share a common coordinate space. Its bounding box contains all of data, and
 the rendered objects are children of this object&apos;s GameObject.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></h4>
-      <section></section>
+      <section><p>An EncodedGameObject connects a DataImpression with a Unity Game Object.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.FilePathVisAssetFetcher.html">FilePathVisAssetFetcher</a></h4>
-      <section></section>
+      <section><p>Fetch VisAsset from somewhere on local disk</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.FloatPrimitive.html">FloatPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.GlyphVisAsset.html">GlyphVisAsset</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.HttpDataLoader.html">HttpDataLoader</a></h4>
+      <section><p>Load data from a remote source</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.HttpStateFileLoader.html">HttpStateFileLoader</a></h4>
-      <section></section>
+      <section><p>Save/Load a state from a web URL</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.HttpVisAssetFetcher.html">HttpVisAssetFetcher</a></h4>
-      <section></section>
+      <section><p>Fetch VisAssets from a URL via HTTP</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.InstancedMeshRenderer.html">InstancedMeshRenderer</a></h4>
+      <section><p>Custom-tailored Instanced Mesh Renderer for rendering glyphs in ABR.
+When using this, developers should make sure that &quot;Use Instanced&quot; is
+checked on the material that these glyphs are using.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.IntegerPrimitive.html">IntegerPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></h4>
-      <section></section>
+      <section><p>Lightweight container for a data object</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.KeyDataMapping.html">KeyDataMapping</a></h4>
-      <section></section>
+      <section><p>Mapping between topologies / types of geometry and actual key data</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.LengthPrimitive.html">LengthPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.LineKeyData.html">LineKeyData</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.LineTextureVisAsset.html">LineTextureVisAsset</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.MediaDataLoader.html">MediaDataLoader</a></h4>
+      <section><p>Load data from the ABREngine Media directory (specified in ABRConfig)</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.Notifier.html">Notifier</a></h4>
+      <section><p>Notifier for ABR state / cache updates, based on WebSockets.</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.PathStateFileLoader.html">PathStateFileLoader</a></h4>
+      <section><p>Save/Load a state to a JSON file somewhere on disk</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.PointKeyData.html">PointKeyData</a></h4>
-      <section></section>
-      <h4><a class="xref" href="IVLab.ABREngine.PointRenderInfo.html">PointRenderInfo</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.RawABRInput.html">RawABRInput</a></h4>
       <section><p>Raw string values from a state JSON being passed to ABR</p>
@@ -167,23 +222,28 @@ the rendered objects are children of this object&apos;s GameObject.</p>
 <p>Parameters can have one or more inputs</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a></h4>
-      <section><p>The raw data as loaded from an ABR Binary Data file and
-corresponding JSON header file. This RawDataset defines the
-specification for each of these files. RawDataset is not to be
-confused with <code>Dataset</code>, which represents a <em>collection</em> of
-RawDatasets which share a coordinate space, key data, and variables.</p>
+      <section><p>The raw variable arrays and geometry for a Data Object. RawDatasets
+can be loaded from a pair of .json and .bin files (JsonHeader and
+BinaryData, respectively). This RawDataset defines the specification
+for each of these files. RawDataset is not to be confused with
+<code>Dataset</code>, which represents a <em>collection</em> of RawDatasets which
+share a coordinate space, key data, and variables.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.RawDataset.BinaryData.html">RawDataset.BinaryData</a></h4>
-      <section></section>
+      <section><p>Actual geometric representation of the data to load from a file / socket</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.RawDataset.JsonHeader.html">RawDataset.JsonHeader</a></h4>
-      <section></section>
+      <section><p>Header that contains metadata for a particular RawDataset</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.RenderHints.html">RenderHints</a></h4>
       <section><p>Hints for rendering, such as whether a data impression should be hidden</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.ResourceStateFileLoader.html">ResourceStateFileLoader</a></h4>
-      <section></section>
+      <section><p>Load a state from any Resources folder within Unity (within any Package or Asset)</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ResourceVisAssetFetcher.html">ResourceVisAssetFetcher</a></h4>
-      <section></section>
+      <section><p>Fetch VisAsset from a Resources folder (in an Asset or Package)</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.SerializableFloatArray.html">SerializableFloatArray</a></h4>
@@ -191,32 +251,42 @@ RawDatasets which share a coordinate space, key data, and variables.</p>
       <h4><a class="xref" href="IVLab.ABREngine.SerializableVectorArray.html">SerializableVectorArray</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.SimpleGlyphDataImpression.html">SimpleGlyphDataImpression</a></h4>
-      <section></section>
+      <section><p>A &quot;Glyphs&quot; data impression that uses hand-sculpted geometry to depict point data.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.SimpleLineDataImpression.html">SimpleLineDataImpression</a></h4>
-      <section></section>
+      <section><p>A &quot;Lines&quot; data impression that uses hand-drawn line textures to depict line/flow data.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.SimpleSurfaceDataImpression.html">SimpleSurfaceDataImpression</a></h4>
-      <section></section>
+      <section><p>A &quot;Surfaces&quot; data impression that uses hand-drawn textures and color to show surface data.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.SocketDataListener.html">SocketDataListener</a></h4>
-      <section></section>
+      <section><p>Listener for incoming upstream data, for example, from a Send2ABR plugin
+for ParaView. Operation of this class is controlled by the ABRConfig
+option <code>dataListenerPort</code>.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.StateLocalVisAssetFetcher.html">StateLocalVisAssetFetcher</a></h4>
       <section><p>Fetch a VisAsset from the currently loaded ABR state. Currently only valid for ColormapVisAssets.</p>
 </section>
-      <h4><a class="xref" href="IVLab.ABREngine.StateSubscriber.html">StateSubscriber</a></h4>
-      <section></section>
-      <h4><a class="xref" href="IVLab.ABREngine.StateSubscriber.SubscriberInfo.html">StateSubscriber.SubscriberInfo</a></h4>
-      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.SurfaceKeyData.html">SurfaceKeyData</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.SurfaceTextureVisAsset.html">SurfaceTextureVisAsset</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.TextStateFileLoader.html">TextStateFileLoader</a></h4>
+      <section><p>Load a state from a serialized JSON string</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAssetLoader.html">VisAssetLoader</a></h4>
-      <section></section>
+      <section><p>Use a particular fetcher to try and get the VisAsset from its source,
+and construct the requisite Unity objects and IVisAsset to add.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAssetManager.html">VisAssetManager</a></h4>
-      <section></section>
+      <section><p>The VisAssetManager is where all VisAssets are stored within the
+ABREngine. VisAssets can be loaded and fetched from various sources
+defined in <code>VisAssetFetchers</code>.</p>
+</section>
     <h3 id="structs">Structs
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.SocketTextData.html">SocketTextData</a></h4>
@@ -228,14 +298,22 @@ RawDatasets which share a coordinate space, key data, and variables.</p>
 of ABR input should fit into a specific ABRInputGenre.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.IABRStateLoader.html">IABRStateLoader</a></h4>
-      <section></section>
+      <section><p>Generic state loader for ABR. Implementations should allow both
+retrieving a state (<code>GetState</code>) and saving a state (<code>SaveState</code>).</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></h4>
       <section><p>Public interface for a single ABR visualization layer</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.IDataImpressionRenderInfo.html">IDataImpressionRenderInfo</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.IDataLoader.html">IDataLoader</a></h4>
+      <section><p>Generic interface to fetch a <code>RawDataset</code> from somewhere</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.IDataVariable-1.html">IDataVariable&lt;T&gt;</a></h4>
-      <section></section>
+      <section><p>Lightweight / high level container for a data variable. Variables keep
+track of their ranges and path, but the actual Data Arrays are preserved
+within the original RawDataset.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.IFloatPrimitive.html">IFloatPrimitive</a></h4>
       <section><p>Represents a numeric primitive value (e.g. 10deg, 96cm, or 4.6)</p>
 </section>
@@ -258,7 +336,8 @@ Inputs). These should match the primitive input types in the schema.</p>
       <h4><a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IVisAssetFetcher.html">IVisAssetFetcher</a></h4>
-      <section></section>
+      <section><p>Generic fetcher that supports fetching all types of VisAssets from a particular source.</p>
+</section>
     <h3 id="enums">Enums
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.ABRInputGenre.html">ABRInputGenre</a></h4>
@@ -266,12 +345,19 @@ Inputs). These should match the primitive input types in the schema.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.DataPath.DataPathType.html">DataPath.DataPathType</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.UpdateLevel.html">UpdateLevel</a></h4>
+      <section><p>How &quot;deep&quot; a particular update needs to go to fully address this ABR Input</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAssetType.html">VisAssetType</a></h4>
       <section></section>
     <h3 id="delegates">Delegates
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.ABREngine.StateChangeDelegate.html">ABREngine.StateChangeDelegate</a></h4>
-      <section></section>
+      <section><p>Delegate callback that is called whenever the ABRState is updated.
+This is useful for applications that build on ABR and need to know
+when the state has been updated.
+See <a href="api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> for usage.</p>
+</section>
 </article>
           </div>
           

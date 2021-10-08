@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class VisAssetManager
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,10 @@
   
   <h1 id="IVLab_ABREngine_VisAssetManager" data-uid="IVLab.ABREngine.VisAssetManager" class="text-break">Class VisAssetManager
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>The VisAssetManager is where all VisAssets are stored within the
+ABREngine. VisAssets can be loaded and fetched from various sources
+defined in <code>VisAssetFetchers</code>.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -96,6 +99,23 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class VisAssetManager</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_VisAssetManager_examples"><strong>Examples</strong></h5>
+  <p>VisAssets can be loaded manually - be mindful of async programming:</p>
+<pre><code>// Initialize the ABR Engine
+await ABREngine.GetInstance().WaitUntilInitialized();
+
+Guid cmapUuid = new Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;);
+
+// Load a VisAsset (must be done in Main Thread!)
+await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+{
+    await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
+});
+
+// Get the actual cmap visasset
+ColormapVisAsset cmap = null;
+ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);</code></pre>
+
   <h3 id="constructors">Constructors
   </h3>
   
@@ -186,7 +206,9 @@
   
   <a id="IVLab_ABREngine_VisAssetManager_LocalVisAssets_" data-uid="IVLab.ABREngine.VisAssetManager.LocalVisAssets*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager_LocalVisAssets" data-uid="IVLab.ABREngine.VisAssetManager.LocalVisAssets">LocalVisAssets</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Any (custom) visassets that are solely described inside the state and do not
+exist on disk or on a server somewhere.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -211,13 +233,47 @@
   </h3>
   
   
-  <a id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset*"></a>
-  <h4 id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_System_Guid_System_Boolean_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset(System.Guid,System.Boolean)">LoadVisAsset(Guid, Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="IVLab_ABREngine_VisAssetManager_GetVisAssets_" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAssets*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_GetVisAssets" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAssets">GetVisAssets()</h4>
+  <div class="markdown level1 summary"><p>Get the UUIDs of every VisAsset that&apos;s been imported into ABR</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public List&lt;Guid&gt; GetVisAssets()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_System_Guid_System_Boolean_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset(System.Guid,System.Boolean)">LoadVisAsset(Guid, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Load a particular VisAsset described by its UUID. VisAssets will
+automatically be loaded from any of the following places:</p>
+<ol>
+<li>The state itself (<code>localVisAssets</code>)</li>
+<li>The media directory on the machine ABR is running on</li>
+<li>Any Resources folder (in Assets or in any Package)</li>
+<li>A VisAsset server</li>
+</ol>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -260,11 +316,13 @@
   
   <a id="IVLab_ABREngine_VisAssetManager_LoadVisAssetPalette_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAssetPalette*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager_LoadVisAssetPalette" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAssetPalette">LoadVisAssetPalette()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Load all VisAssets located in the Media directory into memory.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task LoadVisAssetPalette()</code></pre>
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory&quot;)]
+public async Task LoadVisAssetPalette()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -285,11 +343,12 @@
   
   <a id="IVLab_ABREngine_VisAssetManager_TryGetVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.TryGetVisAsset*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager_TryGetVisAsset_System_Guid_IVLab_ABREngine_IVisAsset__" data-uid="IVLab.ABREngine.VisAssetManager.TryGetVisAsset(System.Guid,IVLab.ABREngine.IVisAsset@)">TryGetVisAsset(Guid, out IVisAsset)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Attempt to retrieve a VisAsset.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void TryGetVisAsset(Guid guid, out IVisAsset visAsset)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool TryGetVisAsset(Guid guid, out IVisAsset visAsset)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -310,6 +369,22 @@
         <td><a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a></td>
         <td><span class="parametername">visAsset</span></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><p>Returns true if the VisAsset is currently loaded into the memory.</p>
+</td>
       </tr>
     </tbody>
   </table>

@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SimpleGlyphDataImpression
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,8 @@
   
   <h1 id="IVLab_ABREngine_SimpleGlyphDataImpression" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression" class="text-break">Class SimpleGlyphDataImpression
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>A &quot;Glyphs&quot; data impression that uses hand-sculpted geometry to depict point data.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -136,6 +137,15 @@
     <pre><code class="lang-csharp hljs">[ABRPlateType(&quot;Glyphs&quot;)]
 public class SimpleGlyphDataImpression : DataImpression, IDataImpression, IHasDataset</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_SimpleGlyphDataImpression_examples"><strong>Examples</strong></h5>
+  <p>An example of creating a single glyph data impression and setting its colormap, color variable, and glyph could be:</p>
+<pre><code>SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
+gi.keyData = points as PointKeyData;
+gi.colorVariable = yAxis;
+gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
+gi.glyph = glyph as GlyphVisAsset;
+ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
+
   <h3 id="constructors">Constructors
   </h3>
   
@@ -187,7 +197,7 @@ single string argument with UUID.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public ColormapVisAsset colormap</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -212,7 +222,7 @@ public ColormapVisAsset colormap</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Color Variable&quot;, &quot;Color&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Color Variable&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public ScalarDataVariable colorVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -237,7 +247,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Forward Variable&quot;, &quot;Direction&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Forward Variable&quot;, &quot;Direction&quot;, UpdateLevel.Style)]
 public VectorDataVariable forwardVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -262,7 +272,7 @@ public VectorDataVariable forwardVariable</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph&quot;, &quot;Glyph&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph&quot;, &quot;Glyph&quot;, UpdateLevel.Style)]
 public GlyphVisAsset glyph</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -276,6 +286,31 @@ public GlyphVisAsset glyph</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.GlyphVisAsset.html">GlyphVisAsset</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_glyphDensity" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.glyphDensity">glyphDensity</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph Density&quot;, &quot;Glyph&quot;, UpdateLevel.Style)]
+public PercentPrimitive glyphDensity</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -311,7 +346,7 @@ public GlyphVisAsset glyph</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph Size&quot;, &quot;Glyph&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph Size&quot;, &quot;Glyph&quot;, UpdateLevel.Style)]
 public LengthPrimitive glyphSize</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -336,7 +371,7 @@ public LengthPrimitive glyphSize</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph Variable&quot;, &quot;Glyph&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Glyph Variable&quot;, &quot;Glyph&quot;, UpdateLevel.Style)]
 public ScalarDataVariable glyphVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -361,7 +396,7 @@ public ScalarDataVariable glyphVariable</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
 public PointKeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -386,7 +421,7 @@ public PointKeyData keyData</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Up Variable&quot;, &quot;Direction&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Up Variable&quot;, &quot;Direction&quot;, UpdateLevel.Style)]
 public VectorDataVariable upVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -464,57 +499,16 @@ public VectorDataVariable upVariable</code></pre>
   </h3>
   
   
-  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_ApplyToGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject*"></a>
-  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)">ApplyToGameObject(EncodedGameObject)</h4>
+  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeGeometry_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry*"></a>
+  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeGeometry" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry">ComputeGeometry()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ApplyToGameObject(EncodedGameObject currentGameObject)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
-        <td><span class="parametername">currentGameObject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_">DataImpression.ApplyToGameObject(EncodedGameObject)</a></div>
-  
-  
-  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeKeyDataRenderInfo_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeKeyDataRenderInfo" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo">ComputeKeyDataRenderInfo()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ComputeKeyDataRenderInfo()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void ComputeGeometry()</code></pre>
   </div>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeKeyDataRenderInfo">DataImpression.ComputeKeyDataRenderInfo()</a></div>
-  
-  
-  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeRenderInfo_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_ComputeRenderInfo" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo">ComputeRenderInfo()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ComputeRenderInfo()</code></pre>
-  </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeRenderInfo">DataImpression.ComputeRenderInfo()</a></div>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeGeometry">DataImpression.ComputeGeometry()</a></div>
   
   
   <a id="IVLab_ABREngine_SimpleGlyphDataImpression_GetDataset_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.GetDataset*"></a>
@@ -542,6 +536,93 @@ public VectorDataVariable upVariable</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_GetDataset">DataImpression.GetDataset()</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_SetupGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject*"></a>
+  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)">SetupGameObject(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SetupGameObject(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_">DataImpression.SetupGameObject(EncodedGameObject)</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_UpdateStyling_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling*"></a>
+  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)">UpdateStyling(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void UpdateStyling(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_">DataImpression.UpdateStyling(EncodedGameObject)</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleGlyphDataImpression_UpdateVisibility_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility*"></a>
+  <h4 id="IVLab_ABREngine_SimpleGlyphDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)">UpdateVisibility(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void UpdateVisibility(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_">DataImpression.UpdateVisibility(EncodedGameObject)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>

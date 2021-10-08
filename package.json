@@ -4,6 +4,7 @@
     "version": "0.2.1",
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
+    "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
     "dependencies": {
     }
 }

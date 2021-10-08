@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ABRConfigInfo
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,10 @@
   
   <h1 id="IVLab_ABREngine_ABRConfigInfo" data-uid="IVLab.ABREngine.ABRConfigInfo" class="text-break">Class ABRConfigInfo
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>These options, when declared in an <code>ABRConfig.json</code> file, change the
+behaviour of the ABREngine. JSON naming convention is analagous to field
+names seen here.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -96,6 +99,22 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ABRConfigInfo</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_ABRConfigInfo_examples"><strong>Examples</strong></h5>
+  <p>This example shows a simple <code>ABRConfig.json</code> file which will be
+converted to an <code>ABRConfigInfo</code> object when the ABREngine is started.</p>
+<pre><code>{
+    &quot;serverAddress&quot;: &quot;http://localhost:8000&quot;,
+    &quot;statePathOnServer&quot;: &quot;api/state&quot;,
+    &quot;mediaPath&quot;: &quot;./media&quot;,
+    &quot;dataListenerPort&quot;: 1900
+}</code></pre>
+<p>When the ABREngine is running, we would be able to access the config:</p>
+<pre><code>void Start()
+{
+    Debug.Log(ABREngine.Instance.Config.Info.serverAddress);
+    // prints &quot;http://localhost:8000&quot;
+}</code></pre>
+
   <h3 id="fields">Fields
   </h3>
   
@@ -230,6 +249,31 @@ persistentData, it will be downloaded. Default: null</p>
   </table>
   
   
+  <h4 id="IVLab_ABREngine_ABRConfigInfo_loadStateOnStart" data-uid="IVLab.ABREngine.ABRConfigInfo.loadStateOnStart">loadStateOnStart</h4>
+  <div class="markdown level1 summary"><p>Load a state from resources on ABREngine startup</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string loadStateOnStart</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <h4 id="IVLab_ABREngine_ABRConfigInfo_mediaPath" data-uid="IVLab.ABREngine.ABRConfigInfo.mediaPath">mediaPath</h4>
   <div class="markdown level1 summary"><p>Local path to look for datasets and visassets at. Default:
 Application.persistentDataPath</p>
@@ -288,7 +332,7 @@ register with the server immediately upon startup. Default: null</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string serverAddress</code></pre>
+    <pre><code class="lang-csharp hljs">public Uri serverAddress</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -300,7 +344,7 @@ register with the server immediately upon startup. Default: null</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uri">Uri</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -309,7 +353,7 @@ register with the server immediately upon startup. Default: null</p>
   
   <h4 id="IVLab_ABREngine_ABRConfigInfo_statePathOnServer" data-uid="IVLab.ABREngine.ABRConfigInfo.statePathOnServer">statePathOnServer</h4>
   <div class="markdown level1 summary"><p>State url to fetch on the server; will be concatenated with
-serverAddress</p>
+serverAddress. Note: Do not include a leading slash!</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -327,32 +371,6 @@ serverAddress</p>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="IVLab_ABREngine_ABRConfigInfo_stateSubscriberPort" data-uid="IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort">stateSubscriberPort</h4>
-  <div class="markdown level1 summary"><p>Observer pattern state subscriber information port (connect to
-socket on a particular host). Default: null</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int? stateSubscriberPort</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.nullable-1">Nullable</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>

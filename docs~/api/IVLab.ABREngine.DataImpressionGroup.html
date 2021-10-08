@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class DataImpressionGroup
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,13 @@
   
   <h1 id="IVLab_ABREngine_DataImpressionGroup" data-uid="IVLab.ABREngine.DataImpressionGroup" class="text-break">Class DataImpressionGroup
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>A DataImpressionGroup is, as the name suggests, a group of data
+impressions within ABR. DataImpressionGroups are contained within a
+defined bounding box, and automatically rescale all of their data to
+stay within this container. Each time a new key data object is loaded
+into a data impression in this group, the GroupToDataMatrix and
+GroupBounds are updated.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -458,7 +464,7 @@ be contained within</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>, <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
+        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>, <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -484,7 +490,7 @@ be contained within</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;T&gt;</td>
+        <td><span class="xref">List</span>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -541,7 +547,7 @@ be contained within</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -710,13 +716,29 @@ datasets.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void RecalculateBounds()</code></pre>
+    <pre><code class="lang-csharp hljs">public bool RecalculateBounds()</code></pre>
   </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td><p>Returns a boolean whether or not the bounds have changed since last recalculation</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_DataImpressionGroup_RemoveDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.RemoveDataImpression*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_RemoveDataImpression_System_Guid_" data-uid="IVLab.ABREngine.DataImpressionGroup.RemoveDataImpression(System.Guid)">RemoveDataImpression(Guid)</h4>
-  <div class="markdown level1 summary"><p>Remove data impression, returning if this data impression group is
+  <div class="markdown level1 summary"><p>Remove data impression, returning true if this data impression group is
 empty after the removal of such impression.</p>
 </div>
   <div class="markdown level1 conceptual"></div>

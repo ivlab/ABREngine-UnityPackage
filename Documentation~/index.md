@@ -2,6 +2,10 @@
 
 ## Introduction
 
+**Here for the ABREngine examples and C# documentation? Head over to the
+[ABREngine Docs](api/IVLab.ABREngine.html) page.** A good place to start is the
+[ABREngine Class](api/IVLab.ABREngine.ABREngine.html).
+
 We introduce Artifact-Based Rendering (ABR), a framework of tools, algorithms,
 and processes that makes it possible to produce real, data-driven 3D scientific
 visualizations with a visual language derived entirely from colors, lines,
@@ -31,9 +35,12 @@ Rendering technique, as described by the
 ## Installation
 
 Install via the Unity Package Manager (UPM). In Unity, go to *Window > Package
-Manager > + > git package* and paste the following URL (install dependencies first!):
+Manager > + > git package* and paste the following URL (install dependencies first, see below):
 
 ```
+ssh://git@github.umn.edu/ivlab-cs/ABREngine-UnityPackage.git#[current version]
+
+# For example:
 ssh://git@github.umn.edu/ivlab-cs/ABREngine-UnityPackage.git#v0.2.1
 ```
 

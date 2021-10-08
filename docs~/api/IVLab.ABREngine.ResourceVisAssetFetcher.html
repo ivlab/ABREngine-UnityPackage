@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ResourceVisAssetFetcher
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/IVLab.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,8 @@
   
   <h1 id="IVLab_ABREngine_ResourceVisAssetFetcher" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher" class="text-break">Class ResourceVisAssetFetcher
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Fetch VisAsset from a Resources folder (in an Asset or Package)</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -100,18 +101,31 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ResourceVisAssetFetcher : IVisAssetFetcher</code></pre>
   </div>
-  <h3 id="fields">Fields
+  <h3 id="constructors">Constructors
   </h3>
   
   
-  <h4 id="IVLab_ABREngine_ResourceVisAssetFetcher_RESOURCES_PATH" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.RESOURCES_PATH">RESOURCES_PATH</h4>
+  <a id="IVLab_ABREngine_ResourceVisAssetFetcher__ctor_" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.#ctor*"></a>
+  <h4 id="IVLab_ABREngine_ResourceVisAssetFetcher__ctor" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.#ctor">ResourceVisAssetFetcher()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string RESOURCES_PATH = &quot;media/visassets/&quot;</code></pre>
+    <pre><code class="lang-csharp hljs">public ResourceVisAssetFetcher()</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="IVLab_ABREngine_ResourceVisAssetFetcher_ResourcePath_" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath*"></a>
+  <h4 id="IVLab_ABREngine_ResourceVisAssetFetcher_ResourcePath" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath">ResourcePath</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ResourcePath { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -128,14 +142,15 @@
   </table>
   
   
-  <h4 id="IVLab_ABREngine_ResourceVisAssetFetcher_VISASSET_JSON" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.VISASSET_JSON">VISASSET_JSON</h4>
+  <a id="IVLab_ABREngine_ResourceVisAssetFetcher_VisAssetJson_" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson*"></a>
+  <h4 id="IVLab_ABREngine_ResourceVisAssetFetcher_VisAssetJson" data-uid="IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson">VisAssetJson</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string VISASSET_JSON = &quot;artifact&quot;</code></pre>
+    <pre><code class="lang-csharp hljs">public string VisAssetJson { get; }</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -160,7 +175,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;JObject&gt; GetArtifactJson(Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;JObject&gt; GetArtifactJson(Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -244,7 +259,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Texture2D&gt; GetColormapTexture(Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;Texture2D&gt; GetColormapTexture(Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -286,7 +301,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;GameObject&gt; GetGlyphGameObject(Guid uuid, JObject lodJson)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;GameObject&gt; GetGlyphGameObject(Guid uuid, JObject lodJson)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -333,7 +348,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Texture2D&gt; GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;Texture2D&gt; GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -380,7 +395,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Texture2D&gt; GetLineTexture(Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;Texture2D&gt; GetLineTexture(Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -422,7 +437,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Texture2D&gt; GetSurfaceNormalMap(Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;Texture2D&gt; GetSurfaceNormalMap(Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -464,7 +479,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;Texture2D&gt; GetSurfaceTexture(Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;Texture2D&gt; GetSurfaceTexture(Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">

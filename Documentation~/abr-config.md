@@ -2,7 +2,7 @@
 
 ABR configuration allows you, the developer, to make modifications to how the
 ABR Engine behaves. All configuration options are defined in
-[ABRConfig.cs](api/IVLab.ABREngine.ABRConfig.html).
+[ABRConfigInfo.cs](api/IVLab.ABREngine.ABRConfigInfo.html).
 
 To make changes to the configuration, place a file `ABRConfig.json` in your
 `Assets/StreamingAssets` folder in Unity, and define any of the key-value pairs

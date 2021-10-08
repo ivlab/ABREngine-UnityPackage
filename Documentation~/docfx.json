@@ -5,7 +5,8 @@
                 {
                     "src": "..",
                     "files": [
-                        "Runtime/**/*.cs"
+                        "Runtime/**/*.cs",
+                        "Editor/**/*.cs"
                     ],
                     "exclude": [
                         "Assets/Plugins/**"
@@ -71,6 +72,6 @@
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
         ],
-        "dest": "../docs"
+        "dest": "../docs~"
     }
 }
