@@ -42,7 +42,7 @@ namespace IVLab.ABREngine
     /// Key data and variables can be loaded directly from the data manager:
     /// <code>
     /// // Load an example dataset
-    /// await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>("Test/Test/KeyData/Example");
+    /// await ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader&gt;("Test/Test/KeyData/Example");
     /// // Load the high-level dataset that both Contour and Points are contained within
     /// Dataset ds = null;
     /// if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))

@@ -72,17 +72,30 @@ namespace IVLab.ABREngine
     ///         {
     ///             await ABREngine.GetInstance().WaitUntilInitialized();
     ///
-    ///             // By this point, the ABREngine is initialized and we can load a state.
-    ///             await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
+    ///             // By this point, the ABREngine is initialized and we can
+    ///             // load a state.
+    ///             await ABREngine
+    ///                 .Instance
+    ///                 .LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
     ///
-    ///             // At this point, all the data impressions, visassets, and data have been loaded into ABR, so we can retrieve them.
-    ///             SimpleGlyphDataImpression gi = ABREngine.Instance.GetDataImpression(new Guid("48cca33b-e1ae-4998-a0d1-2eee1e75e07d")) as SimpleGlyphDataImpression;
+    ///             // At this point, all the data impressions, visassets, and
+    ///             // data have been loaded into ABR, so we can retrieve them.
+    ///             SimpleGlyphDataImpression gi = ABREngine
+    ///                 .Instance
+    ///                 .GetDataImpression(
+    ///                     new Guid("48cca33b-e1ae-4998-a0d1-2eee1e75e07d")
+    ///                 ) as SimpleGlyphDataImpression;
     ///
-    ///             // Now that we have the impression, we can modify its contents (e.g. remove the colormap)
+    ///             // Now that we have the impression, we can modify its
+    ///             // contents (e.g. remove the colormap)
     ///             gi.colormap = null;
     ///
-    ///             // Lastly, render the data impressions.... but this MUST be done in the Unity Main thread.
-    ///             UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
+    ///             // Lastly, render the data impressions.... but this MUST be
+    ///             // done in the Unity Main thread.
+    ///             UnityThreadScheduler.Instance.RunMainThreadWork(() => 
+    ///             {
+    ///                 ABREngine.Instance.Render()
+    ///             });
     ///         });
     ///     }
     /// }
@@ -92,6 +105,9 @@ namespace IVLab.ABREngine
     {
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
+        /// <summary>
+        /// JSON representation of the state that has been previously loaded into ABR
+        /// </summary>
         public JObject State { get { return previouslyLoadedState; }}
         private JObject previouslyLoadedState = null;
         private string previousStateName = "Untitled";
@@ -102,12 +118,51 @@ namespace IVLab.ABREngine
         private bool stateUpdating = false;
 
         private Notifier _notifier;
+
+        /// <summary>
+        /// System-wide manager for VisAssets (visual elements used in the visualization)
+        /// </summary>
         public VisAssetManager VisAssets { get; private set; }
+
+        /// <summary>
+        /// System-wide manager for Data (the geometry and variables that make up the visualization)
+        /// </summary>
         public DataManager Data { get; private set; }
+
+        /// <summary>
+        /// A listener for data connections (e.g., Send2ABR from ParaView)
+        /// </summary>
         public SocketDataListener DataListener { get; private set; }
 
-        // Delegate callback for when state is updated
+        /// <summary>
+        /// Delegate callback that is called whenever the ABRState is updated.
+        /// This is useful for applications that build on ABR and need to know
+        /// when the state has been updated.
+        /// See <a href="api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> for usage.
+        /// </summary>
         public delegate void StateChangeDelegate(JObject state);
+
+        /// <summary>
+        /// Delegate that is called whenever ABRState is updated.
+        /// </summary>
+        /// <example>
+        /// Developers may need to use this if they want to know when the state has been updated:
+        /// <code>
+        /// using UnityEngine;
+        /// using IVLab.ABREngine;
+        /// public class ABRStateExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         ABREngine.Instance.OnStateChanged += ExampleOnStateChanged;
+        ///     }
+        ///     void ExampleOnStateChanged(JObject state)
+        ///     {
+        ///         Debug.Log(state["version"]);
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public StateChangeDelegate OnStateChanged;
 
         // Save this for threading purposes (can't be accessed from non-main-thread)
@@ -118,8 +173,10 @@ namespace IVLab.ABREngine
         private bool _initialized = false;
 
         /// <summary>
-        ///     If a specific media path is provided, use that. Otherwise, use
-        ///     our persistent data path.
+        /// Media path where all datasets and visassets are located. If the
+        /// media path is provided in the ABRConfig, use that media path.
+        /// Otherwise, use Unity's <a
+        /// href="https://docs.unity3d.com/ScriptReference/Application-persistentDataPath.html">Application.persistentDataPath</a>.
         /// </summary>
         public string MediaPath
         {
@@ -136,8 +193,14 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Provides access to all of the ABRConfig options that were loaded in at startup
+        /// </summary>
         public ABRConfig Config { get; private set; }
 
+        /// <summary>
+        /// Client for internal application usage to make web requests.
+        /// </summary>
         public static readonly HttpClient httpClient = new HttpClient();
 
         protected override void Awake()
@@ -205,6 +268,32 @@ namespace IVLab.ABREngine
             });
         }
 
+        /// <summary>
+        /// Wait until the Engine is fully initialized before proceeding to use it.
+        /// </summary>
+        /// <example>
+        /// For example, if we want to do some ABREngine-dependant tasks in a MonoBehaviour Start():
+        /// <code>
+        /// using System.Threading.Tasks;
+        /// using UnityEngine;
+        /// using IVLab.ABREngine;
+        /// 
+        /// public class ABRInitializerExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         Task.Run(async () =>
+        ///         {
+        ///             // Wait for the engine to initialize...
+        ///             await ABREngine.Instance.WaitUntilInitialized();
+        ///             // ... then print out some very important information that
+        ///             // depends on ABR being initialized
+        ///             Debug.Log(ABREngine.Instance.Config.Info.defaultBounds);
+        ///         });
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public async Task WaitUntilInitialized()
         {
             while (!_initialized)
@@ -219,6 +308,12 @@ namespace IVLab.ABREngine
             DataListener?.StopServer();
         }
 
+        /// <summary>
+        /// Check to see if the data impression with a given uuid exists
+        /// </summary>
+        /// <returns>
+        /// A boolean whether or not this data impression is present in this ABR state
+        /// </returns>
         public bool HasDataImpression(Guid uuid)
         {
             return dataImpressionGroups
@@ -226,6 +321,16 @@ namespace IVLab.ABREngine
                 .Where((v) => v.HasDataImpression(uuid)).ToList().Count > 0;
         }
 
+        /// <summary>
+        /// Retreive a particular data impression from the Engine
+        /// </summary>
+        /// <returns>
+        /// A data impression if found, null otherwise.
+        /// </returns>
+        /// <remarks>
+        /// It is often useful to cast the result of this data impression so individual inputs can be modified:
+        /// <code>SimpleSurfaceDataImpression di = ABREngine.Instance.GetDataImpression(someGuid) as SimpleSurfaceDataImpression</code>
+        /// </remarks>
         public IDataImpression GetDataImpression(Guid uuid)
         {
             try
@@ -241,6 +346,14 @@ namespace IVLab.ABREngine
             }
         }
 
+
+        /// <summary>
+        /// Retrieve all data impressions in an ABR state of a given impression
+        /// type (e.g., all `SimpleSurfaceDataImpression`s)
+        /// </summary>
+        /// <returns>
+        /// A list of data impressions that have a particular type
+        /// </returns>
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
@@ -250,6 +363,15 @@ namespace IVLab.ABREngine
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
 
+
+        /// <summary>
+        /// Retrieve all data impressions in an ABR scene that have a particular
+        /// tag. Note that the ABREngine does not do anything with tags; these
+        /// exist solely for application developers.
+        /// </summary>
+        /// <returns>
+        /// A list of data impressions with a particular tag
+        /// </returns>
         public List<IDataImpression> GetDataImpressionsWithTag(string tag)
         {
             return dataImpressionGroups
@@ -258,6 +380,15 @@ namespace IVLab.ABREngine
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
 
+
+        /// <summary>
+        /// Retrieve the encoded game object in the Unity scene associated with
+        /// a particular data impression, identified by its guid.
+        /// </summary>
+        /// <returns>
+        /// An EncodedGameObject (MonoBehaviour) of the Data Impression as it
+        /// exists in the Unity Scene, or null if no such impression exists.
+        /// </returns>
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
         {
             try
@@ -273,16 +404,41 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Add a bare data impression group into the ABR scene. The group
+        /// bounds defaults to the bounds found in
+        /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
+        /// zero.
+        /// </summary>
+        /// <returns>
+        /// The group that has been added.
+        /// </returns>
         public DataImpressionGroup AddDataImpressionGroup(string name)
         {
             return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
+        /// <summary>
+        /// Add a new data impression group with a particular UUID. The group
+        /// bounds defaults to the bounds found in
+        /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
+        /// zero.
+        /// </summary>
+        /// <returns>
+        /// The group that has been added.
+        /// </returns>
         public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid)
         {
             return AddDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
+
+        /// <summary>
+        /// Add a new data impression group with a particular UUID, bounds, position, and rotation.
+        /// </summary>
+        /// <returns>
+        /// The group that has been added.
+        /// </returns>
         public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
         {
             DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
@@ -290,6 +446,10 @@ namespace IVLab.ABREngine
             return group;
         }
 
+        /// <summary>
+        /// Remove a given data impression group from the scene, destroying all
+        /// of the data impressions within the group.
+        /// </summary>
         public void RemoveDataImpressionGroup(Guid uuid)
         {
             dataImpressionGroups[uuid].Clear();
@@ -297,11 +457,24 @@ namespace IVLab.ABREngine
             dataImpressionGroups.Remove(uuid);
         }
 
+        /// <summary>
+        /// Retrieve all data impression groups that currently exist in the
+        /// Unity ABR scene.
+        /// </summary>
+        /// <returns>
+        /// Dictionary mapping of (uuid => `DataImpressionGroup`)
+        /// </returns>
         public Dictionary<Guid, DataImpressionGroup> GetDataImpressionGroups()
         {
             return dataImpressionGroups;
         }
 
+        /// <summary>
+        /// Retrieve a particular data impression group from the scene
+        /// </summary>
+        /// <returns>
+        /// A data impression with a given UUID
+        /// </returns>
         public DataImpressionGroup GetDataImpressionGroup(Guid uuid)
         {
             DataImpressionGroup g = null;
@@ -315,6 +488,12 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Retrieve the first data impression group found that is associated with a particular dataset.
+        /// </summary>
+        /// <returns>
+        /// A data impression with the given dataset.
+        /// </returns>
         public DataImpressionGroup GetDataImpressionGroupByDataset(Dataset ds)
         {
             try
@@ -327,6 +506,12 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Check if a particular data impression group exists.
+        /// </summary>
+        /// <returns>
+        /// Boolean - true if the given group exists in the ABR scene, false otherwise.
+        /// </returns>
         public bool HasDataImpressionGroup(Guid uuid)
         {
             return dataImpressionGroups.ContainsKey(uuid);
@@ -420,6 +605,9 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Remove a data impression from the ABR scene
+        /// </summary>
         public void UnregisterDataImpression(Guid uuid)
         {
             var toRemove = new List<Guid>();
@@ -441,16 +629,44 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Create and return a duplicate copy of the data impression with a
+        /// given UUID. All inputs in the new data impression are identical to
+        /// the one being copied. By default duplicate data impressions will be
+        /// placed in their default groups (grouped by dataset).
+        /// </summary>
+        /// <returns>
+        /// The new data impression.
+        /// </returns>
         public IDataImpression DuplicateDataImpression(Guid uuid)
         {
             return DuplicateDataImpression(GetDataImpression(uuid));
         }
 
+        /// <summary>
+        /// Create and return a duplicate copy of the given data impression.
+        /// All inputs in the new data impression are identical to
+        /// the one being copied. By default duplicate data impressions will be
+        /// placed in their default groups (grouped by dataset).
+        /// </summary>
+        /// <returns>
+        /// The new data impression.
+        /// </returns>
         public IDataImpression DuplicateDataImpression(IDataImpression impression)
         {
             return DuplicateDataImpression(impression, null);
         }
 
+        /// <summary>
+        /// Create and return a duplicate copy of the given data impression.
+        /// The data impression will be placed within the specified
+        /// `DataImpressionGroup group`. If `group` is null, the default group
+        /// will be used (either conforming to the input dataset that the data
+        /// impression has, or the default empty group)
+        /// </summary>
+        /// <returns>
+        /// The new data impression.
+        /// </returns>
         public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, DataImpressionGroup group)
         {
             IDataImpression newDataImpression = dataImpression.Copy();
@@ -468,6 +684,14 @@ namespace IVLab.ABREngine
             return newDataImpression;
         }
 
+        /// <summary>
+        /// Create and return a duplicate copy of the given data impression, but
+        /// ensure that the copy is within the same data impression group as its
+        /// source.
+        /// </summary>
+        /// <returns>
+        /// The new data impression.
+        /// </returns>
         public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, bool retainGroup = true)
         {
             if (retainGroup)
@@ -481,6 +705,9 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Move a data impression from its current group to a new group.
+        /// </summary>
         public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // See if it's a part of a group already
@@ -502,6 +729,9 @@ namespace IVLab.ABREngine
             newGroup.AddDataImpression(dataImpression, allowOverwrite);
         }
 
+        /// <summary>
+        /// Remove all data impression groups from the ABR scene (and in turn, remove all data impressions).
+        /// </summary>
         public void ClearState()
         {
             List<Guid> toRemove = new List<Guid>();
@@ -516,6 +746,11 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Go through every data impression group's impressions and render
+        /// them. Each impression intelligently decides if the entire geometry
+        /// needs to be recomputed (slow), or if only the style has changed (fast).
+        /// </summary>
         public void Render()
         {
             try
@@ -535,6 +770,14 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Load a state into ABR.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: it is recommended to use `ABREngine.LoadStateAsync` instead of
+        /// this method; this method provides no timing guarantees (e.g. that
+        /// any data impressions would be initialized by the time it finishes).
+        /// </remarks>
         public void LoadState<T>(string stateName)
         where T : IABRStateLoader, new()
         {
@@ -549,6 +792,28 @@ namespace IVLab.ABREngine
             });
         }
 
+        /// <summary>
+        /// Load a state into ABR, asynchronously. This Task is finished when:
+        /// (1) All Data and VisAssets from the state have been loaded, (2) The
+        /// ABR scene has been rendered with all updates, and (3) the
+        /// OnStateChanged callback has been fired.
+        /// </summary>
+        /// <example>
+        /// A state may be loaded from any of the following places:
+        /// <code>
+        /// // A Resources folder (in Assets or in a Package)
+        /// await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
+        ///
+        /// // A web resource
+        /// await ABREngine.Instance.LoadStateAsync&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");
+        ///
+        /// // A local file
+        /// await ABREngine.Instance.LoadStateAsync&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/test.json");
+        ///
+        /// // A JSON string
+        /// await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
+        /// </code>
+        /// </example>
         public async Task LoadStateAsync<T>(string stateName)
         where T : IABRStateLoader, new()
         {
@@ -583,6 +848,14 @@ namespace IVLab.ABREngine
             });
         }
 
+        /// <summary>
+        /// Save a state from the ABR Unity scene back to a particular destination.
+        /// </summary>
+        /// <remarks>
+        /// The SaveState functionality is only implemented in a few
+        /// `IABRStateLoader`s, namely `PathStateFileLoader` and
+        /// `HttpStateFileLoader`.
+        /// </remarks>
         public async Task SaveStateAsync<T>()
         where T : IABRStateLoader, new()
         {

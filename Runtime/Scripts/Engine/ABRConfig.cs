@@ -219,6 +219,31 @@ namespace IVLab.ABREngine
 
     }
 
+    /// <summary>
+    /// These options, when declared in an `ABRConfig.json` file, change the
+    /// behaviour of the ABREngine. JSON naming convention is analagous to field
+    /// names seen here.
+    /// </summary>
+    /// <example>
+    /// This example shows a simple `ABRConfig.json` file which will be
+    /// converted to an `ABRConfigInfo` object when the ABREngine is started.
+    /// <code>
+    /// {
+    ///     "serverAddress": "http://localhost:8000",
+    ///     "statePathOnServer": "api/state",
+    ///     "mediaPath": "./media",
+    ///     "dataListenerPort": 1900
+    /// }
+    /// </code>
+    /// When the ABREngine is running, we would be able to access the config:
+    /// <code>
+    /// void Start()
+    /// {
+    ///     Debug.Log(ABREngine.Instance.Config.Info.serverAddress);
+    ///     // prints "http://localhost:8000"
+    /// }
+    /// </code>
+    /// </example>
     public class ABRConfigInfo
     {
         /// <summary>

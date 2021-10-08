@@ -68,20 +68,20 @@ namespace IVLab.ABREngine
     ///     new Vector3(-1, 0,  1), // 2
     ///     new Vector3( 1, 0,  1), // 3
     /// };
+    ///
     /// ds.vertexArray = vertices;
-
     /// // Construct triangle indices/faces - LEFT HAND RULE, outward-facing normals
     /// int[] indices = {
     ///     // Bottom face
     ///     0, 1, 3,
     ///     0, 3, 2
     /// };
+    ///
     /// ds.indexArray = indices;
-
     /// // How many verts per cell are there? (each triangle is a cell)
     /// int[] cellIndexCounts = { 3, 3 };
     /// ds.cellIndexCounts = cellIndexCounts;
-
+    ///
     /// // Where does each cell begin?
     /// int[] cellIndexOffsets = { 0, 3 };
     /// ds.cellIndexOffsets = cellIndexOffsets;

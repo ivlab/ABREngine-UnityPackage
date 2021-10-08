@@ -39,7 +39,7 @@ namespace IVLab.ABREngine
         /// </summary>
         Task<JObject> GetState(string stateText);
 
-        /// <summmary>
+        /// <summary>
         /// Save a serialized JSON state with a particular name
         /// </summary>
         Task SaveState(string name, string serializedState);
