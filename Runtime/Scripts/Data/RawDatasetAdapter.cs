@@ -43,7 +43,7 @@ namespace IVLab.ABREngine
 
             RawDataset ds = new RawDataset();
             ds.bounds = mesh.bounds;
-            ds.meshTopology = MeshTopology.Triangles;
+            ds.dataTopology = DataTopology.Triangles;
 
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
@@ -86,7 +86,7 @@ namespace IVLab.ABREngine
             }
 
             RawDataset ds = new RawDataset();
-            ds.meshTopology = MeshTopology.LineStrip;
+            ds.dataTopology = DataTopology.LineStrip;
             ds.bounds = lineBounds;
 
             ds.vectorArrays = new SerializableVectorArray[0];
