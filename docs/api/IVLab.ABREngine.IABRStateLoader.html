@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Interface IABRStateLoader
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,9 @@
   
   <h1 id="IVLab_ABREngine_IABRStateLoader" data-uid="IVLab.ABREngine.IABRStateLoader" class="text-break">Interface IABRStateLoader
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Generic state loader for ABR. Implementations should allow both
+retrieving a state (<code>GetState</code>) and saving a state (<code>SaveState</code>).</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
@@ -97,11 +99,12 @@
   
   <a id="IVLab_ABREngine_IABRStateLoader_GetState_" data-uid="IVLab.ABREngine.IABRStateLoader.GetState*"></a>
   <h4 id="IVLab_ABREngine_IABRStateLoader_GetState_System_String_" data-uid="IVLab.ABREngine.IABRStateLoader.GetState(System.String)">GetState(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Load a state based on some text (perhaps a JSON string, a file path, or URL)</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Task&lt;JObject&gt; GetState(string name)</code></pre>
+    <pre><code class="lang-csharp hljs">Task&lt;JObject&gt; GetState(string stateText)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -115,7 +118,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">name</span></td>
+        <td><span class="parametername">stateText</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -138,12 +141,13 @@
   
   
   <a id="IVLab_ABREngine_IABRStateLoader_SaveState_" data-uid="IVLab.ABREngine.IABRStateLoader.SaveState*"></a>
-  <h4 id="IVLab_ABREngine_IABRStateLoader_SaveState_System_String_" data-uid="IVLab.ABREngine.IABRStateLoader.SaveState(System.String)">SaveState(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="IVLab_ABREngine_IABRStateLoader_SaveState_System_String_System_String_" data-uid="IVLab.ABREngine.IABRStateLoader.SaveState(System.String,System.String)">SaveState(String, String)</h4>
+  <div class="markdown level1 summary"><p>Save a serialized JSON state with a particular name</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Task SaveState(string serializedState)</code></pre>
+    <pre><code class="lang-csharp hljs">Task SaveState(string name, string serializedState)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -155,6 +159,11 @@
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">serializedState</span></td>

@@ -31,8 +31,19 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The ABRStateParser takes a (text) ABR state from JSON and loads its
+    /// components into Unity, or takes the current state of objects in the
+    /// Unity scene and translates it back into text.
+    /// </summary>
     public class ABRStateParser
     {
+        /// <summary>
+        /// The `LoadState` method, the workhorse of this
+        /// class, has side effects that range from populating new GameObjects for
+        /// data impressions, to loading new data, to loading in VisAssets. By the
+        /// end of `LoadState`, the visualization should be complete.
+        /// </summary>
         public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
@@ -590,6 +601,12 @@ namespace IVLab.ABREngine
             return stateJson;
         }
 
+        /// <summary>
+        /// The SerializeState method takes the current state of the ABR unity
+        /// scene and attempts to put it back into JSON form. There are several
+        /// fields that aren't stored anywhere in the ABREngine, and must thus
+        /// rely on the JSON version of the previous state.
+        /// </summary>
         public string SerializeState(JObject previousState)
         {
             try

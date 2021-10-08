@@ -26,6 +26,12 @@ using UnityEditor;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Custom editor for the ABR Engine that displays:
+    /// - Player status
+    /// - Loaded VisAssets
+    /// - Loaded Datasets, KeyData and Variables
+    /// </summary>
     [CustomEditor(typeof(ABREngine))]
     public class ABREngineEditor : Editor
     {

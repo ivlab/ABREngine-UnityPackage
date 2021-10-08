@@ -22,6 +22,10 @@ using UnityEditor;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Simple custom editor that displays a UUID for a particular GameObject
+    /// associated with an ABR Data Impression
+    /// </summary>
     [CustomEditor(typeof(EncodedGameObject))]
     public class EncodedGameObjectEditor : Editor
     {

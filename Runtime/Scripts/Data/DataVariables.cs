@@ -21,35 +21,43 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataRange<T>
-{
-    public T min;
-    public T max;
-
-    public override bool Equals(object obj)
-    {
-        return this.Equals(obj as DataRange<T>);
-    }
-
-    public bool Equals(DataRange<T> other)
-    {
-        return this.max.Equals(other.max) && this.min.Equals(other.min);
-    }
-
-    public override int GetHashCode()
-    {
-        // HashCode is not available in the version of .NET Unity uses
-        return min.GetHashCode() + max.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return string.Format("DataRange({0}, {1})", min, max);
-    }
-}
-
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Range descriptor for a variable, including a min and max.
+    /// </summary>
+    public class DataRange<T>
+    {
+        public T min;
+        public T max;
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as DataRange<T>);
+        }
+
+        public bool Equals(DataRange<T> other)
+        {
+            return this.max.Equals(other.max) && this.min.Equals(other.min);
+        }
+
+        public override int GetHashCode()
+        {
+            // HashCode is not available in the version of .NET Unity uses
+            return min.GetHashCode() + max.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("DataRange({0}, {1})", min, max);
+        }
+    }
+
+    /// <summary>
+    /// Lightweight / high level container for a data variable. Variables keep
+    /// track of their ranges and path, but the actual Data Arrays are preserved
+    /// within the original RawDataset.
+    /// </summary>
     public interface IDataVariable<T> : IHasDataset, IABRInput
     {
         /// <summary>

@@ -5,7 +5,8 @@
                 {
                     "src": "..",
                     "files": [
-                        "Runtime/**/*.cs"
+                        "Runtime/**/*.cs",
+                        "Editor/**/*.cs"
                     ],
                     "exclude": [
                         "Assets/Plugins/**"
@@ -21,13 +22,16 @@
         "globalMetadata": {
             "_appTitle": "ABREngine",
             "_appFooter": "ABREngine",
+            "_appLogoPath": "resources/logo.svg",
+            "_appFaviconPath": "resources/favicon.ico",
             "_enableSearch": true
         },
         "content": [
             {
                 "files": [
                     "toc.yml",
-                    "index.md"
+                    "index.md",
+                    "abr-config.md"
                 ]
             },
             {

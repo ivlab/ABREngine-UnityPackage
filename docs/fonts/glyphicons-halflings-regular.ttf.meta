@@ -10,7 +10,8 @@ TrueTypeFontImporter:
   includeFontData: 1
   fontNames:
   - GLYPHICONS Halflings
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 34f61d24a3eb85248a7d570af488800c, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

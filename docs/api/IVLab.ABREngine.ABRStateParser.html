@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ABRStateParser
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,10 @@
   
   <h1 id="IVLab_ABREngine_ABRStateParser" data-uid="IVLab.ABREngine.ABRStateParser" class="text-break">Class ABRStateParser
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>The ABRStateParser takes a (text) ABR state from JSON and loads its
+components into Unity, or takes the current state of objects in the
+Unity scene and translates it back into text.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -100,54 +103,18 @@
   </h3>
   
   
-  <a id="IVLab_ABREngine_ABRStateParser_GetParser_" data-uid="IVLab.ABREngine.ABRStateParser.GetParser*"></a>
-  <h4 id="IVLab_ABREngine_ABRStateParser_GetParser__1" data-uid="IVLab.ABREngine.ABRStateParser.GetParser``1">GetParser&lt;T&gt;()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static ABRStateParser GetParser&lt;T&gt;()
-    where T : IABRStateLoader, new()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ABRStateParser.html">ABRStateParser</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
   <a id="IVLab_ABREngine_ABRStateParser_LoadState_" data-uid="IVLab.ABREngine.ABRStateParser.LoadState*"></a>
-  <h4 id="IVLab_ABREngine_ABRStateParser_LoadState_System_String_JObject_" data-uid="IVLab.ABREngine.ABRStateParser.LoadState(System.String,JObject)">LoadState(String, JObject)</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="IVLab_ABREngine_ABRStateParser_LoadState__1_System_String_JObject_" data-uid="IVLab.ABREngine.ABRStateParser.LoadState``1(System.String,JObject)">LoadState&lt;T&gt;(String, JObject)</h4>
+  <div class="markdown level1 summary"><p>The <code>LoadState</code> method, the workhorse of this
+class, has side effects that range from populating new GameObjects for
+data impressions, to loading new data, to loading in VisAssets. By the
+end of <code>LoadState</code>, the visualization should be complete.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;JObject&gt; LoadState(string name, JObject previousState)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;JObject&gt; LoadState&lt;T&gt;(string stateText, JObject previousState)
+    where T : IABRStateLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -161,7 +128,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">name</span></td>
+        <td><span class="parametername">stateText</span></td>
         <td></td>
       </tr>
       <tr>
@@ -186,11 +153,30 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_ABRStateParser_SerializeState_" data-uid="IVLab.ABREngine.ABRStateParser.SerializeState*"></a>
   <h4 id="IVLab_ABREngine_ABRStateParser_SerializeState_JObject_" data-uid="IVLab.ABREngine.ABRStateParser.SerializeState(JObject)">SerializeState(JObject)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The SerializeState method takes the current state of the ABR unity
+scene and attempts to put it back into JSON form. There are several
+fields that aren&apos;t stored anywhere in the ABREngine, and must thus
+rely on the JSON version of the previous state.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">

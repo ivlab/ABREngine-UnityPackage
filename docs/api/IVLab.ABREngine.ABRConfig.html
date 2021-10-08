@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ABRConfig
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,13 @@
   
   <h1 id="IVLab_ABREngine_ABRConfig" data-uid="IVLab.ABREngine.ABRConfig" class="text-break">Class ABRConfig
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>The ABRConfig class provides access throughtout ABR to everything that
+is loaded in from a user&apos;s / developer&apos;s ABRConfig.json file. This is
+mainly useful for modifying the behaviour of the ABREngine internally,
+but can be occasionally helpful in other situations - for instance, if a
+developer needs to get access to the default bounding box / container
+that ABR is using.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -96,6 +102,10 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ABRConfig</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_ABRConfig_examples"><strong>Examples</strong></h5>
+  <pre><code>Bounds defaultBounds = ABREngine.Instance.Config.Info.defaultBounds.Value;
+// ... do something fancy based on `defaultBounds`</code></pre>
+
   <h3 id="constructors">Constructors
   </h3>
   
@@ -108,59 +118,6 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ABRConfig()</code></pre>
   </div>
-  <h3 id="fields">Fields
-  </h3>
-  
-  
-  <h4 id="IVLab_ABREngine_ABRConfig_CONFIG_FILE" data-uid="IVLab.ABREngine.ABRConfig.CONFIG_FILE">CONFIG_FILE</h4>
-  <div class="markdown level1 summary"><p>Look for a file of this name in any Resources folder and load it
-as the config</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string CONFIG_FILE = &quot;ABRConfig&quot;</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="IVLab_ABREngine_ABRConfig_CONFIG_FILE_FALLBACK" data-uid="IVLab.ABREngine.ABRConfig.CONFIG_FILE_FALLBACK">CONFIG_FILE_FALLBACK</h4>
-  <div class="markdown level1 summary"><p>Fall back to the defaults located in this package</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public const string CONFIG_FILE_FALLBACK = &quot;ABRConfigDefault&quot;</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   

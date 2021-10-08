@@ -33,6 +33,20 @@ namespace IVLab.ABREngine
     }
 
 
+    /// <summary>
+    /// A "Surfaces" data impression that uses hand-drawn textures and color to show surface data.
+    /// </summary>
+    /// <example>
+    /// An example of creating a single surface data impression and setting its colormap, color variable, and texture could be:
+    /// <code>
+    /// SimpleSurfaceDataImpression gi = new SimpleSurfaceDataImpression();
+    /// gi.keyData = surfs as SurfaceKeyData;
+    /// gi.colorVariable = yAxis;
+    /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    /// gi.lineTexture = tex as SurfaceTextureVisAsset;
+    /// ABREngine.Instance.RegisterDataImpression(gi);
+    /// </code>
+    /// </example>
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {

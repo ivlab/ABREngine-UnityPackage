@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Interface IDataVariable&lt;T&gt;
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,10 @@
   
   <h1 id="IVLab_ABREngine_IDataVariable_1" data-uid="IVLab.ABREngine.IDataVariable`1" class="text-break">Interface IDataVariable&lt;T&gt;
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Lightweight / high level container for a data variable. Variables keep
+track of their ranges and path, but the actual Data Arrays are preserved
+within the original RawDataset.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -148,71 +151,15 @@
   </table>
   
   
-  <a id="IVLab_ABREngine_IDataVariable_1_MaxValue_" data-uid="IVLab.ABREngine.IDataVariable`1.MaxValue*"></a>
-  <h4 id="IVLab_ABREngine_IDataVariable_1_MaxValue" data-uid="IVLab.ABREngine.IDataVariable`1.MaxValue">MaxValue</h4>
-  <div class="markdown level1 summary"><p>MaxValue is calculated by the DataManager when it imports a new
-dataset. MaxValue is the largest value encountered across every
-instance of this variable, across all datasets.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">T MaxValue { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="IVLab_ABREngine_IDataVariable_1_MinValue_" data-uid="IVLab.ABREngine.IDataVariable`1.MinValue*"></a>
-  <h4 id="IVLab_ABREngine_IDataVariable_1_MinValue" data-uid="IVLab.ABREngine.IDataVariable`1.MinValue">MinValue</h4>
-  <div class="markdown level1 summary"><p>MinValue is calculated by the DataManager when it imports a new
-dataset. MinValue is the smallest value encountered across every
-instance of this variable, across all datasets.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">T MinValue { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="IVLab_ABREngine_IDataVariable_1_OriginalMaxValue_" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalMaxValue*"></a>
-  <h4 id="IVLab_ABREngine_IDataVariable_1_OriginalMaxValue" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalMaxValue">OriginalMaxValue</h4>
-  <div class="markdown level1 summary"><p>Save the original max value in case the user wants to reset it
+  <a id="IVLab_ABREngine_IDataVariable_1_OriginalRange_" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalRange*"></a>
+  <h4 id="IVLab_ABREngine_IDataVariable_1_OriginalRange" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalRange">OriginalRange</h4>
+  <div class="markdown level1 summary"><p>Save the original range in case the user wants to reset it
 later.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">T OriginalMaxValue { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">DataRange&lt;T&gt; OriginalRange { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -224,34 +171,7 @@ later.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="IVLab_ABREngine_IDataVariable_1_OriginalMinValue_" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalMinValue*"></a>
-  <h4 id="IVLab_ABREngine_IDataVariable_1_OriginalMinValue" data-uid="IVLab.ABREngine.IDataVariable`1.OriginalMinValue">OriginalMinValue</h4>
-  <div class="markdown level1 summary"><p>Save the original min value in case the user wants to reset it
-later.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">T OriginalMinValue { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
+        <td><a class="xref" href="IVLab.ABREngine.DataRange-1.html">DataRange</a>&lt;T&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -278,6 +198,61 @@ later.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_IDataVariable_1_Range_" data-uid="IVLab.ABREngine.IDataVariable`1.Range*"></a>
+  <h4 id="IVLab_ABREngine_IDataVariable_1_Range" data-uid="IVLab.ABREngine.IDataVariable`1.Range">Range</h4>
+  <div class="markdown level1 summary"><p>Range is calculated by the DataManager when it imports a new
+dataset. Range is calculated from the smallest/largest values
+encountered across every instance of this variable, across all
+datasets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">DataRange&lt;T&gt; Range { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.DataRange-1.html">DataRange</a>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_IDataVariable_1_SpecificRanges_" data-uid="IVLab.ABREngine.IDataVariable`1.SpecificRanges*"></a>
+  <h4 id="IVLab_ABREngine_IDataVariable_1_SpecificRanges" data-uid="IVLab.ABREngine.IDataVariable`1.SpecificRanges">SpecificRanges</h4>
+  <div class="markdown level1 summary"><p>Dictionary of keyData paths that have specific ranges for this variable</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Dictionary&lt;string, DataRange&lt;T&gt;&gt; SpecificRanges { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.DataRange-1.html">DataRange</a>&lt;T&gt;&gt;</td>
         <td></td>
       </tr>
     </tbody>

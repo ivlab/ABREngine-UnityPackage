@@ -29,6 +29,9 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Generic fetcher that supports fetching all types of VisAssets from a particular source.
+    /// </summary>
     public interface IVisAssetFetcher
     {
         string GetArtifactJsonPath(Guid uuid);
@@ -41,6 +44,9 @@ namespace IVLab.ABREngine
         Task<Texture2D> GetSurfaceNormalMap(Guid uuid);
     }
 
+    /// <summary>
+    /// Fetch VisAssets from a URL via HTTP
+    /// </summary>
     public class HttpVisAssetFetcher : IVisAssetFetcher
     {
         private string _serverUrl;
@@ -251,6 +257,9 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Fetch VisAsset from somewhere on local disk
+    /// </summary>
     public class FilePathVisAssetFetcher : IVisAssetFetcher
     {
         private Dictionary<Guid, JObject> _artifactJsonCache = new Dictionary<Guid, JObject>();
@@ -420,6 +429,9 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Fetch VisAsset from a Resources folder (in an Asset or Package)
+    /// </summary>
     public class ResourceVisAssetFetcher : IVisAssetFetcher
     {
         public string VisAssetJson { get; }
@@ -604,6 +616,10 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Use a particular fetcher to try and get the VisAsset from its source,
+    /// and construct the requisite Unity objects and IVisAsset to add.
+    /// </summary>
     public class VisAssetLoader
     {
         public VisAssetLoader() { }

@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SimpleLineDataImpression
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -83,7 +83,8 @@
   
   <h1 id="IVLab_ABREngine_SimpleLineDataImpression" data-uid="IVLab.ABREngine.SimpleLineDataImpression" class="text-break">Class SimpleLineDataImpression
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>A &quot;Lines&quot; data impression that uses hand-drawn line textures to depict line/flow data.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -136,6 +137,15 @@
     <pre><code class="lang-csharp hljs">[ABRPlateType(&quot;Ribbons&quot;)]
 public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_SimpleLineDataImpression_examples"><strong>Examples</strong></h5>
+  <p>An example of creating a single glyph data impression and setting its colormap, color variable, and line texture could be:</p>
+<pre><code>SimpleLineDataImpression gi = new SimpleLineDataImpression();
+gi.keyData = lines as LineKeyData;
+gi.colorVariable = yAxis;
+gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
+gi.lineTexture = line as LineTextureVisAsset;
+ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
+
   <h3 id="constructors">Constructors
   </h3>
   
@@ -187,7 +197,7 @@ single string argument with UUID.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Smooth&quot;, &quot;Ribbon&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Smooth&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public IntegerPrimitive averageCount</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -212,7 +222,7 @@ public IntegerPrimitive averageCount</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public ColormapVisAsset colormap</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -237,7 +247,7 @@ public ColormapVisAsset colormap</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Color Variable&quot;, &quot;Color&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Color Variable&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public ScalarDataVariable colorVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -262,7 +272,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
 public LineKeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -287,7 +297,7 @@ public LineKeyData keyData</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture&quot;, &quot;Texture&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public LineTextureVisAsset lineTexture</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -312,7 +322,7 @@ public LineTextureVisAsset lineTexture</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Variable&quot;, &quot;Texture&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Variable&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public ScalarDataVariable lineTextureVariable</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -337,7 +347,7 @@ public ScalarDataVariable lineTextureVariable</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Width&quot;, &quot;Ribbon&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Width&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public LengthPrimitive lineWidth</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -362,7 +372,7 @@ public LengthPrimitive lineWidth</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Brightness&quot;, &quot;Ribbon&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Brightness&quot;, &quot;Ribbon&quot;, UpdateLevel.Style)]
 public PercentPrimitive ribbonBrightness</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -387,7 +397,7 @@ public PercentPrimitive ribbonBrightness</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Curve&quot;, &quot;Ribbon&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Curve&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public AnglePrimitive ribbonCurveAngle</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -412,7 +422,7 @@ public AnglePrimitive ribbonCurveAngle</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Rotation&quot;, &quot;Ribbon&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Rotation&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public AnglePrimitive ribbonRotationAngle</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -437,7 +447,7 @@ public AnglePrimitive ribbonRotationAngle</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Cutoff&quot;, &quot;Texture&quot;)]
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Cutoff&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public PercentPrimitive textureCutoff</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
@@ -515,57 +525,16 @@ public PercentPrimitive textureCutoff</code></pre>
   </h3>
   
   
-  <a id="IVLab_ABREngine_SimpleLineDataImpression_ApplyToGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject*"></a>
-  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)">ApplyToGameObject(EncodedGameObject)</h4>
+  <a id="IVLab_ABREngine_SimpleLineDataImpression_ComputeGeometry_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry*"></a>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ComputeGeometry" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry">ComputeGeometry()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ApplyToGameObject(EncodedGameObject currentGameObject)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
-        <td><span class="parametername">currentGameObject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_">DataImpression.ApplyToGameObject(EncodedGameObject)</a></div>
-  
-  
-  <a id="IVLab_ABREngine_SimpleLineDataImpression_ComputeKeyDataRenderInfo_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ComputeKeyDataRenderInfo" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo">ComputeKeyDataRenderInfo()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ComputeKeyDataRenderInfo()</code></pre>
+    <pre><code class="lang-csharp hljs">public override void ComputeGeometry()</code></pre>
   </div>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeKeyDataRenderInfo">DataImpression.ComputeKeyDataRenderInfo()</a></div>
-  
-  
-  <a id="IVLab_ABREngine_SimpleLineDataImpression_ComputeRenderInfo_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ComputeRenderInfo" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo">ComputeRenderInfo()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void ComputeRenderInfo()</code></pre>
-  </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeRenderInfo">DataImpression.ComputeRenderInfo()</a></div>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeGeometry">DataImpression.ComputeGeometry()</a></div>
   
   
   <a id="IVLab_ABREngine_SimpleLineDataImpression_GetDataset_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.GetDataset*"></a>
@@ -593,6 +562,93 @@ public PercentPrimitive textureCutoff</code></pre>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_GetDataset">DataImpression.GetDataset()</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleLineDataImpression_SetupGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject*"></a>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)">SetupGameObject(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SetupGameObject(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_">DataImpression.SetupGameObject(EncodedGameObject)</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleLineDataImpression_UpdateStyling_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling*"></a>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)">UpdateStyling(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void UpdateStyling(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_">DataImpression.UpdateStyling(EncodedGameObject)</a></div>
+  
+  
+  <a id="IVLab_ABREngine_SimpleLineDataImpression_UpdateVisibility_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility*"></a>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)">UpdateVisibility(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void UpdateVisibility(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_">DataImpression.UpdateVisibility(EncodedGameObject)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>

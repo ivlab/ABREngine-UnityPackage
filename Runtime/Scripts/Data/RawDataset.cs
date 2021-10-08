@@ -40,12 +40,53 @@ namespace IVLab.ABREngine
     }
 
     /// <summary>
-    ///     The raw data as loaded from an ABR Binary Data file and
-    ///     corresponding JSON header file. This RawDataset defines the
-    ///     specification for each of these files. RawDataset is not to be
-    ///     confused with `Dataset`, which represents a *collection* of
-    ///     RawDatasets which share a coordinate space, key data, and variables.
+    ///     The raw variable arrays and geometry for a Data Object. RawDatasets
+    ///     can be loaded from a pair of .json and .bin files (JsonHeader and
+    ///     BinaryData, respectively). This RawDataset defines the specification
+    ///     for each of these files. RawDataset is not to be confused with
+    ///     `Dataset`, which represents a *collection* of RawDatasets which
+    ///     share a coordinate space, key data, and variables.
     /// </summary>
+    /// <example>
+    /// A simple 4-vertex plane with no variables can be created like this:
+    /// <code>
+    /// RawDataset ds = new RawDataset();
+    /// ds.meshTopology = MeshTopology.Triangles;
+    /// ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+    ///
+    /// ds.vectorArrays = new SerializableVectorArray[0];
+    /// ds.vectorArrayNames = new string[0];
+    /// ds.scalarArrays = new SerializableFloatArray[0];
+    /// ds.scalarArrayNames = new string[0];
+    /// ds.scalarMins = new float[0];
+    /// ds.scalarMaxes = new float[0];
+    ///
+    /// // Construct the vertices
+    /// Vector3[] vertices = {
+    ///     new Vector3(-1, 0, -1), // 0
+    ///     new Vector3( 1, 0, -1), // 1
+    ///     new Vector3(-1, 0,  1), // 2
+    ///     new Vector3( 1, 0,  1), // 3
+    /// };
+    ///
+    /// ds.vertexArray = vertices;
+    /// // Construct triangle indices/faces - LEFT HAND RULE, outward-facing normals
+    /// int[] indices = {
+    ///     // Bottom face
+    ///     0, 1, 3,
+    ///     0, 3, 2
+    /// };
+    ///
+    /// ds.indexArray = indices;
+    /// // How many verts per cell are there? (each triangle is a cell)
+    /// int[] cellIndexCounts = { 3, 3 };
+    /// ds.cellIndexCounts = cellIndexCounts;
+    ///
+    /// // Where does each cell begin?
+    /// int[] cellIndexOffsets = { 0, 3 };
+    /// ds.cellIndexOffsets = cellIndexOffsets;
+    /// </code>
+    /// </example>
     [System.Serializable]
     public class RawDataset
     {
@@ -89,6 +130,9 @@ namespace IVLab.ABREngine
         [SerializeField]
         public DataTopology dataTopology = DataTopology.Points;
 
+        /// <summary>
+        /// Header that contains metadata for a particular RawDataset
+        /// </summary>
         public class JsonHeader
         {
             public DataTopology meshTopology;
@@ -103,6 +147,9 @@ namespace IVLab.ABREngine
             public float[] scalarMins;
         }
 
+        /// <summary>
+        /// Actual geometric representation of the data to load from a file / socket
+        /// </summary>
         public class BinaryData
         {
             public float[] vertices { get; set; }

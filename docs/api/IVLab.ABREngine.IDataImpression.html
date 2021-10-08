@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Interface IDataImpression
    | ABREngine ">
-    <meta name="generator" content="docfx 2.57.2.0">
+    <meta name="generator" content="docfx 2.58.4.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
@@ -37,7 +37,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -184,62 +184,18 @@ should be hidden</p>
   </h3>
   
   
-  <a id="IVLab_ABREngine_IDataImpression_ApplyToGameObject_" data-uid="IVLab.ABREngine.IDataImpression.ApplyToGameObject*"></a>
-  <h4 id="IVLab_ABREngine_IDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.IDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)">ApplyToGameObject(EncodedGameObject)</h4>
-  <div class="markdown level1 summary"><p>Applies a DataImpression to a particular GameObject</p>
-<p>Note: <code>ComputeKeyDataRenderInfo()</code>, <code>ComputeRenderInfo()</code>, and
-<code>ApplyToGameObject()</code> should be run in sequence.</p>
+  <a id="IVLab_ABREngine_IDataImpression_ComputeGeometry_" data-uid="IVLab.ABREngine.IDataImpression.ComputeGeometry*"></a>
+  <h4 id="IVLab_ABREngine_IDataImpression_ComputeGeometry" data-uid="IVLab.ABREngine.IDataImpression.ComputeGeometry">ComputeGeometry()</h4>
+  <div class="markdown level1 summary"><ol>
+<li>Populate rendering information (Geometry) for the
+DataImpression. This is triggered by the <code>DataImpressionGroup</code>
+when an <code>UpdateLevel.Data</code> happens. This step is generally <em>expensive</em>.</li>
+</ol>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void ApplyToGameObject(EncodedGameObject currentGameObject)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
-        <td><span class="parametername">currentGameObject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="IVLab_ABREngine_IDataImpression_ComputeKeyDataRenderInfo_" data-uid="IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_IDataImpression_ComputeKeyDataRenderInfo" data-uid="IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo">ComputeKeyDataRenderInfo()</h4>
-  <div class="markdown level1 summary"><p>Performs any pre-calculations necessary to render this
-particular type of Key Data (for instance, the individual glyph
-positions for the InstanceMeshRenderer used in glyph rendering)</p>
-<p>Note: <code>ComputeKeyDataRenderInfo()</code>, <code>ComputeRenderInfo()</code>, and
-<code>ApplyToGameObject()</code> should be run in sequence.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void ComputeKeyDataRenderInfo()</code></pre>
-  </div>
-  
-  
-  <a id="IVLab_ABREngine_IDataImpression_ComputeRenderInfo_" data-uid="IVLab.ABREngine.IDataImpression.ComputeRenderInfo*"></a>
-  <h4 id="IVLab_ABREngine_IDataImpression_ComputeRenderInfo" data-uid="IVLab.ABREngine.IDataImpression.ComputeRenderInfo">ComputeRenderInfo()</h4>
-  <div class="markdown level1 summary"><p>Populates rendering information (Geometry) for the
-DataImpression</p>
-<p>Note: <code>ComputeKeyDataRenderInfo()</code>, <code>ComputeRenderInfo()</code>, and
-<code>ApplyToGameObject()</code> should be run in sequence.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void ComputeRenderInfo()</code></pre>
+    <pre><code class="lang-csharp hljs">void ComputeGeometry()</code></pre>
   </div>
   
   
@@ -307,6 +263,100 @@ external purposes only, the engine currently does nothing with tags)</p>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_IDataImpression_SetupGameObject_" data-uid="IVLab.ABREngine.IDataImpression.SetupGameObject*"></a>
+  <h4 id="IVLab_ABREngine_IDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.IDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)">SetupGameObject(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"><ol>
+<li>Take geometric rendering information computed in
+<code>ComputeGeometry()</code> and sets up proper game object(s) and
+components for this Data Impression. Transfers geometry into
+Unity format (e.g. a <code>Mesh</code>). No geometric computations should
+happen in this method, and it should generally be <em>lightweight</em>.</li>
+</ol>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void SetupGameObject(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_IDataImpression_UpdateStyling_" data-uid="IVLab.ABREngine.IDataImpression.UpdateStyling*"></a>
+  <h4 id="IVLab_ABREngine_IDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.IDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)">UpdateStyling(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"><ol>
+<li>Update the &quot;styling&quot; of an impression by sending each
+styling parameter to the shader. Occasionally will need to set
+per-vertex items like transforms. This method should generally be <em>lightweight</em>.</li>
+</ol>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void UpdateStyling(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_IDataImpression_UpdateVisibility_" data-uid="IVLab.ABREngine.IDataImpression.UpdateVisibility*"></a>
+  <h4 id="IVLab_ABREngine_IDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_" data-uid="IVLab.ABREngine.IDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)">UpdateVisibility(EncodedGameObject)</h4>
+  <div class="markdown level1 summary"><p>Update the visibility of an impression (hidden or shown)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void UpdateVisibility(EncodedGameObject currentGameObject)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
+        <td><span class="parametername">currentGameObject</span></td>
         <td></td>
       </tr>
     </tbody>
