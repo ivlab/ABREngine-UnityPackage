@@ -59,6 +59,10 @@ namespace IVLab.ABREngine
 
         public const string VISASSET_JSON = "artifact.json";
 
+        /// <summary>
+        /// Any (custom) visassets that are solely described inside the state and do not
+        /// exist on disk or on a server somewhere.
+        /// </summary>
         public JObject LocalVisAssets { get; set; }
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
@@ -97,11 +101,21 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Attempt to retrieve a VisAsset.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the VisAsset is currently loaded into the memory.
+        /// </returns>
         public bool TryGetVisAsset(Guid guid, out IVisAsset visAsset)
         {
             return _visAssets.TryGetValue(guid, out visAsset);
         }
 
+        /// <summary>
+        /// Load all VisAssets located in the Media directory into memory.
+        /// </summary>
+        [Obsolete("LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory")]
         public async Task LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
@@ -124,6 +138,14 @@ namespace IVLab.ABREngine
             Debug.LogFormat("Successfully loaded {0}/{1} VisAssets", success, files.Length);
         }
 
+        /// <summary>
+        /// Load a particular VisAsset described by its UUID. VisAssets will
+        /// automatically be loaded from any of the following places:
+        /// 1. The state itself (`localVisAssets`)
+        /// 2. The media directory on the machine ABR is running on
+        /// 3. Any Resources folder (in Assets or in any Package)
+        /// 4. A VisAsset server
+        /// </summary>
         public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)

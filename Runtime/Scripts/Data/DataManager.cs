@@ -105,21 +105,58 @@ namespace IVLab.ABREngine
             Debug.Log("Dataset Path: " + appDataPath);
         }
 
+        /// <summary>
+        /// Attempt to get a RawDataset at a particular data path.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the raw dataset was found, false if not, and
+        /// populates the `out RawDataset dataset` accordingly.
+        /// </returns>
         public bool TryGetRawDataset(string dataPath, out RawDataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             return rawDatasets.TryGetValue(dataPath, out dataset);
         }
+
+        /// <summary>
+        /// Attempt to get a lightweight dataset by its data path.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the dataset was found, and populates the `out
+        /// Dataset dataset` accordingly.
+        /// </returns>
         public bool TryGetDataset(string dataPath, out Dataset dataset)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.Dataset);
             return datasets.TryGetValue(dataPath, out dataset);
         }
+
+        /// <summary>
+        /// Retrieve all datasets that are currently loaded into the ABR Engine
+        /// </summary>
+        /// <returns>
+        /// List of currently loaded Datasets
+        /// </returns>
         public List<Dataset> GetDatasets()
         {
             return datasets.Values.ToList();
         }
 
+        /// <summary>
+        /// Load a raw dataset into a RawDataset object by its data path. NOTE:
+        /// this method does not import the resulting `RawDataset` into ABR -
+        /// this is accomplished through `ImportRawDataset`!
+        /// </summary>
+        /// <examples>
+        /// Datasets may be loaded from any of the following locations:
+        /// <code>
+        /// // From a file in the media directory
+        /// await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
+        ///
+        /// // From a web resource
+        /// await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// </code>
+        /// </examples>
         public async Task LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
@@ -127,6 +164,11 @@ namespace IVLab.ABREngine
             await ImportRawDataset(dataPath, ds);
         }
 
+        /// <summary>
+        /// Import a raw dataset into ABR. This method makes the dataset
+        /// available as a key data object and makes all of its scalar and
+        /// vector variables available across ABR.
+        /// </summary>
         public async Task ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
@@ -152,6 +194,10 @@ namespace IVLab.ABREngine
             });
         }
 
+        /// <summary>
+        /// Save a copy of the RawDataset described by `json` and `data` to the
+        /// media folder.
+        /// </summary>
         public async Task CacheRawDataset(string dataPath, string json, byte[] data)
         {
             Debug.Log("Saving " + dataPath + " to " + this.appDataPath);
