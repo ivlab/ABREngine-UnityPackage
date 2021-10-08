@@ -1,0 +1,13 @@
+{
+    "artifactData": {
+        "colormap": "colormap.xml"
+    },
+    "artist": "Francesca Samsel",
+    "class": "linear",
+    "family": "Green",
+    "hidden": false,
+    "preview": "thumbnail.png",
+    "tags": [],
+    "type": "colormap",
+    "uuid": "5a761a72-8bcb-11ea-9265-005056bae6d8"
+}

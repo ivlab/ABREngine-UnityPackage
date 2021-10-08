@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
@@ -44,7 +45,7 @@ namespace IVLab.ABREngine
 
         private bool _loadResourceVisAssets;
 
-        public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
+        public VisAssetManager(string visassetPath)
         {
             this.appDataPath = visassetPath;
             Directory.CreateDirectory(this.appDataPath);
@@ -57,13 +58,8 @@ namespace IVLab.ABREngine
             // Then, try the file system...
             visAssetFetchers.Add(new FilePathVisAssetFetcher(this.appDataPath));
 
-            // Afterwards, try the resources folder if desired
-            _loadResourceVisAssets = loadResourceVisAssets;
-            if (loadResourceVisAssets)
-            {
-                Debug.Log("Allowing loading of VisAssets from Resources folder");
-                visAssetFetchers.Add(new ResourceVisAssetFetcher());
-            }
+            // Afterwards, try the resources folder
+            visAssetFetchers.Add(new ResourceVisAssetFetcher());
 
             // ... and lastly check out the VisAsset server, if present
             if (ABREngine.Instance.Config.Info.visAssetServer != null)
@@ -147,6 +143,28 @@ namespace IVLab.ABREngine
         public List<Guid> GetVisAssets()
         {
             return _visAssets.Keys.ToList();
+        }
+
+        /// <summary>
+        /// Obtain the default visasset for a particular type, if there is one.
+        /// </summary>
+        public IVisAsset GetDefault<T>()
+        where T: IVisAsset
+        {
+            Type t = typeof(T);
+            if (t.IsAssignableFrom(typeof(ColormapVisAsset)))
+            {
+                // Define a black-to-white colormap
+                string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
+                Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
+                ColormapVisAsset cmap = new ColormapVisAsset();
+                cmap.Gradient = cmapTex;
+                return cmap;
+            }
+            else
+            {
+                throw new NotImplementedException($"Default {t.ToString()} is not implemented");
+            }
         }
     }
 }

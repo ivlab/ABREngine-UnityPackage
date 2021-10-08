@@ -1,0 +1,33 @@
+{
+  "artifactData": [
+    {
+      "mesh": "meshes/LOD1.obj", 
+      "normal": "normalmaps/LOD1.png"
+    }, 
+    {
+      "mesh": "meshes/LOD2.obj", 
+      "normal": "normalmaps/LOD2.png"
+    }, 
+    {
+      "mesh": "meshes/LOD3.obj", 
+      "normal": "normalmaps/LOD3.png"
+    }
+  ], 
+  "artifactMaterials": {
+    "clay": true
+  }, 
+  "artist": "Francesca Samsel", 
+  "class": "point", 
+  "family": "haiku", 
+  "hidden": false, 
+  "preview": "thumbnail.png", 
+  "tags": [
+    "yellow", 
+    "green", 
+    "blue", 
+    "indigo", 
+    "violet"
+  ], 
+  "type": "glyph", 
+  "uuid": "1af025aa-f1ed-11e9-a623-8c85900fd4af"
+}

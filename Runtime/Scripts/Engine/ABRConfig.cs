@@ -64,6 +64,11 @@ namespace IVLab.ABREngine
             public const string DatasetFolder = "datasets";
 
             /// <summary>
+            /// Default name for the media folder
+            /// </summary>
+            public const string MediaFolder = "media";
+
+            /// <summary>
             /// Name of VisAsset JSON specifier
             /// </summary>
             public const string VisAssetJson = "artifact.json";
@@ -97,9 +102,12 @@ namespace IVLab.ABREngine
 
             // Load any customizations the user has made
             ABRConfigInfo customizations = new ABRConfigInfo();
-            using (StreamReader reader = new StreamReader(configUserFile))
+            if (File.Exists(configUserFile))
             {
-                customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
+                using (StreamReader reader = new StreamReader(configUserFile))
+                {
+                    customizations = JsonConvert.DeserializeObject<ABRConfigInfo>(reader.ReadToEnd());
+                }
             }
 
             // Dynamically load any customizations if they're provided
@@ -246,11 +254,6 @@ namespace IVLab.ABREngine
         ///     persistentData, it will be downloaded. Default: null
         /// </summary>
         public string visAssetServer;
-
-        /// <summary>
-        ///     Load any visassets located in Resources/media/visassets
-        /// </summary>
-        public bool loadResourceVisAssets;
 
         /// <summary>
         ///     What server to obtain data from, if any. If none provided,

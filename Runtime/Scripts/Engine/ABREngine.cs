@@ -120,7 +120,7 @@ namespace IVLab.ABREngine
 
                 try
                 {
-                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder), Config.Info.loadResourceVisAssets);
+                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder));
                     Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
                     if (Config.Info.dataListenerPort != null)
                     {
@@ -142,10 +142,22 @@ namespace IVLab.ABREngine
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
                 }
 
-                // If a state in resources is specified, load it
+                // If a state in streaming assets or resources is specified, load it
                 if (Config.Info.loadStateOnStart != null)
                 {
-                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                    try
+                    {
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+                        {
+                            await LoadStateAsync<PathStateFileLoader>(Path.Combine(Application.streamingAssetsPath, Config.Info.loadStateOnStart));
+                            Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        await LoadStateAsync<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
+                    }
                 }
                 _initialized = true;
             });

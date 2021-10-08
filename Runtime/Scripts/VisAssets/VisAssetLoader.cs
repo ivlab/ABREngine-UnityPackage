@@ -429,7 +429,7 @@ namespace IVLab.ABREngine
         {
             int dotIndex = ABRConfig.Consts.VisAssetJson.IndexOf('.');
             VisAssetJson = ABRConfig.Consts.VisAssetJson.Substring(0, dotIndex);
-            ResourcePath = ABRConfig.Consts.VisAssetFolder;
+            ResourcePath = Path.Combine(ABRConfig.Consts.MediaFolder, ABRConfig.Consts.VisAssetFolder);
         }
 
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
@@ -481,7 +481,7 @@ namespace IVLab.ABREngine
 
         public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
         {
-            var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normalmap"].ToString());
+            var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normal"].ToString());
             return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(normalPath));
         }
 
@@ -685,7 +685,7 @@ namespace IVLab.ABREngine
                 }
                 foreach (JObject lodJson in lodsList)
                 {
-                    GameObject loadedObjGameObject = await _fetcher.GetGlyphGameObject(guid, lodJson);
+                    GameObject loadedObjGameObject = GameObject.Instantiate(await _fetcher.GetGlyphGameObject(guid, lodJson));
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
                     loadedObjGameObject.SetActive(false);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;

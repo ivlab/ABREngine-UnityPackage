@@ -17,7 +17,6 @@
     "serverAddress": null,
     "statePathOnServer": null,
     "visAssetServer": null,
-    "loadResourceVisAssets": false,
     "dataServer": null,
     "dataListenerPort": null,
     "mediaPath": null,

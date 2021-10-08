@@ -185,6 +185,12 @@ namespace IVLab.ABREngine
                             // Try to grab from media dir
                             await ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
 
+                            // ... if not found, then try to grab from Resources media dir
+                            if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
+                            {
+                                await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(rawData);
+                            }
+
                             // If not found in cache, load from data server, if there is one
                             if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                             {

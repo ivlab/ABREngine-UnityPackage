@@ -1,0 +1,14 @@
+{
+  "artifactData": {
+    "image": "texturemap_0.png", 
+    "normalmap": "normalmap_0.png"
+  }, 
+  "artist": "Francesca Samsel", 
+  "class": "repeating", 
+  "family": "lines", 
+  "hidden": false, 
+  "preview": "thumbnail.png", 
+  "tags": [], 
+  "type": "texture", 
+  "uuid": "3bbc2064-6a0a-11ea-9014-005056bae6d8"
+}
