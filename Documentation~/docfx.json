@@ -22,7 +22,7 @@
         "globalMetadata": {
             "_appTitle": "ABREngine",
             "_appFooter": "ABREngine",
-            "_appLogoPath": "resources/IVLab.svg",
+            "_appLogoPath": "docs/resources/IVLab.svg",
             "_appFaviconPath": "resources/favicon.ico",
             "_enableSearch": true
         },
