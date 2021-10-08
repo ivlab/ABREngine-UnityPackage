@@ -200,4 +200,42 @@ namespace IVLab.ABREngine
             return (Value * 100.0f).ToString() + Units;
         }
     }
+
+    public class BooleanPrimitive : IPrimitive
+    {
+        public ABRInputGenre Genre { get; } = ABRInputGenre.Primitive;
+        public bool Value { get; protected set; }
+        public Regex ParsingRegex { get; } = new Regex(@"^(true)|(false)$", RegexOptions.Compiled);
+
+        public BooleanPrimitive()
+        {
+            Value = false;
+        }
+
+        public BooleanPrimitive(bool value)
+        {
+            Value = value;
+        }
+
+        public BooleanPrimitive(string value)
+        {
+            Value = bool.Parse(ParsingRegex.Match(value).Value);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public RawABRInput GetRawABRInput()
+        {
+            return new RawABRInput
+            {
+                inputType = this.GetType().ToString(),
+                inputValue = this.ToString(),
+                parameterName = "",// TODO
+                inputGenre = Genre.ToString("G"),
+            };
+        }
+    }
 }

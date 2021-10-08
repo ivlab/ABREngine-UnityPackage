@@ -84,17 +84,21 @@ namespace IVLab.ABREngine
         public Bounds bounds;
 
         [SerializeField]
-        public MeshTopology meshTopology = MeshTopology.Points;
+        public Vector3Int dimensions;
+
+        [SerializeField]
+        public DataTopology dataTopology = DataTopology.Points;
 
         public class JsonHeader
         {
-            public MeshTopology meshTopology;
+            public DataTopology meshTopology;
             public int num_points;
             public int num_cells;
             public int num_cell_indices;
             public string[] scalarArrayNames;
             public string[] vectorArrayNames;
             public Bounds bounds;
+            public int[] dimensions;
             public float[] scalarMaxes;
             public float[] scalarMins;
         }
@@ -109,11 +113,16 @@ namespace IVLab.ABREngine
             public void Decode(JsonHeader bdh, byte[] bytes)
             {
                 int offset = 0;
+                int nbytes;
 
-                vertices = new float[3 * bdh.num_points];
-                int nbytes = 3 * bdh.num_points * sizeof(float);
-                Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
-                offset = offset + nbytes;
+                // No vertices stored in binary for volumes
+                if (bdh.meshTopology != DataTopology.Voxels)
+                {
+                    vertices = new float[3 * bdh.num_points];
+                    nbytes = 3 * bdh.num_points * sizeof(float);
+                    Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
+                    offset = offset + nbytes;
+                }
 
                 index_array = new int[bdh.num_cell_indices];
                 nbytes = bdh.num_cell_indices * sizeof(int);
@@ -155,24 +164,25 @@ namespace IVLab.ABREngine
 
         public RawDataset(JsonHeader jh, BinaryData bd)
         {
-            meshTopology = jh.meshTopology;
+            dataTopology = jh.meshTopology;
 
-            vertexArray = new Vector3[jh.num_points];
-            for (int i = 0; i < jh.num_points; i++)
+            if (dataTopology == DataTopology.Voxels)
             {
-                vertexArray[i][0] = bd.vertices[i * 3 + 0];
-                vertexArray[i][1] = bd.vertices[i * 3 + 1];
-                vertexArray[i][2] = bd.vertices[i * 3 + 2];
+                dimensions = new Vector3Int(jh.dimensions[0], jh.dimensions[1], jh.dimensions[2]);
             }
-
-            if ((int)meshTopology == 100)
+            else
             {
-                Debug.LogWarning("Voxels not yet supported, converting to points");
-                meshTopology = MeshTopology.Points;
+                vertexArray = new Vector3[jh.num_points];
+                for (int i = 0; i < jh.num_points; i++)
+                {
+                    vertexArray[i][0] = bd.vertices[i * 3 + 0];
+                    vertexArray[i][1] = bd.vertices[i * 3 + 1];
+                    vertexArray[i][2] = bd.vertices[i * 3 + 2];
+                }
             }
 
             long numIndices = 0;
-            if (meshTopology == MeshTopology.Points)
+            if (dataTopology == DataTopology.Points || dataTopology == DataTopology.Voxels)
                 numIndices = jh.num_cells;
             else
             {

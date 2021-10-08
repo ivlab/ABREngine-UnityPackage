@@ -29,7 +29,7 @@ namespace IVLab.ABREngine
         public int[] indices;
         public Vector3[] normals;
         public Color[] scalars;
-        public MeshTopology topology;
+        public DataTopology topology;
     }
 
 
@@ -96,7 +96,7 @@ namespace IVLab.ABREngine
                     normals = null,
                     indices = new int[0],
                     scalars = new Color[0],
-                    topology = MeshTopology.Points
+                    topology = DataTopology.Points
                 };
             }
             else
@@ -128,12 +128,11 @@ namespace IVLab.ABREngine
                     indices = new int[numIndices],
                     scalars = new Color[numPoints],
                     normals = null,
-                    topology = dataset.meshTopology
-
+                    topology = dataset.dataTopology
                 };
 
                 int numCells = dataset.cellIndexCounts.Length;
-                int cellSize = dataset.meshTopology == MeshTopology.Quads ? 4 : 3;
+                int cellSize = dataset.dataTopology == DataTopology.Quads ? 4 : 3;
 
                 for (int i = 0; i < sourceVertCount; i++)
                 {
@@ -261,7 +260,7 @@ namespace IVLab.ABREngine
                 mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 mesh.vertices = SSrenderData.vertices;
                 mesh.colors = SSrenderData.scalars;
-                mesh.SetIndices(SSrenderData.indices, SSrenderData.topology, 0);
+                mesh.SetIndices(SSrenderData.indices, (MeshTopology)SSrenderData.topology, 0);
                 if (SSrenderData.normals != null)
                 {
                     mesh.normals = SSrenderData.normals;

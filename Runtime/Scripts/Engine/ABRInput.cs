@@ -28,6 +28,7 @@ namespace IVLab.ABREngine
         Variable,
         VisAsset,
         Primitive,
+        PrimitiveGradient,
     }
 
     /// <summary>

@@ -90,6 +90,7 @@ namespace IVLab.ABREngine
             // Generate ABR states from both the previous and current state json objects
             RawABRState previousABRState = previousState?.ToObject<RawABRState>();
             RawABRState state = stateJson.ToObject<RawABRState>();
+
             if (state == null)
             {
                 return null;
@@ -296,6 +297,36 @@ namespace IVLab.ABREngine
                                     Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
                                 }
                             }
+                            else if (value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
+                            {
+                                // Attempt to construct a primitive gradient
+                                try
+                                {
+                                    string uuid = value.inputValue;
+                                    int? pointsLength = state?.primitiveGradients?[uuid]?.points?.Count;
+                                    int? valuesLength = state?.primitiveGradients?[uuid]?.values?.Count;
+                                    if (pointsLength != valuesLength || pointsLength == null || valuesLength == null)
+                                    {
+                                        Debug.LogError("Invalid Primitive Gradient: \"points\" and \"values\" arrays must have same length" +
+                                            " and cannot be null.");
+                                    }
+                                    else
+                                    {
+                                        float[] points = new float[(int)pointsLength];
+                                        string[] values = new string[(int)valuesLength];
+                                        for (int i = 0; i < pointsLength; i++)
+                                        {
+                                            points[i] = state.primitiveGradients[uuid].points[i];
+                                            values[i] = state.primitiveGradients[uuid].values[i];
+                                        }
+                                        possibleInput = new PrimitiveGradient(new Guid(uuid), points, values) as IABRInput;
+                                    }
+                                }
+                                catch (KeyNotFoundException)
+                                {
+                                    Debug.LogErrorFormat("Invalid Primitive Gradient input: Primitive gradient with uuid {0} does not exist.", value.inputValue);
+                                }
+                            }
 
                             // Verify that we have something to put in the input
                             if (possibleInput != null)
@@ -387,16 +418,25 @@ namespace IVLab.ABREngine
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap") &&
-                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Colormap"))
+                    JToken colormapDiff = diffFromPrevious?.SelectToken("localVisAssets");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
                     {
                         string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
-                        string prevColormapUuid = previousImpression.inputValues["Colormap"].inputValue;
-                        // Colormap has changed if its contents have changed
-                        colormapChanged = state?.localVisAssets?[colormapUuid]?.ToString() != previousABRState?.localVisAssets?[prevColormapUuid]?.ToString();
-                    }       
+                        if (colormapDiff?.SelectToken(colormapUuid) != null)
+                            colormapChanged = true;
+                    }
+                    // OR
+                    // - opacity map primitive gradient attached to this impression was changed -
+                    bool opacityMapChanged = false;
+                    JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
+                    {
+                        string primitiveGradientUuid = impression.Value.inputValues["Opacitymap"].inputValue;
+                        if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
+                            opacityMapChanged = true;
+                    }
                     // Toggle the "style changed" flag accordingly
-                    if (scalarRangeChanged || colormapChanged)
+                    if (scalarRangeChanged || colormapChanged || opacityMapChanged)
                     {
                         dataImpression.RenderHints.StyleChanged = true;
                     }
@@ -499,6 +539,8 @@ namespace IVLab.ABREngine
                     lightParent = new GameObject("ABRLightParent");
                     lightParent.transform.parent = GameObject.Find("ABREngine").transform;
                 }
+                if (lightParent.GetComponent<VolumeLightManager>() == null)
+                    lightParent.AddComponent<VolumeLightManager>();
 
                 foreach (var light in state.scene.lighting)
                 {
@@ -718,6 +760,7 @@ namespace IVLab.ABREngine
         public RawDataRanges dataRanges;
         public JToken uiData; // data for UIs, not messing with it at all
         public JToken localVisAssets; // custom vis assets, not messing with them at all
+        public Dictionary<string, RawPrimitiveGradient> primitiveGradients; 
         public string name;
     }
 
