@@ -43,7 +43,7 @@ namespace IVLab.ABREngine
 
             RawDataset ds = new RawDataset();
             ds.bounds = mesh.bounds;
-            ds.meshTopology = MeshTopology.Triangles;
+            ds.dataTopology = DataTopology.Triangles;
 
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
@@ -66,28 +66,16 @@ namespace IVLab.ABREngine
 
 
         /// <summary>
-        /// Define a Line dataset from a bunch of points
+        /// Define a Line dataset from a bunch of points. Don't try to assume or
+        /// calculate the full bounds for the imported data objects - explictly
+        /// ask the user for them.
         /// </summary>
         /// <param name="points">Points in a line - will be treated as a LineStrip</param>
-        public static RawDataset PointsToLine(List<Vector3> points, bool preserveRelationToOrigin)
+        public static RawDataset PointsToLine(List<Vector3> points, Bounds dataBounds)
         {
-            // Compute the bounding box of the entire line
-            Bounds lineBounds = new Bounds();
-            foreach (Vector3 point in points)
-            {
-                if (!float.IsNaN(point.x) && !float.IsNaN(point.y) && !float.IsNaN(point.z))
-                {
-                    lineBounds.Encapsulate(point);
-                }
-            }
-            if (preserveRelationToOrigin)
-            {
-                lineBounds.Encapsulate(Vector3.zero);
-            }
-
             RawDataset ds = new RawDataset();
-            ds.meshTopology = MeshTopology.LineStrip;
-            ds.bounds = lineBounds;
+            ds.dataTopology = DataTopology.LineStrip;
+            ds.bounds = dataBounds;
 
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
