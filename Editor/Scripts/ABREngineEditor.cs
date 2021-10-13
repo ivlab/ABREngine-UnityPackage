@@ -42,19 +42,19 @@ namespace IVLab.ABREngine
         public override void OnInspectorGUI()
         {
             // Setup
-            if (!EditorApplication.isPlaying)
+            if (!EditorApplication.isPlaying || !ABREngine.Instance.IsInitialized)
             {
                 EditorGUILayout.LabelField("ABR Engine is Paused");
-                TextAsset configFile = Resources.Load<TextAsset>(ABRConfig.Consts.ConfigFile);
-                if (configFile != null)
-                {
-                    EditorGUILayout.LabelField("Found config: " + ABRConfig.Consts.ConfigFile);
-                }
-                else
-                {
-                    EditorGUILayout.LabelField("No config found");
-                }
                 return;
+            }
+
+            if (ABREngine.Instance.Config.ABRConfigFile != null)
+            {
+                EditorGUILayout.LabelField("Found config: " + ABREngine.Instance.Config.ABRConfigFile);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("No config found");
             }
 
             EditorGUILayout.LabelField("ABR Engine is Running");
@@ -105,6 +105,7 @@ namespace IVLab.ABREngine
                 {
                     EditorGUILayout.LabelField(ds.Path);
                     Dictionary<string, IKeyData> allKeyData = ds.GetAllKeyData();
+                    EditorGUILayout.LabelField("Key Data:");
                     foreach (IKeyData kd in allKeyData.Values)
                     {
                         EditorGUILayout.LabelField("  " + DataPath.GetName(kd.Path));
@@ -113,6 +114,16 @@ namespace IVLab.ABREngine
                         {
                             EditorGUILayout.LabelField($"  {rawDs.vertexArray.Length} vertices");
                         }
+                    }
+                    EditorGUILayout.LabelField("Scalar Variables:");
+                    foreach (ScalarDataVariable s in ds.GetAllScalarVars().Values)
+                    {
+                        EditorGUILayout.LabelField("  " + DataPath.GetName(s.Path));
+                    }
+                    EditorGUILayout.LabelField("Vector Variables:");
+                    foreach (VectorDataVariable s in ds.GetAllVectorVars().Values)
+                    {
+                        EditorGUILayout.LabelField("  " + DataPath.GetName(s.Path));
                     }
                 }
             }

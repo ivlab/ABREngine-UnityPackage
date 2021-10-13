@@ -267,7 +267,7 @@ namespace IVLab.ABREngine
                                     variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
-                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
