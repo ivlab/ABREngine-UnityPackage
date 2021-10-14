@@ -761,6 +761,11 @@ namespace IVLab.ABREngine
                     saveState.name = previousState["name"].ToString();
                 }
 
+                if (previousState.ContainsKey("primitiveGradients"))
+                {
+                    saveState.primitiveGradients = previousState["primitiveGradients"].ToObject<Dictionary<string, RawPrimitiveGradient>>();
+                }
+
                 return JsonConvert.SerializeObject(saveState, settings);
             }
             catch (Exception e)
