@@ -23,15 +23,19 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Mapping between topologies / types of geometry and actual key data
+    /// </summary>
     public static class KeyDataMapping
     {
-        public static Dictionary<MeshTopology, Type> typeMap = new Dictionary<MeshTopology, Type>()
+        public static Dictionary<DataTopology, Type> typeMap = new Dictionary<DataTopology, Type>()
         {
-            { MeshTopology.Points, typeof(PointKeyData) },
-            { MeshTopology.Triangles, typeof(SurfaceKeyData) },
-            { MeshTopology.Quads, typeof(SurfaceKeyData) },
-            { MeshTopology.Lines, typeof(LineKeyData) },
-            { MeshTopology.LineStrip, typeof(LineKeyData) },
+            { DataTopology.Points, typeof(PointKeyData) },
+            { DataTopology.Triangles, typeof(SurfaceKeyData) },
+            { DataTopology.Quads, typeof(SurfaceKeyData) },
+            { DataTopology.Lines, typeof(LineKeyData) },
+            { DataTopology.LineStrip, typeof(LineKeyData) },
+            { DataTopology.Voxels, typeof(VolumeKeyData) }
         };
     }
 
@@ -43,6 +47,9 @@ namespace IVLab.ABREngine
         string Path { get; }
     }
 
+    /// <summary>
+    /// Lightweight container for a data object
+    /// </summary>
     public class KeyData : IKeyData, IHasDataset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
@@ -85,6 +92,11 @@ namespace IVLab.ABREngine
     public class LineKeyData : KeyData, IKeyData
     {
         public LineKeyData(string path) : base(path) { }
+    }
+
+    public class VolumeKeyData : KeyData, IKeyData
+    {
+        public VolumeKeyData(string path) : base(path) { }
     }
 
     public interface IKeyDataRenderInfo { }

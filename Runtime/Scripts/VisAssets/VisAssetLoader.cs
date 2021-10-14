@@ -29,6 +29,9 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Generic fetcher that supports fetching all types of VisAssets from a particular source.
+    /// </summary>
     public interface IVisAssetFetcher
     {
         string GetArtifactJsonPath(Guid uuid);
@@ -41,6 +44,9 @@ namespace IVLab.ABREngine
         Task<Texture2D> GetSurfaceNormalMap(Guid uuid);
     }
 
+    /// <summary>
+    /// Fetch VisAssets from a URL via HTTP
+    /// </summary>
     public class HttpVisAssetFetcher : IVisAssetFetcher
     {
         private string _serverUrl;
@@ -251,6 +257,9 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Fetch VisAsset from somewhere on local disk
+    /// </summary>
     public class FilePathVisAssetFetcher : IVisAssetFetcher
     {
         private Dictionary<Guid, JObject> _artifactJsonCache = new Dictionary<Guid, JObject>();
@@ -420,6 +429,9 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Fetch VisAsset from a Resources folder (in an Asset or Package)
+    /// </summary>
     public class ResourceVisAssetFetcher : IVisAssetFetcher
     {
         public string VisAssetJson { get; }
@@ -429,7 +441,7 @@ namespace IVLab.ABREngine
         {
             int dotIndex = ABRConfig.Consts.VisAssetJson.IndexOf('.');
             VisAssetJson = ABRConfig.Consts.VisAssetJson.Substring(0, dotIndex);
-            ResourcePath = ABRConfig.Consts.VisAssetFolder;
+            ResourcePath = Path.Combine(ABRConfig.Consts.MediaFolder, ABRConfig.Consts.VisAssetFolder);
         }
 
         private string VisAssetDataPath(string artifactFilePath, string relativeDataPath)
@@ -481,7 +493,7 @@ namespace IVLab.ABREngine
 
         public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
         {
-            var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normalmap"].ToString());
+            var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normal"].ToString());
             return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(normalPath));
         }
 
@@ -604,6 +616,10 @@ namespace IVLab.ABREngine
 
 
 
+    /// <summary>
+    /// Use a particular fetcher to try and get the VisAsset from its source,
+    /// and construct the requisite Unity objects and IVisAsset to add.
+    /// </summary>
     public class VisAssetLoader
     {
         public VisAssetLoader() { }
@@ -685,7 +701,7 @@ namespace IVLab.ABREngine
                 }
                 foreach (JObject lodJson in lodsList)
                 {
-                    GameObject loadedObjGameObject = await _fetcher.GetGlyphGameObject(guid, lodJson);
+                    GameObject loadedObjGameObject = GameObject.Instantiate(await _fetcher.GetGlyphGameObject(guid, lodJson));
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
                     loadedObjGameObject.SetActive(false);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;

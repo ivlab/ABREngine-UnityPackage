@@ -41,39 +41,30 @@ namespace IVLab.ABREngine
         ABRInputIndexerModule InputIndexer { get; }
 
         /// <summary>
-        ///     Performs any pre-calculations necessary to render this
-        ///     particular type of Key Data (for instance, the individual glyph
-        ///     positions for the InstanceMeshRenderer used in glyph rendering)
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
+        ///     1. Populate rendering information (Geometry) for the
+        ///     DataImpression. This is triggered by the `DataImpressionGroup`
+        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
         /// </summary>
-        void ComputeKeyDataRenderInfo();
+        void ComputeGeometry();
 
         /// <summary>
-        ///     Populates rendering information (Geometry) for the
-        ///     DataImpression
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
+        ///     2. Take geometric rendering information computed in
+        ///     `ComputeGeometry()` and sets up proper game object(s) and
+        ///     components for this Data Impression. Transfers geometry into
+        ///     Unity format (e.g. a `Mesh`). No geometric computations should
+        ///     happen in this method, and it should generally be *lightweight*.
         /// </summary>
-        void ComputeRenderInfo();
+        void SetupGameObject(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Applies a DataImpression to a particular GameObject
-        ///
-        ///     Note: `ComputeKeyDataRenderInfo()`, `ComputeRenderInfo()`, and
-        ///     `ApplyToGameObject()` should be run in sequence.
-        /// </summary>
-        void ApplyToGameObject(EncodedGameObject currentGameObject);
-
-        /// <summary>
-        ///     Updates the "styling" of an impression
+        ///     3. Update the "styling" of an impression by sending each
+        ///     styling parameter to the shader. Occasionally will need to set
+        ///     per-vertex items like transforms. This method should generally be *lightweight*.
         /// </summary>
         void UpdateStyling(EncodedGameObject currentGameObject);
 
         /// <summary>
-        ///     Updates the visibility of an impression
+        ///     Update the visibility of an impression (hidden or shown)
         /// </summary>
         void UpdateVisibility(EncodedGameObject currentGameObject);
 
@@ -171,11 +162,9 @@ namespace IVLab.ABREngine
 
         public DataImpression() : this(Guid.NewGuid().ToString()) { }
 
-        public virtual void ComputeKeyDataRenderInfo() { }
+        public virtual void ComputeGeometry() { }
 
-        public virtual void ComputeRenderInfo() { }
-
-        public virtual void ApplyToGameObject(EncodedGameObject currentGameObject) { }
+        public virtual void SetupGameObject(EncodedGameObject currentGameObject) { }
 
         public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
 

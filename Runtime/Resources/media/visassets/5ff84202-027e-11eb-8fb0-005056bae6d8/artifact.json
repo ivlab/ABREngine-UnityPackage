@@ -1,0 +1,14 @@
+{
+    "artifactData": {
+        "horizontal": "horizontal.png",
+        "vertical": "vertical.png"
+    },
+    "artist": "Francesca Samsel",
+    "class": "Straight",
+    "family": "Computer-made",
+    "hidden": false,
+    "preview": "thumbnail.png",
+    "tags": [],
+    "type": "line",
+    "uuid": "5ff84202-027e-11eb-8fb0-005056bae6d8"
+}

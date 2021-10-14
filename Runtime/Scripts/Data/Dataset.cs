@@ -96,6 +96,16 @@ namespace IVLab.ABREngine
         {
             return keyDataObjects;
         }
+
+        public Dictionary<string, ScalarDataVariable> GetAllScalarVars()
+        {
+            return scalarVariables;
+        }
+
+        public Dictionary<string, VectorDataVariable> GetAllVectorVars()
+        {
+            return vectorVariables;
+        }
     }
 
     /// <summary>

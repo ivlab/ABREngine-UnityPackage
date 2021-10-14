@@ -23,18 +23,47 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The VisAssetManager is where all VisAssets are stored within the
+    /// ABREngine. VisAssets can be loaded and fetched from various sources
+    /// defined in `VisAssetFetchers`.
+    /// </summary>
+    /// <example>
+    /// VisAssets can be loaded manually - be mindful of async programming:
+    /// <code>
+    /// // Initialize the ABR Engine
+    /// await ABREngine.GetInstance().WaitUntilInitialized();
+    /// 
+    /// Guid cmapUuid = new Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
+    /// 
+    /// // Load a VisAsset (must be done in Main Thread!)
+    /// await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+    /// {
+    ///     await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
+    /// });
+    /// 
+    /// // Get the actual cmap visasset
+    /// ColormapVisAsset cmap = null;
+    /// ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);
+    /// </code>
+    /// </example>
     public class VisAssetManager
     {
         public string appDataPath;
 
         public const string VISASSET_JSON = "artifact.json";
 
+        /// <summary>
+        /// Any (custom) visassets that are solely described inside the state and do not
+        /// exist on disk or on a server somewhere.
+        /// </summary>
         public JObject LocalVisAssets { get; set; }
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
@@ -44,7 +73,7 @@ namespace IVLab.ABREngine
 
         private bool _loadResourceVisAssets;
 
-        public VisAssetManager(string visassetPath, bool loadResourceVisAssets)
+        public VisAssetManager(string visassetPath)
         {
             this.appDataPath = visassetPath;
             Directory.CreateDirectory(this.appDataPath);
@@ -57,13 +86,8 @@ namespace IVLab.ABREngine
             // Then, try the file system...
             visAssetFetchers.Add(new FilePathVisAssetFetcher(this.appDataPath));
 
-            // Afterwards, try the resources folder if desired
-            _loadResourceVisAssets = loadResourceVisAssets;
-            if (loadResourceVisAssets)
-            {
-                Debug.Log("Allowing loading of VisAssets from Resources folder");
-                visAssetFetchers.Add(new ResourceVisAssetFetcher());
-            }
+            // Afterwards, try the resources folder
+            visAssetFetchers.Add(new ResourceVisAssetFetcher());
 
             // ... and lastly check out the VisAsset server, if present
             if (ABREngine.Instance.Config.Info.visAssetServer != null)
@@ -73,11 +97,21 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Attempt to retrieve a VisAsset.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the VisAsset is currently loaded into the memory.
+        /// </returns>
         public bool TryGetVisAsset(Guid guid, out IVisAsset visAsset)
         {
             return _visAssets.TryGetValue(guid, out visAsset);
         }
 
+        /// <summary>
+        /// Load all VisAssets located in the Media directory into memory.
+        /// </summary>
+        [Obsolete("LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory")]
         public async Task LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
@@ -100,6 +134,14 @@ namespace IVLab.ABREngine
             Debug.LogFormat("Successfully loaded {0}/{1} VisAssets", success, files.Length);
         }
 
+        /// <summary>
+        /// Load a particular VisAsset described by its UUID. VisAssets will
+        /// automatically be loaded from any of the following places:
+        /// 1. The state itself (`localVisAssets`)
+        /// 2. The media directory on the machine ABR is running on
+        /// 3. Any Resources folder (in Assets or in any Package)
+        /// 4. A VisAsset server
+        /// </summary>
         public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
@@ -147,6 +189,28 @@ namespace IVLab.ABREngine
         public List<Guid> GetVisAssets()
         {
             return _visAssets.Keys.ToList();
+        }
+
+        /// <summary>
+        /// Obtain the default visasset for a particular type, if there is one.
+        /// </summary>
+        public IVisAsset GetDefault<T>()
+        where T: IVisAsset
+        {
+            Type t = typeof(T);
+            if (t.IsAssignableFrom(typeof(ColormapVisAsset)))
+            {
+                // Define a black-to-white colormap
+                string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
+                Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
+                ColormapVisAsset cmap = new ColormapVisAsset();
+                cmap.Gradient = cmapTex;
+                return cmap;
+            }
+            else
+            {
+                throw new NotImplementedException($"Default {t.ToString()} is not implemented");
+            }
         }
     }
 }

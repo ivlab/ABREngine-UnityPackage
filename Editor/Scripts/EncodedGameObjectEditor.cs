@@ -17,10 +17,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Simple custom editor that displays a UUID for a particular GameObject
+    /// associated with an ABR Data Impression
+    /// </summary>
     [CustomEditor(typeof(EncodedGameObject))]
     public class EncodedGameObjectEditor : Editor
     {
@@ -35,3 +40,4 @@ namespace IVLab.ABREngine
         }
     }
 }
+#endif

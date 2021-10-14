@@ -1,80 +1,6 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
-- uid: Global
-  name: Global
-  href: api/Global.html
-  name.vb: ''
-  fullName: Global
-  fullName.vb: ''
-  nameWithType: Global
-  nameWithType.vb: ''
-- uid: Global.InstancedMeshRenderer
-  name: InstancedMeshRenderer
-  href: api/Global.InstancedMeshRenderer.html
-  commentId: T:Global.InstancedMeshRenderer
-  fullName: InstancedMeshRenderer
-  nameWithType: InstancedMeshRenderer
-- uid: Global.InstancedMeshRenderer.block
-  name: block
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_block
-  commentId: F:Global.InstancedMeshRenderer.block
-  fullName: InstancedMeshRenderer.block
-  nameWithType: InstancedMeshRenderer.block
-- uid: Global.InstancedMeshRenderer.bounds
-  name: bounds
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_bounds
-  commentId: F:Global.InstancedMeshRenderer.bounds
-  fullName: InstancedMeshRenderer.bounds
-  nameWithType: InstancedMeshRenderer.bounds
-- uid: Global.InstancedMeshRenderer.cachedInstanceCount
-  name: cachedInstanceCount
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_cachedInstanceCount
-  commentId: F:Global.InstancedMeshRenderer.cachedInstanceCount
-  fullName: InstancedMeshRenderer.cachedInstanceCount
-  nameWithType: InstancedMeshRenderer.cachedInstanceCount
-- uid: Global.InstancedMeshRenderer.colors
-  name: colors
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_colors
-  commentId: F:Global.InstancedMeshRenderer.colors
-  fullName: InstancedMeshRenderer.colors
-  nameWithType: InstancedMeshRenderer.colors
-- uid: Global.InstancedMeshRenderer.instanceCount
-  name: instanceCount
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_instanceCount
-  commentId: F:Global.InstancedMeshRenderer.instanceCount
-  fullName: InstancedMeshRenderer.instanceCount
-  nameWithType: InstancedMeshRenderer.instanceCount
-- uid: Global.InstancedMeshRenderer.instanceLocalTransforms
-  name: instanceLocalTransforms
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_instanceLocalTransforms
-  commentId: F:Global.InstancedMeshRenderer.instanceLocalTransforms
-  fullName: InstancedMeshRenderer.instanceLocalTransforms
-  nameWithType: InstancedMeshRenderer.instanceLocalTransforms
-- uid: Global.InstancedMeshRenderer.instanceMaterial
-  name: instanceMaterial
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_instanceMaterial
-  commentId: F:Global.InstancedMeshRenderer.instanceMaterial
-  fullName: InstancedMeshRenderer.instanceMaterial
-  nameWithType: InstancedMeshRenderer.instanceMaterial
-- uid: Global.InstancedMeshRenderer.instanceMesh
-  name: instanceMesh
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_instanceMesh
-  commentId: F:Global.InstancedMeshRenderer.instanceMesh
-  fullName: InstancedMeshRenderer.instanceMesh
-  nameWithType: InstancedMeshRenderer.instanceMesh
-- uid: Global.InstancedMeshRenderer.subMeshIndex
-  name: subMeshIndex
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_subMeshIndex
-  commentId: F:Global.InstancedMeshRenderer.subMeshIndex
-  fullName: InstancedMeshRenderer.subMeshIndex
-  nameWithType: InstancedMeshRenderer.subMeshIndex
-- uid: Global.InstancedMeshRenderer.useInstanced
-  name: useInstanced
-  href: api/Global.InstancedMeshRenderer.html#Global_InstancedMeshRenderer_useInstanced
-  commentId: F:Global.InstancedMeshRenderer.useInstanced
-  fullName: InstancedMeshRenderer.useInstanced
-  nameWithType: InstancedMeshRenderer.useInstanced
 - uid: IVLab.ABREngine
   name: IVLab.ABREngine
   href: api/IVLab.ABREngine.html
@@ -100,18 +26,48 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRConfig.ABRConfig
   nameWithType: ABRConfig.ABRConfig
-- uid: IVLab.ABREngine.ABRConfig.CONFIG_FILE
-  name: CONFIG_FILE
-  href: api/IVLab.ABREngine.ABRConfig.html#IVLab_ABREngine_ABRConfig_CONFIG_FILE
-  commentId: F:IVLab.ABREngine.ABRConfig.CONFIG_FILE
-  fullName: IVLab.ABREngine.ABRConfig.CONFIG_FILE
-  nameWithType: ABRConfig.CONFIG_FILE
-- uid: IVLab.ABREngine.ABRConfig.CONFIG_FILE_FALLBACK
-  name: CONFIG_FILE_FALLBACK
-  href: api/IVLab.ABREngine.ABRConfig.html#IVLab_ABREngine_ABRConfig_CONFIG_FILE_FALLBACK
-  commentId: F:IVLab.ABREngine.ABRConfig.CONFIG_FILE_FALLBACK
-  fullName: IVLab.ABREngine.ABRConfig.CONFIG_FILE_FALLBACK
-  nameWithType: ABRConfig.CONFIG_FILE_FALLBACK
+- uid: IVLab.ABREngine.ABRConfig.Consts
+  name: ABRConfig.Consts
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html
+  commentId: T:IVLab.ABREngine.ABRConfig.Consts
+  fullName: IVLab.ABREngine.ABRConfig.Consts
+  nameWithType: ABRConfig.Consts
+- uid: IVLab.ABREngine.ABRConfig.Consts.ConfigFile
+  name: ConfigFile
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_ConfigFile
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.ConfigFile
+  fullName: IVLab.ABREngine.ABRConfig.Consts.ConfigFile
+  nameWithType: ABRConfig.Consts.ConfigFile
+- uid: IVLab.ABREngine.ABRConfig.Consts.ConfigFileFallback
+  name: ConfigFileFallback
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_ConfigFileFallback
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.ConfigFileFallback
+  fullName: IVLab.ABREngine.ABRConfig.Consts.ConfigFileFallback
+  nameWithType: ABRConfig.Consts.ConfigFileFallback
+- uid: IVLab.ABREngine.ABRConfig.Consts.DatasetFolder
+  name: DatasetFolder
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_DatasetFolder
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.DatasetFolder
+  fullName: IVLab.ABREngine.ABRConfig.Consts.DatasetFolder
+  nameWithType: ABRConfig.Consts.DatasetFolder
+- uid: IVLab.ABREngine.ABRConfig.Consts.SchemaUrl
+  name: SchemaUrl
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_SchemaUrl
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.SchemaUrl
+  fullName: IVLab.ABREngine.ABRConfig.Consts.SchemaUrl
+  nameWithType: ABRConfig.Consts.SchemaUrl
+- uid: IVLab.ABREngine.ABRConfig.Consts.VisAssetFolder
+  name: VisAssetFolder
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_VisAssetFolder
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.VisAssetFolder
+  fullName: IVLab.ABREngine.ABRConfig.Consts.VisAssetFolder
+  nameWithType: ABRConfig.Consts.VisAssetFolder
+- uid: IVLab.ABREngine.ABRConfig.Consts.VisAssetJson
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.ABRConfig.Consts.html#IVLab_ABREngine_ABRConfig_Consts_VisAssetJson
+  commentId: F:IVLab.ABREngine.ABRConfig.Consts.VisAssetJson
+  fullName: IVLab.ABREngine.ABRConfig.Consts.VisAssetJson
+  nameWithType: ABRConfig.Consts.VisAssetJson
 - uid: IVLab.ABREngine.ABRConfig.Defaults
   name: Defaults
   href: api/IVLab.ABREngine.ABRConfig.html#IVLab_ABREngine_ABRConfig_Defaults
@@ -228,6 +184,12 @@ references:
   commentId: F:IVLab.ABREngine.ABRConfigInfo.loadResourceVisAssets
   fullName: IVLab.ABREngine.ABRConfigInfo.loadResourceVisAssets
   nameWithType: ABRConfigInfo.loadResourceVisAssets
+- uid: IVLab.ABREngine.ABRConfigInfo.loadStateOnStart
+  name: loadStateOnStart
+  href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_loadStateOnStart
+  commentId: F:IVLab.ABREngine.ABRConfigInfo.loadStateOnStart
+  fullName: IVLab.ABREngine.ABRConfigInfo.loadStateOnStart
+  nameWithType: ABRConfigInfo.loadStateOnStart
 - uid: IVLab.ABREngine.ABRConfigInfo.mediaPath
   name: mediaPath
   href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_mediaPath
@@ -252,12 +214,6 @@ references:
   commentId: F:IVLab.ABREngine.ABRConfigInfo.statePathOnServer
   fullName: IVLab.ABREngine.ABRConfigInfo.statePathOnServer
   nameWithType: ABRConfigInfo.statePathOnServer
-- uid: IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
-  name: stateSubscriberPort
-  href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_stateSubscriberPort
-  commentId: F:IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
-  fullName: IVLab.ABREngine.ABRConfigInfo.stateSubscriberPort
-  nameWithType: ABRConfigInfo.stateSubscriberPort
 - uid: IVLab.ABREngine.ABRConfigInfo.ToString
   name: ToString()
   href: api/IVLab.ABREngine.ABRConfigInfo.html#IVLab_ABREngine_ABRConfigInfo_ToString
@@ -295,6 +251,12 @@ references:
   commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)
   fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)
   nameWithType: ABREngine.AddDataImpressionGroup(String)
+- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid)
+  name: AddDataImpressionGroup(String, Guid)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_
+  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid)
+  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, System.Guid)
+  nameWithType: ABREngine.AddDataImpressionGroup(String, Guid)
 - uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
   name: AddDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_Bounds_Vector3_Quaternion_
@@ -430,6 +392,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.GetDataImpressionGroup
   nameWithType: ABREngine.GetDataImpressionGroup
+- uid: IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset(IVLab.ABREngine.Dataset)
+  name: GetDataImpressionGroupByDataset(Dataset)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_GetDataImpressionGroupByDataset_IVLab_ABREngine_Dataset_
+  commentId: M:IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset(IVLab.ABREngine.Dataset)
+  fullName: IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset(IVLab.ABREngine.Dataset)
+  nameWithType: ABREngine.GetDataImpressionGroupByDataset(Dataset)
+- uid: IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset*
+  name: GetDataImpressionGroupByDataset
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_GetDataImpressionGroupByDataset_
+  commentId: Overload:IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset
+  nameWithType: ABREngine.GetDataImpressionGroupByDataset
 - uid: IVLab.ABREngine.ABREngine.GetDataImpressionGroups
   name: GetDataImpressionGroups()
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_GetDataImpressionGroups
@@ -639,12 +614,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.Render
   nameWithType: ABREngine.Render
-- uid: IVLab.ABREngine.ABREngine.SaveStateAsync
-  name: SaveStateAsync()
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveStateAsync
-  commentId: M:IVLab.ABREngine.ABREngine.SaveStateAsync
-  fullName: IVLab.ABREngine.ABREngine.SaveStateAsync()
-  nameWithType: ABREngine.SaveStateAsync()
 - uid: IVLab.ABREngine.ABREngine.SaveStateAsync*
   name: SaveStateAsync
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveStateAsync_
@@ -652,6 +621,15 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.SaveStateAsync
   nameWithType: ABREngine.SaveStateAsync
+- uid: IVLab.ABREngine.ABREngine.SaveStateAsync``1
+  name: SaveStateAsync<T>()
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveStateAsync__1
+  commentId: M:IVLab.ABREngine.ABREngine.SaveStateAsync``1
+  name.vb: SaveStateAsync(Of T)()
+  fullName: IVLab.ABREngine.ABREngine.SaveStateAsync<T>()
+  fullName.vb: IVLab.ABREngine.ABREngine.SaveStateAsync(Of T)()
+  nameWithType: ABREngine.SaveStateAsync<T>()
+  nameWithType.vb: ABREngine.SaveStateAsync(Of T)()
 - uid: IVLab.ABREngine.ABREngine.State
   name: State
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_State
@@ -716,12 +694,12 @@ references:
   commentId: T:IVLab.ABREngine.ABRInputAttribute
   fullName: IVLab.ABREngine.ABRInputAttribute
   nameWithType: ABRInputAttribute
-- uid: IVLab.ABREngine.ABRInputAttribute.#ctor(System.String,System.String)
-  name: ABRInputAttribute(String, String)
-  href: api/IVLab.ABREngine.ABRInputAttribute.html#IVLab_ABREngine_ABRInputAttribute__ctor_System_String_System_String_
-  commentId: M:IVLab.ABREngine.ABRInputAttribute.#ctor(System.String,System.String)
-  fullName: IVLab.ABREngine.ABRInputAttribute.ABRInputAttribute(System.String, System.String)
-  nameWithType: ABRInputAttribute.ABRInputAttribute(String, String)
+- uid: IVLab.ABREngine.ABRInputAttribute.#ctor(System.String,System.String,IVLab.ABREngine.UpdateLevel)
+  name: ABRInputAttribute(String, String, UpdateLevel)
+  href: api/IVLab.ABREngine.ABRInputAttribute.html#IVLab_ABREngine_ABRInputAttribute__ctor_System_String_System_String_IVLab_ABREngine_UpdateLevel_
+  commentId: M:IVLab.ABREngine.ABRInputAttribute.#ctor(System.String,System.String,IVLab.ABREngine.UpdateLevel)
+  fullName: IVLab.ABREngine.ABRInputAttribute.ABRInputAttribute(System.String, System.String, IVLab.ABREngine.UpdateLevel)
+  nameWithType: ABRInputAttribute.ABRInputAttribute(String, String, UpdateLevel)
 - uid: IVLab.ABREngine.ABRInputAttribute.#ctor*
   name: ABRInputAttribute
   href: api/IVLab.ABREngine.ABRInputAttribute.html#IVLab_ABREngine_ABRInputAttribute__ctor_
@@ -741,6 +719,12 @@ references:
   commentId: F:IVLab.ABREngine.ABRInputAttribute.parameterName
   fullName: IVLab.ABREngine.ABRInputAttribute.parameterName
   nameWithType: ABRInputAttribute.parameterName
+- uid: IVLab.ABREngine.ABRInputAttribute.updateLevel
+  name: updateLevel
+  href: api/IVLab.ABREngine.ABRInputAttribute.html#IVLab_ABREngine_ABRInputAttribute_updateLevel
+  commentId: F:IVLab.ABREngine.ABRInputAttribute.updateLevel
+  fullName: IVLab.ABREngine.ABRInputAttribute.updateLevel
+  nameWithType: ABRInputAttribute.updateLevel
 - uid: IVLab.ABREngine.ABRInputGenre
   name: ABRInputGenre
   href: api/IVLab.ABREngine.ABRInputGenre.html
@@ -816,18 +800,18 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRInputIndexerModule.ABRInputIndicesByName
   nameWithType: ABRInputIndexerModule.ABRInputIndicesByName
+- uid: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(FieldInfo,IVLab.ABREngine.IABRInput)
+  name: AssignInput(FieldInfo, IABRInput)
+  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_AssignInput_FieldInfo_IVLab_ABREngine_IABRInput_
+  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.AssignInput(FieldInfo,IVLab.ABREngine.IABRInput)
+  fullName: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(FieldInfo, IVLab.ABREngine.IABRInput)
+  nameWithType: ABRInputIndexerModule.AssignInput(FieldInfo, IABRInput)
 - uid: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Int32,IVLab.ABREngine.IABRInput)
   name: AssignInput(Int32, IABRInput)
   href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_AssignInput_System_Int32_IVLab_ABREngine_IABRInput_
   commentId: M:IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Int32,IVLab.ABREngine.IABRInput)
   fullName: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Int32, IVLab.ABREngine.IABRInput)
   nameWithType: ABRInputIndexerModule.AssignInput(Int32, IABRInput)
-- uid: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Reflection.FieldInfo,IVLab.ABREngine.IABRInput)
-  name: AssignInput(FieldInfo, IABRInput)
-  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_AssignInput_System_Reflection_FieldInfo_IVLab_ABREngine_IABRInput_
-  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Reflection.FieldInfo,IVLab.ABREngine.IABRInput)
-  fullName: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.Reflection.FieldInfo, IVLab.ABREngine.IABRInput)
-  nameWithType: ABRInputIndexerModule.AssignInput(FieldInfo, IABRInput)
 - uid: IVLab.ABREngine.ABRInputIndexerModule.AssignInput(System.String,IVLab.ABREngine.IABRInput)
   name: AssignInput(String, IABRInput)
   href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_AssignInput_System_String_IVLab_ABREngine_IABRInput_
@@ -860,13 +844,13 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRInputIndexerModule.CanAssignInput
   nameWithType: ABRInputIndexerModule.CanAssignInput
-- uid: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(System.Reflection.FieldInfo[])
+- uid: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(FieldInfo[])
   name: CatalogABRInputNames(FieldInfo[])
-  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_CatalogABRInputNames_System_Reflection_FieldInfo___
-  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(System.Reflection.FieldInfo[])
+  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_CatalogABRInputNames_FieldInfo___
+  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(FieldInfo[])
   name.vb: CatalogABRInputNames(FieldInfo())
-  fullName: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(System.Reflection.FieldInfo[])
-  fullName.vb: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(System.Reflection.FieldInfo())
+  fullName: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(FieldInfo[])
+  fullName.vb: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames(FieldInfo())
   nameWithType: ABRInputIndexerModule.CatalogABRInputNames(FieldInfo[])
   nameWithType.vb: ABRInputIndexerModule.CatalogABRInputNames(FieldInfo())
 - uid: IVLab.ABREngine.ABRInputIndexerModule.CatalogABRInputNames*
@@ -972,13 +956,13 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRInputIndexerModule.GetInputValue
   nameWithType: ABRInputIndexerModule.GetInputValue
-- uid: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(System.Reflection.FieldInfo[])
+- uid: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(FieldInfo[])
   name: IndexABRInputsByName(FieldInfo[])
-  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_IndexABRInputsByName_System_Reflection_FieldInfo___
-  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(System.Reflection.FieldInfo[])
+  href: api/IVLab.ABREngine.ABRInputIndexerModule.html#IVLab_ABREngine_ABRInputIndexerModule_IndexABRInputsByName_FieldInfo___
+  commentId: M:IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(FieldInfo[])
   name.vb: IndexABRInputsByName(FieldInfo())
-  fullName: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(System.Reflection.FieldInfo[])
-  fullName.vb: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(System.Reflection.FieldInfo())
+  fullName: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(FieldInfo[])
+  fullName.vb: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName(FieldInfo())
   nameWithType: ABRInputIndexerModule.IndexABRInputsByName(FieldInfo[])
   nameWithType.vb: ABRInputIndexerModule.IndexABRInputsByName(FieldInfo())
 - uid: IVLab.ABREngine.ABRInputIndexerModule.IndexABRInputsByName*
@@ -1045,28 +1029,6 @@ references:
   commentId: T:IVLab.ABREngine.ABRStateParser
   fullName: IVLab.ABREngine.ABRStateParser
   nameWithType: ABRStateParser
-- uid: IVLab.ABREngine.ABRStateParser.GetParser*
-  name: GetParser
-  href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_GetParser_
-  commentId: Overload:IVLab.ABREngine.ABRStateParser.GetParser
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ABRStateParser.GetParser
-  nameWithType: ABRStateParser.GetParser
-- uid: IVLab.ABREngine.ABRStateParser.GetParser``1
-  name: GetParser<T>()
-  href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_GetParser__1
-  commentId: M:IVLab.ABREngine.ABRStateParser.GetParser``1
-  name.vb: GetParser(Of T)()
-  fullName: IVLab.ABREngine.ABRStateParser.GetParser<T>()
-  fullName.vb: IVLab.ABREngine.ABRStateParser.GetParser(Of T)()
-  nameWithType: ABRStateParser.GetParser<T>()
-  nameWithType.vb: ABRStateParser.GetParser(Of T)()
-- uid: IVLab.ABREngine.ABRStateParser.LoadState(System.String,JObject)
-  name: LoadState(String, JObject)
-  href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_LoadState_System_String_JObject_
-  commentId: M:IVLab.ABREngine.ABRStateParser.LoadState(System.String,JObject)
-  fullName: IVLab.ABREngine.ABRStateParser.LoadState(System.String, JObject)
-  nameWithType: ABRStateParser.LoadState(String, JObject)
 - uid: IVLab.ABREngine.ABRStateParser.LoadState*
   name: LoadState
   href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_LoadState_
@@ -1074,6 +1036,15 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRStateParser.LoadState
   nameWithType: ABRStateParser.LoadState
+- uid: IVLab.ABREngine.ABRStateParser.LoadState``1(System.String,JObject)
+  name: LoadState<T>(String, JObject)
+  href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_LoadState__1_System_String_JObject_
+  commentId: M:IVLab.ABREngine.ABRStateParser.LoadState``1(System.String,JObject)
+  name.vb: LoadState(Of T)(String, JObject)
+  fullName: IVLab.ABREngine.ABRStateParser.LoadState<T>(System.String, JObject)
+  fullName.vb: IVLab.ABREngine.ABRStateParser.LoadState(Of T)(System.String, JObject)
+  nameWithType: ABRStateParser.LoadState<T>(String, JObject)
+  nameWithType.vb: ABRStateParser.LoadState(Of T)(String, JObject)
 - uid: IVLab.ABREngine.ABRStateParser.SerializeState(JObject)
   name: SerializeState(JObject)
   href: api/IVLab.ABREngine.ABRStateParser.html#IVLab_ABREngine_ABRStateParser_SerializeState_JObject_
@@ -1221,45 +1192,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpression.DataImpression
   nameWithType: DataImpression.DataImpression
-- uid: IVLab.ABREngine.DataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  name: ApplyToGameObject(EncodedGameObject)
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_
-  commentId: M:IVLab.ABREngine.DataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  fullName: IVLab.ABREngine.DataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  nameWithType: DataImpression.ApplyToGameObject(EncodedGameObject)
-- uid: IVLab.ABREngine.DataImpression.ApplyToGameObject*
-  name: ApplyToGameObject
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ApplyToGameObject_
-  commentId: Overload:IVLab.ABREngine.DataImpression.ApplyToGameObject
+- uid: IVLab.ABREngine.DataImpression.ComputeGeometry
+  name: ComputeGeometry()
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeGeometry
+  commentId: M:IVLab.ABREngine.DataImpression.ComputeGeometry
+  fullName: IVLab.ABREngine.DataImpression.ComputeGeometry()
+  nameWithType: DataImpression.ComputeGeometry()
+- uid: IVLab.ABREngine.DataImpression.ComputeGeometry*
+  name: ComputeGeometry
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeGeometry_
+  commentId: Overload:IVLab.ABREngine.DataImpression.ComputeGeometry
   isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpression.ApplyToGameObject
-  nameWithType: DataImpression.ApplyToGameObject
-- uid: IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo
-  name: ComputeKeyDataRenderInfo()
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeKeyDataRenderInfo
-  commentId: M:IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo
-  fullName: IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo()
-  nameWithType: DataImpression.ComputeKeyDataRenderInfo()
-- uid: IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo*
-  name: ComputeKeyDataRenderInfo
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeKeyDataRenderInfo_
-  commentId: Overload:IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpression.ComputeKeyDataRenderInfo
-  nameWithType: DataImpression.ComputeKeyDataRenderInfo
-- uid: IVLab.ABREngine.DataImpression.ComputeRenderInfo
-  name: ComputeRenderInfo()
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeRenderInfo
-  commentId: M:IVLab.ABREngine.DataImpression.ComputeRenderInfo
-  fullName: IVLab.ABREngine.DataImpression.ComputeRenderInfo()
-  nameWithType: DataImpression.ComputeRenderInfo()
-- uid: IVLab.ABREngine.DataImpression.ComputeRenderInfo*
-  name: ComputeRenderInfo
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ComputeRenderInfo_
-  commentId: Overload:IVLab.ABREngine.DataImpression.ComputeRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpression.ComputeRenderInfo
-  nameWithType: DataImpression.ComputeRenderInfo
+  fullName: IVLab.ABREngine.DataImpression.ComputeGeometry
+  nameWithType: DataImpression.ComputeGeometry
 - uid: IVLab.ABREngine.DataImpression.Copy
   name: Copy()
   href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Copy
@@ -1403,6 +1348,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpression.RenderInfo
   nameWithType: DataImpression.RenderInfo
+- uid: IVLab.ABREngine.DataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  name: SetupGameObject(EncodedGameObject)
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.DataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.DataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: DataImpression.SetupGameObject(EncodedGameObject)
+- uid: IVLab.ABREngine.DataImpression.SetupGameObject*
+  name: SetupGameObject
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_SetupGameObject_
+  commentId: Overload:IVLab.ABREngine.DataImpression.SetupGameObject
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataImpression.SetupGameObject
+  nameWithType: DataImpression.SetupGameObject
 - uid: IVLab.ABREngine.DataImpression.Tags
   name: Tags
   href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Tags
@@ -1416,6 +1374,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpression.Tags
   nameWithType: DataImpression.Tags
+- uid: IVLab.ABREngine.DataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateStyling(EncodedGameObject)
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.DataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.DataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: DataImpression.UpdateStyling(EncodedGameObject)
+- uid: IVLab.ABREngine.DataImpression.UpdateStyling*
+  name: UpdateStyling
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateStyling_
+  commentId: Overload:IVLab.ABREngine.DataImpression.UpdateStyling
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataImpression.UpdateStyling
+  nameWithType: DataImpression.UpdateStyling
+- uid: IVLab.ABREngine.DataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateVisibility(EncodedGameObject)
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.DataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.DataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: DataImpression.UpdateVisibility(EncodedGameObject)
+- uid: IVLab.ABREngine.DataImpression.UpdateVisibility*
+  name: UpdateVisibility
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_UpdateVisibility_
+  commentId: Overload:IVLab.ABREngine.DataImpression.UpdateVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataImpression.UpdateVisibility
+  nameWithType: DataImpression.UpdateVisibility
 - uid: IVLab.ABREngine.DataImpression.Uuid
   name: Uuid
   href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Uuid
@@ -1751,32 +1735,22 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataManager.ImportRawDataset
   nameWithType: DataManager.ImportRawDataset
-- uid: IVLab.ABREngine.DataManager.LoadRawDatasetFromCache(System.String)
-  name: LoadRawDatasetFromCache(String)
-  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDatasetFromCache_System_String_
-  commentId: M:IVLab.ABREngine.DataManager.LoadRawDatasetFromCache(System.String)
-  fullName: IVLab.ABREngine.DataManager.LoadRawDatasetFromCache(System.String)
-  nameWithType: DataManager.LoadRawDatasetFromCache(String)
-- uid: IVLab.ABREngine.DataManager.LoadRawDatasetFromCache*
-  name: LoadRawDatasetFromCache
-  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDatasetFromCache_
-  commentId: Overload:IVLab.ABREngine.DataManager.LoadRawDatasetFromCache
+- uid: IVLab.ABREngine.DataManager.LoadRawDataset*
+  name: LoadRawDataset
+  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDataset_
+  commentId: Overload:IVLab.ABREngine.DataManager.LoadRawDataset
   isSpec: "True"
-  fullName: IVLab.ABREngine.DataManager.LoadRawDatasetFromCache
-  nameWithType: DataManager.LoadRawDatasetFromCache
-- uid: IVLab.ABREngine.DataManager.LoadRawDatasetFromURL(System.String,System.String)
-  name: LoadRawDatasetFromURL(String, String)
-  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDatasetFromURL_System_String_System_String_
-  commentId: M:IVLab.ABREngine.DataManager.LoadRawDatasetFromURL(System.String,System.String)
-  fullName: IVLab.ABREngine.DataManager.LoadRawDatasetFromURL(System.String, System.String)
-  nameWithType: DataManager.LoadRawDatasetFromURL(String, String)
-- uid: IVLab.ABREngine.DataManager.LoadRawDatasetFromURL*
-  name: LoadRawDatasetFromURL
-  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDatasetFromURL_
-  commentId: Overload:IVLab.ABREngine.DataManager.LoadRawDatasetFromURL
-  isSpec: "True"
-  fullName: IVLab.ABREngine.DataManager.LoadRawDatasetFromURL
-  nameWithType: DataManager.LoadRawDatasetFromURL
+  fullName: IVLab.ABREngine.DataManager.LoadRawDataset
+  nameWithType: DataManager.LoadRawDataset
+- uid: IVLab.ABREngine.DataManager.LoadRawDataset``1(System.String)
+  name: LoadRawDataset<T>(String)
+  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String_
+  commentId: M:IVLab.ABREngine.DataManager.LoadRawDataset``1(System.String)
+  name.vb: LoadRawDataset(Of T)(String)
+  fullName: IVLab.ABREngine.DataManager.LoadRawDataset<T>(System.String)
+  fullName.vb: IVLab.ABREngine.DataManager.LoadRawDataset(Of T)(System.String)
+  nameWithType: DataManager.LoadRawDataset<T>(String)
+  nameWithType.vb: DataManager.LoadRawDataset(Of T)(String)
 - uid: IVLab.ABREngine.DataManager.TryGetDataset(System.String,IVLab.ABREngine.Dataset@)
   name: TryGetDataset(String, out Dataset)
   href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_TryGetDataset_System_String_IVLab_ABREngine_Dataset__
@@ -2007,6 +1981,91 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataPath.WarnOnDataPathFormat
   nameWithType: DataPath.WarnOnDataPathFormat
+- uid: IVLab.ABREngine.DataRange`1
+  name: DataRange<T>
+  href: api/IVLab.ABREngine.DataRange-1.html
+  commentId: T:IVLab.ABREngine.DataRange`1
+  name.vb: DataRange(Of T)
+  fullName: IVLab.ABREngine.DataRange<T>
+  fullName.vb: IVLab.ABREngine.DataRange(Of T)
+  nameWithType: DataRange<T>
+  nameWithType.vb: DataRange(Of T)
+- uid: IVLab.ABREngine.DataRange`1.Equals(IVLab.ABREngine.DataRange{`0})
+  name: Equals(DataRange<T>)
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_Equals_IVLab_ABREngine_DataRange__0__
+  commentId: M:IVLab.ABREngine.DataRange`1.Equals(IVLab.ABREngine.DataRange{`0})
+  name.vb: Equals(DataRange(Of T))
+  fullName: IVLab.ABREngine.DataRange<T>.Equals(IVLab.ABREngine.DataRange<T>)
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).Equals(IVLab.ABREngine.DataRange(Of T))
+  nameWithType: DataRange<T>.Equals(DataRange<T>)
+  nameWithType.vb: DataRange(Of T).Equals(DataRange(Of T))
+- uid: IVLab.ABREngine.DataRange`1.Equals(System.Object)
+  name: Equals(Object)
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_Equals_System_Object_
+  commentId: M:IVLab.ABREngine.DataRange`1.Equals(System.Object)
+  fullName: IVLab.ABREngine.DataRange<T>.Equals(System.Object)
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).Equals(System.Object)
+  nameWithType: DataRange<T>.Equals(Object)
+  nameWithType.vb: DataRange(Of T).Equals(Object)
+- uid: IVLab.ABREngine.DataRange`1.Equals*
+  name: Equals
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_Equals_
+  commentId: Overload:IVLab.ABREngine.DataRange`1.Equals
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataRange<T>.Equals
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).Equals
+  nameWithType: DataRange<T>.Equals
+  nameWithType.vb: DataRange(Of T).Equals
+- uid: IVLab.ABREngine.DataRange`1.GetHashCode
+  name: GetHashCode()
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_GetHashCode
+  commentId: M:IVLab.ABREngine.DataRange`1.GetHashCode
+  fullName: IVLab.ABREngine.DataRange<T>.GetHashCode()
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).GetHashCode()
+  nameWithType: DataRange<T>.GetHashCode()
+  nameWithType.vb: DataRange(Of T).GetHashCode()
+- uid: IVLab.ABREngine.DataRange`1.GetHashCode*
+  name: GetHashCode
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_GetHashCode_
+  commentId: Overload:IVLab.ABREngine.DataRange`1.GetHashCode
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataRange<T>.GetHashCode
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).GetHashCode
+  nameWithType: DataRange<T>.GetHashCode
+  nameWithType.vb: DataRange(Of T).GetHashCode
+- uid: IVLab.ABREngine.DataRange`1.max
+  name: max
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_max
+  commentId: F:IVLab.ABREngine.DataRange`1.max
+  fullName: IVLab.ABREngine.DataRange<T>.max
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).max
+  nameWithType: DataRange<T>.max
+  nameWithType.vb: DataRange(Of T).max
+- uid: IVLab.ABREngine.DataRange`1.min
+  name: min
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_min
+  commentId: F:IVLab.ABREngine.DataRange`1.min
+  fullName: IVLab.ABREngine.DataRange<T>.min
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).min
+  nameWithType: DataRange<T>.min
+  nameWithType.vb: DataRange(Of T).min
+- uid: IVLab.ABREngine.DataRange`1.ToString
+  name: ToString()
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_ToString
+  commentId: M:IVLab.ABREngine.DataRange`1.ToString
+  fullName: IVLab.ABREngine.DataRange<T>.ToString()
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).ToString()
+  nameWithType: DataRange<T>.ToString()
+  nameWithType.vb: DataRange(Of T).ToString()
+- uid: IVLab.ABREngine.DataRange`1.ToString*
+  name: ToString
+  href: api/IVLab.ABREngine.DataRange-1.html#IVLab_ABREngine_DataRange_1_ToString_
+  commentId: Overload:IVLab.ABREngine.DataRange`1.ToString
+  isSpec: "True"
+  fullName: IVLab.ABREngine.DataRange<T>.ToString
+  fullName.vb: IVLab.ABREngine.DataRange(Of T).ToString
+  nameWithType: DataRange<T>.ToString
+  nameWithType.vb: DataRange(Of T).ToString
 - uid: IVLab.ABREngine.Dataset
   name: Dataset
   href: api/IVLab.ABREngine.Dataset.html
@@ -2151,25 +2210,19 @@ references:
   commentId: T:IVLab.ABREngine.EncodedGameObject
   fullName: IVLab.ABREngine.EncodedGameObject
   nameWithType: EncodedGameObject
-- uid: IVLab.ABREngine.EncodedGameObject.encodedWithUuid
-  name: encodedWithUuid
-  href: api/IVLab.ABREngine.EncodedGameObject.html#IVLab_ABREngine_EncodedGameObject_encodedWithUuid
-  commentId: F:IVLab.ABREngine.EncodedGameObject.encodedWithUuid
-  fullName: IVLab.ABREngine.EncodedGameObject.encodedWithUuid
-  nameWithType: EncodedGameObject.encodedWithUuid
-- uid: IVLab.ABREngine.EncodedGameObject.SetUuid(System.Guid)
-  name: SetUuid(Guid)
-  href: api/IVLab.ABREngine.EncodedGameObject.html#IVLab_ABREngine_EncodedGameObject_SetUuid_System_Guid_
-  commentId: M:IVLab.ABREngine.EncodedGameObject.SetUuid(System.Guid)
-  fullName: IVLab.ABREngine.EncodedGameObject.SetUuid(System.Guid)
-  nameWithType: EncodedGameObject.SetUuid(Guid)
-- uid: IVLab.ABREngine.EncodedGameObject.SetUuid*
-  name: SetUuid
-  href: api/IVLab.ABREngine.EncodedGameObject.html#IVLab_ABREngine_EncodedGameObject_SetUuid_
-  commentId: Overload:IVLab.ABREngine.EncodedGameObject.SetUuid
+- uid: IVLab.ABREngine.EncodedGameObject.Uuid
+  name: Uuid
+  href: api/IVLab.ABREngine.EncodedGameObject.html#IVLab_ABREngine_EncodedGameObject_Uuid
+  commentId: P:IVLab.ABREngine.EncodedGameObject.Uuid
+  fullName: IVLab.ABREngine.EncodedGameObject.Uuid
+  nameWithType: EncodedGameObject.Uuid
+- uid: IVLab.ABREngine.EncodedGameObject.Uuid*
+  name: Uuid
+  href: api/IVLab.ABREngine.EncodedGameObject.html#IVLab_ABREngine_EncodedGameObject_Uuid_
+  commentId: Overload:IVLab.ABREngine.EncodedGameObject.Uuid
   isSpec: "True"
-  fullName: IVLab.ABREngine.EncodedGameObject.SetUuid
-  nameWithType: EncodedGameObject.SetUuid
+  fullName: IVLab.ABREngine.EncodedGameObject.Uuid
+  nameWithType: EncodedGameObject.Uuid
 - uid: IVLab.ABREngine.FilePathVisAssetFetcher
   name: FilePathVisAssetFetcher
   href: api/IVLab.ABREngine.FilePathVisAssetFetcher.html
@@ -2293,12 +2346,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.FilePathVisAssetFetcher.GetSurfaceTexture
   nameWithType: FilePathVisAssetFetcher.GetSurfaceTexture
-- uid: IVLab.ABREngine.FilePathVisAssetFetcher.VISASSET_JSON
-  name: VISASSET_JSON
-  href: api/IVLab.ABREngine.FilePathVisAssetFetcher.html#IVLab_ABREngine_FilePathVisAssetFetcher_VISASSET_JSON
-  commentId: F:IVLab.ABREngine.FilePathVisAssetFetcher.VISASSET_JSON
-  fullName: IVLab.ABREngine.FilePathVisAssetFetcher.VISASSET_JSON
-  nameWithType: FilePathVisAssetFetcher.VISASSET_JSON
+- uid: IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.FilePathVisAssetFetcher.html#IVLab_ABREngine_FilePathVisAssetFetcher_VisAssetJson
+  commentId: P:IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson
+  fullName: IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson
+  nameWithType: FilePathVisAssetFetcher.VisAssetJson
+- uid: IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson*
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.FilePathVisAssetFetcher.html#IVLab_ABREngine_FilePathVisAssetFetcher_VisAssetJson_
+  commentId: Overload:IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson
+  isSpec: "True"
+  fullName: IVLab.ABREngine.FilePathVisAssetFetcher.VisAssetJson
+  nameWithType: FilePathVisAssetFetcher.VisAssetJson
 - uid: IVLab.ABREngine.FloatPrimitive
   name: FloatPrimitive
   href: api/IVLab.ABREngine.FloatPrimitive.html
@@ -2479,6 +2539,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.GlyphVisAsset.VisAssetType
   nameWithType: GlyphVisAsset.VisAssetType
+- uid: IVLab.ABREngine.HttpDataLoader
+  name: HttpDataLoader
+  href: api/IVLab.ABREngine.HttpDataLoader.html
+  commentId: T:IVLab.ABREngine.HttpDataLoader
+  fullName: IVLab.ABREngine.HttpDataLoader
+  nameWithType: HttpDataLoader
+- uid: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
+  name: TryLoadDataAsync(String)
+  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_TryLoadDataAsync_System_String_
+  commentId: M:IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
+  fullName: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
+  nameWithType: HttpDataLoader.TryLoadDataAsync(String)
+- uid: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync*
+  name: TryLoadDataAsync
+  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_TryLoadDataAsync_
+  commentId: Overload:IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync
+  isSpec: "True"
+  fullName: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync
+  nameWithType: HttpDataLoader.TryLoadDataAsync
 - uid: IVLab.ABREngine.HttpStateFileLoader
   name: HttpStateFileLoader
   href: api/IVLab.ABREngine.HttpStateFileLoader.html
@@ -2511,12 +2590,12 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.HttpStateFileLoader.GetState
   nameWithType: HttpStateFileLoader.GetState
-- uid: IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String)
-  name: SaveState(String)
-  href: api/IVLab.ABREngine.HttpStateFileLoader.html#IVLab_ABREngine_HttpStateFileLoader_SaveState_System_String_
-  commentId: M:IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String)
-  fullName: IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String)
-  nameWithType: HttpStateFileLoader.SaveState(String)
+- uid: IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String,System.String)
+  name: SaveState(String, String)
+  href: api/IVLab.ABREngine.HttpStateFileLoader.html#IVLab_ABREngine_HttpStateFileLoader_SaveState_System_String_System_String_
+  commentId: M:IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String,System.String)
+  fullName: IVLab.ABREngine.HttpStateFileLoader.SaveState(System.String, System.String)
+  nameWithType: HttpStateFileLoader.SaveState(String, String)
 - uid: IVLab.ABREngine.HttpStateFileLoader.SaveState*
   name: SaveState
   href: api/IVLab.ABREngine.HttpStateFileLoader.html#IVLab_ABREngine_HttpStateFileLoader_SaveState_
@@ -2673,12 +2752,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.HttpVisAssetFetcher.GetSurfaceTexture
   nameWithType: HttpVisAssetFetcher.GetSurfaceTexture
-- uid: IVLab.ABREngine.HttpVisAssetFetcher.VISASSET_JSON
-  name: VISASSET_JSON
-  href: api/IVLab.ABREngine.HttpVisAssetFetcher.html#IVLab_ABREngine_HttpVisAssetFetcher_VISASSET_JSON
-  commentId: F:IVLab.ABREngine.HttpVisAssetFetcher.VISASSET_JSON
-  fullName: IVLab.ABREngine.HttpVisAssetFetcher.VISASSET_JSON
-  nameWithType: HttpVisAssetFetcher.VISASSET_JSON
+- uid: IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.HttpVisAssetFetcher.html#IVLab_ABREngine_HttpVisAssetFetcher_VisAssetJson
+  commentId: P:IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson
+  fullName: IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson
+  nameWithType: HttpVisAssetFetcher.VisAssetJson
+- uid: IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson*
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.HttpVisAssetFetcher.html#IVLab_ABREngine_HttpVisAssetFetcher_VisAssetJson_
+  commentId: Overload:IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson
+  isSpec: "True"
+  fullName: IVLab.ABREngine.HttpVisAssetFetcher.VisAssetJson
+  nameWithType: HttpVisAssetFetcher.VisAssetJson
 - uid: IVLab.ABREngine.IABRInput
   name: IABRInput
   href: api/IVLab.ABREngine.IABRInput.html
@@ -2730,12 +2816,12 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.IABRStateLoader.GetState
   nameWithType: IABRStateLoader.GetState
-- uid: IVLab.ABREngine.IABRStateLoader.SaveState(System.String)
-  name: SaveState(String)
-  href: api/IVLab.ABREngine.IABRStateLoader.html#IVLab_ABREngine_IABRStateLoader_SaveState_System_String_
-  commentId: M:IVLab.ABREngine.IABRStateLoader.SaveState(System.String)
-  fullName: IVLab.ABREngine.IABRStateLoader.SaveState(System.String)
-  nameWithType: IABRStateLoader.SaveState(String)
+- uid: IVLab.ABREngine.IABRStateLoader.SaveState(System.String,System.String)
+  name: SaveState(String, String)
+  href: api/IVLab.ABREngine.IABRStateLoader.html#IVLab_ABREngine_IABRStateLoader_SaveState_System_String_System_String_
+  commentId: M:IVLab.ABREngine.IABRStateLoader.SaveState(System.String,System.String)
+  fullName: IVLab.ABREngine.IABRStateLoader.SaveState(System.String, System.String)
+  nameWithType: IABRStateLoader.SaveState(String, String)
 - uid: IVLab.ABREngine.IABRStateLoader.SaveState*
   name: SaveState
   href: api/IVLab.ABREngine.IABRStateLoader.html#IVLab_ABREngine_IABRStateLoader_SaveState_
@@ -2749,45 +2835,19 @@ references:
   commentId: T:IVLab.ABREngine.IDataImpression
   fullName: IVLab.ABREngine.IDataImpression
   nameWithType: IDataImpression
-- uid: IVLab.ABREngine.IDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  name: ApplyToGameObject(EncodedGameObject)
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_
-  commentId: M:IVLab.ABREngine.IDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  fullName: IVLab.ABREngine.IDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  nameWithType: IDataImpression.ApplyToGameObject(EncodedGameObject)
-- uid: IVLab.ABREngine.IDataImpression.ApplyToGameObject*
-  name: ApplyToGameObject
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ApplyToGameObject_
-  commentId: Overload:IVLab.ABREngine.IDataImpression.ApplyToGameObject
+- uid: IVLab.ABREngine.IDataImpression.ComputeGeometry
+  name: ComputeGeometry()
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeGeometry
+  commentId: M:IVLab.ABREngine.IDataImpression.ComputeGeometry
+  fullName: IVLab.ABREngine.IDataImpression.ComputeGeometry()
+  nameWithType: IDataImpression.ComputeGeometry()
+- uid: IVLab.ABREngine.IDataImpression.ComputeGeometry*
+  name: ComputeGeometry
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeGeometry_
+  commentId: Overload:IVLab.ABREngine.IDataImpression.ComputeGeometry
   isSpec: "True"
-  fullName: IVLab.ABREngine.IDataImpression.ApplyToGameObject
-  nameWithType: IDataImpression.ApplyToGameObject
-- uid: IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo
-  name: ComputeKeyDataRenderInfo()
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeKeyDataRenderInfo
-  commentId: M:IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo
-  fullName: IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo()
-  nameWithType: IDataImpression.ComputeKeyDataRenderInfo()
-- uid: IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo*
-  name: ComputeKeyDataRenderInfo
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeKeyDataRenderInfo_
-  commentId: Overload:IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.IDataImpression.ComputeKeyDataRenderInfo
-  nameWithType: IDataImpression.ComputeKeyDataRenderInfo
-- uid: IVLab.ABREngine.IDataImpression.ComputeRenderInfo
-  name: ComputeRenderInfo()
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeRenderInfo
-  commentId: M:IVLab.ABREngine.IDataImpression.ComputeRenderInfo
-  fullName: IVLab.ABREngine.IDataImpression.ComputeRenderInfo()
-  nameWithType: IDataImpression.ComputeRenderInfo()
-- uid: IVLab.ABREngine.IDataImpression.ComputeRenderInfo*
-  name: ComputeRenderInfo
-  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_ComputeRenderInfo_
-  commentId: Overload:IVLab.ABREngine.IDataImpression.ComputeRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.IDataImpression.ComputeRenderInfo
-  nameWithType: IDataImpression.ComputeRenderInfo
+  fullName: IVLab.ABREngine.IDataImpression.ComputeGeometry
+  nameWithType: IDataImpression.ComputeGeometry
 - uid: IVLab.ABREngine.IDataImpression.Copy
   name: Copy()
   href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_Copy
@@ -2840,6 +2900,45 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.IDataImpression.RenderHints
   nameWithType: IDataImpression.RenderHints
+- uid: IVLab.ABREngine.IDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  name: SetupGameObject(EncodedGameObject)
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.IDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.IDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: IDataImpression.SetupGameObject(EncodedGameObject)
+- uid: IVLab.ABREngine.IDataImpression.SetupGameObject*
+  name: SetupGameObject
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_SetupGameObject_
+  commentId: Overload:IVLab.ABREngine.IDataImpression.SetupGameObject
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataImpression.SetupGameObject
+  nameWithType: IDataImpression.SetupGameObject
+- uid: IVLab.ABREngine.IDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateStyling(EncodedGameObject)
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.IDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.IDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: IDataImpression.UpdateStyling(EncodedGameObject)
+- uid: IVLab.ABREngine.IDataImpression.UpdateStyling*
+  name: UpdateStyling
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_UpdateStyling_
+  commentId: Overload:IVLab.ABREngine.IDataImpression.UpdateStyling
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataImpression.UpdateStyling
+  nameWithType: IDataImpression.UpdateStyling
+- uid: IVLab.ABREngine.IDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateVisibility(EncodedGameObject)
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.IDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.IDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: IDataImpression.UpdateVisibility(EncodedGameObject)
+- uid: IVLab.ABREngine.IDataImpression.UpdateVisibility*
+  name: UpdateVisibility
+  href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_UpdateVisibility_
+  commentId: Overload:IVLab.ABREngine.IDataImpression.UpdateVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataImpression.UpdateVisibility
+  nameWithType: IDataImpression.UpdateVisibility
 - uid: IVLab.ABREngine.IDataImpression.Uuid
   name: Uuid
   href: api/IVLab.ABREngine.IDataImpression.html#IVLab_ABREngine_IDataImpression_Uuid
@@ -2859,6 +2958,25 @@ references:
   commentId: T:IVLab.ABREngine.IDataImpressionRenderInfo
   fullName: IVLab.ABREngine.IDataImpressionRenderInfo
   nameWithType: IDataImpressionRenderInfo
+- uid: IVLab.ABREngine.IDataLoader
+  name: IDataLoader
+  href: api/IVLab.ABREngine.IDataLoader.html
+  commentId: T:IVLab.ABREngine.IDataLoader
+  fullName: IVLab.ABREngine.IDataLoader
+  nameWithType: IDataLoader
+- uid: IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
+  name: TryLoadDataAsync(String)
+  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_TryLoadDataAsync_System_String_
+  commentId: M:IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
+  fullName: IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
+  nameWithType: IDataLoader.TryLoadDataAsync(String)
+- uid: IVLab.ABREngine.IDataLoader.TryLoadDataAsync*
+  name: TryLoadDataAsync
+  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_TryLoadDataAsync_
+  commentId: Overload:IVLab.ABREngine.IDataLoader.TryLoadDataAsync
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataLoader.TryLoadDataAsync
+  nameWithType: IDataLoader.TryLoadDataAsync
 - uid: IVLab.ABREngine.IDataVariable`1
   name: IDataVariable<T>
   href: api/IVLab.ABREngine.IDataVariable-1.html
@@ -2919,74 +3037,23 @@ references:
   fullName.vb: IVLab.ABREngine.IDataVariable(Of T).IsPartOf
   nameWithType: IDataVariable<T>.IsPartOf
   nameWithType.vb: IDataVariable(Of T).IsPartOf
-- uid: IVLab.ABREngine.IDataVariable`1.MaxValue
-  name: MaxValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_MaxValue
-  commentId: P:IVLab.ABREngine.IDataVariable`1.MaxValue
-  fullName: IVLab.ABREngine.IDataVariable<T>.MaxValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).MaxValue
-  nameWithType: IDataVariable<T>.MaxValue
-  nameWithType.vb: IDataVariable(Of T).MaxValue
-- uid: IVLab.ABREngine.IDataVariable`1.MaxValue*
-  name: MaxValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_MaxValue_
-  commentId: Overload:IVLab.ABREngine.IDataVariable`1.MaxValue
+- uid: IVLab.ABREngine.IDataVariable`1.OriginalRange
+  name: OriginalRange
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalRange
+  commentId: P:IVLab.ABREngine.IDataVariable`1.OriginalRange
+  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalRange
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalRange
+  nameWithType: IDataVariable<T>.OriginalRange
+  nameWithType.vb: IDataVariable(Of T).OriginalRange
+- uid: IVLab.ABREngine.IDataVariable`1.OriginalRange*
+  name: OriginalRange
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalRange_
+  commentId: Overload:IVLab.ABREngine.IDataVariable`1.OriginalRange
   isSpec: "True"
-  fullName: IVLab.ABREngine.IDataVariable<T>.MaxValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).MaxValue
-  nameWithType: IDataVariable<T>.MaxValue
-  nameWithType.vb: IDataVariable(Of T).MaxValue
-- uid: IVLab.ABREngine.IDataVariable`1.MinValue
-  name: MinValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_MinValue
-  commentId: P:IVLab.ABREngine.IDataVariable`1.MinValue
-  fullName: IVLab.ABREngine.IDataVariable<T>.MinValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).MinValue
-  nameWithType: IDataVariable<T>.MinValue
-  nameWithType.vb: IDataVariable(Of T).MinValue
-- uid: IVLab.ABREngine.IDataVariable`1.MinValue*
-  name: MinValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_MinValue_
-  commentId: Overload:IVLab.ABREngine.IDataVariable`1.MinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.IDataVariable<T>.MinValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).MinValue
-  nameWithType: IDataVariable<T>.MinValue
-  nameWithType.vb: IDataVariable(Of T).MinValue
-- uid: IVLab.ABREngine.IDataVariable`1.OriginalMaxValue
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalMaxValue
-  commentId: P:IVLab.ABREngine.IDataVariable`1.OriginalMaxValue
-  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalMaxValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalMaxValue
-  nameWithType: IDataVariable<T>.OriginalMaxValue
-  nameWithType.vb: IDataVariable(Of T).OriginalMaxValue
-- uid: IVLab.ABREngine.IDataVariable`1.OriginalMaxValue*
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalMaxValue_
-  commentId: Overload:IVLab.ABREngine.IDataVariable`1.OriginalMaxValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalMaxValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalMaxValue
-  nameWithType: IDataVariable<T>.OriginalMaxValue
-  nameWithType.vb: IDataVariable(Of T).OriginalMaxValue
-- uid: IVLab.ABREngine.IDataVariable`1.OriginalMinValue
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalMinValue
-  commentId: P:IVLab.ABREngine.IDataVariable`1.OriginalMinValue
-  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalMinValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalMinValue
-  nameWithType: IDataVariable<T>.OriginalMinValue
-  nameWithType.vb: IDataVariable(Of T).OriginalMinValue
-- uid: IVLab.ABREngine.IDataVariable`1.OriginalMinValue*
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_OriginalMinValue_
-  commentId: Overload:IVLab.ABREngine.IDataVariable`1.OriginalMinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalMinValue
-  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalMinValue
-  nameWithType: IDataVariable<T>.OriginalMinValue
-  nameWithType.vb: IDataVariable(Of T).OriginalMinValue
+  fullName: IVLab.ABREngine.IDataVariable<T>.OriginalRange
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).OriginalRange
+  nameWithType: IDataVariable<T>.OriginalRange
+  nameWithType.vb: IDataVariable(Of T).OriginalRange
 - uid: IVLab.ABREngine.IDataVariable`1.Path
   name: Path
   href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_Path
@@ -3004,6 +3071,40 @@ references:
   fullName.vb: IVLab.ABREngine.IDataVariable(Of T).Path
   nameWithType: IDataVariable<T>.Path
   nameWithType.vb: IDataVariable(Of T).Path
+- uid: IVLab.ABREngine.IDataVariable`1.Range
+  name: Range
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_Range
+  commentId: P:IVLab.ABREngine.IDataVariable`1.Range
+  fullName: IVLab.ABREngine.IDataVariable<T>.Range
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).Range
+  nameWithType: IDataVariable<T>.Range
+  nameWithType.vb: IDataVariable(Of T).Range
+- uid: IVLab.ABREngine.IDataVariable`1.Range*
+  name: Range
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_Range_
+  commentId: Overload:IVLab.ABREngine.IDataVariable`1.Range
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataVariable<T>.Range
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).Range
+  nameWithType: IDataVariable<T>.Range
+  nameWithType.vb: IDataVariable(Of T).Range
+- uid: IVLab.ABREngine.IDataVariable`1.SpecificRanges
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_SpecificRanges
+  commentId: P:IVLab.ABREngine.IDataVariable`1.SpecificRanges
+  fullName: IVLab.ABREngine.IDataVariable<T>.SpecificRanges
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).SpecificRanges
+  nameWithType: IDataVariable<T>.SpecificRanges
+  nameWithType.vb: IDataVariable(Of T).SpecificRanges
+- uid: IVLab.ABREngine.IDataVariable`1.SpecificRanges*
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.IDataVariable-1.html#IVLab_ABREngine_IDataVariable_1_SpecificRanges_
+  commentId: Overload:IVLab.ABREngine.IDataVariable`1.SpecificRanges
+  isSpec: "True"
+  fullName: IVLab.ABREngine.IDataVariable<T>.SpecificRanges
+  fullName.vb: IVLab.ABREngine.IDataVariable(Of T).SpecificRanges
+  nameWithType: IDataVariable<T>.SpecificRanges
+  nameWithType.vb: IDataVariable(Of T).SpecificRanges
 - uid: IVLab.ABREngine.IFloatPrimitive
   name: IFloatPrimitive
   href: api/IVLab.ABREngine.IFloatPrimitive.html
@@ -3112,6 +3213,78 @@ references:
   commentId: T:IVLab.ABREngine.IKeyDataRenderInfo
   fullName: IVLab.ABREngine.IKeyDataRenderInfo
   nameWithType: IKeyDataRenderInfo
+- uid: IVLab.ABREngine.InstancedMeshRenderer
+  name: InstancedMeshRenderer
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html
+  commentId: T:IVLab.ABREngine.InstancedMeshRenderer
+  fullName: IVLab.ABREngine.InstancedMeshRenderer
+  nameWithType: InstancedMeshRenderer
+- uid: IVLab.ABREngine.InstancedMeshRenderer.block
+  name: block
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_block
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.block
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.block
+  nameWithType: InstancedMeshRenderer.block
+- uid: IVLab.ABREngine.InstancedMeshRenderer.bounds
+  name: bounds
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_bounds
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.bounds
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.bounds
+  nameWithType: InstancedMeshRenderer.bounds
+- uid: IVLab.ABREngine.InstancedMeshRenderer.cachedInstanceCount
+  name: cachedInstanceCount
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_cachedInstanceCount
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.cachedInstanceCount
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.cachedInstanceCount
+  nameWithType: InstancedMeshRenderer.cachedInstanceCount
+- uid: IVLab.ABREngine.InstancedMeshRenderer.instanceCount
+  name: instanceCount
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_instanceCount
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.instanceCount
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.instanceCount
+  nameWithType: InstancedMeshRenderer.instanceCount
+- uid: IVLab.ABREngine.InstancedMeshRenderer.instanceDensity
+  name: instanceDensity
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_instanceDensity
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.instanceDensity
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.instanceDensity
+  nameWithType: InstancedMeshRenderer.instanceDensity
+- uid: IVLab.ABREngine.InstancedMeshRenderer.instanceLocalTransforms
+  name: instanceLocalTransforms
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_instanceLocalTransforms
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.instanceLocalTransforms
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.instanceLocalTransforms
+  nameWithType: InstancedMeshRenderer.instanceLocalTransforms
+- uid: IVLab.ABREngine.InstancedMeshRenderer.instanceMaterial
+  name: instanceMaterial
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_instanceMaterial
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.instanceMaterial
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.instanceMaterial
+  nameWithType: InstancedMeshRenderer.instanceMaterial
+- uid: IVLab.ABREngine.InstancedMeshRenderer.instanceMesh
+  name: instanceMesh
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_instanceMesh
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.instanceMesh
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.instanceMesh
+  nameWithType: InstancedMeshRenderer.instanceMesh
+- uid: IVLab.ABREngine.InstancedMeshRenderer.renderInfo
+  name: renderInfo
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_renderInfo
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.renderInfo
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.renderInfo
+  nameWithType: InstancedMeshRenderer.renderInfo
+- uid: IVLab.ABREngine.InstancedMeshRenderer.subMeshIndex
+  name: subMeshIndex
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_subMeshIndex
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.subMeshIndex
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.subMeshIndex
+  nameWithType: InstancedMeshRenderer.subMeshIndex
+- uid: IVLab.ABREngine.InstancedMeshRenderer.useInstanced
+  name: useInstanced
+  href: api/IVLab.ABREngine.InstancedMeshRenderer.html#IVLab_ABREngine_InstancedMeshRenderer_useInstanced
+  commentId: F:IVLab.ABREngine.InstancedMeshRenderer.useInstanced
+  fullName: IVLab.ABREngine.InstancedMeshRenderer.useInstanced
+  nameWithType: InstancedMeshRenderer.useInstanced
 - uid: IVLab.ABREngine.IntegerPrimitive
   name: IntegerPrimitive
   href: api/IVLab.ABREngine.IntegerPrimitive.html
@@ -3593,6 +3766,128 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.LineTextureVisAsset.VisAssetType
   nameWithType: LineTextureVisAsset.VisAssetType
+- uid: IVLab.ABREngine.MediaDataLoader
+  name: MediaDataLoader
+  href: api/IVLab.ABREngine.MediaDataLoader.html
+  commentId: T:IVLab.ABREngine.MediaDataLoader
+  fullName: IVLab.ABREngine.MediaDataLoader
+  nameWithType: MediaDataLoader
+- uid: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
+  name: TryLoadDataAsync(String)
+  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_TryLoadDataAsync_System_String_
+  commentId: M:IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
+  fullName: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
+  nameWithType: MediaDataLoader.TryLoadDataAsync(String)
+- uid: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync*
+  name: TryLoadDataAsync
+  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_TryLoadDataAsync_
+  commentId: Overload:IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync
+  isSpec: "True"
+  fullName: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync
+  nameWithType: MediaDataLoader.TryLoadDataAsync
+- uid: IVLab.ABREngine.Notifier
+  name: Notifier
+  href: api/IVLab.ABREngine.Notifier.html
+  commentId: T:IVLab.ABREngine.Notifier
+  fullName: IVLab.ABREngine.Notifier
+  nameWithType: Notifier
+- uid: IVLab.ABREngine.Notifier.#ctor(System.Uri)
+  name: Notifier(Uri)
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier__ctor_System_Uri_
+  commentId: M:IVLab.ABREngine.Notifier.#ctor(System.Uri)
+  fullName: IVLab.ABREngine.Notifier.Notifier(System.Uri)
+  nameWithType: Notifier.Notifier(Uri)
+- uid: IVLab.ABREngine.Notifier.#ctor*
+  name: Notifier
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier__ctor_
+  commentId: Overload:IVLab.ABREngine.Notifier.#ctor
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Notifier.Notifier
+  nameWithType: Notifier.Notifier
+- uid: IVLab.ABREngine.Notifier.ForceDisconnect
+  name: ForceDisconnect()
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_ForceDisconnect
+  commentId: M:IVLab.ABREngine.Notifier.ForceDisconnect
+  fullName: IVLab.ABREngine.Notifier.ForceDisconnect()
+  nameWithType: Notifier.ForceDisconnect()
+- uid: IVLab.ABREngine.Notifier.ForceDisconnect*
+  name: ForceDisconnect
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_ForceDisconnect_
+  commentId: Overload:IVLab.ABREngine.Notifier.ForceDisconnect
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Notifier.ForceDisconnect
+  nameWithType: Notifier.ForceDisconnect
+- uid: IVLab.ABREngine.Notifier.Init
+  name: Init()
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_Init
+  commentId: M:IVLab.ABREngine.Notifier.Init
+  fullName: IVLab.ABREngine.Notifier.Init()
+  nameWithType: Notifier.Init()
+- uid: IVLab.ABREngine.Notifier.Init*
+  name: Init
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_Init_
+  commentId: Overload:IVLab.ABREngine.Notifier.Init
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Notifier.Init
+  nameWithType: Notifier.Init
+- uid: IVLab.ABREngine.Notifier.Stop
+  name: Stop()
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_Stop
+  commentId: M:IVLab.ABREngine.Notifier.Stop
+  fullName: IVLab.ABREngine.Notifier.Stop()
+  nameWithType: Notifier.Stop()
+- uid: IVLab.ABREngine.Notifier.Stop*
+  name: Stop
+  href: api/IVLab.ABREngine.Notifier.html#IVLab_ABREngine_Notifier_Stop_
+  commentId: Overload:IVLab.ABREngine.Notifier.Stop
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Notifier.Stop
+  nameWithType: Notifier.Stop
+- uid: IVLab.ABREngine.PathStateFileLoader
+  name: PathStateFileLoader
+  href: api/IVLab.ABREngine.PathStateFileLoader.html
+  commentId: T:IVLab.ABREngine.PathStateFileLoader
+  fullName: IVLab.ABREngine.PathStateFileLoader
+  nameWithType: PathStateFileLoader
+- uid: IVLab.ABREngine.PathStateFileLoader.#ctor(System.String)
+  name: PathStateFileLoader(String)
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader__ctor_System_String_
+  commentId: M:IVLab.ABREngine.PathStateFileLoader.#ctor(System.String)
+  fullName: IVLab.ABREngine.PathStateFileLoader.PathStateFileLoader(System.String)
+  nameWithType: PathStateFileLoader.PathStateFileLoader(String)
+- uid: IVLab.ABREngine.PathStateFileLoader.#ctor*
+  name: PathStateFileLoader
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader__ctor_
+  commentId: Overload:IVLab.ABREngine.PathStateFileLoader.#ctor
+  isSpec: "True"
+  fullName: IVLab.ABREngine.PathStateFileLoader.PathStateFileLoader
+  nameWithType: PathStateFileLoader.PathStateFileLoader
+- uid: IVLab.ABREngine.PathStateFileLoader.GetState(System.String)
+  name: GetState(String)
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader_GetState_System_String_
+  commentId: M:IVLab.ABREngine.PathStateFileLoader.GetState(System.String)
+  fullName: IVLab.ABREngine.PathStateFileLoader.GetState(System.String)
+  nameWithType: PathStateFileLoader.GetState(String)
+- uid: IVLab.ABREngine.PathStateFileLoader.GetState*
+  name: GetState
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader_GetState_
+  commentId: Overload:IVLab.ABREngine.PathStateFileLoader.GetState
+  isSpec: "True"
+  fullName: IVLab.ABREngine.PathStateFileLoader.GetState
+  nameWithType: PathStateFileLoader.GetState
+- uid: IVLab.ABREngine.PathStateFileLoader.SaveState(System.String,System.String)
+  name: SaveState(String, String)
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader_SaveState_System_String_System_String_
+  commentId: M:IVLab.ABREngine.PathStateFileLoader.SaveState(System.String,System.String)
+  fullName: IVLab.ABREngine.PathStateFileLoader.SaveState(System.String, System.String)
+  nameWithType: PathStateFileLoader.SaveState(String, String)
+- uid: IVLab.ABREngine.PathStateFileLoader.SaveState*
+  name: SaveState
+  href: api/IVLab.ABREngine.PathStateFileLoader.html#IVLab_ABREngine_PathStateFileLoader_SaveState_
+  commentId: Overload:IVLab.ABREngine.PathStateFileLoader.SaveState
+  isSpec: "True"
+  fullName: IVLab.ABREngine.PathStateFileLoader.SaveState
+  nameWithType: PathStateFileLoader.SaveState
 - uid: IVLab.ABREngine.PercentPrimitive
   name: PercentPrimitive
   href: api/IVLab.ABREngine.PercentPrimitive.html
@@ -3676,48 +3971,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.PointKeyData.PointKeyData
   nameWithType: PointKeyData.PointKeyData
-- uid: IVLab.ABREngine.PointRenderInfo
-  name: PointRenderInfo
-  href: api/IVLab.ABREngine.PointRenderInfo.html
-  commentId: T:IVLab.ABREngine.PointRenderInfo
-  fullName: IVLab.ABREngine.PointRenderInfo
-  nameWithType: PointRenderInfo
-- uid: IVLab.ABREngine.PointRenderInfo.bounds
-  name: bounds
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_bounds
-  commentId: F:IVLab.ABREngine.PointRenderInfo.bounds
-  fullName: IVLab.ABREngine.PointRenderInfo.bounds
-  nameWithType: PointRenderInfo.bounds
-- uid: IVLab.ABREngine.PointRenderInfo.colorVariableMax
-  name: colorVariableMax
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_colorVariableMax
-  commentId: F:IVLab.ABREngine.PointRenderInfo.colorVariableMax
-  fullName: IVLab.ABREngine.PointRenderInfo.colorVariableMax
-  nameWithType: PointRenderInfo.colorVariableMax
-- uid: IVLab.ABREngine.PointRenderInfo.colorVariableMin
-  name: colorVariableMin
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_colorVariableMin
-  commentId: F:IVLab.ABREngine.PointRenderInfo.colorVariableMin
-  fullName: IVLab.ABREngine.PointRenderInfo.colorVariableMin
-  nameWithType: PointRenderInfo.colorVariableMin
-- uid: IVLab.ABREngine.PointRenderInfo.orientations
-  name: orientations
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_orientations
-  commentId: F:IVLab.ABREngine.PointRenderInfo.orientations
-  fullName: IVLab.ABREngine.PointRenderInfo.orientations
-  nameWithType: PointRenderInfo.orientations
-- uid: IVLab.ABREngine.PointRenderInfo.positions
-  name: positions
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_positions
-  commentId: F:IVLab.ABREngine.PointRenderInfo.positions
-  fullName: IVLab.ABREngine.PointRenderInfo.positions
-  nameWithType: PointRenderInfo.positions
-- uid: IVLab.ABREngine.PointRenderInfo.scalars
-  name: scalars
-  href: api/IVLab.ABREngine.PointRenderInfo.html#IVLab_ABREngine_PointRenderInfo_scalars
-  commentId: F:IVLab.ABREngine.PointRenderInfo.scalars
-  fullName: IVLab.ABREngine.PointRenderInfo.scalars
-  nameWithType: PointRenderInfo.scalars
 - uid: IVLab.ABREngine.RawABRInput
   name: RawABRInput
   href: api/IVLab.ABREngine.RawABRInput.html
@@ -4111,18 +4364,58 @@ references:
   commentId: T:IVLab.ABREngine.RenderHints
   fullName: IVLab.ABREngine.RenderHints
   nameWithType: RenderHints
-- uid: IVLab.ABREngine.RenderHints.changed
-  name: changed
-  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_changed
-  commentId: F:IVLab.ABREngine.RenderHints.changed
-  fullName: IVLab.ABREngine.RenderHints.changed
-  nameWithType: RenderHints.changed
-- uid: IVLab.ABREngine.RenderHints.visible
-  name: visible
-  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_visible
-  commentId: F:IVLab.ABREngine.RenderHints.visible
-  fullName: IVLab.ABREngine.RenderHints.visible
-  nameWithType: RenderHints.visible
+- uid: IVLab.ABREngine.RenderHints.DataChanged
+  name: DataChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_DataChanged
+  commentId: P:IVLab.ABREngine.RenderHints.DataChanged
+  fullName: IVLab.ABREngine.RenderHints.DataChanged
+  nameWithType: RenderHints.DataChanged
+- uid: IVLab.ABREngine.RenderHints.DataChanged*
+  name: DataChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_DataChanged_
+  commentId: Overload:IVLab.ABREngine.RenderHints.DataChanged
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.DataChanged
+  nameWithType: RenderHints.DataChanged
+- uid: IVLab.ABREngine.RenderHints.StyleChanged
+  name: StyleChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_StyleChanged
+  commentId: P:IVLab.ABREngine.RenderHints.StyleChanged
+  fullName: IVLab.ABREngine.RenderHints.StyleChanged
+  nameWithType: RenderHints.StyleChanged
+- uid: IVLab.ABREngine.RenderHints.StyleChanged*
+  name: StyleChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_StyleChanged_
+  commentId: Overload:IVLab.ABREngine.RenderHints.StyleChanged
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.StyleChanged
+  nameWithType: RenderHints.StyleChanged
+- uid: IVLab.ABREngine.RenderHints.VisibilityChanged
+  name: VisibilityChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_VisibilityChanged
+  commentId: P:IVLab.ABREngine.RenderHints.VisibilityChanged
+  fullName: IVLab.ABREngine.RenderHints.VisibilityChanged
+  nameWithType: RenderHints.VisibilityChanged
+- uid: IVLab.ABREngine.RenderHints.VisibilityChanged*
+  name: VisibilityChanged
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_VisibilityChanged_
+  commentId: Overload:IVLab.ABREngine.RenderHints.VisibilityChanged
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.VisibilityChanged
+  nameWithType: RenderHints.VisibilityChanged
+- uid: IVLab.ABREngine.RenderHints.Visible
+  name: Visible
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_Visible
+  commentId: P:IVLab.ABREngine.RenderHints.Visible
+  fullName: IVLab.ABREngine.RenderHints.Visible
+  nameWithType: RenderHints.Visible
+- uid: IVLab.ABREngine.RenderHints.Visible*
+  name: Visible
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_Visible_
+  commentId: Overload:IVLab.ABREngine.RenderHints.Visible
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.Visible
+  nameWithType: RenderHints.Visible
 - uid: IVLab.ABREngine.ResourceStateFileLoader
   name: ResourceStateFileLoader
   href: api/IVLab.ABREngine.ResourceStateFileLoader.html
@@ -4155,12 +4448,12 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ResourceStateFileLoader.GetState
   nameWithType: ResourceStateFileLoader.GetState
-- uid: IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String)
-  name: SaveState(String)
-  href: api/IVLab.ABREngine.ResourceStateFileLoader.html#IVLab_ABREngine_ResourceStateFileLoader_SaveState_System_String_
-  commentId: M:IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String)
-  fullName: IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String)
-  nameWithType: ResourceStateFileLoader.SaveState(String)
+- uid: IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String,System.String)
+  name: SaveState(String, String)
+  href: api/IVLab.ABREngine.ResourceStateFileLoader.html#IVLab_ABREngine_ResourceStateFileLoader_SaveState_System_String_System_String_
+  commentId: M:IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String,System.String)
+  fullName: IVLab.ABREngine.ResourceStateFileLoader.SaveState(System.String, System.String)
+  nameWithType: ResourceStateFileLoader.SaveState(String, String)
 - uid: IVLab.ABREngine.ResourceStateFileLoader.SaveState*
   name: SaveState
   href: api/IVLab.ABREngine.ResourceStateFileLoader.html#IVLab_ABREngine_ResourceStateFileLoader_SaveState_
@@ -4174,6 +4467,19 @@ references:
   commentId: T:IVLab.ABREngine.ResourceVisAssetFetcher
   fullName: IVLab.ABREngine.ResourceVisAssetFetcher
   nameWithType: ResourceVisAssetFetcher
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.#ctor
+  name: ResourceVisAssetFetcher()
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher__ctor
+  commentId: M:IVLab.ABREngine.ResourceVisAssetFetcher.#ctor
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.ResourceVisAssetFetcher()
+  nameWithType: ResourceVisAssetFetcher.ResourceVisAssetFetcher()
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.#ctor*
+  name: ResourceVisAssetFetcher
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher__ctor_
+  commentId: Overload:IVLab.ABREngine.ResourceVisAssetFetcher.#ctor
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.ResourceVisAssetFetcher
+  nameWithType: ResourceVisAssetFetcher.ResourceVisAssetFetcher
 - uid: IVLab.ABREngine.ResourceVisAssetFetcher.GetArtifactJson(System.Guid)
   name: GetArtifactJson(Guid)
   href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_GetArtifactJson_System_Guid_
@@ -4278,18 +4584,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ResourceVisAssetFetcher.GetSurfaceTexture
   nameWithType: ResourceVisAssetFetcher.GetSurfaceTexture
-- uid: IVLab.ABREngine.ResourceVisAssetFetcher.RESOURCES_PATH
-  name: RESOURCES_PATH
-  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_RESOURCES_PATH
-  commentId: F:IVLab.ABREngine.ResourceVisAssetFetcher.RESOURCES_PATH
-  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.RESOURCES_PATH
-  nameWithType: ResourceVisAssetFetcher.RESOURCES_PATH
-- uid: IVLab.ABREngine.ResourceVisAssetFetcher.VISASSET_JSON
-  name: VISASSET_JSON
-  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_VISASSET_JSON
-  commentId: F:IVLab.ABREngine.ResourceVisAssetFetcher.VISASSET_JSON
-  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.VISASSET_JSON
-  nameWithType: ResourceVisAssetFetcher.VISASSET_JSON
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath
+  name: ResourcePath
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_ResourcePath
+  commentId: P:IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath
+  nameWithType: ResourceVisAssetFetcher.ResourcePath
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath*
+  name: ResourcePath
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_ResourcePath_
+  commentId: Overload:IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.ResourcePath
+  nameWithType: ResourceVisAssetFetcher.ResourcePath
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_VisAssetJson
+  commentId: P:IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson
+  nameWithType: ResourceVisAssetFetcher.VisAssetJson
+- uid: IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson*
+  name: VisAssetJson
+  href: api/IVLab.ABREngine.ResourceVisAssetFetcher.html#IVLab_ABREngine_ResourceVisAssetFetcher_VisAssetJson_
+  commentId: Overload:IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ResourceVisAssetFetcher.VisAssetJson
+  nameWithType: ResourceVisAssetFetcher.VisAssetJson
 - uid: IVLab.ABREngine.ScalarDataVariable
   name: ScalarDataVariable
   href: api/IVLab.ABREngine.ScalarDataVariable.html
@@ -4387,58 +4707,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ScalarDataVariable.IsPartOf
   nameWithType: ScalarDataVariable.IsPartOf
-- uid: IVLab.ABREngine.ScalarDataVariable.MaxValue
-  name: MaxValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_MaxValue
-  commentId: P:IVLab.ABREngine.ScalarDataVariable.MaxValue
-  fullName: IVLab.ABREngine.ScalarDataVariable.MaxValue
-  nameWithType: ScalarDataVariable.MaxValue
-- uid: IVLab.ABREngine.ScalarDataVariable.MaxValue*
-  name: MaxValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_MaxValue_
-  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.MaxValue
+- uid: IVLab.ABREngine.ScalarDataVariable.OriginalRange
+  name: OriginalRange
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalRange
+  commentId: P:IVLab.ABREngine.ScalarDataVariable.OriginalRange
+  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalRange
+  nameWithType: ScalarDataVariable.OriginalRange
+- uid: IVLab.ABREngine.ScalarDataVariable.OriginalRange*
+  name: OriginalRange
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalRange_
+  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.OriginalRange
   isSpec: "True"
-  fullName: IVLab.ABREngine.ScalarDataVariable.MaxValue
-  nameWithType: ScalarDataVariable.MaxValue
-- uid: IVLab.ABREngine.ScalarDataVariable.MinValue
-  name: MinValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_MinValue
-  commentId: P:IVLab.ABREngine.ScalarDataVariable.MinValue
-  fullName: IVLab.ABREngine.ScalarDataVariable.MinValue
-  nameWithType: ScalarDataVariable.MinValue
-- uid: IVLab.ABREngine.ScalarDataVariable.MinValue*
-  name: MinValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_MinValue_
-  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.MinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ScalarDataVariable.MinValue
-  nameWithType: ScalarDataVariable.MinValue
-- uid: IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalMaxValue
-  commentId: P:IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue
-  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue
-  nameWithType: ScalarDataVariable.OriginalMaxValue
-- uid: IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue*
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalMaxValue_
-  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalMaxValue
-  nameWithType: ScalarDataVariable.OriginalMaxValue
-- uid: IVLab.ABREngine.ScalarDataVariable.OriginalMinValue
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalMinValue
-  commentId: P:IVLab.ABREngine.ScalarDataVariable.OriginalMinValue
-  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalMinValue
-  nameWithType: ScalarDataVariable.OriginalMinValue
-- uid: IVLab.ABREngine.ScalarDataVariable.OriginalMinValue*
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_OriginalMinValue_
-  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.OriginalMinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalMinValue
-  nameWithType: ScalarDataVariable.OriginalMinValue
+  fullName: IVLab.ABREngine.ScalarDataVariable.OriginalRange
+  nameWithType: ScalarDataVariable.OriginalRange
 - uid: IVLab.ABREngine.ScalarDataVariable.Path
   name: Path
   href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_Path
@@ -4452,6 +4733,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ScalarDataVariable.Path
   nameWithType: ScalarDataVariable.Path
+- uid: IVLab.ABREngine.ScalarDataVariable.Range
+  name: Range
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_Range
+  commentId: P:IVLab.ABREngine.ScalarDataVariable.Range
+  fullName: IVLab.ABREngine.ScalarDataVariable.Range
+  nameWithType: ScalarDataVariable.Range
+- uid: IVLab.ABREngine.ScalarDataVariable.Range*
+  name: Range
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_Range_
+  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.Range
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ScalarDataVariable.Range
+  nameWithType: ScalarDataVariable.Range
+- uid: IVLab.ABREngine.ScalarDataVariable.SpecificRanges
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_SpecificRanges
+  commentId: P:IVLab.ABREngine.ScalarDataVariable.SpecificRanges
+  fullName: IVLab.ABREngine.ScalarDataVariable.SpecificRanges
+  nameWithType: ScalarDataVariable.SpecificRanges
+- uid: IVLab.ABREngine.ScalarDataVariable.SpecificRanges*
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_SpecificRanges_
+  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.SpecificRanges
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ScalarDataVariable.SpecificRanges
+  nameWithType: ScalarDataVariable.SpecificRanges
 - uid: IVLab.ABREngine.SerializableFloatArray
   name: SerializableFloatArray
   href: api/IVLab.ABREngine.SerializableFloatArray.html
@@ -4501,19 +4808,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.SimpleGlyphDataImpression
   nameWithType: SimpleGlyphDataImpression.SimpleGlyphDataImpression
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  name: ApplyToGameObject(EncodedGameObject)
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_
-  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  nameWithType: SimpleGlyphDataImpression.ApplyToGameObject(EncodedGameObject)
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject*
-  name: ApplyToGameObject
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ApplyToGameObject_
-  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ApplyToGameObject
-  nameWithType: SimpleGlyphDataImpression.ApplyToGameObject
 - uid: IVLab.ABREngine.SimpleGlyphDataImpression.colormap
   name: colormap
   href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_colormap
@@ -4526,32 +4820,19 @@ references:
   commentId: F:IVLab.ABREngine.SimpleGlyphDataImpression.colorVariable
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.colorVariable
   nameWithType: SimpleGlyphDataImpression.colorVariable
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo
-  name: ComputeKeyDataRenderInfo()
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeKeyDataRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo()
-  nameWithType: SimpleGlyphDataImpression.ComputeKeyDataRenderInfo()
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo*
-  name: ComputeKeyDataRenderInfo
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeKeyDataRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry
+  name: ComputeGeometry()
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeGeometry
+  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry()
+  nameWithType: SimpleGlyphDataImpression.ComputeGeometry()
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry*
+  name: ComputeGeometry
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeGeometry_
+  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeKeyDataRenderInfo
-  nameWithType: SimpleGlyphDataImpression.ComputeKeyDataRenderInfo
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo
-  name: ComputeRenderInfo()
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo()
-  nameWithType: SimpleGlyphDataImpression.ComputeRenderInfo()
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo*
-  name: ComputeRenderInfo
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_ComputeRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeRenderInfo
-  nameWithType: SimpleGlyphDataImpression.ComputeRenderInfo
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.ComputeGeometry
+  nameWithType: SimpleGlyphDataImpression.ComputeGeometry
 - uid: IVLab.ABREngine.SimpleGlyphDataImpression.forwardVariable
   name: forwardVariable
   href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_forwardVariable
@@ -4577,6 +4858,12 @@ references:
   commentId: F:IVLab.ABREngine.SimpleGlyphDataImpression.glyph
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.glyph
   nameWithType: SimpleGlyphDataImpression.glyph
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.glyphDensity
+  name: glyphDensity
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_glyphDensity
+  commentId: F:IVLab.ABREngine.SimpleGlyphDataImpression.glyphDensity
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.glyphDensity
+  nameWithType: SimpleGlyphDataImpression.glyphDensity
 - uid: IVLab.ABREngine.SimpleGlyphDataImpression.glyphLod
   name: glyphLod
   href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_glyphLod
@@ -4627,6 +4914,45 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
   nameWithType: SimpleGlyphDataImpression.MaterialName
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  name: SetupGameObject(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleGlyphDataImpression.SetupGameObject(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject*
+  name: SetupGameObject
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_SetupGameObject_
+  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject
+  nameWithType: SimpleGlyphDataImpression.SetupGameObject
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateStyling(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleGlyphDataImpression.UpdateStyling(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling*
+  name: UpdateStyling
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_UpdateStyling_
+  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateStyling
+  nameWithType: SimpleGlyphDataImpression.UpdateStyling
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateVisibility(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleGlyphDataImpression.UpdateVisibility(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility*
+  name: UpdateVisibility
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_UpdateVisibility_
+  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.UpdateVisibility
+  nameWithType: SimpleGlyphDataImpression.UpdateVisibility
 - uid: IVLab.ABREngine.SimpleGlyphDataImpression.upVariable
   name: upVariable
   href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_upVariable
@@ -4658,19 +4984,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleLineDataImpression.SimpleLineDataImpression
   nameWithType: SimpleLineDataImpression.SimpleLineDataImpression
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  name: ApplyToGameObject(EncodedGameObject)
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_
-  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  nameWithType: SimpleLineDataImpression.ApplyToGameObject(EncodedGameObject)
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject*
-  name: ApplyToGameObject
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ApplyToGameObject_
-  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ApplyToGameObject
-  nameWithType: SimpleLineDataImpression.ApplyToGameObject
 - uid: IVLab.ABREngine.SimpleLineDataImpression.averageCount
   name: averageCount
   href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_averageCount
@@ -4689,32 +5002,19 @@ references:
   commentId: F:IVLab.ABREngine.SimpleLineDataImpression.colorVariable
   fullName: IVLab.ABREngine.SimpleLineDataImpression.colorVariable
   nameWithType: SimpleLineDataImpression.colorVariable
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo
-  name: ComputeKeyDataRenderInfo()
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeKeyDataRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo()
-  nameWithType: SimpleLineDataImpression.ComputeKeyDataRenderInfo()
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo*
-  name: ComputeKeyDataRenderInfo
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeKeyDataRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo
+- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry
+  name: ComputeGeometry()
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeGeometry
+  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry()
+  nameWithType: SimpleLineDataImpression.ComputeGeometry()
+- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry*
+  name: ComputeGeometry
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeGeometry_
+  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeKeyDataRenderInfo
-  nameWithType: SimpleLineDataImpression.ComputeKeyDataRenderInfo
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo
-  name: ComputeRenderInfo()
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo()
-  nameWithType: SimpleLineDataImpression.ComputeRenderInfo()
-- uid: IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo*
-  name: ComputeRenderInfo
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ComputeRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeRenderInfo
-  nameWithType: SimpleLineDataImpression.ComputeRenderInfo
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.ComputeGeometry
+  nameWithType: SimpleLineDataImpression.ComputeGeometry
 - uid: IVLab.ABREngine.SimpleLineDataImpression.GetDataset
   name: GetDataset()
   href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_GetDataset
@@ -4796,12 +5096,51 @@ references:
   commentId: F:IVLab.ABREngine.SimpleLineDataImpression.ribbonRotationAngle
   fullName: IVLab.ABREngine.SimpleLineDataImpression.ribbonRotationAngle
   nameWithType: SimpleLineDataImpression.ribbonRotationAngle
+- uid: IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  name: SetupGameObject(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleLineDataImpression.SetupGameObject(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject*
+  name: SetupGameObject
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_SetupGameObject_
+  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.SetupGameObject
+  nameWithType: SimpleLineDataImpression.SetupGameObject
 - uid: IVLab.ABREngine.SimpleLineDataImpression.textureCutoff
   name: textureCutoff
   href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_textureCutoff
   commentId: F:IVLab.ABREngine.SimpleLineDataImpression.textureCutoff
   fullName: IVLab.ABREngine.SimpleLineDataImpression.textureCutoff
   nameWithType: SimpleLineDataImpression.textureCutoff
+- uid: IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateStyling(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleLineDataImpression.UpdateStyling(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling*
+  name: UpdateStyling
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_UpdateStyling_
+  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.UpdateStyling
+  nameWithType: SimpleLineDataImpression.UpdateStyling
+- uid: IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateVisibility(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleLineDataImpression.UpdateVisibility(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility*
+  name: UpdateVisibility
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_UpdateVisibility_
+  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.UpdateVisibility
+  nameWithType: SimpleLineDataImpression.UpdateVisibility
 - uid: IVLab.ABREngine.SimpleSurfaceDataImpression
   name: SimpleSurfaceDataImpression
   href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html
@@ -4827,19 +5166,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.SimpleSurfaceDataImpression
   nameWithType: SimpleSurfaceDataImpression.SimpleSurfaceDataImpression
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  name: ApplyToGameObject(EncodedGameObject)
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ApplyToGameObject_IVLab_ABREngine_EncodedGameObject_
-  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject(IVLab.ABREngine.EncodedGameObject)
-  nameWithType: SimpleSurfaceDataImpression.ApplyToGameObject(EncodedGameObject)
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject*
-  name: ApplyToGameObject
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ApplyToGameObject_
-  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ApplyToGameObject
-  nameWithType: SimpleSurfaceDataImpression.ApplyToGameObject
 - uid: IVLab.ABREngine.SimpleSurfaceDataImpression.colormap
   name: colormap
   href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_colormap
@@ -4852,32 +5178,19 @@ references:
   commentId: F:IVLab.ABREngine.SimpleSurfaceDataImpression.colorVariable
   fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.colorVariable
   nameWithType: SimpleSurfaceDataImpression.colorVariable
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo
-  name: ComputeKeyDataRenderInfo()
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeKeyDataRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo()
-  nameWithType: SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo()
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo*
-  name: ComputeKeyDataRenderInfo
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeKeyDataRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry
+  name: ComputeGeometry()
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeGeometry
+  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry()
+  nameWithType: SimpleSurfaceDataImpression.ComputeGeometry()
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry*
+  name: ComputeGeometry
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeGeometry_
+  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo
-  nameWithType: SimpleSurfaceDataImpression.ComputeKeyDataRenderInfo
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo
-  name: ComputeRenderInfo()
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeRenderInfo
-  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo()
-  nameWithType: SimpleSurfaceDataImpression.ComputeRenderInfo()
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo*
-  name: ComputeRenderInfo
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_ComputeRenderInfo_
-  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo
-  isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeRenderInfo
-  nameWithType: SimpleSurfaceDataImpression.ComputeRenderInfo
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.ComputeGeometry
+  nameWithType: SimpleSurfaceDataImpression.ComputeGeometry
 - uid: IVLab.ABREngine.SimpleSurfaceDataImpression.GetDataset
   name: GetDataset()
   href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_GetDataset
@@ -4959,6 +5272,45 @@ references:
   commentId: F:IVLab.ABREngine.SimpleSurfaceDataImpression.patternVariable
   fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.patternVariable
   nameWithType: SimpleSurfaceDataImpression.patternVariable
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  name: SetupGameObject(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleSurfaceDataImpression.SetupGameObject(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject*
+  name: SetupGameObject
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_SetupGameObject_
+  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.SetupGameObject
+  nameWithType: SimpleSurfaceDataImpression.SetupGameObject
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateStyling(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_UpdateStyling_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleSurfaceDataImpression.UpdateStyling(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling*
+  name: UpdateStyling
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_UpdateStyling_
+  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateStyling
+  nameWithType: SimpleSurfaceDataImpression.UpdateStyling
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  name: UpdateVisibility(EncodedGameObject)
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_UpdateVisibility_IVLab_ABREngine_EncodedGameObject_
+  commentId: M:IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility(IVLab.ABREngine.EncodedGameObject)
+  nameWithType: SimpleSurfaceDataImpression.UpdateVisibility(EncodedGameObject)
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility*
+  name: UpdateVisibility
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_UpdateVisibility_
+  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.UpdateVisibility
+  nameWithType: SimpleSurfaceDataImpression.UpdateVisibility
 - uid: IVLab.ABREngine.SocketDataListener
   name: SocketDataListener
   href: api/IVLab.ABREngine.SocketDataListener.html
@@ -5187,88 +5539,6 @@ references:
   commentId: F:IVLab.ABREngine.StateLocalVisAssetFetcher.VISASSET_STATE
   fullName: IVLab.ABREngine.StateLocalVisAssetFetcher.VISASSET_STATE
   nameWithType: StateLocalVisAssetFetcher.VISASSET_STATE
-- uid: IVLab.ABREngine.StateSubscriber
-  name: StateSubscriber
-  href: api/IVLab.ABREngine.StateSubscriber.html
-  commentId: T:IVLab.ABREngine.StateSubscriber
-  fullName: IVLab.ABREngine.StateSubscriber
-  nameWithType: StateSubscriber
-- uid: IVLab.ABREngine.StateSubscriber.#ctor(System.String)
-  name: StateSubscriber(String)
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber__ctor_System_String_
-  commentId: M:IVLab.ABREngine.StateSubscriber.#ctor(System.String)
-  fullName: IVLab.ABREngine.StateSubscriber.StateSubscriber(System.String)
-  nameWithType: StateSubscriber.StateSubscriber(String)
-- uid: IVLab.ABREngine.StateSubscriber.#ctor*
-  name: StateSubscriber
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber__ctor_
-  commentId: Overload:IVLab.ABREngine.StateSubscriber.#ctor
-  isSpec: "True"
-  fullName: IVLab.ABREngine.StateSubscriber.StateSubscriber
-  nameWithType: StateSubscriber.StateSubscriber
-- uid: IVLab.ABREngine.StateSubscriber.ForceDisconnect
-  name: ForceDisconnect()
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_ForceDisconnect
-  commentId: M:IVLab.ABREngine.StateSubscriber.ForceDisconnect
-  fullName: IVLab.ABREngine.StateSubscriber.ForceDisconnect()
-  nameWithType: StateSubscriber.ForceDisconnect()
-- uid: IVLab.ABREngine.StateSubscriber.ForceDisconnect*
-  name: ForceDisconnect
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_ForceDisconnect_
-  commentId: Overload:IVLab.ABREngine.StateSubscriber.ForceDisconnect
-  isSpec: "True"
-  fullName: IVLab.ABREngine.StateSubscriber.ForceDisconnect
-  nameWithType: StateSubscriber.ForceDisconnect
-- uid: IVLab.ABREngine.StateSubscriber.Init
-  name: Init()
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_Init
-  commentId: M:IVLab.ABREngine.StateSubscriber.Init
-  fullName: IVLab.ABREngine.StateSubscriber.Init()
-  nameWithType: StateSubscriber.Init()
-- uid: IVLab.ABREngine.StateSubscriber.Init*
-  name: Init
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_Init_
-  commentId: Overload:IVLab.ABREngine.StateSubscriber.Init
-  isSpec: "True"
-  fullName: IVLab.ABREngine.StateSubscriber.Init
-  nameWithType: StateSubscriber.Init
-- uid: IVLab.ABREngine.StateSubscriber.Stop
-  name: Stop()
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_Stop
-  commentId: M:IVLab.ABREngine.StateSubscriber.Stop
-  fullName: IVLab.ABREngine.StateSubscriber.Stop()
-  nameWithType: StateSubscriber.Stop()
-- uid: IVLab.ABREngine.StateSubscriber.Stop*
-  name: Stop
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_Stop_
-  commentId: Overload:IVLab.ABREngine.StateSubscriber.Stop
-  isSpec: "True"
-  fullName: IVLab.ABREngine.StateSubscriber.Stop
-  nameWithType: StateSubscriber.Stop
-- uid: IVLab.ABREngine.StateSubscriber.subscriberInfo
-  name: subscriberInfo
-  href: api/IVLab.ABREngine.StateSubscriber.html#IVLab_ABREngine_StateSubscriber_subscriberInfo
-  commentId: F:IVLab.ABREngine.StateSubscriber.subscriberInfo
-  fullName: IVLab.ABREngine.StateSubscriber.subscriberInfo
-  nameWithType: StateSubscriber.subscriberInfo
-- uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo
-  name: StateSubscriber.SubscriberInfo
-  href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html
-  commentId: T:IVLab.ABREngine.StateSubscriber.SubscriberInfo
-  fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo
-  nameWithType: StateSubscriber.SubscriberInfo
-- uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo.address
-  name: address
-  href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html#IVLab_ABREngine_StateSubscriber_SubscriberInfo_address
-  commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.address
-  fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.address
-  nameWithType: StateSubscriber.SubscriberInfo.address
-- uid: IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
-  name: port
-  href: api/IVLab.ABREngine.StateSubscriber.SubscriberInfo.html#IVLab_ABREngine_StateSubscriber_SubscriberInfo_port
-  commentId: F:IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
-  fullName: IVLab.ABREngine.StateSubscriber.SubscriberInfo.port
-  nameWithType: StateSubscriber.SubscriberInfo.port
 - uid: IVLab.ABREngine.SurfaceKeyData
   name: SurfaceKeyData
   href: api/IVLab.ABREngine.SurfaceKeyData.html
@@ -5333,6 +5603,69 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SurfaceTextureVisAsset.VisAssetType
   nameWithType: SurfaceTextureVisAsset.VisAssetType
+- uid: IVLab.ABREngine.TextStateFileLoader
+  name: TextStateFileLoader
+  href: api/IVLab.ABREngine.TextStateFileLoader.html
+  commentId: T:IVLab.ABREngine.TextStateFileLoader
+  fullName: IVLab.ABREngine.TextStateFileLoader
+  nameWithType: TextStateFileLoader
+- uid: IVLab.ABREngine.TextStateFileLoader.#ctor
+  name: TextStateFileLoader()
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader__ctor
+  commentId: M:IVLab.ABREngine.TextStateFileLoader.#ctor
+  fullName: IVLab.ABREngine.TextStateFileLoader.TextStateFileLoader()
+  nameWithType: TextStateFileLoader.TextStateFileLoader()
+- uid: IVLab.ABREngine.TextStateFileLoader.#ctor*
+  name: TextStateFileLoader
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader__ctor_
+  commentId: Overload:IVLab.ABREngine.TextStateFileLoader.#ctor
+  isSpec: "True"
+  fullName: IVLab.ABREngine.TextStateFileLoader.TextStateFileLoader
+  nameWithType: TextStateFileLoader.TextStateFileLoader
+- uid: IVLab.ABREngine.TextStateFileLoader.GetState(System.String)
+  name: GetState(String)
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader_GetState_System_String_
+  commentId: M:IVLab.ABREngine.TextStateFileLoader.GetState(System.String)
+  fullName: IVLab.ABREngine.TextStateFileLoader.GetState(System.String)
+  nameWithType: TextStateFileLoader.GetState(String)
+- uid: IVLab.ABREngine.TextStateFileLoader.GetState*
+  name: GetState
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader_GetState_
+  commentId: Overload:IVLab.ABREngine.TextStateFileLoader.GetState
+  isSpec: "True"
+  fullName: IVLab.ABREngine.TextStateFileLoader.GetState
+  nameWithType: TextStateFileLoader.GetState
+- uid: IVLab.ABREngine.TextStateFileLoader.SaveState(System.String,System.String)
+  name: SaveState(String, String)
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader_SaveState_System_String_System_String_
+  commentId: M:IVLab.ABREngine.TextStateFileLoader.SaveState(System.String,System.String)
+  fullName: IVLab.ABREngine.TextStateFileLoader.SaveState(System.String, System.String)
+  nameWithType: TextStateFileLoader.SaveState(String, String)
+- uid: IVLab.ABREngine.TextStateFileLoader.SaveState*
+  name: SaveState
+  href: api/IVLab.ABREngine.TextStateFileLoader.html#IVLab_ABREngine_TextStateFileLoader_SaveState_
+  commentId: Overload:IVLab.ABREngine.TextStateFileLoader.SaveState
+  isSpec: "True"
+  fullName: IVLab.ABREngine.TextStateFileLoader.SaveState
+  nameWithType: TextStateFileLoader.SaveState
+- uid: IVLab.ABREngine.UpdateLevel
+  name: UpdateLevel
+  href: api/IVLab.ABREngine.UpdateLevel.html
+  commentId: T:IVLab.ABREngine.UpdateLevel
+  fullName: IVLab.ABREngine.UpdateLevel
+  nameWithType: UpdateLevel
+- uid: IVLab.ABREngine.UpdateLevel.Data
+  name: Data
+  href: api/IVLab.ABREngine.UpdateLevel.html#IVLab_ABREngine_UpdateLevel_Data
+  commentId: F:IVLab.ABREngine.UpdateLevel.Data
+  fullName: IVLab.ABREngine.UpdateLevel.Data
+  nameWithType: UpdateLevel.Data
+- uid: IVLab.ABREngine.UpdateLevel.Style
+  name: Style
+  href: api/IVLab.ABREngine.UpdateLevel.html#IVLab_ABREngine_UpdateLevel_Style
+  commentId: F:IVLab.ABREngine.UpdateLevel.Style
+  fullName: IVLab.ABREngine.UpdateLevel.Style
+  nameWithType: UpdateLevel.Style
 - uid: IVLab.ABREngine.VectorDataVariable
   name: VectorDataVariable
   href: api/IVLab.ABREngine.VectorDataVariable.html
@@ -5430,58 +5763,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.VectorDataVariable.IsPartOf
   nameWithType: VectorDataVariable.IsPartOf
-- uid: IVLab.ABREngine.VectorDataVariable.MaxValue
-  name: MaxValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_MaxValue
-  commentId: P:IVLab.ABREngine.VectorDataVariable.MaxValue
-  fullName: IVLab.ABREngine.VectorDataVariable.MaxValue
-  nameWithType: VectorDataVariable.MaxValue
-- uid: IVLab.ABREngine.VectorDataVariable.MaxValue*
-  name: MaxValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_MaxValue_
-  commentId: Overload:IVLab.ABREngine.VectorDataVariable.MaxValue
+- uid: IVLab.ABREngine.VectorDataVariable.OriginalRange
+  name: OriginalRange
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalRange
+  commentId: P:IVLab.ABREngine.VectorDataVariable.OriginalRange
+  fullName: IVLab.ABREngine.VectorDataVariable.OriginalRange
+  nameWithType: VectorDataVariable.OriginalRange
+- uid: IVLab.ABREngine.VectorDataVariable.OriginalRange*
+  name: OriginalRange
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalRange_
+  commentId: Overload:IVLab.ABREngine.VectorDataVariable.OriginalRange
   isSpec: "True"
-  fullName: IVLab.ABREngine.VectorDataVariable.MaxValue
-  nameWithType: VectorDataVariable.MaxValue
-- uid: IVLab.ABREngine.VectorDataVariable.MinValue
-  name: MinValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_MinValue
-  commentId: P:IVLab.ABREngine.VectorDataVariable.MinValue
-  fullName: IVLab.ABREngine.VectorDataVariable.MinValue
-  nameWithType: VectorDataVariable.MinValue
-- uid: IVLab.ABREngine.VectorDataVariable.MinValue*
-  name: MinValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_MinValue_
-  commentId: Overload:IVLab.ABREngine.VectorDataVariable.MinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.VectorDataVariable.MinValue
-  nameWithType: VectorDataVariable.MinValue
-- uid: IVLab.ABREngine.VectorDataVariable.OriginalMaxValue
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalMaxValue
-  commentId: P:IVLab.ABREngine.VectorDataVariable.OriginalMaxValue
-  fullName: IVLab.ABREngine.VectorDataVariable.OriginalMaxValue
-  nameWithType: VectorDataVariable.OriginalMaxValue
-- uid: IVLab.ABREngine.VectorDataVariable.OriginalMaxValue*
-  name: OriginalMaxValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalMaxValue_
-  commentId: Overload:IVLab.ABREngine.VectorDataVariable.OriginalMaxValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.VectorDataVariable.OriginalMaxValue
-  nameWithType: VectorDataVariable.OriginalMaxValue
-- uid: IVLab.ABREngine.VectorDataVariable.OriginalMinValue
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalMinValue
-  commentId: P:IVLab.ABREngine.VectorDataVariable.OriginalMinValue
-  fullName: IVLab.ABREngine.VectorDataVariable.OriginalMinValue
-  nameWithType: VectorDataVariable.OriginalMinValue
-- uid: IVLab.ABREngine.VectorDataVariable.OriginalMinValue*
-  name: OriginalMinValue
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_OriginalMinValue_
-  commentId: Overload:IVLab.ABREngine.VectorDataVariable.OriginalMinValue
-  isSpec: "True"
-  fullName: IVLab.ABREngine.VectorDataVariable.OriginalMinValue
-  nameWithType: VectorDataVariable.OriginalMinValue
+  fullName: IVLab.ABREngine.VectorDataVariable.OriginalRange
+  nameWithType: VectorDataVariable.OriginalRange
 - uid: IVLab.ABREngine.VectorDataVariable.Path
   name: Path
   href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_Path
@@ -5495,6 +5789,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.VectorDataVariable.Path
   nameWithType: VectorDataVariable.Path
+- uid: IVLab.ABREngine.VectorDataVariable.Range
+  name: Range
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_Range
+  commentId: P:IVLab.ABREngine.VectorDataVariable.Range
+  fullName: IVLab.ABREngine.VectorDataVariable.Range
+  nameWithType: VectorDataVariable.Range
+- uid: IVLab.ABREngine.VectorDataVariable.Range*
+  name: Range
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_Range_
+  commentId: Overload:IVLab.ABREngine.VectorDataVariable.Range
+  isSpec: "True"
+  fullName: IVLab.ABREngine.VectorDataVariable.Range
+  nameWithType: VectorDataVariable.Range
+- uid: IVLab.ABREngine.VectorDataVariable.SpecificRanges
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_SpecificRanges
+  commentId: P:IVLab.ABREngine.VectorDataVariable.SpecificRanges
+  fullName: IVLab.ABREngine.VectorDataVariable.SpecificRanges
+  nameWithType: VectorDataVariable.SpecificRanges
+- uid: IVLab.ABREngine.VectorDataVariable.SpecificRanges*
+  name: SpecificRanges
+  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_SpecificRanges_
+  commentId: Overload:IVLab.ABREngine.VectorDataVariable.SpecificRanges
+  isSpec: "True"
+  fullName: IVLab.ABREngine.VectorDataVariable.SpecificRanges
+  nameWithType: VectorDataVariable.SpecificRanges
 - uid: IVLab.ABREngine.VisAsset
   name: VisAsset
   href: api/IVLab.ABREngine.VisAsset.html
@@ -5629,6 +5949,19 @@ references:
   commentId: F:IVLab.ABREngine.VisAssetManager.appDataPath
   fullName: IVLab.ABREngine.VisAssetManager.appDataPath
   nameWithType: VisAssetManager.appDataPath
+- uid: IVLab.ABREngine.VisAssetManager.GetVisAssets
+  name: GetVisAssets()
+  href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAssets
+  commentId: M:IVLab.ABREngine.VisAssetManager.GetVisAssets
+  fullName: IVLab.ABREngine.VisAssetManager.GetVisAssets()
+  nameWithType: VisAssetManager.GetVisAssets()
+- uid: IVLab.ABREngine.VisAssetManager.GetVisAssets*
+  name: GetVisAssets
+  href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAssets_
+  commentId: Overload:IVLab.ABREngine.VisAssetManager.GetVisAssets
+  isSpec: "True"
+  fullName: IVLab.ABREngine.VisAssetManager.GetVisAssets
+  nameWithType: VisAssetManager.GetVisAssets
 - uid: IVLab.ABREngine.VisAssetManager.LoadVisAsset(System.Guid,System.Boolean)
   name: LoadVisAsset(Guid, Boolean)
   href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_LoadVisAsset_System_Guid_System_Boolean_

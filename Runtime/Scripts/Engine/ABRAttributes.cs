@@ -19,9 +19,20 @@
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// How "deep" a particular update needs to go to fully address this ABR Input
+    /// </summary>
     public enum UpdateLevel
     {
+        /// <summary>
+        /// Data updates generally need to address geometric information and/or
+        /// populate data on a per-vertex basis, hence they are usually slow/expensive.
+        /// </summary>
         Data,
+        /// <summary>
+        /// Style updates are generally lightweight and only consist of updating
+        /// uniforms on the GPU, for example changing the colormap or glyph size.
+        /// </summary>
         Style
     }
 

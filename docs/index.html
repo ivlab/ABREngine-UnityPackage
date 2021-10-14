@@ -1,22 +1,169 @@
-﻿
-<div id="sidetoggle">
-  <div>
-    <div class="sidefilter">
-      <form class="toc-filter">
-        <span class="glyphicon glyphicon-filter filter-icon"></span>
-        <span class="glyphicon glyphicon-remove clear-icon" id="toc_filter_clear"></span>
-        <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
-      </form>
-    </div>
-    <div class="sidetoc">
-      <div class="toc" id="toc">
-          
-          <ul class="nav level1">
-                <li>
-                    <a href="api/Global.html" name="api/toc.html" title="Scripting API">Scripting API</a>
-                </li>
-          </ul>
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Artifact-Based Rendering Engine | ABREngine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Artifact-Based Rendering Engine | ABREngine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="resources/favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
       </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="artifact-based-rendering-engine">Artifact-Based Rendering Engine</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p><strong>Here for the ABREngine examples and C# documentation? Head over to the
+<a href="api/IVLab.ABREngine.html">ABREngine Docs</a> page.</strong> A good place to start is the
+<a href="api/IVLab.ABREngine.ABREngine.html">ABREngine Class</a>.</p>
+<p>We introduce Artifact-Based Rendering (ABR), a framework of tools, algorithms,
+and processes that makes it possible to produce real, data-driven 3D scientific
+visualizations with a visual language derived entirely from colors, lines,
+textures, and forms created using traditional physical media or found in nature.
+A theory and process for ABR is presented to address three current needs: (i)
+designing better visualizations by making it possible for non-programmers to
+rapidly design and critique many alternative data-to-visual mappings; (ii)
+expanding the visual vocabulary used in scientific visualizations to depict
+increasingly complex multivariate data; (iii) bringing a more engaging, natural,
+and human-relatable handcrafted aesthetic to data visualization. New tools and
+algorithms to support ABR include front-end applets for constructing
+artifact-based colormaps, optimizing 3D scanned meshes for use in data
+visualization, and synthesizing textures from artifacts. These are complemented
+by an interactive rendering engine with custom algorithms and interfaces that
+demonstrate multiple new visual styles for depicting point, line, surface, and
+volume data. A within-the-research-team design study provides early evidence of
+the shift in visualization design processes that ABR is believed to enable when
+compared to traditional scientific visualization systems. Qualitative user
+feedback on applications to climate science and brain imaging support the
+utility of ABR for scientific discovery and public communication.</p>
+<p>This Unity package provides features and functionality for the Artifact-Based
+Rendering technique, as described by the
+<a href="https://arxiv.org/pdf/1907.13178.pdf">paper from VIS 2019</a>.</p>
+<h2 id="installation">Installation</h2>
+<p>Install via the Unity Package Manager (UPM). In Unity, go to <em>Window &gt; Package
+Manager &gt; + &gt; git package</em> and paste the following URL (install dependencies first, see below):</p>
+<pre><code>ssh://git@github.umn.edu/ivlab-cs/ABREngine-UnityPackage.git#[current version]
+
+# For example:
+ssh://git@github.umn.edu/ivlab-cs/ABREngine-UnityPackage.git#v0.2.1
+</code></pre><h3 id="dependencies">Dependencies</h3>
+<p>NOTE: Currently in Unity, these need to be manually installed. Go to <em>Window &gt;
+Package Manager &gt; + &gt; git package...</em> and paste each of these URLs <em>before</em> you
+paste the ABREngine&#39;s URL.</p>
+<pre><code>ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git
+
+ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git
+
+ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git
+
+ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git
+</code></pre><h2 id="quick-start-for-developers-using-the-abrengine">Quick Start for Developers Using the ABREngine</h2>
+<p><strong>Step 1:</strong> Install the package using UPM as described above.</p>
+<p><strong>Step 2:</strong> Drag and drop the ABREngine prefab into your scene. In the Project
+*tab, search In Packages for &quot;ABREngine&quot;.</p>
+<p><strong>Step 3:</strong> Edit your ABR Configuration. Please see <a href="abr-config.html">ABR
+*Configuration</a> for more details.</p>
+<h2 id="quick-start-for-contributing-to--editing-the-abrengine">Quick Start for Contributing to / Editing the ABREngine</h2>
+<p><strong>Step 1:</strong> Clone the ABREngine-UnityPackage git repository into the <code>Packages</code>
+*folder of your Unity project.</p>
+<p><strong>Step 2:</strong> Same as above Step 2</p>
+<p><strong>Step 3:</strong> Same as above Step 3</p>
+<p><strong>Step 4:</strong> Make your changes on a branch, and make a pull request. See
+*CONTRIBUTING.md in the ABREngine-UnityPackage repository for more information.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            ABREngine
+            
+          </div>
+        </div>
+      </footer>
     </div>
-  </div>
-</div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

@@ -26,6 +26,14 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// A DataImpressionGroup is, as the name suggests, a group of data
+    /// impressions within ABR. DataImpressionGroups are contained within a
+    /// defined bounding box, and automatically rescale all of their data to
+    /// stay within this container. Each time a new key data object is loaded
+    /// into a data impression in this group, the GroupToDataMatrix and
+    /// GroupBounds are updated.
+    /// </summary>
     public class DataImpressionGroup : IHasDataset
     {
         /// <summary>
@@ -288,10 +296,11 @@ namespace IVLab.ABREngine
                     if (boundsChanged || impression.Value.RenderHints.DataChanged)
                     {
                         PrepareImpression(impression.Value);
-                        impression.Value.ComputeKeyDataRenderInfo();
-                        impression.Value.ComputeRenderInfo();
+                        impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
-                        impression.Value.ApplyToGameObject(gameObjectMapping[uuid]);
+                        impression.Value.SetupGameObject(gameObjectMapping[uuid]);
+                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
+                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
                         impression.Value.RenderHints.DataChanged = false;
                         impression.Value.RenderHints.StyleChanged = false;
                     }

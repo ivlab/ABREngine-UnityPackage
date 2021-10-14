@@ -20,30 +20,29 @@
 using System.Reflection;
 using UnityEngine;
 
-using IVLab.Utilities;
-
 namespace IVLab.ABREngine
 {
     class SimpleGlyphRenderInfo : IDataImpressionRenderInfo
     {
         public Matrix4x4[] transforms;
         public Vector4[] scalars;
-        public float colorVariableMin;
-        public float colorVariableMax;
         public Bounds bounds;
     }
 
-    public class PointRenderInfo : IKeyDataRenderInfo
-    {
-        public Vector3[] positions;
-        public Quaternion[] orientations;
-        public Vector4[] scalars;
-        public float colorVariableMin;
-        public float colorVariableMax;
-        public Bounds bounds;
-    }
-
-
+    /// <summary>
+    /// A "Glyphs" data impression that uses hand-sculpted geometry to depict point data.
+    /// </summary>
+    /// <example>
+    /// An example of creating a single glyph data impression and setting its colormap, color variable, and glyph could be:
+    /// <code>
+    /// SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
+    /// gi.keyData = points as PointKeyData;
+    /// gi.colorVariable = yAxis;
+    /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    /// gi.glyph = glyph as GlyphVisAsset;
+    /// ABREngine.Instance.RegisterDataImpression(gi);
+    /// </code>
+    /// </example>
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
@@ -68,15 +67,15 @@ namespace IVLab.ABREngine
         [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
         public PercentPrimitive glyphDensity;
 
-        [ABRInput("Forward Variable", "Direction", UpdateLevel.Style)]
+        [ABRInput("Forward Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable forwardVariable;
 
-        [ABRInput("Up Variable", "Direction", UpdateLevel.Style)]
+        [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable upVariable;
 
         public int glyphLod = 1;
 
-        protected override string MaterialName { get; } = "ABR_DataGlyphs";
+        protected override string MaterialName { get; } = "ABR_Glyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
@@ -92,25 +91,15 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
-        public override void ComputeKeyDataRenderInfo()
+        public override void ComputeGeometry()
         {
-            if (keyData?.Path == null)
-            {
-                return;
-            }
-
-            PointRenderInfo renderInfo;
-
             if (keyData == null)
             {
-                renderInfo = new PointRenderInfo
+                RenderInfo = new SimpleGlyphRenderInfo
                 {
-                    positions = new Vector3[0],
-                    orientations = new Quaternion[0],
+                    transforms = new Matrix4x4[0],
                     scalars = new Vector4[0],
-                    colorVariableMin = 0,
-                    colorVariableMax = 0,
-                    bounds = new Bounds()
+                    bounds = new Bounds(),
                 };
             }
             else
@@ -120,50 +109,20 @@ namespace IVLab.ABREngine
                 {
                     return;
                 }
-
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
-                float colorMin = 0.0f;
-                float colorMax = 0.0f;
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
-                {
-                    if (colorVariable.SpecificRanges.ContainsKey(keyData.Path))
-                    {
-                        colorMin = colorVariable.SpecificRanges[keyData.Path].min;
-                        colorMax = colorVariable.SpecificRanges[keyData.Path].max;
-                    }
-                    else
-                    {
-                        colorMin = colorVariable.Range.min;
-                        colorMax = colorVariable.Range.max;
-                    }
-                }
                 int numPoints = dataset.vertexArray.Length;
-                renderInfo = new PointRenderInfo
-                {
-                    positions = new Vector3[numPoints],
-                    orientations = new Quaternion[numPoints],
-                    scalars = new Vector4[numPoints],
-                    colorVariableMin = colorMin,
-                    colorVariableMax = colorMax,
-                };
+
+                // Compute positions for each point, in room (Unity) space
+                Vector3[] positions = new Vector3[numPoints];
                 for (int i = 0; i < numPoints; i++)
                 {
-                    renderInfo.positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
+                    positions[i] = group.GroupToDataMatrix * dataset.vertexArray[i].ToHomogeneous();
                 }
 
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
-                {
-                    var colorScalars = colorVariable.GetArray(keyData);
-                    for (int i = 0; i < numPoints; i++)
-                        renderInfo.scalars[i][0] = colorScalars[i];
-
-                }
-                else { } // Leave the scalars as 0
-
+                // Get up and forwards vectors at each point
                 Vector3[] dataForwards = null;
                 Vector3[] dataUp = null;
-
                 if (forwardVariable != null && forwardVariable.IsPartOf(keyData))
                 {
                     dataForwards = forwardVariable.GetArray(keyData);
@@ -200,77 +159,58 @@ namespace IVLab.ABREngine
                     }
                 }
 
+                // Compute orientations for each point
+                Quaternion[] orientations = new Quaternion[numPoints];
                 if (upVariable != null && forwardVariable != null)
                 { // Treat up as the more rigid constraint
                     for (int i = 0; i < numPoints; i++)
                     {
                         Vector3 rightAngleForward = Vector3.Cross(
-                        Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
-                        dataUp[i]).normalized;
+                            Vector3.Cross(dataUp[i], dataForwards[i]).normalized,
+                            dataUp[i]
+                        ).normalized;
 
                         Quaternion orientation = Quaternion.LookRotation(rightAngleForward, dataUp[i]) * Quaternion.Euler(0, 180, 0);
-                        renderInfo.orientations[i] = orientation;
+                        orientations[i] = orientation;
                     }
                 }
                 else // Treat forward as the more rigid constraint
                 {
                     for (int i = 0; i < numPoints; i++)
                     {
-
                         Vector3 rightAngleUp = Vector3.Cross(
                             Vector3.Cross(dataForwards[i], dataUp[i]).normalized,
-                            dataForwards[i]).normalized;
+                            dataForwards[i]
+                        ).normalized;
 
                         Quaternion orientation = Quaternion.LookRotation(dataForwards[i], rightAngleUp) * Quaternion.Euler(0, 180, 0);
-                        renderInfo.orientations[i] = orientation;
+                        orientations[i] = orientation;
                     }
                 }
 
-                renderInfo.bounds = dataset?.bounds ?? new Bounds();
-            }
+                var encodingRenderInfo = new SimpleGlyphRenderInfo()
+                {
+                    transforms = new Matrix4x4[numPoints],
+                    scalars = new Vector4[numPoints]
+                };
 
-            KeyDataRenderInfo = renderInfo;
+                // Get glyph scale and apply to instance mesh renderer transform
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                float glyphScale = glyphSize?.Value ??
+                    config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
+
+                for (int i = 0; i < numPoints; i++)
+                {
+                    encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
+                }
+                // Apply room-space bounds to renderer
+                encodingRenderInfo.bounds = group.GroupBounds;
+                RenderInfo = encodingRenderInfo;
+            }
         }
 
-        public override void ComputeRenderInfo()
-        {
-            var dataRenderInfo = KeyDataRenderInfo as PointRenderInfo;
-            if (dataRenderInfo == null) {
-                return;
-            }
-
-            int numPoints = dataRenderInfo.scalars.Length;
-
-            var encodingRenderInfo = new SimpleGlyphRenderInfo()
-            {
-                transforms = new Matrix4x4[numPoints],
-                scalars = dataRenderInfo.scalars,
-                colorVariableMin = dataRenderInfo.colorVariableMin,
-                colorVariableMax = dataRenderInfo.colorVariableMax
-            };
-
-            // Load defaults from configuration / schema
-            ABRConfig config = ABREngine.Instance.Config;
-
-            // Width appears double what it should be, so decrease to
-            // maintain the actual real world distance
-            string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-
-            float glyphScale = glyphSize?.Value ??
-                config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
-
-
-            for (int i = 0; i < numPoints; i++)
-            {
-
-                encodingRenderInfo.transforms[i] = Matrix4x4.TRS(dataRenderInfo.positions[i], dataRenderInfo.orientations[i], Vector3.one * glyphScale);
-
-            }
-            encodingRenderInfo.bounds = dataRenderInfo.bounds;
-            RenderInfo = encodingRenderInfo;
-        }
-
-        public override void ApplyToGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject(EncodedGameObject currentGameObject)
         {
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
             if (currentGameObject == null)
@@ -278,6 +218,7 @@ namespace IVLab.ABREngine
                 return;
             }
 
+            // Ensure there's an ABR layer for this object
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
@@ -288,96 +229,28 @@ namespace IVLab.ABREngine
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleGlyphDataImpression", LayerName);
             }
 
-            MeshRenderer mr = currentGameObject.GetComponent<MeshRenderer>();
-            if (mr == null)
+            // Create mesh renderer and instanced mesh renderer
+            MeshRenderer mr = null;
+            InstancedMeshRenderer imr = null;
+            if (!currentGameObject.TryGetComponent<MeshRenderer>(out mr))
             {
                 mr = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-
-
-            if (colormap != null)
-            {
-                MatPropBlock.SetInt("_UseColorMap", 1);
-                MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
-            }
-            else
-            {
-                MatPropBlock.SetInt("_UseColorMap", 0);
-
-            }
-
-
-
-            InstancedMeshRenderer imr = currentGameObject.GetComponent<InstancedMeshRenderer>();
-            if (imr == null)
+            if (!currentGameObject.TryGetComponent<InstancedMeshRenderer>(out imr))
             {
                 imr = currentGameObject.gameObject.AddComponent<InstancedMeshRenderer>();
             }
-            imr.enabled = RenderHints.Visible;
-            imr.bounds = SSrenderData?.bounds ?? new Bounds();
 
-            int lod = glyphLod;
-            // if (ABRManager.IsValidNode(glyphLod))
-            // {
-            //     lod = (int)glyphLod.floatVal;
-            // }
-            if (glyph != null)
-            {
-
-                imr.instanceMesh = glyph.GetMesh(lod);
-                MatPropBlock.SetTexture("_Normal", glyph.GetNormalMap(lod));
-            }
-            else
-            {
-                Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
-                imr.instanceMesh = mesh;
-            }
-
-
-
+            // Setup instanced rendering based on computed geometry
             if (SSrenderData != null)
             {
-                MatPropBlock.SetFloat("_ColorDataMin", SSrenderData.colorVariableMin);
-                MatPropBlock.SetFloat("_ColorDataMax", SSrenderData.colorVariableMax);
-                MatPropBlock.SetColor("_Color", Color.white);
-
+                imr.bounds = SSrenderData.bounds;
                 imr.instanceLocalTransforms = SSrenderData.transforms;
-
-                // Initialize "render info" -- stores scalar values and info on whether
-                // or not glyphs should be rendered
-                Vector4[] glyphRenderInfo = SSrenderData.scalars;
-                // Get the glyph density
-                ABRConfig config = ABREngine.Instance.Config;
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
-                float glyphDensityOut = glyphDensity?.Value ??
-                    config.GetInputValueDefault<PercentPrimitive>(plateType, "Glyph Density").Value;
-                glyphDensityOut = Mathf.Clamp01(glyphDensityOut);
-                // Sample based on density
-                SampleGlyphs(glyphRenderInfo, (int)(glyphRenderInfo.Length * glyphDensityOut));
-                // Apply scalar/density changes to the instanced mesh renderer
-                imr.instanceDensity = glyphDensityOut;
-                imr.renderInfo = glyphRenderInfo;
-
-                if (colormap?.GetColorGradient() != null)
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                }
-                else
-                {
-                    MatPropBlock.SetInt("_UseColorMap", 0);
-                }
+                imr.renderInfo = SSrenderData.scalars;
+                imr.instanceMaterial = ImpressionMaterial;
+                imr.block = MatPropBlock;
+                imr.cachedInstanceCount = -1;
             }
-            else
-            {
-                imr.instanceLocalTransforms = new Matrix4x4[0];
-            }
-
-            imr.block = MatPropBlock;
-
-            imr.instanceMaterial = ImpressionMaterial;
-
-            imr.cachedInstanceCount = -1;
         }
 
         public override void UpdateStyling(EncodedGameObject currentGameObject)

@@ -1,9 +1,27 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
+    "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
     "dependencies": {
-    }
+    },
+    "samples": [
+        {
+            "displayName": "State Creation",
+            "description": "Contains a script to manually create a state using commands from the ABREngine.",
+            "path": "Samples~/CreateState"
+        },
+        {
+            "displayName": "Interactive state loading and modification",
+            "description": "Contains a script to load a state from a JSON file, then modify it interactively every frame (in essence creating an animation)",
+            "path": "Samples~/InteractiveState"
+        },
+        {
+            "displayName": "Dataset Creation",
+            "description": "Contains a script to manually create and load a raw ABR dataset",
+            "path": "Samples~/CreateDataset"
+        }
+    ]
 }

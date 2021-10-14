@@ -31,8 +31,19 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// The ABRStateParser takes a (text) ABR state from JSON and loads its
+    /// components into Unity, or takes the current state of objects in the
+    /// Unity scene and translates it back into text.
+    /// </summary>
     public class ABRStateParser
     {
+        /// <summary>
+        /// The `LoadState` method, the workhorse of this
+        /// class, has side effects that range from populating new GameObjects for
+        /// data impressions, to loading new data, to loading in VisAssets. By the
+        /// end of `LoadState`, the visualization should be complete.
+        /// </summary>
         public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
@@ -90,6 +101,7 @@ namespace IVLab.ABREngine
             // Generate ABR states from both the previous and current state json objects
             RawABRState previousABRState = previousState?.ToObject<RawABRState>();
             RawABRState state = stateJson.ToObject<RawABRState>();
+
             if (state == null)
             {
                 return null;
@@ -184,6 +196,12 @@ namespace IVLab.ABREngine
                             // Try to grab from media dir
                             await ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
 
+                            // ... if not found, then try to grab from Resources media dir
+                            if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
+                            {
+                                await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(rawData);
+                            }
+
                             // If not found in cache, load from data server, if there is one
                             if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                             {
@@ -249,7 +267,7 @@ namespace IVLab.ABREngine
                                     variable.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
-                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
+                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
@@ -294,6 +312,36 @@ namespace IVLab.ABREngine
                                 if (possibleInput == null)
                                 {
                                     Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
+                                }
+                            }
+                            else if (value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
+                            {
+                                // Attempt to construct a primitive gradient
+                                try
+                                {
+                                    string uuid = value.inputValue;
+                                    int? pointsLength = state?.primitiveGradients?[uuid]?.points?.Count;
+                                    int? valuesLength = state?.primitiveGradients?[uuid]?.values?.Count;
+                                    if (pointsLength != valuesLength || pointsLength == null || valuesLength == null)
+                                    {
+                                        Debug.LogError("Invalid Primitive Gradient: \"points\" and \"values\" arrays must have same length" +
+                                            " and cannot be null.");
+                                    }
+                                    else
+                                    {
+                                        float[] points = new float[(int)pointsLength];
+                                        string[] values = new string[(int)valuesLength];
+                                        for (int i = 0; i < pointsLength; i++)
+                                        {
+                                            points[i] = state.primitiveGradients[uuid].points[i];
+                                            values[i] = state.primitiveGradients[uuid].values[i];
+                                        }
+                                        possibleInput = new PrimitiveGradient(new Guid(uuid), points, values) as IABRInput;
+                                    }
+                                }
+                                catch (KeyNotFoundException)
+                                {
+                                    Debug.LogErrorFormat("Invalid Primitive Gradient input: Primitive gradient with uuid {0} does not exist.", value.inputValue);
                                 }
                             }
 
@@ -387,16 +435,25 @@ namespace IVLab.ABREngine
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap") &&
-                        previousImpression?.inputValues != null && previousImpression.inputValues.ContainsKey("Colormap"))
+                    JToken colormapDiff = diffFromPrevious?.SelectToken("localVisAssets");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
                     {
                         string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
-                        string prevColormapUuid = previousImpression.inputValues["Colormap"].inputValue;
-                        // Colormap has changed if its contents have changed
-                        colormapChanged = state?.localVisAssets?[colormapUuid]?.ToString() != previousABRState?.localVisAssets?[prevColormapUuid]?.ToString();
-                    }       
+                        if (colormapDiff?.SelectToken(colormapUuid) != null)
+                            colormapChanged = true;
+                    }
+                    // OR
+                    // - opacity map primitive gradient attached to this impression was changed -
+                    bool opacityMapChanged = false;
+                    JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
+                    {
+                        string primitiveGradientUuid = impression.Value.inputValues["Opacitymap"].inputValue;
+                        if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
+                            opacityMapChanged = true;
+                    }
                     // Toggle the "style changed" flag accordingly
-                    if (scalarRangeChanged || colormapChanged)
+                    if (scalarRangeChanged || colormapChanged || opacityMapChanged)
                     {
                         dataImpression.RenderHints.StyleChanged = true;
                     }
@@ -499,6 +556,8 @@ namespace IVLab.ABREngine
                     lightParent = new GameObject("ABRLightParent");
                     lightParent.transform.parent = GameObject.Find("ABREngine").transform;
                 }
+                if (lightParent.GetComponent<VolumeLightManager>() == null)
+                    lightParent.AddComponent<VolumeLightManager>();
 
                 foreach (var light in state.scene.lighting)
                 {
@@ -542,6 +601,12 @@ namespace IVLab.ABREngine
             return stateJson;
         }
 
+        /// <summary>
+        /// The SerializeState method takes the current state of the ABR unity
+        /// scene and attempts to put it back into JSON form. There are several
+        /// fields that aren't stored anywhere in the ABREngine, and must thus
+        /// rely on the JSON version of the previous state.
+        /// </summary>
         public string SerializeState(JObject previousState)
         {
             try
@@ -696,6 +761,11 @@ namespace IVLab.ABREngine
                     saveState.name = previousState["name"].ToString();
                 }
 
+                if (previousState.ContainsKey("primitiveGradients"))
+                {
+                    saveState.primitiveGradients = previousState["primitiveGradients"].ToObject<Dictionary<string, RawPrimitiveGradient>>();
+                }
+
                 return JsonConvert.SerializeObject(saveState, settings);
             }
             catch (Exception e)
@@ -718,6 +788,7 @@ namespace IVLab.ABREngine
         public RawDataRanges dataRanges;
         public JToken uiData; // data for UIs, not messing with it at all
         public JToken localVisAssets; // custom vis assets, not messing with them at all
+        public Dictionary<string, RawPrimitiveGradient> primitiveGradients; 
         public string name;
     }
 

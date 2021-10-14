@@ -40,12 +40,53 @@ namespace IVLab.ABREngine
     }
 
     /// <summary>
-    ///     The raw data as loaded from an ABR Binary Data file and
-    ///     corresponding JSON header file. This RawDataset defines the
-    ///     specification for each of these files. RawDataset is not to be
-    ///     confused with `Dataset`, which represents a *collection* of
-    ///     RawDatasets which share a coordinate space, key data, and variables.
+    ///     The raw variable arrays and geometry for a Data Object. RawDatasets
+    ///     can be loaded from a pair of .json and .bin files (JsonHeader and
+    ///     BinaryData, respectively). This RawDataset defines the specification
+    ///     for each of these files. RawDataset is not to be confused with
+    ///     `Dataset`, which represents a *collection* of RawDatasets which
+    ///     share a coordinate space, key data, and variables.
     /// </summary>
+    /// <example>
+    /// A simple 4-vertex plane with no variables can be created like this:
+    /// <code>
+    /// RawDataset ds = new RawDataset();
+    /// ds.meshTopology = MeshTopology.Triangles;
+    /// ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+    ///
+    /// ds.vectorArrays = new SerializableVectorArray[0];
+    /// ds.vectorArrayNames = new string[0];
+    /// ds.scalarArrays = new SerializableFloatArray[0];
+    /// ds.scalarArrayNames = new string[0];
+    /// ds.scalarMins = new float[0];
+    /// ds.scalarMaxes = new float[0];
+    ///
+    /// // Construct the vertices
+    /// Vector3[] vertices = {
+    ///     new Vector3(-1, 0, -1), // 0
+    ///     new Vector3( 1, 0, -1), // 1
+    ///     new Vector3(-1, 0,  1), // 2
+    ///     new Vector3( 1, 0,  1), // 3
+    /// };
+    ///
+    /// ds.vertexArray = vertices;
+    /// // Construct triangle indices/faces - LEFT HAND RULE, outward-facing normals
+    /// int[] indices = {
+    ///     // Bottom face
+    ///     0, 1, 3,
+    ///     0, 3, 2
+    /// };
+    ///
+    /// ds.indexArray = indices;
+    /// // How many verts per cell are there? (each triangle is a cell)
+    /// int[] cellIndexCounts = { 3, 3 };
+    /// ds.cellIndexCounts = cellIndexCounts;
+    ///
+    /// // Where does each cell begin?
+    /// int[] cellIndexOffsets = { 0, 3 };
+    /// ds.cellIndexOffsets = cellIndexOffsets;
+    /// </code>
+    /// </example>
     [System.Serializable]
     public class RawDataset
     {
@@ -84,21 +125,31 @@ namespace IVLab.ABREngine
         public Bounds bounds;
 
         [SerializeField]
-        public MeshTopology meshTopology = MeshTopology.Points;
+        public Vector3Int dimensions;
 
+        [SerializeField]
+        public DataTopology dataTopology = DataTopology.Points;
+
+        /// <summary>
+        /// Header that contains metadata for a particular RawDataset
+        /// </summary>
         public class JsonHeader
         {
-            public MeshTopology meshTopology;
+            public DataTopology meshTopology;
             public int num_points;
             public int num_cells;
             public int num_cell_indices;
             public string[] scalarArrayNames;
             public string[] vectorArrayNames;
             public Bounds bounds;
+            public int[] dimensions;
             public float[] scalarMaxes;
             public float[] scalarMins;
         }
 
+        /// <summary>
+        /// Actual geometric representation of the data to load from a file / socket
+        /// </summary>
         public class BinaryData
         {
             public float[] vertices { get; set; }
@@ -109,11 +160,16 @@ namespace IVLab.ABREngine
             public void Decode(JsonHeader bdh, byte[] bytes)
             {
                 int offset = 0;
+                int nbytes;
 
-                vertices = new float[3 * bdh.num_points];
-                int nbytes = 3 * bdh.num_points * sizeof(float);
-                Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
-                offset = offset + nbytes;
+                // No vertices stored in binary for volumes
+                if (bdh.meshTopology != DataTopology.Voxels)
+                {
+                    vertices = new float[3 * bdh.num_points];
+                    nbytes = 3 * bdh.num_points * sizeof(float);
+                    Buffer.BlockCopy(bytes, offset, vertices, 0, nbytes);
+                    offset = offset + nbytes;
+                }
 
                 index_array = new int[bdh.num_cell_indices];
                 nbytes = bdh.num_cell_indices * sizeof(int);
@@ -155,24 +211,25 @@ namespace IVLab.ABREngine
 
         public RawDataset(JsonHeader jh, BinaryData bd)
         {
-            meshTopology = jh.meshTopology;
+            dataTopology = jh.meshTopology;
 
-            vertexArray = new Vector3[jh.num_points];
-            for (int i = 0; i < jh.num_points; i++)
+            if (dataTopology == DataTopology.Voxels)
             {
-                vertexArray[i][0] = bd.vertices[i * 3 + 0];
-                vertexArray[i][1] = bd.vertices[i * 3 + 1];
-                vertexArray[i][2] = bd.vertices[i * 3 + 2];
+                dimensions = new Vector3Int(jh.dimensions[0], jh.dimensions[1], jh.dimensions[2]);
             }
-
-            if ((int)meshTopology == 100)
+            else
             {
-                Debug.LogWarning("Voxels not yet supported, converting to points");
-                meshTopology = MeshTopology.Points;
+                vertexArray = new Vector3[jh.num_points];
+                for (int i = 0; i < jh.num_points; i++)
+                {
+                    vertexArray[i][0] = bd.vertices[i * 3 + 0];
+                    vertexArray[i][1] = bd.vertices[i * 3 + 1];
+                    vertexArray[i][2] = bd.vertices[i * 3 + 2];
+                }
             }
 
             long numIndices = 0;
-            if (meshTopology == MeshTopology.Points)
+            if (dataTopology == DataTopology.Points || dataTopology == DataTopology.Voxels)
                 numIndices = jh.num_cells;
             else
             {
