@@ -167,6 +167,7 @@ namespace IVLab.ABREngine
 
         // Save this for threading purposes (can't be accessed from non-main-thread)
         private string persistentDataPath = null;
+        private string streamingAssetsPath = null;
 
         private DataImpressionGroup _defaultGroup = null;
 
@@ -211,6 +212,7 @@ namespace IVLab.ABREngine
 
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
+            streamingAssetsPath = Application.streamingAssetsPath;
             base.Awake();
 
             // Initialize state parser
@@ -262,6 +264,7 @@ namespace IVLab.ABREngine
                 {
                     LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
                 }
+                IsInitialized = true;
 
                 // If a state in streaming assets or resources is specified, load it
                 if (Config.Info.loadStateOnStart != null)
@@ -270,7 +273,7 @@ namespace IVLab.ABREngine
                     {
                         await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                         {
-                            await LoadStateAsync<PathStateFileLoader>(Path.Combine(Application.streamingAssetsPath, Config.Info.loadStateOnStart));
+                            await LoadStateAsync<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.Info.loadStateOnStart));
                             Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
                         });
                     }
@@ -280,7 +283,6 @@ namespace IVLab.ABREngine
                         Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
                     }
                 }
-                IsInitialized = true;
             });
         }
 

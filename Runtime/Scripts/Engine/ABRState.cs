@@ -47,7 +47,9 @@ namespace IVLab.ABREngine
         public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
+            try {
             await ABREngine.Instance.WaitUntilInitialized();
+            } catch (Exception e) { Debug.LogError(e); }
             UnityThreadScheduler.GetInstance();
 
             JObject stateJson = await (new T()).GetState(stateText);
