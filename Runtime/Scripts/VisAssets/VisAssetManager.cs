@@ -142,12 +142,12 @@ namespace IVLab.ABREngine
         /// 3. Any Resources folder (in Assets or in any Package)
         /// 4. A VisAsset server
         /// </summary>
-        public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
+        public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
                 Debug.LogWarningFormat("Refusing to replace VisAsset {0} which is already imported", visAssetUUID);
-                return;
+                return null;
             }
 
             try
@@ -175,12 +175,14 @@ namespace IVLab.ABREngine
                 if (visAsset != null)
                 {
                     _visAssets[visAssetUUID] = visAsset;
+                    return visAsset;
                 }
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
             }
+            return null;
         }
 
         /// <summary>
