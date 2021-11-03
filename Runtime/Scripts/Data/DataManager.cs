@@ -143,9 +143,8 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Load a raw dataset into a RawDataset object by its data path. NOTE:
-        /// this method does not import the resulting `RawDataset` into ABR -
-        /// this is accomplished through `ImportRawDataset`!
+        /// Load a raw dataset into a RawDataset object by its data path and
+        /// return the rawdataset after it has been successfully imported.
         /// </summary>
         /// <examples>
         /// Datasets may be loaded from any of the following locations:
@@ -157,7 +156,7 @@ namespace IVLab.ABREngine
         /// await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
         /// </examples>
-        public async Task LoadRawDataset<T>(string dataPath)
+        public async Task<RawDataset> LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
             RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
@@ -165,10 +164,12 @@ namespace IVLab.ABREngine
             if (ds != null)
             {
                 await ImportRawDataset(dataPath, ds);
+                return ds;
             }
             else
             {
                 Debug.LogError("Unable to load Raw Dataset " + dataPath);
+                return null;
             }
         }
 
