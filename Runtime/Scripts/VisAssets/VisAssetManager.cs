@@ -44,14 +44,11 @@ namespace IVLab.ABREngine
     /// Guid cmapUuid = new Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
     /// 
     /// // Load a VisAsset (must be done in Main Thread!)
+    /// ColormapVisAsset cmap = null;
     /// await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
     /// {
-    ///     await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
+    ///     cmap = await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid) as ColormapVisAsset;
     /// });
-    /// 
-    /// // Get the actual cmap visasset
-    /// ColormapVisAsset cmap = null;
-    /// ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);
     /// </code>
     /// </example>
     public class VisAssetManager
@@ -142,6 +139,9 @@ namespace IVLab.ABREngine
         /// 3. Any Resources folder (in Assets or in any Package)
         /// 4. A VisAsset server
         /// </summary>
+        /// <returns>
+        /// Returns the <see cref="IVisAsset"> that was loaded, or `null` if the VisAsset was not found.
+        /// </returns>
         public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
