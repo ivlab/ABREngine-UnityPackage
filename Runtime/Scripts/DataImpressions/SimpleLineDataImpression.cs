@@ -269,10 +269,10 @@ namespace IVLab.ABREngine
                         int nextIndexBottomFront = (j + 1) * 4 + 2;
                         int nextIndexBottomBack = (j + 1) * 4 + 3;
 
-                        renderInfo.vertices[i][indexTopFront] = (point + bitangent * ribbonWidth + normal * ribbonWidth);
-                        renderInfo.vertices[i][indexTopBack] = (point + bitangent * ribbonWidth - normal * ribbonWidth);
-                        renderInfo.vertices[i][indexBottomFront] = (point - bitangent * ribbonWidth + normal * ribbonWidth);
-                        renderInfo.vertices[i][indexBottomBack] = (point - bitangent * ribbonWidth - normal * ribbonWidth);
+                        renderInfo.vertices[i][indexTopFront] = (point + bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexTopBack] = (point + bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexBottomFront] = (point - bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexBottomBack] = (point - bitangent * ribbonWidth);
 
                         renderInfo.normals[i][indexTopFront] = Quaternion.AngleAxis(curveAngle, tangent) * normal;
                         renderInfo.normals[i][indexTopBack] = Quaternion.AngleAxis(-curveAngle, tangent) * -normal;
