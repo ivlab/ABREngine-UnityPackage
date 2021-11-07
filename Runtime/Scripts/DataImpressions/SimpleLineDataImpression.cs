@@ -175,8 +175,8 @@ namespace IVLab.ABREngine
                     Queue<Vector3> smoothingTangents = new Queue<Vector3>(averageCountN);
 
                     int numPoints = dataset.cellIndexCounts[i];
-                    int numVerts = numPoints * 4;
-                    int numIndices = (numPoints - 1) * 12;
+                    int numVerts = numPoints * 4; // 4 vertices per line segment (2 triangles)
+                    int numIndices = (numPoints - 1) * 12; // 12 indices per line segment (4 triangles, front/back)
                     renderInfo.vertices[i] = new Vector3[numVerts];
                     renderInfo.normals[i] = new Vector3[numVerts];
                     renderInfo.uvs[i] = new Vector2[numVerts];
@@ -193,30 +193,50 @@ namespace IVLab.ABREngine
                     for (int index = indexOffset, j = 0; index < indexEnd; index++, j++)
                     {
                         pointIndex = dataset.indexArray[index];
-                        var lastPointIndex = (j == 0) ? pointIndex : dataset.indexArray[index - 1];
-                        var nextPointIndex = (j == numPoints - 1) ? pointIndex : dataset.indexArray[index + 1];
+                        // Gather previous/next point indices, default to current index if outside bounds
+                        var lastPointIndex = (j > 0) ? dataset.indexArray[index - 1] : pointIndex;
+                        var nextPointIndex = (j < numPoints - 1) ? dataset.indexArray[index + 1] : pointIndex;
 
+                        // Point is the current data point from the line dataset, previous and next point
                         Vector3 point = group.GroupToDataMatrix * dataset.vertexArray[pointIndex].ToHomogeneous();
                         Vector3 lastPoint = group.GroupToDataMatrix * dataset.vertexArray[lastPointIndex].ToHomogeneous();
                         Vector3 nextPoint = group.GroupToDataMatrix * dataset.vertexArray[nextPointIndex].ToHomogeneous();
 
+                        // Vectors pointing `last --> current --> next`
+                        Vector3 fromLast = point - lastPoint;
+                        Vector3 toNext = nextPoint - point;
+
                         Vector3 tangent;
                         Vector3 normal;
                         Vector3 bitangent;
-                        Vector3 fromLast = point - lastPoint;
-                        Vector3 toNext = nextPoint - point;
                         Vector4 scalar = Vector4.zero;
 
+                        // Arclength is the length we've travelled so far in this ribbon
                         arclength = arclength + fromLast.magnitude;
+
+                        // Calculate tangent at current point (tangent of curve)
                         tangent = (fromLast + toNext).normalized;
 
+                        // Calculate axis of curvature
                         Vector3 V = Vector3.Cross(fromLast.normalized, toNext.normalized).normalized;
+
+                        // SPECIAL CASE: switching curvature directions
                         if (Vector3.Dot(V, lastV) < 0) V = -V;
+
+                        // SPECIAL CASE: no curvature (default to previously found V)
+                        if (V.magnitude < float.Epsilon)
+                        {
+                            V = lastV;
+                        }
+
                         lastV = V;
+
+                        // Calculate initial normal of ribbon
                         Vector3 N = Vector3.Cross(V, tangent).normalized;
                         Vector3 normalSum = N;
                         Vector3 tangentDirSum = tangent.normalized;
 
+                        // Smooth out the normals, if desired
                         if (smoothingNormals.Count > 0)
                         {
                             if (Vector3.Dot(smoothingNormals.Last(), N) < 0)
@@ -235,26 +255,27 @@ namespace IVLab.ABREngine
                         Vector3 normalAvg = normalSum / (smoothingNormals.Count + 1);
                         Vector3 tangentAvg = tangentDirSum / (smoothingNormals.Count + 1);
 
-
                         normal = normalAvg;
                         tangent = tangentAvg;
 
+                        // Only smooth over averageCountN normals
                         smoothingNormals.Enqueue(normal);
                         while (smoothingNormals.Count > averageCountN) smoothingNormals.Dequeue();
                         while (smoothingTangents.Count > averageCountN) smoothingTangents.Dequeue();
 
-
+                        // Assign scalar variables
                         if (colorVariableArray != null)
                         {
                             scalar[0] = colorVariableArray[index];
                         }
 
+                        // Calculate a 3D basis for the point.
+                        // Normal, Tangent, and Bitangent should be mutually perpendicular.
                         normal = normal.normalized;
                         tangent = tangent.normalized;
                         bitangent = -Vector3.Cross(normal, tangent).normalized;
 
-
-
+                        // Rotate the ribbon based on user parameter
                         normal = Quaternion.AngleAxis(ribbonRotation, tangent) * normal;
                         bitangent = Quaternion.AngleAxis(ribbonRotation, tangent) * bitangent;
 
@@ -293,7 +314,8 @@ namespace IVLab.ABREngine
 
 
 
-                        if (j < (numPoints - 10) && j > 1)
+                        // Skip the first point since there is not a valid curvature direction (need 3 points)
+                        if (j < (numPoints - 1) && j > 0)
                         {
                             renderInfo.indices[i][j * 12 + 0] = indexTopFront;
                             renderInfo.indices[i][j * 12 + 1] = nextIndexTopFront;
