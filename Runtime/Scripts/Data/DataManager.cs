@@ -166,7 +166,7 @@ namespace IVLab.ABREngine
             // Only import if there are actual data present
             if (ds != null)
             {
-                await ImportRawDataset(dataPath, ds);
+                ImportRawDataset(dataPath, ds);
                 return ds;
             }
             else
@@ -203,7 +203,7 @@ namespace IVLab.ABREngine
         /// available as a key data object and makes all of its scalar and
         /// vector variables available across ABR.
         /// </summary>
-        public async Task ImportRawDataset(string dataPath, RawDataset importing)
+        public void ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
@@ -211,7 +211,7 @@ namespace IVLab.ABREngine
 
             // See if we have any data from that dataset yet
             // Needs to be run in main thread because of this.transform
-            await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
+            // await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
                 try
                 {
                     // If we don't, create the dataset
@@ -219,7 +219,7 @@ namespace IVLab.ABREngine
                     if (!TryGetDataset(datasetPath, out dataset))
                     {
                         Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
-                        dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
+                        dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
                     }
 
                     datasets[datasetPath] = dataset;
@@ -232,7 +232,7 @@ namespace IVLab.ABREngine
                 {
                     Debug.LogError(e);
                 }
-            });
+            // });
         }
 
         /// <summary>

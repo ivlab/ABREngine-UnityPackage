@@ -195,6 +195,11 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Cached, readonly version of the ABREngine transform so it can be accessed in a non-main thread
+        /// </summary>
+        public Transform ABRTransform { get; private set; }
+
+        /// <summary>
         /// Provides access to all of the ABRConfig options that were loaded in at startup
         /// </summary>
         public ABRConfig Config { get; private set; }
@@ -213,6 +218,7 @@ namespace IVLab.ABREngine
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             streamingAssetsPath = Application.streamingAssetsPath;
+            ABRTransform = this.transform;
             base.Awake();
 
             // Initialize state parser
