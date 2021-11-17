@@ -70,9 +70,17 @@ namespace IVLab.ABREngine
         /// calculate the full bounds for the imported data objects - explictly
         /// ask the user for them.
         /// </summary>
-        /// <param name="points">Points in a line - will be treated as a LineStrip</param>
-        public static RawDataset PointsToLine(List<Vector3> points, Bounds dataBounds)
+        /// <param name="lines">One, or several, lines. Each line consistes of a series of points.</param>
+        public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds)
         {
+            // Find out lengths of each line so we know where to split
+            List<Vector3> allPoints = new List<Vector3>();
+            foreach (List<Vector3> linePoints in lines)
+            {
+                allPoints.AddRange(linePoints);
+                allPoints.Add(float.NaN * Vector3.one); // Add a NaN to separate the lines
+            }
+
             RawDataset ds = new RawDataset();
             ds.dataTopology = DataTopology.LineStrip;
             ds.bounds = dataBounds;
@@ -87,8 +95,8 @@ namespace IVLab.ABREngine
 
             // Build the ribbon (line strip)'s vertices. Create several segments of
             // a ribbon if there are NaNs, instead of connecting through the NaN.
-            Vector3[] vertices = new Vector3[points.Count];
-            int[] indices = new int[points.Count];
+            Vector3[] vertices = new Vector3[allPoints.Count];
+            int[] indices = new int[allPoints.Count];
             List<int> segmentCounts = new List<int>();
             List<int> segmentStartIndices = new List<int>();
             int lineIndex = 0;
@@ -96,13 +104,13 @@ namespace IVLab.ABREngine
             int segmentStartIndex = 0;
             for (int i = 0; i < vertices.Length; i++)
             {
-                if (!float.IsNaN(points[i].x) && !float.IsNaN(points[i].y) && !float.IsNaN(points[i].z))
+                if (!float.IsNaN(allPoints[i].x) && !float.IsNaN(allPoints[i].y) && !float.IsNaN(allPoints[i].z))
                 {
                     if (segmentCount == 0)
                     {
                         segmentStartIndex = lineIndex;
                     }
-                    vertices[lineIndex] = points[i];
+                    vertices[lineIndex] = allPoints[i];
                     indices[lineIndex] = lineIndex;
                     lineIndex += 1;
                     segmentCount += 1;
