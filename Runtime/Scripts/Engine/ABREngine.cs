@@ -57,8 +57,10 @@ namespace IVLab.ABREngine
     /// `System.Threading.Task` framework and
     /// `IVLab.Utilities.UnityThreadScheduler`. Here's a simple example that
     /// loads in the ABREngine, loads a state, and displays a single data
-    /// impression.
+    /// impression. See <see cref="TestingABR"> for additional example calls
+    /// into the ABREngine.
     /// <code>
+    /// using System;
     /// using System.Threading.Tasks;
     /// using UnityEngine;
     /// using IVLab.ABREngine;
@@ -94,7 +96,7 @@ namespace IVLab.ABREngine
     ///             // done in the Unity Main thread.
     ///             UnityThreadScheduler.Instance.RunMainThreadWork(() => 
     ///             {
-    ///                 ABREngine.Instance.Render()
+    ///                 ABREngine.Instance.Render();
     ///             });
     ///         });
     ///     }
