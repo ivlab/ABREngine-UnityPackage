@@ -91,6 +91,11 @@ namespace IVLab.ABREngine
             ResetBoundsAndTransformation();
         }
 
+        /// <summary>
+        /// Add a data impression to this group. All data impressions in the
+        /// same group NEED to have the same dataset, error will be displayed
+        /// otherwise.
+        /// </summary>
         public void AddDataImpression(IDataImpression impression, bool allowOverwrite = true)
         {
             // Make sure the new impression matches the rest of the impressions'
@@ -144,6 +149,12 @@ namespace IVLab.ABREngine
             return _impressions.Count == 0;
         }
 
+        /// <summary>
+        /// Get a data impression by its UUID
+        /// </summary>
+        /// <returns>
+        /// The data impression, if found, otherwise `null`
+        /// </returns>
         public IDataImpression GetDataImpression(Guid uuid)
         {
             IDataImpression dataImpression = null;
@@ -151,6 +162,65 @@ namespace IVLab.ABREngine
             return dataImpression;
         }
 
+        /// <summary>
+        /// Get a data impression matching a particular criteria
+        /// </summary>
+        /// <example>
+        /// This method can be used to access data impressions in a functional
+        /// manner, for example checking if the impression has a particular
+        /// colormap assigned.
+        /// <code>
+        /// DataImpressionGroup group;
+        /// group.GetDataImpression((di) =>
+        /// {
+        ///     try
+        ///     {
+        ///         SimpleSurfaceDataImpression sdi = di as SimpleSurfaceDataImpression;
+        ///         return sdi.colormap.Uuid == new Guid("5a761a72-8bcb-11ea-9265-005056bae6d8");
+        ///     }
+        ///     catch
+        ///     {
+        ///         return null;
+        ///     }
+        /// });
+        /// </code>
+        /// </example>
+        /// <returns>
+        /// The data impression, if found, otherwise `null`
+        /// </returns>
+        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        {
+            try
+            {
+                return GetDataImpressions(criteria).First();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Return whether or not the data impression with a given UUID is present in this DataImpressionGroup
+        /// </summary>
+        public bool HasDataImpression(Guid uuid)
+        {
+            return _impressions.ContainsKey(uuid);
+        }
+
+        /// <summary>
+        /// Return the Unity GameObject associated with this particular UUID.
+        /// </summary>
+        public EncodedGameObject GetEncodedGameObject(Guid uuid)
+        {
+            EncodedGameObject dataImpression = null;
+            gameObjectMapping.TryGetValue(uuid, out dataImpression);
+            return dataImpression;
+        }
+
+        /// <summary>
+        /// Get all data impressions in this group that match a particular type (e.g. get all <see cref"SimpleSurfaceDataImpression">s).
+        /// </summary>
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
@@ -160,6 +230,12 @@ namespace IVLab.ABREngine
                 .Select((imp) => (T) imp).ToList();
         }
 
+        /// <summary>
+        /// Get all data impressions that have a particular tag. Tags can be any
+        /// string value. They are not used internally to the engine but can be
+        /// useful for keeping track of data impressions in applications that
+        /// use ABR.
+        /// </summary>
         public List<IDataImpression> GetDataImpressionsWithTag(string tag)
         {
             return _impressions
@@ -167,29 +243,34 @@ namespace IVLab.ABREngine
                 .Where((imp) => imp.HasTag(tag)).ToList();
         }
 
-        public bool HasDataImpression(Guid uuid)
-        {
-            return _impressions.ContainsKey(uuid);
-        }
 
-        public EncodedGameObject GetEncodedGameObject(Guid uuid)
-        {
-            EncodedGameObject dataImpression = null;
-            gameObjectMapping.TryGetValue(uuid, out dataImpression);
-            return dataImpression;
-        }
-
+        /// <summary>
+        /// Check to see if a data impression with a particular UUID has a GameObject yet
+        /// </summary>
         public bool HasEncodedGameObject(Guid uuid)
         {
             return gameObjectMapping.ContainsKey(uuid);
         }
 
+        /// <summary>
+        /// Return all data impressions inside this data impression group
+        /// </summary>
         public Dictionary<Guid, IDataImpression> GetDataImpressions()
         {
             return _impressions;
         }
 
+        /// <summary>
+        /// Return all data impressions that match a particular criteria
+        /// </summary>
+        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        {
+            return _impressions.Values.Where(criteria).ToList();
+        }
 
+        /// <summary>
+        /// Remove all data impressions from this DataImpressionGroup
+        /// </summary>
         public void Clear()
         {
             List<Guid> toRemove = _impressions.Keys.ToList();
@@ -281,6 +362,14 @@ namespace IVLab.ABREngine
             return Mathf.Abs(currentBoundsSize - GroupBounds.size.magnitude) > float.Epsilon;
         }
 
+        /// <summary>
+        /// Render every data impression inside this data impression group. Three levels of "update" are provided for each data impression (see <see cref="RenderHints"> for more information):
+        /// <ol>
+        ///     <li>Recompute everything if the data source has changed (geometry, style, visibility)</li>
+        ///     <li>Only recompute style if only the style (variables, visassets, etc.) has changed</li>
+        ///     <li>Only toggle visibility if only that has changed</li>
+        /// </ol>
+        /// </summary>
         public void RenderImpressions()
         {
             try
