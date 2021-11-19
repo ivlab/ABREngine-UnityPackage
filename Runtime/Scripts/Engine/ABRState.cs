@@ -433,7 +433,8 @@ namespace IVLab.ABREngine
                     }
                     // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
                     // - scalar range changed for the color variable of this impression:
-                    bool scalarRangeChanged = state?.dataRanges?.Equals(previousABRState?.dataRanges) == false;
+                    JToken dataRangeDiff = diffFromPrevious?.SelectToken("dataRanges");
+                    bool dataRangeChanged = dataRangeDiff != null;
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
@@ -455,7 +456,7 @@ namespace IVLab.ABREngine
                             opacityMapChanged = true;
                     }
                     // Toggle the "style changed" flag accordingly
-                    if (scalarRangeChanged || colormapChanged || opacityMapChanged)
+                    if (dataRangeChanged || colormapChanged || opacityMapChanged)
                     {
                         dataImpression.RenderHints.StyleChanged = true;
                     }
@@ -903,88 +904,8 @@ namespace IVLab.ABREngine
 
     class RawDataRanges
     {
-
         public Dictionary<string, DataRange<float>> scalarRanges;
         public Dictionary<string, Dictionary<string, DataRange<float>>> specificScalarRanges;
-
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as RawDataRanges);
-        }
-
-        public bool Equals(RawDataRanges other)
-        {
-            if (other == null)
-            {
-                // Debug.Log("other was null");
-                return false;
-            }
-            // First, go through scalarRanges
-            if (this.scalarRanges != null)
-            {
-                if (other.scalarRanges == null)
-                {
-                    // Debug.Log("other.scalarRanges was null");
-                    return false;
-                }
-                foreach (var path in this.scalarRanges)
-                {
-                    if (!other.scalarRanges.ContainsKey(path.Key))
-                    {
-                        // Debug.Log("other.scalarRanges didn't have scalar " + path.Key);
-                        return false;
-                    }
-                    else
-                    {
-                        if (!this.scalarRanges[path.Key].Equals(other.scalarRanges[path.Key]))
-                        {
-                            // Debug.LogFormat("other.scalarRanges key {0} didn't match {1}", other.scalarRanges[path.Key], this.scalarRanges[path.Key]);
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // Then, go through specificScalarRanges
-            if (this.specificScalarRanges != null)
-            {
-                if (other.specificScalarRanges != null)
-                {
-                    // Debug.Log("other.specificScalarRanges was null");
-                    return false;
-                }
-                foreach (var kdPath in this.specificScalarRanges)
-                {
-                    if (!other.specificScalarRanges.ContainsKey(kdPath.Key))
-                    {
-                        // Debug.Log("other.specificScalarRanges didn't have keydata path " + kdPath.Key);
-                        return false;
-                    }
-                    else
-                    {
-                        var thisRanges = this.specificScalarRanges[kdPath.Key];
-                        var otherRanges = other.specificScalarRanges[kdPath.Key];
-                        foreach (var path in thisRanges)
-                        {
-                            if (!otherRanges.ContainsKey(path.Key))
-                            {
-                                // Debug.Log("otherRanges didn't have scalar path " + path.Key);
-                                return false;
-                            }
-                            else
-                            {
-                                if (!thisRanges[path.Key].Equals(otherRanges[path.Key]))
-                                {
-                                    // Debug.LogFormat("otherRanges key {0} didn't match {1}", otherRanges[path.Key], thisRanges[path.Key]);
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
     }
 
     class RawImpressionGroup
