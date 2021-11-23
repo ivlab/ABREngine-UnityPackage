@@ -94,7 +94,7 @@ namespace IVLab.ABREngine
         // RawDatasets are more analogous to KeyData than they are to Datasets.
         private Dictionary<string, RawDataset> rawDatasets = new Dictionary<string, RawDataset>();
         
-        // Dictionary of Data qet DataPath -> Dataset, which contains all the key
+        // Dictionary of Dataset DataPath -> Dataset, which contains all the key
         // data and variables for a particular dataset
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
 
@@ -179,10 +179,10 @@ namespace IVLab.ABREngine
         /// Datasets may be unloaded from any of the following locations:
         /// <code>
         /// // From a file in the media directory
-        /// await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
+        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
         ///
         /// // From a web resource
-        /// await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
         /// </examples> 
         public async Task UnloadRawDataset<T>(string dataPath)
@@ -192,8 +192,6 @@ namespace IVLab.ABREngine
             string datasetPath = DataPath.GetDatasetPath(dataPath);
             rawDatasets.Remove(dataPath);
             datasets.Remove(datasetPath);
-
-
         }
 
         /// <summary>
