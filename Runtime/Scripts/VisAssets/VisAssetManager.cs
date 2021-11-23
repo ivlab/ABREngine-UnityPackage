@@ -183,6 +183,14 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Unload a particular VisAsset described by its UUID. VisAssets will
+        /// automatically be unloaded from any of the following places:
+        /// 1. The state itself (`localVisAssets`)
+        /// 2. The media directory on the machine ABR is running on
+        /// 3. Any Resources folder (in Assets or in any Package)
+        /// 4. A VisAsset server
+        /// </summary>
         public async Task UnloadVisAsset(Guid visAssetUUID)
         {
             _visAssets.Remove(visAssetUUID);
