@@ -37,7 +37,7 @@ namespace IVLab.ABREngine.Examples
             Task.Run(async () =>
             {
                 // First, wait for the ABREngine to be initialized. If you've
-                // place the ABREngine prefab in your scene, this should already
+                // placed the ABREngine prefab in your scene, this should already
                 // be taken care of, but in case you didn't:
                 await ABREngine.GetInstance().WaitUntilInitialized();
 
