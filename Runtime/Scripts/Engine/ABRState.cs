@@ -768,13 +768,95 @@ namespace IVLab.ABREngine
                     saveState.primitiveGradients = previousState["primitiveGradients"].ToObject<Dictionary<string, RawPrimitiveGradient>>();
                 }
 
-                return JsonConvert.SerializeObject(saveState, settings);
+                // return JsonConvert.SerializeObject(saveState, settings);
+                return JsonConvert.SerializeObject(saveState, new UnityObjectSerializer());
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
                 return null;
             }
+        }
+    }
+
+    /// <summary>
+    /// Custom converter to allow less verbose Newtonsoft serialization of Unity
+    /// builtin objects. This converter manually handles several cases, add more
+    /// as they become necessary.
+    /// </summary>
+    public class UnityObjectSerializer : JsonConverter
+    {
+        public override bool CanRead { get { return false; }}
+
+        private BindingFlags fieldFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        private Dictionary<Type, string[]> _saveFields = new Dictionary<Type, string[]>();
+
+        /// <summary>
+        /// Build the custom converter and define both the types that are
+        /// allowed to be serialized and the string keys that are allowed to
+        /// exist post-serialization
+        /// </summary>
+        public UnityObjectSerializer() : base()
+        {
+            _saveFields.Add(typeof(Vector3), new string[] {"x", "y", "z"});
+            _saveFields.Add(typeof(Quaternion), new string[] {"x", "y", "z", "w"});
+            _saveFields.Add(typeof(Bounds), new string[] {"m_Center", "m_Extents"});
+        }
+
+
+        /// <summary>
+        /// We only provide serializers for these types
+        /// </summary>
+        public override bool CanConvert(Type type)
+        {
+            return _saveFields.Keys.Contains(type);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            // Only use this custom converter if type matches (we shouldn't get here)
+            if (!_saveFields.Keys.Contains(value.GetType()))
+            {
+                Debug.LogWarning("Tried to convert " + value.GetType() + " with UnityObjectSerializer");
+                JToken preOut = JToken.FromObject(value);
+                preOut.WriteTo(writer);
+                return;
+            }
+
+            // Everything from this method will be an object
+            JObject output = new JObject();
+
+            // Check each type to see if it matches with the serialized object
+            Type objectType = value.GetType();
+            foreach (var kv in _saveFields)
+            {
+                if (objectType.IsAssignableFrom(kv.Key))
+                {
+                    foreach (string fieldName in kv.Value)
+                    {
+                        // Use reflection to obtain actual value of the field,
+                        // then assign it to the JObject
+                        FieldInfo info = objectType.GetField(fieldName, fieldFlags);
+                        if (info == null)
+                        {
+                            string allFields = string.Join(", ", objectType.GetFields(fieldFlags).Select(f => f.Name));
+                            Debug.LogWarning($"Unable to find field {fieldName} in object {objectType}. Fields available: {allFields}");
+                            continue;
+                        }
+                        object fieldValue = info.GetValue(value);
+
+                        // Recursively deal with further Unity objects using the current serializer
+                        output[fieldName] = JToken.FromObject(fieldValue, serializer);
+                    }
+                }
+            }
+
+            output.WriteTo(writer);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException("Reading is not supported for this serializer");
         }
     }
 
