@@ -357,6 +357,16 @@ namespace IVLab.ABREngine
                 .GetDataImpression(uuid);
         }
 
+        /// <summary>
+        /// Retreive the first data impression found with a particular function crieteria
+        /// </summary>
+        /// <returns>
+        /// A data impression if found, null otherwise.
+        /// </returns>
+        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        {
+            return GetAllDataImpressions().FirstOrDefault(criteria);
+        }
 
         /// <summary>
         /// Retrieve all data impressions in an ABR state of a given impression
@@ -391,6 +401,24 @@ namespace IVLab.ABREngine
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
 
+        /// <summary>
+        /// Retrieve all data impressions matching a particular criteria
+        /// </summary>
+        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        {
+            return GetAllDataImpressions().Where(criteria).ToList();
+        }
+
+        /// <summary>
+        /// Retrieve ALL data impressions that currently exist within the
+        /// Engine, over ALL data impression groups.
+        /// </summary>
+        public List<IDataImpression> GetAllDataImpressions()
+        {
+            return dataImpressionGroups
+                .Select((kv) => kv.Value.GetDataImpressions().Values.ToList())
+                .Aggregate((all, imps) => all.Concat(imps).ToList());
+        }
 
         /// <summary>
         /// Retrieve the encoded game object in the Unity scene associated with
