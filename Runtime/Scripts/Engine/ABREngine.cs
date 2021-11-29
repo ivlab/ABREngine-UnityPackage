@@ -351,17 +351,10 @@ namespace IVLab.ABREngine
         /// </remarks>
         public IDataImpression GetDataImpression(Guid uuid)
         {
-            try
-            {
-                return dataImpressionGroups
-                    .Select((kv) => kv.Value)
-                    .First((v) => v.HasDataImpression(uuid))
-                    .GetDataImpression(uuid);
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .FirstOrDefault((v) => v.HasDataImpression(uuid))?
+                .GetDataImpression(uuid);
         }
 
 
@@ -409,17 +402,10 @@ namespace IVLab.ABREngine
         /// </returns>
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
         {
-            try
-            {
-                return dataImpressionGroups
-                    .Select((kv) => kv.Value)
-                    .First((v) => v.HasEncodedGameObject(impressionGuid))
-                    .GetEncodedGameObject(impressionGuid);
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+            return dataImpressionGroups
+                .Select((kv) => kv.Value)
+                .FirstOrDefault((v) => v.HasEncodedGameObject(impressionGuid))?
+                .GetEncodedGameObject(impressionGuid);
         }
 
         /// <summary>
@@ -514,14 +500,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup GetDataImpressionGroupByDataset(Dataset ds)
         {
-            try
-            {
-                return dataImpressionGroups.Values.First((g) => g.GetDataset()?.Path == ds?.Path);
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+            return dataImpressionGroups.Values.FirstOrDefault((g) => g.GetDataset()?.Path == ds?.Path);
         }
 
         /// <summary>

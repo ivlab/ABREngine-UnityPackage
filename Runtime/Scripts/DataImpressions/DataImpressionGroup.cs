@@ -190,14 +190,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
         {
-            try
-            {
-                return GetDataImpressions(criteria).First();
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+            return GetDataImpressions(criteria).FirstOrDefault();
         }
 
         /// <summary>
