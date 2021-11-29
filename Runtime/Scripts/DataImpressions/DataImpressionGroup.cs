@@ -214,6 +214,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Get all data impressions in this group that match a particular type (e.g. get all <see cref"SimpleSurfaceDataImpression">s).
         /// </summary>
+        [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
@@ -259,6 +260,27 @@ namespace IVLab.ABREngine
         public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
         {
             return _impressions.Values.Where(criteria).ToList();
+        }
+
+        /// <summary>
+        /// Return all data impressions that have a particular type
+        /// </summary>
+        public List<T> GetDataImpressions<T>()
+        where T : IDataImpression
+        {
+            return _impressions
+                .Select((kv) => kv.Value)
+                .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
+                .Select((imp) => (T) imp).ToList();
+        }
+
+        /// <summary>
+        /// Return all data impressions that match a particular criteria AND have a particular type
+        /// </summary>
+        public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().Where(criteria).ToList();
         }
 
         /// <summary>

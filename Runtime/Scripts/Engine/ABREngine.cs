@@ -375,6 +375,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// A list of data impressions that have a particular type
         /// </returns>
+        [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
@@ -407,6 +408,26 @@ namespace IVLab.ABREngine
         public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
         {
             return GetAllDataImpressions().Where(criteria).ToList();
+        }
+
+        /// <summary>
+        /// Retrieve all data impressions of a particular type
+        /// </summary>
+        public List<T> GetDataImpressions<T>()
+        where T : IDataImpression
+        {
+            return GetAllDataImpressions()
+                .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
+                .Select((imp) => (T) imp).ToList();
+        }
+
+        /// <summary>
+        /// Retrieve all data impressions of a particular type AND matching criteria
+        /// </summary>
+        public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().Where(criteria).ToList();
         }
 
         /// <summary>
