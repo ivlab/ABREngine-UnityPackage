@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace IVLab.ABREngine
 {
@@ -40,6 +41,16 @@ namespace IVLab.ABREngine
     public interface IVisAssetGradient<T> : IVisAsset
     where T : IVisAsset
     {
+        /// <summary>
+        /// List of all VisAssets inside this gradient
+        /// </summary>
+        List<T> VisAssets { get; set; }
+
+        /// <summary>
+        /// List of gradient stops (length of VisAssets - 1)
+        /// </summary>
+        List<float> Stops { get; set; }
+
         /// <summary>
         /// Get the VisAsset at a particular index in the gradient (e.g. get the
         /// 3rd glyph in this set)
