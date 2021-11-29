@@ -369,6 +369,24 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Retreive the first data impression found with a particular type AND function crieteria
+        /// </summary>
+        public T GetDataImpression<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().FirstOrDefault(criteria);
+        }
+
+        /// <summary>
+        /// Retreive the first data impression found with a particular type
+        /// </summary>
+        public T GetDataImpression<T>()
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().FirstOrDefault();
+        }
+
+        /// <summary>
         /// Retrieve all data impressions in an ABR state of a given impression
         /// type (e.g., all `SimpleSurfaceDataImpression`s)
         /// </summary>

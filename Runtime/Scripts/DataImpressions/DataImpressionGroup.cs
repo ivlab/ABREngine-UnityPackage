@@ -194,6 +194,36 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Get a data impression matching a type AND a particular criteria
+        /// </summary>
+        /// <example>
+        /// This method can be used as a more elegant way to access individual
+        /// types of data impressions.
+        /// <code>
+        /// DataImpressionGroup group;
+        /// group.GetDataImpression&lt;SimpleSurfaceDataImpression&gt;((di) =>
+        /// {
+        ///     // di is already a SimpleSurfaceDataImpression
+        ///     return sdi.colormap.Uuid == new Guid("5a761a72-8bcb-11ea-9265-005056bae6d8");
+        /// });
+        /// </code>
+        /// </example>
+        public T GetDataImpression<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>(criteria).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get a data impression matching a type
+        /// </summary>
+        public T GetDataImpression<T>()
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().FirstOrDefault();
+        }
+
+        /// <summary>
         /// Return whether or not the data impression with a given UUID is present in this DataImpressionGroup
         /// </summary>
         public bool HasDataImpression(Guid uuid)
