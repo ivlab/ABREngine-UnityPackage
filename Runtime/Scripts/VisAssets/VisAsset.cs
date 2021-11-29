@@ -38,6 +38,7 @@ namespace IVLab.ABREngine
     }
 
     public interface IVisAssetGradient<T> : IVisAsset
+    where T : IVisAsset
     {
         /// <summary>
         /// Get the VisAsset at a particular index in the gradient (e.g. get the

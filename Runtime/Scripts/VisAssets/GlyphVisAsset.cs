@@ -47,5 +47,50 @@ namespace IVLab.ABREngine
             return NormalMapLods[lod];
         }
     }
+
+    public class GlyphGradient : VisAsset, IVisAssetGradient<GlyphVisAsset>
+    {
+        public override VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
+
+        public List<GlyphVisAsset> VisAssets { get; set; } = new List<GlyphVisAsset>();
+
+        public List<float> Stops { get; set; } = new List<float>();
+
+        public GlyphGradient()
+        {
+            this.Uuid = Guid.NewGuid();
+        }
+
+        public GlyphGradient(List<GlyphVisAsset> visAssets, List<float> stops)
+        {
+            this.Uuid = Guid.NewGuid();
+            this.VisAssets = visAssets;
+            this.Stops = stops;
+        }
+
+        public GlyphVisAsset Get(int index)
+        {
+            try
+            {
+                return VisAssets[index];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
+        public GlyphVisAsset Get(float percentage)
+        {
+            for (int i = 0; i < Stops.Count; i++)
+            {
+                if (i >= percentage)
+                {
+                    return Get(i + 1);
+                }
+            }
+            return null;
+        }
+    }
 }
 
