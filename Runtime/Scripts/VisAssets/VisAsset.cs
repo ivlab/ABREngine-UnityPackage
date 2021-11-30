@@ -38,32 +38,6 @@ namespace IVLab.ABREngine
         VisAssetType VisAssetType { get; }
     }
 
-    public interface IVisAssetGradient<T> : IVisAsset
-    where T : IVisAsset
-    {
-        /// <summary>
-        /// List of all VisAssets inside this gradient
-        /// </summary>
-        List<T> VisAssets { get; set; }
-
-        /// <summary>
-        /// List of gradient stops (length of VisAssets - 1)
-        /// </summary>
-        List<float> Stops { get; set; }
-
-        /// <summary>
-        /// Get the VisAsset at a particular index in the gradient (e.g. get the
-        /// 3rd glyph in this set)
-        /// </summary>
-        T Get(int index);
-
-        /// <summary>
-        /// Get the VisAsset a particular percentage of the way through the
-        /// gradient (e.g. get the glyph that's at 50% through the gradient)
-        /// </summary>
-        T Get(float percentage);
-    }
-
     public class VisAsset : IVisAsset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;
@@ -79,6 +53,81 @@ namespace IVLab.ABREngine
                 parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
+        }
+    }
+
+    /// <summary>
+    /// A gradient consisting of VisAssets of any type.
+    /// </summary>
+    public class VisAssetGradient<T> : VisAsset
+    where T : IVisAsset
+    {
+        /// <summary>
+        /// Type of all visassets in this gradient
+        /// </summary>
+        public override VisAssetType VisAssetType { get; }
+
+        /// <summary>
+        /// List of all VisAssets inside this gradient
+        /// </summary>
+        public List<T> VisAssets { get; } = new List<T>();
+
+        /// <summary>
+        /// List of gradient stops (length of VisAssets - 1)
+        /// </summary>
+        public List<float> Stops { get; } = new List<float>();
+
+        public VisAssetGradient(List<T> visAssets, List<float> stops) : this(Guid.NewGuid(), visAssets, stops) { }
+
+        public VisAssetGradient(Guid uuid, List<T> visAssets, List<float> stops)
+        {
+            this.Uuid = uuid;
+            if (visAssets.Count != stops.Count + 1)
+            {
+                throw new ArgumentException("VisAssetGradient: `visAssets` must have exactly ONE more element than `stops`.");
+            }
+            this.VisAssets = visAssets;
+            this.Stops = stops;
+            if (visAssets.Count > 0)
+            {
+                VisAssetType = visAssets[0].VisAssetType;
+            }
+            else
+            {
+                VisAssetType = VisAssetType.Invalid;
+            }
+        }
+
+        /// <summary>
+        /// Get the VisAsset at a particular index in the gradient (e.g. get the
+        /// 3rd glyph in this set)
+        /// </summary>
+        public T Get(int index)
+        {
+            try
+            {
+                return VisAssets[index];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
+        /// Get the VisAsset a particular percentage of the way through the
+        /// gradient (e.g. get the glyph that's at 50% through the gradient)
+        /// </summary>
+        public T Get(float percentage)
+        {
+            for (int i = 0; i < Stops.Count; i++)
+            {
+                if (i >= percentage)
+                {
+                    return Get(i + 1);
+                }
+            }
+            return default;
         }
     }
 }
