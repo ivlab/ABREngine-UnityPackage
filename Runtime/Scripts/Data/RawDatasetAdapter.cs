@@ -158,36 +158,38 @@ namespace IVLab.ABREngine
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
 
-            ds.scalarArrayNames = new string[scalarVars.Count];
-            ds.scalarMins = new float[scalarVars.Count];
-            ds.scalarMaxes = new float[scalarVars.Count];
-            ds.scalarArrays = new SerializableFloatArray[scalarVars.Count];
+            int numScalars = scalarVars?.Count ?? 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
 
-            // Build the scalar arrays
-            int scalarIndex = 0;
-            foreach (var kv in scalarVars)
+            // Build the scalar arrays, if present
+            if (scalarVars != null)
             {
-                ds.scalarArrayNames[scalarIndex] = kv.Key;
-                ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
-                ds.scalarMins[scalarIndex] = kv.Value.Min();
-                ds.scalarMaxes[scalarIndex] = kv.Value.Max();
-                scalarIndex += 1;
+                int scalarIndex = 0;
+                foreach (var kv in scalarVars)
+                {
+                    ds.scalarArrayNames[scalarIndex] = kv.Key;
+                    ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
+                    ds.scalarMins[scalarIndex] = kv.Value.Min();
+                    ds.scalarMaxes[scalarIndex] = kv.Value.Max();
+                    scalarIndex += 1;
+                }
             }
 
             // Build the points.
-            Vector3[] vertices = new Vector3[points.Count];
-            int[] indices = new int[points.Count];
-            for (int i = 0; i < vertices.Length; i++)
+            ds.vertexArray = new Vector3[points.Count];
+            ds.indexArray = new int[points.Count];
+            ds.cellIndexCounts = new int[points.Count];
+            ds.cellIndexOffsets = new int[points.Count];
+            for (int i = 0; i < ds.vertexArray.Length; i++)
             {
-                vertices[i] = points[i];
-                indices[i] = i;
+                ds.vertexArray[i] = points[i];
+                ds.indexArray[i] = i;
+                ds.cellIndexCounts[i] = 1;
+                ds.cellIndexOffsets[i] = i;
             }
-
-            ds.vertexArray = vertices;
-            ds.indexArray = indices;
-
-            ds.cellIndexCounts = new int[] { vertices.Length };
-            ds.cellIndexOffsets = new int[] { 0 };
 
             return ds;
         }
