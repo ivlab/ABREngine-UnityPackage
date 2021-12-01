@@ -333,6 +333,11 @@ namespace IVLab.ABREngine
                     imr.instanceLocalTransforms = transformsWithThisGlyph;
                     imr.renderInfo = scalarValuesWithThisGlyph;
                 }
+                else if (glyph?.Stops == null || glyphVariable == null)
+                {
+                    imr.instanceLocalTransforms = SSrenderData.transforms;
+                    imr.renderInfo = SSrenderData.scalars;
+                }
             }
         }
 
