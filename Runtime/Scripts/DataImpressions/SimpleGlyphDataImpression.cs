@@ -208,27 +208,6 @@ namespace IVLab.ABREngine
                     encodingRenderInfo.transforms[i] = Matrix4x4.TRS(positions[i], orientations[i], Vector3.one * glyphScale);
                 }
 
-                // Apply and pack scalar variables
-                // INDEX 0: Color
-                if (colorVariable != null && colorVariable.IsPartOf(keyData))
-                {
-                    var colorScalars = colorVariable.GetArray(keyData);
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        encodingRenderInfo.scalars[i][0] = colorScalars[i];
-                    }
-                }
-
-                // INDEX 1: Glyph
-                if (glyphVariable != null && glyphVariable.IsPartOf(keyData))
-                {
-                    var glyphScalars = glyphVariable.GetArray(keyData);
-                    for (int i = 0; i < numPoints; i++)
-                    {
-                        encodingRenderInfo.scalars[i][1] = glyphScalars[i];
-                    }
-                }
-
                 // Apply room-space bounds to renderer
                 encodingRenderInfo.bounds = group.GroupBounds;
                 RenderInfo = encodingRenderInfo;
@@ -295,45 +274,9 @@ namespace IVLab.ABREngine
                 imr.block = new MaterialPropertyBlock();
                 imr.cachedInstanceCount = -1;
 
-                // If we're rendering different glyphs based on a scalar variable, sort these out now
-                if (glyph?.Stops != null && glyphVariable != null && glyphVariable.IsPartOf(keyData))
-                {
-                    // Determine if a scalar value falls within the range of this glyph's gradient stop
-                    Func<float, bool> filterData = (float scalarValue) =>
-                    {
-                        if (glyph.Stops.Count == 0)
-                            return true;
-
-                        if (stopIndex < 0)
-                            return scalarValue < glyph.Stops[0];
-                        else if (stopIndex >= glyph.Stops.Count - 1)
-                            return scalarValue >= glyph.Stops[glyph.Stops.Count - 1];
-                        else
-                            return scalarValue >= glyph.Stops[stopIndex] && scalarValue < glyph.Stops[stopIndex + 1];
-                    };
-
-                    // Calculate subset of data (transforms) for this renderer
-                    Matrix4x4[] transformsWithThisGlyph = SSrenderData.transforms.Where((tf, i) =>
-                    {
-                        // Glyph variable is packed at index 1
-                        float scalarValue = SSrenderData.scalars[i][1];
-                        float normalizedScalarValue = (scalarValue - glyphVariable.Range.min) / (glyphVariable.Range.max - glyphVariable.Range.min);
-                        return filterData(normalizedScalarValue);
-                    }).ToArray();
-
-                    // Calculate subset of data (actual data values) for this renderer
-                    Vector4[] scalarValuesWithThisGlyph = SSrenderData.scalars.Where((sc, i) =>
-                    {
-                        // Glyph variable is packed at index 1
-                        float scalarValue = SSrenderData.scalars[i][1];
-                        float normalizedScalarValue = (scalarValue - glyphVariable.Range.min) / (glyphVariable.Range.max - glyphVariable.Range.min);
-                        return filterData(normalizedScalarValue);
-                    }).ToArray();
-
-                    imr.instanceLocalTransforms = transformsWithThisGlyph;
-                    imr.renderInfo = scalarValuesWithThisGlyph;
-                }
-                else if (glyph?.Stops == null || glyphVariable == null)
+                // If there's only 1 glyph, just use the default (fast) route
+                // and don't recompute anything.
+                if (glyph?.Stops == null || glyph.Stops.Count == 1 || glyphVariable == null)
                 {
                     imr.instanceLocalTransforms = SSrenderData.transforms;
                     imr.renderInfo = SSrenderData.scalars;
@@ -454,6 +397,46 @@ namespace IVLab.ABREngine
                 // Apply scalar/density changes to the instanced mesh renderer
                 imr.instanceDensity = glyphDensityOut;
                 imr.renderInfo = glyphRenderInfo;
+
+                // If we're rendering different glyphs based on a scalar variable, filter these now, otherwise leave as-is
+                if (glyph?.Stops != null && glyphVariable != null && glyphVariable.IsPartOf(keyData))
+                {
+                    // Determine if a scalar value falls within the range of this glyph's gradient stop
+                    Func<float, bool> filterData = (float scalarValue) =>
+                    {
+                        int stopIndex = glyphIndex - 1;
+                        if (glyph.Stops.Count == 0)
+                            return true;
+
+                        if (stopIndex < 0)
+                            return scalarValue < glyph.Stops[0];
+                        else if (stopIndex >= glyph.Stops.Count - 1)
+                            return scalarValue >= glyph.Stops[glyph.Stops.Count - 1];
+                        else
+                            return scalarValue >= glyph.Stops[stopIndex] && scalarValue < glyph.Stops[stopIndex + 1];
+                    };
+                    // Calculate subset of data (transforms) for this renderer
+                    Matrix4x4[] transformsWithThisGlyph = imr.instanceLocalTransforms.Where((tf, i) =>
+                    {
+                        // Glyph variable is packed at index 1
+                        float scalarValue = glyphRenderInfo[i][1];
+                        float normalizedScalarValue = (scalarValue - glyphVariable.Range.min) / (glyphVariable.Range.max - glyphVariable.Range.min);
+                        return filterData(normalizedScalarValue);
+                    }).ToArray();
+
+                    // Calculate subset of data (actual data values) for this renderer
+                    Vector4[] scalarValuesWithThisGlyph = glyphRenderInfo.Where((sc, i) =>
+                    {
+                        // Glyph variable is packed at index 1
+                        float scalarValue = glyphRenderInfo[i][1];
+                        float normalizedScalarValue = (scalarValue - glyphVariable.Range.min) / (glyphVariable.Range.max - glyphVariable.Range.min);
+                        return filterData(normalizedScalarValue);
+                    }).ToArray();
+
+                    // Re-apply transforms and render info for THIS specific glyph
+                    imr.instanceLocalTransforms = transformsWithThisGlyph;
+                    imr.renderInfo = scalarValuesWithThisGlyph;
+                }
 
                 // Apply changes to the mesh's shader / material
                 block.SetFloat("_ColorDataMin", colorVariableMin);
