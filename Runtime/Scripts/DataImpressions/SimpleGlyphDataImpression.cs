@@ -274,13 +274,9 @@ namespace IVLab.ABREngine
                 imr.block = new MaterialPropertyBlock();
                 imr.cachedInstanceCount = -1;
 
-                // If there's only 1 glyph, just use the default (fast) route
-                // and don't recompute anything.
-                if (glyph?.Stops == null || glyph.Stops.Count == 1 || glyphVariable == null)
-                {
-                    imr.instanceLocalTransforms = SSrenderData.transforms;
-                    imr.renderInfo = SSrenderData.scalars;
-                }
+                // Default to using every transform in the data
+                imr.instanceLocalTransforms = SSrenderData.transforms;
+                imr.renderInfo = SSrenderData.scalars;
             }
         }
 

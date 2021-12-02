@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IVLab.ABREngine
 {
@@ -76,6 +77,8 @@ namespace IVLab.ABREngine
         /// List of gradient stops (length of VisAssets - 1)
         /// </summary>
         public List<float> Stops { get; } = new List<float>();
+
+        public VisAssetGradient(T singleVisAsset) : this(Guid.NewGuid(), new T[] { singleVisAsset }.ToList(), new List<float>()) { }
 
         public VisAssetGradient(List<T> visAssets, List<float> stops) : this(Guid.NewGuid(), visAssets, stops) { }
 
