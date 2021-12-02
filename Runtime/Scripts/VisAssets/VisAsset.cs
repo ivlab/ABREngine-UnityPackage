@@ -39,6 +39,16 @@ namespace IVLab.ABREngine
         VisAssetType VisAssetType { get; }
     }
 
+    public interface ITextureVisAsset
+    {
+        Texture2D Texture { get; }
+    }
+
+    public interface IGeometryVisAsset
+    {
+        Mesh Mesh { get; }
+    }
+
     public class VisAsset : IVisAsset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;

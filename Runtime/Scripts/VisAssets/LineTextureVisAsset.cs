@@ -27,7 +27,7 @@ namespace IVLab.ABREngine
         Texture2D Texture { get; set; }
     }
 
-    public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset
+    public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset, ITextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.LineTexture;
 

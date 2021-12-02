@@ -671,7 +671,7 @@ namespace IVLab.ABREngine
                 visAsset.Uuid = guid;
                 visAsset.ImportTime = DateTime.Now;
                 Texture2D colormapTexture = await _fetcher.GetColormapTexture(guid);
-                visAsset.Gradient = colormapTexture;
+                visAsset.Texture = colormapTexture;
                 return visAsset;
             }
 

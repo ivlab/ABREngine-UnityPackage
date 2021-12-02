@@ -214,7 +214,7 @@ namespace IVLab.ABREngine
                 string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
                 Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
                 ColormapVisAsset cmap = new ColormapVisAsset();
-                cmap.Gradient = cmapTex;
+                cmap.Texture = cmapTex;
                 return cmap;
             }
             else

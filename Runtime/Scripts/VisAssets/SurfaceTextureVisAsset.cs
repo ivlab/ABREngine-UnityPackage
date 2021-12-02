@@ -28,7 +28,7 @@ namespace IVLab.ABREngine
         Texture2D NormalMap { get; set; }
     }
 
-    public class SurfaceTextureVisAsset : VisAsset, ISurfaceTextureVisAsset
+    public class SurfaceTextureVisAsset : VisAsset, ISurfaceTextureVisAsset, ITextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.SurfaceTexture;
 

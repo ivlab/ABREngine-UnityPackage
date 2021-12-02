@@ -27,20 +27,20 @@ namespace IVLab.ABREngine
         Texture2D GetColorGradient();
     }
 
-    public class ColormapVisAsset : VisAsset, IColormapVisAsset
+    public class ColormapVisAsset : VisAsset, IColormapVisAsset, ITextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
 
-        public Texture2D Gradient { get; set; } = null;
+        public Texture2D Texture { get; set; } = null;
 
         public Color GetColorInterp(float interpAmount)
         {
-            return Gradient.GetPixelBilinear(interpAmount, 0.5f);
+            return Texture.GetPixelBilinear(interpAmount, 0.5f);
         }
 
         public Texture2D GetColorGradient()
         {
-            return Gradient;
+            return Texture;
         }
 
         public static ColormapVisAsset SolidColor(Color fillColor)
@@ -49,7 +49,7 @@ namespace IVLab.ABREngine
             gradient.SetPixel(0, 0, fillColor);
             gradient.Apply();
             ColormapVisAsset cmap = new ColormapVisAsset();
-            cmap.Gradient = gradient;
+            cmap.Texture = gradient;
             return cmap;
         }
     }
