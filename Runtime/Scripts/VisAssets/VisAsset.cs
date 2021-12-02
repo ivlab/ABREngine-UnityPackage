@@ -41,9 +41,20 @@ namespace IVLab.ABREngine
         VisAssetType VisAssetType { get; }
     }
 
+    /// <summary>
+    /// A VisAsset described by a texture (or, series of textures)
+    /// </summary>
     public interface ITextureVisAsset
     {
+        /// <summary>
+        /// The main texture for this VisAsset
+        /// </summary>
         Texture2D Texture { get; }
+
+        /// <summary>
+        /// In gradients of this VisAsset, how wide to make the blend?
+        /// </summary>
+        float BlendWidth { get; }
     }
 
     public interface IGeometryVisAsset
@@ -104,7 +115,7 @@ namespace IVLab.ABREngine
             {
                 if (_blendMap == null)
                 {
-                    CalculateBlendMaps(blendWidth);
+                    CalculateBlendMaps();
                 }
                 return _blendMap;
             }
@@ -122,7 +133,7 @@ namespace IVLab.ABREngine
             {
                 if (_stopMap == null)
                 {
-                    CalculateBlendMaps(blendWidth);
+                    CalculateBlendMaps();
                 }
                 return _stopMap;
             }
@@ -159,7 +170,6 @@ namespace IVLab.ABREngine
         private Texture2D _blendMap;
         private Texture2D _stopMap;
         private Texture2D _stackedTexture;
-        private float blendWidth;
 
         public VisAssetGradient(T singleVisAsset) : this(Guid.NewGuid(), new T[] { singleVisAsset }.ToList(), new List<float>()) { }
 
@@ -219,12 +229,14 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Calculate the blend and stop maps for this gradient
         /// </summary>
-        private void CalculateBlendMaps(float blendWidth)
+        private void CalculateBlendMaps()
         {
             if (!IsTextureGradient)
             {
                 throw new FormatException($"Gradient {Uuid} is not a texture gradient");
             }
+            float blendWidth = (VisAssets[0] as ITextureVisAsset).BlendWidth;
+
             int width = 1024;
             int height = 1;
             int halfBlendWidthPix = (int)(width * blendWidth);
@@ -252,7 +264,6 @@ namespace IVLab.ABREngine
 
                 int stopCol = (int)(stopPercentage * width);
                 int stopWidthPix = stopCol - previousStopCol;
-                Debug.LogFormat("stop: {1}, stopCol: {0}, stopWidthPix: {2}", stopCol, stop, stopWidthPix);
 
                 // If we're not at the beginning, do the beginning part of the blend (from previous tex)
                 int col = previousStopCol;
@@ -273,8 +284,6 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                Debug.LogFormat("after beginning blend: col {0}, pix len {1}", col, pixels.Count);
-
                 // Perform the main part between blends
                 int mainPartEnd = stop < Stops.Count ? stopCol - halfBlendWidthPix : stopCol;
                 for (; col < mainPartEnd; col++)
@@ -283,8 +292,6 @@ namespace IVLab.ABREngine
                     stopPercentPixels.Add(blendMapPercentages[stop] * percentThroughStop);
                     pixels.Add(blendMapPercentages[stop]);
                 }
-
-                Debug.LogFormat("after main part: col {0}, pix len {1}", col, pixels.Count);
 
                 // If we're not on the last stop, perform the end part of the blend
                 if (stop < Stops.Count)
@@ -303,14 +310,12 @@ namespace IVLab.ABREngine
                         pixels.Add(blendPixel);
                     }
                 }
-                Debug.LogFormat("after end blend: col {0}, pix len {1}", col, pixels.Count);
 
                 previousStopCol = stopCol;
             }
 
             _blendMap = new Texture2D(width, height);
             _blendMap.SetPixels(pixels.ToArray());
-            // blendMap.filterMode = FilterMode.Point;
             _blendMap.Apply();
 
             _stopMap = new Texture2D(width, height);

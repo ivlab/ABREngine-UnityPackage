@@ -30,6 +30,7 @@ namespace IVLab.ABREngine
     public class ColormapVisAsset : VisAsset, IColormapVisAsset, ITextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
+        public float BlendWidth { get; } = 0.0f;
 
         public Texture2D Texture { get; set; } = null;
 

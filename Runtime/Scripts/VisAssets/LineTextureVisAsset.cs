@@ -30,6 +30,7 @@ namespace IVLab.ABREngine
     public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset, ITextureVisAsset
     {
         public override VisAssetType VisAssetType { get; } = VisAssetType.LineTexture;
+        public float BlendWidth { get; } = 0.1f;
 
         public Texture2D Texture { get; set; } = null;
     }

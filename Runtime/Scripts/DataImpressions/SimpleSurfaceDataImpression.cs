@@ -430,7 +430,9 @@ namespace IVLab.ABREngine
                 if (pattern != null)
                 {
                     MatPropBlock.SetInt("_UsePattern", 1);
-                    MatPropBlock.SetTexture("_Pattern", pattern?.StackedTexture);
+                    MatPropBlock.SetTexture("_Pattern", pattern.StackedTexture);
+                    MatPropBlock.SetTexture("_BlendMap", pattern.BlendMap);
+                    MatPropBlock.SetInt("_NumTex", pattern.VisAssets.Count);
                     // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
                 }
