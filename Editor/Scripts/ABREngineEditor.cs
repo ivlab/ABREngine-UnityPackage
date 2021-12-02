@@ -78,7 +78,7 @@ namespace IVLab.ABREngine
                         switch (va.VisAssetType)
                         {
                             case VisAssetType.Colormap:
-                                GUILayout.Box(((ColormapVisAsset) va).Gradient, previewOptions);
+                                GUILayout.Box(((ColormapVisAsset) va).Texture, previewOptions);
                                 break;
                             case VisAssetType.LineTexture:
                                 GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
