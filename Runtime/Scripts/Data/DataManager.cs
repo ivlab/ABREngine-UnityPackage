@@ -185,7 +185,7 @@ namespace IVLab.ABREngine
         /// await ABREngine.Instance.Data.UnloadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
         /// </examples> 
-        public async Task UnloadRawDataset<T>(string dataPath)
+        public void UnloadRawDataset(string dataPath)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
