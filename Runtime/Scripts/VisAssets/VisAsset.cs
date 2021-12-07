@@ -25,20 +25,10 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
-    public enum VisAssetType
-    {
-        Colormap,
-        Glyph,
-        LineTexture,
-        SurfaceTexture,
-        Invalid,
-    }
-
     public interface IVisAsset : IABRInput
     {
         Guid Uuid { get; set; }
         DateTime ImportTime { get; set;}
-        VisAssetType VisAssetType { get; }
     }
 
     /// <summary>
@@ -67,7 +57,6 @@ namespace IVLab.ABREngine
         public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;
         public Guid Uuid { get; set; }
         public DateTime ImportTime { get; set; }
-        public virtual VisAssetType VisAssetType { get; }
 
         public RawABRInput GetRawABRInput()
         {
@@ -88,11 +77,6 @@ namespace IVLab.ABREngine
     public class VisAssetGradient<T> : VisAsset
     where T : IVisAsset
     {
-        /// <summary>
-        /// Type of all visassets in this gradient
-        /// </summary>
-        public override VisAssetType VisAssetType { get; }
-
         /// <summary>
         /// List of all VisAssets inside this gradient
         /// </summary>
@@ -184,14 +168,6 @@ namespace IVLab.ABREngine
             }
             this.VisAssets = visAssets;
             this.Stops = stops;
-            if (visAssets.Count > 0)
-            {
-                VisAssetType = visAssets[0].VisAssetType;
-            }
-            else
-            {
-                VisAssetType = VisAssetType.Invalid;
-            }
         }
 
         /// <summary>

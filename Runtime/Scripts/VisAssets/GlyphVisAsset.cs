@@ -31,8 +31,6 @@ namespace IVLab.ABREngine
 
     public class GlyphVisAsset : VisAsset, IGlyphVisAsset
     {
-        public override VisAssetType VisAssetType { get; } = VisAssetType.Glyph;
-
         public List<Mesh> MeshLods { get; set; } = new List<Mesh>();
 
         public List<Texture2D> NormalMapLods { get; set; } = new List<Texture2D>();
