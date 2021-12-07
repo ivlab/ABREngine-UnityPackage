@@ -72,7 +72,7 @@ namespace IVLab.ABREngine
         /// ask the user for them.
         /// </summary>
         /// <param name="lines">One, or several, lines. Each line consistes of a series of points.</param>
-        public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds)
+        public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             // Find out lengths of each line so we know where to split
             List<Vector3> allPoints = new List<Vector3>();
@@ -89,10 +89,25 @@ namespace IVLab.ABREngine
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
 
-            ds.scalarArrayNames = new string[0];
-            ds.scalarMins = new float[0];
-            ds.scalarMaxes = new float[0];
-            ds.scalarArrays = new SerializableFloatArray[0];
+            int numScalars = scalarVars?.Count ?? 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
+
+            // Build the scalar arrays, if present
+            if (scalarVars != null)
+            {
+                int scalarIndex = 0;
+                foreach (var kv in scalarVars)
+                {
+                    ds.scalarArrayNames[scalarIndex] = kv.Key;
+                    ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
+                    ds.scalarMins[scalarIndex] = kv.Value.Min();
+                    ds.scalarMaxes[scalarIndex] = kv.Value.Max();
+                    scalarIndex += 1;
+                }
+            }
 
             // Build the ribbon (line strip)'s vertices. Create several segments of
             // a ribbon if there are NaNs, instead of connecting through the NaN.
