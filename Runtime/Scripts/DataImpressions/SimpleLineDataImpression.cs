@@ -67,7 +67,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
-        public ILineTextureVisAsset lineTexture;
+        public VisAssetGradient<LineTextureVisAsset> lineTexture;
 
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
@@ -438,11 +438,12 @@ namespace IVLab.ABREngine
             }
             int numLines = dataset.cellIndexCounts.Length;
 
-            // Initialize variables to track scalar "styling" changes
+            // Pack scalar min/max and get scalar data, if any
             Color[][] scalars = new Color[numLines][];
             Vector4 scalarMax = Vector4.zero;
             Vector4 scalarMin = Vector4.zero;
             float[] colorVariableArray = null;
+            float[] ribbonVariableArray = null;
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 colorVariableArray = colorVariable.GetArray(keyData);
@@ -456,6 +457,21 @@ namespace IVLab.ABREngine
                 {
                     scalarMin[0] = colorVariable.Range.min;
                     scalarMax[0] = colorVariable.Range.max;
+                }
+            }
+            if (lineTextureVariable != null && lineTextureVariable.IsPartOf(keyData))
+            {
+                ribbonVariableArray = lineTextureVariable.GetArray(keyData);
+                // Get keydata-specific range, if there is one
+                if (lineTextureVariable.SpecificRanges.ContainsKey(keyData.Path))
+                {
+                    scalarMin[1] = lineTextureVariable.SpecificRanges[keyData.Path].min;
+                    scalarMax[1] = lineTextureVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    scalarMin[1] = lineTextureVariable.Range.min;
+                    scalarMax[1] = lineTextureVariable.Range.max;
                 }
             }
 
@@ -490,9 +506,16 @@ namespace IVLab.ABREngine
                 {
                     Vector4 scalar = Vector4.zero;
 
+                    // Pack scalars
+                    // INDEX 0: Color variable
                     if (colorVariableArray != null)
                     {
                         scalar[0] = colorVariableArray[index];
+                    }
+                    // INDEX 1: Ribbon variable
+                    if (ribbonVariableArray != null)
+                    {
+                        scalar[1] = ribbonVariableArray[index];
                     }
 
                     int indexTopFront = j * 4 + 0;
@@ -534,18 +557,19 @@ namespace IVLab.ABREngine
 
                 if (lineTexture != null)
                 {
-                    MatPropBlock.SetTexture("_Texture", lineTexture.Texture);
-                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.Texture.width / (float)lineTexture.Texture.height);
+                    MatPropBlock.SetTexture("_Texture", lineTexture.StackedTexture);
+                    MatPropBlock.SetTexture("_BlendMap", lineTexture.BlendMap);
+                    MatPropBlock.SetInt("_NumTex", lineTexture.VisAssets.Count);
+                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.StackedTexture.width / (float)lineTexture.StackedTexture.height / (float) lineTexture.VisAssets.Count());
                     MatPropBlock.SetInt("_UseLineTexture", 1);
-
                 }
                 else
                 {
                     MatPropBlock.SetInt("_UseLineTexture", 0);
 
                 }
-                MatPropBlock.SetFloat("_ColorDataMin", scalarMin[0]);
-                MatPropBlock.SetFloat("_ColorDataMax", scalarMax[0]);
+                MatPropBlock.SetVector("_ScalarMin", scalarMin);
+                MatPropBlock.SetVector("_ScalarMax", scalarMax);
                 if (colormap?.GetColorGradient() != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);

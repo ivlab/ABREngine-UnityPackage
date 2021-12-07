@@ -50,12 +50,17 @@ Shader "ABR/Ribbon"
             float _Texturescale = 0.5;
             int _UseLineTexture = 0;
             float _Blend = 1;
+            float _RibbonDataMin;
+            float _RibbonDataMax;
 
             // Colormap parameters
             sampler2D _ColorMap;
             int _UseColorMap = false;
-            float _ColorDataMin;
-            float _ColorDataMax;
+            float4 _ScalarMin;
+            float4 _ScalarMax;
+
+            sampler2D _BlendMap; // Blending for each texture (max of 4, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
+            int _NumTex; // Number of textures in this gradient
 
             struct Input
             {
@@ -92,15 +97,28 @@ Shader "ABR/Ribbon"
             void surf(Input IN, inout SurfaceOutput  o)
             {
                 _Texturescale = 0.5;
-                // Compute texture coordinates (repeating) based on (width / height) of texture
-                float2 uv = float2((IN.texcoord.x / _TextureAspect) % 1, IN.texcoord.y);
+                float percentCoverage = 1.0 / _NumTex;
 
-                // Variables: color, null, null, null
+                // Compute texture coordinates (repeating) based on (width / height) of texture
+                float2 uv = float2((percentCoverage * (IN.texcoord.x / _TextureAspect)) % 1, IN.texcoord.y);
+
+                // Variables: color, ribbon, null, null
                 fixed4 variables = IN.color;
+
+                // DEBUG: Check actual data values
+                // o.Albedo = (variables / 20) + 0.5;
+                // return;
+
+                // Percentages of each texture to use at this fragment
+                float4 blendPercentages = tex2D(_BlendMap, float2(clamp(Remap(variables.y, _ScalarMin[1], _ScalarMax[1], 0, 1), 0.001, 0.999), 0.5));
+
+                // DEBUG: Check how the blend map applies to the line
+                // o.Albedo = blendPercentages;
+                // return;
 
                 // Apply colormap
                 float3 vColor = variables.r;
-                float vColorNorm = clamp(Remap(vColor, _ColorDataMin,_ColorDataMax,0,1),0.01,0.99);
+                float vColorNorm = clamp(Remap(vColor, _ScalarMin[0], _ScalarMax[0], 0, 1),0.01,0.99);
                 if (_UseColorMap == 1)
                 {
                     float3 colorMapColor = tex2D(_ColorMap, float2(vColorNorm, 0.5));
@@ -108,13 +126,28 @@ Shader "ABR/Ribbon"
                 }
                 else
                 {
-                    o.Albedo =  _Color.rgb;
+                    o.Albedo = _Color.rgb;
                 }
 
+                // Blend the various line textures to see if this fragment should be included
+                float3 textureColor = 0;
+                for (int texIndex = 0; texIndex < _NumTex; texIndex++)
+                {
+                    float2 texCoord = float2(uv.x, texIndex * percentCoverage + uv.y / _NumTex);
+                    float3 currentColor = tex2D(_Texture, texCoord);
+                    currentColor *= blendPercentages[texIndex];
+                    textureColor += currentColor;
+                }
+
+                // DEBUG: Check texture application
+                // o.Albedo = textureColor;
+
                 // Throw away this fragment if it's above the value of _TextureCutoff
-                if (_UseLineTexture && tex2D(_Texture, uv).r > _TextureCutoff) {
+                if (_UseLineTexture && textureColor.g > _TextureCutoff)
+                {
                     discard;
                 }
+
                 o.Alpha = 1.0;
             }
             ENDCG
