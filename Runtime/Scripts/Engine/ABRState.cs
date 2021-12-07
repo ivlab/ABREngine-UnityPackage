@@ -752,6 +752,7 @@ namespace IVLab.ABREngine
                 settings.NullValueHandling = NullValueHandling.Ignore;
                 settings.Formatting = Formatting.Indented;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                JsonConvert.DefaultSettings = () => settings;
 
                 if (previousState?.ContainsKey("uiData") ?? false)
                 {
@@ -800,6 +801,7 @@ namespace IVLab.ABREngine
 
         private BindingFlags fieldFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         private Dictionary<Type, string[]> _saveFields = new Dictionary<Type, string[]>();
+        private Dictionary<Type, string[]> _remapFieldNames = new Dictionary<Type, string[]>();
 
         /// <summary>
         /// Build the custom converter and define both the types that are
@@ -811,6 +813,7 @@ namespace IVLab.ABREngine
             _saveFields.Add(typeof(Vector3), new string[] {"x", "y", "z"});
             _saveFields.Add(typeof(Quaternion), new string[] {"x", "y", "z", "w"});
             _saveFields.Add(typeof(Bounds), new string[] {"m_Center", "m_Extents"});
+            _remapFieldNames.Add(typeof(Bounds), new string[] {"center", "extents"});
         }
 
 
@@ -842,8 +845,10 @@ namespace IVLab.ABREngine
             {
                 if (objectType.IsAssignableFrom(kv.Key))
                 {
-                    foreach (string fieldName in kv.Value)
+                    for (int f = 0; f < kv.Value.Length; f++)
                     {
+                        string fieldName = kv.Value[f];
+
                         // Use reflection to obtain actual value of the field,
                         // then assign it to the JObject
                         FieldInfo info = objectType.GetField(fieldName, fieldFlags);
@@ -855,8 +860,14 @@ namespace IVLab.ABREngine
                         }
                         object fieldValue = info.GetValue(value);
 
+                        string newName = fieldName;
+                        if (_remapFieldNames.ContainsKey(kv.Key))
+                        {
+                            newName = _remapFieldNames[kv.Key][f];
+                        }
+
                         // Recursively deal with further Unity objects using the current serializer
-                        output[fieldName] = JToken.FromObject(fieldValue, serializer);
+                        output[newName] = JToken.FromObject(fieldValue, serializer);
                     }
                 }
             }
