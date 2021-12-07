@@ -167,6 +167,8 @@ namespace IVLab.ABREngine
         private Texture2D _stopMap;
         private Texture2D _stackedTexture;
 
+        public VisAssetGradient() : this(Guid.NewGuid(), new List<T>(), new List<float>()) { }
+
         public VisAssetGradient(T singleVisAsset) : this(Guid.NewGuid(), new T[] { singleVisAsset }.ToList(), new List<float>()) { }
 
         public VisAssetGradient(List<T> visAssets, List<float> stops) : this(Guid.NewGuid(), visAssets, stops) { }
@@ -180,6 +182,21 @@ namespace IVLab.ABREngine
             }
             this.VisAssets = visAssets;
             this.Stops = stops;
+        }
+
+        public static VisAssetGradient<T> From(RawVisAssetGradient rawGradient)
+        {
+            List<T> vas = new List<T>();
+            foreach (string vaUuid in rawGradient.visAssets)
+            {
+                IVisAsset va = null;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                {
+                    vas.Add((T) va);
+                }
+            }
+            VisAssetGradient<T> grad = new VisAssetGradient<T>(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
+            return grad;
         }
 
         /// <summary>
@@ -217,7 +234,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Calculate the blend and stop maps for this gradient
         /// </summary>
-        private void CalculateBlendMaps()
+        protected void CalculateBlendMaps()
         {
             if (!IsTextureGradient)
             {
@@ -311,6 +328,50 @@ namespace IVLab.ABREngine
             _stopMap.SetPixels(stopPercentPixels.ToArray());
             _stopMap.Apply();
         }
+    }
+
+    /// <summary>
+    /// Non-Generic type alias for gradients of Glyphs (for easy serialization)
+    /// </summary>
+    public class ABRGlyph : VisAssetGradient<GlyphVisAsset>
+    {
+        public ABRGlyph() : base() { }
+        public ABRGlyph(GlyphVisAsset singleVisAsset) : base(singleVisAsset) { }
+        public ABRGlyph(List<GlyphVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
+        public ABRGlyph(Guid uuid, List<GlyphVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+    }
+
+    /// <summary>
+    /// Non-Generic type alias for gradients of Textures (for easy serialization)
+    /// </summary>
+    public class ABRTexture : VisAssetGradient<SurfaceTextureVisAsset>
+    {
+        public ABRTexture() : base() { }
+        public ABRTexture(SurfaceTextureVisAsset singleVisAsset) : base(singleVisAsset) { }
+        public ABRTexture(List<SurfaceTextureVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
+        public ABRTexture(Guid uuid, List<SurfaceTextureVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+    }
+
+    /// <summary>
+    /// Non-Generic type alias for gradients of Line (for easy serialization)
+    /// </summary>
+    public class ABRLine : VisAssetGradient<LineTextureVisAsset>
+    {
+        public ABRLine() : base() { }
+        public ABRLine(LineTextureVisAsset singleVisAsset) : base(singleVisAsset) { }
+        public ABRLine(List<LineTextureVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
+        public ABRLine(Guid uuid, List<LineTextureVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+    }
+
+    /// <summary>
+    /// Non-Generic type alias for gradients of Colormap (for easy serialization)
+    /// </summary>
+    public class ABRColormap : VisAssetGradient<ColormapVisAsset>
+    {
+        public ABRColormap() : base() { }
+        public ABRColormap(ColormapVisAsset singleVisAsset) : base(singleVisAsset) { }
+        public ABRColormap(List<ColormapVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
+        public ABRColormap(Guid uuid, List<ColormapVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
     }
 
     /// <summary>

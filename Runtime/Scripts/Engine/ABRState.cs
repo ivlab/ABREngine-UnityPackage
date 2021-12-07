@@ -109,10 +109,14 @@ namespace IVLab.ABREngine
                 return null;
             }
 
-            // Populate the visasset manager with any local visassets
+            // Populate the visasset manager with any local visassets and gradients
             if (stateJson.ContainsKey("localVisAssets"))
             {
                 ABREngine.Instance.VisAssets.LocalVisAssets = stateJson["localVisAssets"].ToObject<JObject>();
+            }
+            if (state.visAssetGradients != null)
+            {
+                ABREngine.Instance.VisAssets.VisAssetGradients = state.visAssetGradients;
             }
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -618,7 +622,7 @@ namespace IVLab.ABREngine
 
                 RawABRState saveState = new RawABRState();
                 saveState.impressions = new Dictionary<string, RawDataImpression>();
-                saveState.version = previousState["version"].ToString();
+                saveState.version = previousState?["version"]?.ToString() ?? ABREngine.Instance.Config.SchemaJson["properties"]["version"]["default"].ToString();
                 RawScene saveScene = new RawScene
                 {
                     impressionGroups = new Dictionary<string, RawImpressionGroup>(),
@@ -651,7 +655,7 @@ namespace IVLab.ABREngine
                         // Retrieve easy values
                         string guid = impression.Uuid.ToString();
                         saveImpression.uuid = guid;
-                        if (previousState["impressions"].ToObject<JObject>().ContainsKey(guid))
+                        if (previousState?["impressions"]?.ToObject<JObject>().ContainsKey(guid) ?? false)
                         {
                             saveImpression.name = previousState["impressions"][guid]["name"].ToString();
                         }
@@ -749,24 +753,29 @@ namespace IVLab.ABREngine
                 settings.Formatting = Formatting.Indented;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
-                if (previousState.ContainsKey("uiData"))
+                if (previousState?.ContainsKey("uiData") ?? false)
                 {
                     saveState.uiData = previousState["uiData"];
                 }
 
-                if (previousState.ContainsKey("localVisAssets"))
+                if (previousState?.ContainsKey("localVisAssets") ?? false)
                 {
                     saveState.localVisAssets = previousState["localVisAssets"];
                 }
 
-                if (previousState.ContainsKey("name"))
+                if (previousState?.ContainsKey("name") ?? false)
                 {
                     saveState.name = previousState["name"].ToString();
                 }
 
-                if (previousState.ContainsKey("primitiveGradients"))
+                if (previousState?.ContainsKey("primitiveGradients") ?? false)
                 {
                     saveState.primitiveGradients = previousState["primitiveGradients"].ToObject<Dictionary<string, RawPrimitiveGradient>>();
+                }
+
+                if (ABREngine.Instance.VisAssets.VisAssetGradients != null)
+                {
+                    saveState.visAssetGradients = ABREngine.Instance.VisAssets.VisAssetGradients;
                 }
 
                 // return JsonConvert.SerializeObject(saveState, settings);

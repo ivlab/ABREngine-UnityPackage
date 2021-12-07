@@ -64,7 +64,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
-        public VisAssetGradient<SurfaceTextureVisAsset> pattern;
+        public ABRTexture pattern;
 
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;

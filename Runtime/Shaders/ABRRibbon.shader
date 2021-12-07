@@ -141,6 +141,7 @@ Shader "ABR/Ribbon"
 
                 // DEBUG: Check texture application
                 // o.Albedo = textureColor;
+                // return;
 
                 // Throw away this fragment if it's above the value of _TextureCutoff
                 if (_UseLineTexture && textureColor.g > _TextureCutoff)
