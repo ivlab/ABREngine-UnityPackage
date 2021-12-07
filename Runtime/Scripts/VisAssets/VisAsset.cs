@@ -54,6 +54,18 @@ namespace IVLab.ABREngine
 
     public class VisAsset : IVisAsset
     {
+        /// <summary>
+        /// Typemap where we can look up ABR visasset types and convert to C#
+        /// types. Keys should match the "VisAssetType" in the ABR schema.
+        /// </summary>
+        public static Dictionary<string, Type> VisAssetTypeMap = new Dictionary<string, Type>()
+        {
+            { "colormap", typeof(ColormapVisAsset) },
+            { "glyph", typeof(GlyphVisAsset) },
+            { "line", typeof(LineTextureVisAsset) },
+            { "texture", typeof(SurfaceTextureVisAsset) },
+        };
+
         public ABRInputGenre Genre { get; } = ABRInputGenre.VisAsset;
         public Guid Uuid { get; set; }
         public DateTime ImportTime { get; set; }

@@ -665,6 +665,12 @@ namespace IVLab.ABREngine
                 Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
             }
 
+            if (!VisAsset.VisAssetTypeMap.Keys.Contains(type))
+            {
+                Debug.LogError($"`{type}` is not a valid VisAsset type");
+                return null;
+            }
+
             if (type == "colormap")
             {
                 ColormapVisAsset visAsset = new ColormapVisAsset();
