@@ -312,4 +312,28 @@ namespace IVLab.ABREngine
             _stopMap.Apply();
         }
     }
+
+    /// <summary>
+    /// Serializable version of the VisAsset gradients that interacts with
+    /// state/schema
+    /// </summary>
+    public class RawVisAssetGradient
+    {
+        public string uuid;
+        public string gradientScale = "continuous";
+        public string gradientType;
+        public float[] points;
+        public string[] visAssets;
+
+        public static RawVisAssetGradient From<T>(VisAssetGradient<T> gradient)
+        where T : IVisAsset
+        {
+            RawVisAssetGradient grad = new RawVisAssetGradient();
+            grad.uuid = gradient.Uuid.ToString();
+            grad.gradientType = VisAsset.VisAssetTypeMap.FirstOrDefault((kv) => kv.Value == typeof(T)).Key;
+            grad.points = gradient.Stops.ToArray();
+            grad.visAssets = gradient.VisAssets.Select((va) => va.Uuid.ToString()).ToArray();
+            return grad;
+        }
+    }
 }

@@ -874,6 +874,7 @@ namespace IVLab.ABREngine
         public JToken uiData; // data for UIs, not messing with it at all
         public JToken localVisAssets; // custom vis assets, not messing with them at all
         public Dictionary<string, RawPrimitiveGradient> primitiveGradients; 
+        public Dictionary<string, RawVisAssetGradient> visAssetGradients;
         public string name;
     }
 
