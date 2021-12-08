@@ -60,7 +60,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public IColormapVisAsset colormap;
+        public ABRColormap colormap;
 
 
         [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
@@ -570,10 +570,10 @@ namespace IVLab.ABREngine
                 }
                 MatPropBlock.SetVector("_ScalarMin", scalarMin);
                 MatPropBlock.SetVector("_ScalarMax", scalarMax);
-                if (colormap?.GetColorGradient() != null)
+                if (colormap?.StackedTexture != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                    MatPropBlock.SetTexture("_ColorMap", colormap?.StackedTexture);
                 }
                 else
                 {

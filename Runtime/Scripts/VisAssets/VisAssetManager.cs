@@ -173,6 +173,7 @@ namespace IVLab.ABREngine
                 dependencyUuids.Add(visAssetUUID);
             }
 
+            IVisAsset toReturn = null;
             foreach (var dependency in dependencyUuids)
             {
                 try
@@ -183,7 +184,7 @@ namespace IVLab.ABREngine
                     {
                         try
                         {
-                            visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
+                            visAsset = await visAssetLoader.LoadVisAsset(dependency, fetcher);
                         }
                         catch (Exception e)
                         {
@@ -199,8 +200,8 @@ namespace IVLab.ABREngine
 
                     if (visAsset != null)
                     {
-                        _visAssets[visAssetUUID] = visAsset;
-                        return visAsset;
+                        _visAssets[dependency] = visAsset;
+                        toReturn = visAsset;
                     }
                 }
                 catch (Exception e)
@@ -210,7 +211,11 @@ namespace IVLab.ABREngine
             }
 
             // Post-import, verify that all VisAssets in this gradient are of the correct type
-            if (dependencyUuids.Count > 0 && isGradient)
+            if (!isGradient)
+            {
+                return toReturn;
+            }
+            else if (isGradient && dependencyUuids.Count > 0)
             {
                 IVisAsset[] dependencies = dependencyUuids.Select((g) => {
                     IVisAsset visAsset = null;
@@ -235,18 +240,21 @@ namespace IVLab.ABREngine
                 {
                     if (visAssetType == typeof(GlyphVisAsset))
                     {
-                        ABRGlyph gradient = ABRGlyph.From(VisAssetGradients[visAssetUUID.ToString()]) as ABRGlyph;
+                        ABRGlyph gradient = (ABRGlyph) VisAssetGradients[visAssetUUID.ToString()];
                         _visAssets[visAssetUUID] = gradient;
+                        return gradient;
                     }
                     else if (visAssetType == typeof(SurfaceTextureVisAsset))
                     {
-                        ABRTexture gradient = ABRTexture.From(VisAssetGradients[visAssetUUID.ToString()]) as ABRTexture;
+                        ABRTexture gradient = (ABRTexture) VisAssetGradients[visAssetUUID.ToString()];
                         _visAssets[visAssetUUID] = gradient;
+                        return gradient;
                     }
                     else if (visAssetType == typeof(LineTextureVisAsset))
                     {
-                        ABRLine gradient = ABRLine.From(VisAssetGradients[visAssetUUID.ToString()]) as ABRLine;
+                        ABRLine gradient = (ABRLine) VisAssetGradients[visAssetUUID.ToString()];
                         _visAssets[visAssetUUID] = gradient;
+                        return gradient;
                     }
                     else
                     {

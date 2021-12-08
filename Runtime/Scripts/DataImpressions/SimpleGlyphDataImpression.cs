@@ -56,7 +56,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public IColormapVisAsset colormap;
+        public ABRColormap colormap;
 
         [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
@@ -439,10 +439,10 @@ namespace IVLab.ABREngine
                 block.SetFloat("_ColorDataMax", colorVariableMax);
                 block.SetColor("_Color", Color.white);
 
-                if (colormap?.GetColorGradient() != null)
+                if (colormap?.StackedTexture != null)
                 {
                     block.SetInt("_UseColorMap", 1);
-                    block.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                    block.SetTexture("_ColorMap", colormap?.StackedTexture);
                 }
                 else
                 {

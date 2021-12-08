@@ -180,7 +180,7 @@ namespace IVLab.ABREngine
                         IVisAsset existing;
                         if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
-                            await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
+                            existing = await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                         }
 
                         // Re-import if it's a LocalVisAsset

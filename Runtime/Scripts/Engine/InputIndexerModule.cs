@@ -27,6 +27,26 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    public static class TypeExtentions
+    {
+        /// <summary>
+        /// Check if a type implicitly converts to another.
+        /// Source: https://stackoverflow.com/a/2075975
+        /// </summary>
+        public static bool ImplicitlyConvertsTo(this Type type, Type destinationType)
+        {
+            if (type == destinationType)
+                return true;
+
+            return (from method in type.GetMethods(BindingFlags.Static |
+                                                BindingFlags.Public)
+                    where method.Name == "op_Implicit" &&
+                        method.ReturnType == destinationType
+                    select method
+                    ).Count() > 0;
+        }
+    }
+
     /// <summary>
     /// Convenience class to avoid having to repeatedly manage reflection when
     /// adjusting ABR inputs to Data Impressions.
@@ -161,12 +181,13 @@ namespace IVLab.ABREngine
 
         public bool CanAssignInput(int inputIndex, IABRInput value)
         {
-            return GetInputField(inputIndex)?.FieldType.IsAssignableFrom(value.GetType()) ?? false;
+            Type fieldType = GetInputField(inputIndex)?.FieldType;
+            return fieldType != null && (fieldType.IsAssignableFrom(value.GetType()) || fieldType.ImplicitlyConvertsTo(value.GetType()));
         }
 
         public bool CanAssignInput(string inputName, IABRInput value)
         {
-            return GetInputField(inputName)?.FieldType.IsAssignableFrom(value.GetType()) ?? false;
+            return CanAssignInput(GetInputIndex(inputName), value);
         }
 
 

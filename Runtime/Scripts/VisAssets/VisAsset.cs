@@ -169,7 +169,7 @@ namespace IVLab.ABREngine
 
         public VisAssetGradient() : this(Guid.NewGuid(), new List<T>(), new List<float>()) { }
 
-        public VisAssetGradient(T singleVisAsset) : this(Guid.NewGuid(), new T[] { singleVisAsset }.ToList(), new List<float>()) { }
+        public VisAssetGradient(T singleVisAsset) : this(singleVisAsset.Uuid, new T[] { singleVisAsset }.ToList(), new List<float>()) { }
 
         public VisAssetGradient(List<T> visAssets, List<float> stops) : this(Guid.NewGuid(), visAssets, stops) { }
 
@@ -182,21 +182,6 @@ namespace IVLab.ABREngine
             }
             this.VisAssets = visAssets;
             this.Stops = stops;
-        }
-
-        public static VisAssetGradient<T> From(RawVisAssetGradient rawGradient)
-        {
-            List<T> vas = new List<T>();
-            foreach (string vaUuid in rawGradient.visAssets)
-            {
-                IVisAsset va = null;
-                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
-                {
-                    vas.Add((T) va);
-                }
-            }
-            VisAssetGradient<T> grad = new VisAssetGradient<T>(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
-            return grad;
         }
 
         /// <summary>
@@ -331,7 +316,7 @@ namespace IVLab.ABREngine
     }
 
     /// <summary>
-    /// Non-Generic type alias for gradients of Glyphs (for easy serialization)
+    /// Base type for all glyphs, (single/gradient)
     /// </summary>
     public class ABRGlyph : VisAssetGradient<GlyphVisAsset>
     {
@@ -339,10 +324,27 @@ namespace IVLab.ABREngine
         public ABRGlyph(GlyphVisAsset singleVisAsset) : base(singleVisAsset) { }
         public ABRGlyph(List<GlyphVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
         public ABRGlyph(Guid uuid, List<GlyphVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+
+        public static implicit operator GlyphVisAsset(ABRGlyph visAsset) => visAsset.VisAssets[0];
+        public static implicit operator ABRGlyph(GlyphVisAsset visAsset) => new ABRGlyph(visAsset);
+        public static explicit operator ABRGlyph(RawVisAssetGradient rawGradient)
+        {
+            List<GlyphVisAsset> vas = new List<GlyphVisAsset>();
+            foreach (string vaUuid in rawGradient.visAssets)
+            {
+                IVisAsset va = null;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                {
+                    vas.Add((GlyphVisAsset) va);
+                }
+            }
+            ABRGlyph grad = new ABRGlyph(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
+            return grad;
+        }
     }
 
     /// <summary>
-    /// Non-Generic type alias for gradients of Textures (for easy serialization)
+    /// Base type for all textures, (single/gradient)
     /// </summary>
     public class ABRTexture : VisAssetGradient<SurfaceTextureVisAsset>
     {
@@ -350,10 +352,27 @@ namespace IVLab.ABREngine
         public ABRTexture(SurfaceTextureVisAsset singleVisAsset) : base(singleVisAsset) { }
         public ABRTexture(List<SurfaceTextureVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
         public ABRTexture(Guid uuid, List<SurfaceTextureVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+
+        public static implicit operator SurfaceTextureVisAsset(ABRTexture visAsset) => visAsset.VisAssets[0];
+        public static implicit operator ABRTexture(SurfaceTextureVisAsset visAsset) => new ABRTexture(visAsset);
+        public static explicit operator ABRTexture(RawVisAssetGradient rawGradient)
+        {
+            List<SurfaceTextureVisAsset> vas = new List<SurfaceTextureVisAsset>();
+            foreach (string vaUuid in rawGradient.visAssets)
+            {
+                IVisAsset va = null;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                {
+                    vas.Add((SurfaceTextureVisAsset) va);
+                }
+            }
+            ABRTexture grad = new ABRTexture(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
+            return grad;
+        }
     }
 
     /// <summary>
-    /// Non-Generic type alias for gradients of Line (for easy serialization)
+    /// Base type for all lines, (single/gradient)
     /// </summary>
     public class ABRLine : VisAssetGradient<LineTextureVisAsset>
     {
@@ -361,10 +380,27 @@ namespace IVLab.ABREngine
         public ABRLine(LineTextureVisAsset singleVisAsset) : base(singleVisAsset) { }
         public ABRLine(List<LineTextureVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
         public ABRLine(Guid uuid, List<LineTextureVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+
+        public static implicit operator LineTextureVisAsset(ABRLine visAsset) => visAsset.VisAssets[0];
+        public static implicit operator ABRLine(LineTextureVisAsset visAsset) => new ABRLine(visAsset);
+        public static explicit operator ABRLine(RawVisAssetGradient rawGradient)
+        {
+            List<LineTextureVisAsset> vas = new List<LineTextureVisAsset>();
+            foreach (string vaUuid in rawGradient.visAssets)
+            {
+                IVisAsset va = null;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                {
+                    vas.Add((LineTextureVisAsset) va);
+                }
+            }
+            ABRLine grad = new ABRLine(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
+            return grad;
+        }
     }
 
     /// <summary>
-    /// Non-Generic type alias for gradients of Colormap (for easy serialization)
+    /// Base type for all colormaps, (single/gradient)
     /// </summary>
     public class ABRColormap : VisAssetGradient<ColormapVisAsset>
     {
@@ -372,6 +408,23 @@ namespace IVLab.ABREngine
         public ABRColormap(ColormapVisAsset singleVisAsset) : base(singleVisAsset) { }
         public ABRColormap(List<ColormapVisAsset> visAssets, List<float> stops) : base(visAssets, stops) { }
         public ABRColormap(Guid uuid, List<ColormapVisAsset> visAssets, List<float> stops) : base(uuid, visAssets, stops) { }
+
+        public static implicit operator ColormapVisAsset(ABRColormap visAsset) => visAsset.VisAssets[0];
+        public static implicit operator ABRColormap(ColormapVisAsset visAsset) => new ABRColormap(visAsset);
+        public static explicit operator ABRColormap(RawVisAssetGradient rawGradient)
+        {
+            List<ColormapVisAsset> vas = new List<ColormapVisAsset>();
+            foreach (string vaUuid in rawGradient.visAssets)
+            {
+                IVisAsset va = null;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                {
+                    vas.Add((ColormapVisAsset) va);
+                }
+            }
+            ABRColormap grad = new ABRColormap(new Guid(rawGradient.uuid), vas, rawGradient.points.ToList());
+            return grad;
+        }
     }
 
     /// <summary>

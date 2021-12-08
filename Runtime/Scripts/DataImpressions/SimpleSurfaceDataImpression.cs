@@ -57,7 +57,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public IColormapVisAsset colormap;
+        public ABRColormap colormap;
 
 
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
@@ -416,10 +416,10 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetInt("_UsePatternVariable", 0);
 
             }
-            if (colormap?.GetColorGradient() != null)
+            if (colormap?.StackedTexture != null)
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
-                MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                MatPropBlock.SetTexture("_ColorMap", colormap?.StackedTexture);
             }
             else
             {
