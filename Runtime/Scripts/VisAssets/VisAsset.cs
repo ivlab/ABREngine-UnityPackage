@@ -118,8 +118,15 @@ namespace IVLab.ABREngine
         void Initialize(Guid uuid, List<T> visAssets, List<float> stops);
     }
 
+    /// <summary>
+    /// Concrete implementation of a VisAsset Gradient, which is a collection of
+    /// VisAssets that also counts as a single VisAsset.
+    /// </summary>
     public class VisAssetGradient : VisAsset
     {
+        /// <summary>
+        /// Convert from a <see cref="RawVisAssetGradient"> to a regular gradient for internal use.
+        /// </summary>
         public static T FromRaw<T, S>(RawVisAssetGradient raw)
         where T : IVisAssetGradient<S>, new()
         where S : IVisAsset
@@ -156,6 +163,10 @@ namespace IVLab.ABREngine
         public float[] points;
         public string[] visAssets;
 
+        /// <summary>
+        /// Convert from a regular <see cref="VisAssetGradient"> to raw gradient
+        /// for serialization/import/export/interfacing with other apps.
+        /// </summary>
         public static RawVisAssetGradient ToRaw<T>(IVisAssetGradient<T> gradient)
         where T : IVisAsset
         {
