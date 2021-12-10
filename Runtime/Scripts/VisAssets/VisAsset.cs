@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
 
 namespace IVLab.ABREngine
@@ -71,10 +70,10 @@ namespace IVLab.ABREngine
         /// </summary>
         public static Dictionary<string, Type> VisAssetTypeMap = new Dictionary<string, Type>()
         {
-            { "colormap", typeof(IColormapVisAsset) },
-            { "glyph", typeof(IGlyphVisAsset) },
-            { "line", typeof(ILineTextureVisAsset) },
-            { "texture", typeof(ISurfaceTextureVisAsset) },
+            { "colormap", typeof(ColormapVisAsset) },
+            { "glyph", typeof(GlyphVisAsset) },
+            { "line", typeof(LineTextureVisAsset) },
+            { "texture", typeof(SurfaceTextureVisAsset) },
         };
 
         public RawABRInput GetRawABRInput()
@@ -128,7 +127,7 @@ namespace IVLab.ABREngine
             Type gradType = VisAsset.VisAssetTypeMap.FirstOrDefault((kv) => kv.Key == raw.gradientType).Value;
             if (gradType != typeof(S))
             {
-                throw new ArgumentException("VisAssetGradientConverter: incoming raw gradient type does not match desired output type");
+                throw new ArgumentException("VisAssetGradient: incoming raw gradient type does not match desired output type");
             }
             List<S> visAssets = raw.visAssets.Select((vaUuid) =>
             {
