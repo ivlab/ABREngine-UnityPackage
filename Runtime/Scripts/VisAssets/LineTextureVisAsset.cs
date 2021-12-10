@@ -18,19 +18,68 @@
  */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public interface ILineTextureVisAsset
+    public interface ILineTextureVisAsset : IVisAsset, ITextureGradient
     {
-        Texture2D Texture { get; set; }
+        /// <summary>
+        /// Obtain the first (or, only) texture in a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture();
+
+        /// <summary>
+        /// Obtain the texture at a specific index within a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture(int gradientIndex);
+
+        /// <summary>
+        /// Obtain the texture at a specific t-value (percentage) within a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture(float gradientT);
     }
 
-    public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset, ITextureVisAsset
+    public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset, ITextureGradient
     {
-        public float BlendWidth { get; } = 0.1f;
+        public int VisAssetCount { get; } = 1;
+        public GradientBlendMap BlendMaps { get; }
+        public Texture2D Texture { get; }
 
-        public Texture2D Texture { get; set; } = null;
+        public LineTextureVisAsset() : this(new Guid(), null) { }
+        public LineTextureVisAsset(Texture2D texture) : this(Guid.NewGuid(), texture) { }
+        public LineTextureVisAsset(Guid uuid, Texture2D texture)
+        {
+            Uuid = uuid;
+            Texture = texture;
+            ImportTime = DateTime.Now;
+        }
+
+        public Texture2D GetTexture() => Texture;
+        public Texture2D GetTexture(int gradientIndex) => Texture;
+        public Texture2D GetTexture(float gradientT) => Texture;
+    }
+
+    public class LineTextureGradient : VisAsset, ILineTextureVisAsset, IVisAssetGradient<LineTextureVisAsset>, ITextureGradient
+    {
+        public int VisAssetCount { get => VisAssets.Count; }
+        public GradientBlendMap BlendMaps { get; }
+        public List<LineTextureVisAsset> VisAssets { get; }
+        public List<float> Stops { get; }
+
+        public Texture2D GetTexture() => VisAssets[0].GetTexture();
+        public Texture2D GetTexture(int gradientIndex) => VisAssets[gradientIndex].GetTexture();
+        public Texture2D GetTexture(float gradientT)
+        {
+            for (int i = 0; i < Stops.Count; i++)
+            {
+                if (Stops[i] >= gradientT)
+                {
+                    return GetTexture(i + 1);
+                }
+            }
+            return default;
+        }
     }
 }

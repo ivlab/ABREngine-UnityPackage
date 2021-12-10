@@ -46,7 +46,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ABRColormap colormap;
+        public IColormapVisAsset colormap;
 
         [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
@@ -304,7 +304,7 @@ namespace IVLab.ABREngine
             if (colormap != null)
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
-                MatPropBlock.SetTexture("_ColorMap", colormap.StackedTexture);
+                MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
             }
             else
             {

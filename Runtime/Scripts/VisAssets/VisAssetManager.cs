@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
@@ -236,31 +235,31 @@ namespace IVLab.ABREngine
                     return null;
                 }
 
-                Type visAssetType = vaType.First();
-                {
-                    if (visAssetType == typeof(GlyphVisAsset))
-                    {
-                        ABRGlyph gradient = (ABRGlyph) VisAssetGradients[visAssetUUID.ToString()];
-                        _visAssets[visAssetUUID] = gradient;
-                        return gradient;
-                    }
-                    else if (visAssetType == typeof(SurfaceTextureVisAsset))
-                    {
-                        ABRTexture gradient = (ABRTexture) VisAssetGradients[visAssetUUID.ToString()];
-                        _visAssets[visAssetUUID] = gradient;
-                        return gradient;
-                    }
-                    else if (visAssetType == typeof(LineTextureVisAsset))
-                    {
-                        ABRLine gradient = (ABRLine) VisAssetGradients[visAssetUUID.ToString()];
-                        _visAssets[visAssetUUID] = gradient;
-                        return gradient;
-                    }
-                    else
-                    {
-                        throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
-                    }
-                }
+                // Type visAssetType = vaType.First();
+                // {
+                //     if (visAssetType == typeof(GlyphVisAsset))
+                //     {
+                //         ABRGlyph gradient = (ABRGlyph) VisAssetGradients[visAssetUUID.ToString()];
+                //         _visAssets[visAssetUUID] = gradient;
+                //         return gradient;
+                //     }
+                //     else if (visAssetType == typeof(SurfaceTextureVisAsset))
+                //     {
+                //         ABRTexture gradient = (ABRTexture) VisAssetGradients[visAssetUUID.ToString()];
+                //         _visAssets[visAssetUUID] = gradient;
+                //         return gradient;
+                //     }
+                //     else if (visAssetType == typeof(LineTextureVisAsset))
+                //     {
+                //         ABRLine gradient = (ABRLine) VisAssetGradients[visAssetUUID.ToString()];
+                //         _visAssets[visAssetUUID] = gradient;
+                //         return gradient;
+                //     }
+                //     else
+                //     {
+                //         throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
+                //     }
+                // }
             }
             return null;
         }
@@ -293,9 +292,7 @@ namespace IVLab.ABREngine
                 // Define a black-to-white colormap
                 string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
                 Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
-                ColormapVisAsset cmap = new ColormapVisAsset();
-                cmap.Texture = cmapTex;
-                return cmap;
+                return new ColormapVisAsset(cmapTex);
             }
             else
             {

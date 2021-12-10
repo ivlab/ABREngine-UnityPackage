@@ -60,14 +60,14 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ABRColormap colormap;
+        public IColormapVisAsset colormap;
 
 
         [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
-        public ABRLine lineTexture;
+        public ILineTextureVisAsset lineTexture;
 
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
@@ -557,10 +557,10 @@ namespace IVLab.ABREngine
 
                 if (lineTexture != null)
                 {
-                    MatPropBlock.SetTexture("_Texture", lineTexture.StackedTexture);
-                    MatPropBlock.SetTexture("_BlendMap", lineTexture.BlendMap);
-                    MatPropBlock.SetInt("_NumTex", lineTexture.VisAssets.Count);
-                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.StackedTexture.width / (float)lineTexture.StackedTexture.height / (float) lineTexture.VisAssets.Count());
+                    MatPropBlock.SetTexture("_Texture", lineTexture.BlendMaps.Textures);
+                    MatPropBlock.SetTexture("_BlendMap", lineTexture.BlendMaps.BlendMap);
+                    MatPropBlock.SetInt("_NumTex", lineTexture.VisAssetCount);
+                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.BlendMaps.Textures.width / (float)lineTexture.BlendMaps.Textures.height / (float) lineTexture.VisAssetCount);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
                 }
                 else
@@ -570,10 +570,10 @@ namespace IVLab.ABREngine
                 }
                 MatPropBlock.SetVector("_ScalarMin", scalarMin);
                 MatPropBlock.SetVector("_ScalarMax", scalarMax);
-                if (colormap?.StackedTexture != null)
+                if (colormap?.GetColorGradient() != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
-                    MatPropBlock.SetTexture("_ColorMap", colormap?.StackedTexture);
+                    MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
                 }
                 else
                 {

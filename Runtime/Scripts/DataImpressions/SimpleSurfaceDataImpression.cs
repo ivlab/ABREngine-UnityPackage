@@ -57,14 +57,14 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ABRColormap colormap;
+        public IColormapVisAsset colormap;
 
 
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
-        public ABRTexture pattern;
+        public ISurfaceTextureVisAsset pattern;
 
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
@@ -416,10 +416,10 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetInt("_UsePatternVariable", 0);
 
             }
-            if (colormap?.StackedTexture != null)
+            if (colormap?.GetColorGradient() != null)
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
-                MatPropBlock.SetTexture("_ColorMap", colormap?.StackedTexture);
+                MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
             }
             else
             {
@@ -430,9 +430,9 @@ namespace IVLab.ABREngine
                 if (pattern != null)
                 {
                     MatPropBlock.SetInt("_UsePattern", 1);
-                    MatPropBlock.SetTexture("_Pattern", pattern.StackedTexture);
-                    MatPropBlock.SetTexture("_BlendMap", pattern.BlendMap);
-                    MatPropBlock.SetInt("_NumTex", pattern.VisAssets.Count);
+                    MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
+                    MatPropBlock.SetTexture("_BlendMap", pattern.BlendMaps.BlendMap);
+                    MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
                     // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
                 }

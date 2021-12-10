@@ -56,13 +56,13 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ABRColormap colormap;
+        public IColormapVisAsset colormap;
 
         [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
         [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
-        public ABRGlyph glyph;
+        public IGlyphVisAsset glyph;
 
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
@@ -241,7 +241,7 @@ namespace IVLab.ABREngine
             }
 
             // Create pooled game objects with mesh renderer and instanced mesh renderer
-            int rendererCount = glyph?.Stops?.Count ?? 0;
+            int rendererCount = glyph?.VisAssetCount - 1 ?? 0;
             for (int stopIndex = -1; stopIndex < rendererCount; stopIndex++)
             {
                 GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", currentGameObject.transform, (go) =>
@@ -321,10 +321,10 @@ namespace IVLab.ABREngine
                 }
 
                 // Update the instanced mesh renderer to use the currently selected glyph
-                if (glyph != null && glyph.Get(glyphIndex) != null)
+                if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod) != null)
                 {
-                    imr.instanceMesh = glyph.Get(glyphIndex).GetMesh(glyphLod);
-                    block.SetTexture("_Normal", glyph.Get(glyphIndex).GetNormalMap(glyphLod));
+                    imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod);
+                    block.SetTexture("_Normal", glyph.GetNormalMap(glyphIndex, glyphLod));
                 }
                 else
                 {
@@ -395,21 +395,22 @@ namespace IVLab.ABREngine
                 imr.renderInfo = glyphRenderInfo;
 
                 // If we're rendering different glyphs based on a scalar variable, filter these now, otherwise leave as-is
-                if (glyph?.Stops != null && glyphVariable != null && glyphVariable.IsPartOf(keyData))
+                if (glyph?.VisAssetCount > 1 && glyphVariable != null && glyphVariable.IsPartOf(keyData))
                 {
+                    GlyphGradient gradient = glyph as GlyphGradient;
                     // Determine if a scalar value falls within the range of this glyph's gradient stop
                     Func<float, bool> filterData = (float scalarValue) =>
                     {
                         int stopIndex = glyphIndex - 1;
-                        if (glyph.Stops.Count == 0)
+                        if (gradient.Stops.Count == 0)
                             return true;
 
                         if (stopIndex < 0)
-                            return scalarValue < glyph.Stops[0];
-                        else if (stopIndex >= glyph.Stops.Count - 1)
-                            return scalarValue >= glyph.Stops[glyph.Stops.Count - 1];
+                            return scalarValue < gradient.Stops[0];
+                        else if (stopIndex >= gradient.Stops.Count - 1)
+                            return scalarValue >= gradient.Stops[gradient.Stops.Count - 1];
                         else
-                            return scalarValue >= glyph.Stops[stopIndex] && scalarValue < glyph.Stops[stopIndex + 1];
+                            return scalarValue >= gradient.Stops[stopIndex] && scalarValue < gradient.Stops[stopIndex + 1];
                     };
                     // Calculate subset of data (transforms) for this renderer
                     Matrix4x4[] transformsWithThisGlyph = imr.instanceLocalTransforms.Where((tf, i) =>
@@ -439,10 +440,10 @@ namespace IVLab.ABREngine
                 block.SetFloat("_ColorDataMax", colorVariableMax);
                 block.SetColor("_Color", Color.white);
 
-                if (colormap?.StackedTexture != null)
+                if (colormap?.GetColorGradient() != null)
                 {
                     block.SetInt("_UseColorMap", 1);
-                    block.SetTexture("_ColorMap", colormap?.StackedTexture);
+                    block.SetTexture("_ColorMap", colormap?.GetColorGradient());
                 }
                 else
                 {
