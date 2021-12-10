@@ -235,31 +235,31 @@ namespace IVLab.ABREngine
                     return null;
                 }
 
-                // Type visAssetType = vaType.First();
-                // {
-                //     if (visAssetType == typeof(GlyphVisAsset))
-                //     {
-                //         ABRGlyph gradient = (ABRGlyph) VisAssetGradients[visAssetUUID.ToString()];
-                //         _visAssets[visAssetUUID] = gradient;
-                //         return gradient;
-                //     }
-                //     else if (visAssetType == typeof(SurfaceTextureVisAsset))
-                //     {
-                //         ABRTexture gradient = (ABRTexture) VisAssetGradients[visAssetUUID.ToString()];
-                //         _visAssets[visAssetUUID] = gradient;
-                //         return gradient;
-                //     }
-                //     else if (visAssetType == typeof(LineTextureVisAsset))
-                //     {
-                //         ABRLine gradient = (ABRLine) VisAssetGradients[visAssetUUID.ToString()];
-                //         _visAssets[visAssetUUID] = gradient;
-                //         return gradient;
-                //     }
-                //     else
-                //     {
-                //         throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
-                //     }
-                // }
+                Type visAssetType = vaType.First();
+                {
+                    if (visAssetType == typeof(GlyphVisAsset))
+                    {
+                        GlyphGradient gradient = VisAssetGradient.FromRaw<GlyphGradient, GlyphVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(SurfaceTextureVisAsset))
+                    {
+                        SurfaceTextureGradient gradient = VisAssetGradient.FromRaw<SurfaceTextureGradient, SurfaceTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(LineTextureVisAsset))
+                    {
+                        LineTextureGradient gradient = VisAssetGradient.FromRaw<LineTextureGradient, LineTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else
+                    {
+                        throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
+                    }
+                }
             }
             return null;
         }
