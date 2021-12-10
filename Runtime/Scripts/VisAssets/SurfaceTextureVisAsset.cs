@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,12 +64,20 @@ namespace IVLab.ABREngine
         public Texture2D GetTexture(float gradientT) => Texture;
     }
 
-    public class SurfaceTextureGradient : VisAsset, ISurfaceTextureVisAsset, IVisAssetGradient<SurfaceTextureVisAsset>, ITextureGradient
+    public class SurfaceTextureGradient : VisAssetGradient, ISurfaceTextureVisAsset, IVisAssetGradient<SurfaceTextureVisAsset>, ITextureGradient
     {
         public int VisAssetCount { get => VisAssets.Count; }
-        public GradientBlendMap BlendMaps { get; }
-        public List<SurfaceTextureVisAsset> VisAssets { get; }
-        public List<float> Stops { get; }
+        public GradientBlendMap BlendMaps { get; private set; }
+        public List<SurfaceTextureVisAsset> VisAssets { get; private set; }
+        public List<float> Stops { get; private set; }
+
+        public void Initialize(Guid uuid, List<SurfaceTextureVisAsset> visAssets, List<float> stops)
+        {
+            Uuid = uuid;
+            VisAssets = visAssets;
+            Stops = stops;
+            BlendMaps = new GradientBlendMap(VisAssets.Select(va => va.GetTexture()).ToList(), Stops, 0.1f);
+        }
 
         public Texture2D GetTexture() => VisAssets[0].GetTexture();
         public Texture2D GetTexture(int gradientIndex) => VisAssets[gradientIndex].GetTexture();

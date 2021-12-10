@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -80,11 +81,18 @@ namespace IVLab.ABREngine
         public Texture2D GetNormalMap(float gradientT, int lod) => GetNormalMap(lod);
     }
 
-    public class GlyphGradient : VisAsset, IGlyphVisAsset, IVisAssetGradient<GlyphVisAsset>
+    public class GlyphGradient : VisAssetGradient, IGlyphVisAsset, IVisAssetGradient<GlyphVisAsset>
     {
         public int VisAssetCount { get => VisAssets.Count; }
-        public List<GlyphVisAsset> VisAssets { get; }
-        public List<float> Stops { get; }
+        public List<GlyphVisAsset> VisAssets { get; private set; }
+        public List<float> Stops { get; private set; }
+
+        public void Initialize(Guid uuid, List<GlyphVisAsset> visAssets, List<float> stops)
+        {
+            Uuid = uuid;
+            VisAssets = visAssets;
+            Stops = stops;
+        }
 
         public Mesh GetMesh(int lod) => GetMesh(0, lod);
         public Texture2D GetNormalMap(int lod) => GetNormalMap(0, lod);

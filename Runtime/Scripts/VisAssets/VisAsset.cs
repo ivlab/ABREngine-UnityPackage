@@ -69,7 +69,7 @@ namespace IVLab.ABREngine
         /// Schema</a>.
         /// Should match one of: #/definitions/VisAssetType
         /// </summary>
-        private static Dictionary<string, Type> VisAssetTypeMap = new Dictionary<string, Type>()
+        public static Dictionary<string, Type> VisAssetTypeMap = new Dictionary<string, Type>()
         {
             { "colormap", typeof(IColormapVisAsset) },
             { "glyph", typeof(IGlyphVisAsset) },
@@ -110,6 +110,37 @@ namespace IVLab.ABREngine
         /// List of gradient stops (length of VisAssets - 1)
         /// </summary>
         List<float> Stops { get; }
+
+        /// <summary>
+        /// Initialize this gradient with a UUID, some VisAssets, and some
+        /// Stops. This is used instead of a constructor because it is much more
+        /// flexible.
+        /// </summary>
+        void Initialize(Guid uuid, List<T> visAssets, List<float> stops);
+    }
+
+    public class VisAssetGradient : VisAsset
+    {
+        public static T FromRaw<T, S>(RawVisAssetGradient raw)
+        where T : IVisAssetGradient<S>, new()
+        where S : IVisAsset
+        {
+            Type gradType = VisAsset.VisAssetTypeMap.FirstOrDefault((kv) => kv.Key == raw.gradientType).Value;
+            if (gradType != typeof(S))
+            {
+                throw new ArgumentException("VisAssetGradientConverter: incoming raw gradient type does not match desired output type");
+            }
+            List<S> visAssets = raw.visAssets.Select((vaUuid) =>
+            {
+                IVisAsset va;
+                if (ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(vaUuid), out va))
+                    return (S) va;
+                return default;
+            }).ToList();
+            T gradient = new T();
+            gradient.Initialize(new Guid(raw.uuid), visAssets, raw.points.ToList());
+            return gradient;
+        }
     }
 
     /// <summary>
@@ -125,5 +156,16 @@ namespace IVLab.ABREngine
         public string gradientType;
         public float[] points;
         public string[] visAssets;
+
+        public static RawVisAssetGradient ToRaw<T>(IVisAssetGradient<T> gradient)
+        where T : IVisAsset
+        {
+            RawVisAssetGradient grad = new RawVisAssetGradient();
+            grad.uuid = gradient.Uuid.ToString();
+            grad.gradientType = VisAsset.VisAssetTypeMap.FirstOrDefault((kv) => kv.Value == typeof(T)).Key;
+            grad.points = gradient.Stops.ToArray();
+            grad.visAssets = gradient.VisAssets.Select((va) => va.Uuid.ToString()).ToArray();
+            return grad;
+        }
     }
 }
