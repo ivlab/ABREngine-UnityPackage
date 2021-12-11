@@ -184,6 +184,14 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Unload a particular VisAsset described by its UUID. 
+        /// </summary>
+        public void UnloadVisAsset(Guid visAssetUUID)
+        {
+            _visAssets.Remove(visAssetUUID);
+        }
+
+        /// <summary>
         /// Get the UUIDs of every VisAsset that's been imported into ABR
         /// </summary>
         public List<Guid> GetVisAssets()

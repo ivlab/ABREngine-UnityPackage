@@ -144,7 +144,9 @@ namespace IVLab.ABREngine
 
                     byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
                     RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
-
+                    Resources.UnloadAsset(metadataData[0]);
+                    Resources.UnloadAsset(metadataData[1]);
+                    
                     return new RawDataset(meta, data);
                 });
             }

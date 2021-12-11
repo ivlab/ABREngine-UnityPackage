@@ -173,6 +173,28 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Unload a raw dataset from a RawDataset object by its data path. 
+        /// </summary>
+        /// <examples>
+        /// Datasets may be unloaded from any of the following locations:
+        /// <code>
+        /// // From a file in the media directory
+        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
+        ///
+        /// // From a web resource
+        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// </code>
+        /// </examples> 
+        public void UnloadRawDataset(string dataPath)
+        {
+            DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
+            // See what dataset this RawDataset is a part of
+            string datasetPath = DataPath.GetDatasetPath(dataPath);
+            rawDatasets.Remove(dataPath);
+            datasets.Remove(datasetPath);
+        }
+
+        /// <summary>
         /// Import a raw dataset into ABR. This method makes the dataset
         /// available as a key data object and makes all of its scalar and
         /// vector variables available across ABR.
