@@ -458,10 +458,12 @@ namespace IVLab.ABREngine
 
         public override void UpdateVisibility(EncodedGameObject currentGameObject)
         {
-            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
-            if (imr != null)
+            foreach (InstancedMeshRenderer imr in currentGameObject?.GetComponentsInChildren<InstancedMeshRenderer>())
             {
-                imr.enabled = RenderHints.Visible;
+                if (imr != null)
+                {
+                    imr.enabled = RenderHints.Visible;
+                }
             }
         }
 
