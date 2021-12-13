@@ -163,6 +163,8 @@ namespace IVLab.ABREngine
                 {
                     if (impressionsObject != null)
                     {
+                        // This isn't optimial because it still updates EVERY
+                        // impression if there are no impressions changes
                         bool changed = impressionsObject.ContainsKey(impression.Key);
                         if (!changed)
                         {
@@ -478,8 +480,24 @@ namespace IVLab.ABREngine
                             opacityMapChanged = true;
                     }
                     // OR
-                    // - A VisAsset gradient changed
-                    bool visAssetGradientChanged = visAssetGradientDiff != null;
+                    // - A VisAsset gradient used by this impression changed
+                    bool visAssetGradientChanged = false;
+                    if (impression.Value?.inputValues != null)
+                    {
+                        string[] gradientTypes = assembly.GetTypes()
+                            .Where(t => typeof(VisAssetGradient).IsAssignableFrom(t))
+                            .Where(t => typeof(VisAssetGradient) != t)
+                            .Select(t => t.ToString())
+                            .ToArray();
+                        Guid[] gradientInputUuidsChanged = impression.Value.inputValues.Values
+                            .Where(i => gradientTypes.Contains(i.inputType))
+                            .Select(i => new Guid(i.inputValue))
+                            .ToArray();
+                        if (gradientInputUuidsChanged.Intersect(visAssetsToUpdate).Count() > 0)
+                        {
+                            visAssetGradientChanged = true;
+                        }
+                    }
 
                     // Toggle the "style changed" flag accordingly
                     if (dataRangeChanged || colormapChanged || opacityMapChanged || visAssetGradientChanged)

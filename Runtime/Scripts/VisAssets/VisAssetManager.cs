@@ -147,7 +147,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// Returns the <see cref="IVisAsset"> that was loaded, or `null` if the VisAsset was not found.
         /// </returns>
-        public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
+        public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false, bool replaceDependencies = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
@@ -175,6 +175,10 @@ namespace IVLab.ABREngine
             IVisAsset toReturn = null;
             foreach (var dependency in dependencyUuids)
             {
+                if (_visAssets.ContainsKey(dependency) && !replaceDependencies)
+                {
+                    continue;
+                }
                 try
                 {
                     // Try to fetch the visasset in terms of each fetcher's priority
