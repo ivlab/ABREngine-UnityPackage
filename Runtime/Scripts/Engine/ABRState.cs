@@ -119,6 +119,33 @@ namespace IVLab.ABREngine
                 ABREngine.Instance.VisAssets.VisAssetGradients = state.visAssetGradients;
             }
 
+            // Handle new/updated VisAssets, LocalVisAssets and VisAssetGradients
+            // Do this here so that we don't import them every time for every
+            // data impression, which is EXPENSIVE
+            JToken visAssetGradientDiff = diffFromPrevious?.SelectToken("visAssetGradients");
+            JToken localVisAssetDiff = diffFromPrevious?.SelectToken("localVisAssets");
+            List<Guid> visAssetsToUpdate = new List<Guid>();
+            if (visAssetGradientDiff != null)
+            {
+                visAssetsToUpdate.AddRange(visAssetGradientDiff.Select((k) => new Guid((k as JProperty).Name)));
+            }
+            if (localVisAssetDiff != null)
+            {
+                visAssetsToUpdate.AddRange(localVisAssetDiff.Select((k) => new Guid((k as JProperty).Name)));
+            }
+            foreach (Guid visAssetUUID in visAssetsToUpdate)
+            {
+                IVisAsset existing = null;
+                ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
+                if (existing != null
+                    && (ABREngine.Instance.VisAssets.LocalVisAssets?.ContainsKey(existing.Uuid.ToString()) ?? false
+                    || ABREngine.Instance.VisAssets.VisAssetGradients.ContainsKey(existing.Uuid.ToString()))
+                )
+                {
+                    await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
+                }
+            }
+
             var assembly = Assembly.GetExecutingAssembly();
             Type dataImpressionType = typeof(DataImpression);
             List<string> impressionTypeStrings = assembly.GetTypes()
@@ -175,21 +202,13 @@ namespace IVLab.ABREngine
 
                     foreach (var visAsset in visAssetsToLoad)
                     {
-                        // See if we already have the VisAsset; if not then load it
+                        // See if we already have the VisAsset; if not then load it.
+                        // LocalVisAssets and Gradients should already be up-to-date at this point.
                         var visAssetUUID = new Guid(visAsset);
                         IVisAsset existing;
                         if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
                             existing = await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
-                        }
-
-                        // Re-import if it's a LocalVisAsset
-                        if (existing != null
-                            && ABREngine.Instance.VisAssets.LocalVisAssets != null
-                            && ABREngine.Instance.VisAssets.LocalVisAssets.ContainsKey(existing.Uuid.ToString())
-                        )
-                        {
-                            await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
                         }
                     }
 
@@ -442,11 +461,10 @@ namespace IVLab.ABREngine
                     // OR
                     // - local vis asset colormap used by this impression had its contents changed:
                     bool colormapChanged = false;
-                    JToken colormapDiff = diffFromPrevious?.SelectToken("localVisAssets");
                     if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
                     {
                         string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
-                        if (colormapDiff?.SelectToken(colormapUuid) != null)
+                        if (localVisAssetDiff?.SelectToken(colormapUuid) != null)
                             colormapChanged = true;
                     }
                     // OR
@@ -459,8 +477,12 @@ namespace IVLab.ABREngine
                         if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
                             opacityMapChanged = true;
                     }
+                    // OR
+                    // - A VisAsset gradient changed
+                    bool visAssetGradientChanged = visAssetGradientDiff != null;
+
                     // Toggle the "style changed" flag accordingly
-                    if (dataRangeChanged || colormapChanged || opacityMapChanged)
+                    if (dataRangeChanged || colormapChanged || opacityMapChanged || visAssetGradientChanged)
                     {
                         dataImpression.RenderHints.StyleChanged = true;
                     }
