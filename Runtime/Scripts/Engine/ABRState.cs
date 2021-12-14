@@ -428,34 +428,7 @@ namespace IVLab.ABREngine
                     }
                     // Obtain the input values of the previous version of the current impression, if it exists
                     Dictionary<string, RawABRInput> previousInputValues = previousImpression?.inputValues;
-                    // Compare the previous input values to the current input values of the impression 
-                    // and enable "Changed" flags for any differences
-                    foreach (var input in actualInputs)
-                    {
-                        RawABRInput currentInput = null;
-                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(input.inputName))
-                        {
-                            currentInput = impression.Value.inputValues[input.inputName];
-                        }
-                        RawABRInput previousInput = null;
-                        if (previousInputValues != null && previousInputValues.ContainsKey(input.inputName))
-                        {
-                            previousInput = previousInputValues[input.inputName];
-                        }
-                        // If the input values are different a change has occurred
-                        if (currentInput?.inputValue != previousInput?.inputValue)
-                        {
-                            // Enable changed flags according to the input that was changed                      
-                            if (input.updateLevel == UpdateLevel.Data)
-                            {
-                                dataImpression.RenderHints.DataChanged = true;
-                            }
-                            else if (input.updateLevel == UpdateLevel.Style)
-                            {
-                                dataImpression.RenderHints.StyleChanged = true;
-                            }
-                        }
-                    }
+
                     // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
                     // - scalar range changed for the color variable of this impression:
                     JToken dataRangeDiff = diffFromPrevious?.SelectToken("dataRanges");
@@ -479,9 +452,20 @@ namespace IVLab.ABREngine
                         if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
                             opacityMapChanged = true;
                     }
-                    // OR
-                    // - A VisAsset gradient used by this impression changed
-                    bool visAssetGradientChanged = false;
+
+                    // Toggle the "style changed" flag accordingly
+                    if (dataRangeChanged || colormapChanged || opacityMapChanged)
+                    {
+                        dataImpression.RenderHints.StyleChanged = true;
+                    }
+
+                    // React specially to gradient inputs - if gradient changed,
+                    // need to select which type of change to trigger (glyphs
+                    // behave differently than others)
+                    // TODO: We should start supporting a notion of "input
+                    // dependencies" - i.e. if a gradient or local visasset has
+                    // changed, make sure the proper ABR update methods are
+                    // called.
                     if (impression.Value?.inputValues != null)
                     {
                         string[] gradientTypes = assembly.GetTypes()
@@ -489,20 +473,59 @@ namespace IVLab.ABREngine
                             .Where(t => typeof(VisAssetGradient) != t)
                             .Select(t => t.ToString())
                             .ToArray();
-                        Guid[] gradientInputUuidsChanged = impression.Value.inputValues.Values
-                            .Where(i => gradientTypes.Contains(i.inputType))
-                            .Select(i => new Guid(i.inputValue))
-                            .ToArray();
-                        if (gradientInputUuidsChanged.Intersect(visAssetsToUpdate).Count() > 0)
+                        var gradientInputNames = impression.Value.inputValues
+                            .Where(kv => gradientTypes.Contains(kv.Value.inputType))
+                            .Select(kv => kv.Key);
+                        var actualGradientInputs = actualInputs
+                            .Where(i => gradientInputNames.Contains(i.inputName));
+                        foreach (ABRInputAttribute gradientInput in actualGradientInputs)
                         {
-                            visAssetGradientChanged = true;
+                            if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(gradientInput.inputName))
+                            {
+                                RawABRInput gradInput = impression.Value.inputValues[gradientInput.inputName];
+                                Guid gradientUuid = new Guid(gradInput.inputValue);
+                                if (visAssetsToUpdate.Contains(gradientUuid))
+                                {
+                                    if (gradientInput.updateLevel == UpdateLevel.Data)
+                                    {
+                                        dataImpression.RenderHints.DataChanged = true;
+                                    }
+                                    else if (gradientInput.updateLevel == UpdateLevel.Style)
+                                    {
+                                        dataImpression.RenderHints.StyleChanged = true;
+                                    }
+                                }
+                            }
                         }
                     }
 
-                    // Toggle the "style changed" flag accordingly
-                    if (dataRangeChanged || colormapChanged || opacityMapChanged || visAssetGradientChanged)
+                    // Compare the previous input values to the current input values of the impression 
+                    // and enable "Changed" flags for any differences
+                    foreach (var input in actualInputs)
                     {
-                        dataImpression.RenderHints.StyleChanged = true;
+                        RawABRInput currentInput = null;
+                        if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(input.inputName))
+                        {
+                            currentInput = impression.Value.inputValues[input.inputName];
+                        }
+                        RawABRInput previousInput = null;
+                        if (previousInputValues != null && previousInputValues.ContainsKey(input.inputName))
+                        {
+                            previousInput = previousInputValues[input.inputName];
+                        }
+                        // If the input values are different a change has occurred
+                        if (currentInput?.inputValue != previousInput?.inputValue)
+                        {
+                            // Enable changed flags according to the input that was changed
+                            if (input.updateLevel == UpdateLevel.Data)
+                            {
+                                dataImpression.RenderHints.DataChanged = true;
+                            }
+                            else if (input.updateLevel == UpdateLevel.Style)
+                            {
+                                dataImpression.RenderHints.StyleChanged = true;
+                            }
+                        }
                     }
 
                     // Add any tags

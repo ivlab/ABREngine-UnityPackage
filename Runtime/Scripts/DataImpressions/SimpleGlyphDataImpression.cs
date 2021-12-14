@@ -58,10 +58,10 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Data)]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
         public IGlyphVisAsset glyph;
 
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
