@@ -63,7 +63,7 @@ Shader "ABR/Surface"
             sampler2D _PatternNormal;
 
             sampler2D _BlendMap; // Blending for each texture (max of 4, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
-            int _NumTex; // Number of textures in this gradient
+            int _NumTex = 0; // Number of textures in this gradient
 
             float _PatternDataMin;
             float _PatternDataMax;
@@ -250,8 +250,10 @@ Shader "ABR/Surface"
                 }
 
                 // Use Multiply method (could use overlay instead)
-                o.Albedo = o.Albedo * textureColor;
-                //o.Albedo = overlayBlend(o.Albedo, textureColor);
+                if (_NumTex > 0) {
+                    o.Albedo = o.Albedo * textureColor;
+                    //o.Albedo = overlayBlend(o.Albedo, textureColor);
+                }
 
                 o.Metallic = _Metallic;
                 o.Smoothness = _Glossiness;

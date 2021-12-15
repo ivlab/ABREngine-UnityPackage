@@ -55,6 +55,7 @@ namespace IVLab.ABREngine
             Uuid = uuid;
             Texture = texture;
             ImportTime = DateTime.Now;
+            BlendMaps = new GradientBlendMap(texture);
         }
 
         public Texture2D GetTexture() => Texture;
