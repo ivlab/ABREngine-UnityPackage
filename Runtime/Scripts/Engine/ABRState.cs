@@ -125,11 +125,11 @@ namespace IVLab.ABREngine
             JToken visAssetGradientDiff = diffFromPrevious?.SelectToken("visAssetGradients");
             JToken localVisAssetDiff = diffFromPrevious?.SelectToken("localVisAssets");
             List<Guid> visAssetsToUpdate = new List<Guid>();
-            if (visAssetGradientDiff != null)
+            if (visAssetGradientDiff != null && visAssetGradientDiff.Type == JTokenType.Object)
             {
                 visAssetsToUpdate.AddRange(visAssetGradientDiff.Select((k) => new Guid((k as JProperty).Name)));
             }
-            if (localVisAssetDiff != null)
+            if (localVisAssetDiff != null && visAssetGradientDiff.Type == JTokenType.Object)
             {
                 visAssetsToUpdate.AddRange(localVisAssetDiff.Select((k) => new Guid((k as JProperty).Name)));
             }
