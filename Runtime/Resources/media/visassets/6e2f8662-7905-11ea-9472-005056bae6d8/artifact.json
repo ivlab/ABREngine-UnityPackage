@@ -1,0 +1,14 @@
+{
+    "artifactData": {
+        "horizontal": "horizontal.png",
+        "vertical": "vertical.png"
+    },
+    "artist": "Francesca Samsel",
+    "class": "hand drawn",
+    "family": "Chain",
+    "hidden": false,
+    "preview": "thumbnail.png",
+    "tags": [],
+    "type": "line",
+    "uuid": "6e2f8662-7905-11ea-9472-005056bae6d8"
+}
