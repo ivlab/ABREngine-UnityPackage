@@ -164,14 +164,20 @@ namespace IVLab.ABREngine
         /// ask the user for them.
         /// </summary>
         /// <param name="points">Points in a line - will be treated as a LineStrip</param>
-        public static RawDataset PointsToPoints(List<Vector3> points, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
+        public static RawDataset PointsToPoints(
+            List<Vector3> points,
+            Bounds dataBounds,
+            Dictionary<string, List<float>> scalarVars,
+            Dictionary<string, List<Vector3>> vectorVars
+        )
         {
             RawDataset ds = new RawDataset();
             ds.dataTopology = DataTopology.Points;
             ds.bounds = dataBounds;
 
-            ds.vectorArrays = new SerializableVectorArray[0];
-            ds.vectorArrayNames = new string[0];
+            int numVectors = scalarVars?.Count ?? 0;
+            ds.vectorArrayNames = new string[numVectors];
+            ds.vectorArrays = new SerializableVectorArray[numVectors];
 
             int numScalars = scalarVars?.Count ?? 0;
             ds.scalarArrayNames = new string[numScalars];
@@ -190,6 +196,17 @@ namespace IVLab.ABREngine
                     ds.scalarMins[scalarIndex] = kv.Value.Min();
                     ds.scalarMaxes[scalarIndex] = kv.Value.Max();
                     scalarIndex += 1;
+                }
+            }
+
+            if (vectorVars != null)
+            {
+                int vectorIndex = 0;
+                foreach (var kv in vectorVars)
+                {
+                    ds.vectorArrayNames[vectorIndex] = kv.Key;
+                    ds.vectorArrays[vectorIndex] = new SerializableVectorArray() { array = kv.Value.ToArray() };
+                    vectorIndex += 1;
                 }
             }
 
