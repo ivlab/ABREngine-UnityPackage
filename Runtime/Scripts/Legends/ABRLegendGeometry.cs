@@ -143,5 +143,15 @@ namespace IVLab.ABREngine.Legends
             RawDataset ds = RawDatasetAdapter.PointsToLine(lines, LegendBounds, variables > 0 ? scalars : null);
             return ds;
         }
+
+        /// <summary>
+        /// Generate a surface to show a legend
+        /// </summary>
+        /// <param name="variables">Number of variables to provide (1 var, 2 var)</param>
+        public static RawDataset Surface()
+        {
+            RawDataset surf = RawDatasetAdapter.UnityPrimitiveToSurface(PrimitiveType.Sphere);
+            return surf;
+        }
     }
 }

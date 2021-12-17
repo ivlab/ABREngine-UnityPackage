@@ -102,5 +102,36 @@ namespace IVLab.ABREngine.Legends
 
             return li;
         }
+
+        /// <summary>
+        /// Construct a surface data impression for legend entry
+        /// </summary>
+        public static SimpleSurfaceDataImpression CreateSurfaceLegendEntry(IColormapVisAsset colormap, ISurfaceTextureVisAsset texture)
+        {
+            string dataPath = "ABR/Legends/KeyData/Surfaces";
+            RawDataset rds;
+            if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
+            {
+                rds = ABRLegendGeometry.Surface();
+                ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
+            }
+
+            IKeyData kd = null;
+            Dataset ds = null;
+            ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
+            ds.TryGetKeyData(dataPath, out kd);
+
+            SimpleSurfaceDataImpression si = new SimpleSurfaceDataImpression();
+            // Apply the artist-selected VisAssets
+            si.colormap = colormap;
+            si.pattern = texture;
+
+            // Apply legend-specific entries
+            si.keyData = kd as SurfaceKeyData;
+            si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
+            si.patternVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
+
+            return si;
+        }
     }
 }
