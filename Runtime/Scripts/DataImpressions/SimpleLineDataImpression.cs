@@ -88,6 +88,8 @@ namespace IVLab.ABREngine
         [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
 
+        public Vector3 defaultCurveDirection = Vector3.up;
+
         protected override string MaterialName { get; } = "ABR_Ribbon";
         protected override string LayerName { get; } = "ABR_Line";
 
@@ -189,7 +191,7 @@ namespace IVLab.ABREngine
 
                     float arclength = 0;
 
-                    Vector3 lastV = Vector3.up;
+                    Vector3 lastV = defaultCurveDirection;
                     for (int index = indexOffset, j = 0; index < indexEnd; index++, j++)
                     {
                         pointIndex = dataset.indexArray[index];
