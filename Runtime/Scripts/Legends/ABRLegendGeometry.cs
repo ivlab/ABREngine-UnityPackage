@@ -93,5 +93,55 @@ namespace IVLab.ABREngine.Legends
             RawDataset ds = RawDatasetAdapter.PointsToPoints(points, LegendBounds, variables > 0 ? scalars : null, vectors);
             return ds;
         }
+
+        /// <summary>
+        /// Generate a set of ribbons to show in a legend.
+        /// </summary>
+        /// <param name="variables">Number of variables to provide (1 var, 2 var)</param>
+        public static RawDataset Ribbons(int variables)
+        {
+            if (variables < 0 && variables > 2)
+            {
+                throw new System.ArgumentException("Must provide 2 or fewer variables to Glyphs legend generator");
+            }
+            int numRibbonPoints = 50;
+            int numRibbons = variables == 2 ? 5 : 1;
+            List<List<Vector3>> lines = new List<List<Vector3>>();
+            List<float> xVar = new List<float>();
+            List<float> zVar = new List<float>();
+            for (int ribbonIndex = 0; ribbonIndex < numRibbons; ribbonIndex++)
+            {
+                List<Vector3> points = new List<Vector3>();
+                float zt = ((ribbonIndex + 0.5f) / (float) numRibbons);
+                float z = Mathf.Lerp(LegendBounds.min.z, LegendBounds.max.z, zt);
+                for (int g = 0; g < numRibbonPoints; g++)
+                {
+                    float xt = ((g + 0.5f) / (float) numRibbonPoints);
+                    float x = Mathf.Lerp(LegendBounds.min.x, LegendBounds.max.x, xt);
+                    Vector3 point = new Vector3(x, Mathf.Sin(x * 15.0f) * 0.05f, z + Mathf.Sin(x * 7.0f) * 0.05f);
+                    points.Add(point);
+                    if (variables >= 1)
+                    {
+                        xVar.Add(x);
+                    }
+                    if (variables >= 2)
+                    {
+                        zVar.Add(z);
+                    }
+                }
+                lines.Add(points);
+            }
+            Dictionary<string, List<float>> scalars = new Dictionary<string, List<float>>();
+            if (variables >= 1)
+            {
+                scalars.Add("XAxis", xVar);
+            }
+            if (variables >= 2)
+            {
+                scalars.Add("ZAxis", zVar);
+            }
+            RawDataset ds = RawDatasetAdapter.PointsToLine(lines, LegendBounds, variables > 0 ? scalars : null);
+            return ds;
+        }
     }
 }
