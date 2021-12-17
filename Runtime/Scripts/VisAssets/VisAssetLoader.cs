@@ -701,7 +701,9 @@ namespace IVLab.ABREngine
                 }
                 foreach (JObject lodJson in lodsList)
                 {
-                    GameObject loadedObjGameObject = await _fetcher.GetGlyphGameObject(guid, lodJson);
+                    GameObject prefab = await _fetcher.GetGlyphGameObject(guid, lodJson);
+                    prefab.SetActive(false);
+                    GameObject loadedObjGameObject = GameObject.Instantiate(prefab);
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
                     GameObject.Destroy(loadedObjGameObject);
