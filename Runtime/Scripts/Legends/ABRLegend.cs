@@ -19,6 +19,9 @@
 
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
+using IVLab.Utilities;
+using System;
 
 namespace IVLab.ABREngine.Legends
 {
@@ -26,8 +29,100 @@ namespace IVLab.ABREngine.Legends
     /// Generate geometry, encodings, and legend images/GameObjects for ABR
     /// states
     /// </summary>
-    public class ABRLegend
+    public class ABRLegend : MonoBehaviour
     {
+        public GameObject legendEntry2DPrefab;
+        public Vector3 entrySeparation;
+
+        // List of current legend entries - names are EncodedGameObject UUIDs
+        private List<GameObject> legendEntryGameObjects = new List<GameObject>();
+
+        /// <summary>
+        /// Update the legend display in Unity from the current ABR state
+        /// </summary>
+        public void UpdateLegend()
+        {
+            // Clear all existing legend entries
+            for (int g = 0; g < this.transform.childCount; g++)
+            {
+                Destroy(this.transform.GetChild(g));
+            }
+            foreach (var i in legendEntryGameObjects)
+            {
+                ABREngine.Instance.UnregisterDataImpression(new Guid(i.name));
+            }
+            legendEntryGameObjects.Clear();
+
+            int entryIndex = 0;
+            // Create legend clones of each data impression type, register them
+            // in the engine, set up the legend GameObject, then modify all
+            // label text for each legend entry
+            List<SimpleSurfaceDataImpression> surfImpressions = ABREngine.Instance.GetDataImpressions<SimpleSurfaceDataImpression>();
+            foreach (var i in surfImpressions)
+            {
+                SimpleSurfaceDataImpression li = CreateSurfaceLegendEntry(i.colormap, i.pattern);
+                ABREngine.Instance.RegisterDataImpression(li);
+                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.patternVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.patternVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.patternVariable?.Range.max.ToString());
+            }
+            List<SimpleLineDataImpression> lineImpressions = ABREngine.Instance.GetDataImpressions<SimpleLineDataImpression>();
+            foreach (var i in lineImpressions)
+            {
+                SimpleLineDataImpression li = CreateRibbonLegendEntry(i.colormap, i.lineTexture, i.colorVariable != null, i.lineTextureVariable != null);
+                ABREngine.Instance.RegisterDataImpression(li);
+                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.lineTextureVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.lineTextureVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.lineTextureVariable?.Range.max.ToString());
+            }
+            List<SimpleGlyphDataImpression> glyphImpressions = ABREngine.Instance.GetDataImpressions<SimpleGlyphDataImpression>();
+            foreach (var i in glyphImpressions)
+            {
+                SimpleGlyphDataImpression li = CreateGlyphLegendEntry(i.colormap, i.glyph, i.colorVariable != null, i.glyphVariable != null);
+                ABREngine.Instance.RegisterDataImpression(li);
+                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.glyphVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.glyphVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.glyphVariable?.Range.max.ToString());
+            }
+
+            ABREngine.Instance.Render();
+
+            // Move each Data Impression GameObject underneath the legend GameObject
+            foreach (var go in legendEntryGameObjects)
+            {
+                EncodedGameObject ego = ABREngine.Instance.GetEncodedGameObject(new Guid(go.name));
+                ego.gameObject.transform.SetParent(go.transform, false);
+            }
+        }
+
+        private ABRLegendEntry SetupLegendEntry(IDataImpression di, int entryIndex)
+        {
+            GameObject entryGo = Instantiate(legendEntry2DPrefab);
+            entryGo.transform.SetParent(this.transform, false);
+            entryGo.name = di.Uuid.ToString();
+            entryGo.transform.localPosition += entrySeparation * entryIndex;
+            legendEntryGameObjects.Add(entryGo);
+            return entryGo.GetComponent<ABRLegendEntry>();
+        }
+
         /// <summary>
         /// Construct a glyph data impression for a glyph legend entry
         /// </summary>

@@ -27,7 +27,7 @@ namespace IVLab.ABREngine.Legends
     /// </summary>
     public static class ABRLegendGeometry
     {
-        private static Bounds LegendBounds = new Bounds(Vector3.zero, Vector3.one);
+        private static Bounds LegendBounds = new Bounds(Vector3.zero, new Vector3(1.0f, 0.2f, 1.0f));
 
         /// <summary>
         /// Generate a set of n glyphs to show a legend.
@@ -151,6 +151,15 @@ namespace IVLab.ABREngine.Legends
         public static RawDataset Surface()
         {
             RawDataset surf = RawDatasetAdapter.UnityPrimitiveToSurface(PrimitiveType.Sphere);
+            Bounds origBounds = surf.bounds;
+            Vector3 scale = new Vector3(
+                LegendBounds.size.x / origBounds.size.x,
+                LegendBounds.size.y / origBounds.size.y,
+                LegendBounds.size.z / origBounds.size.z
+            );
+            for (int v = 0; v < surf.vertexArray.Length; v++) {
+                surf.vertexArray[v] = Matrix4x4.Scale(scale) * surf.vertexArray[v];
+            }
             return surf;
         }
     }
