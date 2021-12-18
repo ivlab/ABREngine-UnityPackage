@@ -227,7 +227,7 @@ namespace IVLab.ABREngine
             ds.dataTopology = DataTopology.Points;
             ds.bounds = dataBounds;
 
-            int numVectors = scalarVars?.Count ?? 0;
+            int numVectors = vectorVars?.Count ?? 0;
             ds.vectorArrayNames = new string[numVectors];
             ds.vectorArrays = new SerializableVectorArray[numVectors];
 
