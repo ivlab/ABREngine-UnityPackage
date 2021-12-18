@@ -279,16 +279,16 @@ namespace IVLab.ABREngine
                 {
                     try
                     {
+                        await LoadStateAsync<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
+                    }
+                    catch (Exception)
+                    {
                         await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
                         {
                             await LoadStateAsync<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.Info.loadStateOnStart));
                             Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
                         });
-                    }
-                    catch (Exception)
-                    {
-                        await LoadStateAsync<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
-                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
                     }
                 }
             });
