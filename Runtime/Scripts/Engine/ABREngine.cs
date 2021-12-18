@@ -280,7 +280,14 @@ namespace IVLab.ABREngine
                     try
                     {
                         await LoadStateAsync<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
-                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
+                        if (previouslyLoadedState == null)
+                        {
+                            throw new Exception();
+                        }
+                        else
+                        {
+                            Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
+                        }
                     }
                     catch (Exception)
                     {
