@@ -58,10 +58,10 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
-        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Data)]
+        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
-        [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
+        [ABRInput("Glyph", "Glyph", UpdateLevel.Style)]
         public IGlyphVisAsset glyph;
 
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
@@ -273,15 +273,14 @@ namespace IVLab.ABREngine
                 imr.instanceMaterial = ImpressionMaterial;
                 imr.block = new MaterialPropertyBlock();
                 imr.cachedInstanceCount = -1;
-
-                // Default to using every transform in the data
-                imr.instanceLocalTransforms = SSrenderData.transforms;
-                imr.renderInfo = SSrenderData.scalars;
             }
         }
 
         public override void UpdateStyling(EncodedGameObject currentGameObject)
         {
+            // Default to using every transform in the data (re-populate and discard old transforms)
+            var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
+
             // Go through each child glyph renderer and render it
             for (int glyphIndex = 0; glyphIndex < currentGameObject.transform.childCount; glyphIndex++)
             {
@@ -290,6 +289,9 @@ namespace IVLab.ABREngine
                 InstancedMeshRenderer imr = currentGameObject?.transform.GetChild(glyphIndex).GetComponent<InstancedMeshRenderer>();
                 if (imr == null)
                     continue;
+
+                imr.instanceLocalTransforms = SSrenderData.transforms;
+                imr.renderInfo = SSrenderData.scalars;
 
                 // Determine the number of points / glyphs via the number of transforms the
                 // instanced mesh renderer is currently tracking
