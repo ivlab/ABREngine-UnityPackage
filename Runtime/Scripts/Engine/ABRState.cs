@@ -129,7 +129,7 @@ namespace IVLab.ABREngine
             {
                 visAssetsToUpdate.AddRange(visAssetGradientDiff.Select((k) => new Guid((k as JProperty).Name)));
             }
-            if (localVisAssetDiff != null && visAssetGradientDiff.Type == JTokenType.Object)
+            if (localVisAssetDiff != null && localVisAssetDiff.Type == JTokenType.Object)
             {
                 visAssetsToUpdate.AddRange(localVisAssetDiff.Select((k) => new Guid((k as JProperty).Name)));
             }
