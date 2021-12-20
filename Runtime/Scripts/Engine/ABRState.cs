@@ -138,7 +138,7 @@ namespace IVLab.ABREngine
                 IVisAsset existing = null;
                 ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
                 if (existing != null
-                    && (ABREngine.Instance.VisAssets.LocalVisAssets?.ContainsKey(existing.Uuid.ToString()) ?? false
+                    && ((ABREngine.Instance.VisAssets.LocalVisAssets?.ContainsKey(existing.Uuid.ToString()) ?? false)
                     || ABREngine.Instance.VisAssets.VisAssetGradients.ContainsKey(existing.Uuid.ToString()))
                 )
                 {
