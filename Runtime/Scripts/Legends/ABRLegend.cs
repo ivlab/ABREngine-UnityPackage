@@ -45,7 +45,7 @@ namespace IVLab.ABREngine.Legends
             // Clear all existing legend entries
             for (int g = 0; g < this.transform.childCount; g++)
             {
-                Destroy(this.transform.GetChild(g));
+                Destroy(this.transform.GetChild(g).gameObject);
             }
             foreach (var i in legendEntryGameObjects)
             {
@@ -60,7 +60,8 @@ namespace IVLab.ABREngine.Legends
             List<SimpleSurfaceDataImpression> surfImpressions = ABREngine.Instance.GetDataImpressions<SimpleSurfaceDataImpression>();
             foreach (var i in surfImpressions)
             {
-                SimpleSurfaceDataImpression li = CreateSurfaceLegendEntry(i.colormap, i.pattern);
+                if (!i.RenderHints.Visible) continue;
+                SimpleSurfaceDataImpression li = CreateSurfaceLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
 
@@ -75,7 +76,8 @@ namespace IVLab.ABREngine.Legends
             List<SimpleLineDataImpression> lineImpressions = ABREngine.Instance.GetDataImpressions<SimpleLineDataImpression>();
             foreach (var i in lineImpressions)
             {
-                SimpleLineDataImpression li = CreateRibbonLegendEntry(i.colormap, i.lineTexture, i.colorVariable != null, i.lineTextureVariable != null);
+                if (!i.RenderHints.Visible) continue;
+                SimpleLineDataImpression li = CreateRibbonLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
 
@@ -90,7 +92,8 @@ namespace IVLab.ABREngine.Legends
             List<SimpleGlyphDataImpression> glyphImpressions = ABREngine.Instance.GetDataImpressions<SimpleGlyphDataImpression>();
             foreach (var i in glyphImpressions)
             {
-                SimpleGlyphDataImpression li = CreateGlyphLegendEntry(i.colormap, i.glyph, i.colorVariable != null, i.glyphVariable != null);
+                if (!i.RenderHints.Visible) continue;
+                SimpleGlyphDataImpression li = CreateGlyphLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
 
@@ -105,7 +108,8 @@ namespace IVLab.ABREngine.Legends
             List<SimpleVolumeDataImpression> volImpressions = ABREngine.Instance.GetDataImpressions<SimpleVolumeDataImpression>();
             foreach (var i in volImpressions)
             {
-                SimpleVolumeDataImpression li = CreateVolumeLegendEntry(i.colormap, i.opacitymap);
+                if (!i.RenderHints.Visible) continue;
+                SimpleVolumeDataImpression li = CreateVolumeLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
 
@@ -141,12 +145,12 @@ namespace IVLab.ABREngine.Legends
         /// <summary>
         /// Construct a glyph data impression for a glyph legend entry
         /// </summary>
-        public static SimpleGlyphDataImpression CreateGlyphLegendEntry(IColormapVisAsset colormap, IGlyphVisAsset glyph, bool hasColormapVar, bool hasGlyphVar)
+        public static SimpleGlyphDataImpression CreateGlyphLegendEntry(SimpleGlyphDataImpression i)
         {
             string glyphDataPath = "ABR/Legends/KeyData/Glyphs";
             int numVars = 0;
-            if (hasColormapVar) numVars++;
-            if (hasGlyphVar) numVars++;
+            if (i.colorVariable != null) numVars++;
+            if (i.glyphVariable != null) numVars++;
 
             RawDataset rds;
             if (!ABREngine.Instance.Data.TryGetRawDataset(glyphDataPath, out rds))
@@ -160,10 +164,9 @@ namespace IVLab.ABREngine.Legends
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(glyphDataPath), out ds);
             ds.TryGetKeyData(glyphDataPath, out glyphKeyData);
 
+            // Copy all inputs from the actual impression
             SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-            // Apply the artist-selected VisAssets
-            gi.colormap = colormap;
-            gi.glyph = glyph;
+            gi.CopyExisting(i);
 
             // Apply legend-specific entries
             gi.keyData = glyphKeyData as PointKeyData;
@@ -172,6 +175,7 @@ namespace IVLab.ABREngine.Legends
             gi.forwardVariable = ds.GetAllVectorVars().FirstOrDefault(v => v.Key.Contains("Forward")).Value;
             gi.upVariable = ds.GetAllVectorVars().FirstOrDefault(v => v.Key.Contains("Up")).Value;
             gi.glyphSize = new LengthPrimitive("0.3m");
+            gi.glyphDensity = new PercentPrimitive("100%");
 
             return gi;
         }
@@ -179,12 +183,12 @@ namespace IVLab.ABREngine.Legends
         /// <summary>
         /// Construct a ribbon data impression for a line legend entry
         /// </summary>
-        public static SimpleLineDataImpression CreateRibbonLegendEntry(IColormapVisAsset colormap, ILineTextureVisAsset line, bool hasColormapVar, bool hasLineVar)
+        public static SimpleLineDataImpression CreateRibbonLegendEntry(SimpleLineDataImpression i)
         {
             string dataPath = "ABR/Legends/KeyData/Ribbons";
             int numVars = 0;
-            if (hasColormapVar) numVars++;
-            if (hasLineVar) numVars++;
+            if (i.colorVariable != null) numVars++;
+            if (i.lineTextureVariable != null) numVars++;
 
             RawDataset rds;
             if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
@@ -198,10 +202,9 @@ namespace IVLab.ABREngine.Legends
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
+            // Copy all inputs from the actual impression
             SimpleLineDataImpression li = new SimpleLineDataImpression();
-            // Apply the artist-selected VisAssets
-            li.colormap = colormap;
-            li.lineTexture = line;
+            li.CopyExisting(i);
 
             // Apply legend-specific entries
             li.defaultCurveDirection = Vector3.forward;
@@ -216,7 +219,7 @@ namespace IVLab.ABREngine.Legends
         /// <summary>
         /// Construct a surface data impression for legend entry
         /// </summary>
-        public static SimpleSurfaceDataImpression CreateSurfaceLegendEntry(IColormapVisAsset colormap, ISurfaceTextureVisAsset texture)
+        public static SimpleSurfaceDataImpression CreateSurfaceLegendEntry(SimpleSurfaceDataImpression i)
         {
             string dataPath = "ABR/Legends/KeyData/Surfaces";
             RawDataset rds;
@@ -231,12 +234,11 @@ namespace IVLab.ABREngine.Legends
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
+            // Copy all inputs from the actual impression
             SimpleSurfaceDataImpression si = new SimpleSurfaceDataImpression();
-            // Apply the artist-selected VisAssets
-            si.colormap = colormap;
-            si.pattern = texture;
+            si.CopyExisting(i);
 
-            // Apply legend-specific entries
+            // Then, apply legend-specific entries
             si.keyData = kd as SurfaceKeyData;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             si.patternVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
@@ -247,7 +249,7 @@ namespace IVLab.ABREngine.Legends
         /// <summary>
         /// Construct a volume data impression for legend entry
         /// </summary>
-        public static SimpleVolumeDataImpression CreateVolumeLegendEntry(IColormapVisAsset colormap, PrimitiveGradient opacitymap)
+        public static SimpleVolumeDataImpression CreateVolumeLegendEntry(SimpleVolumeDataImpression i)
         {
             string dataPath = "ABR/Legends/KeyData/Volumes";
             RawDataset rds;
@@ -262,15 +264,13 @@ namespace IVLab.ABREngine.Legends
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
+            // Copy all inputs from the actual impression
             SimpleVolumeDataImpression si = new SimpleVolumeDataImpression();
-            // Apply the artist-selected VisAssets
-            si.colormap = colormap;
-            si.opacitymap = opacitymap;
+            si.CopyExisting(i);
 
             // Apply legend-specific entries
             si.keyData = kd as VolumeKeyData;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
-            Debug.Log(si.colorVariable);
 
             return si;
         }
