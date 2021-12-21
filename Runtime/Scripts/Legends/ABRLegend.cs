@@ -152,12 +152,9 @@ namespace IVLab.ABREngine.Legends
             if (i.colorVariable != null) numVars++;
             if (i.glyphVariable != null) numVars++;
 
-            RawDataset rds;
-            if (!ABREngine.Instance.Data.TryGetRawDataset(glyphDataPath, out rds))
-            {
-                rds = ABRLegendGeometry.Glyphs(numVars);
-                ABREngine.Instance.Data.ImportRawDataset(glyphDataPath, rds);
-            }
+            ABREngine.Instance.Data.UnloadRawDataset(glyphDataPath);
+            RawDataset rds = ABRLegendGeometry.Glyphs(numVars);
+            ABREngine.Instance.Data.ImportRawDataset(glyphDataPath, rds);
 
             IKeyData glyphKeyData = null;
             Dataset ds = null;
@@ -190,12 +187,9 @@ namespace IVLab.ABREngine.Legends
             if (i.colorVariable != null) numVars++;
             if (i.lineTextureVariable != null) numVars++;
 
-            RawDataset rds;
-            if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
-            {
-                rds = ABRLegendGeometry.Ribbons(numVars);
-                ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
-            }
+            ABREngine.Instance.Data.UnloadRawDataset(dataPath);
+            RawDataset rds = ABRLegendGeometry.Ribbons(numVars);
+            ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
             IKeyData kd = null;
             Dataset ds = null;
@@ -222,12 +216,9 @@ namespace IVLab.ABREngine.Legends
         public static SimpleSurfaceDataImpression CreateSurfaceLegendEntry(SimpleSurfaceDataImpression i)
         {
             string dataPath = "ABR/Legends/KeyData/Surfaces";
-            RawDataset rds;
-            if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
-            {
-                rds = ABRLegendGeometry.Surface();
-                ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
-            }
+            ABREngine.Instance.Data.UnloadRawDataset(dataPath);
+            RawDataset rds = ABRLegendGeometry.Surface();
+            ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
             IKeyData kd = null;
             Dataset ds = null;
@@ -252,12 +243,9 @@ namespace IVLab.ABREngine.Legends
         public static SimpleVolumeDataImpression CreateVolumeLegendEntry(SimpleVolumeDataImpression i)
         {
             string dataPath = "ABR/Legends/KeyData/Volumes";
-            RawDataset rds;
-            if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
-            {
-                rds = ABRLegendGeometry.Volume();
-                ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
-            }
+            ABREngine.Instance.Data.UnloadRawDataset(dataPath);
+            RawDataset rds = ABRLegendGeometry.Volume();
+            ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
             IKeyData kd = null;
             Dataset ds = null;

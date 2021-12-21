@@ -165,16 +165,20 @@ namespace IVLab.ABREngine.Legends
                 LegendBounds.size.y / origBounds.size.y,
                 LegendBounds.size.z / origBounds.size.z
             );
+            Matrix4x4 scaleMat = Matrix4x4.Scale(scale);
+            for (int v = 0; v < surf.vertexArray.Length; v++)
+            {
+                surf.vertexArray[v] = scaleMat * surf.vertexArray[v];
+            }
             for (int xyz = 0; xyz < surf.scalarArrays.Length; xyz++)
             {
                 for (int v = 0; v < surf.vertexArray.Length; v++)
                 {
-                    surf.vertexArray[v] = Matrix4x4.Scale(scale) * surf.vertexArray[v];
                     surf.scalarArrays[xyz].array[v] -= origBounds.min[xyz];
                     surf.scalarArrays[xyz].array[v] /= origBounds.size[xyz];
                 }
-                surf.scalarMins[xyz] = 0.0f;
-                surf.scalarMaxes[xyz] = 1.0f;
+                surf.scalarMins[xyz] = surf.scalarArrays[xyz].array.Min();
+                surf.scalarMaxes[xyz] = surf.scalarArrays[xyz].array.Max();
             }
             return surf;
         }
