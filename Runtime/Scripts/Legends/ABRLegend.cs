@@ -31,16 +31,47 @@ namespace IVLab.ABREngine.Legends
     /// </summary>
     public class ABRLegend : MonoBehaviour
     {
+        [Tooltip("Prefab for 2D (2 variable) legend entries")]
         public GameObject legendEntry2DPrefab;
-        public Vector3 entrySeparation;
+
+        [Tooltip("Offset for each entry of the legend")]
+        public Vector3 entryOffset;
+
+        [Tooltip("Should the legend be updated whenever the ABR state is updated?")]
+        public bool updateOnABRStateChange = false;
+
+        [Tooltip("Force an update for the legend")]
+        [SerializeField] private bool forceLegendUpdate;
 
         // List of current legend entries - names are EncodedGameObject UUIDs
         private List<GameObject> legendEntryGameObjects = new List<GameObject>();
 
+        // React to update on state change
+        private bool _callbackRegistered = false;
+
+        void Update()
+        {
+            if (updateOnABRStateChange && !_callbackRegistered)
+            {
+                ABREngine.Instance.OnStateChanged += UpdateLegend;
+                _callbackRegistered = true;
+            }
+            if (!updateOnABRStateChange && _callbackRegistered)
+            {
+                ABREngine.Instance.OnStateChanged -= UpdateLegend;
+                _callbackRegistered = false;
+            }
+            if (forceLegendUpdate)
+            {
+                UpdateLegend(null);
+                forceLegendUpdate = false;
+            }
+        }
+
         /// <summary>
         /// Update the legend display in Unity from the current ABR state
         /// </summary>
-        public void UpdateLegend()
+        public void UpdateLegend(Newtonsoft.Json.Linq.JObject state)
         {
             // Clear all existing legend entries
             for (int g = 0; g < this.transform.childCount; g++)
@@ -140,7 +171,7 @@ namespace IVLab.ABREngine.Legends
             GameObject entryGo = Instantiate(legendEntry2DPrefab);
             entryGo.transform.SetParent(this.transform, false);
             entryGo.name = di.Uuid.ToString();
-            entryGo.transform.localPosition += entrySeparation * entryIndex;
+            entryGo.transform.localPosition += entryOffset * entryIndex;
             legendEntryGameObjects.Add(entryGo);
             foreach (MeshRenderer r in entryGo.GetComponentsInChildren<MeshRenderer>())
             {
