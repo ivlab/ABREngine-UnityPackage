@@ -53,6 +53,9 @@ namespace IVLab.ABREngine.Legends
             }
             legendEntryGameObjects.Clear();
 
+            // Obtain background color from state
+            Color background = Camera.main.backgroundColor;
+
             int entryIndex = 0;
             // Create legend clones of each data impression type, register them
             // in the engine, set up the legend GameObject, then modify all
@@ -63,7 +66,7 @@ namespace IVLab.ABREngine.Legends
                 if (!i.RenderHints.Visible) continue;
                 SimpleSurfaceDataImpression li = CreateSurfaceLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
-                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+                ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
                 entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
@@ -79,7 +82,7 @@ namespace IVLab.ABREngine.Legends
                 if (!i.RenderHints.Visible) continue;
                 SimpleLineDataImpression li = CreateRibbonLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
-                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+                ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
                 entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
@@ -95,7 +98,7 @@ namespace IVLab.ABREngine.Legends
                 if (!i.RenderHints.Visible) continue;
                 SimpleGlyphDataImpression li = CreateGlyphLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
-                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+                ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
                 entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
@@ -111,7 +114,7 @@ namespace IVLab.ABREngine.Legends
                 if (!i.RenderHints.Visible) continue;
                 SimpleVolumeDataImpression li = CreateVolumeLegendEntry(i);
                 ABREngine.Instance.RegisterDataImpression(li);
-                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+                ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
                 entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
@@ -132,13 +135,17 @@ namespace IVLab.ABREngine.Legends
             }
         }
 
-        private ABRLegendEntry SetupLegendEntry(IDataImpression di, int entryIndex)
+        private ABRLegendEntry SetupLegendEntry(IDataImpression di, Color backgroundColor, int entryIndex)
         {
             GameObject entryGo = Instantiate(legendEntry2DPrefab);
             entryGo.transform.SetParent(this.transform, false);
             entryGo.name = di.Uuid.ToString();
             entryGo.transform.localPosition += entrySeparation * entryIndex;
             legendEntryGameObjects.Add(entryGo);
+            foreach (MeshRenderer r in entryGo.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material.color = backgroundColor;
+            }
             return entryGo.GetComponent<ABRLegendEntry>();
         }
 
