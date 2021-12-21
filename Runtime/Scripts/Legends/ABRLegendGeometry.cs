@@ -24,7 +24,15 @@ using UnityEngine;
 namespace IVLab.ABREngine.Legends
 {
     /// <summary>
-    /// Generate legend geometry for each data impression type defined in ABR
+    /// Generate legend geometry for each data impression type defined in ABR.
+    /// Methods in this class can generate the following variables and ranges:
+    /// <ol>
+    ///     <li>XAxis [0, 1]</li>
+    ///     <li>YAxis [0, 1]</li>
+    ///     <li>ZAxis [0, 1]</li>
+    ///     <li>Forward</li>
+    ///     <li>Up</li>
+    /// </ol>
     /// </summary>
     public static class ABRLegendGeometry
     {
@@ -59,8 +67,8 @@ namespace IVLab.ABREngine.Legends
                         float z = Mathf.Lerp(LegendBounds.min.z, LegendBounds.max.z, zt);
                         Vector3 point = new Vector3(x, 0, z);
                         points.Add(point);
-                        xVar.Add(x);
-                        zVar.Add(z);
+                        xVar.Add(xt);
+                        zVar.Add(zt);
                         forward.Add((forwardTarget - point).normalized);
                         up.Add(Vector3.forward);
                     }
@@ -71,7 +79,7 @@ namespace IVLab.ABREngine.Legends
                     points.Add(point);
                     if (variables == 1)
                     {
-                        xVar.Add(x);
+                        xVar.Add(xt);
                     }
                     forward.Add((forwardTarget - point).normalized);
                     up.Add(Vector3.forward);
@@ -123,11 +131,11 @@ namespace IVLab.ABREngine.Legends
                     points.Add(point);
                     if (variables >= 1)
                     {
-                        xVar.Add(x);
+                        xVar.Add(xt);
                     }
                     if (variables >= 2)
                     {
-                        zVar.Add(z);
+                        zVar.Add(zt);
                     }
                 }
                 lines.Add(points);
@@ -157,8 +165,16 @@ namespace IVLab.ABREngine.Legends
                 LegendBounds.size.y / origBounds.size.y,
                 LegendBounds.size.z / origBounds.size.z
             );
-            for (int v = 0; v < surf.vertexArray.Length; v++) {
-                surf.vertexArray[v] = Matrix4x4.Scale(scale) * surf.vertexArray[v];
+            for (int xyz = 0; xyz < surf.scalarArrays.Length; xyz++)
+            {
+                for (int v = 0; v < surf.vertexArray.Length; v++)
+                {
+                    surf.vertexArray[v] = Matrix4x4.Scale(scale) * surf.vertexArray[v];
+                    surf.scalarArrays[xyz].array[v] -= origBounds.min[xyz];
+                    surf.scalarArrays[xyz].array[v] /= origBounds.size[xyz];
+                }
+                surf.scalarMins[xyz] = 0.0f;
+                surf.scalarMaxes[xyz] = 1.0f;
             }
             return surf;
         }
@@ -190,9 +206,7 @@ namespace IVLab.ABREngine.Legends
                 {
                     for (int x = 0; x < vol.dimensions.x; x++)
                     {
-                        // Vector3 coord = new Vector3(x, y, z);
-                        // float value = coord.magnitude;
-                        values.Add(x);
+                        values.Add(x / (float)vol.dimensions.x);
                     }
                 }
             }
