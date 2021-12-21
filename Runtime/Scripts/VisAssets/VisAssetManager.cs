@@ -175,7 +175,9 @@ namespace IVLab.ABREngine
             IVisAsset toReturn = null;
             foreach (var dependency in dependencyUuids)
             {
-                if (_visAssets.ContainsKey(dependency) && !replaceExisting)
+                // The only time a dependency would have been updated is if it's a local vis asset.
+                // If dependency not updated, skip it.
+                if (_visAssets.ContainsKey(dependency) && !LocalVisAssets.ContainsKey(dependency.ToString()))
                 {
                     continue;
                 }

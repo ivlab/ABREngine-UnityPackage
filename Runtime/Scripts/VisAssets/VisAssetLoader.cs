@@ -702,11 +702,16 @@ namespace IVLab.ABREngine
                 foreach (JObject lodJson in lodsList)
                 {
                     GameObject prefab = await _fetcher.GetGlyphGameObject(guid, lodJson);
-                    prefab.SetActive(false);
                     GameObject loadedObjGameObject = GameObject.Instantiate(prefab);
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
                     GameObject.Destroy(loadedObjGameObject);
+                    try
+                    {
+                        // Destroy doesn't work if we imported from resources.
+                        GameObject.Destroy(prefab);
+                    }
+                    catch (Exception) { }
                     meshLods.Add(loadedMesh);
 
                     Texture2D normalMap = await _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
