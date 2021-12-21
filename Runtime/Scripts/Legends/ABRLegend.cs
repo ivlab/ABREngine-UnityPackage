@@ -102,6 +102,21 @@ namespace IVLab.ABREngine.Legends
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.glyphVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.glyphVariable?.Range.max.ToString());
             }
+            List<SimpleVolumeDataImpression> volImpressions = ABREngine.Instance.GetDataImpressions<SimpleVolumeDataImpression>();
+            foreach (var i in volImpressions)
+            {
+                SimpleVolumeDataImpression li = CreateVolumeLegendEntry(i.colormap, i.opacitymap);
+                ABREngine.Instance.RegisterDataImpression(li);
+                ABRLegendEntry entry = SetupLegendEntry(li, entryIndex++);
+
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, null);
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, null);
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, null);
+            }
 
             ABREngine.Instance.Render();
 
@@ -225,6 +240,37 @@ namespace IVLab.ABREngine.Legends
             si.keyData = kd as SurfaceKeyData;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             si.patternVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
+
+            return si;
+        }
+
+        /// <summary>
+        /// Construct a volume data impression for legend entry
+        /// </summary>
+        public static SimpleVolumeDataImpression CreateVolumeLegendEntry(IColormapVisAsset colormap, PrimitiveGradient opacitymap)
+        {
+            string dataPath = "ABR/Legends/KeyData/Volumes";
+            RawDataset rds;
+            if (!ABREngine.Instance.Data.TryGetRawDataset(dataPath, out rds))
+            {
+                rds = ABRLegendGeometry.Volume();
+                ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
+            }
+
+            IKeyData kd = null;
+            Dataset ds = null;
+            ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
+            ds.TryGetKeyData(dataPath, out kd);
+
+            SimpleVolumeDataImpression si = new SimpleVolumeDataImpression();
+            // Apply the artist-selected VisAssets
+            si.colormap = colormap;
+            si.opacitymap = opacitymap;
+
+            // Apply legend-specific entries
+            si.keyData = kd as VolumeKeyData;
+            si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
+            Debug.Log(si.colorVariable);
 
             return si;
         }

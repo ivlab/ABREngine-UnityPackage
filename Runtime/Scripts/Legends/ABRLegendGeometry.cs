@@ -18,6 +18,7 @@
  */
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace IVLab.ABREngine.Legends
@@ -147,7 +148,6 @@ namespace IVLab.ABREngine.Legends
         /// <summary>
         /// Generate a surface to show a legend
         /// </summary>
-        /// <param name="variables">Number of variables to provide (1 var, 2 var)</param>
         public static RawDataset Surface()
         {
             RawDataset surf = RawDatasetAdapter.UnityPrimitiveToSurface(PrimitiveType.Sphere);
@@ -161,6 +161,53 @@ namespace IVLab.ABREngine.Legends
                 surf.vertexArray[v] = Matrix4x4.Scale(scale) * surf.vertexArray[v];
             }
             return surf;
+        }
+
+        /// <summary>
+        /// Generate a "spherical" volume for legends
+        /// </summary>
+        public static RawDataset Volume()
+        {
+            RawDataset vol = new RawDataset();
+            vol.dimensions = new Vector3Int(20, 20, 20);
+            vol.bounds = LegendBounds;
+            vol.dataTopology = DataTopology.Voxels;
+
+            int numScalars = 1;
+            vol.scalarArrayNames = new string[numScalars];
+            vol.scalarMins = new float[numScalars];
+            vol.scalarMaxes = new float[numScalars];
+            vol.scalarArrays = new SerializableFloatArray[numScalars];
+
+            int numVectors = 0;
+            vol.vectorArrayNames = new string[numVectors];
+            vol.vectorArrays = new SerializableVectorArray[numVectors];
+
+            List<float> values = new List<float>();
+            for (int y = 0; y < vol.dimensions.y; y++)
+            {
+                for (int z = 0; z < vol.dimensions.z; z++)
+                {
+                    for (int x = 0; x < vol.dimensions.x; x++)
+                    {
+                        // Vector3 coord = new Vector3(x, y, z);
+                        // float value = coord.magnitude;
+                        values.Add(x);
+                    }
+                }
+            }
+
+            vol.scalarArrayNames[0] = "XAxis";
+            vol.scalarArrays[0] = new SerializableFloatArray { array = values.ToArray() };
+            vol.scalarMins[0] = values.Min();
+            vol.scalarMaxes[0] = values.Max();
+
+            vol.vertexArray = new Vector3[0];
+            vol.indexArray = new int[0];
+            vol.cellIndexCounts = new int[0];
+            vol.cellIndexOffsets = new int[0];
+
+            return vol;
         }
     }
 }
