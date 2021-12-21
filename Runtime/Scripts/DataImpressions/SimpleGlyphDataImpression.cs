@@ -469,6 +469,17 @@ namespace IVLab.ABREngine
             }
         }
 
+        public override void Cleanup(EncodedGameObject currentGameObject)
+        {
+            base.Cleanup(currentGameObject);
+            // Return all previous renderers to pool
+            while (currentGameObject.transform.childCount > 0)
+            {
+                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GenericObjectPool.Instance.ReturnObjectToPool(child);
+            }
+        }
+
         // Samples k glyphs, modifying glyph render info so that only they will be rendered
         // Uses reservoir sampling: (https://www.geeksforgeeks.org/reservoir-sampling/)
         private void SampleGlyphs(Vector4[] glyphRenderInfo, int k)
