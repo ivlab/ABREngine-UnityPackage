@@ -817,7 +817,10 @@ namespace IVLab.ABREngine
             foreach (var group in dataImpressionGroups)
             {
                 group.Value.Clear();
-                toRemove.Add(group.Key);
+                if (group.Key != _defaultGroup.Uuid)
+                {
+                    toRemove.Add(group.Key);
+                }
             }
             foreach (var r in toRemove)
             {
