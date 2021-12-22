@@ -43,6 +43,8 @@ namespace IVLab.ABREngine.Legends
         [Tooltip("Force an update for the legend")]
         [SerializeField] private bool forceLegendUpdate;
 
+        private const string defaultText = "[None]";
+
         // List of current legend entries - names are EncodedGameObject UUIDs
         private List<GameObject> legendEntryGameObjects = new List<GameObject>();
 
@@ -99,11 +101,11 @@ namespace IVLab.ABREngine.Legends
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
-                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
-                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path) ?? defaultText);
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
-                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.patternVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.patternVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.patternVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.patternVariable?.Range.max.ToString());
             }
@@ -115,11 +117,11 @@ namespace IVLab.ABREngine.Legends
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
-                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
-                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path) ?? defaultText);
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
-                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.lineTextureVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.lineTextureVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.lineTextureVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.lineTextureVariable?.Range.max.ToString());
             }
@@ -131,11 +133,11 @@ namespace IVLab.ABREngine.Legends
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
-                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
-                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path) ?? defaultText);
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
-                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.glyphVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, DataPath.GetName(i.glyphVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, i.glyphVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, i.glyphVariable?.Range.max.ToString());
             }
@@ -147,11 +149,11 @@ namespace IVLab.ABREngine.Legends
                 ABREngine.Instance.RegisterDataImpression(li);
                 ABRLegendEntry entry = SetupLegendEntry(li, background, entryIndex++);
 
-                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path));
-                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path));
+                entry.SetTextLabel(ABRLegendEntry.Label.Title, DataPath.GetName(i.keyData?.Path) ?? defaultText);
+                entry.SetTextLabel(ABRLegendEntry.Label.XAxis, DataPath.GetName(i.colorVariable?.Path) ?? defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMin, i.colorVariable?.Range.min.ToString());
                 entry.SetTextLabel(ABRLegendEntry.Label.XAxisMax, i.colorVariable?.Range.max.ToString());
-                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, null);
+                entry.SetTextLabel(ABRLegendEntry.Label.YAxis, defaultText);
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMin, null);
                 entry.SetTextLabel(ABRLegendEntry.Label.YAxisMax, null);
             }
