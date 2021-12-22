@@ -366,7 +366,7 @@ namespace IVLab.ABREngine
         /// </remarks>
         public IDataImpression GetDataImpression(Guid uuid)
         {
-            return dataImpressionGroups
+            return dataImpressionGroups?
                 .Select((kv) => kv.Value)
                 .FirstOrDefault((v) => v.HasDataImpression(uuid))?
                 .GetDataImpression(uuid);
@@ -412,7 +412,7 @@ namespace IVLab.ABREngine
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
-            return dataImpressionGroups
+            return dataImpressionGroups?
                 .Select((kv) => kv.Value)
                 .Select((grp) => grp.GetDataImpressionsOfType<T>())
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
@@ -429,7 +429,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public List<IDataImpression> GetDataImpressionsWithTag(string tag)
         {
-            return dataImpressionGroups
+            return dataImpressionGroups?
                 .Select((kv) => kv.Value)
                 .Select((grp) => grp.GetDataImpressionsWithTag(tag))
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
@@ -440,7 +440,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
         {
-            return GetAllDataImpressions().Where(criteria).ToList();
+            return GetAllDataImpressions()?.Where(criteria).ToList();
         }
 
         /// <summary>
@@ -449,7 +449,7 @@ namespace IVLab.ABREngine
         public List<T> GetDataImpressions<T>()
         where T : IDataImpression
         {
-            return GetAllDataImpressions()
+            return GetAllDataImpressions()?
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
                 .Select((imp) => (T) imp).ToList();
         }
@@ -460,7 +460,7 @@ namespace IVLab.ABREngine
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
         where T : IDataImpression
         {
-            return GetDataImpressions<T>().Where(criteria).ToList();
+            return GetDataImpressions<T>()?.Where(criteria).ToList();
         }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public List<IDataImpression> GetAllDataImpressions()
         {
-            return dataImpressionGroups
+            return dataImpressionGroups?
                 .Select((kv) => kv.Value.GetDataImpressions().Values.ToList())
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
@@ -484,7 +484,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
         {
-            return dataImpressionGroups
+            return dataImpressionGroups?
                 .Select((kv) => kv.Value)
                 .FirstOrDefault((v) => v.HasEncodedGameObject(impressionGuid))?
                 .GetEncodedGameObject(impressionGuid);
@@ -603,7 +603,7 @@ namespace IVLab.ABREngine
         {
             try
             {
-                return dataImpressionGroups
+                return dataImpressionGroups?
                     .Select((kv) => kv.Value)
                     .First((v) => dataImpression != null && v.HasDataImpression(dataImpression.Uuid));
             }
