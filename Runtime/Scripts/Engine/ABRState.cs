@@ -729,6 +729,13 @@ namespace IVLab.ABREngine
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
+                        // Skip serializing impressions that aren't inside the ABREngine GameObject
+                        GameObject child = group.GetEncodedGameObject(impression.Uuid).gameObject;
+                        if (child.GetComponentInParent<ABREngine>() == null)
+                        {
+                            continue;
+                        }
+
                         RawDataImpression saveImpression = new RawDataImpression();
 
                         // Retrieve easy values
