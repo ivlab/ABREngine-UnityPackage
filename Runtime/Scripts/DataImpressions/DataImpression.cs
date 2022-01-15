@@ -79,6 +79,13 @@ namespace IVLab.ABREngine
         void CopyExisting(IDataImpression other);
 
         /// <summary>
+        /// When this data impression is done being used, clean up after itself
+        /// if necessary. This method may need access to the GameObject the data
+        /// impression is applied to.
+        /// <summary>
+        void Cleanup(EncodedGameObject encodedGameObject);
+
+        /// <summary>
         ///     Return if this data impression has a particular string tag (for
         ///     external purposes only, the engine currently does nothing with tags)
         /// </summary>
@@ -201,6 +208,11 @@ namespace IVLab.ABREngine
                 IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
                 this.InputIndexer.AssignInput(inputName, otherInput);
             }
+        }
+
+        public virtual void Cleanup(EncodedGameObject encodedGameObject)
+        {
+            RenderInfo = null;
         }
 
         /// <summary>

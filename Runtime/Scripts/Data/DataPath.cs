@@ -19,11 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.IO;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 namespace IVLab.ABREngine
 {
@@ -50,51 +46,55 @@ namespace IVLab.ABREngine
         private static char separator = '/';
         private static string[] GetPathParts(string dataPath)
         {
-            return dataPath.Split(separator);
+            return dataPath?.Split(separator);
         }
 
         public static string GetOrganization(string dataPath)
         {
-            return GetPathParts(dataPath)[0];
+            return GetPathParts(dataPath)?[0];
         }
 
         public static string GetDataset(string dataPath)
         {
-            return GetPathParts(dataPath)[1];
+            return GetPathParts(dataPath)?[1];
         }
 
         public static string GetPathType(string dataPath)
         {
-            return GetPathParts(dataPath)[2];
+            return GetPathParts(dataPath)?[2];
         }
 
         public static string GetName(string dataPath)
         {
-            return GetPathParts(dataPath)[3];
+            return GetPathParts(dataPath)?[3];
         }
 
         public static string GetOrganizationPath(string dataPath)
         {
-            return GetPathParts(dataPath)[0];
+            return GetPathParts(dataPath)?[0];
         }
 
         public static string GetDatasetPath(string dataPath)
         {
-            return Join(GetOrganizationPath(dataPath), GetPathParts(dataPath)[1]);
+            return Join(GetOrganizationPath(dataPath), GetPathParts(dataPath)?[1]);
         }
 
         public static string GetPathTypePath(string dataPath)
         {
-            return Join(GetDatasetPath(dataPath), GetPathParts(dataPath)[2]);
+            return Join(GetDatasetPath(dataPath), GetPathParts(dataPath)?[2]);
         }
 
         public static string GetNamePath(string dataPath)
         {
-            return Join(GetPathTypePath(dataPath), GetPathParts(dataPath)[3]);
+            return Join(GetPathTypePath(dataPath), GetPathParts(dataPath)?[3]);
         }
 
         public static string Join(string path1, string path2)
         {
+            if (path1 == null || path2 == null)
+            {
+                throw new System.ArgumentException("DataPath: path1 and path2 must not be null");
+            }
             if (path1.EndsWith(separator.ToString()))
             {
                 return path1 + path2;
@@ -120,6 +120,10 @@ namespace IVLab.ABREngine
 
         public static bool FollowsConvention(string label, DataPathType pathType = DataPathType.KeyData)
         {
+            if (label == null)
+            {
+                return false;
+            }
             var parts = GetPathParts(label);
             if (pathType != DataPathType.Dataset)
             {

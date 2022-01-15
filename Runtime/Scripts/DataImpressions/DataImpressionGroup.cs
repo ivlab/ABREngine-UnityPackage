@@ -145,6 +145,7 @@ namespace IVLab.ABREngine
         {
             if (_impressions.ContainsKey(uuid))
             {
+                _impressions[uuid].Cleanup(gameObjectMapping[uuid]);
                 _impressions.Remove(uuid);
                 GameObject.Destroy(gameObjectMapping[uuid].gameObject);
                 gameObjectMapping.Remove(uuid);

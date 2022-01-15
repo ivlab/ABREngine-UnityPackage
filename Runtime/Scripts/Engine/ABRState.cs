@@ -71,13 +71,29 @@ namespace IVLab.ABREngine
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
 
-            // If it's an array, that means it's either been deleted or created
-            if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Array)
+            // If >2 values in previous have >2 zeroes, we may assume that the state has been cleared.
+            // https://github.com/benjamine/jsondiffpatch/blob/master/docs/deltas.md
+            if (diffFromPrevious != null && diffFromPrevious.Type == JTokenType.Object)
             {
-                ABREngine.Instance.ClearState();
-                return stateJson;
+                int zeroes = 0;
+                JObject diffObject = diffFromPrevious.ToObject<JObject>();
+                foreach (var token in diffObject)
+                {
+                    JToken diff = token.Value;
+                    if (diff.Type == JTokenType.Array)
+                    {
+                        zeroes += diff.Where(t => t.Type == JTokenType.Integer).Count(t => (int)t == 0);
+                    }
+                }
+                if (zeroes >= 4)
+                {
+                    Debug.Log("Clearing ABR state");
+                    ABREngine.Instance.ClearState();
+                }
             }
-            else
+
+            // If it's an object, that means some impressions have changed
+            if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Object)
             {
                 impressionsObject = allImpressionsDiff?.ToObject<JObject>();
             }
@@ -713,6 +729,13 @@ namespace IVLab.ABREngine
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
+                        // Skip serializing impressions that aren't inside the ABREngine GameObject
+                        GameObject child = group.GetEncodedGameObject(impression.Uuid).gameObject;
+                        if (child.GetComponentInParent<ABREngine>() == null)
+                        {
+                            continue;
+                        }
+
                         RawDataImpression saveImpression = new RawDataImpression();
 
                         // Retrieve easy values

@@ -6,6 +6,7 @@
     "description": "Artifact-Based Rendering Engine",
     "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
     "dependencies": {
+        "com.unity.textmeshpro": "3.0.6"
     },
     "samples": [
         {

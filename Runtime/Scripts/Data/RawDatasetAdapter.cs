@@ -37,11 +37,21 @@ namespace IVLab.ABREngine
         /// <param name="filePath">Data source file</param>
         public static RawDataset ObjToSurface(string filePath)
         {
+
             OBJLoader loader = new OBJLoader();
             GameObject surfaceData = loader.Load(filePath, true);
-
             Mesh mesh = surfaceData.GetComponentInChildren<MeshFilter>()?.mesh;
+            RawDataset ds = MeshToSurface(mesh, null);
+            GameObject.Destroy(surfaceData);
+            return ds;
+        }
 
+        /// <summary>
+        /// Create a surfaces data object from a Unity mesh
+        /// </summary>
+        /// <param name="mesh">The original mesh</param>
+        public static RawDataset MeshToSurface(Mesh mesh, Dictionary<string, List<float>> scalarVars)
+        {
             RawDataset ds = new RawDataset();
             ds.bounds = mesh.bounds;
             ds.dataTopology = DataTopology.Triangles;
@@ -49,10 +59,25 @@ namespace IVLab.ABREngine
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
 
-            ds.scalarArrayNames = new string[0];
-            ds.scalarMins = new float[0];
-            ds.scalarMaxes = new float[0];
-            ds.scalarArrays = new SerializableFloatArray[1];
+            int numScalars = scalarVars?.Count ?? 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
+
+            // Build the scalar arrays, if present
+            if (scalarVars != null)
+            {
+                int scalarIndex = 0;
+                foreach (var kv in scalarVars)
+                {
+                    ds.scalarArrayNames[scalarIndex] = kv.Key;
+                    ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
+                    ds.scalarMins[scalarIndex] = kv.Value.Min();
+                    ds.scalarMaxes[scalarIndex] = kv.Value.Max();
+                    scalarIndex += 1;
+                }
+            }
 
             ds.vertexArray = mesh.vertices;
             ds.indexArray = mesh.triangles;
@@ -60,9 +85,36 @@ namespace IVLab.ABREngine
             // We will not populate any data yet
             ds.cellIndexCounts = new int[mesh.triangles.Length / 3];
             ds.cellIndexOffsets = new int[mesh.triangles.Length / 3];
-
-            GameObject.Destroy(surfaceData);
             return ds;
+        }
+
+        /// <summary>
+        /// Create a Surface data object from a Unity primitive. By default,
+        /// includes XAxis, YAxis, and ZAxis scalar variables.
+        /// </summary>
+        public static RawDataset UnityPrimitiveToSurface(PrimitiveType primitive)
+        {
+            GameObject prim = GameObject.CreatePrimitive(primitive);
+            Mesh mesh = prim.GetComponent<MeshFilter>().mesh;
+            GameObject.Destroy(prim);
+
+            // Construct scalar variables
+            List<float> x = new List<float>();
+            List<float> y = new List<float>();
+            List<float> z = new List<float>();
+            foreach (Vector3 v in mesh.vertices)
+            {
+                x.Add(v.x);
+                y.Add(v.y);
+                z.Add(v.z);
+            }
+            Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>>()
+            {
+                { "XAxis", x },
+                { "YAxis", y },
+                { "ZAxis", z },
+            };
+            return MeshToSurface(mesh, scalarVars);
         }
 
 
@@ -164,14 +216,20 @@ namespace IVLab.ABREngine
         /// ask the user for them.
         /// </summary>
         /// <param name="points">Points in a line - will be treated as a LineStrip</param>
-        public static RawDataset PointsToPoints(List<Vector3> points, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
+        public static RawDataset PointsToPoints(
+            List<Vector3> points,
+            Bounds dataBounds,
+            Dictionary<string, List<float>> scalarVars,
+            Dictionary<string, List<Vector3>> vectorVars
+        )
         {
             RawDataset ds = new RawDataset();
             ds.dataTopology = DataTopology.Points;
             ds.bounds = dataBounds;
 
-            ds.vectorArrays = new SerializableVectorArray[0];
-            ds.vectorArrayNames = new string[0];
+            int numVectors = vectorVars?.Count ?? 0;
+            ds.vectorArrayNames = new string[numVectors];
+            ds.vectorArrays = new SerializableVectorArray[numVectors];
 
             int numScalars = scalarVars?.Count ?? 0;
             ds.scalarArrayNames = new string[numScalars];
@@ -190,6 +248,17 @@ namespace IVLab.ABREngine
                     ds.scalarMins[scalarIndex] = kv.Value.Min();
                     ds.scalarMaxes[scalarIndex] = kv.Value.Max();
                     scalarIndex += 1;
+                }
+            }
+
+            if (vectorVars != null)
+            {
+                int vectorIndex = 0;
+                foreach (var kv in vectorVars)
+                {
+                    ds.vectorArrayNames[vectorIndex] = kv.Key;
+                    ds.vectorArrays[vectorIndex] = new SerializableVectorArray() { array = kv.Value.ToArray() };
+                    vectorIndex += 1;
                 }
             }
 
