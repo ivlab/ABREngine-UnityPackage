@@ -560,7 +560,8 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetTexture("_Texture", lineTexture.BlendMaps.Textures);
                     MatPropBlock.SetTexture("_BlendMap", lineTexture.BlendMaps.BlendMap);
                     MatPropBlock.SetInt("_NumTex", lineTexture.VisAssetCount);
-                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.BlendMaps.Textures.width / (float)lineTexture.BlendMaps.Textures.height / (float) lineTexture.VisAssetCount);
+                    MatPropBlock.SetVector("_TextureAspect", lineTexture.BlendMaps.AspectRatios);
+                    MatPropBlock.SetVector("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
                 }
                 else

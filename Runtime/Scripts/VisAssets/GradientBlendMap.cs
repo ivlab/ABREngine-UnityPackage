@@ -29,6 +29,9 @@ namespace IVLab.ABREngine
     /// Collection of essential textures for making texture-based VisAsset
     /// gradients happen.
     /// </summary>
+    /// <remarks>
+    /// Note that gradient blend maps can only have up to 4 textures at a time.
+    /// </remarks>
     public class GradientBlendMap
     {
         /// <summary>
@@ -52,6 +55,16 @@ namespace IVLab.ABREngine
         /// </summary>
         public Texture2D Textures { get; private set; }
 
+        /// <summary>
+        /// The aspect ratio (width / height) of each texture in this texture gradient
+        /// </summary>
+        public Vector4 AspectRatios { get; private set; }
+
+        /// <summary>
+        /// The aspect ratio (height / width) of each texture in this texture gradient
+        /// </summary>
+        public Vector4 HeightWidthAspectRatios { get; private set; }
+
         public GradientBlendMap(Texture2D texture) : this(
             new List<Texture2D>() { texture },
             new List<float>(),
@@ -69,6 +82,10 @@ namespace IVLab.ABREngine
             if (textures.Count != stops.Count + 1)
             {
                 throw new ArgumentException("GradientBlendMap: `textures` must have exactly ONE more element than `stops`.");
+            }
+            if (textures.Count > 4)
+            {
+                throw new ArgumentException("GradientBlendMap: More than 4 textures is not allowed.");
             }
             CalculateGradient(textures, stops, blendWidths);
         }
@@ -165,6 +182,20 @@ namespace IVLab.ABREngine
             StopMap.filterMode = FilterMode.Point;
             StopMap.SetPixels(stopPercentPixels.ToArray());
             StopMap.Apply();
+
+            // Calculate the aspect ratio of each texture in the set (in
+            // particular for lines they may be different)
+            Vector4 aspectRatios = Vector4.zero;
+            Vector4 hwAspectRatios = Vector4.zero;
+            for (int t = 0; t < textures.Count; t++)
+            {
+                float aspect = textures[t].width / (float)textures[t].height;
+                float hwAspect = textures[t].height / (float)textures[t].width;
+                aspectRatios[t] = aspect;
+                hwAspectRatios[t] = hwAspect;
+            }
+            AspectRatios = aspectRatios;
+            HeightWidthAspectRatios = hwAspectRatios;
 
             Textures = TextureUtilities.MakeTextureGradientVertical(textures);
         }

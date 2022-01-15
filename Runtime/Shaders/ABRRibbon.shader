@@ -44,10 +44,14 @@ Shader "ABR/Ribbon"
             // Ribbon parameters
             sampler2D _Texture;
             sampler2D _TextureNRM;
-            float _TextureAspect;
+
+            // Aspect ratio (width / height) of textures
+            float4 _TextureAspect;
+            // Aspect ratio (height / width) of textures
+            float4 _TextureHeightWidthAspect;
+
             float _TextureCutoff;
             float _RibbonBrightness;
-            float _Texturescale = 0.5;
             int _UseLineTexture = 0;
             float _Blend = 1;
             float _RibbonDataMin;
@@ -96,14 +100,12 @@ Shader "ABR/Ribbon"
 
             void surf(Input IN, inout SurfaceOutput  o)
             {
-                _Texturescale = 0.5;
-                float percentCoverage = 1.0 / _NumTex;
-
-                // Compute texture coordinates (repeating) based on (width / height) of texture
-                float2 uv = float2((percentCoverage * (IN.texcoord.x / _TextureAspect)) % 1, IN.texcoord.y);
-
                 // Variables: color, ribbon, null, null
                 fixed4 variables = IN.color;
+
+                // Calculate how tall each texture is (percentage of the whole)
+                float4 hw = _TextureHeightWidthAspect;
+                float4 hwAspectPercent = hw / (hw.x + hw.y + hw.z + hw.w);
 
                 // DEBUG: Check actual data values
                 // o.Albedo = (variables / 20) + 0.5;
@@ -114,6 +116,10 @@ Shader "ABR/Ribbon"
 
                 // DEBUG: Check how the blend map applies to the line
                 // o.Albedo = blendPercentages;
+                // return;
+
+                // DEBUG: Show aspect ratio info
+                // o.Albedo = hwAspectPercent * blendPercentages;
                 // return;
 
                 // Apply colormap
@@ -131,10 +137,13 @@ Shader "ABR/Ribbon"
 
                 // Blend the various line textures to see if this fragment should be included
                 float3 textureColor = 0;
+                float totalAspect = 0;
                 for (int texIndex = 0; texIndex < _NumTex; texIndex++)
                 {
-                    float2 texCoord = float2(uv.x, texIndex * percentCoverage + uv.y / _NumTex);
-                    float3 currentColor = tex2D(_Texture, texCoord);
+                    // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
+                    float2 uv = float2((IN.texcoord.x / _TextureAspect[texIndex]) % 1, texIndex * totalAspect + IN.texcoord.y * hwAspectPercent[texIndex]);
+                    totalAspect += hwAspectPercent[texIndex];
+                    float3 currentColor = tex2D(_Texture, uv);
                     currentColor *= blendPercentages[texIndex];
                     textureColor += currentColor;
                 }
