@@ -112,7 +112,10 @@ namespace IVLab.ABREngine
             {
                 if (allowOverwrite)
                 {
-                    _impressions[impression.Uuid] = impression;
+                    // Instead of actually assigning a completely new
+                    // DataImpression, copy the temporary one's inputs and let
+                    // the temp be GC'd.
+                    _impressions[impression.Uuid].CopyExisting(impression);
                 }
                 else
                 {

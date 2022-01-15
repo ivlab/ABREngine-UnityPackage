@@ -70,26 +70,26 @@ namespace IVLab.ABREngine
                     if (ABREngine.Instance.VisAssets.TryGetVisAsset(uuid, out va))
                     {
                         EditorGUILayout.LabelField("  " + uuid.ToString());
-                        EditorGUILayout.LabelField("    Type: " + va.VisAssetType);
+                        EditorGUILayout.LabelField("    Type: " + va.GetType());
                         GUILayoutOption[] previewOptions = {
                             GUILayout.Width(EditorGUIUtility.currentViewWidth),
                             GUILayout.Height(30)
                         };
-                        switch (va.VisAssetType)
-                        {
-                            case VisAssetType.Colormap:
-                                GUILayout.Box(((ColormapVisAsset) va).Gradient, previewOptions);
-                                break;
-                            case VisAssetType.LineTexture:
-                                GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
-                                break;
-                            case VisAssetType.SurfaceTexture:
-                                GUILayout.Box(((SurfaceTextureVisAsset) va).Texture, previewOptions);
-                                break;
-                            case VisAssetType.Glyph:
-                                GUILayout.Label("[No preview]");
-                                break;
-                        }
+                        // switch (va.VisAssetType)
+                        // {
+                        //     case VisAssetType.Colormap:
+                        //         GUILayout.Box(((ColormapVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.LineTexture:
+                        //         GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.SurfaceTexture:
+                        //         GUILayout.Box(((SurfaceTextureVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.Glyph:
+                        //         GUILayout.Label("[No preview]");
+                        //         break;
+                        // }
                     }
                     GUILayout.Space(10);
                 }

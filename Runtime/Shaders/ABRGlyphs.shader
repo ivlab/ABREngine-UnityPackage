@@ -111,7 +111,7 @@ Shader "ABR/InstancedGlyphs" {
                 float scalarValue = renderInfo.r;
 
                 // Normalizing scalar allows us to use it for colormap-texture lookup
-                float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0, 0.99);
+                float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0.01, 0.99);
                 if (_UseColorMap == 1)
                 {
                     o.Albedo = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));

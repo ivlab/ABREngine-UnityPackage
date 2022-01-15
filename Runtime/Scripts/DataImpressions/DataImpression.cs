@@ -74,6 +74,11 @@ namespace IVLab.ABREngine
         IDataImpression Copy();
 
         /// <summary>
+        /// Update this data impression from an existing (possibly temporary) one.
+        /// </summary>
+        void CopyExisting(IDataImpression other);
+
+        /// <summary>
         ///     Return if this data impression has a particular string tag (for
         ///     external purposes only, the engine currently does nothing with tags)
         /// </summary>
@@ -180,7 +185,22 @@ namespace IVLab.ABREngine
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Tags = new List<string>(di.Tags);
             di.Uuid = Guid.NewGuid();
+            this.RenderHints = di.RenderHints;
             return di as IDataImpression;
+        }
+
+        /// <summary>
+        /// Update this data impression from an existing (possibly temporary) one.
+        /// </summary>
+        public virtual void CopyExisting(IDataImpression other)
+        {
+            this.Tags = new List<string>((other as DataImpression).Tags);
+            this.RenderHints = other.RenderHints;
+            foreach (string inputName in other.InputIndexer.InputNames)
+            {
+                IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
+                this.InputIndexer.AssignInput(inputName, otherInput);
+            }
         }
 
         /// <summary>

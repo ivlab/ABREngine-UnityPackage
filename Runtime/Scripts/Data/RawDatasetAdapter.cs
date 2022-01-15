@@ -20,6 +20,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using IVLab.OBJImport;
+using System.Linq;
 
 namespace IVLab.ABREngine
 {
@@ -71,7 +72,7 @@ namespace IVLab.ABREngine
         /// ask the user for them.
         /// </summary>
         /// <param name="lines">One, or several, lines. Each line consistes of a series of points.</param>
-        public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds)
+        public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             // Find out lengths of each line so we know where to split
             List<Vector3> allPoints = new List<Vector3>();
@@ -88,10 +89,25 @@ namespace IVLab.ABREngine
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
 
-            ds.scalarArrayNames = new string[0];
-            ds.scalarMins = new float[0];
-            ds.scalarMaxes = new float[0];
-            ds.scalarArrays = new SerializableFloatArray[0];
+            int numScalars = scalarVars?.Count ?? 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
+
+            // Build the scalar arrays, if present
+            if (scalarVars != null)
+            {
+                int scalarIndex = 0;
+                foreach (var kv in scalarVars)
+                {
+                    ds.scalarArrayNames[scalarIndex] = kv.Key;
+                    ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
+                    ds.scalarMins[scalarIndex] = kv.Value.Min();
+                    ds.scalarMaxes[scalarIndex] = kv.Value.Max();
+                    scalarIndex += 1;
+                }
+            }
 
             // Build the ribbon (line strip)'s vertices. Create several segments of
             // a ribbon if there are NaNs, instead of connecting through the NaN.
@@ -138,6 +154,57 @@ namespace IVLab.ABREngine
 
             ds.cellIndexCounts = segmentCounts.ToArray();
             ds.cellIndexOffsets = segmentStartIndices.ToArray();
+
+            return ds;
+        }
+
+        /// <summary>
+        /// Define a Point dataset from a bunch of points. Don't try to assume or
+        /// calculate the full bounds for the imported data objects - explictly
+        /// ask the user for them.
+        /// </summary>
+        /// <param name="points">Points in a line - will be treated as a LineStrip</param>
+        public static RawDataset PointsToPoints(List<Vector3> points, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
+        {
+            RawDataset ds = new RawDataset();
+            ds.dataTopology = DataTopology.Points;
+            ds.bounds = dataBounds;
+
+            ds.vectorArrays = new SerializableVectorArray[0];
+            ds.vectorArrayNames = new string[0];
+
+            int numScalars = scalarVars?.Count ?? 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
+
+            // Build the scalar arrays, if present
+            if (scalarVars != null)
+            {
+                int scalarIndex = 0;
+                foreach (var kv in scalarVars)
+                {
+                    ds.scalarArrayNames[scalarIndex] = kv.Key;
+                    ds.scalarArrays[scalarIndex] = new SerializableFloatArray() { array = kv.Value.ToArray() };
+                    ds.scalarMins[scalarIndex] = kv.Value.Min();
+                    ds.scalarMaxes[scalarIndex] = kv.Value.Max();
+                    scalarIndex += 1;
+                }
+            }
+
+            // Build the points.
+            ds.vertexArray = new Vector3[points.Count];
+            ds.indexArray = new int[points.Count];
+            ds.cellIndexCounts = new int[points.Count];
+            ds.cellIndexOffsets = new int[points.Count];
+            for (int i = 0; i < ds.vertexArray.Length; i++)
+            {
+                ds.vertexArray[i] = points[i];
+                ds.indexArray[i] = i;
+                ds.cellIndexCounts[i] = 1;
+                ds.cellIndexOffsets[i] = i;
+            }
 
             return ds;
         }

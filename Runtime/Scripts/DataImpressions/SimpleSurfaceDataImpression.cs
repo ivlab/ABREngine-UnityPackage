@@ -57,14 +57,14 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ColormapVisAsset colormap;
+        public IColormapVisAsset colormap;
 
 
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
-        public SurfaceTextureVisAsset pattern;
+        public ISurfaceTextureVisAsset pattern;
 
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
@@ -427,18 +427,20 @@ namespace IVLab.ABREngine
             }
             try
             {
-                if (pattern?.Texture != null)
+                if (pattern != null)
                 {
                     MatPropBlock.SetInt("_UsePattern", 1);
-                    MatPropBlock.SetTexture("_Pattern", pattern?.Texture);
-                    MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
+                    MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
+                    MatPropBlock.SetTexture("_BlendMap", pattern.BlendMaps.BlendMap);
+                    MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
+                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
                 }
                 else
                 {
                     MatPropBlock.SetInt("_UsePattern", 0);
                     MatPropBlock.SetTexture("_Pattern", new Texture2D(10, 10));
-                    MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
+                    // MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
                 }
             }
             catch (Exception e)

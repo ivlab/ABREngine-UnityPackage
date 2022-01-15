@@ -46,7 +46,7 @@ namespace IVLab.ABREngine
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ColormapVisAsset colormap;
+        public IColormapVisAsset colormap;
 
         [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;

@@ -123,7 +123,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Schema to use for internally grabbing default values
         /// </summary>
-        private JObject _schema;
+        public JObject SchemaJson { get; private set; }
 
         public ABRConfig()
         {
@@ -188,8 +188,8 @@ namespace IVLab.ABREngine
                 return;
             }
 
-            _schema = JObject.Parse(schemaContents);
-            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["default"]);
+            SchemaJson = JObject.Parse(schemaContents);
+            Debug.LogFormat("Using ABR Schema, version {0}", SchemaJson["properties"]["version"]["default"]);
         }
 
         /// <summary>
@@ -199,12 +199,12 @@ namespace IVLab.ABREngine
         public T GetInputValueDefault<T>(string plateName, string inputName)
         where T : IPrimitive
         {
-            if (_schema == null)
+            if (SchemaJson == null)
             {
                 Debug.LogErrorFormat("Schema is null, cannot get default value {0}", inputName);
                 return default(T);
             }
-            string primitiveValue = _schema["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
+            string primitiveValue = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
             
             Type inputType = typeof(T);
             ConstructorInfo inputCtor =
@@ -233,12 +233,12 @@ namespace IVLab.ABREngine
         /// </summary>
         public string[] GetInputNames(string plateName)
         {
-            if (_schema == null)
+            if (SchemaJson == null)
             {
                 Debug.LogErrorFormat("Schema is null, cannot get input names for {0}", plateName);
                 return new string[0];
             }
-            Dictionary<string, JToken> inputList = _schema["definitions"]["Plates"][plateName]["properties"].ToObject<Dictionary<string, JToken>>();
+            Dictionary<string, JToken> inputList = SchemaJson["definitions"]["Plates"][plateName]["properties"].ToObject<Dictionary<string, JToken>>();
             return inputList.Keys.ToArray();
         }
 

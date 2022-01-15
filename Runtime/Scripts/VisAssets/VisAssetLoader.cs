@@ -665,25 +665,25 @@ namespace IVLab.ABREngine
                 Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
             }
 
+            if (!VisAsset.IsValidVisAssetType(type))
+            {
+                Debug.LogError($"`{type}` is not a valid VisAsset type");
+                return null;
+            }
+
             if (type == "colormap")
             {
-                ColormapVisAsset visAsset = new ColormapVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
                 Texture2D colormapTexture = await _fetcher.GetColormapTexture(guid);
-                visAsset.Gradient = colormapTexture;
+                ColormapVisAsset visAsset = new ColormapVisAsset(guid, colormapTexture);
                 return visAsset;
             }
 
             if (type == "glyph")
             {
-                GlyphVisAsset visAsset = new GlyphVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
                 var artifactData = jsonData["artifactData"];
                 List<JObject> lodsList = null;
-
+                List<Mesh> meshLods = new List<Mesh>();
+                List<Texture2D> normalMapLods = new List<Texture2D>();
                 try
                 {
                     lodsList = artifactData["lods"].ToObject<List<JObject>>();
@@ -701,44 +701,31 @@ namespace IVLab.ABREngine
                 }
                 foreach (JObject lodJson in lodsList)
                 {
-                    GameObject loadedObjGameObject = GameObject.Instantiate(await _fetcher.GetGlyphGameObject(guid, lodJson));
+                    GameObject loadedObjGameObject = await _fetcher.GetGlyphGameObject(guid, lodJson);
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
-                    loadedObjGameObject.SetActive(false);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
                     GameObject.Destroy(loadedObjGameObject);
-                    visAsset.MeshLods.Add(loadedMesh);
+                    meshLods.Add(loadedMesh);
 
                     Texture2D normalMap = await _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
-                    visAsset.NormalMapLods.Add(normalMap);
+                    normalMapLods.Add(normalMap);
                 }
-
+                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods);
                 return visAsset;
             }
 
             if (type == "line")
             {
-                LineTextureVisAsset visAsset = new LineTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
                 Texture2D texture = await _fetcher.GetLineTexture(guid);
-                visAsset.Texture = texture;
-
+                LineTextureVisAsset visAsset = new LineTextureVisAsset(guid, texture);
                 return visAsset;
             }
 
             if (type == "texture")
             {
-                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
                 Texture2D texture = await _fetcher.GetSurfaceTexture(guid);
-                visAsset.Texture = texture;
-
                 Texture2D normal = await _fetcher.GetSurfaceNormalMap(guid);
-                visAsset.NormalMap = normal;
-
+                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset(guid, texture, normal);
                 return visAsset;
             }
             return null;

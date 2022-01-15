@@ -928,9 +928,13 @@ namespace IVLab.ABREngine
         /// `IABRStateLoader`s, namely `PathStateFileLoader` and
         /// `HttpStateFileLoader`.
         /// </remarks>
-        public async Task SaveStateAsync<T>()
+        public async Task SaveStateAsync<T>(string overrideStateName = null)
         where T : IABRStateLoader, new()
         {
+            if (overrideStateName != null)
+            {
+                previousStateName = overrideStateName;
+            }
             T loader = new T();
             try
             {

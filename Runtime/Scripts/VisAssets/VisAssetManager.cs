@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
@@ -62,6 +61,12 @@ namespace IVLab.ABREngine
         /// exist on disk or on a server somewhere.
         /// </summary>
         public JObject LocalVisAssets { get; set; }
+
+        /// <summary>
+        /// Any VisAsset gradients that are contained within the state (updated
+        /// directly from state)
+        /// </summary>
+        public Dictionary<string, RawVisAssetGradient> VisAssetGradients { get; set; } = new Dictionary<string, RawVisAssetGradient>();
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
 
@@ -150,37 +155,115 @@ namespace IVLab.ABREngine
                 return null;
             }
 
-            try
+            // First, check if the VisAsset is a gradient and recursivly import its VisAsset dependencies
+            List<Guid> dependencyUuids = new List<Guid>();
+            bool isGradient = false;
+            if (VisAssetGradients != null && VisAssetGradients.ContainsKey(visAssetUUID.ToString()))
             {
-                // Try to fetch the visasset in terms of each fetcher's priority
-                IVisAsset visAsset = null;
-                foreach (IVisAssetFetcher fetcher in visAssetFetchers)
+                isGradient = true;
+                foreach (var dependency in VisAssetGradients[visAssetUUID.ToString()].visAssets)
                 {
-                    try
-                    {
-                        visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(e);
-                    }
-
-                    // If we've found it, stop looking
-                    if (visAsset != null)
-                    {
-                        break;
-                    }
-                }
-
-                if (visAsset != null)
-                {
-                    _visAssets[visAssetUUID] = visAsset;
-                    return visAsset;
+                    dependencyUuids.Add(new Guid(dependency.ToString()));
                 }
             }
-            catch (Exception e)
+            else
             {
-                Debug.LogError(e);
+                // If it's not a gradient, just import the regular VisAsset (no dependencies)
+                dependencyUuids.Add(visAssetUUID);
+            }
+
+            IVisAsset toReturn = null;
+            foreach (var dependency in dependencyUuids)
+            {
+                if (_visAssets.ContainsKey(dependency) && !replaceExisting)
+                {
+                    continue;
+                }
+                try
+                {
+                    // Try to fetch the visasset in terms of each fetcher's priority
+                    IVisAsset visAsset = null;
+                    foreach (IVisAssetFetcher fetcher in visAssetFetchers)
+                    {
+                        try
+                        {
+                            visAsset = await visAssetLoader.LoadVisAsset(dependency, fetcher);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e);
+                        }
+
+                        // If we've found it, stop looking
+                        if (visAsset != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (visAsset != null)
+                    {
+                        _visAssets[dependency] = visAsset;
+                        toReturn = visAsset;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
+            }
+
+            // Post-import, verify that all VisAssets in this gradient are of the correct type
+            if (!isGradient)
+            {
+                return toReturn;
+            }
+            else if (isGradient && dependencyUuids.Count > 0)
+            {
+                IVisAsset[] dependencies = dependencyUuids.Select((g) => {
+                    IVisAsset visAsset = null;
+                    if (TryGetVisAsset(g, out visAsset))
+                    {
+                        return visAsset;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }).Where((va) => va != null).ToArray();
+
+                IEnumerable<Type> vaType = dependencies.Select((va) => va.GetType()).Distinct();
+                if (vaType.Count() != 1)
+                {
+                    Debug.LogErrorFormat("VisAsset Gradient `{0}`: not all VisAsset dependency types match", visAssetUUID.ToString());
+                    return null;
+                }
+
+                Type visAssetType = vaType.First();
+                {
+                    if (visAssetType == typeof(GlyphVisAsset))
+                    {
+                        GlyphGradient gradient = VisAssetGradient.FromRaw<GlyphGradient, GlyphVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(SurfaceTextureVisAsset))
+                    {
+                        SurfaceTextureGradient gradient = VisAssetGradient.FromRaw<SurfaceTextureGradient, SurfaceTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(LineTextureVisAsset))
+                    {
+                        LineTextureGradient gradient = VisAssetGradient.FromRaw<LineTextureGradient, LineTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else
+                    {
+                        throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
+                    }
+                }
             }
             return null;
         }
@@ -213,9 +296,7 @@ namespace IVLab.ABREngine
                 // Define a black-to-white colormap
                 string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
                 Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
-                ColormapVisAsset cmap = new ColormapVisAsset();
-                cmap.Gradient = cmapTex;
-                return cmap;
+                return new ColormapVisAsset(cmapTex);
             }
             else
             {

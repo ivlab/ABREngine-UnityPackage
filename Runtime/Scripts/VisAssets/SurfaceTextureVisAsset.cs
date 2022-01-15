@@ -18,16 +18,80 @@
  */
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class SurfaceTextureVisAsset : VisAsset
+    public interface ISurfaceTextureVisAsset : IVisAsset, ITextureGradient
     {
-        public override VisAssetType VisAssetType { get; } = VisAssetType.SurfaceTexture;
+        /// <summary>
+        /// Obtain the first (or, only) texture in a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture();
 
-        public Texture2D Texture { get; set; } = null;
+        /// <summary>
+        /// Obtain the texture at a specific index within a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture(int gradientIndex);
 
-        public Texture2D NormalMap { get; set; } = null;
+        /// <summary>
+        /// Obtain the texture at a specific t-value (percentage) within a multi-visasset gradient
+        /// </summary>
+        Texture2D GetTexture(float gradientT);
+    }
+
+    public class SurfaceTextureVisAsset : VisAsset, ISurfaceTextureVisAsset
+    {
+        public int VisAssetCount { get; } = 1;
+        public Texture2D Texture { get; } = null;
+        public Texture2D NormalMap { get; } = null;
+        public GradientBlendMap BlendMaps { get; }
+
+        public SurfaceTextureVisAsset() : this(new Guid(), null, null) { }
+        public SurfaceTextureVisAsset(Texture2D texture, Texture2D normalMap) : this(Guid.NewGuid(), texture, normalMap) { }
+        public SurfaceTextureVisAsset(Guid uuid, Texture2D texture, Texture2D normalMap)
+        {
+            Uuid = uuid;
+            Texture = texture;
+            NormalMap = normalMap;
+            ImportTime = DateTime.Now;
+            BlendMaps = new GradientBlendMap(texture);
+        }
+
+        public Texture2D GetTexture() => Texture;
+        public Texture2D GetTexture(int gradientIndex) => Texture;
+        public Texture2D GetTexture(float gradientT) => Texture;
+    }
+
+    public class SurfaceTextureGradient : VisAssetGradient, ISurfaceTextureVisAsset, IVisAssetGradient<SurfaceTextureVisAsset>, ITextureGradient
+    {
+        public int VisAssetCount { get => VisAssets.Count; }
+        public GradientBlendMap BlendMaps { get; private set; }
+        public List<SurfaceTextureVisAsset> VisAssets { get; private set; }
+        public List<float> Stops { get; private set; }
+
+        public void Initialize(Guid uuid, List<SurfaceTextureVisAsset> visAssets, List<float> stops)
+        {
+            Uuid = uuid;
+            VisAssets = visAssets;
+            Stops = stops;
+            BlendMaps = new GradientBlendMap(VisAssets.Select(va => va.GetTexture()).ToList(), Stops, 0.1f);
+        }
+
+        public Texture2D GetTexture() => VisAssets[0].GetTexture();
+        public Texture2D GetTexture(int gradientIndex) => VisAssets[gradientIndex].GetTexture();
+        public Texture2D GetTexture(float gradientT)
+        {
+            for (int i = 0; i < Stops.Count; i++)
+            {
+                if (Stops[i] >= gradientT)
+                {
+                    return GetTexture(i + 1);
+                }
+            }
+            return default;
+        }
     }
 }

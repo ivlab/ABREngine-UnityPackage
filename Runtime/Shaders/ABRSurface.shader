@@ -62,6 +62,9 @@ Shader "ABR/Surface"
             sampler2D _Pattern;
             sampler2D _PatternNormal;
 
+            sampler2D _BlendMap; // Blending for each texture (max of 4, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
+            int _NumTex = 0; // Number of textures in this gradient
+
             float _PatternDataMin;
             float _PatternDataMax;
 
@@ -109,11 +112,30 @@ Shader "ABR/Surface"
             {
                 float3 poscoodinates = IN.position.xyz;
 
-                // DEBUG: ensure position coordinates are correct
-                // o.Albedo = poscoodinates;
-
                 // Variables: color variable, pattern variable, null, null
                 fixed4 variables = IN.color;
+                float percentCoverage = 1.0 / _NumTex;
+
+                // DEBUG: ensure position coordinates are correct
+                // o.Albedo = poscoodinates;
+                // return;
+
+                // DEBUG: Check actual data values
+                // o.Albedo = variables / 10;
+                // return;
+
+                // DEBUG: Check that texture coordinates exist
+                // o.Albedo = float4(IN.uv_MainTex, 0.0, 1.0);
+                // return;
+
+                // Percentages of each texture to use at this fragment
+                float4 blendPercentages = tex2D(_BlendMap, float2(clamp(Remap(variables.y, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.999), 0.5));
+
+                // DEBUG: Check how the blend map applies to the surface
+                // if (poscoodinates.x < -0.3) {
+                // o.Albedo = blendPercentages;
+                // return;
+                // }
 
                 // Compute UV coordinates for tri-planar projection
                 float3 normal = IN.normal.xyz;
@@ -131,6 +153,12 @@ Shader "ABR/Surface"
                 uv2.x /= _PatternScale;
                 uv2.y /= _PatternScale;
                 uv2 = uv2 - floor(uv2);
+
+                // DEBUG: UV coords
+                // o.Albedo = fixed4(uv0, 0, 1);
+                // o.Albedo = fixed4(uv1, 0, 1);
+                // o.Albedo = fixed4(uv2, 0, 1);
+                // return;
 
                 float a = normal.x;
                 float b = normal.y;
@@ -163,24 +191,40 @@ Shader "ABR/Surface"
                 b /= sum;
                 c /= sum;
 
-                float3 colorA;
-                float3 colorB;
-                float3 colorC;
-                float3 normalA;
-                float3 normalB;
-                float3 normalC;
+                // Compute the actual pixel color from the various textures
+                fixed4 finalColor = 0;
+                float3 textureColor = 0;
+                float3 norm = 0;
+                for (int texIndex = 0; texIndex < _NumTex; texIndex++)
+                {
+                    float3 colorA;
+                    float3 colorB;
+                    float3 colorC;
+                    float3 normalA;
+                    float3 normalB;
+                    float3 normalC;
 
-                // Compute colors / normals for tri-planar projection
-                colorA = tex2D(_Pattern, uv0);
-                colorB = tex2D(_Pattern, uv1);
-                colorC = tex2D(_Pattern, uv2);
-                normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
-                normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
-                normalC = UnpackNormal(tex2D(_PatternNormal, uv2));
+                    // Calculate *actual* tex coord within *this* texture
+                    // Divide by _NumTex to get coordinate inside base texture; textures are stacked along y-axis
+                    float2 texCoord0 = float2(uv0.x, texIndex * percentCoverage + uv0.y / _NumTex);
+                    float2 texCoord1 = float2(uv1.x, texIndex * percentCoverage + uv1.y / _NumTex);
+                    float2 texCoord2 = float2(uv1.x, texIndex * percentCoverage + uv2.y / _NumTex);
 
-                float3 textureColor = colorA * a + colorB * b + colorC * c;
-                float3 norm = normalA * a + normalB * b + normalC * c;
-                norm = normalize(norm);
+                    // Compute colors / normals for tri-planar projection
+                    colorA = tex2D(_Pattern, texCoord0);
+                    colorB = tex2D(_Pattern, texCoord1);
+                    colorC = tex2D(_Pattern, texCoord2);
+                    normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
+                    normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
+                    normalC = UnpackNormal(tex2D(_PatternNormal, uv2));
+
+                    float3 currentColor = colorA * a + colorB * b + colorC * c;
+                    norm = normalA * a + normalB * b + normalC * c;
+                    norm = normalize(norm);
+
+                    currentColor *= blendPercentages[texIndex];
+                    textureColor += currentColor;
+                }
 
                 // Compute saturation
                 float3 grayTextureColor = dot(textureColor, float3(0.3, 0.59, 0.11));
@@ -193,14 +237,6 @@ Shader "ABR/Surface"
                 float vColor = variables.r;
                 float vPattern = variables.g;
                 float vColorNorm = clamp(Remap(vColor, _ColorDataMin,_ColorDataMax,0,1),0.01,0.99);
-                float vPatternNorm = clamp(Remap(vPattern, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.99);
-
-                // Apply pattern
-                if (_UsePatternVariable) {
-                    textureColor = lerp(fixed3(1, 1, 1), textureColor, clamp(vPatternNorm, 0, 1));
-                    norm = lerp( o.Normal, norm, clamp(vPatternNorm,0,1));
-                    norm = normalize(norm);
-                }
 
                 // Apply colormap
                 if (_UseColorMap == 1)
@@ -214,8 +250,10 @@ Shader "ABR/Surface"
                 }
 
                 // Use Multiply method (could use overlay instead)
-                o.Albedo = o.Albedo * textureColor;
-                //o.Albedo = overlayBlend(o.Albedo, textureColor);
+                if (_NumTex > 0) {
+                    o.Albedo = o.Albedo * textureColor;
+                    //o.Albedo = overlayBlend(o.Albedo, textureColor);
+                }
 
                 o.Metallic = _Metallic;
                 o.Smoothness = _Glossiness;
