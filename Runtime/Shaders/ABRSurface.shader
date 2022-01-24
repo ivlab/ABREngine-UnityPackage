@@ -62,8 +62,10 @@ Shader "ABR/Surface"
             sampler2D _Pattern;
             sampler2D _PatternNormal;
 
-            sampler2D _BlendMap; // Blending for each texture (max of 4, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
-            int _NumTex = 0; // Number of textures in this gradient
+            // Number of textures in this gradient
+            int _NumTex = 0;
+            // Blending for each texture (max of 4 per texture, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
+            sampler2D _BlendMaps;
 
             float _PatternDataMin;
             float _PatternDataMax;
@@ -72,6 +74,8 @@ Shader "ABR/Surface"
             float _PatternScale = 0.0;
             float _PatternSaturation = 1.0;
             float _PatternIntensity = 1.0;
+
+            uint SupportedChannels = 4;
 
             struct Input
             {
@@ -116,6 +120,9 @@ Shader "ABR/Surface"
                 fixed4 variables = IN.color;
                 float percentCoverage = 1.0 / _NumTex;
 
+                // Find number of "grouped" blend map textures
+                uint numGroups = _NumTex / SupportedChannels;
+
                 // DEBUG: ensure position coordinates are correct
                 // o.Albedo = poscoodinates;
                 // return;
@@ -127,15 +134,6 @@ Shader "ABR/Surface"
                 // DEBUG: Check that texture coordinates exist
                 // o.Albedo = float4(IN.uv_MainTex, 0.0, 1.0);
                 // return;
-
-                // Percentages of each texture to use at this fragment
-                float4 blendPercentages = tex2D(_BlendMap, float2(clamp(Remap(variables.y, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.999), 0.5));
-
-                // DEBUG: Check how the blend map applies to the surface
-                // if (poscoodinates.x < -0.3) {
-                // o.Albedo = blendPercentages;
-                // return;
-                // }
 
                 // Compute UV coordinates for tri-planar projection
                 float3 normal = IN.normal.xyz;
@@ -197,6 +195,15 @@ Shader "ABR/Surface"
                 float3 norm = 0;
                 for (int texIndex = 0; texIndex < _NumTex; texIndex++)
                 {
+                    // Percentages of each texture to use at this fragment
+                    // "Unpack" the blendmap texture
+                    float blendMapX = clamp(Remap(variables.y, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.999);
+                    uint channelIndex = texIndex % SupportedChannels;
+                    uint groupIndex = texIndex / SupportedChannels;
+                    float blendMapY = (groupIndex + 0.5) / (float) numGroups;
+                    // Percentages of each texture to use at this fragment
+                    float4 blendPercentages = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+
                     float3 colorA;
                     float3 colorB;
                     float3 colorC;
@@ -222,8 +229,15 @@ Shader "ABR/Surface"
                     norm = normalA * a + normalB * b + normalC * c;
                     norm = normalize(norm);
 
-                    currentColor *= blendPercentages[texIndex];
+                    currentColor *= blendPercentages[channelIndex];
                     textureColor += currentColor;
+
+                    // DEBUG: Check how the blend map applies to the surface
+                    // if (poscoodinates.x < -0.3) {
+                        // textureColor = texIndex / (float) _NumTex;
+                    // textureColor = blendPercentages;
+                    // textureColor = blendPercentages[texIndex] * (channelIndex / (float) SupportedChannels);
+                    // }
                 }
 
                 // Compute saturation
@@ -251,7 +265,8 @@ Shader "ABR/Surface"
 
                 // Use Multiply method (could use overlay instead)
                 if (_NumTex > 0) {
-                    o.Albedo = o.Albedo * textureColor;
+                    // o.Albedo = o.Albedo * textureColor;
+                    o.Albedo = textureColor;
                     //o.Albedo = overlayBlend(o.Albedo, textureColor);
                 }
 

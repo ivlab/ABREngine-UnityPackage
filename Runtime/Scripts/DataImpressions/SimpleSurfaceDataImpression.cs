@@ -431,7 +431,7 @@ namespace IVLab.ABREngine
                 {
                     MatPropBlock.SetInt("_UsePattern", 1);
                     MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
-                    MatPropBlock.SetTexture("_BlendMap", pattern.BlendMaps.BlendMap);
+                    MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
                     // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 

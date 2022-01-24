@@ -63,8 +63,10 @@ Shader "ABR/Ribbon"
             float4 _ScalarMin;
             float4 _ScalarMax;
 
-            sampler2D _BlendMap; // Blending for each texture (max of 4, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
-            int _NumTex; // Number of textures in this gradient
+            // Number of textures in this gradient
+            int _NumTex = 0;
+            // Blending for each texture (max of 4 per texture, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
+            sampler2D _BlendMaps;
 
             struct Input
             {
@@ -107,19 +109,11 @@ Shader "ABR/Ribbon"
                 float4 hw = _TextureHeightWidthAspect;
                 float4 hwAspectPercent = hw / (hw.x + hw.y + hw.z + hw.w);
 
+                // Calculate offset Y for blendmap (1/2 a pixel)
+                float blendOffset = 0.5 / _NumTex;
+
                 // DEBUG: Check actual data values
                 // o.Albedo = (variables / 20) + 0.5;
-                // return;
-
-                // Percentages of each texture to use at this fragment
-                float4 blendPercentages = tex2D(_BlendMap, float2(clamp(Remap(variables.y, _ScalarMin[1], _ScalarMax[1], 0, 1), 0.001, 0.999), 0.5));
-
-                // DEBUG: Check how the blend map applies to the line
-                // o.Albedo = blendPercentages;
-                // return;
-
-                // DEBUG: Show aspect ratio info
-                // o.Albedo = hwAspectPercent * blendPercentages;
                 // return;
 
                 // Apply colormap
@@ -140,12 +134,24 @@ Shader "ABR/Ribbon"
                 float totalAspect = 0;
                 for (int texIndex = 0; texIndex < _NumTex; texIndex++)
                 {
+                    // "Unpack" the blendmap texture (scalar variable index 1 = ribbon)
+                    float blendMapX = clamp(Remap(variables.y, _ScalarMin[1], _ScalarMax[1], 0, 1), 0.001, 0.999);
+                    float blendMapY = (texIndex / (float) _NumTex) + blendOffset;
+                    // Percentages of each texture to use at this fragment
+                    float4 blendPercentages = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+
                     // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
                     float2 uv = float2((IN.texcoord.x / _TextureAspect[texIndex]) % 1, texIndex * totalAspect + IN.texcoord.y * hwAspectPercent[texIndex]);
                     totalAspect += hwAspectPercent[texIndex];
                     float3 currentColor = tex2D(_Texture, uv);
                     currentColor *= blendPercentages[texIndex];
                     textureColor += currentColor;
+
+                    // DEBUG: Check how the blend map applies to the line
+                    // textureColor = blendPercentages;
+
+                    // DEBUG: Show aspect ratio info
+                    // textureColor = hwAspectPercent * blendPercentages;
                 }
 
                 // DEBUG: Check texture application
