@@ -28,6 +28,7 @@ Shader "ABR/Surface"
         _PatternNormal("Normal (RGB)", 2D) = "bump" {}
         _Pattern("Stacked Textures", 2D) = "white" {}
         _BlendMaps("Stacked Blend Maps", 2D) = "white" {}
+        _PatternBlendWidth ("Blend Width", Range(0.0, 0.5)) = 0.3
 
         _Color("Color", Color) = (1,1,1,1)
         _Glossiness("Smoothness", Range(0,1)) = 0.5
@@ -41,7 +42,7 @@ Shader "ABR/Surface"
 
             CGPROGRAM
             // Physically based Standard lighting model, and enable shadows on all light types
-            #pragma surface surf Standard fullforwardshadows  vertex:vert addshadow
+            #pragma surface surf Standard fullforwardshadows vertex:vert addshadow
 
             // Use shader model 3.0 target, to get nicer looking lighting
             #pragma target 3.0
@@ -76,6 +77,7 @@ Shader "ABR/Surface"
             float _PatternScale = 0.0;
             float _PatternSaturation = 1.0;
             float _PatternIntensity = 1.0;
+            float _PatternBlendWidth = 0.1;
 
             struct Input
             {
@@ -92,23 +94,54 @@ Shader "ABR/Surface"
             // Vertex shader - simply compute positions and normals
             void vert(inout appdata_full v, out Input o) {
                 UNITY_INITIALIZE_OUTPUT(Input, o);
-                o.normal = abs(v.normal);
+                o.normal = abs(v.normal);  // Ensures weights in triplanar mapping are positive
                 o.position = (v.vertex);
             }
 
-            // Blend overlay method (instead of Multiply)
-            fixed3 overlayBlend(fixed3 a, fixed3 b) {
-                float twiceLuminance = dot(b, fixed4(0.2126, 0.7152, 0.0722, 0)) * 2;
+            // Blends seams of the tiled texture
+            float3 SeamBlend(float3 color, float2 uv, float2 buv)
+            {
+                // if (uv.x < _PatternBlendWidth && uv.y < _PatternBlendWidth)  // Bottom-left
+                // {
+                //     //float2 xyOffset = float2(_PatternBlendWidth-uv.x, _PatternBlendWidth-uv.y);
+                //      //color =  0.5*xOffset/_PatternBlendWidth;
+                // }
+                // else if (uv.x > 1-_PatternBlendWidth && uv.y < _PatternBlendWidth)  // Bottom-right
+                // {
 
-                fixed3 output = 0;
-                // The actual Overlay/High Light method is based on the shader
-                if (twiceLuminance < 1) {
-                    output = lerp(fixed3(0, 0, 0), a, twiceLuminance);
+                // }
+                // else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Top-left
+                // {
+
+                // }
+                // else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Top-right
+                // {
+
+                // }
+                if (uv.x <= _PatternBlendWidth)  // Blend left
+                {
+                    float xOffset = _PatternBlendWidth - uv.x;
+                    float2 offsetUVs = float2(1-xOffset, buv.y);
+                    float3 blendColor = tex2D(_Pattern, offsetUVs);
+                    float t = 0.5*xOffset/_PatternBlendWidth;
+                    color = lerp(color, blendColor, t);
                 }
-                else {
-                    output = lerp(a, fixed3(1, 1, 1), twiceLuminance - 1);
+                if (uv.y <= _PatternBlendWidth)  // Blend top
+                {
+                    float yOffset = _PatternBlendWidth - uv.y;
+                    color = lerp(color, tex2D(_Pattern, float2(buv.x,1-yOffset)), 0.5*yOffset/_PatternBlendWidth);
                 }
-                return output;
+                if (uv.x >= 1-_PatternBlendWidth)  // Blend right
+                {
+                    float xOffset = uv.x-(1-_PatternBlendWidth);
+                    color = lerp(color, tex2D(_Pattern, float2(xOffset,buv.y)), 0.5*xOffset/_PatternBlendWidth);
+                }
+                if (uv.y >= 1-_PatternBlendWidth)  // Blend button
+                {
+                    float yOffset = uv.y-(1-_PatternBlendWidth);
+                    color = lerp(color, tex2D(_Pattern, float2(buv.x,yOffset)), 0.5*yOffset/_PatternBlendWidth);
+                }
+                return color;
             }
 
             // The surface shader
@@ -144,17 +177,20 @@ Shader "ABR/Surface"
                 float2 uv0 = poscoodinates.yz;
                 uv0.x /= _PatternScale;
                 uv0.y /= _PatternScale;
-                uv0 = uv0 - floor(uv0);
+                uv0 = frac(uv0/(1-2*_PatternBlendWidth));
+                float2 buv0 = _PatternBlendWidth + uv0 * (1-2*_PatternBlendWidth);
 
                 float2 uv1 = poscoodinates.xz;
                 uv1.x /= _PatternScale;
                 uv1.y /= _PatternScale;
-                uv1 = uv1 - floor(uv1);
+                uv1 = frac(uv1/(1-2*_PatternBlendWidth));
+                float2 buv1 = _PatternBlendWidth + uv1 * (1-2*_PatternBlendWidth);
 
-                float2 uv2 = poscoodinates.xy;// - floor(IN.position.xy);
+                float2 uv2 = poscoodinates.xy;
                 uv2.x /= _PatternScale;
                 uv2.y /= _PatternScale;
-                uv2 = uv2 - floor(uv2);
+                uv2 = frac(uv2/(1-2*_PatternBlendWidth));
+                float2 buv2 = _PatternBlendWidth + uv2 * (1-2*_PatternBlendWidth);
 
                 // DEBUG: UV coords
                 // o.Albedo = fixed4(uv0, 0, 1);
@@ -171,7 +207,6 @@ Shader "ABR/Surface"
                 b /= sum;
                 c /= sum;
 
-                float average = (a + b + c) / 3;
                 float mx = max(a, max(b, c));
 
                 // Compute "powerfulness" of tri-planar projection
@@ -216,23 +251,29 @@ Shader "ABR/Surface"
                 float3 norm = 0;
                 for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
                 {
-                    float3 colorA;
-                    float3 colorB;
-                    float3 colorC;
+                    float3 colorA = float3(0,0,0);
+                    float3 colorB = float3(0,0,0);
+                    float3 colorC = float3(0,0,0);
                     float3 normalA;
                     float3 normalB;
                     float3 normalC;
 
                     // Calculate *actual* tex coord within *this* texture
                     // Divide by _NumTex to get coordinate inside base texture; textures are stacked along y-axis
-                    float2 texCoord0 = float2(uv0.x, texIndex * percentCoverage + uv0.y / _NumTex);
-                    float2 texCoord1 = float2(uv1.x, texIndex * percentCoverage + uv1.y / _NumTex);
-                    float2 texCoord2 = float2(uv1.x, texIndex * percentCoverage + uv2.y / _NumTex);
+                    float2 texCoord0 = float2(buv0.x, texIndex * percentCoverage + buv0.y / _NumTex);
+                    float2 texCoord1 = float2(buv1.x, texIndex * percentCoverage + buv1.y / _NumTex);
+                    float2 texCoord2 = float2(buv2.x, texIndex * percentCoverage + buv2.y / _NumTex);
 
                     // Compute colors / normals for tri-planar projection
                     colorA = tex2D(_Pattern, texCoord0);
+                    colorA =  SeamBlend(colorA, uv0, texCoord0);
+
                     colorB = tex2D(_Pattern, texCoord1);
+                    colorB = SeamBlend(colorB, uv1, texCoord1);
+
                     colorC = tex2D(_Pattern, texCoord2);
+                    colorC = SeamBlend(colorC, uv2, texCoord2);
+
                     normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
                     normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
                     normalC = UnpackNormal(tex2D(_PatternNormal, uv2));
