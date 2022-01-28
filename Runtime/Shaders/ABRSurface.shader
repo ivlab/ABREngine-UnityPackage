@@ -98,49 +98,123 @@ Shader "ABR/Surface"
                 o.position = (v.vertex);
             }
 
+            // Blends seams in corners
+            float3 CornerBlend(float3 color, float2 uv, float2 buv, float2 xyOffset, float2 offsetUVs)
+            {
+                // Lookup color in neighboring tiles using uv offset
+                float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
+                float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
+                float3 cornerColor = tex2D(_Pattern, xyOffset*0.5);
+                // Compute blend percentages
+                float2 a = float2(0.5,0.5);
+                float2 b = normalize(float2(1,1));
+                float2 x = xyOffset/_PatternBlendWidth;
+                float gamma = dot(x-a,b);
+                float dist = length(x-(a+gamma*b));
+                float blend = dist / sqrt(2);  // Cap range from 0->0.5
+
+                float cornerBlend = clamp(1-length(1-xyOffset/_PatternBlendWidth),0,1);
+
+                // Blend sides
+                if (xyOffset.x > xyOffset.y)  // Horizontal blend
+                    color = lerp(lerp(color,cornerColor,x.y), yColor, blend);
+                else  // Vertical blend
+                    color = lerp(lerp(color,cornerColor,x.x), xColor, blend);
+
+                // return color;
+
+                float colorBlend = max(blend,cornerBlend);
+                // Apply blend
+                float blendSum = blend+blend+cornerBlend;
+                float3 blendColor = (xColor*blend + yColor*blend + cornerColor*cornerBlend)/blendSum;
+                return lerp(color, cornerColor, cornerBlend);//lerp(color, blendColor, colorBlend);
+
+                // // Compute blend percentages
+                // float2 blend = 0.5*xyOffset/_PatternBlendWidth;//0.5*((1-xyOffset.x/_PatternBlendWidth)*xyOffset.y/_PatternBlendWidth);
+                // float cornerBlend = 0.5*(xyOffset.x*xyOffset.y)/(_PatternBlendWidth*_PatternBlendWidth);
+                // //float yBlend = 0.5*xyOffset.y/_PatternBlendWidth;//0.5*(xyOffset.x/_PatternBlendWidth*(1-xyOffset.y/_PatternBlendWidth));
+                // // Lookup color in neighboring tiles using uv offset
+                // float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
+                // float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
+
+                // if (blend.x > blend.y)
+                //     color = lerp(color, yColor, blend.x);
+                // else
+                //     color = lerp(color, xColor, blend.y);
+
+                // return cornerBlend;
+
+
+                // // Lookup color in neighboring tiles using uv offset
+                // float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
+                // float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
+                // float3 cornerColor = 1.0;//tex2D(_Pattern, offsetUVs);
+                // // Compute blend percentages
+                // float2 sideBlends = float2(0.5*((1-xyOffset.x/_PatternBlendWidth)*xyOffset.y/_PatternBlendWidth), 0.5*(xyOffset.x/_PatternBlendWidth*(1-xyOffset.y/_PatternBlendWidth)));//0.5*xyOffset/_PatternBlendWidth;
+                // float cornerBlend = 0.5*(xyOffset.x*xyOffset.y)/(_PatternBlendWidth*_PatternBlendWidth);
+                // float colorBlend = max(max(sideBlends.x,sideBlends.y),cornerBlend);
+                // // Apply blend
+                // float blendSum = sideBlends.x+sideBlends.y+cornerBlend;
+                // float3 blendColor = (xColor*sideBlends.y + yColor*sideBlends.x + cornerColor*cornerBlend)/blendSum;
+                // return lerp(color, blendColor, colorBlend);
+            }
+
             // Blends seams of the tiled texture
             float3 SeamBlend(float3 color, float2 uv, float2 buv)
             {
-                // if (uv.x < _PatternBlendWidth && uv.y < _PatternBlendWidth)  // Bottom-left
-                // {
-                //     //float2 xyOffset = float2(_PatternBlendWidth-uv.x, _PatternBlendWidth-uv.y);
-                //      //color =  0.5*xOffset/_PatternBlendWidth;
-                // }
-                // else if (uv.x > 1-_PatternBlendWidth && uv.y < _PatternBlendWidth)  // Bottom-right
-                // {
-
-                // }
-                // else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Top-left
-                // {
-
-                // }
-                // else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Top-right
-                // {
-
-                // }
-                if (uv.x <= _PatternBlendWidth)  // Blend left
+                if (uv.x < _PatternBlendWidth && uv.y < _PatternBlendWidth)  // Blend bottom-left
+                {
+                    // Compute uv offset
+                    float2 xyOffset = float2(_PatternBlendWidth-uv.x, _PatternBlendWidth-uv.y);
+                    float2 offsetUVs = 1-xyOffset;
+                    // Compute corner blend
+                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                }
+                else if (uv.x > 1-_PatternBlendWidth && uv.y < _PatternBlendWidth)  // Blend bottom-right
+                {
+                    // Compute uv offset
+                    float2 xyOffset = float2(uv.x-(1-_PatternBlendWidth), _PatternBlendWidth-uv.y);
+                    float2 offsetUVs = float2(xyOffset.x, 1-xyOffset.y);
+                    // Compute corner blend
+                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                }
+                else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Blend top-left
+                {
+                    // Compute uv offset
+                    float2 xyOffset = float2(_PatternBlendWidth-uv.x, uv.y-(1-_PatternBlendWidth));
+                    float2 offsetUVs = float2(1-xyOffset.x, xyOffset.y);
+                    /// Compute corner blend
+                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                }
+                else if (uv.x > 1-_PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Blend top-right
+                {
+                    // Compute uv offset
+                    float2 xyOffset = float2(uv.x-(1-_PatternBlendWidth), uv.y-(1-_PatternBlendWidth));
+                    float2 offsetUVs = xyOffset;
+                    // Compute corner blend
+                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                }
+                else if (uv.x <= _PatternBlendWidth)  // Blend left
                 {
                     float xOffset = _PatternBlendWidth - uv.x;
-                    float2 offsetUVs = float2(1-xOffset, buv.y);
-                    float3 blendColor = tex2D(_Pattern, offsetUVs);
-                    float t = 0.5*xOffset/_PatternBlendWidth;
-                    color = lerp(color, blendColor, t);
+                    color = lerp(color, tex2D(_Pattern, float2(1-xOffset, buv.y)), 0.5*xOffset/_PatternBlendWidth);
                 }
-                if (uv.y <= _PatternBlendWidth)  // Blend top
+                else if (uv.y <= _PatternBlendWidth)  // Blend bottom
                 {
                     float yOffset = _PatternBlendWidth - uv.y;
                     color = lerp(color, tex2D(_Pattern, float2(buv.x,1-yOffset)), 0.5*yOffset/_PatternBlendWidth);
                 }
-                if (uv.x >= 1-_PatternBlendWidth)  // Blend right
+                else if (uv.x >= 1-_PatternBlendWidth)  // Blend right
                 {
                     float xOffset = uv.x-(1-_PatternBlendWidth);
                     color = lerp(color, tex2D(_Pattern, float2(xOffset,buv.y)), 0.5*xOffset/_PatternBlendWidth);
                 }
-                if (uv.y >= 1-_PatternBlendWidth)  // Blend button
+                else if (uv.y >= 1-_PatternBlendWidth)  // Blend top
                 {
                     float yOffset = uv.y-(1-_PatternBlendWidth);
                     color = lerp(color, tex2D(_Pattern, float2(buv.x,yOffset)), 0.5*yOffset/_PatternBlendWidth);
                 }
+
                 return color;
             }
 
