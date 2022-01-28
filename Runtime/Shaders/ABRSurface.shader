@@ -98,123 +98,127 @@ Shader "ABR/Surface"
                 o.position = (v.vertex);
             }
 
-            // Blends seams in corners
-            float3 CornerBlend(float3 color, float2 uv, float2 buv, float2 xyOffset, float2 offsetUVs)
+            // Converts from general 0->1 tex coords to *actual* tex coord within texture with given index
+            float2 ActualTexCoord(float2 uv, int texIndex)
             {
-                // Lookup color in neighboring tiles using uv offset
-                float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
-                float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
-                float3 cornerColor = tex2D(_Pattern, xyOffset*0.5);
-                // Compute blend percentages
-                float2 a = float2(0.5,0.5);
-                float2 b = normalize(float2(1,1));
-                float2 x = xyOffset/_PatternBlendWidth;
-                float gamma = dot(x-a,b);
-                float dist = length(x-(a+gamma*b));
-                float blend = dist / sqrt(2);  // Cap range from 0->0.5
-
-                float cornerBlend = clamp(1-length(1-xyOffset/_PatternBlendWidth),0,1);
-
-                // Blend sides
-                if (xyOffset.x > xyOffset.y)  // Horizontal blend
-                    color = lerp(lerp(color,cornerColor,x.y), yColor, blend);
-                else  // Vertical blend
-                    color = lerp(lerp(color,cornerColor,x.x), xColor, blend);
-
-                // return color;
-
-                float colorBlend = max(blend,cornerBlend);
-                // Apply blend
-                float blendSum = blend+blend+cornerBlend;
-                float3 blendColor = (xColor*blend + yColor*blend + cornerColor*cornerBlend)/blendSum;
-                return lerp(color, cornerColor, cornerBlend);//lerp(color, blendColor, colorBlend);
-
-                // // Compute blend percentages
-                // float2 blend = 0.5*xyOffset/_PatternBlendWidth;//0.5*((1-xyOffset.x/_PatternBlendWidth)*xyOffset.y/_PatternBlendWidth);
-                // float cornerBlend = 0.5*(xyOffset.x*xyOffset.y)/(_PatternBlendWidth*_PatternBlendWidth);
-                // //float yBlend = 0.5*xyOffset.y/_PatternBlendWidth;//0.5*(xyOffset.x/_PatternBlendWidth*(1-xyOffset.y/_PatternBlendWidth));
-                // // Lookup color in neighboring tiles using uv offset
-                // float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
-                // float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
-
-                // if (blend.x > blend.y)
-                //     color = lerp(color, yColor, blend.x);
-                // else
-                //     color = lerp(color, xColor, blend.y);
-
-                // return cornerBlend;
-
-
-                // // Lookup color in neighboring tiles using uv offset
-                // float3 xColor = tex2D(_Pattern, float2(buv.x, offsetUVs.y));
-                // float3 yColor = tex2D(_Pattern, float2(offsetUVs.x, buv.y));
-                // float3 cornerColor = 1.0;//tex2D(_Pattern, offsetUVs);
-                // // Compute blend percentages
-                // float2 sideBlends = float2(0.5*((1-xyOffset.x/_PatternBlendWidth)*xyOffset.y/_PatternBlendWidth), 0.5*(xyOffset.x/_PatternBlendWidth*(1-xyOffset.y/_PatternBlendWidth)));//0.5*xyOffset/_PatternBlendWidth;
-                // float cornerBlend = 0.5*(xyOffset.x*xyOffset.y)/(_PatternBlendWidth*_PatternBlendWidth);
-                // float colorBlend = max(max(sideBlends.x,sideBlends.y),cornerBlend);
-                // // Apply blend
-                // float blendSum = sideBlends.x+sideBlends.y+cornerBlend;
-                // float3 blendColor = (xColor*sideBlends.y + yColor*sideBlends.x + cornerColor*cornerBlend)/blendSum;
-                // return lerp(color, blendColor, colorBlend);
+                // Divide by _NumTex to get coordinate inside base texture; textures are stacked along y-axis
+                return float2(uv.x, (texIndex + uv.y) / _NumTex);
             }
 
-            // Blends seams of the tiled texture
-            float3 SeamBlend(float3 color, float2 uv, float2 buv)
+            // Blends seams at corners
+            // Corners are particularly tricky because three textures need to be blended smoothly instead of two
+            float3 CornerBlend(float3 color, float2 xyOffset, float2 horizontalTexCoord, float2 verticalTexCoord, float2 sharedTexCoord)
             {
-                if (uv.x < _PatternBlendWidth && uv.y < _PatternBlendWidth)  // Blend bottom-left
+                // Compute side blend percentage
+                // We want a diagonal gradient cutting through the center of the corner
+                // We first define a diagonal line of form f(t) = <a> + t*<b> going through the center of the corner
+                // Then we find the distance from the current pixel position to that line in order to compute a smooth diagonal gradient
+                float2 a = float2(0.5,0.5);  // Center of the corner
+                float2 b = normalize(float2(1,1));  // Ray pointing diagonally through the center of the corner
+                float2 x = xyOffset/_PatternBlendWidth;  // Current pixel point in "corner" uv space
+                float d = length(x-(a+dot(x-a,b)*b));  // Distance from the line
+                float sideBlend = d/sqrt(2);  // Scale distance to only go from 0->0.5
+
+                // Compute corner blend percentage
+                // We want a circlular gradient with its center at the tip of the corner
+                float cornerBlend = clamp(1-length(1-xyOffset/_PatternBlendWidth),0,1);
+                
+                // Get color from neighboring tiles
+                float3 xColor = tex2D(_Pattern, horizontalTexCoord);  // Horizontal neighbor
+                float3 yColor = tex2D(_Pattern, verticalTexCoord);  // Vertical neighbor
+                float3 cornerColor = tex2D(_Pattern, sharedTexCoord);  // Shared texcoords that smoothly interpolate between all 4 corners
+
+                // Blend colors and return
+                if (xyOffset.x > xyOffset.y)  // Horizontal blend
+                    color = lerp(lerp(color,cornerColor,x.y), xColor, sideBlend);
+                else  // Vertical blend
+                    color = lerp(lerp(color,cornerColor,x.x), yColor, sideBlend);
+                return lerp(color, cornerColor, cornerBlend);  // Corner blend
+            }
+
+            // Blends tiled textures at seams
+            float3 SeamBlend(float3 color, float2 uv, float2 buv, int texIndex)
+            {
+                // Blend bottom-left
+                if (uv.x < _PatternBlendWidth && uv.y < _PatternBlendWidth)
                 {
                     // Compute uv offset
                     float2 xyOffset = float2(_PatternBlendWidth-uv.x, _PatternBlendWidth-uv.y);
-                    float2 offsetUVs = 1-xyOffset;
+                    float2 horizontalTexCoord = ActualTexCoord(float2(1-xyOffset.x, buv.y), texIndex);
+                    float2 verticalTexCoord = ActualTexCoord(float2(buv.x, 1-xyOffset.y), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(float2(uv+_PatternBlendWidth), texIndex);
                     // Compute corner blend
-                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                    color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
-                else if (uv.x > 1-_PatternBlendWidth && uv.y < _PatternBlendWidth)  // Blend bottom-right
+                // Blend bottom-right
+                else if (uv.x > 1-_PatternBlendWidth && uv.y < _PatternBlendWidth)
                 {
                     // Compute uv offset
                     float2 xyOffset = float2(uv.x-(1-_PatternBlendWidth), _PatternBlendWidth-uv.y);
                     float2 offsetUVs = float2(xyOffset.x, 1-xyOffset.y);
+                    float2 horizontalTexCoord = ActualTexCoord(float2(xyOffset.x, buv.y), texIndex);
+                    float2 verticalTexCoord = ActualTexCoord(float2(buv.x, 1-xyOffset.y), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(float2(xyOffset.x, _PatternBlendWidth+uv.y), texIndex);
                     // Compute corner blend
-                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                    color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
-                else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Blend top-left
+                // Blend top-left
+                else if (uv.x < _PatternBlendWidth && uv.y > 1-_PatternBlendWidth)
                 {
                     // Compute uv offset
                     float2 xyOffset = float2(_PatternBlendWidth-uv.x, uv.y-(1-_PatternBlendWidth));
                     float2 offsetUVs = float2(1-xyOffset.x, xyOffset.y);
+                    float2 horizontalTexCoord = ActualTexCoord(float2(1-xyOffset.x, buv.y), texIndex);
+                    float2 verticalTexCoord = ActualTexCoord(float2(buv.x, xyOffset.y), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(float2(_PatternBlendWidth+uv.x,xyOffset.y), texIndex);
                     /// Compute corner blend
-                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                    color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
-                else if (uv.x > 1-_PatternBlendWidth && uv.y > 1-_PatternBlendWidth)  // Blend top-right
+                // Blend top-right
+                else if (uv.x > 1-_PatternBlendWidth && uv.y > 1-_PatternBlendWidth)
                 {
                     // Compute uv offset
                     float2 xyOffset = float2(uv.x-(1-_PatternBlendWidth), uv.y-(1-_PatternBlendWidth));
-                    float2 offsetUVs = xyOffset;
+                    float2 horizontalTexCoord = ActualTexCoord(float2(xyOffset.x, buv.y), texIndex);
+                    float2 verticalTexCoord = ActualTexCoord(float2(buv.x, xyOffset.y), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(xyOffset, texIndex);
                     // Compute corner blend
-                    color = CornerBlend(color, uv, buv, xyOffset, offsetUVs);
+                    color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
-                else if (uv.x <= _PatternBlendWidth)  // Blend left
+                // Blend left
+                else if (uv.x <= _PatternBlendWidth)
                 {
                     float xOffset = _PatternBlendWidth - uv.x;
-                    color = lerp(color, tex2D(_Pattern, float2(1-xOffset, buv.y)), 0.5*xOffset/_PatternBlendWidth);
+                    float2 texCoord = ActualTexCoord(float2(1-xOffset, buv.y), texIndex);
+                    float blend = 0.5*xOffset/_PatternBlendWidth;
+                    color = lerp(color, tex2D(_Pattern, texCoord), blend);
                 }
-                else if (uv.y <= _PatternBlendWidth)  // Blend bottom
+                // Blend bottom
+                else if (uv.y <= _PatternBlendWidth)
                 {
                     float yOffset = _PatternBlendWidth - uv.y;
-                    color = lerp(color, tex2D(_Pattern, float2(buv.x,1-yOffset)), 0.5*yOffset/_PatternBlendWidth);
+                    float2 texCoord = ActualTexCoord(float2(buv.x, 1-yOffset), texIndex);
+                    float blend = 0.5*yOffset/_PatternBlendWidth;
+                    color = lerp(color, tex2D(_Pattern, texCoord), blend);
                 }
-                else if (uv.x >= 1-_PatternBlendWidth)  // Blend right
+                // Blend right
+                else if (uv.x >= 1-_PatternBlendWidth)
                 {
                     float xOffset = uv.x-(1-_PatternBlendWidth);
-                    color = lerp(color, tex2D(_Pattern, float2(xOffset,buv.y)), 0.5*xOffset/_PatternBlendWidth);
+                    float2 texCoord = ActualTexCoord(float2(xOffset, buv.y), texIndex);
+                    float blend = 0.5*xOffset/_PatternBlendWidth;
+                    color = lerp(color, tex2D(_Pattern, texCoord), blend);
                 }
-                else if (uv.y >= 1-_PatternBlendWidth)  // Blend top
+                // Blend top
+                else if (uv.y >= 1-_PatternBlendWidth)
                 {
                     float yOffset = uv.y-(1-_PatternBlendWidth);
-                    color = lerp(color, tex2D(_Pattern, float2(buv.x,yOffset)), 0.5*yOffset/_PatternBlendWidth);
+                    float2 texCoord = ActualTexCoord(float2(buv.x, yOffset), texIndex);
+                    float blend = 0.5*yOffset/_PatternBlendWidth;
+                    color = lerp(color, tex2D(_Pattern, texCoord), blend);
                 }
 
+                // Return blended color
                 return color;
             }
 
@@ -227,7 +231,6 @@ Shader "ABR/Surface"
 
                 // Variables: color variable, pattern variable, null, null
                 fixed4 variables = IN.color;
-                float percentCoverage = 1.0 / _NumTex;
 
                 // Find number of "grouped" blend map textures
                 uint numGroups = _NumTex / SupportedChannels + 1;
@@ -247,6 +250,7 @@ Shader "ABR/Surface"
                 // return;
 
                 // Compute UV coordinates for tri-planar projection
+                // Scale UVs to account for seam blending and compute blend UVs (buv)
                 float3 normal = IN.normal.xyz;
                 float2 uv0 = poscoodinates.yz;
                 uv0.x /= _PatternScale;
@@ -332,21 +336,15 @@ Shader "ABR/Surface"
                     float3 normalB;
                     float3 normalC;
 
-                    // Calculate *actual* tex coord within *this* texture
-                    // Divide by _NumTex to get coordinate inside base texture; textures are stacked along y-axis
-                    float2 texCoord0 = float2(buv0.x, texIndex * percentCoverage + buv0.y / _NumTex);
-                    float2 texCoord1 = float2(buv1.x, texIndex * percentCoverage + buv1.y / _NumTex);
-                    float2 texCoord2 = float2(buv2.x, texIndex * percentCoverage + buv2.y / _NumTex);
-
                     // Compute colors / normals for tri-planar projection
-                    colorA = tex2D(_Pattern, texCoord0);
-                    colorA =  SeamBlend(colorA, uv0, texCoord0);
+                    colorA = tex2D(_Pattern, ActualTexCoord(buv0, texIndex));
+                    colorA =  SeamBlend(colorA, uv0, buv0, texIndex);
 
-                    colorB = tex2D(_Pattern, texCoord1);
-                    colorB = SeamBlend(colorB, uv1, texCoord1);
+                    colorB = tex2D(_Pattern, ActualTexCoord(buv1, texIndex));
+                    colorB = SeamBlend(colorB, uv1, buv1, texIndex);
 
-                    colorC = tex2D(_Pattern, texCoord2);
-                    colorC = SeamBlend(colorC, uv2, texCoord2);
+                    colorC = tex2D(_Pattern, ActualTexCoord(buv2, texIndex));
+                    colorC = SeamBlend(colorC, uv2, buv2, texIndex);
 
                     normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
                     normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
