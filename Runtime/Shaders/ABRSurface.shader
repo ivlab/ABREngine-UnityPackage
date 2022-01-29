@@ -26,6 +26,8 @@ Shader "ABR/Surface"
         [PerRendererData]
         _ColorDataMin("ColorDataMax",Float) = 1.0
         _PatternNormal("Normal (RGB)", 2D) = "bump" {}
+        _Pattern("Stacked Textures", 2D) = "white" {}
+        _BlendMaps("Stacked Blend Maps", 2D) = "white" {}
 
         _Color("Color", Color) = (1,1,1,1)
         _Glossiness("Smoothness", Range(0,1)) = 0.5
@@ -63,7 +65,7 @@ Shader "ABR/Surface"
             sampler2D _PatternNormal;
 
             // Number of textures in this gradient
-            int _NumTex = 0;
+            uint _NumTex = 0;
             // Blending for each texture (max of 4 per texture, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
             sampler2D _BlendMaps;
 
@@ -74,8 +76,6 @@ Shader "ABR/Surface"
             float _PatternScale = 0.0;
             float _PatternSaturation = 1.0;
             float _PatternIntensity = 1.0;
-
-            uint SupportedChannels = 4;
 
             struct Input
             {
@@ -114,6 +114,8 @@ Shader "ABR/Surface"
             // The surface shader
             void surf(Input IN, inout SurfaceOutputStandard o)
             {
+                uint SupportedChannels = 4u;
+
                 float3 poscoodinates = IN.position.xyz;
 
                 // Variables: color variable, pattern variable, null, null
@@ -121,7 +123,9 @@ Shader "ABR/Surface"
                 float percentCoverage = 1.0 / _NumTex;
 
                 // Find number of "grouped" blend map textures
-                uint numGroups = _NumTex / SupportedChannels;
+                uint numGroups = _NumTex / SupportedChannels + 1;
+                float groupSize = 1.0 / numGroups;
+                float groupOffset = 0.5 * groupSize;
 
                 // DEBUG: ensure position coordinates are correct
                 // o.Albedo = poscoodinates;
@@ -189,21 +193,29 @@ Shader "ABR/Surface"
                 b /= sum;
                 c /= sum;
 
-                // Compute the actual pixel color from the various textures
-                fixed4 finalColor = 0;
+                // Final pixel color is computed in "groups" of 4 textures (according to the blendmap)
+                // support up to 16 textures (4 groups)
+                float blendPercentages[16];
+                for (uint i = 0; i < 16; i++) {
+                    blendPercentages[i] = 0.0;
+                }
+
+                // Aggregate all blend percentages for each group
+                float blendMapX = clamp(Remap(variables.y, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.999);
+                for (int group = 0; group < (int) numGroups; group++) {
+                    float blendMapY = group * groupSize + groupOffset;
+                    float4 blendPercentageGroup = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+                    int index = group * SupportedChannels;
+                    blendPercentages[index + 0] += blendPercentageGroup.r;
+                    blendPercentages[index + 1] += blendPercentageGroup.g;
+                    blendPercentages[index + 2] += blendPercentageGroup.b;
+                    blendPercentages[index + 3] += blendPercentageGroup.a;
+                }
+
                 float3 textureColor = 0;
                 float3 norm = 0;
-                for (int texIndex = 0; texIndex < _NumTex; texIndex++)
+                for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
                 {
-                    // Percentages of each texture to use at this fragment
-                    // "Unpack" the blendmap texture
-                    float blendMapX = clamp(Remap(variables.y, _PatternDataMin, _PatternDataMax, 0, 1), 0.001, 0.999);
-                    uint channelIndex = texIndex % SupportedChannels;
-                    uint groupIndex = texIndex / SupportedChannels;
-                    float blendMapY = (groupIndex + 0.5) / (float) numGroups;
-                    // Percentages of each texture to use at this fragment
-                    float4 blendPercentages = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
-
                     float3 colorA;
                     float3 colorB;
                     float3 colorC;
@@ -229,15 +241,8 @@ Shader "ABR/Surface"
                     norm = normalA * a + normalB * b + normalC * c;
                     norm = normalize(norm);
 
-                    currentColor *= blendPercentages[channelIndex];
+                    currentColor *= blendPercentages[texIndex];
                     textureColor += currentColor;
-
-                    // DEBUG: Check how the blend map applies to the surface
-                    // if (poscoodinates.x < -0.3) {
-                        // textureColor = texIndex / (float) _NumTex;
-                    // textureColor = blendPercentages;
-                    // textureColor = blendPercentages[texIndex] * (channelIndex / (float) SupportedChannels);
-                    // }
                 }
 
                 // Compute saturation

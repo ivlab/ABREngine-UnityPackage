@@ -132,14 +132,18 @@ namespace IVLab.ABREngine
 
                 // Channel (R, G, B, A) or (0, 1, 2, 3)
                 int channelIndex = texIndex % SupportedChannels;
+                bool nextIsDiffGroup = channelIndex + 1 >= SupportedChannels;
+                bool prevIsDiffGroup = channelIndex - 1 < 0;
                 int nextChannelIndex = (channelIndex + 1) % SupportedChannels;
-                int prevChannelIndex = (channelIndex - 1) < 0 ? SupportedChannels - 1 : channelIndex - 1;
+                int prevChannelIndex = prevIsDiffGroup ? SupportedChannels - 1 : channelIndex - 1;
 
                 // "Texture Group" index (row of blend/stop map to put the result in)
                 int groupIndex = texIndex / SupportedChannels;
 
                 bool isFirstStop = stop == 0;
                 bool isLastStop = stop >= stops.Count;
+
+                // Debug.Log($"stop: {stop}, channelIndex: {channelIndex}, nxch: {nextChannelIndex}, pch: {prevChannelIndex}, grp: {groupIndex}");
 
                 // Apply the main (middle) part of this texture
                 int mainStart = !isFirstStop ? startCol + halfBlendWidthPix : startCol;
@@ -165,11 +169,20 @@ namespace IVLab.ABREngine
                         float stopT = (col - startCol) / (float) stopWidth;
                         float blendT = 0.5f * ((col - blendStart) / (float) (nextStopCol - blendStart));
                         int pixIndex = col + TexWidth * groupIndex;
-
                         Color cur = blendMapPercentages[channelIndex] * (1.0f - blendT);
                         Color next = blendMapPercentages[nextChannelIndex] * blendT;
-                        Color blend = cur + next;
-                        blendMapPixels[pixIndex] += blend;
+                        if ((channelIndex + 1) >= SupportedChannels)
+                        {
+                            int pixIndexNext = col + TexWidth * (groupIndex + 1);
+                            blendMapPixels[pixIndex] += cur;
+                            blendMapPixels[pixIndexNext] += next;
+                        }
+                        else
+                        {
+                            Color blend = cur + next;
+                            blendMapPixels[pixIndex] += blend;
+                        }
+
                         stopMapPixels[pixIndex][channelIndex] = stopT;
                     }
                 }
@@ -183,12 +196,20 @@ namespace IVLab.ABREngine
                         float stopT = (col - startCol) / (float) stopWidth;
                         float blendT = 0.5f * ((col - startCol) / (float) (blendEnd - startCol)) + 0.5f;
                         int pixIndex = col + TexWidth * groupIndex;
-
                         Color cur = blendMapPercentages[channelIndex] * blendT;
                         Color prev = blendMapPercentages[prevChannelIndex] * (1.0f - blendT);
-                        Color blend = cur + prev;
+                        if ((channelIndex - 1) < 0)
+                        {
+                            int pixIndexPrev = col + TexWidth * (groupIndex - 1);
+                            blendMapPixels[pixIndex] += cur;
+                            blendMapPixels[pixIndexPrev] += prev;
+                        }
+                        else
+                        {
+                            Color blend = cur + prev;
+                            blendMapPixels[pixIndex] += blend;
+                        }
 
-                        blendMapPixels[pixIndex] += blend;
                         stopMapPixels[pixIndex][channelIndex] = stopT;
                     }
                 }
@@ -200,26 +221,26 @@ namespace IVLab.ABREngine
             // for (int i = 0; i < blendMapPixels.Length; i++)
             // {
             //     // Build part 1 (alpha)
-            //     // if (blendMapPixels[i].a > 0)
-            //     // {
-            //     //     blendMapPixels[i].r = blendMapPixels[i].a;
-            //     //     blendMapPixels[i].g = blendMapPixels[i].a;
-            //     //     blendMapPixels[i].b = blendMapPixels[i].a;
-            //     // }
-            //     // else
-            //     // {
-            //     //     blendMapPixels[i] = Color.black;
-            //     // }
-            //     // if (stopMapPixels[i].a > 0)
-            //     // {
-            //     //     stopMapPixels[i].r = stopMapPixels[i].a;
-            //     //     stopMapPixels[i].g = stopMapPixels[i].a;
-            //     //     stopMapPixels[i].b = stopMapPixels[i].a;
-            //     // }
-            //     // else
-            //     // {
-            //     //     stopMapPixels[i] = Color.black;
-            //     // }
+            //     if (blendMapPixels[i].a > 0)
+            //     {
+            //         blendMapPixels[i].r = blendMapPixels[i].a;
+            //         blendMapPixels[i].g = blendMapPixels[i].a;
+            //         blendMapPixels[i].b = blendMapPixels[i].a;
+            //     }
+            //     else
+            //     {
+            //         blendMapPixels[i] = Color.black;
+            //     }
+            //     if (stopMapPixels[i].a > 0)
+            //     {
+            //         stopMapPixels[i].r = stopMapPixels[i].a;
+            //         stopMapPixels[i].g = stopMapPixels[i].a;
+            //         stopMapPixels[i].b = stopMapPixels[i].a;
+            //     }
+            //     else
+            //     {
+            //         stopMapPixels[i] = Color.black;
+            //     }
             //     // Build part 2 (RGB)
             //     blendMapPixels[i].a = 1.0f;
             //     stopMapPixels[i].a = 1.0f;
