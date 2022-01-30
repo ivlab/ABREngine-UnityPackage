@@ -145,7 +145,7 @@ Shader "ABR/Surface"
                     float2 xyOffset = float2(_PatternBlendWidth-uv.x, _PatternBlendWidth-uv.y);
                     float2 horizontalTexCoord = ActualTexCoord(float2(1-xyOffset.x, buv.y), texIndex);
                     float2 verticalTexCoord = ActualTexCoord(float2(buv.x, 1-xyOffset.y), texIndex);
-                    float2 sharedTexCoord = ActualTexCoord(uv*(1-2*_PatternBlendWidth)+0.5, texIndex);  //ActualTexCoord((uv+_PatternBlendWidth)*(1-2*_PatternBlendWidth), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord((uv+_PatternBlendWidth)*(1-2*_PatternBlendWidth), texIndex);
                     // Compute corner blend
                     color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
@@ -157,7 +157,7 @@ Shader "ABR/Surface"
                     float2 offsetUVs = float2(xyOffset.x, 1-xyOffset.y);
                     float2 horizontalTexCoord = ActualTexCoord(float2(xyOffset.x, buv.y), texIndex);
                     float2 verticalTexCoord = ActualTexCoord(float2(buv.x, 1-xyOffset.y), texIndex);
-                    float2 sharedTexCoord = ActualTexCoord((float2(xyOffset.x, _PatternBlendWidth+uv.y)-_PatternBlendWidth)*(1-2*_PatternBlendWidth)+0.5, texIndex);  //ActualTexCoord(float2(xyOffset.x, _PatternBlendWidth+uv.y)*(1-2*_PatternBlendWidth), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(float2(xyOffset.x, _PatternBlendWidth+uv.y)*(1-2*_PatternBlendWidth), texIndex);
                     // Compute corner blend
                     color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
@@ -169,7 +169,7 @@ Shader "ABR/Surface"
                     float2 offsetUVs = float2(1-xyOffset.x, xyOffset.y);
                     float2 horizontalTexCoord = ActualTexCoord(float2(1-xyOffset.x, buv.y), texIndex);
                     float2 verticalTexCoord = ActualTexCoord(float2(buv.x, xyOffset.y), texIndex);
-                    float2 sharedTexCoord = ActualTexCoord((float2(_PatternBlendWidth+uv.x,xyOffset.y)-_PatternBlendWidth)*(1-2*_PatternBlendWidth)+0.5, texIndex);  //ActualTexCoord(float2(_PatternBlendWidth+uv.x,xyOffset.y)*(1-2*_PatternBlendWidth), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(float2(_PatternBlendWidth+uv.x,xyOffset.y)*(1-2*_PatternBlendWidth), texIndex);
                     /// Compute corner blend
                     color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
@@ -180,7 +180,7 @@ Shader "ABR/Surface"
                     float2 xyOffset = float2(uv.x-(1-_PatternBlendWidth), uv.y-(1-_PatternBlendWidth));
                     float2 horizontalTexCoord = ActualTexCoord(float2(xyOffset.x, buv.y), texIndex);
                     float2 verticalTexCoord = ActualTexCoord(float2(buv.x, xyOffset.y), texIndex);
-                    float2 sharedTexCoord = ActualTexCoord((xyOffset-_PatternBlendWidth)*(1-2*_PatternBlendWidth)+0.5, texIndex);  //ActualTexCoord(xyOffset*(1-2*_PatternBlendWidth), texIndex);
+                    float2 sharedTexCoord = ActualTexCoord(xyOffset*(1-2*_PatternBlendWidth), texIndex);
                     // Compute corner blend
                     color = CornerBlend(color, xyOffset, horizontalTexCoord, verticalTexCoord, sharedTexCoord);
                 }
