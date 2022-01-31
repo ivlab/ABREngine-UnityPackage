@@ -29,6 +29,8 @@ Shader "ABR/Ribbon"
         _Color("Color", Color) = (1,1,1,1)
         _Glossiness("Smoothness", Range(0,1)) = 0.5
         _Metallic("Metallic", Range(0,1)) = 0.0
+        _BlendMaps("Blend Maps", 2D) = "white" {}
+        _Texture("Textures", 2D) = "white" {}
     }
         SubShader
         {
@@ -46,16 +48,14 @@ Shader "ABR/Ribbon"
             sampler2D _TextureNRM;
 
             // Aspect ratio (width / height) of textures
-            float4 _TextureAspect;
+            float _TextureAspect[16];
             // Aspect ratio (height / width) of textures
-            float4 _TextureHeightWidthAspect;
+            float _TextureHeightWidthAspect[16];
 
             float _TextureCutoff;
             float _RibbonBrightness;
             int _UseLineTexture = 0;
             float _Blend = 1;
-            float _RibbonDataMin;
-            float _RibbonDataMax;
 
             // Colormap parameters
             sampler2D _ColorMap;
@@ -64,7 +64,7 @@ Shader "ABR/Ribbon"
             float4 _ScalarMax;
 
             // Number of textures in this gradient
-            int _NumTex = 0;
+            uint _NumTex = 0u;
             // Blending for each texture (max of 4 per texture, tex 1 is red, tex 2 is green, tex 3 is blue, tex 4 is alpha)
             sampler2D _BlendMaps;
 
@@ -102,15 +102,25 @@ Shader "ABR/Ribbon"
 
             void surf(Input IN, inout SurfaceOutput  o)
             {
+                uint SupportedChannels = 4u;
+
                 // Variables: color, ribbon, null, null
                 fixed4 variables = IN.color;
 
                 // Calculate how tall each texture is (percentage of the whole)
-                float4 hw = _TextureHeightWidthAspect;
-                float4 hwAspectPercent = hw / (hw.x + hw.y + hw.z + hw.w);
+                float suma = 0;
+                for (uint i = 0; i < _NumTex; i++) {
+                    suma += _TextureHeightWidthAspect[i];
+                }
+                float hwAspectPercent[16];
+                for (uint j = 0; j < _NumTex; j++) {
+                    hwAspectPercent[j] = _TextureHeightWidthAspect[j] / suma;
+                }
 
-                // Calculate offset Y for blendmap (1/2 a pixel)
-                float blendOffset = 0.5 / _NumTex;
+                // Find number of "grouped" blend map textures
+                uint numGroups = (_NumTex - 1) / SupportedChannels + 1;
+                float groupSize = 1.0 / numGroups;
+                float groupOffset = 0.5 * groupSize;
 
                 // DEBUG: Check actual data values
                 // o.Albedo = (variables / 20) + 0.5;
@@ -129,21 +139,36 @@ Shader "ABR/Ribbon"
                     o.Albedo = _Color.rgb;
                 }
 
+                // Final pixel color is computed in "groups" of 4 textures (according to the blendmap)
+                // support up to 16 textures (4 groups)
+                float blendPercentages[16];
+                for (uint k = 0; k < 16; k++) {
+                    blendPercentages[k] = 0.0;
+                }
+
+                // Aggregate all blend percentages for each group
+                float blendMapX = clamp(Remap(variables.y, _ScalarMin.y, _ScalarMax.y, 0, 1), 0.001, 0.999);
+                for (int group = 0; group < (int) numGroups; group++) {
+                    float blendMapY = group * groupSize + groupOffset;
+                    float4 blendPercentageGroup = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+                    int index = group * SupportedChannels;
+                    blendPercentages[index + 0] += blendPercentageGroup.r;
+                    blendPercentages[index + 1] += blendPercentageGroup.g;
+                    blendPercentages[index + 2] += blendPercentageGroup.b;
+                    blendPercentages[index + 3] += blendPercentageGroup.a;
+                }
+
                 // Blend the various line textures to see if this fragment should be included
                 float3 textureColor = 0;
                 float totalAspect = 0;
-                for (int texIndex = 0; texIndex < _NumTex; texIndex++)
+                for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
                 {
-                    // "Unpack" the blendmap texture (scalar variable index 1 = ribbon)
-                    float blendMapX = clamp(Remap(variables.y, _ScalarMin[1], _ScalarMax[1], 0, 1), 0.001, 0.999);
-                    float blendMapY = (texIndex / (float) _NumTex) + blendOffset;
-                    // Percentages of each texture to use at this fragment
-                    float4 blendPercentages = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
-
                     // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
-                    float2 uv = float2((IN.texcoord.x / _TextureAspect[texIndex]) % 1, texIndex * totalAspect + IN.texcoord.y * hwAspectPercent[texIndex]);
+                    float u = (IN.texcoord.x / _TextureAspect[texIndex]) % 1;
+                    // float v = texIndex * totalAspect + IN.texcoord.y * hwAspectPercent[texIndex];
+                    float v = IN.texcoord.y;
                     totalAspect += hwAspectPercent[texIndex];
-                    float3 currentColor = tex2D(_Texture, uv);
+                    float3 currentColor = tex2D(_Texture, float2(u, v));
                     currentColor *= blendPercentages[texIndex];
                     textureColor += currentColor;
 
@@ -151,12 +176,12 @@ Shader "ABR/Ribbon"
                     // textureColor = blendPercentages;
 
                     // DEBUG: Show aspect ratio info
-                    // textureColor = hwAspectPercent * blendPercentages;
+                    // textureColor = hwAspectPercent[texIndex] * blendPercentages[texIndex];
                 }
 
                 // DEBUG: Check texture application
-                // o.Albedo = textureColor;
-                // return;
+                o.Albedo = textureColor;
+                return;
 
                 // Throw away this fragment if it's above the value of _TextureCutoff
                 if (_UseLineTexture && textureColor.g > _TextureCutoff)
