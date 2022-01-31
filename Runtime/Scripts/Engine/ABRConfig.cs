@@ -231,7 +231,7 @@ namespace IVLab.ABREngine
             }
             if (needBackup)
             {
-                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + ".json";
+                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture).Replace(":", "_") + ".json";
                 if (!Directory.Exists(backupSchemaDir))
                 {
                     Directory.CreateDirectory(backupSchemaDir);
