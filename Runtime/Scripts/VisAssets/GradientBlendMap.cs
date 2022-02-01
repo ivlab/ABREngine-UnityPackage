@@ -69,7 +69,10 @@ namespace IVLab.ABREngine
         public float[] HeightWidthAspectRatios { get; private set; }
 
         /// <summary>
-        /// The actual combined texture that contains all visassets, stacked together vertically
+        /// The actual combined texture that contains all visassets, stacked
+        /// together vertically. For a gradient with 5 line texture elements, it
+        /// might look something like this:
+        /// <img src="./resources/textures.png"/>
         /// </summary>
         public Texture2D Textures { get; private set; }
 
@@ -227,10 +230,11 @@ namespace IVLab.ABREngine
             // To generate stopmap.png and blendmap.png, uncomment this whole section.
             // Then, build the RGB blend by running the engine.
             // Next, build the Alpha blend by setting `buildAlpha` to true and running the engine again.
+            // Uncomment the PNG saves below as necessary, and blend them together in GIMP/Photoshop.
             // for (int i = 0; i < blendMapPixels.Length; i++)
             // {
             //     // Build alpha blend
-            //     bool buildAlpha = false;
+            //     bool buildAlpha = true;
             //     if (buildAlpha)
             //     {
             //         if (blendMapPixels[i].a > 0)
@@ -268,9 +272,11 @@ namespace IVLab.ABREngine
             StopMaps.SetPixels(stopMapPixels);
             StopMaps.Apply();
 
+            Textures = TextureUtilities.MakeTextureGradientVertical(textures);
+
             // DEBUG: Save blendmap and stopmap for documentation
-            // System.IO.File.WriteAllBytes("./blendmap.png", BlendMaps.EncodeToPNG());
-            // System.IO.File.WriteAllBytes("./stopmap.png", StopMaps.EncodeToPNG());
+            // System.IO.File.WriteAllBytes("./blendmap-alpha.png", BlendMaps.EncodeToPNG());
+            // System.IO.File.WriteAllBytes("./stopmap-alpha.png", StopMaps.EncodeToPNG());
             // System.IO.File.WriteAllBytes("./textures.png", Textures.EncodeToPNG());
 
             // Calculate the aspect ratio of each texture in the set (in
@@ -286,8 +292,6 @@ namespace IVLab.ABREngine
                 AspectRatios[t] = aspect;
                 HeightWidthAspectRatios[t] = hwAspect;
             }
-
-            Textures = TextureUtilities.MakeTextureGradientVertical(textures);
         }
     }
 }
