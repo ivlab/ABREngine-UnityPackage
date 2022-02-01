@@ -112,6 +112,7 @@ Shader "ABR/Ribbon"
                 for (uint i = 0; i < _NumTex; i++) {
                     suma += _TextureHeightWidthAspect[i];
                 }
+                // Maximum of 16 textures supported (4 groups)
                 float hwAspectPercent[16];
                 for (uint j = 0; j < _NumTex; j++) {
                     hwAspectPercent[j] = _TextureHeightWidthAspect[j] / suma;
@@ -160,28 +161,25 @@ Shader "ABR/Ribbon"
 
                 // Blend the various line textures to see if this fragment should be included
                 float3 textureColor = 0;
-                float totalAspect = 0;
+                float vOffsetTotal = 0;
                 for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
                 {
                     // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
+                    // X coordinate loops occasionally along the length of the line
                     float u = (IN.texcoord.x / _TextureAspect[texIndex]) % 1;
-                    // float v = texIndex * totalAspect + IN.texcoord.y * hwAspectPercent[texIndex];
-                    float v = IN.texcoord.y;
-                    totalAspect += hwAspectPercent[texIndex];
+                    // Y coordinate skips up a texture each iteration of this loop
+                    float vOffset = hwAspectPercent[texIndex];
+                    float v = IN.texcoord.y * vOffset + vOffsetTotal;
+                    vOffsetTotal += vOffset;
+
                     float3 currentColor = tex2D(_Texture, float2(u, v));
                     currentColor *= blendPercentages[texIndex];
                     textureColor += currentColor;
-
-                    // DEBUG: Check how the blend map applies to the line
-                    // textureColor = blendPercentages;
-
-                    // DEBUG: Show aspect ratio info
-                    // textureColor = hwAspectPercent[texIndex] * blendPercentages[texIndex];
                 }
 
                 // DEBUG: Check texture application
-                o.Albedo = textureColor;
-                return;
+                // o.Albedo = textureColor;
+                // return;
 
                 // Throw away this fragment if it's above the value of _TextureCutoff
                 if (_UseLineTexture && textureColor.g > _TextureCutoff)

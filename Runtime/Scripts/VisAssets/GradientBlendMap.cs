@@ -32,6 +32,12 @@ namespace IVLab.ABREngine
     /// </summary>
     public class GradientBlendMap
     {
+
+        /// <summary>
+        /// Maximum number of supported textures in a texture gradient
+        /// </summary>
+        public const int MaxSupportedTextures = 16;
+
         /// <summary>
         /// Red/Green/Blue/Alpha texture that describes the blending
         /// between `Stops`. For a gradient with 3 elements, this texture will
@@ -261,8 +267,10 @@ namespace IVLab.ABREngine
 
             // Calculate the aspect ratio of each texture in the set (in
             // particular for lines they may be different)
-            AspectRatios = new float[textures.Count];
-            HeightWidthAspectRatios = new float[textures.Count];
+            // Always use arrays of length 16 so it doesn't become a problem
+            // when adding more textures
+            AspectRatios = new float[MaxSupportedTextures];
+            HeightWidthAspectRatios = new float[MaxSupportedTextures];
             for (int t = 0; t < textures.Count; t++)
             {
                 float aspect = textures[t].width / (float)textures[t].height;
