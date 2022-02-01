@@ -107,7 +107,7 @@ namespace IVLab.ABREngine
             int numBlendTex = textures.Count / 4 + 1;
             const int SupportedChannels = 4;
 
-            float blendWidth = 0.05f;
+            float blendWidth = 0.02f;
 
             const int TexWidth = 1024;
             int halfBlendWidthPix = (int)(TexWidth * blendWidth);
