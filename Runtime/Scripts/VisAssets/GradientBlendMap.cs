@@ -224,30 +224,37 @@ namespace IVLab.ABREngine
             }
 
             // DEBUG: Mess with alpha for saving pixels for documentation
+            // To generate stopmap.png and blendmap.png, uncomment this whole section.
+            // Then, build the RGB blend by running the engine.
+            // Next, build the Alpha blend by setting `buildAlpha` to true and running the engine again.
             // for (int i = 0; i < blendMapPixels.Length; i++)
             // {
-            //     // Build part 1 (alpha)
-            //     if (blendMapPixels[i].a > 0)
+            //     // Build alpha blend
+            //     bool buildAlpha = false;
+            //     if (buildAlpha)
             //     {
-            //         blendMapPixels[i].r = blendMapPixels[i].a;
-            //         blendMapPixels[i].g = blendMapPixels[i].a;
-            //         blendMapPixels[i].b = blendMapPixels[i].a;
+            //         if (blendMapPixels[i].a > 0)
+            //         {
+            //             blendMapPixels[i].r = blendMapPixels[i].a;
+            //             blendMapPixels[i].g = blendMapPixels[i].a;
+            //             blendMapPixels[i].b = blendMapPixels[i].a;
+            //         }
+            //         else
+            //         {
+            //             blendMapPixels[i] = Color.black;
+            //         }
+            //         if (stopMapPixels[i].a > 0)
+            //         {
+            //             stopMapPixels[i].r = stopMapPixels[i].a;
+            //             stopMapPixels[i].g = stopMapPixels[i].a;
+            //             stopMapPixels[i].b = stopMapPixels[i].a;
+            //         }
+            //         else
+            //         {
+            //             stopMapPixels[i] = Color.black;
+            //         }
             //     }
-            //     else
-            //     {
-            //         blendMapPixels[i] = Color.black;
-            //     }
-            //     if (stopMapPixels[i].a > 0)
-            //     {
-            //         stopMapPixels[i].r = stopMapPixels[i].a;
-            //         stopMapPixels[i].g = stopMapPixels[i].a;
-            //         stopMapPixels[i].b = stopMapPixels[i].a;
-            //     }
-            //     else
-            //     {
-            //         stopMapPixels[i] = Color.black;
-            //     }
-            //     // Build part 2 (RGB)
+
             //     blendMapPixels[i].a = 1.0f;
             //     stopMapPixels[i].a = 1.0f;
             // }
@@ -264,6 +271,7 @@ namespace IVLab.ABREngine
             // DEBUG: Save blendmap and stopmap for documentation
             // System.IO.File.WriteAllBytes("./blendmap.png", BlendMaps.EncodeToPNG());
             // System.IO.File.WriteAllBytes("./stopmap.png", StopMaps.EncodeToPNG());
+            // System.IO.File.WriteAllBytes("./textures.png", Textures.EncodeToPNG());
 
             // Calculate the aspect ratio of each texture in the set (in
             // particular for lines they may be different)

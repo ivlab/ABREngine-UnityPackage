@@ -119,7 +119,7 @@ Shader "ABR/Ribbon"
                 }
 
                 // Find number of "grouped" blend map textures
-                uint numGroups = (_NumTex - 1) / SupportedChannels + 1;
+                uint numGroups = _NumTex / SupportedChannels + 1;
                 float groupSize = 1.0 / numGroups;
                 float groupOffset = 0.5 * groupSize;
 
@@ -140,51 +140,58 @@ Shader "ABR/Ribbon"
                     o.Albedo = _Color.rgb;
                 }
 
-                // Final pixel color is computed in "groups" of 4 textures (according to the blendmap)
-                // support up to 16 textures (4 groups)
-                float blendPercentages[16];
-                for (uint k = 0; k < 16; k++) {
-                    blendPercentages[k] = 0.0;
-                }
+                if (_UseLineTexture) {
+                    // Final pixel color is computed in "groups" of 4 textures (according to the blendmap)
+                    // support up to 16 textures (4 groups)
+                    float blendPercentages[16];
+                    for (uint k = 0; k < 16; k++) {
+                        blendPercentages[k] = 0.0;
+                    }
 
-                // Aggregate all blend percentages for each group
-                float blendMapX = clamp(Remap(variables.y, _ScalarMin.y, _ScalarMax.y, 0, 1), 0.001, 0.999);
-                for (int group = 0; group < (int) numGroups; group++) {
-                    float blendMapY = group * groupSize + groupOffset;
-                    float4 blendPercentageGroup = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
-                    int index = group * SupportedChannels;
-                    blendPercentages[index + 0] += blendPercentageGroup.r;
-                    blendPercentages[index + 1] += blendPercentageGroup.g;
-                    blendPercentages[index + 2] += blendPercentageGroup.b;
-                    blendPercentages[index + 3] += blendPercentageGroup.a;
-                }
+                    // Aggregate all blend percentages for each group
+                    float blendMapX = clamp(Remap(variables.y, _ScalarMin.y, _ScalarMax.y, 0, 1), 0.001, 0.999);
+                    for (int group = 0; group < (int) numGroups; group++) {
+                        float blendMapY = group * groupSize + groupOffset;
+                        float4 blendPercentageGroup = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+                        int index = group * SupportedChannels;
+                        blendPercentages[index + 0] += blendPercentageGroup.r;
+                        blendPercentages[index + 1] += blendPercentageGroup.g;
+                        blendPercentages[index + 2] += blendPercentageGroup.b;
+                        blendPercentages[index + 3] += blendPercentageGroup.a;
+                    }
 
-                // Blend the various line textures to see if this fragment should be included
-                float3 textureColor = 0;
-                float vOffsetTotal = 0;
-                for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
-                {
-                    // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
-                    // X coordinate loops occasionally along the length of the line
-                    float u = (IN.texcoord.x / _TextureAspect[texIndex]) % 1;
-                    // Y coordinate skips up a texture each iteration of this loop
-                    float vOffset = hwAspectPercent[texIndex];
-                    float v = IN.texcoord.y * vOffset + vOffsetTotal;
-                    vOffsetTotal += vOffset;
+                    // DEBUG: Show blend percentages for first few textures
+                    // o.Albedo.r = blendPercentages[0];
+                    // o.Albedo.g = blendPercentages[1];
+                    // o.Albedo.b = blendPercentages[2];
 
-                    float3 currentColor = tex2D(_Texture, float2(u, v));
-                    currentColor *= blendPercentages[texIndex];
-                    textureColor += currentColor;
-                }
+                    // Blend the various line textures to see if this fragment should be included
+                    float3 textureColor = 0;
+                    float vOffsetTotal = 0;
+                    for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
+                    {
+                        // Calculate the *actual* UV coordinate within THIS texture (not all textures are the same height)
+                        // X coordinate loops occasionally along the length of the line
+                        float u = (IN.texcoord.x / _TextureAspect[texIndex]) % 1;
+                        // Y coordinate skips up a texture each iteration of this loop
+                        float vOffset = hwAspectPercent[texIndex];
+                        float v = IN.texcoord.y * vOffset + vOffsetTotal;
+                        vOffsetTotal += vOffset;
 
-                // DEBUG: Check texture application
-                // o.Albedo = textureColor;
-                // return;
+                        float3 currentColor = tex2D(_Texture, float2(u, v));
+                        currentColor *= blendPercentages[texIndex];
+                        textureColor += currentColor;
+                    }
 
-                // Throw away this fragment if it's above the value of _TextureCutoff
-                if (_UseLineTexture && textureColor.g > _TextureCutoff)
-                {
-                    discard;
+                    // DEBUG: Check texture application
+                    // o.Albedo = textureColor;
+                    // return;
+
+                    // Throw away this fragment if it's above the value of _TextureCutoff
+                    if (textureColor.g > _TextureCutoff)
+                    {
+                        discard;
+                    }
                 }
 
                 o.Alpha = 1.0;
