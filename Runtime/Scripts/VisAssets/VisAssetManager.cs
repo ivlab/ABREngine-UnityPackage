@@ -177,7 +177,7 @@ namespace IVLab.ABREngine
             {
                 // The only time a dependency would have been updated is if it's a local vis asset.
                 // If dependency not updated, skip it.
-                if (_visAssets.ContainsKey(dependency) && !LocalVisAssets.ContainsKey(dependency.ToString()))
+                if (_visAssets.ContainsKey(dependency) && (LocalVisAssets != null && !LocalVisAssets.ContainsKey(dependency.ToString())))
                 {
                     continue;
                 }

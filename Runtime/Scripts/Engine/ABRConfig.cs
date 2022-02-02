@@ -168,14 +168,42 @@ namespace IVLab.ABREngine
                 defaultPrefab = defaultPrefab
             };
 
+            // Check for a backed up schema
+            string backupSchemaDir = Path.Combine(Application.streamingAssetsPath, "schemas");
+            string backupSchema = null;
+            try
+            {
+                List<string> schemas = Directory.GetFiles(backupSchemaDir).Where(f => f.EndsWith(".json")).ToList();
+                schemas.Sort();
+                schemas.Reverse();
+                backupSchema = schemas[0];
+            }
+            catch
+            {
+                Debug.LogErrorFormat("Unable to find a backup schema in {0}", backupSchemaDir);
+            }
+
+            if (backupSchema != null)
+            {
+                backupSchema = Path.Combine(backupSchemaDir, backupSchema);
+            }
+
             // Load the schema
             HttpResponseMessage resp = ABREngine.httpClient.GetAsync(ABRConfig.Consts.SchemaUrl).Result;
+            string schemaContents = null;
             if (!resp.IsSuccessStatusCode)
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}", ABRConfig.Consts.SchemaUrl);
-                return;
+                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", ABRConfig.Consts.SchemaUrl, backupSchema);
+                using (StreamReader reader = new StreamReader(backupSchema))
+                {
+                    schemaContents = reader.ReadToEnd();
+                }
             }
-            string schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            else
+            {
+                schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            }
+
             Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
@@ -187,8 +215,36 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("Schema `{0}` is invalid.", Info.schemaName);
                 return;
             }
-
             SchemaJson = JObject.Parse(schemaContents);
+
+            // Save a copy if needed
+            bool needBackup = true;
+            if (backupSchema != null) {
+                using (StreamReader reader = new StreamReader(backupSchema))
+                {
+                    string bakContents = reader.ReadToEnd();
+                    if (bakContents == schemaContents)
+                    {
+                        needBackup = false;
+                    }
+                }
+            }
+            if (needBackup)
+            {
+                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture).Replace(":", "_") + ".json";
+                if (!Directory.Exists(backupSchemaDir))
+                {
+                    Directory.CreateDirectory(backupSchemaDir);
+                }
+                string schemaBakPath = Path.Combine(backupSchemaDir, schemaName);
+                using (StreamWriter writer = new StreamWriter(schemaBakPath))
+                {
+                    writer.Write(schemaContents);
+                }
+                Debug.Log("Saved backup schema to " + schemaBakPath);
+            }
+
+
             Debug.LogFormat("Using ABR Schema, version {0}", SchemaJson["properties"]["version"]["default"]);
         }
 

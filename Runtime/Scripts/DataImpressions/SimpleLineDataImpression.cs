@@ -560,10 +560,10 @@ namespace IVLab.ABREngine
                 if (lineTexture != null)
                 {
                     MatPropBlock.SetTexture("_Texture", lineTexture.BlendMaps.Textures);
-                    MatPropBlock.SetTexture("_BlendMap", lineTexture.BlendMaps.BlendMap);
+                    MatPropBlock.SetTexture("_BlendMaps", lineTexture.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", lineTexture.VisAssetCount);
-                    MatPropBlock.SetVector("_TextureAspect", lineTexture.BlendMaps.AspectRatios);
-                    MatPropBlock.SetVector("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
+                    MatPropBlock.SetFloatArray("_TextureAspect", lineTexture.BlendMaps.AspectRatios);
+                    MatPropBlock.SetFloatArray("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
                 }
                 else
