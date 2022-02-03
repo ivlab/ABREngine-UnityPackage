@@ -28,7 +28,6 @@ Shader "ABR/Surface"
         _PatternNormal("Normal (RGB)", 2D) = "bump" {}
         _Pattern("Stacked Textures", 2D) = "white" {}
         _BlendMaps("Stacked Blend Maps", 2D) = "white" {}
-        _PatternBlendWidth ("Blend Width", Range(0.0, 0.5)) = 0.3
         _Color("Color", Color) = (1,1,1,1)
         _Glossiness("Smoothness", Range(0,1)) = 0.5
         _Metallic("Metallic", Range(0,1)) = 0.0
@@ -328,33 +327,37 @@ Shader "ABR/Surface"
                 float3 norm = 0;
                 for (uint texIndex = 0u; texIndex < _NumTex; texIndex++)
                 {
-                    float3 colorA = float3(0,0,0);
-                    float3 colorB = float3(0,0,0);
-                    float3 colorC = float3(0,0,0);
-                    float3 normalA;
-                    float3 normalB;
-                    float3 normalC;
+                    // Only sample texture if texture is visible
+                    if (blendPercentages[texIndex] > 0)
+                    {
+                        float3 colorA = float3(0,0,0);
+                        float3 colorB = float3(0,0,0);
+                        float3 colorC = float3(0,0,0);
+                        float3 normalA;
+                        float3 normalB;
+                        float3 normalC;
 
-                    // Compute colors / normals for tri-planar projection
-                    colorA = tex2D(_Pattern, ActualTexCoord(buv0, texIndex));
-                    colorA =  SeamBlend(colorA, uv0, buv0, texIndex);
+                        // Compute colors / normals for tri-planar projection
+                        colorA = tex2D(_Pattern, ActualTexCoord(buv0, texIndex));
+                        colorA =  SeamBlend(colorA, uv0, buv0, texIndex);
 
-                    colorB = tex2D(_Pattern, ActualTexCoord(buv1, texIndex));
-                    colorB = SeamBlend(colorB, uv1, buv1, texIndex);
+                        colorB = tex2D(_Pattern, ActualTexCoord(buv1, texIndex));
+                        colorB = SeamBlend(colorB, uv1, buv1, texIndex);
 
-                    colorC = tex2D(_Pattern, ActualTexCoord(buv2, texIndex));
-                    colorC = SeamBlend(colorC, uv2, buv2, texIndex);
+                        colorC = tex2D(_Pattern, ActualTexCoord(buv2, texIndex));
+                        colorC = SeamBlend(colorC, uv2, buv2, texIndex);
 
-                    normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
-                    normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
-                    normalC = UnpackNormal(tex2D(_PatternNormal, uv2));
+                        normalA = UnpackNormal(tex2D(_PatternNormal, uv0));
+                        normalB = UnpackNormal(tex2D(_PatternNormal, uv1));
+                        normalC = UnpackNormal(tex2D(_PatternNormal, uv2));
 
-                    float3 currentColor = colorA * a + colorB * b + colorC * c;
-                    norm = normalA * a + normalB * b + normalC * c;
-                    norm = normalize(norm);
+                        float3 currentColor = colorA * a + colorB * b + colorC * c;
+                        norm = normalA * a + normalB * b + normalC * c;
+                        norm = normalize(norm);
 
-                    currentColor *= blendPercentages[texIndex];
-                    textureColor += currentColor;
+                        currentColor *= blendPercentages[texIndex];
+                        textureColor += currentColor;
+                    }
                 }
 
                 // Compute saturation
