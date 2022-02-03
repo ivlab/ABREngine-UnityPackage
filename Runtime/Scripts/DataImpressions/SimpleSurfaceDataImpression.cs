@@ -70,7 +70,7 @@ namespace IVLab.ABREngine
         public LengthPrimitive patternSize;
 
         [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
-        public PercentPrimitive patternDirectionBlend;
+        public PercentPrimitive patternSeamBlend;
 
         [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
@@ -396,7 +396,7 @@ namespace IVLab.ABREngine
             float patternIntensityOut = patternIntensity?.Value ??
                 config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Intensity").Value;
 
-            float patternDirectionBlendOut = patternDirectionBlend?.Value ??
+            float patternSeamBlendOut = patternSeamBlend?.Value ??
                 config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Seam Blend").Value;
 
             float patternSaturationOut = patternSaturation?.Value ??
@@ -404,7 +404,8 @@ namespace IVLab.ABREngine
 
             MatPropBlock.SetFloat("_PatternScale", patternSizeOut);
             MatPropBlock.SetFloat("_PatternIntensity", patternIntensityOut);
-            MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlendOut);
+            MatPropBlock.SetFloat("_PatternDirectionBlend", 1.0f);
+            MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
             if (patternVariable != null)
