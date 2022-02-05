@@ -93,32 +93,136 @@
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="IVLab.ABREngine.ILineTextureVisAsset.html">ILineTextureVisAsset</a></div>
     <div><a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a></div>
     <div><a class="xref" href="IVLab.ABREngine.IABRInput.html">IABRInput</a></div>
+    <div><a class="xref" href="IVLab.ABREngine.ITextureGradient.html">ITextureGradient</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_Genre">VisAsset.Genre</a>
+      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_Uuid">VisAsset.Uuid</a>
     </div>
     <div>
-      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_Uuid">VisAsset.Uuid</a>
+      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_Genre">VisAsset.Genre</a>
     </div>
     <div>
       <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_ImportTime">VisAsset.ImportTime</a>
     </div>
     <div>
+      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_VisAssetTypeMap">VisAsset.VisAssetTypeMap</a>
+    </div>
+    <div>
       <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_GetRawABRInput">VisAsset.GetRawABRInput()</a>
+    </div>
+    <div>
+      <a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_IsValidVisAssetType_System_String_">VisAsset.IsValidVisAssetType(String)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_LineTextureVisAsset_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class LineTextureVisAsset : VisAsset, IVisAsset, IABRInput</code></pre>
+    <pre><code class="lang-csharp hljs">public class LineTextureVisAsset : VisAsset, ILineTextureVisAsset, IVisAsset, IABRInput, ITextureGradient</code></pre>
   </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset__ctor_" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset__ctor" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor">LineTextureVisAsset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LineTextureVisAsset()</code></pre>
+  </div>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset__ctor_" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset__ctor_System_Guid_Texture2D_" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor(System.Guid,Texture2D)">LineTextureVisAsset(Guid, Texture2D)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LineTextureVisAsset(Guid uuid, Texture2D texture)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
+        <td><span class="parametername">uuid</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Texture2D</span></td>
+        <td><span class="parametername">texture</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset__ctor_" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset__ctor_Texture2D_" data-uid="IVLab.ABREngine.LineTextureVisAsset.#ctor(Texture2D)">LineTextureVisAsset(Texture2D)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LineTextureVisAsset(Texture2D texture)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Texture2D</span></td>
+        <td><span class="parametername">texture</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset_BlendMaps_" data-uid="IVLab.ABREngine.LineTextureVisAsset.BlendMaps*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset_BlendMaps" data-uid="IVLab.ABREngine.LineTextureVisAsset.BlendMaps">BlendMaps</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GradientBlendMap BlendMaps { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.GradientBlendMap.html">GradientBlendMap</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_LineTextureVisAsset_Texture_" data-uid="IVLab.ABREngine.LineTextureVisAsset.Texture*"></a>
@@ -127,7 +231,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Texture2D Texture { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Texture2D Texture { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -146,13 +250,13 @@
   </table>
   
   
-  <a id="IVLab_ABREngine_LineTextureVisAsset_VisAssetType_" data-uid="IVLab.ABREngine.LineTextureVisAsset.VisAssetType*"></a>
-  <h4 id="IVLab_ABREngine_LineTextureVisAsset_VisAssetType" data-uid="IVLab.ABREngine.LineTextureVisAsset.VisAssetType">VisAssetType</h4>
+  <a id="IVLab_ABREngine_LineTextureVisAsset_VisAssetCount_" data-uid="IVLab.ABREngine.LineTextureVisAsset.VisAssetCount*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset_VisAssetCount" data-uid="IVLab.ABREngine.LineTextureVisAsset.VisAssetCount">VisAssetCount</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override VisAssetType VisAssetType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int VisAssetCount { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -164,19 +268,134 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.VisAssetType.html">VisAssetType</a></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.VisAsset.html#IVLab_ABREngine_VisAsset_VisAssetType">VisAsset.VisAssetType</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset_GetTexture_" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset_GetTexture" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture">GetTexture()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Texture2D GetTexture()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Texture2D</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset_GetTexture_" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset_GetTexture_System_Int32_" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture(System.Int32)">GetTexture(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Texture2D GetTexture(int gradientIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
+        <td><span class="parametername">gradientIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Texture2D</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_LineTextureVisAsset_GetTexture_" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture*"></a>
+  <h4 id="IVLab_ABREngine_LineTextureVisAsset_GetTexture_System_Single_" data-uid="IVLab.ABREngine.LineTextureVisAsset.GetTexture(System.Single)">GetTexture(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Texture2D GetTexture(float gradientT)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.single">Single</a></td>
+        <td><span class="parametername">gradientT</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Texture2D</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="IVLab.ABREngine.ILineTextureVisAsset.html">ILineTextureVisAsset</a>
+  </div>
   <div>
       <a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a>
   </div>
   <div>
       <a class="xref" href="IVLab.ABREngine.IABRInput.html">IABRInput</a>
+  </div>
+  <div>
+      <a class="xref" href="IVLab.ABREngine.ITextureGradient.html">ITextureGradient</a>
   </div>
 </article>
           </div>

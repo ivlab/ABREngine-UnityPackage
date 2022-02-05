@@ -2,487 +2,661 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/abr-config.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/Global.VolumeLightManager.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/Global.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRConfig.Consts.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRConfig.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRConfigDefaults.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRConfigInfo.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABREngine.StateChangeDelegate.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABREngine.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRInputAttribute.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRInputGenre.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRInputIndexerModule.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRPlateType.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ABRStateParser.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.AnglePrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.BooleanPrimitive.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ColormapVisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataImpression.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataImpressionGroup.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataManager.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataPath.DataPathType.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataPath.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataRange-1.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Dataset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.DataTopology.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.EncodedGameObject.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.FilePathVisAssetFetcher.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.FloatPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.GlyphGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.GlyphVisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.GradientBlendMap.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.HttpDataLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.HttpStateFileLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.HttpVisAssetFetcher.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IABRInput.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IABRStateLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IColormapVisAsset.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IDataImpression.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IDataImpressionRenderInfo.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IDataLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IDataVariable-1.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IFloatPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IGlyphVisAsset.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IHasDataset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IIntegerPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IKeyData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IKeyDataRenderInfo.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ILineTextureVisAsset.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.InstancedMeshRenderer.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IntegerPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IPrimitiveGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ISurfaceTextureVisAsset.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ITextureGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IVisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IVisAssetFetcher.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.IVisAssetGradient-1.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.KeyData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.KeyDataMapping.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Legends.ABRLegend.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Legends.ABRLegendEntry.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Legends.ABRLegendGeometry.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Legends.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.LengthPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.LineKeyData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.LineTextureGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.LineTextureVisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.MediaDataLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.Notifier.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.PathStateFileLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.PercentPrimitive.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.PointKeyData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.PrimitiveGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawABRInput.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawDataset.BinaryData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawDataset.JsonHeader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawDataset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawDatasetAdapter.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawPrimitiveGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RawVisAssetGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.RenderHints.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ResourcesDataLoader.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ResourceStateFileLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ResourceVisAssetFetcher.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.ScalarDataVariable.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SerializableFloatArray.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SerializableVectorArray.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SimpleGlyphDataImpression.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SimpleLineDataImpression.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SimpleSurfaceDataImpression.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SimpleVolumeDataImpression.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SocketDataListener.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SocketTextData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.StateLocalVisAssetFetcher.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SurfaceKeyData.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SurfaceTextureGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.SurfaceTextureVisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.TextStateFileLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.TypeExtentions.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.UnityObjectSerializer.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.UpdateLevel.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VectorDataVariable.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VisAsset.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VisAssetGradient.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VisAssetLoader.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VisAssetManager.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VisAssetType.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.VolumeKeyData.html</loc>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/api/IVLab.ABREngine.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/index.html</loc>
-    <lastmod>2021-10-08T12:28:26-05:00</lastmod>
+    <lastmod>2022-02-04T09:41:33-06:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

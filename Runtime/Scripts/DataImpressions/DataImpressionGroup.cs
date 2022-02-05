@@ -246,7 +246,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Get all data impressions in this group that match a particular type (e.g. get all <see cref"SimpleSurfaceDataImpression">s).
+        /// Get all data impressions in this group that match a particular type (e.g. get all <see cref="SimpleSurfaceDataImpression"/>s).
         /// </summary>
         [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
@@ -412,7 +412,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Render every data impression inside this data impression group. Three levels of "update" are provided for each data impression (see <see cref="RenderHints"> for more information):
+        /// Render every data impression inside this data impression group. Three levels of "update" are provided for each data impression (see <see cref="RenderHints"/> for more information):
         /// <ol>
         ///     <li>Recompute everything if the data source has changed (geometry, style, visibility)</li>
         ///     <li>Only recompute style if only the style (variables, visassets, etc.) has changed</li>

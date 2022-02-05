@@ -118,8 +118,10 @@ in ABR.</p>
 <code>System.Threading.Task</code> framework and
 <code>IVLab.Utilities.UnityThreadScheduler</code>. Here&apos;s a simple example that
 loads in the ABREngine, loads a state, and displays a single data
-impression.</p>
-<pre><code>using System.Threading.Tasks;
+impression. See <see cref="!:Examples.TestingABR"></see> for additional example calls
+into the ABREngine.</p>
+<pre><code>using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using IVLab.ABREngine;
 using IVLab.Utilities;
@@ -154,7 +156,7 @@ public class SimpleABRExample : MonoBehaviour
             // done in the Unity Main thread.
             UnityThreadScheduler.Instance.RunMainThreadWork(() => 
             {
-                ABREngine.Instance.Render()
+                ABREngine.Instance.Render();
             });
         });
     }
@@ -232,6 +234,32 @@ public class ABRStateExample : MonoBehaviour
   </h3>
   
   
+  <a id="IVLab_ABREngine_ABREngine_ABRTransform_" data-uid="IVLab.ABREngine.ABREngine.ABRTransform*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_ABRTransform" data-uid="IVLab.ABREngine.ABREngine.ABRTransform">ABRTransform</h4>
+  <div class="markdown level1 summary"><p>Cached, readonly version of the ABREngine transform so it can be accessed in a non-main thread</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Transform ABRTransform { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Transform</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="IVLab_ABREngine_ABREngine_Config_" data-uid="IVLab.ABREngine.ABREngine.Config*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_Config" data-uid="IVLab.ABREngine.ABREngine.Config">Config</h4>
   <div class="markdown level1 summary"><p>Provides access to all of the ABRConfig options that were loaded in at startup</p>
@@ -304,6 +332,31 @@ public class ABRStateExample : MonoBehaviour
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.SocketDataListener.html">SocketDataListener</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_IsInitialized_" data-uid="IVLab.ABREngine.ABREngine.IsInitialized*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_IsInitialized" data-uid="IVLab.ABREngine.ABREngine.IsInitialized">IsInitialized</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsInitialized { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -774,6 +827,77 @@ placed in their default groups (grouped by dataset).</p>
   </table>
   
   
+  <a id="IVLab_ABREngine_ABREngine_GetAllDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetAllDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetAllDataImpressions" data-uid="IVLab.ABREngine.ABREngine.GetAllDataImpressions">GetAllDataImpressions()</h4>
+  <div class="markdown level1 summary"><p>Retrieve ALL data impressions that currently exist within the
+Engine, over ALL data impression groups.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IDataImpression&gt; GetAllDataImpressions()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpression(Func&lt;IDataImpression, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular function crieteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDataImpression GetDataImpression(Func&lt;IDataImpression, bool&gt; criteria)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
+        <td><p>A data impression if found, null otherwise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression_System_Guid_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression(System.Guid)">GetDataImpression(Guid)</h4>
   <div class="markdown level1 summary"><p>Retreive a particular data impression from the Engine</p>
@@ -820,6 +944,107 @@ placed in their default groups (grouped by dataset).</p>
   <div class="markdown level1 remarks"><p>It is often useful to cast the result of this data impression so individual inputs can be modified:</p>
 <pre><code>SimpleSurfaceDataImpression di = ABREngine.Instance.GetDataImpression(someGuid) as SimpleSurfaceDataImpression</code></pre>
 </div>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression__1" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression``1">GetDataImpression&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;()
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression``1(System.Func{``0,System.Boolean})">GetDataImpression&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular type AND function crieteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;(Func&lt;T, bool&gt; criteria)
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressionGroup*"></a>
@@ -938,6 +1163,150 @@ Unity ABR scene.</p>
   </table>
   
   
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpressions(Func&lt;IDataImpression, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retrieve all data impressions matching a particular criteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IDataImpression&gt; GetDataImpressions(Func&lt;IDataImpression, bool&gt; criteria)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions__1" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions``1">GetDataImpressions&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Retrieve all data impressions of a particular type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;()
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions``1(System.Func{``0,System.Boolean})">GetDataImpressions&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Retrieve all data impressions of a particular type AND matching criteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;(Func&lt;T, bool&gt; criteria)
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressionsOfType_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressionsOfType*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressionsOfType__1" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressionsOfType``1">GetDataImpressionsOfType&lt;T&gt;()</h4>
   <div class="markdown level1 summary"><p>Retrieve all data impressions in an ABR state of a given impression
@@ -946,7 +1315,8 @@ type (e.g., all <code>SimpleSurfaceDataImpression</code>s)</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressionsOfType&lt;T&gt;()
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;GetDataImpressionsOfType&lt;T&gt; is obsolete, use GetDataImpressions&lt;T&gt; instead&quot;)]
+public List&lt;T&gt; GetDataImpressionsOfType&lt;T&gt;()
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -1485,15 +1855,32 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
   
   
   <a id="IVLab_ABREngine_ABREngine_SaveStateAsync_" data-uid="IVLab.ABREngine.ABREngine.SaveStateAsync*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1" data-uid="IVLab.ABREngine.ABREngine.SaveStateAsync``1">SaveStateAsync&lt;T&gt;()</h4>
+  <h4 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1_System_String_" data-uid="IVLab.ABREngine.ABREngine.SaveStateAsync``1(System.String)">SaveStateAsync&lt;T&gt;(String)</h4>
   <div class="markdown level1 summary"><p>Save a state from the ABR Unity scene back to a particular destination.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task SaveStateAsync&lt;T&gt;()
+    <pre><code class="lang-csharp hljs">public async Task SaveStateAsync&lt;T&gt;(string overrideStateName = null)
     where T : IABRStateLoader, new()</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">overrideStateName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -1524,7 +1911,7 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1_remarks">Remarks</h5>
+  <h5 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1_System_String__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The SaveState functionality is only implemented in a few
 <code>IABRStateLoader</code>s, namely <code>PathStateFileLoader</code> and
 <code>HttpStateFileLoader</code>.</p>

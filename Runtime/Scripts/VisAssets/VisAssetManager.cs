@@ -145,7 +145,7 @@ namespace IVLab.ABREngine
         /// 4. A VisAsset server
         /// </summary>
         /// <returns>
-        /// Returns the <see cref="IVisAsset"> that was loaded, or `null` if the VisAsset was not found.
+        /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
         /// </returns>
         public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {

@@ -107,26 +107,23 @@ await ABREngine.GetInstance().WaitUntilInitialized();
 Guid cmapUuid = new Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;);
 
 // Load a VisAsset (must be done in Main Thread!)
+ColormapVisAsset cmap = null;
 await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
 {
-    await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
-});
-
-// Get the actual cmap visasset
-ColormapVisAsset cmap = null;
-ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);</code></pre>
+    cmap = await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid) as ColormapVisAsset;
+});</code></pre>
 
   <h3 id="constructors">Constructors
   </h3>
   
   
   <a id="IVLab_ABREngine_VisAssetManager__ctor_" data-uid="IVLab.ABREngine.VisAssetManager.#ctor*"></a>
-  <h4 id="IVLab_ABREngine_VisAssetManager__ctor_System_String_System_Boolean_" data-uid="IVLab.ABREngine.VisAssetManager.#ctor(System.String,System.Boolean)">VisAssetManager(String, Boolean)</h4>
+  <h4 id="IVLab_ABREngine_VisAssetManager__ctor_System_String_" data-uid="IVLab.ABREngine.VisAssetManager.#ctor(System.String)">VisAssetManager(String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VisAssetManager(string visassetPath, bool loadResourceVisAssets)</code></pre>
+    <pre><code class="lang-csharp hljs">public VisAssetManager(string visassetPath)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -141,11 +138,6 @@ ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);</code></pre>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">visassetPath</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td><span class="parametername">loadResourceVisAssets</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -229,8 +221,77 @@ exist on disk or on a server somewhere.</p>
       </tr>
     </tbody>
   </table>
+  
+  
+  <a id="IVLab_ABREngine_VisAssetManager_VisAssetGradients_" data-uid="IVLab.ABREngine.VisAssetManager.VisAssetGradients*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_VisAssetGradients" data-uid="IVLab.ABREngine.VisAssetManager.VisAssetGradients">VisAssetGradients</h4>
+  <div class="markdown level1 summary"><p>Any VisAsset gradients that are contained within the state (updated
+directly from state)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, RawVisAssetGradient&gt; VisAssetGradients { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.RawVisAssetGradient.html">RawVisAssetGradient</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
+  
+  
+  <a id="IVLab_ABREngine_VisAssetManager_GetDefault_" data-uid="IVLab.ABREngine.VisAssetManager.GetDefault*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_GetDefault__1" data-uid="IVLab.ABREngine.VisAssetManager.GetDefault``1">GetDefault&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Obtain the default visasset for a particular type, if there is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IVisAsset GetDefault&lt;T&gt;()
+    where T : IVisAsset</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_VisAssetManager_GetVisAssets_" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAssets*"></a>
@@ -273,7 +334,7 @@ automatically be loaded from any of the following places:</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;IVisAsset&gt; LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -307,8 +368,9 @@ automatically be loaded from any of the following places:</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a>&gt;</td>
+        <td><p>Returns the <a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a> that was loaded, or <code>null</code> if the VisAsset was not found.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -385,6 +447,34 @@ public async Task LoadVisAssetPalette()</code></pre>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><p>Returns true if the VisAsset is currently loaded into the memory.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_VisAssetManager_UnloadVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.UnloadVisAsset*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_UnloadVisAsset_System_Guid_" data-uid="IVLab.ABREngine.VisAssetManager.UnloadVisAsset(System.Guid)">UnloadVisAsset(Guid)</h4>
+  <div class="markdown level1 summary"><p>Unload a particular VisAsset described by its UUID. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UnloadVisAsset(Guid visAssetUUID)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
+        <td><span class="parametername">visAssetUUID</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

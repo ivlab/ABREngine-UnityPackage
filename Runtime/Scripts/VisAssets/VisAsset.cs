@@ -125,7 +125,7 @@ namespace IVLab.ABREngine
     public class VisAssetGradient : VisAsset
     {
         /// <summary>
-        /// Convert from a <see cref="RawVisAssetGradient"> to a regular gradient for internal use.
+        /// Convert from a <see cref="RawVisAssetGradient"/> to a regular gradient for internal use.
         /// </summary>
         public static T FromRaw<T, S>(RawVisAssetGradient raw)
         where T : IVisAssetGradient<S>, new()
@@ -164,7 +164,7 @@ namespace IVLab.ABREngine
         public string[] visAssets;
 
         /// <summary>
-        /// Convert from a regular <see cref="VisAssetGradient"> to raw gradient
+        /// Convert from a regular <see cref="VisAssetGradient"/> to raw gradient
         /// for serialization/import/export/interfacing with other apps.
         /// </summary>
         public static RawVisAssetGradient ToRaw<T>(IVisAssetGradient<T> gradient)

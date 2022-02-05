@@ -259,7 +259,7 @@ vector variables available across ABR.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task ImportRawDataset(string dataPath, RawDataset importing)</code></pre>
+    <pre><code class="lang-csharp hljs">public void ImportRawDataset(string dataPath, RawDataset importing)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -283,33 +283,17 @@ vector variables available across ABR.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataManager_LoadRawDataset_" data-uid="IVLab.ABREngine.DataManager.LoadRawDataset*"></a>
   <h4 id="IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String_" data-uid="IVLab.ABREngine.DataManager.LoadRawDataset``1(System.String)">LoadRawDataset&lt;T&gt;(String)</h4>
-  <div class="markdown level1 summary"><p>Load a raw dataset into a RawDataset object by its data path. NOTE:
-this method does not import the resulting <code>RawDataset</code> into ABR -
-this is accomplished through <code>ImportRawDataset</code>!</p>
+  <div class="markdown level1 summary"><p>Load a raw dataset into a RawDataset object by its data path and
+return the rawdataset after it has been successfully imported.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task LoadRawDataset&lt;T&gt;(string dataPath)
+    <pre><code class="lang-csharp hljs">public async Task&lt;RawDataset&gt; LoadRawDataset&lt;T&gt;(string dataPath)
     where T : IDataLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -339,8 +323,9 @@ this is accomplished through <code>ImportRawDataset</code>!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>&gt;</td>
+        <td><p>Returns the actual <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a> if the dataset was found, <code>null</code> if not found.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -359,6 +344,13 @@ this is accomplished through <code>ImportRawDataset</code>!</p>
       </tr>
     </tbody>
   </table>
+  <h5 id="IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String__examples">Examples</h5>
+  <p>Datasets may be loaded from any of the following locations:</p>
+<pre><code>// From a file in the media directory
+RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media>(&quot;Test/Test/KeyData/Example&quot;);
+// From a web resource
+RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader>(&quot;Test/Test/KeyData/Example&quot;);</code></pre>
+
   
   
   <a id="IVLab_ABREngine_DataManager_TryGetDataset_" data-uid="IVLab.ABREngine.DataManager.TryGetDataset*"></a>
@@ -456,6 +448,34 @@ Dataset dataset</code> accordingly.</p>
         <td><p>Returns true if the raw dataset was found, false if not, and
 populates the <code>out RawDataset dataset</code> accordingly.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataManager_UnloadRawDataset_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset*"></a>
+  <h4 id="IVLab_ABREngine_DataManager_UnloadRawDataset_System_String_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset(System.String)">UnloadRawDataset(String)</h4>
+  <div class="markdown level1 summary"><p>Unload a raw dataset from a RawDataset object by its data path. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UnloadRawDataset(string dataPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">dataPath</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

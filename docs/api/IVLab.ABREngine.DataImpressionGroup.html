@@ -364,7 +364,10 @@ be contained within</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_AddDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.AddDataImpression*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_AddDataImpression_IVLab_ABREngine_IDataImpression_System_Boolean_" data-uid="IVLab.ABREngine.DataImpressionGroup.AddDataImpression(IVLab.ABREngine.IDataImpression,System.Boolean)">AddDataImpression(IDataImpression, Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Add a data impression to this group. All data impressions in the
+same group NEED to have the same dataset, error will be displayed
+otherwise.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -396,7 +399,8 @@ be contained within</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_Clear_" data-uid="IVLab.ABREngine.DataImpressionGroup.Clear*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_Clear" data-uid="IVLab.ABREngine.DataImpressionGroup.Clear">Clear()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Remove all data impressions from this DataImpressionGroup</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -405,8 +409,71 @@ be contained within</p>
   
   
   <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpression(Func&lt;IDataImpression, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Get a data impression matching a particular criteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDataImpression GetDataImpression(Func&lt;IDataImpression, bool&gt; criteria)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
+        <td><p>The data impression, if found, otherwise <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean___examples">Examples</h5>
+  <p>This method can be used to access data impressions in a functional
+manner, for example checking if the impression has a particular
+colormap assigned.</p>
+<pre><code>DataImpressionGroup group;
+group.GetDataImpression((di) =>
+{
+    try
+    {
+        SimpleSurfaceDataImpression sdi = di as SimpleSurfaceDataImpression;
+        return sdi.colormap.Uuid == new Guid(&quot;5a761a72-8bcb-11ea-9265-005056bae6d8&quot;);
+    }
+    catch
+    {
+        return null;
+    }
+});</code></pre>
+
+  
+  
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_System_Guid_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression(System.Guid)">GetDataImpression(Guid)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Get a data impression by its UUID</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -440,15 +507,128 @@ be contained within</p>
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
+        <td><p>The data impression, if found, otherwise <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression__1" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression``1">GetDataImpression&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Get a data impression matching a type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;()
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   
   
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpression``1(System.Func{``0,System.Boolean})">GetDataImpression&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Get a data impression matching a type AND a particular criteria</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;(Func&lt;T, bool&gt; criteria)
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpression__1_System_Func___0_System_Boolean___examples">Examples</h5>
+  <p>This method can be used as a more elegant way to access individual
+types of data impressions.</p>
+<pre><code>DataImpressionGroup group;
+group.GetDataImpression&lt;SimpleSurfaceDataImpression>((di) =>
+{
+    // di is already a SimpleSurfaceDataImpression
+    return sdi.colormap.Uuid == new Guid(&quot;5a761a72-8bcb-11ea-9265-005056bae6d8&quot;);
+});</code></pre>
+
+  
+  
   <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions">GetDataImpressions()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Return all data impressions inside this data impression group</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -471,13 +651,159 @@ be contained within</p>
   </table>
   
   
-  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsOfType_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsOfType*"></a>
-  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsOfType__1" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsOfType``1">GetDataImpressionsOfType&lt;T&gt;()</h4>
-  <div class="markdown level1 summary"></div>
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpressions(Func&lt;IDataImpression, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Return all data impressions that match a particular criteria</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressionsOfType&lt;T&gt;()
+    <pre><code class="lang-csharp hljs">public List&lt;IDataImpression&gt; GetDataImpressions(Func&lt;IDataImpression, bool&gt; criteria)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions__1" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions``1">GetDataImpressions&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Return all data impressions that have a particular type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;()
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressions__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressions``1(System.Func{``0,System.Boolean})">GetDataImpressions&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Return all data impressions that match a particular criteria AND have a particular type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;(Func&lt;T, bool&gt; criteria)
+    where T : IDataImpression</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
+        <td><span class="parametername">criteria</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">List</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsOfType_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsOfType*"></a>
+  <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsOfType__1" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsOfType``1">GetDataImpressionsOfType&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Get all data impressions in this group that match a particular type (e.g. get all <a class="xref" href="IVLab.ABREngine.SimpleSurfaceDataImpression.html">SimpleSurfaceDataImpression</a>s).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;GetDataImpressionsOfType&lt;T&gt; is obsolete, use GetDataImpressions&lt;T&gt; instead&quot;)]
+public List&lt;T&gt; GetDataImpressionsOfType&lt;T&gt;()
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -514,7 +840,11 @@ be contained within</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsWithTag_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsWithTag*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_GetDataImpressionsWithTag_System_String_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetDataImpressionsWithTag(System.String)">GetDataImpressionsWithTag(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Get all data impressions that have a particular tag. Tags can be any
+string value. They are not used internally to the engine but can be
+useful for keeping track of data impressions in applications that
+use ABR.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -583,7 +913,8 @@ associated with. All DataImpressionGroups MUST have only one dataset.</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_GetEncodedGameObject_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetEncodedGameObject*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_GetEncodedGameObject_System_Guid_" data-uid="IVLab.ABREngine.DataImpressionGroup.GetEncodedGameObject(System.Guid)">GetEncodedGameObject(Guid)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Return the Unity GameObject associated with this particular UUID.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -625,7 +956,8 @@ associated with. All DataImpressionGroups MUST have only one dataset.</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_HasDataImpression_" data-uid="IVLab.ABREngine.DataImpressionGroup.HasDataImpression*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_HasDataImpression_System_Guid_" data-uid="IVLab.ABREngine.DataImpressionGroup.HasDataImpression(System.Guid)">HasDataImpression(Guid)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Return whether or not the data impression with a given UUID is present in this DataImpressionGroup</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -667,7 +999,8 @@ associated with. All DataImpressionGroups MUST have only one dataset.</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_HasEncodedGameObject_" data-uid="IVLab.ABREngine.DataImpressionGroup.HasEncodedGameObject*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_HasEncodedGameObject_System_Guid_" data-uid="IVLab.ABREngine.DataImpressionGroup.HasEncodedGameObject(System.Guid)">HasEncodedGameObject(Guid)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Check to see if a data impression with a particular UUID has a GameObject yet</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -782,7 +1115,13 @@ empty after the removal of such impression.</p>
   
   <a id="IVLab_ABREngine_DataImpressionGroup_RenderImpressions_" data-uid="IVLab.ABREngine.DataImpressionGroup.RenderImpressions*"></a>
   <h4 id="IVLab_ABREngine_DataImpressionGroup_RenderImpressions" data-uid="IVLab.ABREngine.DataImpressionGroup.RenderImpressions">RenderImpressions()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Render every data impression inside this data impression group. Three levels of &quot;update&quot; are provided for each data impression (see <a class="xref" href="IVLab.ABREngine.RenderHints.html">RenderHints</a> for more information):
+<ol>
+<li>Recompute everything if the data source has changed (geometry, style, visibility)</li>
+<li>Only recompute style if only the style (variables, visassets, etc.) has changed</li>
+<li>Only toggle visibility if only that has changed</li>
+</ol></p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">

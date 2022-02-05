@@ -82,7 +82,7 @@ namespace IVLab.ABREngine
         /// When this data impression is done being used, clean up after itself
         /// if necessary. This method may need access to the GameObject the data
         /// impression is applied to.
-        /// <summary>
+        /// </summary>
         void Cleanup(EncodedGameObject encodedGameObject);
 
         /// <summary>

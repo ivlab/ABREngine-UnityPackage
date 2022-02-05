@@ -146,18 +146,17 @@ namespace IVLab.ABREngine
         /// Load a raw dataset into a RawDataset object by its data path and
         /// return the rawdataset after it has been successfully imported.
         /// </summary>
-        /// <examples>
+        /// <example>
         /// Datasets may be loaded from any of the following locations:
         /// <code>
         /// // From a file in the media directory
         /// RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        ///
         /// // From a web resource
         /// RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
-        /// </examples>
+        /// </example>
         /// <returns>
-        /// Returns the actual <see cref="RawDataset"> if the dataset was found, `null` if not found.
+        /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
         /// </returns>
         public async Task<RawDataset> LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
