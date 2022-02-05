@@ -389,15 +389,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "ManagedReference",
       "source_relative_path": "api/IVLab.ABREngine.GradientBlendMap.yml",
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.GradientBlendMap.html",
-          "hash": "SPMeWrUcmhiKoqUHd4ia3iRgfB6/jLFhO3GRiRR3Cl4="
+          "hash": "f2yBJXRFGxOrTlQU7hYj3y+uoxZUErW9OmrncDj1dAs="
         }
       },
       "is_incremental": false,

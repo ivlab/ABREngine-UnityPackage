@@ -44,8 +44,8 @@ namespace IVLab.ABREngine
         /// look red on the left, green in the middle, and blue on the right.
         /// For a gradient with 12 elements, this texture will have 3 rows with
         /// red, green, blue, and alpha. The transition blend is defined by
-        /// `blendWidth`. For a gradient with 6 elements, the BlendMap looks
-        /// something like this: <img src="./resources/blendmap-combined.png"/>
+        /// `blendWidth`. For a gradient with 5 elements, the BlendMap looks
+        /// something like this: <img src="/resources/blendmap-combined.png"/>
         /// </summary>
         public Texture2D BlendMaps { get; private set; }
 
@@ -53,8 +53,8 @@ namespace IVLab.ABREngine
         /// Red/green/blue/alpha texture that describes how far along in the
         /// current stop we are, matching up with `BlendMap`. For a gradient
         /// with 3 elements, this texture will look like 3 black-to-white
-        /// colormaps smooshed together. For a gradient with 6 elements, the StopMap looks
-        /// something like this: <img src="./resources/stopmap-combined.png"/>
+        /// colormaps smooshed together. For a gradient with 5 elements, the StopMap looks
+        /// something like this: <img src="/resources/stopmap-combined.png"/>
         /// </summary>
         public Texture2D StopMaps { get; private set; }
 
@@ -72,7 +72,7 @@ namespace IVLab.ABREngine
         /// The actual combined texture that contains all visassets, stacked
         /// together vertically. For a gradient with 5 line texture elements, it
         /// might look something like this:
-        /// <img src="./resources/textures.png"/>
+        /// <img src="/resources/textures.png"/>
         /// </summary>
         public Texture2D Textures { get; private set; }
 
