@@ -151,8 +151,12 @@ Shader "ABR/Ribbon"
                     // Aggregate all blend percentages for each group
                     float blendMapX = clamp(Remap(variables.y, _ScalarMin.y, _ScalarMax.y, 0, 1), 0.001, 0.999);
                     for (int group = 0; group < (int) numGroups; group++) {
-                        float blendMapY = group * groupSize + groupOffset;
+                        float blendMapY = clamp(group * groupSize + groupOffset, 0.001, 0.999);
+
+                        // Note: this texture lookup results in significant weirdness.
+                        // See sqrt() note below.
                         float4 blendPercentageGroup = tex2D(_BlendMaps, float2(blendMapX, blendMapY));
+
                         int index = group * SupportedChannels;
                         blendPercentages[index + 0] += blendPercentageGroup.r;
                         blendPercentages[index + 1] += blendPercentageGroup.g;
@@ -161,9 +165,10 @@ Shader "ABR/Ribbon"
                     }
 
                     // DEBUG: Show blend percentages for first few textures
-                    // o.Albedo.r = blendPercentages[0];
+                    // o.Albedo.r = blendPercentages[2];
                     // o.Albedo.g = blendPercentages[1];
                     // o.Albedo.b = blendPercentages[2];
+                    // return;
 
                     // Blend the various line textures to see if this fragment should be included
                     float3 textureColor = 0;
@@ -179,7 +184,11 @@ Shader "ABR/Ribbon"
                         vOffsetTotal += vOffset;
 
                         float3 currentColor = tex2D(_Texture, float2(u, v));
-                        currentColor *= blendPercentages[texIndex];
+
+                        // Sqrt is used to avoid STRANGE behaviour from texture lookups in blendmap
+                        // On dense lines, it gets a "spiky" effect that changes with camera distance.
+                        // sqrt() avoids this.
+                        currentColor *= sqrt(blendPercentages[texIndex]);
                         textureColor += currentColor;
                     }
 
