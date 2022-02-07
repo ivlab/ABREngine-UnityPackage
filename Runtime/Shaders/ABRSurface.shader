@@ -385,8 +385,8 @@ Shader "ABR/Surface"
 
                 // Use Multiply method (could use overlay instead)
                 if (_NumTex > 0) {
-                    // o.Albedo = o.Albedo * textureColor;
-                    o.Albedo = textureColor;
+                    o.Albedo = o.Albedo * textureColor;
+                    // o.Albedo = textureColor;
                     //o.Albedo = overlayBlend(o.Albedo, textureColor);
                 }
 
