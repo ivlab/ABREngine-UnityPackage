@@ -125,7 +125,12 @@ namespace IVLab.ABREngine
         /// calculate the full bounds for the imported data objects - explictly
         /// ask the user for them.
         /// </summary>
-        /// <param name="lines">One, or several, lines. Each line consistes of a series of points.</param>
+        /// <param name="lines">One, or several, lines. Each line consists of a series of points.</param>
+        /// <param name="dataBounds">The center and extents of the data in the original coordinate space</param>
+        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <em>array of floating point numbers</em> for each scalar variable
+        /// attached to the lines. Values will be applied at each point along
+        /// each segment of each line.</param>
         public static RawDataset PointsToLine(List<List<Vector3>> lines, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             // Find out lengths of each line so we know where to split
@@ -217,7 +222,16 @@ namespace IVLab.ABREngine
         /// calculate the full bounds for the imported data objects - explictly
         /// ask the user for them.
         /// </summary>
-        /// <param name="points">Points in a line - will be treated as a LineStrip</param>
+        /// <param name="points">Source points in the original coordinate space</param>
+        /// <param name="dataBounds">Center and extent of the data, in the original coordinate space</param>
+        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <em>array of floating point numbers</em> for each scalar variable
+        /// attached to these points. Values will be applied at each point of
+        /// the dataset.</param>
+        /// <param name="vectorVars">Mapping of <em>variable name</em> &rarr;
+        /// <em>array of Vector3</em> for each vector variable
+        /// attached to these points. Values will be applied at each point of
+        /// the dataset.</param>
         public static RawDataset PointsToPoints(
             List<Vector3> points,
             Bounds dataBounds,
@@ -265,98 +279,6 @@ namespace IVLab.ABREngine
             }
 
             // Build the points.
-            ds.vertexArray = new Vector3[points.Count];
-            ds.indexArray = new int[points.Count];
-            ds.cellIndexCounts = new int[points.Count];
-            ds.cellIndexOffsets = new int[points.Count];
-            for (int i = 0; i < ds.vertexArray.Length; i++)
-            {
-                ds.vertexArray[i] = points[i];
-                ds.indexArray[i] = i;
-                ds.cellIndexCounts[i] = 1;
-                ds.cellIndexOffsets[i] = i;
-            }
-
-            return ds;
-        }
-
-        /// <summary>
-        /// Load a CSV file as a points data object. The first three columns
-        /// will be interpreted as "x", "y", and "z" coordinates, respectively.
-        /// This method assumes you want to use the Data Bounds as simply the
-        /// min/max of the XYZ coordinates, and that you're importing from
-        /// Right-Hand Z-Up coordinate space.
-        /// </summary>
-        public static RawDataset CSVToPoints(string csvFilePath)
-        {
-            return CSVToPoints(csvFilePath, null,
-                new CoordConversion.CoordSystem(
-                    CoordConversion.CoordSystem.Handedness.RightHanded,
-                    CoordConversion.CoordSystem.Axis.PosZ,
-                    CoordConversion.CoordSystem.Axis.PosY
-                )
-            );
-        }
-
-        /// <summary>
-        /// Load a CSV file as a points data object. The first three columns
-        /// will be interpreted as "x", "y", and "z" coordinates, respectively,
-        /// and points will be transformed from the source coordinate system
-        /// accordingly.
-        /// </summary>
-        public static RawDataset CSVToPoints(string csvFilePath, Bounds? dataBounds, CoordConversion.CoordSystem coordSystem)
-        {
-            RawDataset ds = new RawDataset();
-            ds.dataTopology = DataTopology.Points;
-
-            // int numVectors = vectorVars?.Count ?? 0;
-            int numVectors = 0;
-            ds.vectorArrayNames = new string[numVectors];
-            ds.vectorArrays = new SerializableVectorArray[numVectors];
-
-            // int numScalars = scalarVars?.Count ?? 0;
-            int numScalars = 0;
-            ds.scalarArrayNames = new string[numScalars];
-            ds.scalarMins = new float[numScalars];
-            ds.scalarMaxes = new float[numScalars];
-            ds.scalarArrays = new SerializableFloatArray[numScalars];
-
-            List<Vector3> points = new List<Vector3>();
-            using (StreamReader reader = new StreamReader(csvFilePath))
-            {
-                string line = reader.ReadLine();
-                line = reader.ReadLine();
-                while (line != null)
-                {
-                    string[] contents = line.Trim().Split(',');
-
-                    float x = float.Parse(contents[0]);
-                    float y = float.Parse(contents[1]);
-                    float z = float.Parse(contents[2]);
-
-                    Vector3 rawPoint = new Vector3(x, y, z);
-                    Vector3 transformed = CoordConversion.ToUnity(rawPoint, coordSystem);
-                    points.Add(transformed);
-
-                    line = reader.ReadLine();
-                }
-            }
-
-            // Interpret data bounds from min/max if not provided
-            if (!dataBounds.HasValue)
-            {
-                Vector3 max = points.Aggregate((v, r) => v.MaxComponent() > r.MaxComponent() ? v : r);
-                Vector3 min = points.Aggregate((v, r) => v.MaxComponent() < r.MaxComponent() ? v : r);
-                Vector3 centroid = (max + min) / 2.0f;
-                Vector3 extents = max - min;
-                ds.bounds = new Bounds(centroid, extents);
-            }
-            else
-            {
-                ds.bounds = dataBounds.Value;
-            }
-
-
             ds.vertexArray = new Vector3[points.Count];
             ds.indexArray = new int[points.Count];
             ds.cellIndexCounts = new int[points.Count];
