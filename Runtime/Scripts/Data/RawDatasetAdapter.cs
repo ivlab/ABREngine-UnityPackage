@@ -22,6 +22,7 @@ using UnityEngine;
 using IVLab.OBJImport;
 using System.Linq;
 using System.IO;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -282,12 +283,31 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Load a CSV file as a points data object. The first three columns
         /// will be interpreted as "x", "y", and "z" coordinates, respectively.
+        /// This method assumes you want to use the Data Bounds as simply the
+        /// min/max of the XYZ coordinates, and that you're importing from
+        /// Right-Hand Z-Up coordinate space.
         /// </summary>
-        public static RawDataset CSVToPoints(string csvFilePath, Bounds dataBounds)
+        public static RawDataset CSVToPoints(string csvFilePath)
+        {
+            return CSVToPoints(csvFilePath, null,
+                new CoordConversion.CoordSystem(
+                    CoordConversion.CoordSystem.Handedness.RightHanded,
+                    CoordConversion.CoordSystem.Axis.PosZ,
+                    CoordConversion.CoordSystem.Axis.PosY
+                )
+            );
+        }
+
+        /// <summary>
+        /// Load a CSV file as a points data object. The first three columns
+        /// will be interpreted as "x", "y", and "z" coordinates, respectively,
+        /// and points will be transformed from the source coordinate system
+        /// accordingly.
+        /// </summary>
+        public static RawDataset CSVToPoints(string csvFilePath, Bounds? dataBounds, CoordConversion.CoordSystem coordSystem)
         {
             RawDataset ds = new RawDataset();
             ds.dataTopology = DataTopology.Points;
-            ds.bounds = dataBounds;
 
             // int numVectors = vectorVars?.Count ?? 0;
             int numVectors = 0;
@@ -314,12 +334,27 @@ namespace IVLab.ABREngine
                     float y = float.Parse(contents[1]);
                     float z = float.Parse(contents[2]);
 
-                    points.Add(new Vector3(x, y, z));
+                    Vector3 rawPoint = new Vector3(x, y, z);
+                    Vector3 transformed = CoordConversion.ToUnity(rawPoint, coordSystem);
+                    points.Add(transformed);
 
                     line = reader.ReadLine();
                 }
             }
 
+            // Interpret data bounds from min/max if not provided
+            if (!dataBounds.HasValue)
+            {
+                Vector3 max = points.Aggregate((v, r) => v.MaxComponent() > r.MaxComponent() ? v : r);
+                Vector3 min = points.Aggregate((v, r) => v.MaxComponent() < r.MaxComponent() ? v : r);
+                Vector3 centroid = (max + min) / 2.0f;
+                Vector3 extents = max - min;
+                ds.bounds = new Bounds(centroid, extents);
+            }
+            else
+            {
+                ds.bounds = dataBounds.Value;
+            }
 
 
             ds.vertexArray = new Vector3[points.Count];
