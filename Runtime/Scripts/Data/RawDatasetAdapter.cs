@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IVLab.OBJImport;
 using System.Linq;
+using System.IO;
 
 namespace IVLab.ABREngine
 {
@@ -263,6 +264,64 @@ namespace IVLab.ABREngine
             }
 
             // Build the points.
+            ds.vertexArray = new Vector3[points.Count];
+            ds.indexArray = new int[points.Count];
+            ds.cellIndexCounts = new int[points.Count];
+            ds.cellIndexOffsets = new int[points.Count];
+            for (int i = 0; i < ds.vertexArray.Length; i++)
+            {
+                ds.vertexArray[i] = points[i];
+                ds.indexArray[i] = i;
+                ds.cellIndexCounts[i] = 1;
+                ds.cellIndexOffsets[i] = i;
+            }
+
+            return ds;
+        }
+
+        /// <summary>
+        /// Load a CSV file as a points data object. The first three columns
+        /// will be interpreted as "x", "y", and "z" coordinates, respectively.
+        /// </summary>
+        public static RawDataset CSVToPoints(string csvFilePath, Bounds dataBounds)
+        {
+            RawDataset ds = new RawDataset();
+            ds.dataTopology = DataTopology.Points;
+            ds.bounds = dataBounds;
+
+            // int numVectors = vectorVars?.Count ?? 0;
+            int numVectors = 0;
+            ds.vectorArrayNames = new string[numVectors];
+            ds.vectorArrays = new SerializableVectorArray[numVectors];
+
+            // int numScalars = scalarVars?.Count ?? 0;
+            int numScalars = 0;
+            ds.scalarArrayNames = new string[numScalars];
+            ds.scalarMins = new float[numScalars];
+            ds.scalarMaxes = new float[numScalars];
+            ds.scalarArrays = new SerializableFloatArray[numScalars];
+
+            List<Vector3> points = new List<Vector3>();
+            using (StreamReader reader = new StreamReader(csvFilePath))
+            {
+                string line = reader.ReadLine();
+                line = reader.ReadLine();
+                while (line != null)
+                {
+                    string[] contents = line.Trim().Split(',');
+
+                    float x = float.Parse(contents[0]);
+                    float y = float.Parse(contents[1]);
+                    float z = float.Parse(contents[2]);
+
+                    points.Add(new Vector3(x, y, z));
+
+                    line = reader.ReadLine();
+                }
+            }
+
+
+
             ds.vertexArray = new Vector3[points.Count];
             ds.indexArray = new int[points.Count];
             ds.cellIndexCounts = new int[points.Count];
