@@ -300,6 +300,15 @@ namespace IVLab.ABREngine
                 Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
                 return new ColormapVisAsset(cmapTex);
             }
+            if (t.IsAssignableFrom(typeof(GlyphVisAsset)))
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Mesh glyphMesh = cube.GetComponent<MeshFilter>().sharedMesh;
+                List<Mesh> lods = new List<Mesh> { glyphMesh };
+                List<Texture2D> nrms = new List<Texture2D> { Texture2D.normalTexture };
+                GameObject.Destroy(cube);
+                return new GlyphVisAsset(lods, nrms);
+            }
             else
             {
                 throw new NotImplementedException($"Default {t.ToString()} is not implemented");
