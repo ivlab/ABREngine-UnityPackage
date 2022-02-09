@@ -202,36 +202,54 @@ namespace IVLab.ABREngine
         /// available as a key data object and makes all of its scalar and
         /// vector variables available across ABR.
         /// </summary>
-        public void ImportRawDataset(string dataPath, RawDataset importing)
+        /// <returns>
+        /// Returns the Key Data and variables that were just imported to
+        /// this data path.
+        /// </returns>
+        public DataInfo ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
             string datasetPath = DataPath.GetDatasetPath(dataPath);
 
             // See if we have any data from that dataset yet
-            // Needs to be run in main thread because of this.transform
-            // await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                try
+            try
+            {
+                // If we don't, create the dataset
+                Dataset dataset;
+                if (!TryGetDataset(datasetPath, out dataset))
                 {
-                    // If we don't, create the dataset
-                    Dataset dataset;
-                    if (!TryGetDataset(datasetPath, out dataset))
-                    {
-                        Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
-                        dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
-                    }
-
-                    datasets[datasetPath] = dataset;
-                    rawDatasets[dataPath] = importing;
-
-                    ImportVariables(dataPath, importing, dataset);
-                    ImportKeyData(dataPath, importing, dataset);
+                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
+                    dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
                 }
-                catch (Exception e)
+
+                datasets[datasetPath] = dataset;
+                rawDatasets[dataPath] = importing;
+
+                ImportVariables(dataPath, importing, dataset);
+                ImportKeyData(dataPath, importing, dataset);
+
+                // Retrieve the KeyData object that was just imported
+                IKeyData keyData;
+                if (!dataset.TryGetKeyData(dataPath, out keyData))
                 {
-                    Debug.LogError(e);
+                    Debug.LogError($"Failed to import Key Data for {dataPath} properly");
+                    return null;
                 }
-            // });
+
+                return new DataInfo
+                {
+                    keyData = keyData,
+                    scalarVariables = dataset.GetAllScalarVars().Values.ToArray(),
+                    vectorVariables = dataset.GetAllVectorVars().Values.ToArray()
+                };
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -348,5 +366,16 @@ namespace IVLab.ABREngine
 
             dataset.AddKeyData(keyData);
         }
+    }
+
+    /// <summary>
+    /// Information class giving pointers to the Key Data and Variables that
+    /// were just imported to the engine.
+    /// </summary>
+    public class DataInfo
+    {
+        public IKeyData keyData;
+        public ScalarDataVariable[] scalarVariables;
+        public VectorDataVariable[] vectorVariables;
     }
 }
