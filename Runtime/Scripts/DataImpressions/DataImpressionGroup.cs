@@ -40,7 +40,7 @@ namespace IVLab.ABREngine
         ///     Room-scale (Unity rendering space) bounds that all data should
         ///     be contained within
         /// </summary>
-        public Bounds GroupContainer { get; }
+        public Bounds GroupContainer { get; set; }
 
         /// <summary>
         ///     Transformation from the original data space into the room-scale
