@@ -124,7 +124,7 @@ Shader "ABR/Ribbon"
                 float groupOffset = 0.5 * groupSize;
 
                 // DEBUG: Check actual data values
-                // o.Albedo = (variables / 20) + 0.5;
+                // o.Albedo = variables;
                 // return;
 
                 // Apply colormap

@@ -266,8 +266,8 @@ namespace IVLab.ABREngine
                 return new DataInfo
                 {
                     keyData = keyData as KeyData,
-                    scalarVariables = dataset.GetAllScalarVars().Values.ToArray(),
-                    vectorVariables = dataset.GetAllVectorVars().Values.ToArray()
+                    scalarVariables = dataset.GetAllScalarVars().Values.Where(v => v.IsPartOf(keyData)).ToArray(),
+                    vectorVariables = dataset.GetAllVectorVars().Values.Where(v => v.IsPartOf(keyData)).ToArray(),
                 };
             }
             catch (Exception e)
