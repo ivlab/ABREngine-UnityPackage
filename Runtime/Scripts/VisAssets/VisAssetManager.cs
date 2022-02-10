@@ -114,7 +114,7 @@ namespace IVLab.ABREngine
         /// Load all VisAssets located in the Media directory into memory.
         /// </summary>
         [Obsolete("LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory")]
-        public async Task LoadVisAssetPalette()
+        public void LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
             Debug.LogFormat("Loading VisAsset Palette ({0} VisAssets)", files.Length);
@@ -125,7 +125,7 @@ namespace IVLab.ABREngine
                 try
                 {
                     string uuid = Path.GetFileName(filePath);
-                    await LoadVisAsset(new Guid(uuid));
+                    LoadVisAsset(new Guid(uuid));
                     success += 1;
                 }
                 catch (Exception e)
@@ -134,6 +134,18 @@ namespace IVLab.ABREngine
                 }
             }
             Debug.LogFormat("Successfully loaded {0}/{1} VisAssets", success, files.Length);
+        }
+
+        /// <summary>
+        /// Provides a convenience synchronous and generic wrapper for VisAsset loading. This call will block until VisAsset loading is finished.
+        /// </summary>
+        /// <returns>
+        /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
+        /// </returns>
+        public T LoadVisAsset<T>(Guid visAssetUUID, bool replaceExisting = false)
+        where T: IVisAsset
+        {
+            return (T) LoadVisAsset(visAssetUUID, replaceExisting);
         }
 
         /// <summary>
@@ -147,7 +159,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
         /// </returns>
-        public async Task<IVisAsset> LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
+        public IVisAsset LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
@@ -189,7 +201,7 @@ namespace IVLab.ABREngine
                     {
                         try
                         {
-                            visAsset = await visAssetLoader.LoadVisAsset(dependency, fetcher);
+                            visAsset = visAssetLoader.LoadVisAsset(dependency, fetcher);
                         }
                         catch (Exception e)
                         {
@@ -267,6 +279,8 @@ namespace IVLab.ABREngine
                     }
                 }
             }
+
+            Debug.LogError($"Unable to load VisAsset `{visAssetUUID}`");
             return null;
         }
 

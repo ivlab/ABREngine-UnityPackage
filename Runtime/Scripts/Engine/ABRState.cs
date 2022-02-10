@@ -158,7 +158,7 @@ namespace IVLab.ABREngine
                     || ABREngine.Instance.VisAssets.VisAssetGradients.ContainsKey(existing.Uuid.ToString()))
                 )
                 {
-                    await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
+                    ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
                 }
             }
 
@@ -226,7 +226,7 @@ namespace IVLab.ABREngine
                         IVisAsset existing;
                         if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
-                            existing = await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
+                            existing = ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                         }
                     }
 
