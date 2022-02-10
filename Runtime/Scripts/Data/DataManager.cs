@@ -98,6 +98,17 @@ namespace IVLab.ABREngine
         // data and variables for a particular dataset
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
 
+        // Default internal path for data if path is not provided
+        private const string DefaultDatasetPath = "Imported/Imported";
+        private int importCount = 0;
+        private string DefaultKeyDataPath
+        {
+            get
+            {
+                return DefaultDatasetPath + "/KeyData/" + importCount;
+            }
+        }
+
         public DataManager(string datasetPath)
         {
             this.appDataPath = datasetPath;
@@ -195,6 +206,21 @@ namespace IVLab.ABREngine
             string datasetPath = DataPath.GetDatasetPath(dataPath);
             rawDatasets.Remove(dataPath);
             datasets.Remove(datasetPath);
+        }
+
+        /// <summary>
+        /// Import a raw dataset into ABR. This method makes the dataset
+        /// available as a key data object and makes all of its scalar and
+        /// vector variables available across ABR.
+        /// </summary>
+        /// <returns>
+        /// Returns the Key Data and variables that were just imported to
+        /// this data path.
+        /// </returns>
+        public DataInfo ImportRawDataset(RawDataset importing)
+        {
+            importCount++;
+            return ImportRawDataset(DefaultKeyDataPath, importing);
         }
 
         /// <summary>
