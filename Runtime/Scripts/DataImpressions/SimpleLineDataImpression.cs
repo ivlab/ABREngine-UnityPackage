@@ -54,7 +54,7 @@ namespace IVLab.ABREngine
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public LineKeyData keyData;
+        public KeyData keyData;
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;

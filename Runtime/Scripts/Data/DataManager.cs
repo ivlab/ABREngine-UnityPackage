@@ -265,7 +265,7 @@ namespace IVLab.ABREngine
 
                 return new DataInfo
                 {
-                    keyData = keyData,
+                    keyData = keyData as KeyData,
                     scalarVariables = dataset.GetAllScalarVars().Values.ToArray(),
                     vectorVariables = dataset.GetAllVectorVars().Values.ToArray()
                 };
@@ -400,7 +400,7 @@ namespace IVLab.ABREngine
     /// </summary>
     public class DataInfo
     {
-        public IKeyData keyData;
+        public KeyData keyData;
         public ScalarDataVariable[] scalarVariables;
         public VectorDataVariable[] vectorVariables;
     }

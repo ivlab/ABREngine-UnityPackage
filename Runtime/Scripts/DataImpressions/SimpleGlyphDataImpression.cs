@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public PointKeyData keyData;
+        public KeyData keyData;
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
