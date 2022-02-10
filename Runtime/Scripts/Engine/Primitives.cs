@@ -96,6 +96,8 @@ namespace IVLab.ABREngine
                 inputGenre = Genre.ToString("G"),
             };
         }
+
+        public static implicit operator IntegerPrimitive(int i) => new IntegerPrimitive(i);
     }
 
     public class FloatPrimitive : IFloatPrimitive
@@ -153,6 +155,8 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("Length units `{0}` are not currently supported", tempUnits);
             }
         }
+
+        public static implicit operator LengthPrimitive(float f) => new LengthPrimitive(f);
     }
 
     public class AnglePrimitive : FloatPrimitive
@@ -172,6 +176,8 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("Angle units `{0}` are not currently supported", tempUnits);
             }
         }
+
+        public static implicit operator AnglePrimitive(float f) => new AnglePrimitive(f);
     }
 
     public class PercentPrimitive : FloatPrimitive
@@ -199,6 +205,8 @@ namespace IVLab.ABREngine
         {
             return (Value * 100.0f).ToString() + Units;
         }
+
+        public static implicit operator PercentPrimitive(float f) => new PercentPrimitive(f * 100.0f);
     }
 
     public class BooleanPrimitive : IPrimitive
@@ -237,5 +245,7 @@ namespace IVLab.ABREngine
                 inputGenre = Genre.ToString("G"),
             };
         }
+
+        public static implicit operator BooleanPrimitive(bool b) => new BooleanPrimitive(b);
     }
 }
