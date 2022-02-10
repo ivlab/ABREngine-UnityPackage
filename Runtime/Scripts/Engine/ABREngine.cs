@@ -505,6 +505,19 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Add a bare data impression group into the ABR scene. The group
+        /// bounds defaults to the bounds found in
+        /// `ABRConfig.Info.defaultBounds`, and the position is defined by the user.
+        /// </summary>
+        /// <returns>
+        /// The group that has been added.
+        /// </returns>
+        public DataImpressionGroup AddDataImpressionGroup(string name, Vector3 position)
+        {
+            return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, position, Quaternion.identity);
+        }
+
+        /// <summary>
         /// Add a new data impression group with a particular UUID. The group
         /// bounds defaults to the bounds found in
         /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
