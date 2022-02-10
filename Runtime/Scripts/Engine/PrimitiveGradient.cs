@@ -50,6 +50,14 @@ namespace IVLab.ABREngine
             Values = values;
         }
 
+        /// <summary>
+        /// Return a default 0%-100% gradient at 0.0 and 1.0
+        /// </summary>
+        public static PrimitiveGradient Default()
+        {
+            return new PrimitiveGradient(Guid.NewGuid(), new float[] { 0.0f, 1.0f }, new string[] { "0%", "100%" });
+        }
+
         public RawABRInput GetRawABRInput()
         {
             return new RawABRInput
