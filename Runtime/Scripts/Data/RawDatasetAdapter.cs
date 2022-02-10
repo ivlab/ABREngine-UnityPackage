@@ -21,8 +21,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IVLab.OBJImport;
 using System.Linq;
-using System.IO;
-using IVLab.Utilities;
+using System;
 
 namespace IVLab.ABREngine
 {
@@ -292,6 +291,47 @@ namespace IVLab.ABREngine
             }
 
             return ds;
+        }
+
+        /// <summary>
+        /// Convert a grid (2.5D) of points into an ABR surface data object.
+        /// </summary>
+        /// <param name="points">Vertices of the desired mesh. Points are assumed to be in reverse column-major order, i.e. starting from -x, -z and ending at +x +z.</param>
+        /// <param name="gridDimension">Dimensions of the mesh grid that the points make up (x vertex count and z vertex count).</param>
+        /// <param name="dataBounds">The bounds of the actual vertices of the data.</param>
+        /// <param name="scalarVars">Mapping from name => float array for every scalar variable attached to the data. Float arrays are assumed to have the same ordering as `points`.</param>
+        public static RawDataset GridPointsToSurface(List<Vector3> points, Vector2Int gridDimension, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
+        {
+            Mesh m = new Mesh();
+            m.vertices = points.ToArray();
+            m.bounds = dataBounds;
+
+            // Handle meshes with big indices / many vertices
+            m.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+            int[] indices = new int[m.vertices.Length * 6];
+
+            int i = 0;
+            for (int gridX = 0; gridX < gridDimension.x - 1; gridX++)
+            {
+                for (int gridY = 0; gridY < gridDimension.y - 1; gridY++)
+                {
+                    // Construct first triangle ^
+                    indices[i + 0] = gridX * gridDimension.y + gridY;
+                    indices[i + 1] = gridX * gridDimension.y + (gridY + 1);
+                    indices[i + 2] = (gridX + 1) * gridDimension.y + (gridY + 1);
+                    i += 3;
+
+                    // Construct second triangle v
+                    indices[i + 0] = gridX * gridDimension.y + gridY;
+                    indices[i + 1] = (gridX + 1) * gridDimension.y + (gridY + 1);
+                    indices[i + 2] = (gridX + 1) * gridDimension.y + gridY;
+                    i += 3;
+                }
+            }
+
+            m.triangles = indices;
+            return MeshToSurface(m, scalarVars);
         }
     }
 }
