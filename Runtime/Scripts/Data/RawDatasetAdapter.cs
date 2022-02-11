@@ -333,5 +333,49 @@ namespace IVLab.ABREngine
             m.triangles = indices;
             return MeshToSurface(m, scalarVars);
         }
+
+        /// <summary>
+        /// Convert a 3D grid into an ABR volume data object. There is assumed to be a single scalar variable described by the array `voxels`.
+        /// </summary>
+        /// <param name="voxels">3D voxels that make up the volume. All voxels are assumed to be the same size.</param>
+        /// <param name="voxelsName">Name of the variable the `voxels` are storing</param>
+        /// <param name="volumeDimensions">Dimensions of the volume (number of steps in x, y, and z).</param>
+        /// <param name="dataBounds">The bounds of volume in actual space.</param>
+        public static RawDataset VoxelsToVolume(float[][][] voxels, string voxelsName, Vector3Int volumeDimensions, Bounds dataBounds)
+        {
+            RawDataset ds = new RawDataset();
+            ds.bounds = dataBounds;
+            int volX = volumeDimensions.x;
+            int volY = volumeDimensions.y;
+            int volZ = volumeDimensions.z;
+            ds.dimensions = volumeDimensions;
+            ds.scalarArrayNames = new string[] { voxelsName };
+            float[] scalars = new float[volX * volY * volZ];
+
+            int v = 0;
+            // Array expects right-hand coordinates, so flip it here...
+            // Essentially, flatten the voxels into a single scalar array
+            for (int z = volZ - 1; z >= 0; z--)
+            {
+                for (int y = 0; y < volY; y++)
+                {
+                    for (int x = 0; x < volX; x++)
+                    {
+                        scalars[v] = voxels[z][y][x];
+                        v++;
+                    }
+                }
+            }
+            ds.scalarMins = new float[] { scalars.Min() };
+            ds.scalarMaxes = new float[] { scalars.Max() };
+            ds.scalarArrays = new SerializableFloatArray[] { new SerializableFloatArray() { array = scalars }};
+
+            int numVectors = 0;
+            ds.vectorArrayNames = new string[numVectors];
+            ds.vectorArrays = new SerializableVectorArray[numVectors];
+            ds.dataTopology = DataTopology.Voxels;
+
+            return ds;
+        }
     }
 }
