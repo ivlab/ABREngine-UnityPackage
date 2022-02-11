@@ -118,6 +118,21 @@ namespace IVLab.ABREngine
             return MeshToSurface(mesh, scalarVars);
         }
 
+        /// <summary>
+        /// Define a Line dataset from a bunch of points. Don't try to assume or
+        /// calculate the full bounds for the imported data objects - explictly
+        /// ask the user for them. This method is a shortcut for a single connected line.
+        /// </summary>
+        /// <param name="lines">A line. Each line consists of a series of points.</param>
+        /// <param name="dataBounds">The center and extents of the data in the original coordinate space</param>
+        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <em>array of floating point numbers</em> for each scalar variable
+        /// attached to the lines. Values will be applied at each point along
+        /// each segment of each line.</param>
+        public static RawDataset PointsToLine(List<Vector3> line, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
+        {
+            return PointsToLine(new List<List<Vector3>> { line }, dataBounds, scalarVars);
+        }
 
         /// <summary>
         /// Define a Line dataset from a bunch of points. Don't try to assume or
