@@ -192,7 +192,7 @@ namespace IVLab.ABREngine
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Tags = new List<string>(di.Tags);
             di.Uuid = Guid.NewGuid();
-            this.RenderHints = di.RenderHints;
+            di.RenderHints = this.RenderHints.Copy();
             return di as IDataImpression;
         }
 
@@ -202,7 +202,7 @@ namespace IVLab.ABREngine
         public virtual void CopyExisting(IDataImpression other)
         {
             this.Tags = new List<string>((other as DataImpression).Tags);
-            this.RenderHints = other.RenderHints;
+            this.RenderHints = other.RenderHints.Copy();
             foreach (string inputName in other.InputIndexer.InputNames)
             {
                 IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
@@ -270,5 +270,10 @@ namespace IVLab.ABREngine
         }
 
         private bool visible = true;
+
+        public RenderHints Copy()
+        {
+            return (RenderHints) this.MemberwiseClone();
+        }
     }
 }
