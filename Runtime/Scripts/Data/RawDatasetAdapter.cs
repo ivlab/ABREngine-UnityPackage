@@ -26,16 +26,34 @@ using System;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    /// Adapter for converting other formats to ABRDataFormat. For example, OBJs
-    /// => surfaces, or lists of points => ribbons, or lists of points =>
-    /// glyphs.
+    /// Adapter for converting other formats to ABRDataFormat. For example,
+    /// lists of points => ribbons, or lists of points => glyphs. See the examples below for usage of each of these methods.
     /// </summary>
+    /// <remarks>
+    /// Note: None of these methods will actually import your data into ABR!
+    /// These are simply a convenience for converting data into ABR format.
+    /// After you call one of the RawDatasetAdapter methods, you MUST import it
+    /// using `ABREngine.Instance.Data.ImportRawDataset(...)` to be able to use
+    /// it in ABR!
+    /// </remarks>
     public static class RawDatasetAdapter
     {
         /// <summary>
         /// Load data from the data source.
         /// </summary>
         /// <param name="filePath">Data source file</param>
+        /// <example>
+        /// In this example, we load in a 3D model in OBJ format and convert it into ABR format.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         RawDataset objSurface = RawDatasetAdapter.ObjToSurface("C:/Users/me/Desktop/cube.obj");
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
         public static RawDataset ObjToSurface(string filePath)
         {
 
@@ -51,6 +69,24 @@ namespace IVLab.ABREngine
         /// Create a surfaces data object from a Unity mesh
         /// </summary>
         /// <param name="mesh">The original mesh</param>
+        /// <example>
+        /// In this example, we load a triangle GameObject from our existing Unity scene and associate some data with it.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         Mesh m = GameObject.Find("SomeTriangle").GetComponent<MeshFilter>().mesh;
+        /// 
+        ///         // 3 vertices with scalar data values (assumed to have same number of vertices as the mesh, and the same order too)
+        ///         List<float> someVariable = new List<float> { 0.0f, 1.0f, 0.5f };
+        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someVariable", someVariable }};
+        /// 
+        ///         RawDataset meshSurface = RawDatasetAdapter.MeshToSurface(m, scalarVars);
+        ///     }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset MeshToSurface(Mesh mesh, Dictionary<string, List<float>> scalarVars)
         {
             RawDataset ds = new RawDataset();
@@ -93,6 +129,18 @@ namespace IVLab.ABREngine
         /// Create a Surface data object from a Unity primitive. By default,
         /// includes XAxis, YAxis, and ZAxis scalar variables.
         /// </summary>
+        /// <example>
+        /// In this example, we create a surface from a Cube GameObject primitive.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         RawDataset cubeSurface = RawDatasetAdapter.UnityPrimitiveToSurface(PrimitiveType.Cube);
+        ///     }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset UnityPrimitiveToSurface(PrimitiveType primitive)
         {
             GameObject prim = GameObject.CreatePrimitive(primitive);
@@ -129,6 +177,48 @@ namespace IVLab.ABREngine
         /// <em>array of floating point numbers</em> for each scalar variable
         /// attached to the lines. Values will be applied at each point along
         /// each segment of each line.</param>
+        /// <example>
+        /// In this example, we create a single line from a series of vertices that have data values associated with them.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         List<Vector3> points = new List<Vector3>
+        ///         {
+        ///             new Vector3(0.0f, 0.0f, 0.0f),
+        ///             new Vector3(0.1f, 0.1f, 0.0f),
+        ///             new Vector3(0.2f, 0.2f, 0.0f),
+        ///             new Vector3(0.3f, 0.3f, 0.0f),
+        ///             new Vector3(0.4f, 0.4f, 0.0f),
+        ///             new Vector3(0.5f, 0.5f, 0.0f)
+        ///         };
+        ///
+        ///         // Each data point corresponds with a vertex above
+        ///         List<float> data = new List<float>
+        ///         {
+        ///             0.0f,
+        ///             1.0f,
+        ///             2.0f,
+        ///             3.0f,
+        ///             4.0f,
+        ///             5.0f
+        ///         };
+        ///
+        ///         // Save the scalar var so we can use it
+        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
+        ///
+        ///         // Provide a generous bounding box
+        ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
+        ///
+        ///         RawDataset abrLine = RawDatasetAdapter.PointsToLine(points, b, scalarVars);
+        ///
+        ///         // Or, if you don't have any variables:
+        ///         RawDataset abrLine2 = RawDatasetAdapter.PointsToLine(points, b, null);
+        ///     }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset PointsToLine(List<Vector3> line, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             return PointsToLine(new List<List<Vector3>> { line }, dataBounds, scalarVars);
@@ -246,6 +336,60 @@ namespace IVLab.ABREngine
         /// <em>array of Vector3</em> for each vector variable
         /// attached to these points. Values will be applied at each point of
         /// the dataset.</param>
+        /// <example>
+        /// In this example, we create a points data object from a series of vertices.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         List<Vector3> points = new List<Vector3>
+        ///         {
+        ///             new Vector3(0.0f, 0.0f, 0.0f),
+        ///             new Vector3(0.1f, 0.1f, 0.0f),
+        ///             new Vector3(0.2f, 0.2f, 0.0f),
+        ///             new Vector3(0.3f, 0.3f, 0.0f),
+        ///             new Vector3(0.4f, 0.4f, 0.0f),
+        ///             new Vector3(0.5f, 0.5f, 0.0f)
+        ///         };
+        ///
+        ///         // Each data point corresponds with a vertex above
+        ///         List<float> data = new List<float>
+        ///         {
+        ///             0.0f,
+        ///             1.0f,
+        ///             2.0f,
+        ///             3.0f,
+        ///             4.0f,
+        ///             5.0f
+        ///         };
+        ///
+        ///         // Some vector data corresponding with each vertex
+        ///         List<Vector3> vectorData = new List<Vector3>
+        ///         {
+        ///             Vector3.up,
+        ///             Vector3.up,
+        ///             Vector3.up,
+        ///             Vector3.down,
+        ///             Vector3.down,
+        ///             Vector3.down,
+        ///         };
+        ///
+        ///         // Save the vars so we can use them
+        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
+        ///         Dictionary<string, List<Vector3>> vectorVars = new Dictionary<string, List<Vector3>> {{ "someVectorData", vectorData }};
+        ///
+        ///         // Provide a generous bounding box
+        ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
+        ///
+        ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, vectorVars);
+        ///
+        ///         // Or, if you don't have any variables:
+        ///         RawDataset abrPoints2 = RawDatasetAdapter.PointsToPoints(points, b, null, null);
+        ///     }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset PointsToPoints(
             List<Vector3> points,
             Bounds dataBounds,
@@ -315,6 +459,67 @@ namespace IVLab.ABREngine
         /// <param name="gridDimension">Dimensions of the mesh grid that the points make up (x vertex count and z vertex count).</param>
         /// <param name="dataBounds">The bounds of the actual vertices of the data.</param>
         /// <param name="scalarVars">Mapping from name => float array for every scalar variable attached to the data. Float arrays are assumed to have the same ordering as `points`.</param>
+        /// <example>
+        /// In this example, we create a surface from a Cube GameObject primitive.
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///      void Start()
+        ///      {
+        ///          // 3x3 2.5D grid of points. Note their arrangement in x-based "columns"
+        ///          // -- this is a grid in the X-Z plane where only the y-coordinate is
+        ///          // varying.
+        ///          List<Vector3> gridVertices = new List<Vector3>
+        ///          {
+        ///              // column 1
+        ///              new Vector3(0.0f, 0.5f, 0.0f),
+        ///              new Vector3(0.0f, 0.6f, 0.1f),
+        ///              new Vector3(0.0f, 0.4f, 0.2f),
+        ///
+        ///              // column 2
+        ///              new Vector3(0.1f, 0.3f, 0.0f),
+        ///              new Vector3(0.1f, 0.2f, 0.1f),
+        ///              new Vector3(0.1f, 0.3f, 0.2f),
+        ///
+        ///              // column 3
+        ///              new Vector3(0.2f, 0.0f, 0.0f),
+        ///              new Vector3(0.2f, 0.3f, 0.1f),
+        ///              new Vector3(0.2f, 0.1f, 0.2f),
+        ///          };
+        ///
+        ///          // Dimenisions of the grid vertices (3x3)
+        ///          Vector2Int dimensions = new Vector2Int(3, 3);
+        ///
+        ///          // Each data point corresponds with a vertex above
+        ///          List<float> data = new List<float>
+        ///          {
+        ///              0.0f,
+        ///              0.0f,
+        ///              0.0f,
+        ///
+        ///              1.0f,
+        ///              1.0f,
+        ///              1.0f,
+        ///
+        ///              2.0f,
+        ///              2.0f,
+        ///              2.0f,
+        ///          };
+        ///
+        ///          // Save the var so we can use it
+        ///          Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
+        ///
+        ///          // Provide a generous bounding box
+        ///          Bounds b = new Bounds(Vector3.zero, Vector3.one);
+        ///
+        ///          RawDataset abrSurface = RawDatasetAdapter.GridPointsToSurface(gridVertices, dimensions, b, scalarVars);
+        ///
+        ///          // Or, if you don't have any variables:
+        ///          RawDataset abrSurface2 = RawDatasetAdapter.GridPointsToSurface(gridVertices, dimensions, b, null);
+        ///      }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset GridPointsToSurface(List<Vector3> points, Vector2Int gridDimension, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             Mesh m = new Mesh();
@@ -356,6 +561,42 @@ namespace IVLab.ABREngine
         /// <param name="voxelsName">Name of the variable the `voxels` are storing</param>
         /// <param name="volumeDimensions">Dimensions of the volume (number of steps in x, y, and z).</param>
         /// <param name="dataBounds">The bounds of volume in actual space.</param>
+        /// <example>
+        /// In this example, we create a volume from a series of voxels
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         // Define a 100x100x100 volume
+        ///         int volX = 100;
+        ///         int volY = 100;
+        ///         int volZ = 100;
+        ///         float[][][] voxels = new float[volZ][][];
+        ///
+        ///         // Populate voxels with "data" (x * y * z)
+        ///         for (int z = 0; z < volZ; z++)
+        ///         {
+        ///             float[][] stack = new float[volY][];
+        ///             for (int y = 0; y < volY; y++)
+        ///             {
+        ///                 float[] col = new float[volX];
+        ///                 for (int x = 0; x < volX; x++)
+        ///                 {
+        ///                     col[x] = x * y * z;
+        ///                 }
+        ///                 stack[y] = col;
+        ///             }
+        ///             voxels[z] = stack;
+        ///         }
+        ///
+        ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
+        ///
+        ///         RawDataset abrVolume = RawDatasetAdapter.VoxelsToVolume(voxels, "someData", new Vector3Int(volX, volY, volZ), b);
+        ///     }
+        /// }
+        /// </code>
+        /// <example>
         public static RawDataset VoxelsToVolume(float[][][] voxels, string voxelsName, Vector3Int volumeDimensions, Bounds dataBounds)
         {
             RawDataset ds = new RawDataset();
