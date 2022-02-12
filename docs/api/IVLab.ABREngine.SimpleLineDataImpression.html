@@ -144,12 +144,12 @@
 public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset</code></pre>
   </div>
   <h5 id="IVLab_ABREngine_SimpleLineDataImpression_examples"><strong>Examples</strong></h5>
-  <p>An example of creating a single glyph data impression and setting its colormap, color variable, and line texture could be:</p>
+  <p>An example of creating a single line data impression and setting its colormap, color variable, and line texture could be:</p>
 <pre><code>SimpleLineDataImpression gi = new SimpleLineDataImpression();
-gi.keyData = lines as LineKeyData;
+gi.keyData = lines;
 gi.colorVariable = yAxis;
 gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
-gi.lineTexture = line as LineTextureVisAsset;
+gi.lineTexture = line;
 ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
 
   <h3 id="constructors">Constructors
@@ -303,7 +303,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public LineKeyData keyData</code></pre>
+public KeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -315,7 +315,7 @@ public LineKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.LineKeyData.html">LineKeyData</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>

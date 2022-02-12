@@ -83,7 +83,8 @@
   
   <h1 id="IVLab_ABREngine_SimpleVolumeDataImpression" data-uid="IVLab.ABREngine.SimpleVolumeDataImpression" class="text-break">Class SimpleVolumeDataImpression
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>A &quot;Volumes&quot; data impression that uses a user-defined transfer (opacity) map and a colormap to show volumetric data.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -142,6 +143,15 @@
     <pre><code class="lang-csharp hljs">[ABRPlateType(&quot;Volumes&quot;)]
 public class SimpleVolumeDataImpression : DataImpression, IDataImpression, IHasDataset</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_SimpleVolumeDataImpression_examples"><strong>Examples</strong></h5>
+  <p>An example of creating a single volume data impression and setting its colormap and opacity map could be:</p>
+<pre><code>SimpleVolumeDataImpression gi = new SimpleVolumeDataImpression();
+gi.keyData = volume;
+gi.colorVariable = yAxis;
+gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
+gi.opacityMap = PrimitiveGradient.Default();
+ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
+
   <h3 id="constructors">Constructors
   </h3>
   
@@ -244,7 +254,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public VolumeKeyData keyData</code></pre>
+public KeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -256,7 +266,7 @@ public VolumeKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.VolumeKeyData.html">VolumeKeyData</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>

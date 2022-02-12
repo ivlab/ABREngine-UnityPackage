@@ -316,6 +316,12 @@ references:
   commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
   fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, System.Guid, Bounds, Vector3, Quaternion)
   nameWithType: ABREngine.AddDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
+- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,Vector3)
+  name: AddDataImpressionGroup(String, Vector3)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_Vector3_
+  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,Vector3)
+  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, Vector3)
+  nameWithType: ABREngine.AddDataImpressionGroup(String, Vector3)
 - uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup*
   name: AddDataImpressionGroup
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_
@@ -1229,6 +1235,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.AnglePrimitive.AnglePrimitive
   nameWithType: AnglePrimitive.AnglePrimitive
+- uid: IVLab.ABREngine.AnglePrimitive.op_Implicit(System.Single)~IVLab.ABREngine.AnglePrimitive
+  name: Implicit(Single to AnglePrimitive)
+  href: api/IVLab.ABREngine.AnglePrimitive.html#IVLab_ABREngine_AnglePrimitive_op_Implicit_System_Single__IVLab_ABREngine_AnglePrimitive
+  commentId: M:IVLab.ABREngine.AnglePrimitive.op_Implicit(System.Single)~IVLab.ABREngine.AnglePrimitive
+  name.vb: Widening(Single to AnglePrimitive)
+  fullName: IVLab.ABREngine.AnglePrimitive.Implicit(System.Single to IVLab.ABREngine.AnglePrimitive)
+  fullName.vb: IVLab.ABREngine.AnglePrimitive.Widening(System.Single to IVLab.ABREngine.AnglePrimitive)
+  nameWithType: AnglePrimitive.Implicit(Single to AnglePrimitive)
+  nameWithType.vb: AnglePrimitive.Widening(Single to AnglePrimitive)
+- uid: IVLab.ABREngine.AnglePrimitive.op_Implicit*
+  name: Implicit
+  href: api/IVLab.ABREngine.AnglePrimitive.html#IVLab_ABREngine_AnglePrimitive_op_Implicit_
+  commentId: Overload:IVLab.ABREngine.AnglePrimitive.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: IVLab.ABREngine.AnglePrimitive.Implicit
+  fullName.vb: IVLab.ABREngine.AnglePrimitive.Widening
+  nameWithType: AnglePrimitive.Implicit
+  nameWithType.vb: AnglePrimitive.Widening
 - uid: IVLab.ABREngine.AnglePrimitive.ParsingRegex
   name: ParsingRegex
   href: api/IVLab.ABREngine.AnglePrimitive.html#IVLab_ABREngine_AnglePrimitive_ParsingRegex
@@ -1312,6 +1337,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.BooleanPrimitive.GetRawABRInput
   nameWithType: BooleanPrimitive.GetRawABRInput
+- uid: IVLab.ABREngine.BooleanPrimitive.op_Implicit(System.Boolean)~IVLab.ABREngine.BooleanPrimitive
+  name: Implicit(Boolean to BooleanPrimitive)
+  href: api/IVLab.ABREngine.BooleanPrimitive.html#IVLab_ABREngine_BooleanPrimitive_op_Implicit_System_Boolean__IVLab_ABREngine_BooleanPrimitive
+  commentId: M:IVLab.ABREngine.BooleanPrimitive.op_Implicit(System.Boolean)~IVLab.ABREngine.BooleanPrimitive
+  name.vb: Widening(Boolean to BooleanPrimitive)
+  fullName: IVLab.ABREngine.BooleanPrimitive.Implicit(System.Boolean to IVLab.ABREngine.BooleanPrimitive)
+  fullName.vb: IVLab.ABREngine.BooleanPrimitive.Widening(System.Boolean to IVLab.ABREngine.BooleanPrimitive)
+  nameWithType: BooleanPrimitive.Implicit(Boolean to BooleanPrimitive)
+  nameWithType.vb: BooleanPrimitive.Widening(Boolean to BooleanPrimitive)
+- uid: IVLab.ABREngine.BooleanPrimitive.op_Implicit*
+  name: Implicit
+  href: api/IVLab.ABREngine.BooleanPrimitive.html#IVLab_ABREngine_BooleanPrimitive_op_Implicit_
+  commentId: Overload:IVLab.ABREngine.BooleanPrimitive.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: IVLab.ABREngine.BooleanPrimitive.Implicit
+  fullName.vb: IVLab.ABREngine.BooleanPrimitive.Widening
+  nameWithType: BooleanPrimitive.Implicit
+  nameWithType.vb: BooleanPrimitive.Widening
 - uid: IVLab.ABREngine.BooleanPrimitive.ParsingRegex
   name: ParsingRegex
   href: api/IVLab.ABREngine.BooleanPrimitive.html#IVLab_ABREngine_BooleanPrimitive_ParsingRegex
@@ -2034,6 +2078,30 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpressionGroup.Uuid
   nameWithType: DataImpressionGroup.Uuid
+- uid: IVLab.ABREngine.DataInfo
+  name: DataInfo
+  href: api/IVLab.ABREngine.DataInfo.html
+  commentId: T:IVLab.ABREngine.DataInfo
+  fullName: IVLab.ABREngine.DataInfo
+  nameWithType: DataInfo
+- uid: IVLab.ABREngine.DataInfo.keyData
+  name: keyData
+  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_keyData
+  commentId: F:IVLab.ABREngine.DataInfo.keyData
+  fullName: IVLab.ABREngine.DataInfo.keyData
+  nameWithType: DataInfo.keyData
+- uid: IVLab.ABREngine.DataInfo.scalarVariables
+  name: scalarVariables
+  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_scalarVariables
+  commentId: F:IVLab.ABREngine.DataInfo.scalarVariables
+  fullName: IVLab.ABREngine.DataInfo.scalarVariables
+  nameWithType: DataInfo.scalarVariables
+- uid: IVLab.ABREngine.DataInfo.vectorVariables
+  name: vectorVariables
+  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_vectorVariables
+  commentId: F:IVLab.ABREngine.DataInfo.vectorVariables
+  fullName: IVLab.ABREngine.DataInfo.vectorVariables
+  nameWithType: DataInfo.vectorVariables
 - uid: IVLab.ABREngine.DataManager
   name: DataManager
   href: api/IVLab.ABREngine.DataManager.html
@@ -2082,6 +2150,12 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataManager.GetDatasets
   nameWithType: DataManager.GetDatasets
+- uid: IVLab.ABREngine.DataManager.ImportRawDataset(IVLab.ABREngine.RawDataset)
+  name: ImportRawDataset(RawDataset)
+  href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_ImportRawDataset_IVLab_ABREngine_RawDataset_
+  commentId: M:IVLab.ABREngine.DataManager.ImportRawDataset(IVLab.ABREngine.RawDataset)
+  fullName: IVLab.ABREngine.DataManager.ImportRawDataset(IVLab.ABREngine.RawDataset)
+  nameWithType: DataManager.ImportRawDataset(RawDataset)
 - uid: IVLab.ABREngine.DataManager.ImportRawDataset(System.String,IVLab.ABREngine.RawDataset)
   name: ImportRawDataset(String, RawDataset)
   href: api/IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_ImportRawDataset_System_String_IVLab_ABREngine_RawDataset_
@@ -4189,6 +4263,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.IntegerPrimitive.GetRawABRInput
   nameWithType: IntegerPrimitive.GetRawABRInput
+- uid: IVLab.ABREngine.IntegerPrimitive.op_Implicit(System.Int32)~IVLab.ABREngine.IntegerPrimitive
+  name: Implicit(Int32 to IntegerPrimitive)
+  href: api/IVLab.ABREngine.IntegerPrimitive.html#IVLab_ABREngine_IntegerPrimitive_op_Implicit_System_Int32__IVLab_ABREngine_IntegerPrimitive
+  commentId: M:IVLab.ABREngine.IntegerPrimitive.op_Implicit(System.Int32)~IVLab.ABREngine.IntegerPrimitive
+  name.vb: Widening(Int32 to IntegerPrimitive)
+  fullName: IVLab.ABREngine.IntegerPrimitive.Implicit(System.Int32 to IVLab.ABREngine.IntegerPrimitive)
+  fullName.vb: IVLab.ABREngine.IntegerPrimitive.Widening(System.Int32 to IVLab.ABREngine.IntegerPrimitive)
+  nameWithType: IntegerPrimitive.Implicit(Int32 to IntegerPrimitive)
+  nameWithType.vb: IntegerPrimitive.Widening(Int32 to IntegerPrimitive)
+- uid: IVLab.ABREngine.IntegerPrimitive.op_Implicit*
+  name: Implicit
+  href: api/IVLab.ABREngine.IntegerPrimitive.html#IVLab_ABREngine_IntegerPrimitive_op_Implicit_
+  commentId: Overload:IVLab.ABREngine.IntegerPrimitive.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: IVLab.ABREngine.IntegerPrimitive.Implicit
+  fullName.vb: IVLab.ABREngine.IntegerPrimitive.Widening
+  nameWithType: IntegerPrimitive.Implicit
+  nameWithType.vb: IntegerPrimitive.Widening
 - uid: IVLab.ABREngine.IntegerPrimitive.ParsingRegex
   name: ParsingRegex
   href: api/IVLab.ABREngine.IntegerPrimitive.html#IVLab_ABREngine_IntegerPrimitive_ParsingRegex
@@ -4918,6 +5011,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.LengthPrimitive.LengthPrimitive
   nameWithType: LengthPrimitive.LengthPrimitive
+- uid: IVLab.ABREngine.LengthPrimitive.op_Implicit(System.Single)~IVLab.ABREngine.LengthPrimitive
+  name: Implicit(Single to LengthPrimitive)
+  href: api/IVLab.ABREngine.LengthPrimitive.html#IVLab_ABREngine_LengthPrimitive_op_Implicit_System_Single__IVLab_ABREngine_LengthPrimitive
+  commentId: M:IVLab.ABREngine.LengthPrimitive.op_Implicit(System.Single)~IVLab.ABREngine.LengthPrimitive
+  name.vb: Widening(Single to LengthPrimitive)
+  fullName: IVLab.ABREngine.LengthPrimitive.Implicit(System.Single to IVLab.ABREngine.LengthPrimitive)
+  fullName.vb: IVLab.ABREngine.LengthPrimitive.Widening(System.Single to IVLab.ABREngine.LengthPrimitive)
+  nameWithType: LengthPrimitive.Implicit(Single to LengthPrimitive)
+  nameWithType.vb: LengthPrimitive.Widening(Single to LengthPrimitive)
+- uid: IVLab.ABREngine.LengthPrimitive.op_Implicit*
+  name: Implicit
+  href: api/IVLab.ABREngine.LengthPrimitive.html#IVLab_ABREngine_LengthPrimitive_op_Implicit_
+  commentId: Overload:IVLab.ABREngine.LengthPrimitive.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: IVLab.ABREngine.LengthPrimitive.Implicit
+  fullName.vb: IVLab.ABREngine.LengthPrimitive.Widening
+  nameWithType: LengthPrimitive.Implicit
+  nameWithType.vb: LengthPrimitive.Widening
 - uid: IVLab.ABREngine.LengthPrimitive.ParsingRegex
   name: ParsingRegex
   href: api/IVLab.ABREngine.LengthPrimitive.html#IVLab_ABREngine_LengthPrimitive_ParsingRegex
@@ -5304,6 +5416,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.PercentPrimitive.PercentPrimitive
   nameWithType: PercentPrimitive.PercentPrimitive
+- uid: IVLab.ABREngine.PercentPrimitive.op_Implicit(System.Single)~IVLab.ABREngine.PercentPrimitive
+  name: Implicit(Single to PercentPrimitive)
+  href: api/IVLab.ABREngine.PercentPrimitive.html#IVLab_ABREngine_PercentPrimitive_op_Implicit_System_Single__IVLab_ABREngine_PercentPrimitive
+  commentId: M:IVLab.ABREngine.PercentPrimitive.op_Implicit(System.Single)~IVLab.ABREngine.PercentPrimitive
+  name.vb: Widening(Single to PercentPrimitive)
+  fullName: IVLab.ABREngine.PercentPrimitive.Implicit(System.Single to IVLab.ABREngine.PercentPrimitive)
+  fullName.vb: IVLab.ABREngine.PercentPrimitive.Widening(System.Single to IVLab.ABREngine.PercentPrimitive)
+  nameWithType: PercentPrimitive.Implicit(Single to PercentPrimitive)
+  nameWithType.vb: PercentPrimitive.Widening(Single to PercentPrimitive)
+- uid: IVLab.ABREngine.PercentPrimitive.op_Implicit*
+  name: Implicit
+  href: api/IVLab.ABREngine.PercentPrimitive.html#IVLab_ABREngine_PercentPrimitive_op_Implicit_
+  commentId: Overload:IVLab.ABREngine.PercentPrimitive.op_Implicit
+  isSpec: "True"
+  name.vb: Widening
+  fullName: IVLab.ABREngine.PercentPrimitive.Implicit
+  fullName.vb: IVLab.ABREngine.PercentPrimitive.Widening
+  nameWithType: PercentPrimitive.Implicit
+  nameWithType.vb: PercentPrimitive.Widening
 - uid: IVLab.ABREngine.PercentPrimitive.ParsingRegex
   name: ParsingRegex
   href: api/IVLab.ABREngine.PercentPrimitive.html#IVLab_ABREngine_PercentPrimitive_ParsingRegex
@@ -5384,6 +5515,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.PrimitiveGradient.PrimitiveGradient
   nameWithType: PrimitiveGradient.PrimitiveGradient
+- uid: IVLab.ABREngine.PrimitiveGradient.Default
+  name: Default()
+  href: api/IVLab.ABREngine.PrimitiveGradient.html#IVLab_ABREngine_PrimitiveGradient_Default
+  commentId: M:IVLab.ABREngine.PrimitiveGradient.Default
+  fullName: IVLab.ABREngine.PrimitiveGradient.Default()
+  nameWithType: PrimitiveGradient.Default()
+- uid: IVLab.ABREngine.PrimitiveGradient.Default*
+  name: Default
+  href: api/IVLab.ABREngine.PrimitiveGradient.html#IVLab_ABREngine_PrimitiveGradient_Default_
+  commentId: Overload:IVLab.ABREngine.PrimitiveGradient.Default
+  isSpec: "True"
+  fullName: IVLab.ABREngine.PrimitiveGradient.Default
+  nameWithType: PrimitiveGradient.Default
 - uid: IVLab.ABREngine.PrimitiveGradient.Genre
   name: Genre
   href: api/IVLab.ABREngine.PrimitiveGradient.html#IVLab_ABREngine_PrimitiveGradient_Genre
@@ -5854,6 +5998,22 @@ references:
   commentId: T:IVLab.ABREngine.RawDatasetAdapter
   fullName: IVLab.ABREngine.RawDatasetAdapter
   nameWithType: RawDatasetAdapter
+- uid: IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface(List{Vector3},Vector2Int,Bounds,Dictionary{System.String,List{System.Single}})
+  name: GridPointsToSurface(List<Vector3>, Vector2Int, Bounds, Dictionary<String, List<Single>>)
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_GridPointsToSurface_List_Vector3__Vector2Int_Bounds_Dictionary_System_String_List_System_Single___
+  commentId: M:IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface(List{Vector3},Vector2Int,Bounds,Dictionary{System.String,List{System.Single}})
+  name.vb: GridPointsToSurface(List(Of Vector3), Vector2Int, Bounds, Dictionary(Of String, List(Of Single)))
+  fullName: IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface(List<Vector3>, Vector2Int, Bounds, Dictionary<System.String, List<System.Single>>)
+  fullName.vb: IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface(List(Of Vector3), Vector2Int, Bounds, Dictionary(Of System.String, List(Of System.Single)))
+  nameWithType: RawDatasetAdapter.GridPointsToSurface(List<Vector3>, Vector2Int, Bounds, Dictionary<String, List<Single>>)
+  nameWithType.vb: RawDatasetAdapter.GridPointsToSurface(List(Of Vector3), Vector2Int, Bounds, Dictionary(Of String, List(Of Single)))
+- uid: IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface*
+  name: GridPointsToSurface
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_GridPointsToSurface_
+  commentId: Overload:IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RawDatasetAdapter.GridPointsToSurface
+  nameWithType: RawDatasetAdapter.GridPointsToSurface
 - uid: IVLab.ABREngine.RawDatasetAdapter.MeshToSurface(Mesh,Dictionary{System.String,List{System.Single}})
   name: MeshToSurface(Mesh, Dictionary<String, List<Single>>)
   href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_MeshToSurface_Mesh_Dictionary_System_String_List_System_Single___
@@ -5892,6 +6052,15 @@ references:
   fullName.vb: IVLab.ABREngine.RawDatasetAdapter.PointsToLine(List(Of List(Of Vector3)), Bounds, Dictionary(Of System.String, List(Of System.Single)))
   nameWithType: RawDatasetAdapter.PointsToLine(List<List<Vector3>>, Bounds, Dictionary<String, List<Single>>)
   nameWithType.vb: RawDatasetAdapter.PointsToLine(List(Of List(Of Vector3)), Bounds, Dictionary(Of String, List(Of Single)))
+- uid: IVLab.ABREngine.RawDatasetAdapter.PointsToLine(List{Vector3},Bounds,Dictionary{System.String,List{System.Single}})
+  name: PointsToLine(List<Vector3>, Bounds, Dictionary<String, List<Single>>)
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_PointsToLine_List_Vector3__Bounds_Dictionary_System_String_List_System_Single___
+  commentId: M:IVLab.ABREngine.RawDatasetAdapter.PointsToLine(List{Vector3},Bounds,Dictionary{System.String,List{System.Single}})
+  name.vb: PointsToLine(List(Of Vector3), Bounds, Dictionary(Of String, List(Of Single)))
+  fullName: IVLab.ABREngine.RawDatasetAdapter.PointsToLine(List<Vector3>, Bounds, Dictionary<System.String, List<System.Single>>)
+  fullName.vb: IVLab.ABREngine.RawDatasetAdapter.PointsToLine(List(Of Vector3), Bounds, Dictionary(Of System.String, List(Of System.Single)))
+  nameWithType: RawDatasetAdapter.PointsToLine(List<Vector3>, Bounds, Dictionary<String, List<Single>>)
+  nameWithType.vb: RawDatasetAdapter.PointsToLine(List(Of Vector3), Bounds, Dictionary(Of String, List(Of Single)))
 - uid: IVLab.ABREngine.RawDatasetAdapter.PointsToLine*
   name: PointsToLine
   href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_PointsToLine_
@@ -5928,6 +6097,22 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.RawDatasetAdapter.UnityPrimitiveToSurface
   nameWithType: RawDatasetAdapter.UnityPrimitiveToSurface
+- uid: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[][][],System.String,Vector3Int,Bounds)
+  name: VoxelsToVolume(Single[][][], String, Vector3Int, Bounds)
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_VoxelsToVolume_System_Single_______System_String_Vector3Int_Bounds_
+  commentId: M:IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[][][],System.String,Vector3Int,Bounds)
+  name.vb: VoxelsToVolume(Single()()(), String, Vector3Int, Bounds)
+  fullName: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[][][], System.String, Vector3Int, Bounds)
+  fullName.vb: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single()()(), System.String, Vector3Int, Bounds)
+  nameWithType: RawDatasetAdapter.VoxelsToVolume(Single[][][], String, Vector3Int, Bounds)
+  nameWithType.vb: RawDatasetAdapter.VoxelsToVolume(Single()()(), String, Vector3Int, Bounds)
+- uid: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume*
+  name: VoxelsToVolume
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_VoxelsToVolume_
+  commentId: Overload:IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume
+  nameWithType: RawDatasetAdapter.VoxelsToVolume
 - uid: IVLab.ABREngine.RawPrimitiveGradient
   name: RawPrimitiveGradient
   href: api/IVLab.ABREngine.RawPrimitiveGradient.html
@@ -6004,6 +6189,19 @@ references:
   commentId: T:IVLab.ABREngine.RenderHints
   fullName: IVLab.ABREngine.RenderHints
   nameWithType: RenderHints
+- uid: IVLab.ABREngine.RenderHints.Copy
+  name: Copy()
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_Copy
+  commentId: M:IVLab.ABREngine.RenderHints.Copy
+  fullName: IVLab.ABREngine.RenderHints.Copy()
+  nameWithType: RenderHints.Copy()
+- uid: IVLab.ABREngine.RenderHints.Copy*
+  name: Copy
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_Copy_
+  commentId: Overload:IVLab.ABREngine.RenderHints.Copy
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.Copy
+  nameWithType: RenderHints.Copy
 - uid: IVLab.ABREngine.RenderHints.DataChanged
   name: DataChanged
   href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_DataChanged
@@ -8107,6 +8305,15 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.VisAssetManager.LoadVisAsset
   nameWithType: VisAssetManager.LoadVisAsset
+- uid: IVLab.ABREngine.VisAssetManager.LoadVisAsset``1(System.Guid,System.Boolean)
+  name: LoadVisAsset<T>(Guid, Boolean)
+  href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_LoadVisAsset__1_System_Guid_System_Boolean_
+  commentId: M:IVLab.ABREngine.VisAssetManager.LoadVisAsset``1(System.Guid,System.Boolean)
+  name.vb: LoadVisAsset(Of T)(Guid, Boolean)
+  fullName: IVLab.ABREngine.VisAssetManager.LoadVisAsset<T>(System.Guid, System.Boolean)
+  fullName.vb: IVLab.ABREngine.VisAssetManager.LoadVisAsset(Of T)(System.Guid, System.Boolean)
+  nameWithType: VisAssetManager.LoadVisAsset<T>(Guid, Boolean)
+  nameWithType.vb: VisAssetManager.LoadVisAsset(Of T)(Guid, Boolean)
 - uid: IVLab.ABREngine.VisAssetManager.LoadVisAssetPalette
   name: LoadVisAssetPalette()
   href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_LoadVisAssetPalette

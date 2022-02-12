@@ -46,19 +46,25 @@ namespace IVLab.ABREngine
     /// <remarks>
     /// Many of the methods in the ABREngine must be run from Unity's Main
     /// Thread. For simple scenes this is not a problem, but when you start to
-    /// integrate with an ABR Server things become more difficult. The general
-    /// guideline is - if anything interacts directly with Unity, it should go
-    /// in the main thread using `IVLab.Utilities.UnityThreadScheduler`. See the
-    /// following example for information on how to properly handle asynchrony
+    /// integrate with an ABR Server things become more difficult. Try to keep
+    /// things in the main thread when possible, and use
+    /// `IVLab.Utilities.UnityThreadScheduler.RunMainThreadWork` if you need to
+    /// run Unity main thread work inside a different thread.
     /// in ABR.
     /// </remarks>
     /// <example>
-    /// Applications built on ABR should make heavy use of C#'s
-    /// `System.Threading.Task` framework and
-    /// `IVLab.Utilities.UnityThreadScheduler`. Here's a simple example that
-    /// loads in the ABREngine, loads a state, and displays a single data
-    /// impression. See <see cref="Examples.TestingABR"/> for additional example calls
-    /// into the ABREngine.
+    /// This example shows how to quickly get up and running with a
+    /// custom-defined dataset and building your own data impressions. The
+    /// general process for making a visualization programmatically with ABR is:
+    /// <ol>
+    ///     <li>Define your data in some `List`s.</li>
+    ///     <li>Use the <see cref="RawDatasetAdapter"/> to convert the `List` into an ABR <see cref="RawDataset"/>.</li>
+    ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/>.</li>
+    ///     <li>Optionally, import any <see cref="VisAsset"/>s you want to use.</li>
+    ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together.</li>
+    ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
+    ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
+    /// </ol>
     /// <code>
     /// using System;
     /// using System.Threading.Tasks;
@@ -70,8 +76,9 @@ namespace IVLab.ABREngine
     /// {
     ///     void Start()
     ///     {
-    ///         // A series of 9 points
-    ///         List<Vector3> vertices = new List<Vector3>
+    ///         // STEP 1: Define data
+    ///         // 9 points in 3D space
+    ///         List&lt;Vector3&gt; vertices = new List&lt;Vector3&gt;
     ///         {
     ///             new Vector3(0.0f, 0.5f, 0.0f),
     ///             new Vector3(0.0f, 0.6f, 0.1f),
@@ -84,24 +91,36 @@ namespace IVLab.ABREngine
     ///             new Vector3(0.2f, 0.1f, 0.2f),
     ///         };
     ///
+    ///         // Data values for those points
+    ///         List&lt;float&gt; data = new List&lt;float&gt;();
+    ///         for (int i = 0; i &lt; vertices.Count; i++) data.Add(i);
+    ///
+    ///         // Named scalar variable
+    ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
+    ///
     ///         // Define some generous bounds
     ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
     ///
-    ///         // Convert the point list int ABR Format (no variables attached)
-    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, null, null);
+    ///         // STEP 2: Convert the point list into ABR Format
+    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, scalarVars, null);
     ///
-    ///         // Import the point data into ABR so we can use it
+    ///         // STEP 3: Import the point data into ABR so we can use it
     ///         DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
     ///
-    ///         // Create a Data Impression (layer) for the points, and assign some key data and styling
-    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = pointsInfo.keyData;
-    ///         di.glyphSize = 0.002f;
+    ///         // STEP 4: Import a colormap visasset
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
     ///
-    ///         // Register impression with the engine
+    ///         // STEP 5: Create a Data Impression (layer) for the points, and assign some key data and styling
+    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+    ///         di.keyData = pointsInfo.keyData;                  // Assign key data (point geometry)
+    ///         di.colorVariable = pointsInfo.scalarVariables[0]; // Assign scalar variable "someData"
+    ///         di.colormap = cmap;                               // Apply colormap
+    ///         di.glyphSize = 0.002f;                            // Apply glyph size styling
+    ///
+    ///         // STEP 6: Register impression with the engine
     ///         ABREngine.Instance.RegisterDataImpression(di);
     ///
-    ///         // Render the visualization
+    ///         // STEP 7: Render the visualization
     ///         ABREngine.Instance.Render();
     ///     }
     /// }

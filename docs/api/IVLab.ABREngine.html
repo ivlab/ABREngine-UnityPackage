@@ -146,6 +146,10 @@ stay within this container. Each time a new key data object is loaded
 into a data impression in this group, the GroupToDataMatrix and
 GroupBounds are updated.</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.DataInfo.html">DataInfo</a></h4>
+      <section><p>Information class giving pointers to the Key Data and Variables that
+were just imported to the engine.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.DataManager.html">DataManager</a></h4>
       <section><p>Manager where all datasets, key data, and variables live. This class
 makes the connection between Datasets and RawDatasets. This class is
@@ -248,9 +252,8 @@ share a coordinate space, key data, and variables.</p>
       <section><p>Header that contains metadata for a particular RawDataset</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.RawDatasetAdapter.html">RawDatasetAdapter</a></h4>
-      <section><p>Adapter for converting other formats to ABRDataFormat. For example, OBJs
-=&gt; surfaces, or lists of points =&gt; ribbons, or lists of points =&gt;
-glyphs.</p>
+      <section><p>Adapter for converting other formats to ABRDataFormat. For example,
+lists of points =&gt; ribbons, or lists of points =&gt; glyphs. See the examples below for usage of each of these methods.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.RawPrimitiveGradient.html">RawPrimitiveGradient</a></h4>
       <section></section>
@@ -292,7 +295,8 @@ which is which - currently guessing the larger of the two files is the
       <section><p>A &quot;Surfaces&quot; data impression that uses hand-drawn textures and color to show surface data.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.SimpleVolumeDataImpression.html">SimpleVolumeDataImpression</a></h4>
-      <section></section>
+      <section><p>A &quot;Volumes&quot; data impression that uses a user-defined transfer (opacity) map and a colormap to show volumetric data.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.SocketDataListener.html">SocketDataListener</a></h4>
       <section><p>Listener for incoming upstream data, for example, from a Send2ABR plugin
 for ParaView. Operation of this class is controlled by the ABRConfig

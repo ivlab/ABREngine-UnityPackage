@@ -143,10 +143,10 @@ public class SimpleGlyphDataImpression : DataImpression, IDataImpression, IHasDa
   <h5 id="IVLab_ABREngine_SimpleGlyphDataImpression_examples"><strong>Examples</strong></h5>
   <p>An example of creating a single glyph data impression and setting its colormap, color variable, and glyph could be:</p>
 <pre><code>SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-gi.keyData = points as PointKeyData;
+gi.keyData = points;
 gi.colorVariable = yAxis;
 gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
-gi.glyph = glyph as GlyphVisAsset;
+gi.glyph = glyph;
 ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
 
   <h3 id="constructors">Constructors
@@ -400,7 +400,7 @@ public ScalarDataVariable glyphVariable</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public PointKeyData keyData</code></pre>
+public KeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -412,7 +412,7 @@ public PointKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.PointKeyData.html">PointKeyData</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>

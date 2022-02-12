@@ -44,7 +44,7 @@ namespace IVLab.ABREngine
     /// {
     ///     void Start()
     ///     {
-    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAsset>(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
     ///     }
     /// }
     /// </code>
@@ -58,7 +58,7 @@ namespace IVLab.ABREngine
     /// {
     ///     void Start()
     ///     {
-    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
     ///     }
     /// }
     /// </code>
@@ -317,7 +317,7 @@ namespace IVLab.ABREngine
         /// Obtain the default visasset for a particular type, if there is one.
         /// </summary>
         /// <remarks>
-        /// If using the VisAsset immediately as the type `T`, you will likely need to do a cast (e.g. `ColormapVisAsset c = ....GetDefault<ColormapVisAsset>() as ColormapVisAsset`).
+        /// If using the VisAsset immediately as the type `T`, you will likely need to do a cast (e.g. `ColormapVisAsset c = ....GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset`).
         /// </remarks>
         public IVisAsset GetDefault<T>()
         where T: IVisAsset

@@ -76,17 +76,17 @@ namespace IVLab.ABREngine
         /// {
         ///     void Start()
         ///     {
-        ///         Mesh m = GameObject.Find("SomeTriangle").GetComponent<MeshFilter>().mesh;
+        ///         Mesh m = GameObject.Find("SomeTriangle").GetComponent&lt;MeshFilter&gt;().mesh;
         /// 
         ///         // 3 vertices with scalar data values (assumed to have same number of vertices as the mesh, and the same order too)
-        ///         List<float> someVariable = new List<float> { 0.0f, 1.0f, 0.5f };
-        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someVariable", someVariable }};
+        ///         List&lt;float&gt; someVariable = new List&lt;float&gt; { 0.0f, 1.0f, 0.5f };
+        ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someVariable", someVariable }};
         /// 
         ///         RawDataset meshSurface = RawDatasetAdapter.MeshToSurface(m, scalarVars);
         ///     }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset MeshToSurface(Mesh mesh, Dictionary<string, List<float>> scalarVars)
         {
             RawDataset ds = new RawDataset();
@@ -140,7 +140,7 @@ namespace IVLab.ABREngine
         ///     }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset UnityPrimitiveToSurface(PrimitiveType primitive)
         {
             GameObject prim = GameObject.CreatePrimitive(primitive);
@@ -173,7 +173,7 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="lines">A line. Each line consists of a series of points.</param>
         /// <param name="dataBounds">The center and extents of the data in the original coordinate space</param>
-        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <param name="scalarVars">Mapping of <em>variable name</em> =>
         /// <em>array of floating point numbers</em> for each scalar variable
         /// attached to the lines. Values will be applied at each point along
         /// each segment of each line.</param>
@@ -184,7 +184,7 @@ namespace IVLab.ABREngine
         /// {
         ///     void Start()
         ///     {
-        ///         List<Vector3> points = new List<Vector3>
+        ///         List&lt;Vector3&gt; points = new List&lt;Vector3&gt;
         ///         {
         ///             new Vector3(0.0f, 0.0f, 0.0f),
         ///             new Vector3(0.1f, 0.1f, 0.0f),
@@ -195,7 +195,7 @@ namespace IVLab.ABREngine
         ///         };
         ///
         ///         // Each data point corresponds with a vertex above
-        ///         List<float> data = new List<float>
+        ///         List&lt;float&gt; data = new List&lt;float&gt;
         ///         {
         ///             0.0f,
         ///             1.0f,
@@ -206,7 +206,7 @@ namespace IVLab.ABREngine
         ///         };
         ///
         ///         // Save the scalar var so we can use it
-        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
+        ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
         ///
         ///         // Provide a generous bounding box
         ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
@@ -218,7 +218,7 @@ namespace IVLab.ABREngine
         ///     }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset PointsToLine(List<Vector3> line, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             return PointsToLine(new List<List<Vector3>> { line }, dataBounds, scalarVars);
@@ -231,7 +231,7 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="lines">One, or several, lines. Each line consists of a series of points.</param>
         /// <param name="dataBounds">The center and extents of the data in the original coordinate space</param>
-        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <param name="scalarVars">Mapping of <em>variable name</em> =>
         /// <em>array of floating point numbers</em> for each scalar variable
         /// attached to the lines. Values will be applied at each point along
         /// each segment of each line.</param>
@@ -328,11 +328,11 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="points">Source points in the original coordinate space</param>
         /// <param name="dataBounds">Center and extent of the data, in the original coordinate space</param>
-        /// <param name="scalarVars">Mapping of <em>variable name</em> &rarr;
+        /// <param name="scalarVars">Mapping of <em>variable name</em> =>
         /// <em>array of floating point numbers</em> for each scalar variable
         /// attached to these points. Values will be applied at each point of
         /// the dataset.</param>
-        /// <param name="vectorVars">Mapping of <em>variable name</em> &rarr;
+        /// <param name="vectorVars">Mapping of <em>variable name</em> =>
         /// <em>array of Vector3</em> for each vector variable
         /// attached to these points. Values will be applied at each point of
         /// the dataset.</param>
@@ -343,7 +343,7 @@ namespace IVLab.ABREngine
         /// {
         ///     void Start()
         ///     {
-        ///         List<Vector3> points = new List<Vector3>
+        ///         List&lt;Vector3&gt; points = new List&lt;Vector3&gt;
         ///         {
         ///             new Vector3(0.0f, 0.0f, 0.0f),
         ///             new Vector3(0.1f, 0.1f, 0.0f),
@@ -354,7 +354,7 @@ namespace IVLab.ABREngine
         ///         };
         ///
         ///         // Each data point corresponds with a vertex above
-        ///         List<float> data = new List<float>
+        ///         List&lt;float&gt; data = new List&lt;float&gt;
         ///         {
         ///             0.0f,
         ///             1.0f,
@@ -365,7 +365,7 @@ namespace IVLab.ABREngine
         ///         };
         ///
         ///         // Some vector data corresponding with each vertex
-        ///         List<Vector3> vectorData = new List<Vector3>
+        ///         List&lt;Vector3&gt; vectorData = new List&lt;Vector3&gt;
         ///         {
         ///             Vector3.up,
         ///             Vector3.up,
@@ -376,8 +376,8 @@ namespace IVLab.ABREngine
         ///         };
         ///
         ///         // Save the vars so we can use them
-        ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
-        ///         Dictionary<string, List<Vector3>> vectorVars = new Dictionary<string, List<Vector3>> {{ "someVectorData", vectorData }};
+        ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
+        ///         Dictionary&lt;string, List&lt;Vector3&gt;&gt; vectorVars = new Dictionary&lt;string, List&lt;Vector3&gt;&gt; {{ "someVectorData", vectorData }};
         ///
         ///         // Provide a generous bounding box
         ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
@@ -389,7 +389,7 @@ namespace IVLab.ABREngine
         ///     }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset PointsToPoints(
             List<Vector3> points,
             Bounds dataBounds,
@@ -469,7 +469,7 @@ namespace IVLab.ABREngine
         ///          // 3x3 2.5D grid of points. Note their arrangement in x-based "columns"
         ///          // -- this is a grid in the X-Z plane where only the y-coordinate is
         ///          // varying.
-        ///          List<Vector3> gridVertices = new List<Vector3>
+        ///          List&lt;Vector3&gt; gridVertices = new List&lt;Vector3&gt;
         ///          {
         ///              // column 1
         ///              new Vector3(0.0f, 0.5f, 0.0f),
@@ -491,7 +491,7 @@ namespace IVLab.ABREngine
         ///          Vector2Int dimensions = new Vector2Int(3, 3);
         ///
         ///          // Each data point corresponds with a vertex above
-        ///          List<float> data = new List<float>
+        ///          List&lt;float&gt; data = new List&lt;float&gt;
         ///          {
         ///              0.0f,
         ///              0.0f,
@@ -507,7 +507,7 @@ namespace IVLab.ABREngine
         ///          };
         ///
         ///          // Save the var so we can use it
-        ///          Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", data }};
+        ///          Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
         ///
         ///          // Provide a generous bounding box
         ///          Bounds b = new Bounds(Vector3.zero, Vector3.one);
@@ -519,7 +519,7 @@ namespace IVLab.ABREngine
         ///      }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset GridPointsToSurface(List<Vector3> points, Vector2Int gridDimension, Bounds dataBounds, Dictionary<string, List<float>> scalarVars)
         {
             Mesh m = new Mesh();
@@ -575,13 +575,13 @@ namespace IVLab.ABREngine
         ///         float[][][] voxels = new float[volZ][][];
         ///
         ///         // Populate voxels with "data" (x * y * z)
-        ///         for (int z = 0; z < volZ; z++)
+        ///         for (int z = 0; z &lt; volZ; z++)
         ///         {
         ///             float[][] stack = new float[volY][];
-        ///             for (int y = 0; y < volY; y++)
+        ///             for (int y = 0; y &lt; volY; y++)
         ///             {
         ///                 float[] col = new float[volX];
-        ///                 for (int x = 0; x < volX; x++)
+        ///                 for (int x = 0; x &lt; volX; x++)
         ///                 {
         ///                     col[x] = x * y * z;
         ///                 }
@@ -596,7 +596,7 @@ namespace IVLab.ABREngine
         ///     }
         /// }
         /// </code>
-        /// <example>
+        /// </example>
         public static RawDataset VoxelsToVolume(float[][][] voxels, string voxelsName, Vector3Int volumeDimensions, Bounds dataBounds)
         {
             RawDataset ds = new RawDataset();

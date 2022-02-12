@@ -48,9 +48,9 @@ namespace IVLab.ABREngine
     ///     void Start()
     ///     {
     ///         // Generate 100 random points with "data" values
-    ///         List<Vector3> points = new List<Vector3>();
-    ///         List<float> dataValues = new List<float>();
-    ///         for (int i = 0; i < 100; i++)
+    ///         List&lt;Vector3&gt; points = new List&lt;Vector3&gt;();
+    ///         List&lt;float&gt; dataValues = new List&lt;float&gt;();
+    ///         for (int i = 0; i &lt; 100; i++)
     ///         {
     ///             points.Add(Random.insideUnitSphere);
     ///             dataValues.Add(i);
@@ -60,7 +60,7 @@ namespace IVLab.ABREngine
     ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
     /// 
     ///         // Create a dictionary to name the scalar values
-    ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", dataValues }};
+    ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", dataValues }};
     /// 
     ///         // Create an ABR-formatted dataset
     ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, null);

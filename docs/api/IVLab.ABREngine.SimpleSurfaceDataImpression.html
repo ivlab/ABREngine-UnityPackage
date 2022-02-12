@@ -146,10 +146,10 @@ public class SimpleSurfaceDataImpression : DataImpression, IDataImpression, IHas
   <h5 id="IVLab_ABREngine_SimpleSurfaceDataImpression_examples"><strong>Examples</strong></h5>
   <p>An example of creating a single surface data impression and setting its colormap, color variable, and texture could be:</p>
 <pre><code>SimpleSurfaceDataImpression gi = new SimpleSurfaceDataImpression();
-gi.keyData = surfs as SurfaceKeyData;
+gi.keyData = surfs;
 gi.colorVariable = yAxis;
 gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
-gi.lineTexture = tex as SurfaceTextureVisAsset;
+gi.lineTexture = tex;
 ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
 
   <h3 id="constructors">Constructors
@@ -254,7 +254,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public SurfaceKeyData keyData</code></pre>
+public KeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -266,7 +266,7 @@ public SurfaceKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.SurfaceKeyData.html">SurfaceKeyData</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>
