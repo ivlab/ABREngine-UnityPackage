@@ -39,32 +39,41 @@ namespace IVLab.ABREngine
     /// Impressions.
     /// </summary>
     /// <example>
-    /// Key data and variables can be loaded directly from the data manager:
+    /// When constructing a custom dataset, you can load it directly into the
+    /// engine and access its imported contents via the <see cref="DataInfo"/>
+    /// object returned by <see cref="ImportRawDataset"/>.
     /// <code>
-    /// // Load an example dataset
-    /// await ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader&gt;("Test/Test/KeyData/Example");
-    /// // Load the high-level dataset that both Contour and Points are contained within
-    /// Dataset ds = null;
-    /// if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))
+    /// public class DataManagerExample : MonoBehaviour
     /// {
-    ///     Debug.LogError("Unable to load dataset " + datasetPath);
-    ///     return;
-    /// }
+    ///     void Start()
+    ///     {
+    ///         // Generate 100 random points with "data" values
+    ///         List<Vector3> points = new List<Vector3>();
+    ///         List<float> dataValues = new List<float>();
+    ///         for (int i = 0; i < 100; i++)
+    ///         {
+    ///             points.Add(Random.insideUnitSphere);
+    ///             dataValues.Add(i);
+    ///         }
     /// 
-    /// KeyData kd = null;
-    /// // Populate the key data objects from dataset
-    /// if (!ds.TryGetKeyData("Test/Test/KeyData/Example", out kd))
-    /// {
-    ///     Debug.LogError("Key data not found in dataset");
-    ///     return;
-    /// }
+    ///         // Create some bounds
+    ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
     /// 
-    /// ScalarDataVariable s = null;
-    /// // Populate the variables from dataset
-    /// if (!ds.TryGetScalarVar("Test/Test/ScalarVar/ExampleVar", out s))
-    /// {
-    ///     Debug.LogError("Dataset does not have variable");
-    ///     return;
+    ///         // Create a dictionary to name the scalar values
+    ///         Dictionary<string, List<float>> scalarVars = new Dictionary<string, List<float>> {{ "someData", dataValues }};
+    /// 
+    ///         // Create an ABR-formatted dataset
+    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, null);
+    /// 
+    ///         // AND, import these data to ABR
+    ///         DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+    /// 
+    ///         // From here, we can access the keyData, scalarVariables, and vectorVariables
+    ///         Debug.Log(pointsInfo.keyData);                // the key data (point geometry) we just imported
+    ///         Debug.Log(pointsInfo.scalarVariables.Length); // length of 1
+    ///         Debug.Log(pointsInfo.scalarVariables[0]);     // the 'someData' variable we declared above
+    ///         Debug.Log(pointsInfo.vectorVariables.Length); // length of 0 -- we didn't declare any vector vars here.
+    ///     }
     /// }
     /// </code>
     /// Additionally, the actual raw data can be loaded from the data manager.

@@ -40,13 +40,13 @@ namespace IVLab.ABREngine
     /// A "Lines" data impression that uses hand-drawn line textures to depict line/flow data.
     /// </summary>
     /// <example>
-    /// An example of creating a single glyph data impression and setting its colormap, color variable, and line texture could be:
+    /// An example of creating a single line data impression and setting its colormap, color variable, and line texture could be:
     /// <code>
     /// SimpleLineDataImpression gi = new SimpleLineDataImpression();
-    /// gi.keyData = lines as LineKeyData;
+    /// gi.keyData = lines;
     /// gi.colorVariable = yAxis;
     /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    /// gi.lineTexture = line as LineTextureVisAsset;
+    /// gi.lineTexture = line;
     /// ABREngine.Instance.RegisterDataImpression(gi);
     /// </code>
     /// </example>

@@ -35,19 +35,32 @@ namespace IVLab.ABREngine
     /// defined in `VisAssetFetchers`.
     /// </summary>
     /// <example>
-    /// VisAssets can be loaded manually - be mindful of async programming:
+    /// VisAssets can be loaded manually from your media folder, resources
+    /// folder, or a network resource. This example loads a colormap
+    /// `66b3cde4-034d-11eb-a7e6-005056bae6d8` from Resources (it's included in
+    /// the ABREngine/Resources/media folder).
     /// <code>
-    /// // Initialize the ABR Engine
-    /// await ABREngine.GetInstance().WaitUntilInitialized();
-    /// 
-    /// Guid cmapUuid = new Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
-    /// 
-    /// // Load a VisAsset (must be done in Main Thread!)
-    /// ColormapVisAsset cmap = null;
-    /// await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+    /// public class VisAssetManagerExample : MonoBehaviour
     /// {
-    ///     cmap = await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid) as ColormapVisAsset;
-    /// });
+    ///     void Start()
+    ///     {
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAsset>(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    /// <example>
+    /// You can also get the "default" visasset for a few VisAsset types. Keep
+    /// in mind that the <see cref="GetDefault"/> method may not be defined for
+    /// the VisAsset type that you want to get!
+    /// <code>
+    /// public class VisAssetManagerExample : MonoBehaviour
+    /// {
+    ///     void Start()
+    ///     {
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
+    ///     }
+    /// }
     /// </code>
     /// </example>
     public class VisAssetManager
@@ -137,7 +150,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Provides a convenience synchronous and generic wrapper for VisAsset loading. This call will block until VisAsset loading is finished.
+        /// Provides a convenience generic wrapper for VisAsset loading.
         /// </summary>
         /// <returns>
         /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
@@ -303,6 +316,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Obtain the default visasset for a particular type, if there is one.
         /// </summary>
+        /// <remarks>
+        /// If using the VisAsset immediately as the type `T`, you will likely need to do a cast (e.g. `ColormapVisAsset c = ....GetDefault<ColormapVisAsset>() as ColormapVisAsset`).
+        /// </remarks>
         public IVisAsset GetDefault<T>()
         where T: IVisAsset
         {

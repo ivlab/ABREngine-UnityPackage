@@ -35,6 +35,20 @@ namespace IVLab.ABREngine
         public float stepCount;
     }
 
+    /// <summary>
+    /// A "Volumes" data impression that uses a user-defined transfer (opacity) map and a colormap to show volumetric data.
+    /// </summary>
+    /// <example>
+    /// An example of creating a single volume data impression and setting its colormap and opacity map could be:
+    /// <code>
+    /// SimpleVolumeDataImpression gi = new SimpleVolumeDataImpression();
+    /// gi.keyData = volume;
+    /// gi.colorVariable = yAxis;
+    /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    /// gi.opacityMap = PrimitiveGradient.Default();
+    /// ABREngine.Instance.RegisterDataImpression(gi);
+    /// </code>
+    /// </example>
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression, IDataImpression
     {

@@ -39,10 +39,10 @@ namespace IVLab.ABREngine
     /// An example of creating a single glyph data impression and setting its colormap, color variable, and glyph could be:
     /// <code>
     /// SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-    /// gi.keyData = points as PointKeyData;
+    /// gi.keyData = points;
     /// gi.colorVariable = yAxis;
     /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    /// gi.glyph = glyph as GlyphVisAsset;
+    /// gi.glyph = glyph;
     /// ABREngine.Instance.RegisterDataImpression(gi);
     /// </code>
     /// </example>

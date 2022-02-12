@@ -40,10 +40,10 @@ namespace IVLab.ABREngine
     /// An example of creating a single surface data impression and setting its colormap, color variable, and texture could be:
     /// <code>
     /// SimpleSurfaceDataImpression gi = new SimpleSurfaceDataImpression();
-    /// gi.keyData = surfs as SurfaceKeyData;
+    /// gi.keyData = surfs;
     /// gi.colorVariable = yAxis;
     /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    /// gi.lineTexture = tex as SurfaceTextureVisAsset;
+    /// gi.lineTexture = tex;
     /// ABREngine.Instance.RegisterDataImpression(gi);
     /// </code>
     /// </example>

@@ -70,35 +70,39 @@ namespace IVLab.ABREngine
     /// {
     ///     void Start()
     ///     {
-    ///         Task.Run(async () =>
+    ///         // A series of 9 points
+    ///         List<Vector3> vertices = new List<Vector3>
     ///         {
-    ///             await ABREngine.GetInstance().WaitUntilInitialized();
+    ///             new Vector3(0.0f, 0.5f, 0.0f),
+    ///             new Vector3(0.0f, 0.6f, 0.1f),
+    ///             new Vector3(0.0f, 0.4f, 0.2f),
+    ///             new Vector3(0.1f, 0.3f, 0.0f),
+    ///             new Vector3(0.1f, 0.2f, 0.1f),
+    ///             new Vector3(0.1f, 0.3f, 0.2f),
+    ///             new Vector3(0.2f, 0.0f, 0.0f),
+    ///             new Vector3(0.2f, 0.3f, 0.1f),
+    ///             new Vector3(0.2f, 0.1f, 0.2f),
+    ///         };
     ///
-    ///             // By this point, the ABREngine is initialized and we can
-    ///             // load a state.
-    ///             await ABREngine
-    ///                 .Instance
-    ///                 .LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
+    ///         // Define some generous bounds
+    ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
     ///
-    ///             // At this point, all the data impressions, visassets, and
-    ///             // data have been loaded into ABR, so we can retrieve them.
-    ///             SimpleGlyphDataImpression gi = ABREngine
-    ///                 .Instance
-    ///                 .GetDataImpression(
-    ///                     new Guid("48cca33b-e1ae-4998-a0d1-2eee1e75e07d")
-    ///                 ) as SimpleGlyphDataImpression;
+    ///         // Convert the point list int ABR Format (no variables attached)
+    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, null, null);
     ///
-    ///             // Now that we have the impression, we can modify its
-    ///             // contents (e.g. remove the colormap)
-    ///             gi.colormap = null;
+    ///         // Import the point data into ABR so we can use it
+    ///         DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
     ///
-    ///             // Lastly, render the data impressions.... but this MUST be
-    ///             // done in the Unity Main thread.
-    ///             UnityThreadScheduler.Instance.RunMainThreadWork(() => 
-    ///             {
-    ///                 ABREngine.Instance.Render();
-    ///             });
-    ///         });
+    ///         // Create a Data Impression (layer) for the points, and assign some key data and styling
+    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+    ///         di.keyData = pointsInfo.keyData;
+    ///         di.glyphSize = 0.002f;
+    ///
+    ///         // Register impression with the engine
+    ///         ABREngine.Instance.RegisterDataImpression(di);
+    ///
+    ///         // Render the visualization
+    ///         ABREngine.Instance.Render();
     ///     }
     /// }
     /// </code>
@@ -307,7 +311,6 @@ namespace IVLab.ABREngine
         /// <example>
         /// For example, if we want to do some ABREngine-dependant tasks in a MonoBehaviour Start():
         /// <code>
-        /// using System.Threading.Tasks;
         /// using UnityEngine;
         /// using IVLab.ABREngine;
         /// 
@@ -315,14 +318,12 @@ namespace IVLab.ABREngine
         /// {
         ///     void Start()
         ///     {
-        ///         Task.Run(async () =>
-        ///         {
-        ///             // Wait for the engine to initialize...
-        ///             await ABREngine.Instance.WaitUntilInitialized();
-        ///             // ... then print out some very important information that
-        ///             // depends on ABR being initialized
-        ///             Debug.Log(ABREngine.Instance.Config.Info.defaultBounds);
-        ///         });
+        ///         // Wait for the engine to initialize...
+        ///         while (!ABREngine.Instance.IsInitialized);
+        ///
+        ///         // ... then print out some very important information that
+        ///         // depends on ABR being initialized
+        ///         Debug.Log(ABREngine.Instance.Config.Info.defaultBounds);
         ///     }
         /// }
         /// </code>
