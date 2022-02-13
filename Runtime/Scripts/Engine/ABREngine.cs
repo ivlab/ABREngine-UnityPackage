@@ -254,7 +254,7 @@ namespace IVLab.ABREngine
 
             // Initialize the default DataImpressionGroup (where impressions go
             // when they have no dataset) - guid zeroed out
-            _defaultGroup = AddDataImpressionGroup("Default", new Guid());
+            _defaultGroup = CreateDataImpressionGroup("Default", new Guid());
 
             Task.Run(async () =>
             {
@@ -519,9 +519,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup AddDataImpressionGroup(string name)
+        public DataImpressionGroup CreateDataImpressionGroup(string name)
         {
-            return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
         /// <summary>
@@ -532,9 +532,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup AddDataImpressionGroup(string name, Vector3 position)
+        public DataImpressionGroup CreateDataImpressionGroup(string name, Vector3 position)
         {
-            return AddDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, position, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, position, Quaternion.identity);
         }
 
         /// <summary>
@@ -546,9 +546,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid)
+        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid)
         {
-            return AddDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
         }
 
 
@@ -558,7 +558,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
+        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
         {
             DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
             dataImpressionGroups[group.Uuid] = group;
@@ -669,11 +669,11 @@ namespace IVLab.ABREngine
                     // Name it according to the impression's dataset, if there is one
                     if (ds?.Path != null)
                     {
-                        newGroup = AddDataImpressionGroup(ds.Path);
+                        newGroup = CreateDataImpressionGroup(ds.Path);
                     }
                     else
                     {
-                        newGroup = AddDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                        newGroup = CreateDataImpressionGroup(string.Format("{0}", DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                     }
                 }
             }

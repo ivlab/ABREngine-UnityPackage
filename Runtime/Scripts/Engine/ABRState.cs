@@ -561,7 +561,7 @@ namespace IVLab.ABREngine
                                 DataImpressionGroup g = ABREngine.Instance.GetDataImpressionGroup(group.Value.uuid);
                                 if (g == null)
                                 {
-                                    g = ABREngine.Instance.AddDataImpressionGroup(
+                                    g = ABREngine.Instance.CreateDataImpressionGroup(
                                         group.Value.name,
                                         group.Value.uuid,
                                         group.Value.containerBounds,

@@ -73,10 +73,10 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        public DataImpressionGroup(string name, Bounds bounds, Transform parent)
+        internal DataImpressionGroup(string name, Bounds bounds, Transform parent)
             : this(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent) { }
 
-        public DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+        internal DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
         {
             Uuid = uuid;
             Name = name;
