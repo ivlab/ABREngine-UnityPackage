@@ -226,7 +226,7 @@ namespace IVLab.ABREngine
         /// Returns the Key Data and variables that were just imported to
         /// this data path.
         /// </returns>
-        public DataInfo ImportRawDataset(RawDataset importing)
+        public KeyData ImportRawDataset(RawDataset importing)
         {
             importCount++;
             return ImportRawDataset(DefaultKeyDataPath, importing);
@@ -241,7 +241,7 @@ namespace IVLab.ABREngine
         /// Returns the Key Data and variables that were just imported to
         /// this data path.
         /// </returns>
-        public DataInfo ImportRawDataset(string dataPath, RawDataset importing)
+        public KeyData ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
@@ -272,12 +272,7 @@ namespace IVLab.ABREngine
                     return null;
                 }
 
-                return new DataInfo
-                {
-                    keyData = keyData as KeyData,
-                    scalarVariables = dataset.GetAllScalarVars().Values.Where(v => v.IsPartOf(keyData)).ToArray(),
-                    vectorVariables = dataset.GetAllVectorVars().Values.Where(v => v.IsPartOf(keyData)).ToArray(),
-                };
+                return keyData as KeyData;
             }
             catch (Exception e)
             {
@@ -401,16 +396,5 @@ namespace IVLab.ABREngine
 
             dataset.AddKeyData(keyData);
         }
-    }
-
-    /// <summary>
-    /// Information class giving pointers to the Key Data and Variables that
-    /// were just imported to the engine.
-    /// </summary>
-    public class DataInfo
-    {
-        public KeyData keyData;
-        public ScalarDataVariable[] scalarVariables;
-        public VectorDataVariable[] vectorVariables;
     }
 }

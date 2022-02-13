@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +40,7 @@ namespace IVLab.ABREngine
         private Dictionary<string, VectorDataVariable> vectorVariables = new Dictionary<string, VectorDataVariable>();
 
         /// <summary>
-        ///     Path of this dataset (should conform to DataPath)
+        ///     Path of this dataset (should conform to <see cref="DataPath"/>)
         /// </summary>
         public string Path { get; }
 
@@ -48,6 +49,56 @@ namespace IVLab.ABREngine
         ///     add more datasets
         /// </summary>
         public Bounds DataSpaceBounds;
+
+        /// <summary>
+        /// All <see cref="VectorDataVariable"/> objects within this dataset.
+        /// NOTE: Not every VectorDataVariable applies to every KeyData object!
+        /// </summary>
+        public VectorDataVariable[] GetVectorVariables(IKeyData associatedWith)
+        {
+            if (associatedWith != null)
+            {
+                return vectorVariables.Values.ToArray();
+            }
+            else
+            {
+                return this.vectorVariables.Values.Where(v => v.IsPartOf(associatedWith)).ToArray();
+            }
+        }
+
+        public VectorDataVariable[] GetVectorVariables()
+        {
+            return GetVectorVariables(null);
+        }
+
+        /// <summary>
+        /// All <see cref="ScalarDataVariable"/> objects within this dataset.
+        /// NOTE: Not every ScalarDataVariable applies to every KeyData object!
+        /// </summary>
+        public ScalarDataVariable[] GetScalarVariables(IKeyData associatedWith)
+        {
+            if (associatedWith != null)
+            {
+                return scalarVariables.Values.ToArray();
+            }
+            else
+            {
+                return this.scalarVariables.Values.Where(v => v.IsPartOf(associatedWith)).ToArray();
+            }
+        }
+
+        public ScalarDataVariable[] GetScalarVariables()
+        {
+            return GetScalarVariables(null);
+        }
+
+        /// <summary>
+        /// All <see cref="IKeyData"/> objects within this dataset
+        /// </summary>
+        public IKeyData[] GetKeyData()
+        {
+            return keyDataObjects.Values.ToArray();
+        }
 
         public Dataset(string dataPath, Bounds bounds, Transform parent)
         {

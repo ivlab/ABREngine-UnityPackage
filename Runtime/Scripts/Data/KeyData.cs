@@ -60,6 +60,22 @@ namespace IVLab.ABREngine
             Path = path;
         }
 
+        /// <summary>
+        /// Get all of the scalar data variables associated with this key data object
+        /// </summary>
+        public ScalarDataVariable[] GetScalarVariables()
+        {
+            return GetDataset().GetScalarVariables(this);
+        }
+
+        /// <summary>
+        /// Get all of the vector data variables associated with this key data object
+        /// </summary>
+        public VectorDataVariable[] GetVectorVariables()
+        {
+            return GetDataset().GetVectorVariables(this);
+        }
+
         public Dataset GetDataset()
         {
             string datasetPath = DataPath.GetDatasetPath(Path);
