@@ -124,6 +124,26 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Get a visasset by its unique identifier.
+        /// </summary>
+        /// <returns>
+        /// Returns the VisAsset, if found, otherwise returns null.
+        /// </returns>
+        public T GetVisAsset<T>(Guid uuid)
+        where T: IVisAsset
+        {
+            IVisAsset va;
+            if (TryGetVisAsset(uuid, out va))
+            {
+                return (T) va;
+            }
+            else
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
         /// Load all VisAssets located in the Media directory into memory.
         /// </summary>
         [Obsolete("LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory")]
