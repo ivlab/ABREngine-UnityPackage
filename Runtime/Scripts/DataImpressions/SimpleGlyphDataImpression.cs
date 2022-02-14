@@ -76,7 +76,17 @@ namespace IVLab.ABREngine
         [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable upVariable;
 
+        /// <summary>
+        /// Level of detail to use for glyph rendering (higher number = lower
+        /// level of detail; most glyphs have 3 LODs)
+        /// </summary>
         public int glyphLod = 1;
+
+        /// <summary>
+        /// Use random forward/up directions when no Vector variables are
+        /// applied for forward/up.
+        /// </summary>
+        public bool useRandomOrientation = true;
 
         protected override string MaterialName { get; } = "ABR_Glyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
@@ -136,11 +146,13 @@ namespace IVLab.ABREngine
                     dataForwards = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        dataForwards[i] = new Vector3(
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1);
-                        // dataForwards[i] = new Vector3(0, 0, 1);
+                        if (useRandomOrientation)
+                            dataForwards[i] = new Vector3(
+                                (float)rand.NextDouble() * 2 - 1,
+                                (float)rand.NextDouble() * 2 - 1,
+                                (float)rand.NextDouble() * 2 - 1);
+                        else
+                            dataForwards[i] = Vector3.forward;
                     }
                 }
 
@@ -154,11 +166,13 @@ namespace IVLab.ABREngine
                     dataUp = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        dataUp[i] = new Vector3(
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1,
-                            (float)rand.NextDouble() * 2 - 1);
-                        // dataUp[i] = new Vector3(0, 1, 0);
+                        if (useRandomOrientation)
+                            dataUp[i] = new Vector3(
+                                (float)rand.NextDouble() * 2 - 1,
+                                (float)rand.NextDouble() * 2 - 1,
+                                (float)rand.NextDouble() * 2 - 1);
+                        else
+                            dataUp[i] = Vector3.up;
                     }
                 }
 
