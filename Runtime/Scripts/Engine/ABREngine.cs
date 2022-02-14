@@ -105,23 +105,66 @@ namespace IVLab.ABREngine
     ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, scalarVars, null);
     ///
     ///         // STEP 3: Import the point data into ABR so we can use it
-    ///         DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+    ///         KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
     ///
     ///         // STEP 4: Import a colormap visasset
     ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
     ///
     ///         // STEP 5: Create a Data Impression (layer) for the points, and assign some key data and styling
     ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = pointsInfo.keyData;                  // Assign key data (point geometry)
-    ///         di.colorVariable = pointsInfo.scalarVariables[0]; // Assign scalar variable "someData"
-    ///         di.colormap = cmap;                               // Apply colormap
-    ///         di.glyphSize = 0.002f;                            // Apply glyph size styling
+    ///         di.keyData = pointsInfo;                               // Assign key data (point geometry)
+    ///         di.colorVariable = pointsInfo.GetScalarVariables()[0]; // Assign scalar variable "someData"
+    ///         di.colormap = cmap;                                    // Apply colormap
+    ///         di.glyphSize = 0.002f;                                 // Apply glyph size styling
     ///
     ///         // STEP 6: Register impression with the engine
     ///         ABREngine.Instance.RegisterDataImpression(di);
     ///
     ///         // STEP 7: Render the visualization
     ///         ABREngine.Instance.Render();
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    /// <example>
+    /// You may also wish to create a data impression but place in a different
+    /// position than the original one (e.g., to create a side-by-side
+    /// visualization). This example shows how to use the <see
+    /// cref="ABREngine.CreateDataImpressionGroup(string, Vector3)"/> and the
+    /// <see cref="ABREngine.DuplicateDataImpression(IDataImpression)"/> method
+    /// to create a side-by-side visualization.
+    /// <code>
+    /// public class ABREngineExample
+    /// {
+    ///     void Start()
+    ///     {
+    ///         // Let's say we've imported some fancy point data that we want to compare
+    ///         KeyData fancyData1 = // ... some import
+    ///         KeyData fancyData2 = // ... some import
+    /// 
+    ///         // We can construct a data impression for the first data. Maybe we've
+    ///         // applied a bunch of styling to this that we want to copy...
+    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+    ///         di.keyData = fancyData1;
+    ///         di.colorVariable = fancyData1.GetScalarVariables()[0];
+    ///         di.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
+    ///         di.glyphSize = 0.002f;
+    /// 
+    ///         // Register the first impression
+    ///         ABREngine.Instance.RegisterDataImpression(di);
+    /// 
+    ///         // Then, duplicate the data impression:
+    ///         SimpleGlyphDataImpression other = ABREngine.Instance.DuplicateDataImpression(di) as SimpleGlyphDataImpression;
+    /// 
+    ///         // Change the data and a little styling
+    ///         other.keyData = fancyData2;
+    ///         other.glyphSize = 0.5f;
+    /// 
+    ///         // Create a new impression group centered just to the right of the first one
+    ///         DataImpressionGroup newGroup = ABREngine.Instance.CreateDataImpressionGroup("OffsetGroup", new Vector3(0.5f, 0.0f, 0.0f));
+    /// 
+    ///         // And, register the impression with the new group
+    ///         ABREngine.Instance.RegisterDataImpression(other, newGroup);
     ///     }
     /// }
     /// </code>

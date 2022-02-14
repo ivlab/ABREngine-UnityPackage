@@ -34,6 +34,11 @@ namespace IVLab.ABREngine
     /// into a data impression in this group, the GroupToDataMatrix and
     /// GroupBounds are updated.
     /// </summary>
+    /// <remarks>
+    /// DataImpressionGroups cannot be constructed directly, you MUST use the a
+    /// variation of the <see cref="ABREngine.CreateDataImpressionGroup"/>
+    /// method.
+    /// </remarks>
     public class DataImpressionGroup : IHasDataset
     {
         /// <summary>

@@ -40,7 +40,7 @@ namespace IVLab.ABREngine
     /// </summary>
     /// <example>
     /// When constructing a custom dataset, you can load it directly into the
-    /// engine and access its imported contents via the <see cref="DataInfo"/>
+    /// engine and access its imported contents via the <see cref="KeyData"/>
     /// object returned by <see cref="ImportRawDataset"/>.
     /// <code>
     /// public class DataManagerExample : MonoBehaviour
@@ -66,13 +66,13 @@ namespace IVLab.ABREngine
     ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, null);
     /// 
     ///         // AND, import these data to ABR
-    ///         DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+    ///         KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
     /// 
     ///         // From here, we can access the keyData, scalarVariables, and vectorVariables
-    ///         Debug.Log(pointsInfo.keyData);                // the key data (point geometry) we just imported
-    ///         Debug.Log(pointsInfo.scalarVariables.Length); // length of 1
-    ///         Debug.Log(pointsInfo.scalarVariables[0]);     // the 'someData' variable we declared above
-    ///         Debug.Log(pointsInfo.vectorVariables.Length); // length of 0 -- we didn't declare any vector vars here.
+    ///         Debug.Log(pointsKD);                             // the key data (point geometry) we just imported
+    ///         Debug.Log(pointsKD.GetScalarVariables().Length); // length of 1
+    ///         Debug.Log(pointsKD.GetScalarVariables()[0]);     // the 'someData' variable we declared above
+    ///         Debug.Log(pointsKD.GetVectorVariables().Length); // length of 0 -- we didn't declare any vector vars here.
     ///     }
     /// }
     /// </code>

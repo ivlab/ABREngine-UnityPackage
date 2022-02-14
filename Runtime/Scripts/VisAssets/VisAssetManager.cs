@@ -46,6 +46,12 @@ namespace IVLab.ABREngine
     ///     {
     ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
     ///     }
+    ///
+    ///     void Update()
+    ///     {
+    ///         // If you want to access the colormap later, you can use `GetVisAsset`.
+    ///         ColormapVisAsset cmapInUpdate = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
+    ///     }
     /// }
     /// </code>
     /// </example>
