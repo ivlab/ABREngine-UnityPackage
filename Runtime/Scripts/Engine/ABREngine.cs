@@ -147,7 +147,7 @@ namespace IVLab.ABREngine
     ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
     ///         di.keyData = fancyData1;
     ///         di.colorVariable = fancyData1.GetScalarVariables()[0];
-    ///         di.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
+    ///         di.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
     ///         di.glyphSize = 0.002f;
     /// 
     ///         // Register the first impression

@@ -165,23 +165,62 @@ public class SimpleABRExample : MonoBehaviour
         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, scalarVars, null);
 
         // STEP 3: Import the point data into ABR so we can use it
-        DataInfo pointsInfo = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+        KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
 
         // STEP 4: Import a colormap visasset
         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset>(new System.Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;));
 
         // STEP 5: Create a Data Impression (layer) for the points, and assign some key data and styling
         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-        di.keyData = pointsInfo.keyData;                  // Assign key data (point geometry)
-        di.colorVariable = pointsInfo.scalarVariables[0]; // Assign scalar variable &quot;someData&quot;
-        di.colormap = cmap;                               // Apply colormap
-        di.glyphSize = 0.002f;                            // Apply glyph size styling
+        di.keyData = pointsInfo;                               // Assign key data (point geometry)
+        di.colorVariable = pointsInfo.GetScalarVariables()[0]; // Assign scalar variable &quot;someData&quot;
+        di.colormap = cmap;                                    // Apply colormap
+        di.glyphSize = 0.002f;                                 // Apply glyph size styling
 
         // STEP 6: Register impression with the engine
         ABREngine.Instance.RegisterDataImpression(di);
 
         // STEP 7: Render the visualization
         ABREngine.Instance.Render();
+    }
+}</code></pre>
+
+  <p>You may also wish to create a data impression but place in a different
+position than the original one (e.g., to create a side-by-side
+visualization). This example shows how to use the <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_Vector3_">CreateDataImpressionGroup(String, Vector3)</a> and the
+<a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DuplicateDataImpression_IVLab_ABREngine_IDataImpression_">DuplicateDataImpression(IDataImpression)</a> method
+to create a side-by-side visualization.</p>
+<pre><code>public class ABREngineExample
+{
+    void Start()
+    {
+        // Let&apos;s say we&apos;ve imported some fancy point data that we want to compare
+        KeyData fancyData1 = // ... some import
+        KeyData fancyData2 = // ... some import
+
+        // We can construct a data impression for the first data. Maybe we&apos;ve
+        // applied a bunch of styling to this that we want to copy...
+        SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+        di.keyData = fancyData1;
+        di.colorVariable = fancyData1.GetScalarVariables()[0];
+        di.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
+        di.glyphSize = 0.002f;
+
+        // Register the first impression
+        ABREngine.Instance.RegisterDataImpression(di);
+
+        // Then, duplicate the data impression:
+        SimpleGlyphDataImpression other = ABREngine.Instance.DuplicateDataImpression(di) as SimpleGlyphDataImpression;
+
+        // Change the data and a little styling
+        other.keyData = fancyData2;
+        other.glyphSize = 0.5f;
+
+        // Create a new impression group centered just to the right of the first one
+        DataImpressionGroup newGroup = ABREngine.Instance.CreateDataImpressionGroup(&quot;OffsetGroup&quot;, new Vector3(0.5f, 0.0f, 0.0f));
+
+        // And, register the impression with the new group
+        ABREngine.Instance.RegisterDataImpression(other, newGroup);
     }
 }</code></pre>
 
@@ -468,8 +507,29 @@ Otherwise, use Unity&apos;s <a href="https://docs.unity3d.com/ScriptReference/Ap
   </h3>
   
   
-  <a id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)">AddDataImpressionGroup(String)</h4>
+  <a id="IVLab_ABREngine_ABREngine_Awake_" data-uid="IVLab.ABREngine.ABREngine.Awake*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_Awake" data-uid="IVLab.ABREngine.ABREngine.Awake">Awake()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Awake()</code></pre>
+  </div>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_ClearState_" data-uid="IVLab.ABREngine.ABREngine.ClearState*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_ClearState" data-uid="IVLab.ABREngine.ABREngine.ClearState">ClearState()</h4>
+  <div class="markdown level1 summary"><p>Remove all data impression groups from the ABR scene (and in turn, remove all data impressions).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ClearState()</code></pre>
+  </div>
+  
+  
+  <a id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String)">CreateDataImpressionGroup(String)</h4>
   <div class="markdown level1 summary"><p>Add a bare data impression group into the ABR scene. The group
 bounds defaults to the bounds found in
 <code>ABRConfig.Info.defaultBounds</code>, and the position/rotation default to
@@ -478,7 +538,7 @@ zero.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DataImpressionGroup AddDataImpressionGroup(string name)</code></pre>
+    <pre><code class="lang-csharp hljs">public DataImpressionGroup CreateDataImpressionGroup(string name)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -515,8 +575,8 @@ zero.</p>
   </table>
   
   
-  <a id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid)">AddDataImpressionGroup(String, Guid)</h4>
+  <a id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_System_Guid_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid)">CreateDataImpressionGroup(String, Guid)</h4>
   <div class="markdown level1 summary"><p>Add a new data impression group with a particular UUID. The group
 bounds defaults to the bounds found in
 <code>ABRConfig.Info.defaultBounds</code>, and the position/rotation default to
@@ -525,7 +585,7 @@ zero.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid)</code></pre>
+    <pre><code class="lang-csharp hljs">public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -567,14 +627,14 @@ zero.</p>
   </table>
   
   
-  <a id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_Bounds_Vector3_Quaternion_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)">AddDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)</h4>
+  <a id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_System_Guid_Bounds_Vector3_Quaternion_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)">CreateDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)</h4>
   <div class="markdown level1 summary"><p>Add a new data impression group with a particular UUID, bounds, position, and rotation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DataImpressionGroup AddDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)</code></pre>
+    <pre><code class="lang-csharp hljs">public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -631,8 +691,8 @@ zero.</p>
   </table>
   
   
-  <a id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_Vector3_" data-uid="IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,Vector3)">AddDataImpressionGroup(String, Vector3)</h4>
+  <a id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_Vector3_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,Vector3)">CreateDataImpressionGroup(String, Vector3)</h4>
   <div class="markdown level1 summary"><p>Add a bare data impression group into the ABR scene. The group
 bounds defaults to the bounds found in
 <code>ABRConfig.Info.defaultBounds</code>, and the position is defined by the user.</p>
@@ -640,7 +700,7 @@ bounds defaults to the bounds found in
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DataImpressionGroup AddDataImpressionGroup(string name, Vector3 position)</code></pre>
+    <pre><code class="lang-csharp hljs">public DataImpressionGroup CreateDataImpressionGroup(string name, Vector3 position)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -680,27 +740,6 @@ bounds defaults to the bounds found in
       </tr>
     </tbody>
   </table>
-  
-  
-  <a id="IVLab_ABREngine_ABREngine_Awake_" data-uid="IVLab.ABREngine.ABREngine.Awake*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_Awake" data-uid="IVLab.ABREngine.ABREngine.Awake">Awake()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Awake()</code></pre>
-  </div>
-  
-  
-  <a id="IVLab_ABREngine_ABREngine_ClearState_" data-uid="IVLab.ABREngine.ABREngine.ClearState*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_ClearState" data-uid="IVLab.ABREngine.ABREngine.ClearState">ClearState()</h4>
-  <div class="markdown level1 summary"><p>Remove all data impression groups from the ABR scene (and in turn, remove all data impressions).</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void ClearState()</code></pre>
-  </div>
   
   
   <a id="IVLab_ABREngine_ABREngine_DuplicateDataImpression_" data-uid="IVLab.ABREngine.ABREngine.DuplicateDataImpression*"></a>

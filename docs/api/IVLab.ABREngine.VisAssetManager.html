@@ -110,6 +110,12 @@ the ABREngine/Resources/media folder).</p>
     {
         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset>(new System.Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;));
     }
+
+    void Update()
+    {
+        // If you want to access the colormap later, you can use `GetVisAsset`.
+        ColormapVisAsset cmapInUpdate = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset>(new System.Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;);
+    }
 }</code></pre>
 
   <p>You can also get the &quot;default&quot; visasset for a few VisAsset types. Keep
@@ -305,6 +311,66 @@ directly from state)</p>
   <h5 id="IVLab_ABREngine_VisAssetManager_GetDefault__1_remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>If using the VisAsset immediately as the type <code>T</code>, you will likely need to do a cast (e.g. <code>ColormapVisAsset c = ....GetDefault&amp;lt;ColormapVisAsset&gt;() as ColormapVisAsset</code>).</p>
 </div>
+  
+  
+  <a id="IVLab_ABREngine_VisAssetManager_GetVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAsset*"></a>
+  <h4 id="IVLab_ABREngine_VisAssetManager_GetVisAsset__1_System_Guid_" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAsset``1(System.Guid)">GetVisAsset&lt;T&gt;(Guid)</h4>
+  <div class="markdown level1 summary"><p>Get a visasset by its unique identifier.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T GetVisAsset&lt;T&gt;(Guid uuid)
+    where T : IVisAsset</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
+        <td><span class="parametername">uuid</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>Returns the VisAsset, if found, otherwise returns null.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="IVLab_ABREngine_VisAssetManager_GetVisAssets_" data-uid="IVLab.ABREngine.VisAssetManager.GetVisAssets*"></a>

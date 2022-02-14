@@ -298,37 +298,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.ABRTransform
   nameWithType: ABREngine.ABRTransform
-- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)
-  name: AddDataImpressionGroup(String)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_
-  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)
-  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String)
-  nameWithType: ABREngine.AddDataImpressionGroup(String)
-- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid)
-  name: AddDataImpressionGroup(String, Guid)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_
-  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid)
-  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, System.Guid)
-  nameWithType: ABREngine.AddDataImpressionGroup(String, Guid)
-- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
-  name: AddDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_System_Guid_Bounds_Vector3_Quaternion_
-  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
-  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, System.Guid, Bounds, Vector3, Quaternion)
-  nameWithType: ABREngine.AddDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
-- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,Vector3)
-  name: AddDataImpressionGroup(String, Vector3)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_System_String_Vector3_
-  commentId: M:IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String,Vector3)
-  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup(System.String, Vector3)
-  nameWithType: ABREngine.AddDataImpressionGroup(String, Vector3)
-- uid: IVLab.ABREngine.ABREngine.AddDataImpressionGroup*
-  name: AddDataImpressionGroup
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_AddDataImpressionGroup_
-  commentId: Overload:IVLab.ABREngine.ABREngine.AddDataImpressionGroup
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ABREngine.AddDataImpressionGroup
-  nameWithType: ABREngine.AddDataImpressionGroup
 - uid: IVLab.ABREngine.ABREngine.Awake
   name: Awake()
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_Awake
@@ -368,6 +337,37 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.Config
   nameWithType: ABREngine.Config
+- uid: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String)
+  name: CreateDataImpressionGroup(String)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_
+  commentId: M:IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String)
+  fullName: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String)
+  nameWithType: ABREngine.CreateDataImpressionGroup(String)
+- uid: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid)
+  name: CreateDataImpressionGroup(String, Guid)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_System_Guid_
+  commentId: M:IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid)
+  fullName: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String, System.Guid)
+  nameWithType: ABREngine.CreateDataImpressionGroup(String, Guid)
+- uid: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
+  name: CreateDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_System_Guid_Bounds_Vector3_Quaternion_
+  commentId: M:IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,System.Guid,Bounds,Vector3,Quaternion)
+  fullName: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String, System.Guid, Bounds, Vector3, Quaternion)
+  nameWithType: ABREngine.CreateDataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion)
+- uid: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,Vector3)
+  name: CreateDataImpressionGroup(String, Vector3)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_System_String_Vector3_
+  commentId: M:IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String,Vector3)
+  fullName: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup(System.String, Vector3)
+  nameWithType: ABREngine.CreateDataImpressionGroup(String, Vector3)
+- uid: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*
+  name: CreateDataImpressionGroup
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_
+  commentId: Overload:IVLab.ABREngine.ABREngine.CreateDataImpressionGroup
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ABREngine.CreateDataImpressionGroup
+  nameWithType: ABREngine.CreateDataImpressionGroup
 - uid: IVLab.ABREngine.ABREngine.Data
   name: Data
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_Data
@@ -1769,25 +1769,6 @@ references:
   commentId: T:IVLab.ABREngine.DataImpressionGroup
   fullName: IVLab.ABREngine.DataImpressionGroup
   nameWithType: DataImpressionGroup
-- uid: IVLab.ABREngine.DataImpressionGroup.#ctor(System.String,Bounds,Transform)
-  name: DataImpressionGroup(String, Bounds, Transform)
-  href: api/IVLab.ABREngine.DataImpressionGroup.html#IVLab_ABREngine_DataImpressionGroup__ctor_System_String_Bounds_Transform_
-  commentId: M:IVLab.ABREngine.DataImpressionGroup.#ctor(System.String,Bounds,Transform)
-  fullName: IVLab.ABREngine.DataImpressionGroup.DataImpressionGroup(System.String, Bounds, Transform)
-  nameWithType: DataImpressionGroup.DataImpressionGroup(String, Bounds, Transform)
-- uid: IVLab.ABREngine.DataImpressionGroup.#ctor(System.String,System.Guid,Bounds,Vector3,Quaternion,Transform)
-  name: DataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion, Transform)
-  href: api/IVLab.ABREngine.DataImpressionGroup.html#IVLab_ABREngine_DataImpressionGroup__ctor_System_String_System_Guid_Bounds_Vector3_Quaternion_Transform_
-  commentId: M:IVLab.ABREngine.DataImpressionGroup.#ctor(System.String,System.Guid,Bounds,Vector3,Quaternion,Transform)
-  fullName: IVLab.ABREngine.DataImpressionGroup.DataImpressionGroup(System.String, System.Guid, Bounds, Vector3, Quaternion, Transform)
-  nameWithType: DataImpressionGroup.DataImpressionGroup(String, Guid, Bounds, Vector3, Quaternion, Transform)
-- uid: IVLab.ABREngine.DataImpressionGroup.#ctor*
-  name: DataImpressionGroup
-  href: api/IVLab.ABREngine.DataImpressionGroup.html#IVLab_ABREngine_DataImpressionGroup__ctor_
-  commentId: Overload:IVLab.ABREngine.DataImpressionGroup.#ctor
-  isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpressionGroup.DataImpressionGroup
-  nameWithType: DataImpressionGroup.DataImpressionGroup
 - uid: IVLab.ABREngine.DataImpressionGroup.AddDataImpression(IVLab.ABREngine.IDataImpression,System.Boolean)
   name: AddDataImpression(IDataImpression, Boolean)
   href: api/IVLab.ABREngine.DataImpressionGroup.html#IVLab_ABREngine_DataImpressionGroup_AddDataImpression_IVLab_ABREngine_IDataImpression_System_Boolean_
@@ -2078,30 +2059,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpressionGroup.Uuid
   nameWithType: DataImpressionGroup.Uuid
-- uid: IVLab.ABREngine.DataInfo
-  name: DataInfo
-  href: api/IVLab.ABREngine.DataInfo.html
-  commentId: T:IVLab.ABREngine.DataInfo
-  fullName: IVLab.ABREngine.DataInfo
-  nameWithType: DataInfo
-- uid: IVLab.ABREngine.DataInfo.keyData
-  name: keyData
-  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_keyData
-  commentId: F:IVLab.ABREngine.DataInfo.keyData
-  fullName: IVLab.ABREngine.DataInfo.keyData
-  nameWithType: DataInfo.keyData
-- uid: IVLab.ABREngine.DataInfo.scalarVariables
-  name: scalarVariables
-  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_scalarVariables
-  commentId: F:IVLab.ABREngine.DataInfo.scalarVariables
-  fullName: IVLab.ABREngine.DataInfo.scalarVariables
-  nameWithType: DataInfo.scalarVariables
-- uid: IVLab.ABREngine.DataInfo.vectorVariables
-  name: vectorVariables
-  href: api/IVLab.ABREngine.DataInfo.html#IVLab_ABREngine_DataInfo_vectorVariables
-  commentId: F:IVLab.ABREngine.DataInfo.vectorVariables
-  fullName: IVLab.ABREngine.DataInfo.vectorVariables
-  nameWithType: DataInfo.vectorVariables
 - uid: IVLab.ABREngine.DataManager
   name: DataManager
   href: api/IVLab.ABREngine.DataManager.html
@@ -2616,6 +2573,57 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.Dataset.GetAllVectorVars
   nameWithType: Dataset.GetAllVectorVars
+- uid: IVLab.ABREngine.Dataset.GetKeyData
+  name: GetKeyData()
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetKeyData
+  commentId: M:IVLab.ABREngine.Dataset.GetKeyData
+  fullName: IVLab.ABREngine.Dataset.GetKeyData()
+  nameWithType: Dataset.GetKeyData()
+- uid: IVLab.ABREngine.Dataset.GetKeyData*
+  name: GetKeyData
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetKeyData_
+  commentId: Overload:IVLab.ABREngine.Dataset.GetKeyData
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Dataset.GetKeyData
+  nameWithType: Dataset.GetKeyData
+- uid: IVLab.ABREngine.Dataset.GetScalarVariables
+  name: GetScalarVariables()
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetScalarVariables
+  commentId: M:IVLab.ABREngine.Dataset.GetScalarVariables
+  fullName: IVLab.ABREngine.Dataset.GetScalarVariables()
+  nameWithType: Dataset.GetScalarVariables()
+- uid: IVLab.ABREngine.Dataset.GetScalarVariables(IVLab.ABREngine.IKeyData)
+  name: GetScalarVariables(IKeyData)
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetScalarVariables_IVLab_ABREngine_IKeyData_
+  commentId: M:IVLab.ABREngine.Dataset.GetScalarVariables(IVLab.ABREngine.IKeyData)
+  fullName: IVLab.ABREngine.Dataset.GetScalarVariables(IVLab.ABREngine.IKeyData)
+  nameWithType: Dataset.GetScalarVariables(IKeyData)
+- uid: IVLab.ABREngine.Dataset.GetScalarVariables*
+  name: GetScalarVariables
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetScalarVariables_
+  commentId: Overload:IVLab.ABREngine.Dataset.GetScalarVariables
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Dataset.GetScalarVariables
+  nameWithType: Dataset.GetScalarVariables
+- uid: IVLab.ABREngine.Dataset.GetVectorVariables
+  name: GetVectorVariables()
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetVectorVariables
+  commentId: M:IVLab.ABREngine.Dataset.GetVectorVariables
+  fullName: IVLab.ABREngine.Dataset.GetVectorVariables()
+  nameWithType: Dataset.GetVectorVariables()
+- uid: IVLab.ABREngine.Dataset.GetVectorVariables(IVLab.ABREngine.IKeyData)
+  name: GetVectorVariables(IKeyData)
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetVectorVariables_IVLab_ABREngine_IKeyData_
+  commentId: M:IVLab.ABREngine.Dataset.GetVectorVariables(IVLab.ABREngine.IKeyData)
+  fullName: IVLab.ABREngine.Dataset.GetVectorVariables(IVLab.ABREngine.IKeyData)
+  nameWithType: Dataset.GetVectorVariables(IKeyData)
+- uid: IVLab.ABREngine.Dataset.GetVectorVariables*
+  name: GetVectorVariables
+  href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_GetVectorVariables_
+  commentId: Overload:IVLab.ABREngine.Dataset.GetVectorVariables
+  isSpec: "True"
+  fullName: IVLab.ABREngine.Dataset.GetVectorVariables
+  nameWithType: Dataset.GetVectorVariables
 - uid: IVLab.ABREngine.Dataset.Path
   name: Path
   href: api/IVLab.ABREngine.Dataset.html#IVLab_ABREngine_Dataset_Path
@@ -4735,6 +4743,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.KeyData.GetRawABRInput
   nameWithType: KeyData.GetRawABRInput
+- uid: IVLab.ABREngine.KeyData.GetScalarVariables
+  name: GetScalarVariables()
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariables
+  commentId: M:IVLab.ABREngine.KeyData.GetScalarVariables
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariables()
+  nameWithType: KeyData.GetScalarVariables()
+- uid: IVLab.ABREngine.KeyData.GetScalarVariables*
+  name: GetScalarVariables
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariables_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetScalarVariables
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariables
+  nameWithType: KeyData.GetScalarVariables
+- uid: IVLab.ABREngine.KeyData.GetVectorVariables
+  name: GetVectorVariables()
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariables
+  commentId: M:IVLab.ABREngine.KeyData.GetVectorVariables
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariables()
+  nameWithType: KeyData.GetVectorVariables()
+- uid: IVLab.ABREngine.KeyData.GetVectorVariables*
+  name: GetVectorVariables
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariables_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetVectorVariables
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariables
+  nameWithType: KeyData.GetVectorVariables
 - uid: IVLab.ABREngine.KeyData.Path
   name: Path
   href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_Path
@@ -6473,19 +6507,6 @@ references:
   commentId: T:IVLab.ABREngine.ScalarDataVariable
   fullName: IVLab.ABREngine.ScalarDataVariable
   nameWithType: ScalarDataVariable
-- uid: IVLab.ABREngine.ScalarDataVariable.#ctor(System.String)
-  name: ScalarDataVariable(String)
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable__ctor_System_String_
-  commentId: M:IVLab.ABREngine.ScalarDataVariable.#ctor(System.String)
-  fullName: IVLab.ABREngine.ScalarDataVariable.ScalarDataVariable(System.String)
-  nameWithType: ScalarDataVariable.ScalarDataVariable(String)
-- uid: IVLab.ABREngine.ScalarDataVariable.#ctor*
-  name: ScalarDataVariable
-  href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable__ctor_
-  commentId: Overload:IVLab.ABREngine.ScalarDataVariable.#ctor
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ScalarDataVariable.ScalarDataVariable
-  nameWithType: ScalarDataVariable.ScalarDataVariable
 - uid: IVLab.ABREngine.ScalarDataVariable.CustomizedRange
   name: CustomizedRange
   href: api/IVLab.ABREngine.ScalarDataVariable.html#IVLab_ABREngine_ScalarDataVariable_CustomizedRange
@@ -6829,6 +6850,12 @@ references:
   commentId: F:IVLab.ABREngine.SimpleGlyphDataImpression.upVariable
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.upVariable
   nameWithType: SimpleGlyphDataImpression.upVariable
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.useRandomOrientation
+  name: useRandomOrientation
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_useRandomOrientation
+  commentId: F:IVLab.ABREngine.SimpleGlyphDataImpression.useRandomOrientation
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.useRandomOrientation
+  nameWithType: SimpleGlyphDataImpression.useRandomOrientation
 - uid: IVLab.ABREngine.SimpleLineDataImpression
   name: SimpleLineDataImpression
   href: api/IVLab.ABREngine.SimpleLineDataImpression.html
@@ -7958,19 +7985,6 @@ references:
   commentId: T:IVLab.ABREngine.VectorDataVariable
   fullName: IVLab.ABREngine.VectorDataVariable
   nameWithType: VectorDataVariable
-- uid: IVLab.ABREngine.VectorDataVariable.#ctor(System.String)
-  name: VectorDataVariable(String)
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable__ctor_System_String_
-  commentId: M:IVLab.ABREngine.VectorDataVariable.#ctor(System.String)
-  fullName: IVLab.ABREngine.VectorDataVariable.VectorDataVariable(System.String)
-  nameWithType: VectorDataVariable.VectorDataVariable(String)
-- uid: IVLab.ABREngine.VectorDataVariable.#ctor*
-  name: VectorDataVariable
-  href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable__ctor_
-  commentId: Overload:IVLab.ABREngine.VectorDataVariable.#ctor
-  isSpec: "True"
-  fullName: IVLab.ABREngine.VectorDataVariable.VectorDataVariable
-  nameWithType: VectorDataVariable.VectorDataVariable
 - uid: IVLab.ABREngine.VectorDataVariable.CustomizedRange
   name: CustomizedRange
   href: api/IVLab.ABREngine.VectorDataVariable.html#IVLab_ABREngine_VectorDataVariable_CustomizedRange
@@ -8279,6 +8293,22 @@ references:
   fullName.vb: IVLab.ABREngine.VisAssetManager.GetDefault(Of T)()
   nameWithType: VisAssetManager.GetDefault<T>()
   nameWithType.vb: VisAssetManager.GetDefault(Of T)()
+- uid: IVLab.ABREngine.VisAssetManager.GetVisAsset*
+  name: GetVisAsset
+  href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAsset_
+  commentId: Overload:IVLab.ABREngine.VisAssetManager.GetVisAsset
+  isSpec: "True"
+  fullName: IVLab.ABREngine.VisAssetManager.GetVisAsset
+  nameWithType: VisAssetManager.GetVisAsset
+- uid: IVLab.ABREngine.VisAssetManager.GetVisAsset``1(System.Guid)
+  name: GetVisAsset<T>(Guid)
+  href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAsset__1_System_Guid_
+  commentId: M:IVLab.ABREngine.VisAssetManager.GetVisAsset``1(System.Guid)
+  name.vb: GetVisAsset(Of T)(Guid)
+  fullName: IVLab.ABREngine.VisAssetManager.GetVisAsset<T>(System.Guid)
+  fullName.vb: IVLab.ABREngine.VisAssetManager.GetVisAsset(Of T)(System.Guid)
+  nameWithType: VisAssetManager.GetVisAsset<T>(Guid)
+  nameWithType.vb: VisAssetManager.GetVisAsset(Of T)(Guid)
 - uid: IVLab.ABREngine.VisAssetManager.GetVisAssets
   name: GetVisAssets()
   href: api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAssets

@@ -130,7 +130,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ABREngine.html",
-          "hash": "vflGWJRsvuOfhj1UJMK40AlUoEHYABmVaZGTko/PiuE="
+          "hash": "OIR8ahGAFZgnOwtpOwb0bWb8/dr0Iiz9RZLyqHFYDeI="
         }
       },
       "is_incremental": false,
@@ -250,19 +250,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.DataImpressionGroup.html",
-          "hash": "iygvlbSvUSq3eP38ugvFy5VS5p0rdIyjiuEdcz6eW6s="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.ABREngine.DataInfo.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataInfo.html",
-          "hash": "QdEKuT2AzYmz+R6qXtoRGOzUEksaTrFzms3hJajGiwY="
+          "hash": "82Meelk4PNWlg9y7S27GaKZ/zZLEyKTZSMM1A9nE1J4="
         }
       },
       "is_incremental": false,
@@ -274,7 +262,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.DataManager.html",
-          "hash": "lTgTuADUDKUYkjGoEpLmukuAYWfPaBBgyk7qKcMNTXE="
+          "hash": "cMRYS4Hv7WxBkUNZGgIWYh3jSJ+JMrvXIgGjCTgWndE="
         }
       },
       "is_incremental": false,
@@ -334,7 +322,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.Dataset.html",
-          "hash": "81yjC+HHXE8Hr17gESB9mZhL9r+Ed05//V3LFoOnNDw="
+          "hash": "dwiyrUhhXuyT0xe5pt4S3K4cT7QM7ZlL5GPbcfLFGD8="
         }
       },
       "is_incremental": false,
@@ -730,7 +718,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.KeyData.html",
-          "hash": "/jzrSmcXbWdTgMlmqmpBXBOzdJg+OUHP17MzaYHLEwQ="
+          "hash": "YQxl4o7FIy7ifo+vemEVmWOcDL962Y9YVuvdQtV9ziE="
         }
       },
       "is_incremental": false,
@@ -826,7 +814,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.LineKeyData.html",
-          "hash": "pU6jvwBJe6mMqmSPUsg3bBM1dJmgN3McvIstWDMUwmg="
+          "hash": "N7hs8moMNsF6A4izlB8L6LnEFdM+8WNFHxoNhHgUMrU="
         }
       },
       "is_incremental": false,
@@ -910,7 +898,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.PointKeyData.html",
-          "hash": "Ccdck7JiNjeMxIRPGTW2makyBc+ybTtoHGahz6+XTRU="
+          "hash": "PouYo2A+PvVXkzY3LD1OJz4OHVoEvu23l3SdBOkNoqo="
         }
       },
       "is_incremental": false,
@@ -1066,7 +1054,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ScalarDataVariable.html",
-          "hash": "wy39GoLTVAYUGpEhaQhaN/EMHqJ5mABNOy/e8DI1rBc="
+          "hash": "bc8DsZXFjY8gA3nc/jhInLkiPhF8Skfw02vZPh0fD1s="
         }
       },
       "is_incremental": false,
@@ -1102,7 +1090,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.html",
-          "hash": "xHfNYqFahaRVUSejErB7FwBw0t5YaqYv5wpzGtG2yek="
+          "hash": "w+ZuAmlbIYscWUVQ89lP4C/m0xiYLXfJix18yKOtZHU="
         }
       },
       "is_incremental": false,
@@ -1186,7 +1174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SurfaceKeyData.html",
-          "hash": "EW9sMFEWFxny8Db03AUDvEqm1o71GqZCtB3UyjXZ9WQ="
+          "hash": "QdKQx05ZdZfKb3ZXqYGy9evbdwKG1dsiNezYL+5910I="
         }
       },
       "is_incremental": false,
@@ -1270,7 +1258,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.VectorDataVariable.html",
-          "hash": "H4CY9vGAIozYr5mhS45xX24BlWrMCBqBsRoQ6RHDba4="
+          "hash": "tDNd6cl7uG2QLiI6hP2guQXt0iqNi/l1632Jmhfweoc="
         }
       },
       "is_incremental": false,
@@ -1318,7 +1306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.VisAssetManager.html",
-          "hash": "7DBshNOOUIMJjLtjS7+md1nxidNspAg7JNbjF06gFG4="
+          "hash": "DsDmbOpws6I/IJaLs4gMnbCRmoIXs1VB6BXJxFFMTvU="
         }
       },
       "is_incremental": false,
@@ -1330,7 +1318,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.VolumeKeyData.html",
-          "hash": "62xnRdncu4M1OBfrMQ8ZNhWUq7YhrOWGFycpIXWPK/g="
+          "hash": "P6NM2eUw5D59mi4rW6mB8IANMkRSZLHlceVaqIIs5dg="
         }
       },
       "is_incremental": false,
@@ -1342,7 +1330,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.html",
-          "hash": "5SaWBzW3LGvRyCzi7+80qarCQZUbI8pk8csg7IgaGtE="
+          "hash": "g315eBEo4NsV6IRUxVq/WERupsc1EtUzej5u4CmdKDs="
         }
       },
       "is_incremental": false,
@@ -1354,7 +1342,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "S+dnTatuwnKYpKmCNiu5wiNvZEkBjL2xax1Qr26dJoA="
+          "hash": "9ne8CuU+y3WiMypBIk82jRhxT4jb9viHXuSRekJuD4s="
         }
       },
       "is_incremental": false,
@@ -1505,8 +1493,8 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 109,
-          "skipped_file_count": 108
+          "total_file_count": 108,
+          "skipped_file_count": 6
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
