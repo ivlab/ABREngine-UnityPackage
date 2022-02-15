@@ -56,7 +56,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public VectorDataVariable[] GetVectorVariables(IKeyData associatedWith)
         {
-            if (associatedWith != null)
+            if (associatedWith == null)
             {
                 return vectorVariables.Values.ToArray();
             }
@@ -77,7 +77,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public ScalarDataVariable[] GetScalarVariables(IKeyData associatedWith)
         {
-            if (associatedWith != null)
+            if (associatedWith == null)
             {
                 return scalarVariables.Values.ToArray();
             }
