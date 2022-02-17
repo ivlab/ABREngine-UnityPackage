@@ -125,7 +125,7 @@ Shader "ABR/Volume"
 			bool VoxelIsVisible(float3 uvw) {
 				// Convert uvw coords to 1d voxel array index
 				uint3 voxelId = floor(uvw * _Dimensions);
-                uint voxelIdx = voxelId.x + voxelId.y * _Dimensions.x + voxelId.z * _Dimensions.x * _Dimensions.y;
+				uint voxelIdx = voxelId.x + voxelId.y * _Dimensions.x + voxelId.z * _Dimensions.x * _Dimensions.y;
 
 				// Convert voxel array index into squashed per-index visibility buffer index
 				// (since original bit array got smooshed into an int array)
