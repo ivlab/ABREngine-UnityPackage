@@ -598,8 +598,18 @@ namespace IVLab.ABREngine
             }
             for (int i = 0; i < currentGameObject.transform.childCount; i++)
             {
-                GameObject line = currentGameObject.transform.GetChild(i).gameObject;
-                line.SetActive(RenderHints.Visible);
+                MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
+                if (RenderHints.Visible)
+                {
+                    if (RenderHints.HasPerIndexVisibility() && i < RenderHints.PerIndexVisibility.Count)
+                        mr.enabled = RenderHints.PerIndexVisibility[i];
+                    else
+                        mr.enabled = true;
+                }
+                else
+                {
+                    mr.enabled = false;
+                }
             }
         }
     }
