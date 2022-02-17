@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -270,6 +271,20 @@ namespace IVLab.ABREngine
         }
 
         private bool visible = true;
+
+
+        /// <summary>
+        ///    Index-level visibility toggle
+        /// </summary>
+        public BitArray PerIndexVisibility { get; set; } = null;
+
+        /// <summary>
+        ///    Whether or not the impression currently has per-index visibility
+        /// </summary>
+        public bool HasPerIndexVisibility()
+        {
+            return (PerIndexVisibility != null) && (PerIndexVisibility.Count > 0);
+        }
 
         public RenderHints Copy()
         {
