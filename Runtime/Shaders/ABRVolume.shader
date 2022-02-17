@@ -133,7 +133,7 @@ Shader "ABR/Volume"
 				uint voxelVisibilityRem = voxelIdx % 32;
 
 				// Return whether or not voxel is visible
-				return _PerVoxelVisibility[voxelVisibilityIndex] & (1 << (31 - voxelVisibilityRem));
+				return _PerVoxelVisibility[voxelVisibilityIndex] & (1 << voxelVisibilityRem);
 			}
 
 			// Remaps dataValue from data range to target range
