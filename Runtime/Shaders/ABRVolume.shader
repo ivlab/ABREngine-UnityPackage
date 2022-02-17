@@ -84,6 +84,7 @@ Shader "ABR/Volume"
 			// Bounds of the mesh the volume is being rendered on
 			float3 _Center;
 			float3 _Extents;
+			uint3 _Dimensions;
 			// Color/opacity map toggles
 			int _UseColorMap;
 			int _UseOpacityMap;
@@ -110,12 +111,30 @@ Shader "ABR/Volume"
 			float _LightIntensities[3];
 			// Max number of steps traversed into the volume
 			float _StepCount;
+			// Per voxel visibility flags
+			int _HasPerVoxelVisibility;
+			StructuredBuffer<int> _PerVoxelVisibility;
 			// Depth texture for intersection with opaque objects
 			// (written to automatically when camera's DepthTextureMode
 			// is set to Depth)
 			sampler2D_float _CameraDepthTexture;
 
 			// __ Helper Functions ____________________________________________
+
+			// Returns whether or not the voxel with given uvw texcoords is visible
+			bool VoxelIsVisible(float3 uvw) {
+				// Convert uvw coords to 1d voxel array index
+				uint3 voxelId = floor(uvw * _Dimensions);
+                uint voxelIdx = voxelId.x + voxelId.y * _Dimensions.x + voxelId.z * _Dimensions.x * _Dimensions.y;
+
+				// Convert voxel array index into squashed per-index visibility buffer index
+				// (since original bit array got smooshed into an int array)
+				uint voxelVisibilityIndex = voxelIdx / 32;
+				uint voxelVisibilityRem = voxelIdx % 32;
+
+				// Return whether or not voxel is visible
+				return _PerVoxelVisibility[voxelVisibilityIndex] & (1 << (31 - voxelVisibilityRem));
+			}
 
 			// Remaps dataValue from data range to target range
 			//
@@ -143,7 +162,7 @@ Shader "ABR/Volume"
 			// invdir = inv direction the ray is coming from (camera origin to model)
 			// sign = indicates direction in each axis
 			// bounds = min/max of rectangular prism
-			float2  Intersect(float3 orig, float3 invdir, int3 sign, float3 bounds[2]) {
+			float2 Intersect(float3 orig, float3 invdir, int3 sign, float3 bounds[2]) {
 
 				float tmin, tmax, tymin, tymax, tzmin, tzmax;
 				tmin = (bounds[sign[0]].x - orig.x) * invdir.x;
@@ -293,6 +312,10 @@ Shader "ABR/Volume"
 
 					// Remap the position to uvw-coords into volume texture
 					float3 uvw = RemapVector01(pos, bounds);
+
+					// Skip this voxel if it's not visible
+					if (_HasPerVoxelVisibility && !VoxelIsVisible(uvw))
+						continue;
 
 					// Sample the 3D texture to obtain the scalar value and gradients at this point,
 					// remapping the data value so that it lies in 0 -> 1 and can therefore be used for texture lookup
