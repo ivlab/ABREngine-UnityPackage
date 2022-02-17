@@ -368,6 +368,18 @@ namespace IVLab.ABREngine
                     glyphRenderInfo = imr.renderInfo;
                 }
 
+                // Hide/show glyphs based on per index visibility
+                if (RenderHints.HasPerIndexVisibility())
+                {
+                    for (int i = 0; i < numPoints && i < RenderHints.PerIndexVisibility.Count; i++)
+                    {
+                        if (RenderHints.PerIndexVisibility[i])
+                            glyphRenderInfo[i][3] = 1;
+                        else
+                            glyphRenderInfo[i][3] = -1;
+                    }
+                }
+
                 // Get keydata-specific range, if there is one
                 float colorVariableMin = 0.0f;
                 float colorVariableMax = 0.0f;
