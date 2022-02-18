@@ -54,7 +54,6 @@ Shader "ABR/InstancedGlyphs" {
             half _Glossiness;
             half _Metallic;
 
-
             struct Input {
                 float2 uv_MainTex;
             };
@@ -106,7 +105,7 @@ Shader "ABR/InstancedGlyphs" {
                 // Discard this glyph if it's not visible
                 if (_HasPerGlyphVisibility) {
                     uint glyphVisibilityIndex = unity_InstanceID / 32;
-				    uint glyphVisibilityRem = unity_InstanceID % 32;
+                    uint glyphVisibilityRem = unity_InstanceID % 32;
                     if (!(_PerGlyphVisibility[glyphVisibilityIndex] & (1 << glyphVisibilityRem)))
                         discard;
                 }
