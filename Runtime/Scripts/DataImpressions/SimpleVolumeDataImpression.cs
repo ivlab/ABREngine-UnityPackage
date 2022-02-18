@@ -360,7 +360,7 @@ namespace IVLab.ABREngine
                 RenderHints.PerIndexVisibility.CopyTo(perVoxelVisibility, 0);
                 // Initialize the compute buffer if it is uninitialized
                 if (perVoxelVisibilityBuffer == null)
-                    perVoxelVisibilityBuffer = new ComputeBuffer(voxelCount, sizeof(int), ComputeBufferType.Default);
+                    perVoxelVisibilityBuffer = new ComputeBuffer(perVoxelVisibility.Length, sizeof(int), ComputeBufferType.Default);
                 // Set buffer data to int array and send to shader
                 perVoxelVisibilityBuffer.SetData(perVoxelVisibility);
                 MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
