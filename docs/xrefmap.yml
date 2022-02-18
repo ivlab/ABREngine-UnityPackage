@@ -6249,6 +6249,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.RenderHints.DataChanged
   nameWithType: RenderHints.DataChanged
+- uid: IVLab.ABREngine.RenderHints.HasPerIndexVisibility
+  name: HasPerIndexVisibility()
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_HasPerIndexVisibility
+  commentId: M:IVLab.ABREngine.RenderHints.HasPerIndexVisibility
+  fullName: IVLab.ABREngine.RenderHints.HasPerIndexVisibility()
+  nameWithType: RenderHints.HasPerIndexVisibility()
+- uid: IVLab.ABREngine.RenderHints.HasPerIndexVisibility*
+  name: HasPerIndexVisibility
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_HasPerIndexVisibility_
+  commentId: Overload:IVLab.ABREngine.RenderHints.HasPerIndexVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.HasPerIndexVisibility
+  nameWithType: RenderHints.HasPerIndexVisibility
+- uid: IVLab.ABREngine.RenderHints.PerIndexVisibility
+  name: PerIndexVisibility
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_PerIndexVisibility
+  commentId: P:IVLab.ABREngine.RenderHints.PerIndexVisibility
+  fullName: IVLab.ABREngine.RenderHints.PerIndexVisibility
+  nameWithType: RenderHints.PerIndexVisibility
+- uid: IVLab.ABREngine.RenderHints.PerIndexVisibility*
+  name: PerIndexVisibility
+  href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_PerIndexVisibility_
+  commentId: Overload:IVLab.ABREngine.RenderHints.PerIndexVisibility
+  isSpec: "True"
+  fullName: IVLab.ABREngine.RenderHints.PerIndexVisibility
+  nameWithType: RenderHints.PerIndexVisibility
 - uid: IVLab.ABREngine.RenderHints.StyleChanged
   name: StyleChanged
   href: api/IVLab.ABREngine.RenderHints.html#IVLab_ABREngine_RenderHints_StyleChanged
