@@ -88,6 +88,13 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool useRandomOrientation = true;
 
+
+        /// <summary>
+        ///    Compute buffer used to quickly pass per-glyph visibility flags to GPU
+        /// </summary>
+        private ComputeBuffer perGlyphVisibilityBuffer;
+
+
         protected override string MaterialName { get; } = "ABR_Glyphs";
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -368,6 +375,25 @@ namespace IVLab.ABREngine
                     glyphRenderInfo = imr.renderInfo;
                 }
 
+                // Hide/show glyphs based on per index visibility
+                if (RenderHints.HasPerIndexVisibility() && RenderHints.PerIndexVisibility.Count == numPoints)
+                {
+                    // Copy per-index bit array to int array so that it can be sent to GPU
+                    int[] perGlyphVisibility = new int[(numPoints - 1) / sizeof(int) + 1];
+                    RenderHints.PerIndexVisibility.CopyTo(perGlyphVisibility, 0);
+                    // Initialize the compute buffer if it is uninitialized
+                    if (perGlyphVisibilityBuffer == null)
+                        perGlyphVisibilityBuffer = new ComputeBuffer(perGlyphVisibility.Length, sizeof(int), ComputeBufferType.Default);
+                    // Set buffer data to int array and send to shader
+                    perGlyphVisibilityBuffer.SetData(perGlyphVisibility);
+                    block.SetBuffer("_PerGlyphVisibility", perGlyphVisibilityBuffer);
+                    block.SetInt("_HasPerGlyphVisibility", 1);
+                }
+                else
+                {
+                    block.SetInt("_HasPerGlyphVisibility", 0);
+                }
+
                 // Get keydata-specific range, if there is one
                 float colorVariableMin = 0.0f;
                 float colorVariableMax = 0.0f;
@@ -533,6 +559,13 @@ namespace IVLab.ABREngine
                     glyphRenderInfo[i][3] = -1;  // discard the glyph
                 }
             }
+        }
+
+        void OnDisable()
+        {
+            if (perGlyphVisibilityBuffer != null)
+                perGlyphVisibilityBuffer.Release();
+            perGlyphVisibilityBuffer = null;
         }
     }
 }

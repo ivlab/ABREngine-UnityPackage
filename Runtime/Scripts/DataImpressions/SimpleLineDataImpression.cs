@@ -492,6 +492,10 @@ namespace IVLab.ABREngine
                     return;
                 }
 
+                // Show/hide line based on per-index visibility
+                if (RenderHints.HasPerIndexVisibility() && i < RenderHints.PerIndexVisibility.Count)
+                    meshRenderer.enabled = RenderHints.PerIndexVisibility[i];
+
                 // We should be able to access the mesh now
                 Mesh mesh = meshFilter.mesh;
 
@@ -595,9 +599,19 @@ namespace IVLab.ABREngine
             for (int i = 0; i < currentGameObject.transform.childCount; i++)
             {
                 MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
-                if (mr != null)
+                if (mr !=  null)
                 {
-                    mr.enabled = RenderHints.Visible;
+                    if (RenderHints.Visible)
+                    {
+                        if (RenderHints.HasPerIndexVisibility() && i < RenderHints.PerIndexVisibility.Count)
+                            mr.enabled = RenderHints.PerIndexVisibility[i];
+                        else
+                            mr.enabled = true;
+                    }
+                    else
+                    {
+                        mr.enabled = false;
+                    }
                 }
             }
         }

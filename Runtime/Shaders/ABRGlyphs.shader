@@ -62,6 +62,9 @@ Shader "ABR/InstancedGlyphs" {
             StructuredBuffer<float4> renderInfoBuffer;
             StructuredBuffer<float4x4> transformBuffer;
             StructuredBuffer<float4x4> transformBufferInverse;
+            // Per glyph visibility flags
+            int _HasPerGlyphVisibility;
+            StructuredBuffer<int> _PerGlyphVisibility;
 #endif
 
             void rotate2D(inout float2 v, float r)
@@ -98,6 +101,14 @@ Shader "ABR/InstancedGlyphs" {
                 fixed4 renderInfo;
 #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
                 renderInfo = renderInfoBuffer[unity_InstanceID];
+
+                // Discard this glyph if it's not visible
+                if (_HasPerGlyphVisibility) {
+                    uint glyphVisibilityIndex = unity_InstanceID / 32;
+                    uint glyphVisibilityRem = unity_InstanceID % 32;
+                    if (!(_PerGlyphVisibility[glyphVisibilityIndex] & (1 << glyphVisibilityRem)))
+                        discard;
+                }
 #else
                 renderInfo = _RenderInfo;
 #endif
