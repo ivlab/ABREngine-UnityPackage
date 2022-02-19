@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
@@ -36,22 +35,38 @@ namespace IVLab.ABREngine
     /// defined in `VisAssetFetchers`.
     /// </summary>
     /// <example>
-    /// VisAssets can be loaded manually - be mindful of async programming:
+    /// VisAssets can be loaded manually from your media folder, resources
+    /// folder, or a network resource. This example loads a colormap
+    /// `66b3cde4-034d-11eb-a7e6-005056bae6d8` from Resources (it's included in
+    /// the ABREngine/Resources/media folder).
     /// <code>
-    /// // Initialize the ABR Engine
-    /// await ABREngine.GetInstance().WaitUntilInitialized();
-    /// 
-    /// Guid cmapUuid = new Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
-    /// 
-    /// // Load a VisAsset (must be done in Main Thread!)
-    /// await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+    /// public class VisAssetManagerExample : MonoBehaviour
     /// {
-    ///     await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
-    /// });
-    /// 
-    /// // Get the actual cmap visasset
-    /// ColormapVisAsset cmap = null;
-    /// ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap);
+    ///     void Start()
+    ///     {
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
+    ///     }
+    ///
+    ///     void Update()
+    ///     {
+    ///         // If you want to access the colormap later, you can use `GetVisAsset`.
+    ///         ColormapVisAsset cmapInUpdate = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8");
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
+    /// <example>
+    /// You can also get the "default" visasset for a few VisAsset types. Keep
+    /// in mind that the <see cref="GetDefault"/> method may not be defined for
+    /// the VisAsset type that you want to get!
+    /// <code>
+    /// public class VisAssetManagerExample : MonoBehaviour
+    /// {
+    ///     void Start()
+    ///     {
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    ///     }
+    /// }
     /// </code>
     /// </example>
     public class VisAssetManager
@@ -65,6 +80,12 @@ namespace IVLab.ABREngine
         /// exist on disk or on a server somewhere.
         /// </summary>
         public JObject LocalVisAssets { get; set; }
+
+        /// <summary>
+        /// Any VisAsset gradients that are contained within the state (updated
+        /// directly from state)
+        /// </summary>
+        public Dictionary<string, RawVisAssetGradient> VisAssetGradients { get; set; } = new Dictionary<string, RawVisAssetGradient>();
 
         private Dictionary<Guid, IVisAsset> _visAssets = new Dictionary<Guid, IVisAsset>();
 
@@ -109,10 +130,30 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Get a visasset by its unique identifier.
+        /// </summary>
+        /// <returns>
+        /// Returns the VisAsset, if found, otherwise returns null.
+        /// </returns>
+        public T GetVisAsset<T>(Guid uuid)
+        where T: IVisAsset
+        {
+            IVisAsset va;
+            if (TryGetVisAsset(uuid, out va))
+            {
+                return (T) va;
+            }
+            else
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
         /// Load all VisAssets located in the Media directory into memory.
         /// </summary>
         [Obsolete("LoadVisAssetPalette is obsolete because it only takes into consideration VisAssets in the media directory")]
-        public async Task LoadVisAssetPalette()
+        public void LoadVisAssetPalette()
         {
             string[] files = Directory.GetFiles(appDataPath, VISASSET_JSON, SearchOption.AllDirectories);
             Debug.LogFormat("Loading VisAsset Palette ({0} VisAssets)", files.Length);
@@ -123,7 +164,7 @@ namespace IVLab.ABREngine
                 try
                 {
                     string uuid = Path.GetFileName(filePath);
-                    await LoadVisAsset(new Guid(uuid));
+                    LoadVisAsset(new Guid(uuid));
                     success += 1;
                 }
                 catch (Exception e)
@@ -135,6 +176,18 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Provides a convenience generic wrapper for VisAsset loading.
+        /// </summary>
+        /// <returns>
+        /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
+        /// </returns>
+        public T LoadVisAsset<T>(Guid visAssetUUID, bool replaceExisting = false)
+        where T: IVisAsset
+        {
+            return (T) LoadVisAsset(visAssetUUID, replaceExisting);
+        }
+
+        /// <summary>
         /// Load a particular VisAsset described by its UUID. VisAssets will
         /// automatically be loaded from any of the following places:
         /// 1. The state itself (`localVisAssets`)
@@ -142,45 +195,132 @@ namespace IVLab.ABREngine
         /// 3. Any Resources folder (in Assets or in any Package)
         /// 4. A VisAsset server
         /// </summary>
-        public async Task LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
+        /// <returns>
+        /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
+        /// </returns>
+        public IVisAsset LoadVisAsset(Guid visAssetUUID, bool replaceExisting = false)
         {
             if (_visAssets.ContainsKey(visAssetUUID) && !replaceExisting)
             {
                 Debug.LogWarningFormat("Refusing to replace VisAsset {0} which is already imported", visAssetUUID);
-                return;
+                return null;
             }
 
-            try
+            // First, check if the VisAsset is a gradient and recursivly import its VisAsset dependencies
+            List<Guid> dependencyUuids = new List<Guid>();
+            bool isGradient = false;
+            if (VisAssetGradients != null && VisAssetGradients.ContainsKey(visAssetUUID.ToString()))
             {
-                // Try to fetch the visasset in terms of each fetcher's priority
-                IVisAsset visAsset = null;
-                foreach (IVisAssetFetcher fetcher in visAssetFetchers)
+                isGradient = true;
+                foreach (var dependency in VisAssetGradients[visAssetUUID.ToString()].visAssets)
                 {
-                    try
+                    dependencyUuids.Add(new Guid(dependency.ToString()));
+                }
+            }
+            else
+            {
+                // If it's not a gradient, just import the regular VisAsset (no dependencies)
+                dependencyUuids.Add(visAssetUUID);
+            }
+
+            IVisAsset toReturn = null;
+            foreach (var dependency in dependencyUuids)
+            {
+                // The only time a dependency would have been updated is if it's a local vis asset.
+                // If dependency not updated, skip it.
+                if (_visAssets.ContainsKey(dependency) && (LocalVisAssets != null && !LocalVisAssets.ContainsKey(dependency.ToString())))
+                {
+                    continue;
+                }
+                try
+                {
+                    // Try to fetch the visasset in terms of each fetcher's priority
+                    IVisAsset visAsset = null;
+                    foreach (IVisAssetFetcher fetcher in visAssetFetchers)
                     {
-                        visAsset = await visAssetLoader.LoadVisAsset(visAssetUUID, fetcher);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(e);
+                        try
+                        {
+                            visAsset = visAssetLoader.LoadVisAsset(dependency, fetcher);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e);
+                        }
+
+                        // If we've found it, stop looking
+                        if (visAsset != null)
+                        {
+                            break;
+                        }
                     }
 
-                    // If we've found it, stop looking
                     if (visAsset != null)
                     {
-                        break;
+                        _visAssets[dependency] = visAsset;
+                        toReturn = visAsset;
                     }
                 }
-
-                if (visAsset != null)
+                catch (Exception e)
                 {
-                    _visAssets[visAssetUUID] = visAsset;
+                    Debug.LogError(e);
                 }
             }
-            catch (Exception e)
+
+            // Post-import, verify that all VisAssets in this gradient are of the correct type
+            if (!isGradient)
             {
-                Debug.LogError(e);
+                return toReturn;
             }
+            else if (isGradient && dependencyUuids.Count > 0)
+            {
+                IVisAsset[] dependencies = dependencyUuids.Select((g) => {
+                    IVisAsset visAsset = null;
+                    if (TryGetVisAsset(g, out visAsset))
+                    {
+                        return visAsset;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }).Where((va) => va != null).ToArray();
+
+                IEnumerable<Type> vaType = dependencies.Select((va) => va.GetType()).Distinct();
+                if (vaType.Count() != 1)
+                {
+                    Debug.LogErrorFormat("VisAsset Gradient `{0}`: not all VisAsset dependency types match", visAssetUUID.ToString());
+                    return null;
+                }
+
+                Type visAssetType = vaType.First();
+                {
+                    if (visAssetType == typeof(GlyphVisAsset))
+                    {
+                        GlyphGradient gradient = VisAssetGradient.FromRaw<GlyphGradient, GlyphVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(SurfaceTextureVisAsset))
+                    {
+                        SurfaceTextureGradient gradient = VisAssetGradient.FromRaw<SurfaceTextureGradient, SurfaceTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else if (visAssetType == typeof(LineTextureVisAsset))
+                    {
+                        LineTextureGradient gradient = VisAssetGradient.FromRaw<LineTextureGradient, LineTextureVisAsset>(VisAssetGradients[visAssetUUID.ToString()]);
+                        _visAssets[visAssetUUID] = gradient;
+                        return gradient;
+                    }
+                    else
+                    {
+                        throw new NotImplementedException(visAssetType.ToString() + " has no gradient handler");
+                    }
+                }
+            }
+
+            Debug.LogError($"Unable to load VisAsset `{visAssetUUID}`");
+            return null;
         }
 
         /// <summary>
@@ -202,6 +342,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Obtain the default visasset for a particular type, if there is one.
         /// </summary>
+        /// <remarks>
+        /// If using the VisAsset immediately as the type `T`, you will likely need to do a cast (e.g. `ColormapVisAsset c = ....GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset`).
+        /// </remarks>
         public IVisAsset GetDefault<T>()
         where T: IVisAsset
         {
@@ -211,9 +354,16 @@ namespace IVLab.ABREngine
                 // Define a black-to-white colormap
                 string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
                 Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
-                ColormapVisAsset cmap = new ColormapVisAsset();
-                cmap.Gradient = cmapTex;
-                return cmap;
+                return new ColormapVisAsset(cmapTex);
+            }
+            if (t.IsAssignableFrom(typeof(GlyphVisAsset)))
+            {
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                Mesh glyphMesh = cube.GetComponent<MeshFilter>().sharedMesh;
+                List<Mesh> lods = new List<Mesh> { glyphMesh };
+                List<Texture2D> nrms = new List<Texture2D> { Texture2D.normalTexture };
+                GameObject.Destroy(cube);
+                return new GlyphVisAsset(lods, nrms);
             }
             else
             {

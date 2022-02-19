@@ -129,6 +129,12 @@
     <div>
       <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Copy">DataImpression.Copy()</a>
     </div>
+    <div>
+      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_CopyExisting_IVLab_ABREngine_IDataImpression_">DataImpression.CopyExisting(IDataImpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Cleanup_IVLab_ABREngine_EncodedGameObject_">DataImpression.Cleanup(EncodedGameObject)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
@@ -140,10 +146,10 @@ public class SimpleSurfaceDataImpression : DataImpression, IDataImpression, IHas
   <h5 id="IVLab_ABREngine_SimpleSurfaceDataImpression_examples"><strong>Examples</strong></h5>
   <p>An example of creating a single surface data impression and setting its colormap, color variable, and texture could be:</p>
 <pre><code>SimpleSurfaceDataImpression gi = new SimpleSurfaceDataImpression();
-gi.keyData = surfs as SurfaceKeyData;
+gi.keyData = surfs;
 gi.colorVariable = yAxis;
 gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
-gi.lineTexture = tex as SurfaceTextureVisAsset;
+gi.lineTexture = tex;
 ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
 
   <h3 id="constructors">Constructors
@@ -198,7 +204,7 @@ single string argument with UUID.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;, UpdateLevel.Style)]
-public ColormapVisAsset colormap</code></pre>
+public IColormapVisAsset colormap</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -210,7 +216,7 @@ public ColormapVisAsset colormap</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.IColormapVisAsset.html">IColormapVisAsset</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -248,7 +254,7 @@ public ScalarDataVariable colorVariable</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public SurfaceKeyData keyData</code></pre>
+public KeyData keyData</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -260,7 +266,7 @@ public SurfaceKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.SurfaceKeyData.html">SurfaceKeyData</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -273,7 +279,7 @@ public SurfaceKeyData keyData</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Pattern&quot;, &quot;Pattern&quot;, UpdateLevel.Style)]
-public SurfaceTextureVisAsset pattern</code></pre>
+public ISurfaceTextureVisAsset pattern</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -285,32 +291,7 @@ public SurfaceTextureVisAsset pattern</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.SurfaceTextureVisAsset.html">SurfaceTextureVisAsset</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <h4 id="IVLab_ABREngine_SimpleSurfaceDataImpression_patternDirectionBlend" data-uid="IVLab.ABREngine.SimpleSurfaceDataImpression.patternDirectionBlend">patternDirectionBlend</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Pattern Seam Blend&quot;, &quot;Pattern&quot;, UpdateLevel.Style)]
-public PercentPrimitive patternDirectionBlend</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.ISurfaceTextureVisAsset.html">ISurfaceTextureVisAsset</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -349,6 +330,31 @@ public PercentPrimitive patternIntensity</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Pattern Saturation&quot;, &quot;Pattern&quot;, UpdateLevel.Style)]
 public PercentPrimitive patternSaturation</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="IVLab_ABREngine_SimpleSurfaceDataImpression_patternSeamBlend" data-uid="IVLab.ABREngine.SimpleSurfaceDataImpression.patternSeamBlend">patternSeamBlend</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Pattern Seam Blend&quot;, &quot;Pattern&quot;, UpdateLevel.Style)]
+public PercentPrimitive patternSeamBlend</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">

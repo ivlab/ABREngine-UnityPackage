@@ -3,7 +3,8 @@
     "references": [
         "IVLab.Utilities.Runtime",
         "IVLab.OBJImport",
-        "JsonDiffPatchDotNet"
+        "JsonDiffPatchDotNet",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

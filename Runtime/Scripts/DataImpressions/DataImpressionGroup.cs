@@ -34,13 +34,18 @@ namespace IVLab.ABREngine
     /// into a data impression in this group, the GroupToDataMatrix and
     /// GroupBounds are updated.
     /// </summary>
+    /// <remarks>
+    /// DataImpressionGroups cannot be constructed directly, you MUST use the a
+    /// variation of the <see cref="ABREngine.CreateDataImpressionGroup"/>
+    /// method.
+    /// </remarks>
     public class DataImpressionGroup : IHasDataset
     {
         /// <summary>
         ///     Room-scale (Unity rendering space) bounds that all data should
         ///     be contained within
         /// </summary>
-        public Bounds GroupContainer { get; }
+        public Bounds GroupContainer { get; set; }
 
         /// <summary>
         ///     Transformation from the original data space into the room-scale
@@ -73,10 +78,10 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        public DataImpressionGroup(string name, Bounds bounds, Transform parent)
+        internal DataImpressionGroup(string name, Bounds bounds, Transform parent)
             : this(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent) { }
 
-        public DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+        internal DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
         {
             Uuid = uuid;
             Name = name;
@@ -91,6 +96,11 @@ namespace IVLab.ABREngine
             ResetBoundsAndTransformation();
         }
 
+        /// <summary>
+        /// Add a data impression to this group. All data impressions in the
+        /// same group NEED to have the same dataset, error will be displayed
+        /// otherwise.
+        /// </summary>
         public void AddDataImpression(IDataImpression impression, bool allowOverwrite = true)
         {
             // Make sure the new impression matches the rest of the impressions'
@@ -107,7 +117,10 @@ namespace IVLab.ABREngine
             {
                 if (allowOverwrite)
                 {
-                    _impressions[impression.Uuid] = impression;
+                    // Instead of actually assigning a completely new
+                    // DataImpression, copy the temporary one's inputs and let
+                    // the temp be GC'd.
+                    _impressions[impression.Uuid].CopyExisting(impression);
                 }
                 else
                 {
@@ -137,6 +150,7 @@ namespace IVLab.ABREngine
         {
             if (_impressions.ContainsKey(uuid))
             {
+                _impressions[uuid].Cleanup(gameObjectMapping[uuid]);
                 _impressions.Remove(uuid);
                 GameObject.Destroy(gameObjectMapping[uuid].gameObject);
                 gameObjectMapping.Remove(uuid);
@@ -144,6 +158,12 @@ namespace IVLab.ABREngine
             return _impressions.Count == 0;
         }
 
+        /// <summary>
+        /// Get a data impression by its UUID
+        /// </summary>
+        /// <returns>
+        /// The data impression, if found, otherwise `null`
+        /// </returns>
         public IDataImpression GetDataImpression(Guid uuid)
         {
             IDataImpression dataImpression = null;
@@ -151,6 +171,89 @@ namespace IVLab.ABREngine
             return dataImpression;
         }
 
+        /// <summary>
+        /// Get a data impression matching a particular criteria
+        /// </summary>
+        /// <example>
+        /// This method can be used to access data impressions in a functional
+        /// manner, for example checking if the impression has a particular
+        /// colormap assigned.
+        /// <code>
+        /// DataImpressionGroup group;
+        /// group.GetDataImpression((di) =>
+        /// {
+        ///     try
+        ///     {
+        ///         SimpleSurfaceDataImpression sdi = di as SimpleSurfaceDataImpression;
+        ///         return sdi.colormap.Uuid == new Guid("5a761a72-8bcb-11ea-9265-005056bae6d8");
+        ///     }
+        ///     catch
+        ///     {
+        ///         return null;
+        ///     }
+        /// });
+        /// </code>
+        /// </example>
+        /// <returns>
+        /// The data impression, if found, otherwise `null`
+        /// </returns>
+        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        {
+            return GetDataImpressions(criteria).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get a data impression matching a type AND a particular criteria
+        /// </summary>
+        /// <example>
+        /// This method can be used as a more elegant way to access individual
+        /// types of data impressions.
+        /// <code>
+        /// DataImpressionGroup group;
+        /// group.GetDataImpression&lt;SimpleSurfaceDataImpression&gt;((di) =>
+        /// {
+        ///     // di is already a SimpleSurfaceDataImpression
+        ///     return sdi.colormap.Uuid == new Guid("5a761a72-8bcb-11ea-9265-005056bae6d8");
+        /// });
+        /// </code>
+        /// </example>
+        public T GetDataImpression<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>(criteria).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get a data impression matching a type
+        /// </summary>
+        public T GetDataImpression<T>()
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Return whether or not the data impression with a given UUID is present in this DataImpressionGroup
+        /// </summary>
+        public bool HasDataImpression(Guid uuid)
+        {
+            return _impressions.ContainsKey(uuid);
+        }
+
+        /// <summary>
+        /// Return the Unity GameObject associated with this particular UUID.
+        /// </summary>
+        public EncodedGameObject GetEncodedGameObject(Guid uuid)
+        {
+            EncodedGameObject dataImpression = null;
+            gameObjectMapping.TryGetValue(uuid, out dataImpression);
+            return dataImpression;
+        }
+
+        /// <summary>
+        /// Get all data impressions in this group that match a particular type (e.g. get all <see cref="SimpleSurfaceDataImpression"/>s).
+        /// </summary>
+        [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
         where T : IDataImpression
         {
@@ -160,6 +263,12 @@ namespace IVLab.ABREngine
                 .Select((imp) => (T) imp).ToList();
         }
 
+        /// <summary>
+        /// Get all data impressions that have a particular tag. Tags can be any
+        /// string value. They are not used internally to the engine but can be
+        /// useful for keeping track of data impressions in applications that
+        /// use ABR.
+        /// </summary>
         public List<IDataImpression> GetDataImpressionsWithTag(string tag)
         {
             return _impressions
@@ -167,29 +276,55 @@ namespace IVLab.ABREngine
                 .Where((imp) => imp.HasTag(tag)).ToList();
         }
 
-        public bool HasDataImpression(Guid uuid)
-        {
-            return _impressions.ContainsKey(uuid);
-        }
 
-        public EncodedGameObject GetEncodedGameObject(Guid uuid)
-        {
-            EncodedGameObject dataImpression = null;
-            gameObjectMapping.TryGetValue(uuid, out dataImpression);
-            return dataImpression;
-        }
-
+        /// <summary>
+        /// Check to see if a data impression with a particular UUID has a GameObject yet
+        /// </summary>
         public bool HasEncodedGameObject(Guid uuid)
         {
             return gameObjectMapping.ContainsKey(uuid);
         }
 
+        /// <summary>
+        /// Return all data impressions inside this data impression group
+        /// </summary>
         public Dictionary<Guid, IDataImpression> GetDataImpressions()
         {
             return _impressions;
         }
 
+        /// <summary>
+        /// Return all data impressions that match a particular criteria
+        /// </summary>
+        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        {
+            return _impressions.Values.Where(criteria).ToList();
+        }
 
+        /// <summary>
+        /// Return all data impressions that have a particular type
+        /// </summary>
+        public List<T> GetDataImpressions<T>()
+        where T : IDataImpression
+        {
+            return _impressions
+                .Select((kv) => kv.Value)
+                .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
+                .Select((imp) => (T) imp).ToList();
+        }
+
+        /// <summary>
+        /// Return all data impressions that match a particular criteria AND have a particular type
+        /// </summary>
+        public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
+        where T : IDataImpression
+        {
+            return GetDataImpressions<T>().Where(criteria).ToList();
+        }
+
+        /// <summary>
+        /// Remove all data impressions from this DataImpressionGroup
+        /// </summary>
         public void Clear()
         {
             List<Guid> toRemove = _impressions.Keys.ToList();
@@ -281,6 +416,14 @@ namespace IVLab.ABREngine
             return Mathf.Abs(currentBoundsSize - GroupBounds.size.magnitude) > float.Epsilon;
         }
 
+        /// <summary>
+        /// Render every data impression inside this data impression group. Three levels of "update" are provided for each data impression (see <see cref="RenderHints"/> for more information):
+        /// <ol>
+        ///     <li>Recompute everything if the data source has changed (geometry, style, visibility)</li>
+        ///     <li>Only recompute style if only the style (variables, visassets, etc.) has changed</li>
+        ///     <li>Only toggle visibility if only that has changed</li>
+        /// </ol>
+        /// </summary>
         public void RenderImpressions()
         {
             try

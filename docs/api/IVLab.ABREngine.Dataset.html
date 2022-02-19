@@ -172,7 +172,7 @@ add more datasets</p>
   
   <a id="IVLab_ABREngine_Dataset_Path_" data-uid="IVLab.ABREngine.Dataset.Path*"></a>
   <h4 id="IVLab_ABREngine_Dataset_Path" data-uid="IVLab.ABREngine.Dataset.Path">Path</h4>
-  <div class="markdown level1 summary"><p>Path of this dataset (should conform to DataPath)</p>
+  <div class="markdown level1 summary"><p>Path of this dataset (should conform to <a class="xref" href="IVLab.ABREngine.DataPath.html">DataPath</a>)</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -298,6 +298,220 @@ add more datasets</p>
     <tbody>
       <tr>
         <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.IKeyData.html">IKeyData</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetAllScalarVars_" data-uid="IVLab.ABREngine.Dataset.GetAllScalarVars*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetAllScalarVars" data-uid="IVLab.ABREngine.Dataset.GetAllScalarVars">GetAllScalarVars()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, ScalarDataVariable&gt; GetAllScalarVars()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetAllVectorVars_" data-uid="IVLab.ABREngine.Dataset.GetAllVectorVars*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetAllVectorVars" data-uid="IVLab.ABREngine.Dataset.GetAllVectorVars">GetAllVectorVars()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Dictionary&lt;string, VectorDataVariable&gt; GetAllVectorVars()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetKeyData_" data-uid="IVLab.ABREngine.Dataset.GetKeyData*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetKeyData" data-uid="IVLab.ABREngine.Dataset.GetKeyData">GetKeyData()</h4>
+  <div class="markdown level1 summary"><p>All <a class="xref" href="IVLab.ABREngine.IKeyData.html">IKeyData</a> objects within this dataset</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IKeyData[] GetKeyData()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IKeyData.html">IKeyData</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetScalarVariables_" data-uid="IVLab.ABREngine.Dataset.GetScalarVariables*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetScalarVariables" data-uid="IVLab.ABREngine.Dataset.GetScalarVariables">GetScalarVariables()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScalarDataVariable[] GetScalarVariables()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetScalarVariables_" data-uid="IVLab.ABREngine.Dataset.GetScalarVariables*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetScalarVariables_IVLab_ABREngine_IKeyData_" data-uid="IVLab.ABREngine.Dataset.GetScalarVariables(IVLab.ABREngine.IKeyData)">GetScalarVariables(IKeyData)</h4>
+  <div class="markdown level1 summary"><p>All <a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a> objects within this dataset.
+NOTE: Not every ScalarDataVariable applies to every KeyData object!</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScalarDataVariable[] GetScalarVariables(IKeyData associatedWith)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IKeyData.html">IKeyData</a></td>
+        <td><span class="parametername">associatedWith</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetVectorVariables_" data-uid="IVLab.ABREngine.Dataset.GetVectorVariables*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetVectorVariables" data-uid="IVLab.ABREngine.Dataset.GetVectorVariables">GetVectorVariables()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VectorDataVariable[] GetVectorVariables()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_Dataset_GetVectorVariables_" data-uid="IVLab.ABREngine.Dataset.GetVectorVariables*"></a>
+  <h4 id="IVLab_ABREngine_Dataset_GetVectorVariables_IVLab_ABREngine_IKeyData_" data-uid="IVLab.ABREngine.Dataset.GetVectorVariables(IVLab.ABREngine.IKeyData)">GetVectorVariables(IKeyData)</h4>
+  <div class="markdown level1 summary"><p>All <a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a> objects within this dataset.
+NOTE: Not every VectorDataVariable applies to every KeyData object!</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VectorDataVariable[] GetVectorVariables(IKeyData associatedWith)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.IKeyData.html">IKeyData</a></td>
+        <td><span class="parametername">associatedWith</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a>[]</td>
         <td></td>
       </tr>
     </tbody>

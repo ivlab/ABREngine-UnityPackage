@@ -35,13 +35,13 @@ namespace IVLab.ABREngine
     public interface IVisAssetFetcher
     {
         string GetArtifactJsonPath(Guid uuid);
-        Task<JObject> GetArtifactJson(Guid uuid);
-        Task<Texture2D> GetColormapTexture(Guid uuid);
-        Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson);
-        Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
-        Task<Texture2D> GetLineTexture(Guid uuid);
-        Task<Texture2D> GetSurfaceTexture(Guid uuid);
-        Task<Texture2D> GetSurfaceNormalMap(Guid uuid);
+        JObject GetArtifactJson(Guid uuid);
+        Texture2D GetColormapTexture(Guid uuid);
+        GameObject GetGlyphGameObject(Guid uuid, JObject lodJson);
+        Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
+        Texture2D GetLineTexture(Guid uuid);
+        Texture2D GetSurfaceTexture(Guid uuid);
+        Texture2D GetSurfaceNormalMap(Guid uuid);
     }
 
     /// <summary>
@@ -86,14 +86,14 @@ namespace IVLab.ABREngine
             );
         }
 
-        public async Task<JObject> GetArtifactJson(Guid uuid)
+        public JObject GetArtifactJson(Guid uuid)
         {
             if (!_artifactJsonCache.ContainsKey(uuid))
             {
-                List<string> failed = await DownloadVisAsset(uuid);
+                List<string> failed = DownloadVisAsset(uuid).Result;
                 if (failed.Count == 0)
                 {
-                    _artifactJsonCache[uuid] = await _fpFetcher.GetArtifactJson(uuid);
+                    _artifactJsonCache[uuid] = _fpFetcher.GetArtifactJson(uuid);
                 }
                 else
                 {
@@ -112,40 +112,40 @@ namespace IVLab.ABREngine
             }
         }
 
-        public async Task<Texture2D> GetColormapTexture(Guid uuid)
+        public Texture2D GetColormapTexture(Guid uuid)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetColormapTexture(uuid);
+            return _fpFetcher.GetColormapTexture(uuid);
         }
 
-        public async Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodInfo)
+        public GameObject GetGlyphGameObject(Guid uuid, JObject lodInfo)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetGlyphGameObject(uuid, lodInfo);
+            return _fpFetcher.GetGlyphGameObject(uuid, lodInfo);
         }
 
-        public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodInfo)
+        public Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodInfo)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetGlyphNormalMapTexture(uuid, lodInfo);
+            return _fpFetcher.GetGlyphNormalMapTexture(uuid, lodInfo);
         }
 
-        public async Task<Texture2D> GetLineTexture(Guid uuid)
+        public Texture2D GetLineTexture(Guid uuid)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetLineTexture(uuid);
+            return _fpFetcher.GetLineTexture(uuid);
         }
 
-        public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
+        public Texture2D GetSurfaceTexture(Guid uuid)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetSurfaceTexture(uuid);
+            return _fpFetcher.GetSurfaceTexture(uuid);
         }
 
-        public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
+        public Texture2D GetSurfaceNormalMap(Guid uuid)
         {
             CheckExists(uuid);
-            return await _fpFetcher.GetSurfaceNormalMap(uuid);
+            return _fpFetcher.GetSurfaceNormalMap(uuid);
         }
 
         // Mirrors the download_visasset function from abr_server
@@ -171,7 +171,7 @@ namespace IVLab.ABREngine
                 return failed; // Cannot continue without artifact json
             }
 
-            JObject artifactJson = await _fpFetcher.GetArtifactJson(uuid);
+            JObject artifactJson = _fpFetcher.GetArtifactJson(uuid);
 
             // Download the thumbnail
             string previewImg = artifactJson["preview"].ToString();
@@ -286,14 +286,14 @@ namespace IVLab.ABREngine
             return Path.Combine(Path.GetDirectoryName(artifactFilePath), relativeDataPath);
         }
 
-        public async Task<JObject> GetArtifactJson(Guid uuid)
+        public JObject GetArtifactJson(Guid uuid)
         {
             if (!_artifactJsonCache.ContainsKey(uuid))
             {
                 if (File.Exists(GetArtifactJsonPath(uuid)))
                 {
                     StreamReader reader = new StreamReader(GetArtifactJsonPath(uuid));
-                    JObject jsonData = JObject.Parse(await reader.ReadToEndAsync());
+                    JObject jsonData = JObject.Parse(reader.ReadToEnd());
                     reader.Close();
                     _artifactJsonCache[uuid] = jsonData;
                     return jsonData;
@@ -309,43 +309,40 @@ namespace IVLab.ABREngine
             }
         }
 
-        public async Task<Texture2D> GetColormapTexture(Guid uuid)
+        public Texture2D GetColormapTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             string relativeColormapPath = artifactJson["artifactData"]["colormap"].ToString();
             string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), relativeColormapPath);
 
             if (File.Exists(colormapfilePath))
             {
-                return await UnityThreadScheduler.Instance.RunMainThreadWork(() => ColormapUtilities.ColormapFromFile(colormapfilePath, 1024, 100));
+                return ColormapUtilities.ColormapFromFile(colormapfilePath, 1024, 100);
             }
             return null;
         }
 
-        public async Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson)
+        public GameObject GetGlyphGameObject(Guid uuid, JObject lodJson)
         {
             string artifactJsonPath = GetArtifactJsonPath(uuid);
             var meshPath = VisAssetDataPath(artifactJsonPath, lodJson["mesh"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => new IVLab.OBJImport.OBJLoader().Load(meshPath, true));
+            return new IVLab.OBJImport.OBJLoader().Load(meshPath, true);
         }
 
-        public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
+        public Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
         {
             string artifactJsonPath = GetArtifactJsonPath(uuid);
             var normalPath = VisAssetDataPath(artifactJsonPath, lodJson["normal"].ToString());
-            var normalData = await Task.Run(() => File.ReadAllBytes(normalPath));
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                // Textures exported by Blender are in Linear color space
-                var normalMap = new Texture2D(2, 2, textureFormat: TextureFormat.RGBA32, mipChain: true, linear: true);
-                normalMap.LoadImage(normalData);
-                return normalMap;
-            });
+            var normalData = File.ReadAllBytes(normalPath);
+            // Textures exported by Blender are in Linear color space
+            var normalMap = new Texture2D(2, 2, textureFormat: TextureFormat.RGBA32, mipChain: true, linear: true);
+            normalMap.LoadImage(normalData);
+            return normalMap;
         }
 
-        public async Task<Texture2D> GetLineTexture(Guid uuid)
+        public Texture2D GetLineTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             string texturePath = "";
             try
             {
@@ -361,18 +358,15 @@ namespace IVLab.ABREngine
                 throw e;
             }
 
-            var textureData = await Task.Run(() => File.ReadAllBytes(texturePath));
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(textureData);
-                return texture;
-            });
+            var textureData = File.ReadAllBytes(texturePath);
+            var texture = new Texture2D(2, 2);
+            texture.LoadImage(textureData);
+            return texture;
         }
 
-        public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
+        public Texture2D GetSurfaceTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             string texturePath = "";
             try
             {
@@ -388,18 +382,15 @@ namespace IVLab.ABREngine
                 throw e;
             }
 
-            var textureData = await Task.Run(() => File.ReadAllBytes(texturePath));
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(textureData);
-                return texture;
-            });
+            var textureData = File.ReadAllBytes(texturePath);
+            var texture = new Texture2D(2, 2);
+            texture.LoadImage(textureData);
+            return texture;
         }
 
-        public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
+        public Texture2D GetSurfaceNormalMap(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             string texturePath = "";
             try
             {
@@ -415,13 +406,10 @@ namespace IVLab.ABREngine
                 throw e;
             }
 
-            var textureData = await Task.Run(() => File.ReadAllBytes(texturePath));
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                var texture = new Texture2D(2, 2);
-                texture.LoadImage(textureData);
-                return texture;
-            });
+            var textureData = File.ReadAllBytes(texturePath);
+            var texture = new Texture2D(2, 2);
+            texture.LoadImage(textureData);
+            return texture;
         }
     }
 
@@ -460,62 +448,56 @@ namespace IVLab.ABREngine
             );
         }
 
-        public async Task<JObject> GetArtifactJson(Guid uuid)
+        public JObject GetArtifactJson(Guid uuid)
         {
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+            TextAsset artifactJson = Resources.Load<TextAsset>(GetArtifactJsonPath(uuid));
+            if (artifactJson == null)
             {
-                TextAsset artifactJson = Resources.Load<TextAsset>(GetArtifactJsonPath(uuid));
-                if (artifactJson == null)
-                {
-                    return null;
-                }
-                return JObject.Parse(artifactJson.text);
-            });
+                return null;
+            }
+            return JObject.Parse(artifactJson.text);
         }
 
-        public async Task<Texture2D> GetColormapTexture(Guid uuid)
+        public Texture2D GetColormapTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["colormap"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
-                Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML.text, 1024, 100);
-                return texture;
-            });
+            TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
+            Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML.text, 1024, 100);
+            return texture;
         }
 
-        public async Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson)
+        public GameObject GetGlyphGameObject(Guid uuid, JObject lodJson)
         {
             var meshPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["mesh"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<GameObject>(meshPath));
+            return Resources.Load<GameObject>(meshPath);
         }
 
-        public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
+        public Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
         {
             var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normal"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(normalPath));
+            return Resources.Load<Texture2D>(normalPath);
         }
 
-        public async Task<Texture2D> GetLineTexture(Guid uuid)
+        public Texture2D GetLineTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["horizontal"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
+            return Resources.Load<Texture2D>(path);
         }
 
-        public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
+        public Texture2D GetSurfaceTexture(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["image"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
+            return Resources.Load<Texture2D>(path);
         }
 
-        public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
+        public Texture2D GetSurfaceNormalMap(Guid uuid)
         {
-            JObject artifactJson = await GetArtifactJson(uuid);
+            JObject artifactJson = GetArtifactJson(uuid);
             var path = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["normalmap"].ToString());
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() => Resources.Load<Texture2D>(path));
+            return Resources.Load<Texture2D>(path);
         }
     }
 
@@ -525,16 +507,6 @@ namespace IVLab.ABREngine
     /// </summary>
     public class StateLocalVisAssetFetcher : IVisAssetFetcher
     {
-        // string GetArtifactJsonPath(Guid uuid);
-        // Task<JObject> GetArtifactJson(Guid uuid);
-        // Task<Texture2D> GetColormapTexture(Guid uuid);
-        // Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson);
-        // Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
-        // Task<Texture2D> GetLineTexture(Guid uuid);
-        // Task<Texture2D> GetSurfaceTexture(Guid uuid);
-        // Task<Texture2D> GetSurfaceNormalMap(Guid uuid);
-        // public const string VISASSET_JSON = "artifact";
-        // public const string RESOURCES_PATH = "media/visassets/";
         public const string VISASSET_STATE = "localVisAssets";
         public const string VISASSET_JSON = "artifactJson";
         public const string ARTIFACT_DATA = "artifactDataContents";
@@ -544,73 +516,67 @@ namespace IVLab.ABREngine
             throw new NotImplementedException("StateLocal VisAssets don't have a path");
         }
 
-        public async Task<JObject> GetArtifactJson(Guid uuid)
+        public JObject GetArtifactJson(Guid uuid)
         {
-            return await Task.Run(() =>
+            try
             {
-                try
+                JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                if (visAssets == null || !visAssets.ContainsKey(uuid.ToString()))
                 {
-                    JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
-                    if (visAssets == null || !visAssets.ContainsKey(uuid.ToString()))
-                    {
-                        return null as JObject;
-                    }
-                    return visAssets[uuid.ToString()][VISASSET_JSON].ToObject<JObject>();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
                     return null as JObject;
                 }
-            });
+                return visAssets[uuid.ToString()][VISASSET_JSON].ToObject<JObject>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return null as JObject;
+            }
         }
 
-        public async Task<Texture2D> GetColormapTexture(Guid uuid)
+        public Texture2D GetColormapTexture(Guid uuid)
         {
-            return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+            try
             {
-                try
+                JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                if (!visAssets.ContainsKey(uuid.ToString()))
                 {
-                    JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
-                    if (!visAssets.ContainsKey(uuid.ToString()))
-                    {
-                        return null;
-                    }
-                    string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
-                    Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML, 1024, 100);
-                    return texture;
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
                     return null;
                 }
-            });
+                string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
+                Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML, 1024, 100);
+                return texture;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return null;
+            }
         }
 
-        public async Task<GameObject> GetGlyphGameObject(Guid uuid, JObject lodJson)
+        public GameObject GetGlyphGameObject(Guid uuid, JObject lodJson)
         {
-            return await Task.Run(() => null as GameObject);
+            return null;
         }
 
-        public async Task<Texture2D> GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
+        public Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson)
         {
-            return await Task.Run(() => null as Texture2D);
+            return null;
         }
 
-        public async Task<Texture2D> GetLineTexture(Guid uuid)
+        public Texture2D GetLineTexture(Guid uuid)
         {
-            return await Task.Run(() => null as Texture2D);
+            return null;
         }
 
-        public async Task<Texture2D> GetSurfaceTexture(Guid uuid)
+        public Texture2D GetSurfaceTexture(Guid uuid)
         {
-            return await Task.Run(() => null as Texture2D);
+            return null;
         }
 
-        public async Task<Texture2D> GetSurfaceNormalMap(Guid uuid)
+        public Texture2D GetSurfaceNormalMap(Guid uuid)
         {
-            return await Task.Run(() => null as Texture2D);
+            return null;
         }
     }
 
@@ -624,17 +590,17 @@ namespace IVLab.ABREngine
     {
         public VisAssetLoader() { }
 
-        public async Task<IVisAsset> LoadVisAsset(Guid uuid)
+        public IVisAsset LoadVisAsset(Guid uuid)
         {
-            return await LoadVisAsset(uuid, new ResourceVisAssetFetcher());
+            return LoadVisAsset(uuid, new ResourceVisAssetFetcher());
         }
 
-        public async Task<IVisAsset> LoadVisAsset(Guid uuid, IVisAssetFetcher _fetcher)
+        public IVisAsset LoadVisAsset(Guid uuid, IVisAssetFetcher _fetcher)
         {
             JObject jsonData = null;
             try
             {
-                jsonData = await _fetcher.GetArtifactJson(uuid);
+                jsonData = _fetcher.GetArtifactJson(uuid);
             }
             catch (Exception e)
             {
@@ -665,25 +631,25 @@ namespace IVLab.ABREngine
                 Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
             }
 
+            if (!VisAsset.IsValidVisAssetType(type))
+            {
+                Debug.LogError($"`{type}` is not a valid VisAsset type");
+                return null;
+            }
+
             if (type == "colormap")
             {
-                ColormapVisAsset visAsset = new ColormapVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-                Texture2D colormapTexture = await _fetcher.GetColormapTexture(guid);
-                visAsset.Gradient = colormapTexture;
+                Texture2D colormapTexture = _fetcher.GetColormapTexture(guid);
+                ColormapVisAsset visAsset = new ColormapVisAsset(guid, colormapTexture);
                 return visAsset;
             }
 
             if (type == "glyph")
             {
-                GlyphVisAsset visAsset = new GlyphVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
                 var artifactData = jsonData["artifactData"];
                 List<JObject> lodsList = null;
-
+                List<Mesh> meshLods = new List<Mesh>();
+                List<Texture2D> normalMapLods = new List<Texture2D>();
                 try
                 {
                     lodsList = artifactData["lods"].ToObject<List<JObject>>();
@@ -701,44 +667,38 @@ namespace IVLab.ABREngine
                 }
                 foreach (JObject lodJson in lodsList)
                 {
-                    GameObject loadedObjGameObject = GameObject.Instantiate(await _fetcher.GetGlyphGameObject(guid, lodJson));
+                    GameObject prefab = _fetcher.GetGlyphGameObject(guid, lodJson);
+                    GameObject loadedObjGameObject = GameObject.Instantiate(prefab);
                     loadedObjGameObject.transform.SetParent(ABREngine.Instance.transform);
-                    loadedObjGameObject.SetActive(false);
                     var loadedMesh = loadedObjGameObject.GetComponentInChildren<MeshFilter>().mesh;
                     GameObject.Destroy(loadedObjGameObject);
-                    visAsset.MeshLods.Add(loadedMesh);
+                    try
+                    {
+                        // Destroy doesn't work if we imported from resources.
+                        GameObject.Destroy(prefab);
+                    }
+                    catch (Exception) { }
+                    meshLods.Add(loadedMesh);
 
-                    Texture2D normalMap = await _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
-                    visAsset.NormalMapLods.Add(normalMap);
+                    Texture2D normalMap = _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
+                    normalMapLods.Add(normalMap);
                 }
-
+                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods);
                 return visAsset;
             }
 
             if (type == "line")
             {
-                LineTextureVisAsset visAsset = new LineTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
-                Texture2D texture = await _fetcher.GetLineTexture(guid);
-                visAsset.Texture = texture;
-
+                Texture2D texture = _fetcher.GetLineTexture(guid);
+                LineTextureVisAsset visAsset = new LineTextureVisAsset(guid, texture);
                 return visAsset;
             }
 
             if (type == "texture")
             {
-                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset();
-                visAsset.Uuid = guid;
-                visAsset.ImportTime = DateTime.Now;
-
-                Texture2D texture = await _fetcher.GetSurfaceTexture(guid);
-                visAsset.Texture = texture;
-
-                Texture2D normal = await _fetcher.GetSurfaceNormalMap(guid);
-                visAsset.NormalMap = normal;
-
+                Texture2D texture = _fetcher.GetSurfaceTexture(guid);
+                Texture2D normal = _fetcher.GetSurfaceNormalMap(guid);
+                SurfaceTextureVisAsset visAsset = new SurfaceTextureVisAsset(guid, texture, normal);
                 return visAsset;
             }
             return null;

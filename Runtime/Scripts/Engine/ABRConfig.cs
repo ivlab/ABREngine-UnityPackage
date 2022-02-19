@@ -123,7 +123,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Schema to use for internally grabbing default values
         /// </summary>
-        private JObject _schema;
+        public JObject SchemaJson { get; private set; }
 
         public ABRConfig()
         {
@@ -168,14 +168,42 @@ namespace IVLab.ABREngine
                 defaultPrefab = defaultPrefab
             };
 
+            // Check for a backed up schema
+            string backupSchemaDir = Path.Combine(Application.streamingAssetsPath, "schemas");
+            string backupSchema = null;
+            try
+            {
+                List<string> schemas = Directory.GetFiles(backupSchemaDir).Where(f => f.EndsWith(".json")).ToList();
+                schemas.Sort();
+                schemas.Reverse();
+                backupSchema = schemas[0];
+            }
+            catch
+            {
+                Debug.LogErrorFormat("Unable to find a backup schema in {0}", backupSchemaDir);
+            }
+
+            if (backupSchema != null)
+            {
+                backupSchema = Path.Combine(backupSchemaDir, backupSchema);
+            }
+
             // Load the schema
             HttpResponseMessage resp = ABREngine.httpClient.GetAsync(ABRConfig.Consts.SchemaUrl).Result;
+            string schemaContents = null;
             if (!resp.IsSuccessStatusCode)
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}", ABRConfig.Consts.SchemaUrl);
-                return;
+                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", ABRConfig.Consts.SchemaUrl, backupSchema);
+                using (StreamReader reader = new StreamReader(backupSchema))
+                {
+                    schemaContents = reader.ReadToEnd();
+                }
             }
-            string schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            else
+            {
+                schemaContents = (resp.Content.ReadAsStringAsync().Result);
+            }
+
             Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
@@ -187,9 +215,37 @@ namespace IVLab.ABREngine
                 Debug.LogErrorFormat("Schema `{0}` is invalid.", Info.schemaName);
                 return;
             }
+            SchemaJson = JObject.Parse(schemaContents);
 
-            _schema = JObject.Parse(schemaContents);
-            Debug.LogFormat("Using ABR Schema, version {0}", _schema["properties"]["version"]["default"]);
+            // Save a copy if needed
+            bool needBackup = true;
+            if (backupSchema != null) {
+                using (StreamReader reader = new StreamReader(backupSchema))
+                {
+                    string bakContents = reader.ReadToEnd();
+                    if (bakContents == schemaContents)
+                    {
+                        needBackup = false;
+                    }
+                }
+            }
+            if (needBackup)
+            {
+                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture).Replace(":", "_") + ".json";
+                if (!Directory.Exists(backupSchemaDir))
+                {
+                    Directory.CreateDirectory(backupSchemaDir);
+                }
+                string schemaBakPath = Path.Combine(backupSchemaDir, schemaName);
+                using (StreamWriter writer = new StreamWriter(schemaBakPath))
+                {
+                    writer.Write(schemaContents);
+                }
+                Debug.Log("Saved backup schema to " + schemaBakPath);
+            }
+
+
+            Debug.LogFormat("Using ABR Schema, version {0}", SchemaJson["properties"]["version"]["default"]);
         }
 
         /// <summary>
@@ -199,12 +255,12 @@ namespace IVLab.ABREngine
         public T GetInputValueDefault<T>(string plateName, string inputName)
         where T : IPrimitive
         {
-            if (_schema == null)
+            if (SchemaJson == null)
             {
                 Debug.LogErrorFormat("Schema is null, cannot get default value {0}", inputName);
                 return default(T);
             }
-            string primitiveValue = _schema["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
+            string primitiveValue = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
             
             Type inputType = typeof(T);
             ConstructorInfo inputCtor =
@@ -233,12 +289,12 @@ namespace IVLab.ABREngine
         /// </summary>
         public string[] GetInputNames(string plateName)
         {
-            if (_schema == null)
+            if (SchemaJson == null)
             {
                 Debug.LogErrorFormat("Schema is null, cannot get input names for {0}", plateName);
                 return new string[0];
             }
-            Dictionary<string, JToken> inputList = _schema["definitions"]["Plates"][plateName]["properties"].ToObject<Dictionary<string, JToken>>();
+            Dictionary<string, JToken> inputList = SchemaJson["definitions"]["Plates"][plateName]["properties"].ToObject<Dictionary<string, JToken>>();
             return inputList.Keys.ToArray();
         }
 

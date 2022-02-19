@@ -39,32 +39,41 @@ namespace IVLab.ABREngine
     /// Impressions.
     /// </summary>
     /// <example>
-    /// Key data and variables can be loaded directly from the data manager:
+    /// When constructing a custom dataset, you can load it directly into the
+    /// engine and access its imported contents via the <see cref="KeyData"/>
+    /// object returned by <see cref="ImportRawDataset"/>.
     /// <code>
-    /// // Load an example dataset
-    /// await ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader&gt;("Test/Test/KeyData/Example");
-    /// // Load the high-level dataset that both Contour and Points are contained within
-    /// Dataset ds = null;
-    /// if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))
+    /// public class DataManagerExample : MonoBehaviour
     /// {
-    ///     Debug.LogError("Unable to load dataset " + datasetPath);
-    ///     return;
-    /// }
+    ///     void Start()
+    ///     {
+    ///         // Generate 100 random points with "data" values
+    ///         List&lt;Vector3&gt; points = new List&lt;Vector3&gt;();
+    ///         List&lt;float&gt; dataValues = new List&lt;float&gt;();
+    ///         for (int i = 0; i &lt; 100; i++)
+    ///         {
+    ///             points.Add(Random.insideUnitSphere);
+    ///             dataValues.Add(i);
+    ///         }
     /// 
-    /// KeyData kd = null;
-    /// // Populate the key data objects from dataset
-    /// if (!ds.TryGetKeyData("Test/Test/KeyData/Example", out kd))
-    /// {
-    ///     Debug.LogError("Key data not found in dataset");
-    ///     return;
-    /// }
+    ///         // Create some bounds
+    ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
     /// 
-    /// ScalarDataVariable s = null;
-    /// // Populate the variables from dataset
-    /// if (!ds.TryGetScalarVar("Test/Test/ScalarVar/ExampleVar", out s))
-    /// {
-    ///     Debug.LogError("Dataset does not have variable");
-    ///     return;
+    ///         // Create a dictionary to name the scalar values
+    ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", dataValues }};
+    /// 
+    ///         // Create an ABR-formatted dataset
+    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, null);
+    /// 
+    ///         // AND, import these data to ABR
+    ///         KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+    /// 
+    ///         // From here, we can access the keyData, scalarVariables, and vectorVariables
+    ///         Debug.Log(pointsKD);                             // the key data (point geometry) we just imported
+    ///         Debug.Log(pointsKD.GetScalarVariables().Length); // length of 1
+    ///         Debug.Log(pointsKD.GetScalarVariables()[0]);     // the 'someData' variable we declared above
+    ///         Debug.Log(pointsKD.GetVectorVariables().Length); // length of 0 -- we didn't declare any vector vars here.
+    ///     }
     /// }
     /// </code>
     /// Additionally, the actual raw data can be loaded from the data manager.
@@ -97,6 +106,17 @@ namespace IVLab.ABREngine
         // Dictionary of Dataset DataPath -> Dataset, which contains all the key
         // data and variables for a particular dataset
         private Dictionary<string, Dataset> datasets = new Dictionary<string, Dataset>();
+
+        // Default internal path for data if path is not provided
+        private const string DefaultDatasetPath = "Imported/Imported";
+        private int importCount = 0;
+        private string DefaultKeyDataPath
+        {
+            get
+            {
+                return DefaultDatasetPath + "/KeyData/" + importCount;
+            }
+        }
 
         public DataManager(string datasetPath)
         {
@@ -143,32 +163,35 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Load a raw dataset into a RawDataset object by its data path. NOTE:
-        /// this method does not import the resulting `RawDataset` into ABR -
-        /// this is accomplished through `ImportRawDataset`!
+        /// Load a raw dataset into a RawDataset object by its data path and
+        /// return the rawdataset after it has been successfully imported.
         /// </summary>
-        /// <examples>
+        /// <example>
         /// Datasets may be loaded from any of the following locations:
         /// <code>
         /// // From a file in the media directory
-        /// await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        ///
+        /// RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
         /// // From a web resource
-        /// await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
-        /// </examples>
-        public async Task LoadRawDataset<T>(string dataPath)
+        /// </example>
+        /// <returns>
+        /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
+        /// </returns>
+        public async Task<RawDataset> LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
             RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
             // Only import if there are actual data present
             if (ds != null)
             {
-                await ImportRawDataset(dataPath, ds);
+                ImportRawDataset(dataPath, ds);
+                return ds;
             }
             else
             {
                 Debug.LogError("Unable to load Raw Dataset " + dataPath);
+                return null;
             }
         }
 
@@ -199,36 +222,64 @@ namespace IVLab.ABREngine
         /// available as a key data object and makes all of its scalar and
         /// vector variables available across ABR.
         /// </summary>
-        public async Task ImportRawDataset(string dataPath, RawDataset importing)
+        /// <returns>
+        /// Returns the Key Data and variables that were just imported to
+        /// this data path.
+        /// </returns>
+        public KeyData ImportRawDataset(RawDataset importing)
+        {
+            importCount++;
+            return ImportRawDataset(DefaultKeyDataPath, importing);
+        }
+
+        /// <summary>
+        /// Import a raw dataset into ABR. This method makes the dataset
+        /// available as a key data object and makes all of its scalar and
+        /// vector variables available across ABR.
+        /// </summary>
+        /// <returns>
+        /// Returns the Key Data and variables that were just imported to
+        /// this data path.
+        /// </returns>
+        public KeyData ImportRawDataset(string dataPath, RawDataset importing)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             // See what dataset this RawDataset is a part of
             string datasetPath = DataPath.GetDatasetPath(dataPath);
 
             // See if we have any data from that dataset yet
-            // Needs to be run in main thread because of this.transform
-            await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                try
+            try
+            {
+                // If we don't, create the dataset
+                Dataset dataset;
+                if (!TryGetDataset(datasetPath, out dataset))
                 {
-                    // If we don't, create the dataset
-                    Dataset dataset;
-                    if (!TryGetDataset(datasetPath, out dataset))
-                    {
-                        Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
-                        dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.transform);
-                    }
-
-                    datasets[datasetPath] = dataset;
-                    rawDatasets[dataPath] = importing;
-
-                    ImportVariables(dataPath, importing, dataset);
-                    ImportKeyData(dataPath, importing, dataset);
+                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
+                    dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
                 }
-                catch (Exception e)
+
+                datasets[datasetPath] = dataset;
+                rawDatasets[dataPath] = importing;
+
+                ImportVariables(dataPath, importing, dataset);
+                ImportKeyData(dataPath, importing, dataset);
+
+                // Retrieve the KeyData object that was just imported
+                IKeyData keyData;
+                if (!dataset.TryGetKeyData(dataPath, out keyData))
                 {
-                    Debug.LogError(e);
+                    Debug.LogError($"Failed to import Key Data for {dataPath} properly");
+                    return null;
                 }
-            });
+
+                return keyData as KeyData;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
+            return null;
         }
 
         /// <summary>

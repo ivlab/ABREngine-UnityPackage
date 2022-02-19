@@ -22,29 +22,35 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    public class ColormapVisAsset : VisAsset
+    public interface IColormapVisAsset : IVisAsset
     {
-        public override VisAssetType VisAssetType { get; } = VisAssetType.Colormap;
+        Texture2D GetColorGradient();
+    }
 
-        public Texture2D Gradient { get; set; } = null;
+    public class ColormapVisAsset : VisAsset, IColormapVisAsset
+    {
+        public int VisAssetCount { get; } = 1;
+        public Texture2D Colormap { get; } = null;
 
-        public Color GetColorInterp(float interpAmount)
+        public ColormapVisAsset() : this(new Guid(), null) { }
+        public ColormapVisAsset(Texture2D colormap) : this(Guid.NewGuid(), colormap) { }
+        public ColormapVisAsset(Guid uuid, Texture2D colormap)
         {
-            return Gradient.GetPixelBilinear(interpAmount, 0.5f);
+            Uuid = uuid;
+            Colormap = colormap;
+            ImportTime = DateTime.Now;
         }
 
-        public Texture2D GetColorGradient()
-        {
-            return Gradient;
-        }
+        public Color GetColorInterp(float interpAmount) => Colormap.GetPixelBilinear(interpAmount, 0.5f);
+
+        public Texture2D GetColorGradient() => Colormap;
 
         public static ColormapVisAsset SolidColor(Color fillColor)
         {
             Texture2D gradient = new Texture2D(1, 1);
             gradient.SetPixel(0, 0, fillColor);
             gradient.Apply();
-            ColormapVisAsset cmap = new ColormapVisAsset();
-            cmap.Gradient = gradient;
+            ColormapVisAsset cmap = new ColormapVisAsset(gradient);
             return cmap;
         }
     }

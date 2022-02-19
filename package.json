@@ -1,11 +1,12 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "0.2.1",
+    "version": "1.0.1",
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
     "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
     "dependencies": {
+        "com.unity.textmeshpro": "3.0.6"
     },
     "samples": [
         {
@@ -22,6 +23,11 @@
             "displayName": "Dataset Creation",
             "description": "Contains a script to manually create and load a raw ABR dataset",
             "path": "Samples~/CreateDataset"
+        },
+        {
+            "displayName": "ABR Testing",
+            "description": "If you are contributing to the ABREngine, you may use this script as a framework to test your new features.",
+            "path": "Samples~/TestingABR"
         }
     ]
 }

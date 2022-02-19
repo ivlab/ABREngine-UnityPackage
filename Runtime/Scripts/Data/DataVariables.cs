@@ -111,7 +111,7 @@ namespace IVLab.ABREngine
         public bool CustomizedRange { get; set; }
         public Dictionary<string, DataRange<float>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<float>>();
 
-        public ScalarDataVariable(string path)
+        internal ScalarDataVariable(string path)
         {
             Path = path;
         }
@@ -174,7 +174,7 @@ namespace IVLab.ABREngine
         public bool CustomizedRange { get; set; }
         public Dictionary<string, DataRange<Vector3>> SpecificRanges { get; set; } = new Dictionary<string, DataRange<Vector3>>();
 
-        public VectorDataVariable(string path)
+        internal VectorDataVariable(string path)
         {
             Path = path;
         }

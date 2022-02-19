@@ -35,18 +35,32 @@ namespace IVLab.ABREngine
         public float stepCount;
     }
 
+    /// <summary>
+    /// A "Volumes" data impression that uses a user-defined transfer (opacity) map and a colormap to show volumetric data.
+    /// </summary>
+    /// <example>
+    /// An example of creating a single volume data impression and setting its colormap and opacity map could be:
+    /// <code>
+    /// SimpleVolumeDataImpression gi = new SimpleVolumeDataImpression();
+    /// gi.keyData = volume;
+    /// gi.colorVariable = yAxis;
+    /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+    /// gi.opacityMap = PrimitiveGradient.Default();
+    /// ABREngine.Instance.RegisterDataImpression(gi);
+    /// </code>
+    /// </example>
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression, IDataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public VolumeKeyData keyData;
+        public KeyData keyData;
 
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Data)]
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ColormapVisAsset colormap;
+        public IColormapVisAsset colormap;
 
         [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
@@ -60,6 +74,12 @@ namespace IVLab.ABREngine
 
         [ABRInput("Volume Lighting", "Volume", UpdateLevel.Style)]
         public BooleanPrimitive volumeLighting;
+
+
+        /// <summary>
+        ///    Compute buffer used to quickly pass per-voxel visibility flags to GPU
+        /// </summary>
+        private ComputeBuffer perVoxelVisibilityBuffer; 
 
 
         protected override string MaterialName { get; } = "ABR_Volume";
@@ -245,6 +265,7 @@ namespace IVLab.ABREngine
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);
                 MatPropBlock.SetVector("_Center", volumeRenderData.bounds.center);
                 MatPropBlock.SetVector("_Extents", volumeRenderData.bounds.extents);
+                MatPropBlock.SetVector("_Dimensions", new Vector4(volumeRenderData.voxelTex.width, volumeRenderData.voxelTex.height, volumeRenderData.voxelTex.depth, 0));
                 MatPropBlock.SetFloat("_StepCount", volumeRenderData.stepCount);
                 meshRenderer.SetPropertyBlock(MatPropBlock);
             }
@@ -329,6 +350,27 @@ namespace IVLab.ABREngine
 
             }
 
+            // Per index/voxel visibility
+            var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;
+            int voxelCount = volumeRenderData.voxelTex.width * volumeRenderData.voxelTex.height * volumeRenderData.voxelTex.depth;
+            if (RenderHints.HasPerIndexVisibility() && RenderHints.PerIndexVisibility.Count == voxelCount)
+            {
+                // Copy per-index bit array to int array so that it can be sent to GPU
+                int[] perVoxelVisibility = new int[(voxelCount - 1) / sizeof(int) + 1];
+                RenderHints.PerIndexVisibility.CopyTo(perVoxelVisibility, 0);
+                // Initialize the compute buffer if it is uninitialized
+                if (perVoxelVisibilityBuffer == null)
+                    perVoxelVisibilityBuffer = new ComputeBuffer(perVoxelVisibility.Length, sizeof(int), ComputeBufferType.Default);
+                // Set buffer data to int array and send to shader
+                perVoxelVisibilityBuffer.SetData(perVoxelVisibility);
+                MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
+                MatPropBlock.SetInt("_HasPerVoxelVisibility", 1);
+            }
+            else
+            {
+                MatPropBlock.SetInt("_HasPerVoxelVisibility", 0);
+            }
+
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
@@ -390,6 +432,13 @@ namespace IVLab.ABREngine
             // Apply updated pixels to texture
             opacityMapTexture.SetPixels(pixelColors);
             opacityMapTexture.Apply(false);
+        }
+
+        void OnDisable()
+        { 
+            if (perVoxelVisibilityBuffer != null)
+                perVoxelVisibilityBuffer.Release();
+            perVoxelVisibilityBuffer = null;
         }
     }
 }

@@ -40,13 +40,13 @@ namespace IVLab.ABREngine
     /// A "Lines" data impression that uses hand-drawn line textures to depict line/flow data.
     /// </summary>
     /// <example>
-    /// An example of creating a single glyph data impression and setting its colormap, color variable, and line texture could be:
+    /// An example of creating a single line data impression and setting its colormap, color variable, and line texture could be:
     /// <code>
     /// SimpleLineDataImpression gi = new SimpleLineDataImpression();
-    /// gi.keyData = lines as LineKeyData;
+    /// gi.keyData = lines;
     /// gi.colorVariable = yAxis;
     /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    /// gi.lineTexture = line as LineTextureVisAsset;
+    /// gi.lineTexture = line;
     /// ABREngine.Instance.RegisterDataImpression(gi);
     /// </code>
     /// </example>
@@ -54,20 +54,20 @@ namespace IVLab.ABREngine
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public LineKeyData keyData;
+        public KeyData keyData;
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ColormapVisAsset colormap;
+        public IColormapVisAsset colormap;
 
 
         [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
-        public LineTextureVisAsset lineTexture;
+        public ILineTextureVisAsset lineTexture;
 
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
@@ -87,6 +87,8 @@ namespace IVLab.ABREngine
 
         [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
+
+        public Vector3 defaultCurveDirection = Vector3.up;
 
         protected override string MaterialName { get; } = "ABR_Ribbon";
         protected override string LayerName { get; } = "ABR_Line";
@@ -175,8 +177,8 @@ namespace IVLab.ABREngine
                     Queue<Vector3> smoothingTangents = new Queue<Vector3>(averageCountN);
 
                     int numPoints = dataset.cellIndexCounts[i];
-                    int numVerts = numPoints * 4;
-                    int numIndices = (numPoints - 1) * 12;
+                    int numVerts = numPoints * 4; // 4 vertices per line segment (2 triangles)
+                    int numIndices = (numPoints - 1) * 12; // 12 indices per line segment (4 triangles, front/back)
                     renderInfo.vertices[i] = new Vector3[numVerts];
                     renderInfo.normals[i] = new Vector3[numVerts];
                     renderInfo.uvs[i] = new Vector2[numVerts];
@@ -189,34 +191,54 @@ namespace IVLab.ABREngine
 
                     float arclength = 0;
 
-                    Vector3 lastV = Vector3.up;
+                    Vector3 lastV = defaultCurveDirection;
                     for (int index = indexOffset, j = 0; index < indexEnd; index++, j++)
                     {
                         pointIndex = dataset.indexArray[index];
-                        var lastPointIndex = (j == 0) ? pointIndex : dataset.indexArray[index - 1];
-                        var nextPointIndex = (j == numPoints - 1) ? pointIndex : dataset.indexArray[index + 1];
+                        // Gather previous/next point indices, default to current index if outside bounds
+                        var lastPointIndex = (j > 0) ? dataset.indexArray[index - 1] : pointIndex;
+                        var nextPointIndex = (j < numPoints - 1) ? dataset.indexArray[index + 1] : pointIndex;
 
+                        // Point is the current data point from the line dataset, previous and next point
                         Vector3 point = group.GroupToDataMatrix * dataset.vertexArray[pointIndex].ToHomogeneous();
                         Vector3 lastPoint = group.GroupToDataMatrix * dataset.vertexArray[lastPointIndex].ToHomogeneous();
                         Vector3 nextPoint = group.GroupToDataMatrix * dataset.vertexArray[nextPointIndex].ToHomogeneous();
 
+                        // Vectors pointing `last --> current --> next`
+                        Vector3 fromLast = point - lastPoint;
+                        Vector3 toNext = nextPoint - point;
+
                         Vector3 tangent;
                         Vector3 normal;
                         Vector3 bitangent;
-                        Vector3 fromLast = point - lastPoint;
-                        Vector3 toNext = nextPoint - point;
                         Vector4 scalar = Vector4.zero;
 
+                        // Arclength is the length we've travelled so far in this ribbon
                         arclength = arclength + fromLast.magnitude;
+
+                        // Calculate tangent at current point (tangent of curve)
                         tangent = (fromLast + toNext).normalized;
 
+                        // Calculate axis of curvature
                         Vector3 V = Vector3.Cross(fromLast.normalized, toNext.normalized).normalized;
+
+                        // SPECIAL CASE: switching curvature directions
                         if (Vector3.Dot(V, lastV) < 0) V = -V;
+
+                        // SPECIAL CASE: no curvature (default to previously found V)
+                        if (V.magnitude < float.Epsilon)
+                        {
+                            V = lastV;
+                        }
+
                         lastV = V;
+
+                        // Calculate initial normal of ribbon
                         Vector3 N = Vector3.Cross(V, tangent).normalized;
                         Vector3 normalSum = N;
                         Vector3 tangentDirSum = tangent.normalized;
 
+                        // Smooth out the normals, if desired
                         if (smoothingNormals.Count > 0)
                         {
                             if (Vector3.Dot(smoothingNormals.Last(), N) < 0)
@@ -235,26 +257,27 @@ namespace IVLab.ABREngine
                         Vector3 normalAvg = normalSum / (smoothingNormals.Count + 1);
                         Vector3 tangentAvg = tangentDirSum / (smoothingNormals.Count + 1);
 
-
                         normal = normalAvg;
                         tangent = tangentAvg;
 
+                        // Only smooth over averageCountN normals
                         smoothingNormals.Enqueue(normal);
                         while (smoothingNormals.Count > averageCountN) smoothingNormals.Dequeue();
                         while (smoothingTangents.Count > averageCountN) smoothingTangents.Dequeue();
 
-
+                        // Assign scalar variables
                         if (colorVariableArray != null)
                         {
                             scalar[0] = colorVariableArray[index];
                         }
 
+                        // Calculate a 3D basis for the point.
+                        // Normal, Tangent, and Bitangent should be mutually perpendicular.
                         normal = normal.normalized;
                         tangent = tangent.normalized;
                         bitangent = -Vector3.Cross(normal, tangent).normalized;
 
-
-
+                        // Rotate the ribbon based on user parameter
                         normal = Quaternion.AngleAxis(ribbonRotation, tangent) * normal;
                         bitangent = Quaternion.AngleAxis(ribbonRotation, tangent) * bitangent;
 
@@ -269,10 +292,10 @@ namespace IVLab.ABREngine
                         int nextIndexBottomFront = (j + 1) * 4 + 2;
                         int nextIndexBottomBack = (j + 1) * 4 + 3;
 
-                        renderInfo.vertices[i][indexTopFront] = (point + bitangent * ribbonWidth + normal * ribbonWidth);
-                        renderInfo.vertices[i][indexTopBack] = (point + bitangent * ribbonWidth - normal * ribbonWidth);
-                        renderInfo.vertices[i][indexBottomFront] = (point - bitangent * ribbonWidth + normal * ribbonWidth);
-                        renderInfo.vertices[i][indexBottomBack] = (point - bitangent * ribbonWidth - normal * ribbonWidth);
+                        renderInfo.vertices[i][indexTopFront] = (point + bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexTopBack] = (point + bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexBottomFront] = (point - bitangent * ribbonWidth);
+                        renderInfo.vertices[i][indexBottomBack] = (point - bitangent * ribbonWidth);
 
                         renderInfo.normals[i][indexTopFront] = Quaternion.AngleAxis(curveAngle, tangent) * normal;
                         renderInfo.normals[i][indexTopBack] = Quaternion.AngleAxis(-curveAngle, tangent) * -normal;
@@ -293,7 +316,8 @@ namespace IVLab.ABREngine
 
 
 
-                        if (j < (numPoints - 10) && j > 1)
+                        // Skip the first point since there is not a valid curvature direction (need 3 points)
+                        if (j < (numPoints - 1) && j > 0)
                         {
                             renderInfo.indices[i][j * 12 + 0] = indexTopFront;
                             renderInfo.indices[i][j * 12 + 1] = nextIndexTopFront;
@@ -416,11 +440,12 @@ namespace IVLab.ABREngine
             }
             int numLines = dataset.cellIndexCounts.Length;
 
-            // Initialize variables to track scalar "styling" changes
+            // Pack scalar min/max and get scalar data, if any
             Color[][] scalars = new Color[numLines][];
             Vector4 scalarMax = Vector4.zero;
             Vector4 scalarMin = Vector4.zero;
             float[] colorVariableArray = null;
+            float[] ribbonVariableArray = null;
             if (colorVariable != null && colorVariable.IsPartOf(keyData))
             {
                 colorVariableArray = colorVariable.GetArray(keyData);
@@ -434,6 +459,21 @@ namespace IVLab.ABREngine
                 {
                     scalarMin[0] = colorVariable.Range.min;
                     scalarMax[0] = colorVariable.Range.max;
+                }
+            }
+            if (lineTextureVariable != null && lineTextureVariable.IsPartOf(keyData))
+            {
+                ribbonVariableArray = lineTextureVariable.GetArray(keyData);
+                // Get keydata-specific range, if there is one
+                if (lineTextureVariable.SpecificRanges.ContainsKey(keyData.Path))
+                {
+                    scalarMin[1] = lineTextureVariable.SpecificRanges[keyData.Path].min;
+                    scalarMax[1] = lineTextureVariable.SpecificRanges[keyData.Path].max;
+                }
+                else
+                {
+                    scalarMin[1] = lineTextureVariable.Range.min;
+                    scalarMax[1] = lineTextureVariable.Range.max;
                 }
             }
 
@@ -452,6 +492,10 @@ namespace IVLab.ABREngine
                     return;
                 }
 
+                // Show/hide line based on per-index visibility
+                if (RenderHints.HasPerIndexVisibility() && i < RenderHints.PerIndexVisibility.Count)
+                    meshRenderer.enabled = RenderHints.PerIndexVisibility[i];
+
                 // We should be able to access the mesh now
                 Mesh mesh = meshFilter.mesh;
 
@@ -468,9 +512,16 @@ namespace IVLab.ABREngine
                 {
                     Vector4 scalar = Vector4.zero;
 
+                    // Pack scalars
+                    // INDEX 0: Color variable
                     if (colorVariableArray != null)
                     {
                         scalar[0] = colorVariableArray[index];
+                    }
+                    // INDEX 1: Ribbon variable
+                    if (ribbonVariableArray != null)
+                    {
+                        scalar[1] = ribbonVariableArray[index];
                     }
 
                     int indexTopFront = j * 4 + 0;
@@ -512,18 +563,20 @@ namespace IVLab.ABREngine
 
                 if (lineTexture != null)
                 {
-                    MatPropBlock.SetTexture("_Texture", lineTexture.Texture);
-                    MatPropBlock.SetFloat("_TextureAspect", lineTexture.Texture.width / (float)lineTexture.Texture.height);
+                    MatPropBlock.SetTexture("_Texture", lineTexture.BlendMaps.Textures);
+                    MatPropBlock.SetTexture("_BlendMaps", lineTexture.BlendMaps.BlendMaps);
+                    MatPropBlock.SetInt("_NumTex", lineTexture.VisAssetCount);
+                    MatPropBlock.SetFloatArray("_TextureAspect", lineTexture.BlendMaps.AspectRatios);
+                    MatPropBlock.SetFloatArray("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
-
                 }
                 else
                 {
                     MatPropBlock.SetInt("_UseLineTexture", 0);
 
                 }
-                MatPropBlock.SetFloat("_ColorDataMin", scalarMin[0]);
-                MatPropBlock.SetFloat("_ColorDataMax", scalarMax[0]);
+                MatPropBlock.SetVector("_ScalarMin", scalarMin);
+                MatPropBlock.SetVector("_ScalarMax", scalarMax);
                 if (colormap?.GetColorGradient() != null)
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
@@ -546,9 +599,19 @@ namespace IVLab.ABREngine
             for (int i = 0; i < currentGameObject.transform.childCount; i++)
             {
                 MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
-                if (mr != null)
+                if (mr !=  null)
                 {
-                    mr.enabled = RenderHints.Visible;
+                    if (RenderHints.Visible)
+                    {
+                        if (RenderHints.HasPerIndexVisibility() && i < RenderHints.PerIndexVisibility.Count)
+                            mr.enabled = RenderHints.PerIndexVisibility[i];
+                        else
+                            mr.enabled = true;
+                    }
+                    else
+                    {
+                        mr.enabled = false;
+                    }
                 }
             }
         }

@@ -101,31 +101,40 @@ Impressions.</p>
     <pre><code class="lang-csharp hljs">public class DataManager</code></pre>
   </div>
   <h5 id="IVLab_ABREngine_DataManager_examples"><strong>Examples</strong></h5>
-  <p>Key data and variables can be loaded directly from the data manager:</p>
-<pre><code>// Load an example dataset
-await ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader>(&quot;Test/Test/KeyData/Example&quot;);
-// Load the high-level dataset that both Contour and Points are contained within
-Dataset ds = null;
-if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))
+  <p>When constructing a custom dataset, you can load it directly into the
+engine and access its imported contents via the <a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a>
+object returned by <a class="xref" href="IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_ImportRawDataset_IVLab_ABREngine_RawDataset_">ImportRawDataset(RawDataset)</a>.</p>
+<pre><code>public class DataManagerExample : MonoBehaviour
 {
-    Debug.LogError(&quot;Unable to load dataset &quot; + datasetPath);
-    return;
-}
+    void Start()
+    {
+        // Generate 100 random points with &quot;data&quot; values
+        List&lt;Vector3> points = new List&lt;Vector3>();
+        List&lt;float> dataValues = new List&lt;float>();
+        for (int i = 0; i &lt; 100; i++)
+        {
+            points.Add(Random.insideUnitSphere);
+            dataValues.Add(i);
+        }
 
-KeyData kd = null;
-// Populate the key data objects from dataset
-if (!ds.TryGetKeyData(&quot;Test/Test/KeyData/Example&quot;, out kd))
-{
-    Debug.LogError(&quot;Key data not found in dataset&quot;);
-    return;
-}
+        // Create some bounds
+        Bounds b = new Bounds(Vector3.zero, Vector3.one);
 
-ScalarDataVariable s = null;
-// Populate the variables from dataset
-if (!ds.TryGetScalarVar(&quot;Test/Test/ScalarVar/ExampleVar&quot;, out s))
-{
-    Debug.LogError(&quot;Dataset does not have variable&quot;);
-    return;
+        // Create a dictionary to name the scalar values
+        Dictionary&lt;string, List&lt;float>> scalarVars = new Dictionary&lt;string, List&lt;float>> {{ &quot;someData&quot;, dataValues }};
+
+        // Create an ABR-formatted dataset
+        RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(points, b, scalarVars, null);
+
+        // AND, import these data to ABR
+        KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
+
+        // From here, we can access the keyData, scalarVariables, and vectorVariables
+        Debug.Log(pointsKD);                             // the key data (point geometry) we just imported
+        Debug.Log(pointsKD.GetScalarVariables().Length); // length of 1
+        Debug.Log(pointsKD.GetScalarVariables()[0]);     // the &apos;someData&apos; variable we declared above
+        Debug.Log(pointsKD.GetVectorVariables().Length); // length of 0 -- we didn&apos;t declare any vector vars here.
+    }
 }</code></pre>
 <p>Additionally, the actual raw data can be loaded from the data manager.
 Generally this is not necessary, simply using the high-level variables
@@ -251,6 +260,53 @@ media folder.</p>
   
   
   <a id="IVLab_ABREngine_DataManager_ImportRawDataset_" data-uid="IVLab.ABREngine.DataManager.ImportRawDataset*"></a>
+  <h4 id="IVLab_ABREngine_DataManager_ImportRawDataset_IVLab_ABREngine_RawDataset_" data-uid="IVLab.ABREngine.DataManager.ImportRawDataset(IVLab.ABREngine.RawDataset)">ImportRawDataset(RawDataset)</h4>
+  <div class="markdown level1 summary"><p>Import a raw dataset into ABR. This method makes the dataset
+available as a key data object and makes all of its scalar and
+vector variables available across ABR.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public KeyData ImportRawDataset(RawDataset importing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a></td>
+        <td><span class="parametername">importing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
+        <td><p>Returns the Key Data and variables that were just imported to
+this data path.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataManager_ImportRawDataset_" data-uid="IVLab.ABREngine.DataManager.ImportRawDataset*"></a>
   <h4 id="IVLab_ABREngine_DataManager_ImportRawDataset_System_String_IVLab_ABREngine_RawDataset_" data-uid="IVLab.ABREngine.DataManager.ImportRawDataset(System.String,IVLab.ABREngine.RawDataset)">ImportRawDataset(String, RawDataset)</h4>
   <div class="markdown level1 summary"><p>Import a raw dataset into ABR. This method makes the dataset
 available as a key data object and makes all of its scalar and
@@ -259,7 +315,7 @@ vector variables available across ABR.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task ImportRawDataset(string dataPath, RawDataset importing)</code></pre>
+    <pre><code class="lang-csharp hljs">public KeyData ImportRawDataset(string dataPath, RawDataset importing)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -293,8 +349,10 @@ vector variables available across ABR.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
+        <td><p>Returns the Key Data and variables that were just imported to
+this data path.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -302,14 +360,13 @@ vector variables available across ABR.</p>
   
   <a id="IVLab_ABREngine_DataManager_LoadRawDataset_" data-uid="IVLab.ABREngine.DataManager.LoadRawDataset*"></a>
   <h4 id="IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String_" data-uid="IVLab.ABREngine.DataManager.LoadRawDataset``1(System.String)">LoadRawDataset&lt;T&gt;(String)</h4>
-  <div class="markdown level1 summary"><p>Load a raw dataset into a RawDataset object by its data path. NOTE:
-this method does not import the resulting <code>RawDataset</code> into ABR -
-this is accomplished through <code>ImportRawDataset</code>!</p>
+  <div class="markdown level1 summary"><p>Load a raw dataset into a RawDataset object by its data path and
+return the rawdataset after it has been successfully imported.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task LoadRawDataset&lt;T&gt;(string dataPath)
+    <pre><code class="lang-csharp hljs">public async Task&lt;RawDataset&gt; LoadRawDataset&lt;T&gt;(string dataPath)
     where T : IDataLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -339,8 +396,9 @@ this is accomplished through <code>ImportRawDataset</code>!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>&gt;</td>
+        <td><p>Returns the actual <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a> if the dataset was found, <code>null</code> if not found.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -359,6 +417,13 @@ this is accomplished through <code>ImportRawDataset</code>!</p>
       </tr>
     </tbody>
   </table>
+  <h5 id="IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String__examples">Examples</h5>
+  <p>Datasets may be loaded from any of the following locations:</p>
+<pre><code>// From a file in the media directory
+RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media>(&quot;Test/Test/KeyData/Example&quot;);
+// From a web resource
+RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader>(&quot;Test/Test/KeyData/Example&quot;);</code></pre>
+
   
   
   <a id="IVLab_ABREngine_DataManager_TryGetDataset_" data-uid="IVLab.ABREngine.DataManager.TryGetDataset*"></a>
@@ -456,6 +521,34 @@ Dataset dataset</code> accordingly.</p>
         <td><p>Returns true if the raw dataset was found, false if not, and
 populates the <code>out RawDataset dataset</code> accordingly.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_DataManager_UnloadRawDataset_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset*"></a>
+  <h4 id="IVLab_ABREngine_DataManager_UnloadRawDataset_System_String_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset(System.String)">UnloadRawDataset(String)</h4>
+  <div class="markdown level1 summary"><p>Unload a raw dataset from a RawDataset object by its data path. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UnloadRawDataset(string dataPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
+        <td><span class="parametername">dataPath</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

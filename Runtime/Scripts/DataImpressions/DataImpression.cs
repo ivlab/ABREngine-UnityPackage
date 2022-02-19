@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -72,6 +73,18 @@ namespace IVLab.ABREngine
         ///     Copy a data impression, giving a new Uuid
         /// </summary>
         IDataImpression Copy();
+
+        /// <summary>
+        /// Update this data impression from an existing (possibly temporary) one.
+        /// </summary>
+        void CopyExisting(IDataImpression other);
+
+        /// <summary>
+        /// When this data impression is done being used, clean up after itself
+        /// if necessary. This method may need access to the GameObject the data
+        /// impression is applied to.
+        /// </summary>
+        void Cleanup(EncodedGameObject encodedGameObject);
 
         /// <summary>
         ///     Return if this data impression has a particular string tag (for
@@ -180,7 +193,27 @@ namespace IVLab.ABREngine
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Tags = new List<string>(di.Tags);
             di.Uuid = Guid.NewGuid();
+            di.RenderHints = this.RenderHints.Copy();
             return di as IDataImpression;
+        }
+
+        /// <summary>
+        /// Update this data impression from an existing (possibly temporary) one.
+        /// </summary>
+        public virtual void CopyExisting(IDataImpression other)
+        {
+            this.Tags = new List<string>((other as DataImpression).Tags);
+            this.RenderHints = other.RenderHints.Copy();
+            foreach (string inputName in other.InputIndexer.InputNames)
+            {
+                IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
+                this.InputIndexer.AssignInput(inputName, otherInput);
+            }
+        }
+
+        public virtual void Cleanup(EncodedGameObject encodedGameObject)
+        {
+            RenderInfo = null;
         }
 
         /// <summary>
@@ -238,5 +271,59 @@ namespace IVLab.ABREngine
         }
 
         private bool visible = true;
+
+
+        /// <summary>
+        ///    Index-level toggle to control visibility of individual parts of a data impression (e.g., points, lines).
+        /// </summary>
+        /// <remarks>
+        /// Index-level visibility may not be implemented for every data impression.
+        /// </remarks>
+        /// <example>
+        /// The following example shows basic usage of per-index visibility on a simple glyph data impression:
+        /// <code>
+        /// public class IndexVisibilityExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         // Let's say the key data has 42 points.
+        ///         KeyData pointsKd = // some data we've imported
+        ///
+        ///         // Create a layer for "before" points (blue)
+        ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+        ///         di.keyData = // some key data we've loaded previously
+        ///
+        ///         // Default everything to invisible (visible = false)
+        ///         di.RenderHints.PerIndexVisibility = new BitArray(42, false);
+        ///
+        ///         // Register impression with the engine and render
+        ///         ABREngine.Instance.RegisterDataImpression(di);
+        ///         ABREngine.Instance.Render();
+        ///
+        ///         // Then, if we wanted to set some index to visible:
+        ///         di.RenderHints.PerIndexVisibility[10] = true;
+        ///
+        ///         // Note: we need to tell the impression that its style has changed and
+        ///         // call Render() again
+        ///         di.RenderHints.StyleChanged = true;
+        ///         ABREngine.Instance.Render();
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        public BitArray PerIndexVisibility { get; set; } = null;
+
+        /// <summary>
+        ///    Whether or not the impression currently has per-index visibility
+        /// </summary>
+        public bool HasPerIndexVisibility()
+        {
+            return (PerIndexVisibility != null) && (PerIndexVisibility.Count > 0);
+        }
+
+        public RenderHints Copy()
+        {
+            return (RenderHints) this.MemberwiseClone();
+        }
     }
 }

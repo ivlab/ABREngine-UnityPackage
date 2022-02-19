@@ -106,30 +106,13 @@
   
   
   <a id="IVLab_ABREngine_PathStateFileLoader__ctor_" data-uid="IVLab.ABREngine.PathStateFileLoader.#ctor*"></a>
-  <h4 id="IVLab_ABREngine_PathStateFileLoader__ctor_System_String_" data-uid="IVLab.ABREngine.PathStateFileLoader.#ctor(System.String)">PathStateFileLoader(String)</h4>
+  <h4 id="IVLab_ABREngine_PathStateFileLoader__ctor" data-uid="IVLab.ABREngine.PathStateFileLoader.#ctor">PathStateFileLoader()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public PathStateFileLoader(string rootPath)</code></pre>
+    <pre><code class="lang-csharp hljs">public PathStateFileLoader()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">rootPath</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -140,7 +123,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task&lt;JObject&gt; GetState(string stateFileName)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task&lt;JObject&gt; GetState(string stateFilePath)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -154,7 +137,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">stateFileName</span></td>
+        <td><span class="parametername">stateFilePath</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -182,7 +165,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task SaveState(string name, string serializedState)</code></pre>
+    <pre><code class="lang-csharp hljs">public async Task SaveState(string outPath, string serializedState)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -196,7 +179,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">name</span></td>
+        <td><span class="parametername">outPath</span></td>
         <td></td>
       </tr>
       <tr>

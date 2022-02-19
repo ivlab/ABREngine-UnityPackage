@@ -129,15 +129,15 @@ namespace IVLab.ABREngine
             // Positions
             if (renderInfoBuffer != null)
                 renderInfoBuffer.Release();
-            renderInfoBuffer = new ComputeBuffer(instanceCount, 4 * 4);
+            renderInfoBuffer = new ComputeBuffer(instanceCount, sizeof(float) * 4);
 
             if (transformBuffer != null)
                 transformBuffer.Release();
-            transformBuffer = new ComputeBuffer(instanceCount, 4 * 16);
+            transformBuffer = new ComputeBuffer(instanceCount, sizeof(float) * 16);
 
             if (transformBufferInverse != null)
                 transformBufferInverse.Release();
-            transformBufferInverse = new ComputeBuffer(instanceCount, 4 * 16);
+            transformBufferInverse = new ComputeBuffer(instanceCount, sizeof(float) * 16);
 
 
 
@@ -146,13 +146,10 @@ namespace IVLab.ABREngine
             {
                 instanceLocalTransformsInverse[i] = instanceLocalTransforms[i].inverse;
             }
-            if (renderInfo != null)
-                renderInfoBuffer.SetData(renderInfo);
+
             transformBuffer.SetData(instanceLocalTransforms);
             transformBufferInverse.SetData(instanceLocalTransformsInverse);
             renderInfoBuffer.SetData(renderInfo);
-
-
 
             block.SetBuffer("transformBuffer", transformBuffer);
             block.SetBuffer("transformBufferInverse", transformBufferInverse);

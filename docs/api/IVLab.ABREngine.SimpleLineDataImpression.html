@@ -129,6 +129,12 @@
     <div>
       <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Copy">DataImpression.Copy()</a>
     </div>
+    <div>
+      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_CopyExisting_IVLab_ABREngine_IDataImpression_">DataImpression.CopyExisting(IDataImpression)</a>
+    </div>
+    <div>
+      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Cleanup_IVLab_ABREngine_EncodedGameObject_">DataImpression.Cleanup(EncodedGameObject)</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
   <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
@@ -138,12 +144,12 @@
 public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset</code></pre>
   </div>
   <h5 id="IVLab_ABREngine_SimpleLineDataImpression_examples"><strong>Examples</strong></h5>
-  <p>An example of creating a single glyph data impression and setting its colormap, color variable, and line texture could be:</p>
+  <p>An example of creating a single line data impression and setting its colormap, color variable, and line texture could be:</p>
 <pre><code>SimpleLineDataImpression gi = new SimpleLineDataImpression();
-gi.keyData = lines as LineKeyData;
+gi.keyData = lines;
 gi.colorVariable = yAxis;
 gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset>() as ColormapVisAsset;
-gi.lineTexture = line as LineTextureVisAsset;
+gi.lineTexture = line;
 ABREngine.Instance.RegisterDataImpression(gi);</code></pre>
 
   <h3 id="constructors">Constructors
@@ -223,7 +229,7 @@ public IntegerPrimitive averageCount</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;, UpdateLevel.Style)]
-public ColormapVisAsset colormap</code></pre>
+public IColormapVisAsset colormap</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -235,7 +241,7 @@ public ColormapVisAsset colormap</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.IColormapVisAsset.html">IColormapVisAsset</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -267,13 +273,12 @@ public ScalarDataVariable colorVariable</code></pre>
   </table>
   
   
-  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_keyData" data-uid="IVLab.ABREngine.SimpleLineDataImpression.keyData">keyData</h4>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_defaultCurveDirection" data-uid="IVLab.ABREngine.SimpleLineDataImpression.defaultCurveDirection">defaultCurveDirection</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
-public LineKeyData keyData</code></pre>
+    <pre><code class="lang-csharp hljs">public Vector3 defaultCurveDirection</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -285,7 +290,32 @@ public LineKeyData keyData</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.LineKeyData.html">LineKeyData</a></td>
+        <td><span class="xref">Vector3</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_keyData" data-uid="IVLab.ABREngine.SimpleLineDataImpression.keyData">keyData</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
+public KeyData keyData</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -298,7 +328,7 @@ public LineKeyData keyData</code></pre>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
-public LineTextureVisAsset lineTexture</code></pre>
+public ILineTextureVisAsset lineTexture</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -310,7 +340,7 @@ public LineTextureVisAsset lineTexture</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="IVLab.ABREngine.LineTextureVisAsset.html">LineTextureVisAsset</a></td>
+        <td><a class="xref" href="IVLab.ABREngine.ILineTextureVisAsset.html">ILineTextureVisAsset</a></td>
         <td></td>
       </tr>
     </tbody>

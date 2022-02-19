@@ -127,6 +127,65 @@
   </table>
   
   
+  <a id="IVLab_ABREngine_RenderHints_PerIndexVisibility_" data-uid="IVLab.ABREngine.RenderHints.PerIndexVisibility*"></a>
+  <h4 id="IVLab_ABREngine_RenderHints_PerIndexVisibility" data-uid="IVLab.ABREngine.RenderHints.PerIndexVisibility">PerIndexVisibility</h4>
+  <div class="markdown level1 summary"><p>Index-level toggle to control visibility of individual parts of a data impression (e.g., points, lines).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BitArray PerIndexVisibility { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">BitArray</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="IVLab_ABREngine_RenderHints_PerIndexVisibility_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Index-level visibility may not be implemented for every data impression.</p>
+</div>
+  <h5 id="IVLab_ABREngine_RenderHints_PerIndexVisibility_examples">Examples</h5>
+  <p>The following example shows basic usage of per-index visibility on a simple glyph data impression:</p>
+<pre><code>public class IndexVisibilityExample : MonoBehaviour
+{
+    void Start()
+    {
+        // Let&apos;s say the key data has 42 points.
+        KeyData pointsKd = // some data we&apos;ve imported
+
+        // Create a layer for &quot;before&quot; points (blue)
+        SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
+        di.keyData = // some key data we&apos;ve loaded previously
+
+        // Default everything to invisible (visible = false)
+        di.RenderHints.PerIndexVisibility = new BitArray(42, false);
+
+        // Register impression with the engine and render
+        ABREngine.Instance.RegisterDataImpression(di);
+        ABREngine.Instance.Render();
+
+        // Then, if we wanted to set some index to visible:
+        di.RenderHints.PerIndexVisibility[10] = true;
+
+        // Note: we need to tell the impression that its style has changed and
+        // call Render() again
+        di.RenderHints.StyleChanged = true;
+        ABREngine.Instance.Render();
+    }
+}</code></pre>
+
+  
+  
   <a id="IVLab_ABREngine_RenderHints_StyleChanged_" data-uid="IVLab.ABREngine.RenderHints.StyleChanged*"></a>
   <h4 id="IVLab_ABREngine_RenderHints_StyleChanged" data-uid="IVLab.ABREngine.RenderHints.StyleChanged">StyleChanged</h4>
   <div class="markdown level1 summary"><p>Has the style of the impression been changed</p>
@@ -189,6 +248,59 @@
     <pre><code class="lang-csharp hljs">public bool Visible { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="IVLab_ABREngine_RenderHints_Copy_" data-uid="IVLab.ABREngine.RenderHints.Copy*"></a>
+  <h4 id="IVLab_ABREngine_RenderHints_Copy" data-uid="IVLab.ABREngine.RenderHints.Copy">Copy()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RenderHints Copy()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="IVLab.ABREngine.RenderHints.html">RenderHints</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="IVLab_ABREngine_RenderHints_HasPerIndexVisibility_" data-uid="IVLab.ABREngine.RenderHints.HasPerIndexVisibility*"></a>
+  <h4 id="IVLab_ABREngine_RenderHints_HasPerIndexVisibility" data-uid="IVLab.ABREngine.RenderHints.HasPerIndexVisibility">HasPerIndexVisibility()</h4>
+  <div class="markdown level1 summary"><p>Whether or not the impression currently has per-index visibility</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasPerIndexVisibility()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>

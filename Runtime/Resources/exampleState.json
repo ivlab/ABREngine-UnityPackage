@@ -26,6 +26,19 @@
                 }
             }
         },
+        "95f61c06-0526-41b9-b75f-457e0b2c24ed": {
+            "plateType": "Ribbons",
+            "uuid": "95f61c06-0526-41b9-b75f-457e0b2c24ed",
+            "name": "Lines",
+            "inputValues": {
+                "Key Data": {
+                    "inputType": "IVLab.ABREngine.LineKeyData",
+                    "parameterName": "Key Data",
+                    "inputGenre": "KeyData",
+                    "inputValue": "Demo/Wavelet/KeyData/Flow"
+                }
+            }
+        },
         "48cca33b-e1ae-4998-a0d1-2eee1e75e07d": {
             "plateType": "Glyphs",
             "uuid": "48cca33b-e1ae-4998-a0d1-2eee1e75e07d",

@@ -3,6 +3,9 @@ apiRules:
     uidRegex: ^IVLab.ABREngine
     type: Namespace
 - include:
+    uidRegex: ^IVLab.ABREngine.Examples
+    type: Namespace
+- include:
     uidRegex: ^Global
     type: Namespace
 - exclude:

@@ -47,7 +47,9 @@ namespace IVLab.ABREngine
         public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
+            try {
             await ABREngine.Instance.WaitUntilInitialized();
+            } catch (Exception e) { Debug.LogError(e); }
             UnityThreadScheduler.GetInstance();
 
             JObject stateJson = await (new T()).GetState(stateText);
@@ -69,13 +71,29 @@ namespace IVLab.ABREngine
             JToken allImpressionsDiff = diffFromPrevious?.SelectToken("impressions");
             JObject impressionsObject = null;
 
-            // If it's an array, that means it's either been deleted or created
-            if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Array)
+            // If >2 values in previous have >2 zeroes, we may assume that the state has been cleared.
+            // https://github.com/benjamine/jsondiffpatch/blob/master/docs/deltas.md
+            if (diffFromPrevious != null && diffFromPrevious.Type == JTokenType.Object)
             {
-                ABREngine.Instance.ClearState();
-                return stateJson;
+                int zeroes = 0;
+                JObject diffObject = diffFromPrevious.ToObject<JObject>();
+                foreach (var token in diffObject)
+                {
+                    JToken diff = token.Value;
+                    if (diff.Type == JTokenType.Array)
+                    {
+                        zeroes += diff.Where(t => t.Type == JTokenType.Integer).Count(t => (int)t == 0);
+                    }
+                }
+                if (zeroes >= 4)
+                {
+                    Debug.Log("Clearing ABR state");
+                    ABREngine.Instance.ClearState();
+                }
             }
-            else
+
+            // If it's an object, that means some impressions have changed
+            if (allImpressionsDiff != null && allImpressionsDiff.Type == JTokenType.Object)
             {
                 impressionsObject = allImpressionsDiff?.ToObject<JObject>();
             }
@@ -107,10 +125,41 @@ namespace IVLab.ABREngine
                 return null;
             }
 
-            // Populate the visasset manager with any local visassets
+            // Populate the visasset manager with any local visassets and gradients
             if (stateJson.ContainsKey("localVisAssets"))
             {
                 ABREngine.Instance.VisAssets.LocalVisAssets = stateJson["localVisAssets"].ToObject<JObject>();
+            }
+            if (state.visAssetGradients != null)
+            {
+                ABREngine.Instance.VisAssets.VisAssetGradients = state.visAssetGradients;
+            }
+
+            // Handle new/updated VisAssets, LocalVisAssets and VisAssetGradients
+            // Do this here so that we don't import them every time for every
+            // data impression, which is EXPENSIVE
+            JToken visAssetGradientDiff = diffFromPrevious?.SelectToken("visAssetGradients");
+            JToken localVisAssetDiff = diffFromPrevious?.SelectToken("localVisAssets");
+            List<Guid> visAssetsToUpdate = new List<Guid>();
+            if (visAssetGradientDiff != null && visAssetGradientDiff.Type == JTokenType.Object)
+            {
+                visAssetsToUpdate.AddRange(visAssetGradientDiff.Select((k) => new Guid((k as JProperty).Name)));
+            }
+            if (localVisAssetDiff != null && localVisAssetDiff.Type == JTokenType.Object)
+            {
+                visAssetsToUpdate.AddRange(localVisAssetDiff.Select((k) => new Guid((k as JProperty).Name)));
+            }
+            foreach (Guid visAssetUUID in visAssetsToUpdate)
+            {
+                IVisAsset existing = null;
+                ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing);
+                if (existing != null
+                    && ((ABREngine.Instance.VisAssets.LocalVisAssets?.ContainsKey(existing.Uuid.ToString()) ?? false)
+                    || ABREngine.Instance.VisAssets.VisAssetGradients.ContainsKey(existing.Uuid.ToString()))
+                )
+                {
+                    ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
+                }
             }
 
             var assembly = Assembly.GetExecutingAssembly();
@@ -130,6 +179,8 @@ namespace IVLab.ABREngine
                 {
                     if (impressionsObject != null)
                     {
+                        // This isn't optimial because it still updates EVERY
+                        // impression if there are no impressions changes
                         bool changed = impressionsObject.ContainsKey(impression.Key);
                         if (!changed)
                         {
@@ -169,21 +220,13 @@ namespace IVLab.ABREngine
 
                     foreach (var visAsset in visAssetsToLoad)
                     {
-                        // See if we already have the VisAsset; if not then load it
+                        // See if we already have the VisAsset; if not then load it.
+                        // LocalVisAssets and Gradients should already be up-to-date at this point.
                         var visAssetUUID = new Guid(visAsset);
                         IVisAsset existing;
                         if (!ABREngine.Instance.VisAssets.TryGetVisAsset(visAssetUUID, out existing))
                         {
-                            await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
-                        }
-
-                        // Re-import if it's a LocalVisAsset
-                        if (existing != null
-                            && ABREngine.Instance.VisAssets.LocalVisAssets != null
-                            && ABREngine.Instance.VisAssets.LocalVisAssets.ContainsKey(existing.Uuid.ToString())
-                        )
-                        {
-                            await ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID, true);
+                            existing = ABREngine.Instance.VisAssets.LoadVisAsset(visAssetUUID);
                         }
                     }
 
@@ -401,6 +444,77 @@ namespace IVLab.ABREngine
                     }
                     // Obtain the input values of the previous version of the current impression, if it exists
                     Dictionary<string, RawABRInput> previousInputValues = previousImpression?.inputValues;
+
+                    // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
+                    // - scalar range changed for the color variable of this impression:
+                    JToken dataRangeDiff = diffFromPrevious?.SelectToken("dataRanges");
+                    bool dataRangeChanged = dataRangeDiff != null;
+                    // OR
+                    // - local vis asset colormap used by this impression had its contents changed:
+                    bool colormapChanged = false;
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
+                    {
+                        string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
+                        if (localVisAssetDiff?.SelectToken(colormapUuid) != null)
+                            colormapChanged = true;
+                    }
+                    // OR
+                    // - opacity map primitive gradient attached to this impression was changed -
+                    bool opacityMapChanged = false;
+                    JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
+                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
+                    {
+                        string primitiveGradientUuid = impression.Value.inputValues["Opacitymap"].inputValue;
+                        if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
+                            opacityMapChanged = true;
+                    }
+
+                    // Toggle the "style changed" flag accordingly
+                    if (dataRangeChanged || colormapChanged || opacityMapChanged)
+                    {
+                        dataImpression.RenderHints.StyleChanged = true;
+                    }
+
+                    // React specially to gradient inputs - if gradient changed,
+                    // need to select which type of change to trigger (glyphs
+                    // behave differently than others)
+                    // TODO: We should start supporting a notion of "input
+                    // dependencies" - i.e. if a gradient or local visasset has
+                    // changed, make sure the proper ABR update methods are
+                    // called.
+                    if (impression.Value?.inputValues != null)
+                    {
+                        string[] gradientTypes = assembly.GetTypes()
+                            .Where(t => typeof(VisAssetGradient).IsAssignableFrom(t))
+                            .Where(t => typeof(VisAssetGradient) != t)
+                            .Select(t => t.ToString())
+                            .ToArray();
+                        var gradientInputNames = impression.Value.inputValues
+                            .Where(kv => gradientTypes.Contains(kv.Value.inputType))
+                            .Select(kv => kv.Key);
+                        var actualGradientInputs = actualInputs
+                            .Where(i => gradientInputNames.Contains(i.inputName));
+                        foreach (ABRInputAttribute gradientInput in actualGradientInputs)
+                        {
+                            if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey(gradientInput.inputName))
+                            {
+                                RawABRInput gradInput = impression.Value.inputValues[gradientInput.inputName];
+                                Guid gradientUuid = new Guid(gradInput.inputValue);
+                                if (visAssetsToUpdate.Contains(gradientUuid))
+                                {
+                                    if (gradientInput.updateLevel == UpdateLevel.Data)
+                                    {
+                                        dataImpression.RenderHints.DataChanged = true;
+                                    }
+                                    else if (gradientInput.updateLevel == UpdateLevel.Style)
+                                    {
+                                        dataImpression.RenderHints.StyleChanged = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     // Compare the previous input values to the current input values of the impression 
                     // and enable "Changed" flags for any differences
                     foreach (var input in actualInputs)
@@ -418,7 +532,7 @@ namespace IVLab.ABREngine
                         // If the input values are different a change has occurred
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
-                            // Enable changed flags according to the input that was changed                      
+                            // Enable changed flags according to the input that was changed
                             if (input.updateLevel == UpdateLevel.Data)
                             {
                                 dataImpression.RenderHints.DataChanged = true;
@@ -428,34 +542,6 @@ namespace IVLab.ABREngine
                                 dataImpression.RenderHints.StyleChanged = true;
                             }
                         }
-                    }
-                    // Ensure that the "style changed" flag is also enabled if a colormap was edited, so either -
-                    // - scalar range changed for the color variable of this impression:
-                    bool scalarRangeChanged = state?.dataRanges?.Equals(previousABRState?.dataRanges) == false;
-                    // OR
-                    // - local vis asset colormap used by this impression had its contents changed:
-                    bool colormapChanged = false;
-                    JToken colormapDiff = diffFromPrevious?.SelectToken("localVisAssets");
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Colormap"))
-                    {
-                        string colormapUuid = impression.Value.inputValues["Colormap"].inputValue;
-                        if (colormapDiff?.SelectToken(colormapUuid) != null)
-                            colormapChanged = true;
-                    }
-                    // OR
-                    // - opacity map primitive gradient attached to this impression was changed -
-                    bool opacityMapChanged = false;
-                    JToken primitiveGradientDiff = diffFromPrevious?.SelectToken("primitiveGradients");
-                    if (impression.Value?.inputValues != null && impression.Value.inputValues.ContainsKey("Opacitymap"))
-                    {
-                        string primitiveGradientUuid = impression.Value.inputValues["Opacitymap"].inputValue;
-                        if (primitiveGradientDiff?.SelectToken(primitiveGradientUuid) != null)
-                            opacityMapChanged = true;
-                    }
-                    // Toggle the "style changed" flag accordingly
-                    if (scalarRangeChanged || colormapChanged || opacityMapChanged)
-                    {
-                        dataImpression.RenderHints.StyleChanged = true;
                     }
 
                     // Add any tags
@@ -475,7 +561,7 @@ namespace IVLab.ABREngine
                                 DataImpressionGroup g = ABREngine.Instance.GetDataImpressionGroup(group.Value.uuid);
                                 if (g == null)
                                 {
-                                    g = ABREngine.Instance.AddDataImpressionGroup(
+                                    g = ABREngine.Instance.CreateDataImpressionGroup(
                                         group.Value.name,
                                         group.Value.uuid,
                                         group.Value.containerBounds,
@@ -615,7 +701,7 @@ namespace IVLab.ABREngine
 
                 RawABRState saveState = new RawABRState();
                 saveState.impressions = new Dictionary<string, RawDataImpression>();
-                saveState.version = previousState["version"].ToString();
+                saveState.version = previousState?["version"]?.ToString() ?? ABREngine.Instance.Config.SchemaJson["properties"]["version"]["default"].ToString();
                 RawScene saveScene = new RawScene
                 {
                     impressionGroups = new Dictionary<string, RawImpressionGroup>(),
@@ -643,12 +729,19 @@ namespace IVLab.ABREngine
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
+                        // Skip serializing impressions that aren't inside the ABREngine GameObject
+                        GameObject child = group.GetEncodedGameObject(impression.Uuid).gameObject;
+                        if (child.GetComponentInParent<ABREngine>() == null)
+                        {
+                            continue;
+                        }
+
                         RawDataImpression saveImpression = new RawDataImpression();
 
                         // Retrieve easy values
                         string guid = impression.Uuid.ToString();
                         saveImpression.uuid = guid;
-                        if (previousState["impressions"].ToObject<JObject>().ContainsKey(guid))
+                        if (previousState?["impressions"]?.ToObject<JObject>().ContainsKey(guid) ?? false)
                         {
                             saveImpression.name = previousState["impressions"][guid]["name"].ToString();
                         }
@@ -745,34 +838,132 @@ namespace IVLab.ABREngine
                 settings.NullValueHandling = NullValueHandling.Ignore;
                 settings.Formatting = Formatting.Indented;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                JsonConvert.DefaultSettings = () => settings;
 
-                if (previousState.ContainsKey("uiData"))
+                if (previousState?.ContainsKey("uiData") ?? false)
                 {
                     saveState.uiData = previousState["uiData"];
                 }
 
-                if (previousState.ContainsKey("localVisAssets"))
+                if (previousState?.ContainsKey("localVisAssets") ?? false)
                 {
                     saveState.localVisAssets = previousState["localVisAssets"];
                 }
 
-                if (previousState.ContainsKey("name"))
+                if (previousState?.ContainsKey("name") ?? false)
                 {
                     saveState.name = previousState["name"].ToString();
                 }
 
-                if (previousState.ContainsKey("primitiveGradients"))
+                if (previousState?.ContainsKey("primitiveGradients") ?? false)
                 {
                     saveState.primitiveGradients = previousState["primitiveGradients"].ToObject<Dictionary<string, RawPrimitiveGradient>>();
                 }
 
-                return JsonConvert.SerializeObject(saveState, settings);
+                if (ABREngine.Instance.VisAssets.VisAssetGradients != null)
+                {
+                    saveState.visAssetGradients = ABREngine.Instance.VisAssets.VisAssetGradients;
+                }
+
+                // return JsonConvert.SerializeObject(saveState, settings);
+                return JsonConvert.SerializeObject(saveState, new UnityObjectSerializer());
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
                 return null;
             }
+        }
+    }
+
+    /// <summary>
+    /// Custom converter to allow less verbose Newtonsoft serialization of Unity
+    /// builtin objects. This converter manually handles several cases, add more
+    /// as they become necessary.
+    /// </summary>
+    public class UnityObjectSerializer : JsonConverter
+    {
+        public override bool CanRead { get { return false; }}
+
+        private BindingFlags fieldFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        private Dictionary<Type, string[]> _saveFields = new Dictionary<Type, string[]>();
+        private Dictionary<Type, string[]> _remapFieldNames = new Dictionary<Type, string[]>();
+
+        /// <summary>
+        /// Build the custom converter and define both the types that are
+        /// allowed to be serialized and the string keys that are allowed to
+        /// exist post-serialization
+        /// </summary>
+        public UnityObjectSerializer() : base()
+        {
+            _saveFields.Add(typeof(Vector3), new string[] {"x", "y", "z"});
+            _saveFields.Add(typeof(Quaternion), new string[] {"x", "y", "z", "w"});
+            _saveFields.Add(typeof(Bounds), new string[] {"m_Center", "m_Extents"});
+            _remapFieldNames.Add(typeof(Bounds), new string[] {"center", "extents"});
+        }
+
+
+        /// <summary>
+        /// We only provide serializers for these types
+        /// </summary>
+        public override bool CanConvert(Type type)
+        {
+            return _saveFields.Keys.Contains(type);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            // Only use this custom converter if type matches (we shouldn't get here)
+            if (!_saveFields.Keys.Contains(value.GetType()))
+            {
+                Debug.LogWarning("Tried to convert " + value.GetType() + " with UnityObjectSerializer");
+                JToken preOut = JToken.FromObject(value);
+                preOut.WriteTo(writer);
+                return;
+            }
+
+            // Everything from this method will be an object
+            JObject output = new JObject();
+
+            // Check each type to see if it matches with the serialized object
+            Type objectType = value.GetType();
+            foreach (var kv in _saveFields)
+            {
+                if (objectType.IsAssignableFrom(kv.Key))
+                {
+                    for (int f = 0; f < kv.Value.Length; f++)
+                    {
+                        string fieldName = kv.Value[f];
+
+                        // Use reflection to obtain actual value of the field,
+                        // then assign it to the JObject
+                        FieldInfo info = objectType.GetField(fieldName, fieldFlags);
+                        if (info == null)
+                        {
+                            string allFields = string.Join(", ", objectType.GetFields(fieldFlags).Select(f => f.Name));
+                            Debug.LogWarning($"Unable to find field {fieldName} in object {objectType}. Fields available: {allFields}");
+                            continue;
+                        }
+                        object fieldValue = info.GetValue(value);
+
+                        string newName = fieldName;
+                        if (_remapFieldNames.ContainsKey(kv.Key))
+                        {
+                            newName = _remapFieldNames[kv.Key][f];
+                        }
+
+                        // Recursively deal with further Unity objects using the current serializer
+                        output[newName] = JToken.FromObject(fieldValue, serializer);
+                    }
+                }
+            }
+
+            output.WriteTo(writer);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException("Reading is not supported for this serializer");
         }
     }
 
@@ -789,6 +980,7 @@ namespace IVLab.ABREngine
         public JToken uiData; // data for UIs, not messing with it at all
         public JToken localVisAssets; // custom vis assets, not messing with them at all
         public Dictionary<string, RawPrimitiveGradient> primitiveGradients; 
+        public Dictionary<string, RawVisAssetGradient> visAssetGradients;
         public string name;
     }
 
@@ -819,88 +1011,8 @@ namespace IVLab.ABREngine
 
     class RawDataRanges
     {
-
         public Dictionary<string, DataRange<float>> scalarRanges;
         public Dictionary<string, Dictionary<string, DataRange<float>>> specificScalarRanges;
-
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as RawDataRanges);
-        }
-
-        public bool Equals(RawDataRanges other)
-        {
-            if (other == null)
-            {
-                // Debug.Log("other was null");
-                return false;
-            }
-            // First, go through scalarRanges
-            if (this.scalarRanges != null)
-            {
-                if (other.scalarRanges == null)
-                {
-                    // Debug.Log("other.scalarRanges was null");
-                    return false;
-                }
-                foreach (var path in this.scalarRanges)
-                {
-                    if (!other.scalarRanges.ContainsKey(path.Key))
-                    {
-                        // Debug.Log("other.scalarRanges didn't have scalar " + path.Key);
-                        return false;
-                    }
-                    else
-                    {
-                        if (!this.scalarRanges[path.Key].Equals(other.scalarRanges[path.Key]))
-                        {
-                            // Debug.LogFormat("other.scalarRanges key {0} didn't match {1}", other.scalarRanges[path.Key], this.scalarRanges[path.Key]);
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // Then, go through specificScalarRanges
-            if (this.specificScalarRanges != null)
-            {
-                if (other.specificScalarRanges != null)
-                {
-                    // Debug.Log("other.specificScalarRanges was null");
-                    return false;
-                }
-                foreach (var kdPath in this.specificScalarRanges)
-                {
-                    if (!other.specificScalarRanges.ContainsKey(kdPath.Key))
-                    {
-                        // Debug.Log("other.specificScalarRanges didn't have keydata path " + kdPath.Key);
-                        return false;
-                    }
-                    else
-                    {
-                        var thisRanges = this.specificScalarRanges[kdPath.Key];
-                        var otherRanges = other.specificScalarRanges[kdPath.Key];
-                        foreach (var path in thisRanges)
-                        {
-                            if (!otherRanges.ContainsKey(path.Key))
-                            {
-                                // Debug.Log("otherRanges didn't have scalar path " + path.Key);
-                                return false;
-                            }
-                            else
-                            {
-                                if (!thisRanges[path.Key].Equals(otherRanges[path.Key]))
-                                {
-                                    // Debug.LogFormat("otherRanges key {0} didn't match {1}", otherRanges[path.Key], thisRanges[path.Key]);
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
     }
 
     class RawImpressionGroup

@@ -40,10 +40,10 @@ namespace IVLab.ABREngine
     /// An example of creating a single surface data impression and setting its colormap, color variable, and texture could be:
     /// <code>
     /// SimpleSurfaceDataImpression gi = new SimpleSurfaceDataImpression();
-    /// gi.keyData = surfs as SurfaceKeyData;
+    /// gi.keyData = surfs;
     /// gi.colorVariable = yAxis;
     /// gi.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    /// gi.lineTexture = tex as SurfaceTextureVisAsset;
+    /// gi.lineTexture = tex;
     /// ABREngine.Instance.RegisterDataImpression(gi);
     /// </code>
     /// </example>
@@ -51,26 +51,26 @@ namespace IVLab.ABREngine
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
-        public SurfaceKeyData keyData;
+        public KeyData keyData;
 
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
-        public ColormapVisAsset colormap;
+        public IColormapVisAsset colormap;
 
 
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
-        public SurfaceTextureVisAsset pattern;
+        public ISurfaceTextureVisAsset pattern;
 
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
         [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
-        public PercentPrimitive patternDirectionBlend;
+        public PercentPrimitive patternSeamBlend;
 
         [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
@@ -396,7 +396,7 @@ namespace IVLab.ABREngine
             float patternIntensityOut = patternIntensity?.Value ??
                 config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Intensity").Value;
 
-            float patternDirectionBlendOut = patternDirectionBlend?.Value ??
+            float patternSeamBlendOut = patternSeamBlend?.Value ??
                 config.GetInputValueDefault<PercentPrimitive>(plateType, "Pattern Seam Blend").Value;
 
             float patternSaturationOut = patternSaturation?.Value ??
@@ -404,7 +404,8 @@ namespace IVLab.ABREngine
 
             MatPropBlock.SetFloat("_PatternScale", patternSizeOut);
             MatPropBlock.SetFloat("_PatternIntensity", patternIntensityOut);
-            MatPropBlock.SetFloat("_PatternDirectionBlend", patternDirectionBlendOut);
+            MatPropBlock.SetFloat("_PatternDirectionBlend", 1.0f);
+            MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
             if (patternVariable != null)
@@ -427,18 +428,20 @@ namespace IVLab.ABREngine
             }
             try
             {
-                if (pattern?.Texture != null)
+                if (pattern != null)
                 {
                     MatPropBlock.SetInt("_UsePattern", 1);
-                    MatPropBlock.SetTexture("_Pattern", pattern?.Texture);
-                    MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
+                    MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
+                    MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
+                    MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
+                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
                 }
                 else
                 {
                     MatPropBlock.SetInt("_UsePattern", 0);
                     MatPropBlock.SetTexture("_Pattern", new Texture2D(10, 10));
-                    MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
+                    // MatPropBlock.SetTexture("_PatternNormal", new Texture2D(10, 10));
                 }
             }
             catch (Exception e)

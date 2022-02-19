@@ -70,26 +70,26 @@ namespace IVLab.ABREngine
                     if (ABREngine.Instance.VisAssets.TryGetVisAsset(uuid, out va))
                     {
                         EditorGUILayout.LabelField("  " + uuid.ToString());
-                        EditorGUILayout.LabelField("    Type: " + va.VisAssetType);
+                        EditorGUILayout.LabelField("    Type: " + va.GetType());
                         GUILayoutOption[] previewOptions = {
                             GUILayout.Width(EditorGUIUtility.currentViewWidth),
                             GUILayout.Height(30)
                         };
-                        switch (va.VisAssetType)
-                        {
-                            case VisAssetType.Colormap:
-                                GUILayout.Box(((ColormapVisAsset) va).Gradient, previewOptions);
-                                break;
-                            case VisAssetType.LineTexture:
-                                GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
-                                break;
-                            case VisAssetType.SurfaceTexture:
-                                GUILayout.Box(((SurfaceTextureVisAsset) va).Texture, previewOptions);
-                                break;
-                            case VisAssetType.Glyph:
-                                GUILayout.Label("[No preview]");
-                                break;
-                        }
+                        // switch (va.VisAssetType)
+                        // {
+                        //     case VisAssetType.Colormap:
+                        //         GUILayout.Box(((ColormapVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.LineTexture:
+                        //         GUILayout.Box(((LineTextureVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.SurfaceTexture:
+                        //         GUILayout.Box(((SurfaceTextureVisAsset) va).Texture, previewOptions);
+                        //         break;
+                        //     case VisAssetType.Glyph:
+                        //         GUILayout.Label("[No preview]");
+                        //         break;
+                        // }
                     }
                     GUILayout.Space(10);
                 }
@@ -103,27 +103,32 @@ namespace IVLab.ABREngine
                 EditorGUILayout.LabelField("Loaded Datasets:");
                 foreach (Dataset ds in datasets)
                 {
-                    EditorGUILayout.LabelField(ds.Path);
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField("----- " + ds.Path + " -----");
                     Dictionary<string, IKeyData> allKeyData = ds.GetAllKeyData();
                     EditorGUILayout.LabelField("Key Data:");
                     foreach (IKeyData kd in allKeyData.Values)
                     {
-                        EditorGUILayout.LabelField("  " + DataPath.GetName(kd.Path));
+                        string keyData = "    " + DataPath.GetName(kd.Path);
                         RawDataset rawDs = null;
                         if (ABREngine.Instance.Data.TryGetRawDataset(kd.Path, out rawDs))
                         {
-                            EditorGUILayout.LabelField($"  {rawDs.vertexArray.Length} vertices");
+                            if (rawDs.vertexArray != null)
+                            {
+                                keyData += $"  ({rawDs.vertexArray.Length} vertices)";
+                            }
                         }
+                        EditorGUILayout.LabelField(keyData, EditorStyles.boldLabel);
                     }
                     EditorGUILayout.LabelField("Scalar Variables:");
                     foreach (ScalarDataVariable s in ds.GetAllScalarVars().Values)
                     {
-                        EditorGUILayout.LabelField("  " + DataPath.GetName(s.Path));
+                        EditorGUILayout.LabelField($"    {DataPath.GetName(s.Path)} [{s.Range.min}, {s.Range.max}]", EditorStyles.boldLabel);
                     }
                     EditorGUILayout.LabelField("Vector Variables:");
                     foreach (VectorDataVariable s in ds.GetAllVectorVars().Values)
                     {
-                        EditorGUILayout.LabelField("  " + DataPath.GetName(s.Path));
+                        EditorGUILayout.LabelField("    " + DataPath.GetName(s.Path), EditorStyles.boldLabel);
                     }
                 }
             }

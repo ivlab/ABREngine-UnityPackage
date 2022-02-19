@@ -130,6 +130,8 @@ Unity scene and translates it back into text.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.AnglePrimitive.html">AnglePrimitive</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.BooleanPrimitive.html">BooleanPrimitive</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.DataImpression.html">DataImpression</a></h4>
@@ -173,8 +175,14 @@ the rendered objects are children of this object&apos;s GameObject.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.FloatPrimitive.html">FloatPrimitive</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.GlyphGradient.html">GlyphGradient</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.GlyphVisAsset.html">GlyphVisAsset</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.GradientBlendMap.html">GradientBlendMap</a></h4>
+      <section><p>Collection of essential textures for making texture-based VisAsset
+gradients happen. The blend maps are controlled via the <see cref="!:BlendMap"></see> and <see cref="!:StopMap"></see> texture arrays.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.HttpDataLoader.html">HttpDataLoader</a></h4>
       <section><p>Load data from a remote source</p>
 </section>
@@ -201,6 +209,8 @@ checked on the material that these glyphs are using.</p>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.LineKeyData.html">LineKeyData</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.LineTextureGradient.html">LineTextureGradient</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.LineTextureVisAsset.html">LineTextureVisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.MediaDataLoader.html">MediaDataLoader</a></h4>
@@ -215,6 +225,8 @@ checked on the material that these glyphs are using.</p>
       <h4><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.PointKeyData.html">PointKeyData</a></h4>
+      <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.PrimitiveGradient.html">PrimitiveGradient</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.RawABRInput.html">RawABRInput</a></h4>
       <section><p>Raw string values from a state JSON being passed to ABR</p>
@@ -235,8 +247,27 @@ share a coordinate space, key data, and variables.</p>
       <h4><a class="xref" href="IVLab.ABREngine.RawDataset.JsonHeader.html">RawDataset.JsonHeader</a></h4>
       <section><p>Header that contains metadata for a particular RawDataset</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.RawDatasetAdapter.html">RawDatasetAdapter</a></h4>
+      <section><p>Adapter for converting other formats to ABRDataFormat. For example,
+lists of points =&gt; ribbons, or lists of points =&gt; glyphs. See the examples below for usage of each of these methods.</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.RawPrimitiveGradient.html">RawPrimitiveGradient</a></h4>
+      <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.RawVisAssetGradient.html">RawVisAssetGradient</a></h4>
+      <section><p>Serializable version of the VisAsset gradients that interacts with
+state/schema.
+Each VisAsset type should be responsible for implementing their own
+conversion to/from this.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.RenderHints.html">RenderHints</a></h4>
       <section><p>Hints for rendering, such as whether a data impression should be hidden</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.ResourcesDataLoader.html">ResourcesDataLoader</a></h4>
+      <section><p>Load data from resources folder. NOTE: The actual data files (.bin) must
+have their file extension changed to .txt in order to be recognized.
+When data are imported, the identity of each is lost so we must guess
+which is which - currently guessing the larger of the two files is the
+&quot;Data&quot; and the smaller is &quot;Metadata&quot;.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.ResourceStateFileLoader.html">ResourceStateFileLoader</a></h4>
       <section><p>Load a state from any Resources folder within Unity (within any Package or Asset)</p>
@@ -259,6 +290,9 @@ share a coordinate space, key data, and variables.</p>
       <h4><a class="xref" href="IVLab.ABREngine.SimpleSurfaceDataImpression.html">SimpleSurfaceDataImpression</a></h4>
       <section><p>A &quot;Surfaces&quot; data impression that uses hand-drawn textures and color to show surface data.</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.SimpleVolumeDataImpression.html">SimpleVolumeDataImpression</a></h4>
+      <section><p>A &quot;Volumes&quot; data impression that uses a user-defined transfer (opacity) map and a colormap to show volumetric data.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.SocketDataListener.html">SocketDataListener</a></h4>
       <section><p>Listener for incoming upstream data, for example, from a Send2ABR plugin
 for ParaView. Operation of this class is controlled by the ABRConfig
@@ -269,15 +303,29 @@ option <code>dataListenerPort</code>.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.SurfaceKeyData.html">SurfaceKeyData</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.SurfaceTextureGradient.html">SurfaceTextureGradient</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.SurfaceTextureVisAsset.html">SurfaceTextureVisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.TextStateFileLoader.html">TextStateFileLoader</a></h4>
       <section><p>Load a state from a serialized JSON string</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.TypeExtentions.html">TypeExtentions</a></h4>
+      <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.UnityObjectSerializer.html">UnityObjectSerializer</a></h4>
+      <section><p>Custom converter to allow less verbose Newtonsoft serialization of Unity
+builtin objects. This converter manually handles several cases, add more
+as they become necessary.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a></h4>
-      <section></section>
+      <section><p>Generic type for all VisAssets to inherit from</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.VisAssetGradient.html">VisAssetGradient</a></h4>
+      <section><p>Concrete implementation of a VisAsset Gradient, which is a collection of
+VisAssets that also counts as a single VisAsset.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.VisAssetLoader.html">VisAssetLoader</a></h4>
       <section><p>Use a particular fetcher to try and get the VisAsset from its source,
 and construct the requisite Unity objects and IVisAsset to add.</p>
@@ -287,6 +335,8 @@ and construct the requisite Unity objects and IVisAsset to add.</p>
 ABREngine. VisAssets can be loaded and fetched from various sources
 defined in <code>VisAssetFetchers</code>.</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.VolumeKeyData.html">VolumeKeyData</a></h4>
+      <section></section>
     <h3 id="structs">Structs
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.SocketTextData.html">SocketTextData</a></h4>
@@ -301,6 +351,8 @@ of ABR input should fit into a specific ABRInputGenre.</p>
       <section><p>Generic state loader for ABR. Implementations should allow both
 retrieving a state (<code>GetState</code>) and saving a state (<code>SaveState</code>).</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.IColormapVisAsset.html">IColormapVisAsset</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></h4>
       <section><p>Public interface for a single ABR visualization layer</p>
 </section>
@@ -317,6 +369,8 @@ within the original RawDataset.</p>
       <h4><a class="xref" href="IVLab.ABREngine.IFloatPrimitive.html">IFloatPrimitive</a></h4>
       <section><p>Represents a numeric primitive value (e.g. 10deg, 96cm, or 4.6)</p>
 </section>
+      <h4><a class="xref" href="IVLab.ABREngine.IGlyphVisAsset.html">IGlyphVisAsset</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IHasDataset.html">IHasDataset</a></h4>
       <section><p>Should be assigned to anything that is associated with a dataset
 (e.g. KeyData, Variables, and even DataImpressions once they have
@@ -329,14 +383,28 @@ valid KeyData)</p>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IKeyDataRenderInfo.html">IKeyDataRenderInfo</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.ILineTextureVisAsset.html">ILineTextureVisAsset</a></h4>
+      <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IPrimitive.html">IPrimitive</a></h4>
       <section><p>Representative of a primitive element (usually used in ABR
 Inputs). These should match the primitive input types in the schema.</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.IPrimitiveGradient.html">IPrimitiveGradient</a></h4>
+      <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.ISurfaceTextureVisAsset.html">ISurfaceTextureVisAsset</a></h4>
+      <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.ITextureGradient.html">ITextureGradient</a></h4>
+      <section><p>A VisAsset gradient described by a texture (or, series of textures)</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.IVisAssetFetcher.html">IVisAssetFetcher</a></h4>
       <section><p>Generic fetcher that supports fetching all types of VisAssets from a particular source.</p>
+</section>
+      <h4><a class="xref" href="IVLab.ABREngine.IVisAssetGradient-1.html">IVisAssetGradient&lt;T&gt;</a></h4>
+      <section><p>A gradient consisting of VisAssets of any type. NOTE: Texture-based
+gradients (Surface/Line textures and colormaps) must have 4 or fewer
+elements.</p>
 </section>
     <h3 id="enums">Enums
   </h3>
@@ -345,11 +413,13 @@ Inputs). These should match the primitive input types in the schema.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.DataPath.DataPathType.html">DataPath.DataPathType</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.DataTopology.html">DataTopology</a></h4>
+      <section><p>Extension of Unity&apos;s MeshTopology enum that defines more 
+generic &quot;data&quot; topology, including voxels.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.UpdateLevel.html">UpdateLevel</a></h4>
       <section><p>How &quot;deep&quot; a particular update needs to go to fully address this ABR Input</p>
 </section>
-      <h4><a class="xref" href="IVLab.ABREngine.VisAssetType.html">VisAssetType</a></h4>
-      <section></section>
     <h3 id="delegates">Delegates
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.ABREngine.StateChangeDelegate.html">ABREngine.StateChangeDelegate</a></h4>
