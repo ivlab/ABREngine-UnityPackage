@@ -47,8 +47,8 @@ namespace IVLab.ABREngine
 
         public static ColormapVisAsset SolidColor(Color fillColor)
         {
-            Texture2D gradient = new Texture2D(1, 1);
-            gradient.SetPixel(0, 0, fillColor);
+            Texture2D gradient = new Texture2D(2, 2);
+            gradient.SetPixels(new Color[] { fillColor, fillColor, fillColor, fillColor });
             gradient.Apply();
             ColormapVisAsset cmap = new ColormapVisAsset(gradient);
             return cmap;
