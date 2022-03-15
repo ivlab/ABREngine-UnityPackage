@@ -181,7 +181,6 @@ namespace IVLab.ABREngine
                         int zMinusOneOffset = z == 0 ? 0 : (z - 1) * dimensions.y * dimensions.x;
                         int zOffset = z * dimensions.y * dimensions.x;
                         int zPlusOneOffset = z == dimensions.z - 1 ? (dimensions.z - 1) * dimensions.y * dimensions.x : (z + 1) * dimensions.y * dimensions.x;
-                        int zOffsetFlipped = (dimensions.z - z - 1) * dimensions.y * dimensions.x;
                         for (int y = 0; y < dimensions.y; y++)
                         {
                             int yMinusOneOffset = y == 0 ? 0 : (y - 1) * dimensions.x;
@@ -199,8 +198,7 @@ namespace IVLab.ABREngine
                                 // Compute scalar data value
                                 float d = colorScalars[xOffset + yOffset + zOffset];
                                 // Store gradient in color rgb and data in alpha
-                                // (flip z to account for RH -> LH coordinate system conversion)
-                                pixels[xOffset + yOffset + zOffsetFlipped] = new Color(xPartial, yPartial, -zPartial, d);
+                                pixels[xOffset + yOffset + zOffset] = new Color(xPartial, yPartial, zPartial, d);
                             }
                         }
                     }
