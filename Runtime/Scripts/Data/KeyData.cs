@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace IVLab.ABREngine
 {
@@ -68,12 +69,48 @@ namespace IVLab.ABREngine
             return GetDataset().GetScalarVariables(this);
         }
 
+        public string[] GetScalarVariableNames()
+        {
+            return GetDataset().GetScalarVariables(this).Select(var => DataPath.GetName(var.Path)).ToArray();
+        }
+
+        public ScalarDataVariable GetScalarVariable(string varName)
+        {
+            ScalarDataVariable[] matches = GetDataset()
+                .GetScalarVariables(this)
+                .Where(var => DataPath.GetName(var.Path) == varName)
+                .ToArray();
+            if (matches.Length > 0) {
+                return matches[0];
+            } else {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Get all of the vector data variables associated with this key data object
         /// </summary>
         public VectorDataVariable[] GetVectorVariables()
         {
             return GetDataset().GetVectorVariables(this);
+        }
+
+        public string[] GetVectorVariableNames()
+        {
+            return GetDataset().GetVectorVariables(this).Select(var => DataPath.GetName(var.Path)).ToArray();
+        }
+
+        public VectorDataVariable GetVectorVariable(string varName)
+        {
+            VectorDataVariable[] matches = GetDataset()
+                .GetVectorVariables(this)
+                .Where(var => DataPath.GetName(var.Path) == varName)
+                .ToArray();
+            if (matches.Length > 0) {
+                return matches[0];
+            } else {
+                return null;
+            }
         }
 
         public Dataset GetDataset()
