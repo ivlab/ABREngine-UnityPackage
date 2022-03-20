@@ -361,5 +361,5 @@ void surf(Input IN, inout SurfaceOutputStandard o)
 
     o.Metallic = _Metallic;
     o.Smoothness = _Glossiness;
-    o.Alpha = 1;
+    o.Alpha = _Color.a;
 }

@@ -78,7 +78,12 @@ namespace IVLab.ABREngine
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
-        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque" };
+        // TODO: Integrate this with schema.
+        // TODO: Opacity is not 100% correct, especially when working in tandem
+        // with Volumes (volumes always render in front of transparent surfaces)
+        public PercentPrimitive opacity;
+
+        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent" };
         protected override string LayerName { get; } = "ABR_Surface";
 
 
@@ -287,7 +292,6 @@ namespace IVLab.ABREngine
                 mesh.UploadMeshData(false);
 
                 meshFilter.mesh = mesh;
-                meshRenderer.material = ImpressionMaterials[0];
             }
         }
 
@@ -375,9 +379,25 @@ namespace IVLab.ABREngine
             mesh.UploadMeshData(false);
             meshFilter.mesh = mesh;
 
+            // Set material based on opacity - if 100% opaque, use the regular
+            // opaque shader. If <100% opaque, use transparent shader.
+            if (opacity == null || Mathf.Approximately(opacity.Value, 1.0f))
+            {
+                meshRenderer.material = ImpressionMaterials[0];
+            }
+            else
+            {
+                meshRenderer.material = ImpressionMaterials[1];
+            }
+
+            // Opacity currently just uses the alpha channel of the shader's
+            // _Color input
+            Color defaultColor = Color.white;
+            defaultColor.a = opacity.Value;
+
             // Apply changes to the mesh's shader / material
             meshRenderer.GetPropertyBlock(MatPropBlock);
-            MatPropBlock.SetColor("_Color", Color.white);
+            MatPropBlock.SetColor("_Color", defaultColor);
             MatPropBlock.SetFloat("_ColorDataMin", scalarMin[0]);
             MatPropBlock.SetFloat("_ColorDataMax", scalarMax[0]);
             MatPropBlock.SetFloat("_PatternDataMin", scalarMin[1]);
