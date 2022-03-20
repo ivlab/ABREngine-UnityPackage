@@ -95,7 +95,7 @@ namespace IVLab.ABREngine
         private ComputeBuffer perGlyphVisibilityBuffer;
 
 
-        protected override string MaterialName { get; } = "ABR_Glyphs";
+        protected override string[] MaterialNames { get; } = { "ABR_Glyphs" };
         protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace IVLab.ABREngine
                 }
 
                 imr.bounds = SSrenderData.bounds;
-                imr.instanceMaterial = ImpressionMaterial;
+                imr.instanceMaterial = ImpressionMaterials[0];
                 imr.block = new MaterialPropertyBlock();
                 imr.cachedInstanceCount = -1;
             }

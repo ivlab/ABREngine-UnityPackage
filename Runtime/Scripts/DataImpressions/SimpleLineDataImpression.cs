@@ -90,7 +90,7 @@ namespace IVLab.ABREngine
 
         public Vector3 defaultCurveDirection = Vector3.up;
 
-        protected override string MaterialName { get; } = "ABR_Ribbon";
+        protected override string[] MaterialNames { get; } = { "ABR_Ribbon" };
         protected override string LayerName { get; } = "ABR_Line";
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace IVLab.ABREngine
                 mesh.UploadMeshData(false);
 
                 meshFilter.mesh = mesh;
-                meshRenderer.material = ImpressionMaterial;
+                meshRenderer.material = ImpressionMaterials[0];
             }
         }
 

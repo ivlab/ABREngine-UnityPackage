@@ -82,7 +82,7 @@ namespace IVLab.ABREngine
         private ComputeBuffer perVoxelVisibilityBuffer; 
 
 
-        protected override string MaterialName { get; } = "ABR_Volume";
+        protected override string[] MaterialNames { get; } = { "ABR_Volume" };
         protected override string LayerName { get; } = "ABR_Volume";
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace IVLab.ABREngine
                 meshFilter.mesh = mesh;
 
                 // Apply the voxel texture to the mesh
-                meshRenderer.material = ImpressionMaterial;
+                meshRenderer.material = ImpressionMaterials[0];
                 meshRenderer.GetPropertyBlock(MatPropBlock);
                 Texture3D.DestroyImmediate(MatPropBlock.GetTexture("_VolumeTexture"));
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);

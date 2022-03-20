@@ -78,7 +78,7 @@ namespace IVLab.ABREngine
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
-        protected override string MaterialName { get; } = "ABR_Surface";
+        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque" };
         protected override string LayerName { get; } = "ABR_Surface";
 
 
@@ -287,7 +287,7 @@ namespace IVLab.ABREngine
                 mesh.UploadMeshData(false);
 
                 meshFilter.mesh = mesh;
-                meshRenderer.material = ImpressionMaterial;
+                meshRenderer.material = ImpressionMaterials[0];
             }
         }
 
