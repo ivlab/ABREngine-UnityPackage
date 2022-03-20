@@ -145,7 +145,8 @@ namespace IVLab.ABREngine
             }
             else
             {
-                return default;
+                // If not found, try to load it
+                return LoadVisAsset<T>(uuid);
             }
         }
 
