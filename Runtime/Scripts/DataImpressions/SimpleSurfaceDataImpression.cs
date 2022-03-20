@@ -379,6 +379,10 @@ namespace IVLab.ABREngine
             mesh.UploadMeshData(false);
             meshFilter.mesh = mesh;
 
+            // Opacity currently just uses the alpha channel of the shader's
+            // _Color input
+            Color defaultColor = Color.white;
+
             // Set material based on opacity - if 100% opaque, use the regular
             // opaque shader. If <100% opaque, use transparent shader.
             if (opacity == null || Mathf.Approximately(opacity.Value, 1.0f))
@@ -388,12 +392,8 @@ namespace IVLab.ABREngine
             else
             {
                 meshRenderer.material = ImpressionMaterials[1];
+                defaultColor.a = opacity.Value;
             }
-
-            // Opacity currently just uses the alpha channel of the shader's
-            // _Color input
-            Color defaultColor = Color.white;
-            defaultColor.a = opacity.Value;
 
             // Apply changes to the mesh's shader / material
             meshRenderer.GetPropertyBlock(MatPropBlock);
