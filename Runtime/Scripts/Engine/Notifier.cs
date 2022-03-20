@@ -73,7 +73,7 @@ namespace IVLab.ABREngine
             _subscriberWebSocket = new Uri("ws://" + this._serverAddress.Authority + "/ws/");
         }
 
-        public async Task Init()
+        public void Init()
         {
             cts = new CancellationTokenSource();
             try
@@ -83,11 +83,19 @@ namespace IVLab.ABREngine
 
                 // Inspiration from:
                 // https://csharp.hotexamples.com/examples/-/ClientWebSocket/-/php-clientwebsocket-class-examples.html#0x5cb1281703a205e0b8dd236b8e8798505c77e14c91383f620be403f868cae48b-43,,96,
-                await this._client.ConnectAsync(this._subscriberWebSocket, cts.Token);
+                this._client.ConnectAsync(this._subscriberWebSocket, cts.Token);
 
-                this._running = true;
+                // Wait for a max of ~400ms to see if the client can connect
+                int tries = 0;
+                while (this._client.State != WebSocketState.Open && tries < 20)
+                {
+                    tries++;
+                    Thread.Sleep(20);
+                }
+
                 if (this._client.State == WebSocketState.Open)
                 {
+                    this._running = true;
                     Debug.Log("State subscriber notifier WebSocket listening");
                     this._receiverThread = new Thread(new ThreadStart(this.Receiver));
                     this._receiverThread.Start();
@@ -96,7 +104,7 @@ namespace IVLab.ABREngine
                 }
                 else
                 {
-                    throw new Exception("Failed to connect to state subscriber notifier: " + this._client.State);
+                    throw new Exception($"Failed to connect to state subscriber notifier after {tries} tries: " + this._client.State);
                 }
             }
             catch (Exception e)
@@ -132,14 +140,17 @@ namespace IVLab.ABREngine
                 NotifierTarget target = JsonConvert.DeserializeObject<NotifierTarget>(rcvMsg);
                 if (target.target == "state")
                 {
-                    // Load the state,
-                    await ABREngine.Instance.LoadStateAsync<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                    // Load the state (make sure this happens in the main thread),
+                    await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+                    {
+                        ABREngine.Instance.LoadState<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                    });
 
                     // ... then immediately send back a thumbnail of what we just rendered
                     // 0. Try and get the Screenshot component
                     byte[] thumbnail = null;
                     Screenshot scr = null;
-                    await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+                    await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                     {
                         if (Camera.main.TryGetComponent<Screenshot>(out scr))
                         {

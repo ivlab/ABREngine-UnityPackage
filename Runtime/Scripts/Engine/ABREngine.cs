@@ -43,15 +43,6 @@ namespace IVLab.ABREngine
     /// string mediaPath = ABREngine.Instance.MediaPath;
     /// </code>
     /// </example>
-    /// <remarks>
-    /// Many of the methods in the ABREngine must be run from Unity's Main
-    /// Thread. For simple scenes this is not a problem, but when you start to
-    /// integrate with an ABR Server things become more difficult. Try to keep
-    /// things in the main thread when possible, and use
-    /// `IVLab.Utilities.UnityThreadScheduler.RunMainThreadWork` if you need to
-    /// run Unity main thread work inside a different thread.
-    /// in ABR.
-    /// </remarks>
     /// <example>
     /// This example shows how to quickly get up and running with a
     /// custom-defined dataset and building your own data impressions. The
@@ -299,72 +290,66 @@ namespace IVLab.ABREngine
             // when they have no dataset) - guid zeroed out
             _defaultGroup = CreateDataImpressionGroup("Default", new Guid());
 
-            Task.Run(async () =>
+            try
+            {
+                if (Config.Info.serverAddress != null)
+                {
+                    _notifier = new Notifier(Config.Info.serverAddress);
+                    _notifier.Init();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Unable to connect to state server " + Config.Info.serverAddress);
+                Debug.LogError(e);
+            }
+
+            try
+            {
+                VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder));
+                Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
+                if (Config.Info.dataListenerPort != null)
+                {
+                    DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
+                    DataListener.StartServer();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+
+            // Fetch the state from the server, if we're connected
+            if (Config.Info.serverAddress != null &&
+                    _notifier != null &&
+                    Config.Info.statePathOnServer != null
+            )
+            {
+                LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
+            }
+            IsInitialized = true;
+
+            // If a state in streaming assets or resources is specified, load it
+            if (Config.Info.loadStateOnStart != null)
             {
                 try
                 {
-                    if (Config.Info.serverAddress != null)
+                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                    if (previouslyLoadedState == null)
                     {
-                        _notifier = new Notifier(Config.Info.serverAddress);
-                        await _notifier.Init();
+                        throw new Exception();
+                    }
+                    else
+                    {
+                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.LogError("Unable to connect to state server " + Config.Info.serverAddress);
-                    Debug.LogError(e);
+                    LoadState<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.Info.loadStateOnStart));
+                    Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
                 }
-
-                try
-                {
-                    VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder));
-                    Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
-                    if (Config.Info.dataListenerPort != null)
-                    {
-                        DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
-                        DataListener.StartServer();
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
-
-                // Fetch the state from the server, if we're connected
-                if (Config.Info.serverAddress != null &&
-                        _notifier != null &&
-                        Config.Info.statePathOnServer != null
-                )
-                {
-                    LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
-                }
-                IsInitialized = true;
-
-                // If a state in streaming assets or resources is specified, load it
-                if (Config.Info.loadStateOnStart != null)
-                {
-                    try
-                    {
-                        await LoadStateAsync<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
-                        if (previouslyLoadedState == null)
-                        {
-                            throw new Exception();
-                        }
-                        else
-                        {
-                            Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
-                        {
-                            await LoadStateAsync<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.Info.loadStateOnStart));
-                            Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
-                        });
-                    }
-                }
-            });
+            }
         }
 
         /// <summary>
@@ -929,28 +914,6 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Load a state into ABR.
-        /// </summary>
-        /// <remarks>
-        /// NOTE: it is recommended to use `ABREngine.LoadStateAsync` instead of
-        /// this method; this method provides no timing guarantees (e.g. that
-        /// any data impressions would be initialized by the time it finishes).
-        /// </remarks>
-        public void LoadState<T>(string stateName)
-        where T : IABRStateLoader, new()
-        {
-            // Kick off a task to load the new state, and make sure it's all in
-            // the main thread. TODO there's definitely a better way to do this
-            // and optimize what needs to be in the main thread and what
-            // doesn't. Currently takes about 10 frames to get from here to the
-            // end of the `RenderImpressions()` call.
-            UnityThreadScheduler.Instance.KickoffMainThreadWork(async () =>
-            {
-                await LoadStateAsync<T>(stateName);
-            });
-        }
-
-        /// <summary>
         /// Load a state into ABR, asynchronously. This Task is finished when:
         /// (1) All Data and VisAssets from the state have been loaded, (2) The
         /// ABR scene has been rendered with all updates, and (3) the
@@ -972,38 +935,35 @@ namespace IVLab.ABREngine
         /// await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
         /// </code>
         /// </example>
-        public async Task LoadStateAsync<T>(string stateName)
+        public void LoadState<T>(string stateName)
         where T : IABRStateLoader, new()
         {
             lock (_stateUpdatingLock)
             {
                 stateUpdating = true;
             }
-            await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
+            try
             {
-                try
+                JObject tempState = stateParser.LoadState<T>(stateName, previouslyLoadedState);
+                lock (_stateLock)
                 {
-                    JObject tempState = await stateParser.LoadState<T>(stateName, previouslyLoadedState);
-                    lock (_stateLock)
-                    {
-                        previousStateName = stateName;
-                        previouslyLoadedState = tempState;
-                    }
-                    Render();
-                    lock (_stateUpdatingLock)
-                    {
-                        stateUpdating = false;
-                    }
-                    if (OnStateChanged != null)
-                    {
-                        OnStateChanged(previouslyLoadedState);
-                    }
+                    previousStateName = stateName;
+                    previouslyLoadedState = tempState;
                 }
-                catch (Exception e)
+                Render();
+                lock (_stateUpdatingLock)
                 {
-                    Debug.LogError(e);
+                    stateUpdating = false;
                 }
-            });
+                if (OnStateChanged != null)
+                {
+                    OnStateChanged(previouslyLoadedState);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         /// <summary>
@@ -1014,7 +974,7 @@ namespace IVLab.ABREngine
         /// `IABRStateLoader`s, namely `PathStateFileLoader` and
         /// `HttpStateFileLoader`.
         /// </remarks>
-        public async Task SaveStateAsync<T>(string overrideStateName = null)
+        public void SaveStateAsync<T>(string overrideStateName = null)
         where T : IABRStateLoader, new()
         {
             if (overrideStateName != null)
@@ -1024,19 +984,8 @@ namespace IVLab.ABREngine
             T loader = new T();
             try
             {
-                await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
-                {
-                    try
-                    {
-                        string state = stateParser.SerializeState(previouslyLoadedState);
-
-                        loader.SaveState(previousStateName, state);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(e);
-                    }
-                });
+                string state = stateParser.SerializeState(previouslyLoadedState);
+                loader.SaveState(previousStateName, state);
             }
             catch (Exception e)
             {

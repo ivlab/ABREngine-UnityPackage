@@ -44,14 +44,9 @@ namespace IVLab.ABREngine
         /// data impressions, to loading new data, to loading in VisAssets. By the
         /// end of `LoadState`, the visualization should be complete.
         /// </summary>
-        public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
+        public JObject LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
-            try {
-            await ABREngine.Instance.WaitUntilInitialized();
-            } catch (Exception e) { Debug.LogError(e); }
-            UnityThreadScheduler.GetInstance();
-
             JObject stateJson = (new T()).GetState(stateText);
 
             IList<ValidationError> errors;
@@ -326,10 +321,7 @@ namespace IVLab.ABREngine
                             else if (value?.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
                             {
                                 IVisAsset visAsset = null;
-                                await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-                                {
-                                    ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
-                                });
+                                ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
                                 if (visAsset == null)
                                 {
                                     Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
