@@ -259,6 +259,10 @@ namespace IVLab.ABREngine
                         _visAssets[dependency] = visAsset;
                         toReturn = visAsset;
                     }
+                    else
+                    {
+                        Debug.LogError($"Unable to find VisAsset `{visAssetUUID}`");
+                    }
                 }
                 catch (Exception e)
                 {
