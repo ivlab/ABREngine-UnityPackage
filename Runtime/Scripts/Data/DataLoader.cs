@@ -36,7 +36,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Load data specified by `dataPath` from a particular source
         /// </summary>
-        Task<RawDataset> TryLoadDataAsync(string dataPath);
+        RawDataset LoadData(string dataPath);
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace IVLab.ABREngine
     /// </summary>
     public class MediaDataLoader : IDataLoader
     {
-        public async Task<RawDataset> TryLoadDataAsync(string dataPath)
+        public RawDataset LoadData(string dataPath)
         {
             string mediaDir = Path.GetFullPath(ABREngine.Instance.MediaPath);
             FileInfo jsonFile = new FileInfo(Path.Combine(mediaDir, ABRConfig.Consts.DatasetFolder, dataPath) + ".json");
@@ -61,15 +61,13 @@ namespace IVLab.ABREngine
             string metadataContent = "";
             using (StreamReader file = new StreamReader(jsonFile.FullName))
             {
-                metadataContent = await file.ReadToEndAsync();
+                metadataContent = file.ReadToEnd();
             }
 
             RawDataset.JsonHeader metadata = JsonUtility.FromJson<RawDataset.JsonHeader>(metadataContent);
 
             FileInfo binFile = new FileInfo(Path.Combine(mediaDir, ABRConfig.Consts.DatasetFolder, dataPath) + ".bin");
-            // File.ReadAllBytesAsync doesn't exist in this version (2.0 Standard)
-            // of .NET apparently?
-            byte[] dataBytes = await Task.Run(() => File.ReadAllBytes(binFile.FullName));
+            byte[] dataBytes = File.ReadAllBytes(binFile.FullName);
 
             RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
 
@@ -82,7 +80,7 @@ namespace IVLab.ABREngine
     /// </summary>
     public class HttpDataLoader : IDataLoader
     {
-        public async Task<RawDataset> TryLoadDataAsync(string dataPath)
+        public RawDataset LoadData(string dataPath)
         {
             string url = ABREngine.Instance.Config.Info.dataServer;
             Debug.Log("Loading " + dataPath + " from " + url);
@@ -90,16 +88,16 @@ namespace IVLab.ABREngine
 
             try
             {
-                HttpResponseMessage metadataResponse = await ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath);
+                HttpResponseMessage metadataResponse = ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath).Result;
                 metadataResponse.EnsureSuccessStatusCode();
-                string responseBody = await metadataResponse.Content.ReadAsStringAsync();
+                string responseBody = metadataResponse.Content.ReadAsStringAsync().Result;
 
                 JToken metadataJson = JObject.Parse(responseBody)["metadata"];
                 RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
 
-                HttpResponseMessage dataResponse = await ABREngine.httpClient.GetAsync(url + "/data/" + dataPath);
+                HttpResponseMessage dataResponse = ABREngine.httpClient.GetAsync(url + "/data/" + dataPath).Result;
                 metadataResponse.EnsureSuccessStatusCode();
-                byte[] dataBytes = await dataResponse.Content.ReadAsByteArrayAsync();
+                byte[] dataBytes = dataResponse.Content.ReadAsByteArrayAsync().Result;
 
                 RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
                 return new RawDataset(metadata, data);
@@ -121,34 +119,30 @@ namespace IVLab.ABREngine
     /// </summary>
     public class ResourcesDataLoader : IDataLoader
     {
-        public async Task<RawDataset> TryLoadDataAsync(string dataPath)
+        public RawDataset LoadData(string dataPath)
         {
             Debug.Log("Loading " + dataPath + " from Resources");
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
 
             try
             {
-                return await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
+                // Fetch both files from resources
+                TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
+                if (metadataData == null || metadataData.Length != 2)
                 {
+                    throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
+                }
 
-                    // Fetch both files from resources
-                    TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
-                    if (metadataData == null || metadataData.Length != 2)
-                    {
-                        throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
-                    }
+                string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
+                JObject metadata = JObject.Parse(metadataJson);
+                RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
 
-                    string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
-                    JObject metadata = JObject.Parse(metadataJson);
-                    RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
-
-                    byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
-                    RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
-                    Resources.UnloadAsset(metadataData[0]);
-                    Resources.UnloadAsset(metadataData[1]);
-                    
-                    return new RawDataset(meta, data);
-                });
+                byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
+                RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
+                Resources.UnloadAsset(metadataData[0]);
+                Resources.UnloadAsset(metadataData[1]);
+                
+                return new RawDataset(meta, data);
             }
             catch (Exception e)
             {

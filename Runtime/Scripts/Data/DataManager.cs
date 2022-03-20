@@ -178,10 +178,10 @@ namespace IVLab.ABREngine
         /// <returns>
         /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
         /// </returns>
-        public async Task<RawDataset> LoadRawDataset<T>(string dataPath)
+        public RawDataset LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
-            RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
+            RawDataset ds = (new T()).LoadData(dataPath);
             // Only import if there are actual data present
             if (ds != null)
             {
