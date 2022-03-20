@@ -52,7 +52,7 @@ namespace IVLab.ABREngine
             } catch (Exception e) { Debug.LogError(e); }
             UnityThreadScheduler.GetInstance();
 
-            JObject stateJson = await (new T()).GetState(stateText);
+            JObject stateJson = (new T()).GetState(stateText);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))

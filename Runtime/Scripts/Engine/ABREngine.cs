@@ -1030,7 +1030,7 @@ namespace IVLab.ABREngine
                     {
                         string state = stateParser.SerializeState(previouslyLoadedState);
 
-                        await loader.SaveState(previousStateName, state);
+                        loader.SaveState(previousStateName, state);
                     }
                     catch (Exception e)
                     {
