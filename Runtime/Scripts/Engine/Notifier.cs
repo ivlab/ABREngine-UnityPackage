@@ -85,12 +85,12 @@ namespace IVLab.ABREngine
                 // https://csharp.hotexamples.com/examples/-/ClientWebSocket/-/php-clientwebsocket-class-examples.html#0x5cb1281703a205e0b8dd236b8e8798505c77e14c91383f620be403f868cae48b-43,,96,
                 this._client.ConnectAsync(this._subscriberWebSocket, cts.Token);
 
-                // Wait for a max of ~400ms to see if the client can connect
+                // Wait for a max of ~5s to see if the client can connect
                 int tries = 0;
-                while (this._client.State != WebSocketState.Open && tries < 20)
+                while (this._client.State != WebSocketState.Open && tries < 50)
                 {
                     tries++;
-                    Thread.Sleep(20);
+                    Thread.Sleep(100);
                 }
 
                 if (this._client.State == WebSocketState.Open)
@@ -120,6 +120,9 @@ namespace IVLab.ABREngine
             this._sending = false;
             this._running = false;
             this._receiverThread?.Join();
+            this._senderThread?.Join();
+            this._client.Dispose();
+            Debug.Log("Disconnected state subscriber notifier");
         }
 
         public void ForceDisconnect()
