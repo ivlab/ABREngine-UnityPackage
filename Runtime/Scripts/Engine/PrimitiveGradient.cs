@@ -36,6 +36,14 @@ namespace IVLab.ABREngine
         string[] Values { get; }
     }
 
+    /// <summary>
+    /// A simple gradient of points associated with values.
+    /// </summary>
+    /// <remarks>
+    /// At present, this class is expressly used to describe the <see
+    /// cref="SimpleVolumeDataImpression.opacitymap"/>. In the future this may
+    /// change, and when that happens this class will likely change as well.
+    /// </remarks>
     public class PrimitiveGradient : IPrimitiveGradient
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.PrimitiveGradient;

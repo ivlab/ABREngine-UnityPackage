@@ -95,7 +95,6 @@ Impressions.</p>
     <div class="level1"><span class="xref">DataManager</span></div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_DataManager_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class DataManager</code></pre>
@@ -366,7 +365,7 @@ return the rawdataset after it has been successfully imported.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task&lt;RawDataset&gt; LoadRawDataset&lt;T&gt;(string dataPath)
+    <pre><code class="lang-csharp hljs">public RawDataset LoadRawDataset&lt;T&gt;(string dataPath)
     where T : IDataLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -382,7 +381,10 @@ return the rawdataset after it has been successfully imported.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">dataPath</span></td>
-        <td></td>
+        <td><p>Data path to load. If loading from the media
+directory, you can use the relative path inside that folder (but
+exclude the .bin/.json extension)</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -396,7 +398,7 @@ return the rawdataset after it has been successfully imported.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>&gt;</td>
+        <td><a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a></td>
         <td><p>Returns the actual <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a> if the dataset was found, <code>null</code> if not found.</p>
 </td>
       </tr>
@@ -413,16 +415,22 @@ return the rawdataset after it has been successfully imported.</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any <a class="xref" href="IVLab.ABREngine.IDataLoader.html">IDataLoader</a> type</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h5 id="IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String__examples">Examples</h5>
-  <p>Datasets may be loaded from any of the following locations:</p>
-<pre><code>// From a file in the media directory
-RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media>(&quot;Test/Test/KeyData/Example&quot;);
-// From a web resource
-RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader>(&quot;Test/Test/KeyData/Example&quot;);</code></pre>
+  <p>If you&apos;re working with a pre-existing dataset (i.e., one that already
+exists in ABR raw data format in your media folder), you can use <a class="xref" href="IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String_">LoadRawDataset&lt;T&gt;(String)</a> to obtain a <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>.</p>
+<pre><code>// Load from a .bin/.json file pair in the datasets folder in the
+// media directory. Most of the time when you&apos;re fetching an existing
+// dataset, this is what you&apos;ll want to do. Just make sure the
+// dataset actually exists in the media folder!
+RawDataset ds1 = ABREngine.Instance.Data.LoadRawDataset&lt;MediaDataLoader>(&quot;Test/Test/KeyData/Example&quot;);
+
+// You can also load an ABR raw dataset from a web resource. This requires setting up an ABR data server.
+RawDataset ds2 = ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader>(&quot;Test/Test/KeyData/Example&quot;);</code></pre>
 
   
   
@@ -528,7 +536,7 @@ populates the <code>out RawDataset dataset</code> accordingly.</p>
   
   <a id="IVLab_ABREngine_DataManager_UnloadRawDataset_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset*"></a>
   <h4 id="IVLab_ABREngine_DataManager_UnloadRawDataset_System_String_" data-uid="IVLab.ABREngine.DataManager.UnloadRawDataset(System.String)">UnloadRawDataset(String)</h4>
-  <div class="markdown level1 summary"><p>Unload a raw dataset from a RawDataset object by its data path. </p>
+  <div class="markdown level1 summary"><p>Entirely remove a RawDataset from ABR memory.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -548,10 +556,14 @@ populates the <code>out RawDataset dataset</code> accordingly.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">dataPath</span></td>
-        <td></td>
+        <td><p>The data path / key data to be unloaded</p>
+</td>
       </tr>
     </tbody>
   </table>
+  <h5 id="IVLab_ABREngine_DataManager_UnloadRawDataset_System_String__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method <em>does not check if the dataset is currently in use</em>, so utilize this method with care!</p>
+</div>
 </article>
           </div>
           

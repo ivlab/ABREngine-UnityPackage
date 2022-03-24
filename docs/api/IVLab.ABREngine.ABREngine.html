@@ -95,20 +95,10 @@ data listener, VisAssets and Data managers, etc.</p>
     <div class="level1"><span class="xref">ABREngine</span></div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_ABREngine_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ABREngine : Singleton&lt;ABREngine&gt;</code></pre>
   </div>
-  <h5 id="IVLab_ABREngine_ABREngine_remarks"><strong>Remarks</strong></h5>
-  <div class="markdown level0 remarks"><p>Many of the methods in the ABREngine must be run from Unity&apos;s Main
-Thread. For simple scenes this is not a problem, but when you start to
-integrate with an ABR Server things become more difficult. Try to keep
-things in the main thread when possible, and use
-<code>IVLab.Utilities.UnityThreadScheduler.RunMainThreadWork</code> if you need to
-run Unity main thread work inside a different thread.
-in ABR.</p>
-</div>
   <h5 id="IVLab_ABREngine_ABREngine_examples"><strong>Examples</strong></h5>
   <p>Most methods of the ABREngine can be accessed through its singleton
 <code>Instance</code> without needing to do a <code>GetComponent</code>:</p>
@@ -119,9 +109,9 @@ custom-defined dataset and building your own data impressions. The
 general process for making a visualization programmatically with ABR is:
 <ol>
 <li>Define your data in some <code>List</code>s.</li>
-<li>Use the <a class="xref" href="IVLab.ABREngine.RawDatasetAdapter.html">RawDatasetAdapter</a> to convert the <code>List</code> into an ABR <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>.</li>
-<li>Import that <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a> into ABR using <a class="xref" href="IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_ImportRawDataset_IVLab_ABREngine_RawDataset_">ImportRawDataset(RawDataset)</a>.</li>
-<li>Optionally, import any <a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a>s you want to use.</li>
+<li>Use the <a class="xref" href="IVLab.ABREngine.RawDatasetAdapter.html">RawDatasetAdapter</a> to convert the <code>List</code> into an ABR <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>, or import an existing ABR RawDataset using <a class="xref" href="IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_LoadRawDataset__1_System_String_">LoadRawDataset&lt;T&gt;(String)</a>.</li>
+<li>Import that <a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a> into ABR using <a class="xref" href="IVLab.ABREngine.DataManager.html#IVLab_ABREngine_DataManager_ImportRawDataset_IVLab_ABREngine_RawDataset_">ImportRawDataset(RawDataset)</a> (optionally, giving the dataset a data path identifier for easier semantic access later).</li>
+<li>Optionally, import any <a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a>s you want to use using <a class="xref" href="IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_GetVisAsset__1_System_Guid_">GetVisAsset&lt;T&gt;(Guid)</a>.</li>
 <li>Create a <a class="xref" href="IVLab.ABREngine.DataImpression.html">DataImpression</a> to combine the data and visuals together.</li>
 <li>Use <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_RegisterDataImpression_IVLab_ABREngine_IDataImpression_IVLab_ABREngine_DataImpressionGroup_System_Boolean_">RegisterDataImpression(IDataImpression, DataImpressionGroup, Boolean)</a> to add the impression to the engine.</li>
 <li>Render the data and visuals to the screen using <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_Render">Render()</a>.</li>
@@ -228,31 +218,6 @@ to create a side-by-side visualization.</p>
   </h3>
   
   
-  <h4 id="IVLab_ABREngine_ABREngine_httpClient" data-uid="IVLab.ABREngine.ABREngine.httpClient">httpClient</h4>
-  <div class="markdown level1 summary"><p>Client for internal application usage to make web requests.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static readonly HttpClient httpClient</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">HttpClient</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
   <h4 id="IVLab_ABREngine_ABREngine_OnStateChanged" data-uid="IVLab.ABREngine.ABREngine.OnStateChanged">OnStateChanged</h4>
   <div class="markdown level1 summary"><p>Delegate that is called whenever ABRState is updated.</p>
 </div>
@@ -261,21 +226,6 @@ to create a side-by-side visualization.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ABREngine.StateChangeDelegate OnStateChanged</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ABREngine.StateChangeDelegate.html">ABREngine.StateChangeDelegate</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h5 id="IVLab_ABREngine_ABREngine_OnStateChanged_examples">Examples</h5>
   <p>Developers may need to use this if they want to know when the state has been updated:</p>
 <pre><code>using UnityEngine;
@@ -305,21 +255,6 @@ public class ABRStateExample : MonoBehaviour
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Transform ABRTransform { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Transform</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_Config_" data-uid="IVLab.ABREngine.ABREngine.Config*"></a>
@@ -331,21 +266,6 @@ public class ABRStateExample : MonoBehaviour
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ABRConfig Config { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ABRConfig.html">ABRConfig</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_Data_" data-uid="IVLab.ABREngine.ABREngine.Data*"></a>
@@ -357,21 +277,6 @@ public class ABRStateExample : MonoBehaviour
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public DataManager Data { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.DataManager.html">DataManager</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_DataListener_" data-uid="IVLab.ABREngine.ABREngine.DataListener*"></a>
@@ -383,46 +288,22 @@ public class ABRStateExample : MonoBehaviour
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public SocketDataListener DataListener { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.SocketDataListener.html">SocketDataListener</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_IsInitialized_" data-uid="IVLab.ABREngine.ABREngine.IsInitialized*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_IsInitialized" data-uid="IVLab.ABREngine.ABREngine.IsInitialized">IsInitialized</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>True if the ABREngine is set up and completely ready to begin rendering. Only returns true once all setup has finished, including:
+<ul>
+<li>Loading the ABRConfig</li>
+<li>Connecting to the server (if applicable)</li>
+<li>Loading any initial state specified by the programmer, or the remote state from the server</li>
+</ul></p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsInitialized { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_MediaPath_" data-uid="IVLab.ABREngine.ABREngine.MediaPath*"></a>
@@ -436,21 +317,6 @@ Otherwise, use Unity&apos;s <a href="https://docs.unity3d.com/ScriptReference/Ap
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public string MediaPath { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_State_" data-uid="IVLab.ABREngine.ABREngine.State*"></a>
@@ -462,21 +328,6 @@ Otherwise, use Unity&apos;s <a href="https://docs.unity3d.com/ScriptReference/Ap
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public JObject State { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">JObject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_ABREngine_VisAssets_" data-uid="IVLab.ABREngine.ABREngine.VisAssets*"></a>
@@ -488,21 +339,6 @@ Otherwise, use Unity&apos;s <a href="https://docs.unity3d.com/ScriptReference/Ap
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public VisAssetManager VisAssets { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.VisAssetManager.html">VisAssetManager</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -526,6 +362,11 @@ Otherwise, use Unity&apos;s <a href="https://docs.unity3d.com/ScriptReference/Ap
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ClearState()</code></pre>
   </div>
+  <h5 id="IVLab_ABREngine_ABREngine_ClearState_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method does remove all data impressions, but it does not clean
+up other state values like custom colormaps, lighting, and
+gradients.</p>
+</div>
   
   
   <a id="IVLab_ABREngine_ABREngine_CreateDataImpressionGroup_" data-uid="IVLab.ABREngine.ABREngine.CreateDataImpressionGroup*"></a>
@@ -553,7 +394,8 @@ zero.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">name</span></td>
-        <td></td>
+        <td><p>Name of the new data impression group that will be created</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -600,12 +442,14 @@ zero.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">name</span></td>
-        <td></td>
+        <td><p>Name of the new data impression group that will be created</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID to use for the new data impression group</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -649,27 +493,32 @@ zero.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">name</span></td>
-        <td></td>
+        <td><p>Name of the new data impression group that will be created</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID to use for the new data impression group</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">Bounds</span></td>
         <td><span class="parametername">bounds</span></td>
-        <td></td>
+        <td><p>Default bounds to use for this data impression group. Data will be &quot;squished&quot; inside this bounding box.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">Vector3</span></td>
         <td><span class="parametername">position</span></td>
-        <td></td>
+        <td><p>Default position (in Unity coordinates) to use for the data impression group.</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">Quaternion</span></td>
         <td><span class="parametername">rotation</span></td>
-        <td></td>
+        <td><p>Default rotation (in Unity angles) to use for the data impression group.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -715,12 +564,14 @@ bounds defaults to the bounds found in
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">name</span></td>
-        <td></td>
+        <td><p>Name of the new data impression group that will be created</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">Vector3</span></td>
         <td><span class="parametername">position</span></td>
-        <td></td>
+        <td><p>Where to place the data impression in space</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -767,7 +618,8 @@ placed in their default groups (grouped by dataset).</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">impression</span></td>
-        <td></td>
+        <td><p>The data impression that should be duplicated.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -815,12 +667,14 @@ impression has, or the default empty group)</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>The data impression that should be duplicated.</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a></td>
         <td><span class="parametername">group</span></td>
-        <td></td>
+        <td><p>The <a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a> that the new data impression should be placed into.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -866,12 +720,16 @@ source.</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>The data impression that should be duplicated.</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">retainGroup</span></td>
-        <td></td>
+        <td><p>Ensure the copy of the data impression
+will exist within the same group as the original, regardless of
+whether different data have been applied.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -918,7 +776,8 @@ placed in their default groups (grouped by dataset).</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID of the data impression that should be duplicated.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -961,7 +820,8 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
-        <td></td>
+        <td><p>All data impressions that exist in the ABREngine</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -969,7 +829,7 @@ Engine, over ALL data impression groups.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpression(Func&lt;IDataImpression, Boolean&gt;)</h4>
-  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular function crieteria</p>
+  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular function crieteria (similar to a &quot;filter&quot; or Linq-esque &quot;where&quot; operation).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -989,7 +849,8 @@ Engine, over ALL data impression groups.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
         <td><span class="parametername">criteria</span></td>
-        <td></td>
+        <td><p>Function that takes each data impression of any type and returns a boolean.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1004,7 +865,7 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
-        <td><p>A data impression if found, null otherwise.</p>
+        <td><p>The first data impression of any type that matches criteria, null otherwise.</p>
 </td>
       </tr>
     </tbody>
@@ -1033,7 +894,8 @@ Engine, over ALL data impression groups.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>Unique identifier (UUID) of the data impression to be fetched from the engine</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1054,8 +916,8 @@ Engine, over ALL data impression groups.</p>
     </tbody>
   </table>
   <h5 id="IVLab_ABREngine_ABREngine_GetDataImpression_System_Guid__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>It is often useful to cast the result of this data impression so individual inputs can be modified:</p>
-<pre><code>SimpleSurfaceDataImpression di = ABREngine.Instance.GetDataImpression(someGuid) as SimpleSurfaceDataImpression</code></pre>
+  <div class="markdown level1 remarks"><p>It is often more useful to use the <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_GetDataImpression__1_System_Func___0_System_Boolean__">GetDataImpression&lt;T&gt;(Func&lt;T, Boolean&gt;)</a> method since it returns an
+actual data impression instead of a <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>.</p>
 </div>
   
   
@@ -1080,7 +942,8 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td></td>
+        <td><p>The first data impression of matching type <code>T</code>, null otherwise.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1095,7 +958,8 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any data impression type implementing <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1103,7 +967,7 @@ Engine, over ALL data impression groups.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpression__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpression``1(System.Func{``0,System.Boolean})">GetDataImpression&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
-  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular type AND function crieteria</p>
+  <div class="markdown level1 summary"><p>Retreive the first data impression found with a particular type AND function crieteria (similar to a &quot;filter&quot; or Linq-esque &quot;where&quot; operation).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1124,7 +988,8 @@ Engine, over ALL data impression groups.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
         <td><span class="parametername">criteria</span></td>
-        <td></td>
+        <td><p>Function that takes each data impression matching type <code>T</code> and returns a boolean.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1139,7 +1004,8 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td></td>
+        <td><p>The first data impression of type <code>T</code> that matches criteria, null otherwise.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1154,7 +1020,8 @@ Engine, over ALL data impression groups.</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any data impression type implementing <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1182,7 +1049,8 @@ Engine, over ALL data impression groups.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID of the data impression group that should be retrieved.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1206,7 +1074,7 @@ Engine, over ALL data impression groups.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressionGroupByDataset_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressionGroupByDataset_IVLab_ABREngine_Dataset_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressionGroupByDataset(IVLab.ABREngine.Dataset)">GetDataImpressionGroupByDataset(Dataset)</h4>
-  <div class="markdown level1 summary"><p>Retrieve the first data impression group found that is associated with a particular dataset.</p>
+  <div class="markdown level1 summary"><p>Retrieve the first data impression group found that is associated with a particular <a class="xref" href="IVLab.ABREngine.Dataset.html">Dataset</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1226,7 +1094,8 @@ Engine, over ALL data impression groups.</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.Dataset.html">Dataset</a></td>
         <td><span class="parametername">ds</span></td>
-        <td></td>
+        <td><p>Dataset that should be matched with</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1278,7 +1147,7 @@ Unity ABR scene.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions_System_Func_IVLab_ABREngine_IDataImpression_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions(System.Func{IVLab.ABREngine.IDataImpression,System.Boolean})">GetDataImpressions(Func&lt;IDataImpression, Boolean&gt;)</h4>
-  <div class="markdown level1 summary"><p>Retrieve all data impressions matching a particular criteria</p>
+  <div class="markdown level1 summary"><p>Retreive the all data impressions found of any type matching function crieteria (similar to a &quot;filter&quot; or Linq-esque &quot;where&quot; operation).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1298,7 +1167,8 @@ Unity ABR scene.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
         <td><span class="parametername">criteria</span></td>
-        <td></td>
+        <td><p>Function that takes each data impression and returns a boolean.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1313,7 +1183,8 @@ Unity ABR scene.</p>
     <tbody>
       <tr>
         <td><span class="xref">List</span>&lt;<a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a>&gt;</td>
-        <td></td>
+        <td><p>All data impressions of any type that matches criteria, null otherwise.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1321,7 +1192,7 @@ Unity ABR scene.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions__1" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions``1">GetDataImpressions&lt;T&gt;()</h4>
-  <div class="markdown level1 summary"><p>Retrieve all data impressions of a particular type</p>
+  <div class="markdown level1 summary"><p>Retreive the all data impressions found of a particular type</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1340,7 +1211,8 @@ Unity ABR scene.</p>
     <tbody>
       <tr>
         <td><span class="xref">List</span>&lt;T&gt;</td>
-        <td></td>
+        <td><p>All data impressions of type <code>T</code>.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1355,7 +1227,8 @@ Unity ABR scene.</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any data impression type implementing <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1363,7 +1236,7 @@ Unity ABR scene.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetDataImpressions_" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetDataImpressions__1_System_Func___0_System_Boolean__" data-uid="IVLab.ABREngine.ABREngine.GetDataImpressions``1(System.Func{``0,System.Boolean})">GetDataImpressions&lt;T&gt;(Func&lt;T, Boolean&gt;)</h4>
-  <div class="markdown level1 summary"><p>Retrieve all data impressions of a particular type AND matching criteria</p>
+  <div class="markdown level1 summary"><p>Retreive the all data impressions found of a particular type matching function crieteria (similar to a &quot;filter&quot; or Linq-esque &quot;where&quot; operation).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1384,7 +1257,8 @@ Unity ABR scene.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a>&gt;</td>
         <td><span class="parametername">criteria</span></td>
-        <td></td>
+        <td><p>Function that takes each data impression of type <code>T</code> and returns a boolean.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1399,7 +1273,8 @@ Unity ABR scene.</p>
     <tbody>
       <tr>
         <td><span class="xref">List</span>&lt;T&gt;</td>
-        <td></td>
+        <td><p>All data impressions of type <code>T</code> that match the criteria.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1414,7 +1289,8 @@ Unity ABR scene.</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any data impression type implementing <a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1489,7 +1365,8 @@ exist solely for application developers.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">tag</span></td>
-        <td></td>
+        <td><p>The tag to check for</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1534,7 +1411,8 @@ a particular data impression, identified by its guid.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">impressionGuid</span></td>
-        <td></td>
+        <td><p>Unique identifier (UUID) of the data impression to get the GameObject for</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1549,7 +1427,7 @@ a particular data impression, identified by its guid.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></td>
-        <td><p>An EncodedGameObject (MonoBehaviour) of the Data Impression as it
+        <td><p>An <a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a> (MonoBehaviour) of the Data Impression as it
 exists in the Unity Scene, or null if no such impression exists.</p>
 </td>
       </tr>
@@ -1559,7 +1437,7 @@ exists in the Unity Scene, or null if no such impression exists.</p>
   
   <a id="IVLab_ABREngine_ABREngine_GetGroupFromImpression_" data-uid="IVLab.ABREngine.ABREngine.GetGroupFromImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_GetGroupFromImpression_IVLab_ABREngine_IDataImpression_" data-uid="IVLab.ABREngine.ABREngine.GetGroupFromImpression(IVLab.ABREngine.IDataImpression)">GetGroupFromImpression(IDataImpression)</h4>
-  <div class="markdown level1 summary"><p>Get the group a particular data impression</p>
+  <div class="markdown level1 summary"><p>Get the data impression group a particular data impression</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1579,7 +1457,8 @@ exists in the Unity Scene, or null if no such impression exists.</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>Data impression to find out the group of</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1594,7 +1473,8 @@ exists in the Unity Scene, or null if no such impression exists.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a></td>
-        <td></td>
+        <td><p>The data impression group <code>dataImpression</code> belongs to, otherwise null.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1622,7 +1502,8 @@ exists in the Unity Scene, or null if no such impression exists.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>Unique identifier (UUID) of the requisite data impression</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1666,7 +1547,8 @@ exists in the Unity Scene, or null if no such impression exists.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID to check existence of</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1681,7 +1563,7 @@ exists in the Unity Scene, or null if no such impression exists.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
-        <td><p>Boolean - true if the given group exists in the ABR scene, false otherwise.</p>
+        <td><p>Boolean - true if the given group exists in the current ABR state, false otherwise.</p>
 </td>
       </tr>
     </tbody>
@@ -1690,7 +1572,12 @@ exists in the Unity Scene, or null if no such impression exists.</p>
   
   <a id="IVLab_ABREngine_ABREngine_LoadState_" data-uid="IVLab.ABREngine.ABREngine.LoadState*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_LoadState__1_System_String_" data-uid="IVLab.ABREngine.ABREngine.LoadState``1(System.String)">LoadState&lt;T&gt;(String)</h4>
-  <div class="markdown level1 summary"><p>Load a state into ABR.</p>
+  <div class="markdown level1 summary"><p>Load a state into ABR. This includes the following steps:
+<ol>
+<li>All Data and VisAssets from the state have been loaded.</li>
+<li>The ABR scene has been rendered with all updates (including data impressions, lighting, etc.).</li>
+<li>The <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> callback has been fired.</li>
+</ol></p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1731,85 +1618,21 @@ exists in the Unity Scene, or null if no such impression exists.</p>
     </tbody>
   </table>
   <h5 id="IVLab_ABREngine_ABREngine_LoadState__1_System_String__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>NOTE: it is recommended to use <code>ABREngine.LoadStateAsync</code> instead of
-this method; this method provides no timing guarantees (e.g. that
-any data impressions would be initialized by the time it finishes).</p>
+  <div class="markdown level1 remarks"><p>Data impressions that have not changed will not be re-rendered. </p>
 </div>
-  
-  
-  <a id="IVLab_ABREngine_ABREngine_LoadStateAsync_" data-uid="IVLab.ABREngine.ABREngine.LoadStateAsync*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_LoadStateAsync__1_System_String_" data-uid="IVLab.ABREngine.ABREngine.LoadStateAsync``1(System.String)">LoadStateAsync&lt;T&gt;(String)</h4>
-  <div class="markdown level1 summary"><p>Load a state into ABR, asynchronously. This Task is finished when:
-(1) All Data and VisAssets from the state have been loaded, (2) The
-ABR scene has been rendered with all updates, and (3) the
-OnStateChanged callback has been fired.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task LoadStateAsync&lt;T&gt;(string stateName)
-    where T : IABRStateLoader, new()</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">stateName</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="IVLab_ABREngine_ABREngine_LoadStateAsync__1_System_String__examples">Examples</h5>
+  <h5 id="IVLab_ABREngine_ABREngine_LoadState__1_System_String__examples">Examples</h5>
   <p>A state may be loaded from any of the following places:</p>
 <pre><code>// A Resources folder (in Assets or in a Package)
-await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;exampleState.json&quot;);
-
-// A web resource
-await ABREngine.Instance.LoadStateAsync&lt;HttpStateFileLoader>(&quot;http://localhost:8000/api/state&quot;);
+ABREngine.Instance.LoadState&lt;ResourceStateFileLoader>(&quot;exampleState.json&quot;);
 
 // A local file
-await ABREngine.Instance.LoadStateAsync&lt;PathStateFileLoader>(&quot;C:/Users/VRDemo/Desktop/test.json&quot;);
+ABREngine.Instance.LoadState&lt;PathStateFileLoader>(&quot;C:/Users/VRDemo/Desktop/test.json&quot;);
 
 // A JSON string
-await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;{\&quot;version\&quot;: \&quot;0.2.0\&quot;, \&quot;name\&quot;: \&quot;test\&quot;}&quot;);</code></pre>
+ABREngine.Instance.LoadState&lt;ResourceStateFileLoader>(&quot;{\&quot;version\&quot;: \&quot;0.2.0\&quot;, \&quot;name\&quot;: \&quot;test\&quot;}&quot;);
+
+// A web resource
+ABREngine.Instance.LoadState&lt;HttpStateFileLoader>(&quot;http://localhost:8000/api/state&quot;);</code></pre>
 
   
   
@@ -1835,17 +1658,20 @@ await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;{\&quo
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>The data impression that should be moved.</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a></td>
         <td><span class="parametername">newGroup</span></td>
-        <td></td>
+        <td><p>The group to place the data impression into.</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">allowOverwrite</span></td>
-        <td></td>
+        <td><p>Should we destroy any existing data impressions with this UUID within the <code>newGroup</code>?</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1853,7 +1679,8 @@ await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;{\&quo
   
   <a id="IVLab_ABREngine_ABREngine_RegisterDataImpression_" data-uid="IVLab.ABREngine.ABREngine.RegisterDataImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_RegisterDataImpression_IVLab_ABREngine_IDataImpression_IVLab_ABREngine_DataImpressionGroup_System_Boolean_" data-uid="IVLab.ABREngine.ABREngine.RegisterDataImpression(IVLab.ABREngine.IDataImpression,IVLab.ABREngine.DataImpressionGroup,System.Boolean)">RegisterDataImpression(IDataImpression, DataImpressionGroup, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Add a new data impression, but add it to a specific group ID.</p>
+  <div class="markdown level1 summary"><p>Register a new data impression with the ABREngine and add it to a
+specific <a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1873,17 +1700,20 @@ await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;{\&quo
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>The data impression to register with the engine</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a></td>
         <td><span class="parametername">newGroup</span></td>
-        <td></td>
+        <td><p>Group to add this data impression to</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">allowOverwrite</span></td>
-        <td></td>
+        <td><p>Should we destroy any existing data impressions that have this UUID already?</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1894,7 +1724,7 @@ await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader>(&quot;{\&quo
   <div class="markdown level1 summary"><p>Register a new data impression, or replace an existing one. If the
 data impression has a dataset, defaults to placing it inside the
 existing group with the same dataset, or creating a new
-DataImpressionGroup with that dataset if no group exists yet.</p>
+<a class="xref" href="IVLab.ABREngine.DataImpressionGroup.html">DataImpressionGroup</a> with that dataset if no group exists yet.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -1914,12 +1744,14 @@ DataImpressionGroup with that dataset if no group exists yet.</p>
       <tr>
         <td><a class="xref" href="IVLab.ABREngine.IDataImpression.html">IDataImpression</a></td>
         <td><span class="parametername">dataImpression</span></td>
-        <td></td>
+        <td><p>The data impression to register with the engine</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">allowOverwrite</span></td>
-        <td></td>
+        <td><p>Should we destroy any existing data impressions that have this UUID already?</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1948,7 +1780,8 @@ of the data impressions within the group.</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID of the data impression group that should be removed.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -1967,14 +1800,14 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
   </div>
   
   
-  <a id="IVLab_ABREngine_ABREngine_SaveStateAsync_" data-uid="IVLab.ABREngine.ABREngine.SaveStateAsync*"></a>
-  <h4 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1_System_String_" data-uid="IVLab.ABREngine.ABREngine.SaveStateAsync``1(System.String)">SaveStateAsync&lt;T&gt;(String)</h4>
-  <div class="markdown level1 summary"><p>Save a state from the ABR Unity scene back to a particular destination.</p>
+  <a id="IVLab_ABREngine_ABREngine_SaveState_" data-uid="IVLab.ABREngine.ABREngine.SaveState*"></a>
+  <h4 id="IVLab_ABREngine_ABREngine_SaveState__1_System_String_" data-uid="IVLab.ABREngine.ABREngine.SaveState``1(System.String)">SaveState&lt;T&gt;(String)</h4>
+  <div class="markdown level1 summary"><p>Save a state from the ABR Unity scene back to a particular JSON destination.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task SaveStateAsync&lt;T&gt;(string overrideStateName = null)
+    <pre><code class="lang-csharp hljs">public void SaveState&lt;T&gt;(string overrideStateName = null)
     where T : IABRStateLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1994,21 +1827,6 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -2024,16 +1842,28 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="IVLab_ABREngine_ABREngine_SaveStateAsync__1_System_String__remarks">Remarks</h5>
+  <h5 id="IVLab_ABREngine_ABREngine_SaveState__1_System_String__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The SaveState functionality is only implemented in a few
-<code>IABRStateLoader</code>s, namely <code>PathStateFileLoader</code> and
-<code>HttpStateFileLoader</code>.</p>
+<a class="xref" href="IVLab.ABREngine.IABRStateLoader.html">IABRStateLoader</a> classes, namely <a class="xref" href="IVLab.ABREngine.PathStateFileLoader.html">PathStateFileLoader</a> and
+<a class="xref" href="IVLab.ABREngine.HttpStateFileLoader.html">HttpStateFileLoader</a>.</p>
+<p>This method generally takes a long time so should not be called
+frequently. Also, since this method manually looks through
+GameObjects in the scene to reverse-engineer a JSON state, so the
+resulting JSON state may not always be complete.</p>
 </div>
+  <h5 id="IVLab_ABREngine_ABREngine_SaveState__1_System_String__examples">Examples</h5>
+  <p>ABR states can be saved like this:</p>
+<pre><code>// Save the current state to a file on your computer
+ABREngine.Instance.SaveState&lt;PathStateFileLoader>(&quot;C:/Users/VRDemo/Desktop/exampleState.json&quot;);
+
+// Save the current state to a web resource
+ABREngine.Instance.SaveState&lt;HttpStateFileLoader>(&quot;http://localhost:8000/api/state&quot;);</code></pre>
+
   
   
   <a id="IVLab_ABREngine_ABREngine_UnregisterDataImpression_" data-uid="IVLab.ABREngine.ABREngine.UnregisterDataImpression*"></a>
   <h4 id="IVLab_ABREngine_ABREngine_UnregisterDataImpression_System_Guid_" data-uid="IVLab.ABREngine.ABREngine.UnregisterDataImpression(System.Guid)">UnregisterDataImpression(Guid)</h4>
-  <div class="markdown level1 summary"><p>Remove a data impression from the ABR scene</p>
+  <div class="markdown level1 summary"><p>Remove a data impression from the ABR state.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -2053,7 +1883,8 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>The UUID data impression to remove (unregister) from the ABREngine</p>
+</td>
       </tr>
     </tbody>
   </table>

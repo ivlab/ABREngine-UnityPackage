@@ -42,7 +42,8 @@ namespace IVLab.ABREngine
         /// The `LoadState` method, the workhorse of this
         /// class, has side effects that range from populating new GameObjects for
         /// data impressions, to loading new data, to loading in VisAssets. By the
-        /// end of `LoadState`, the visualization should be complete.
+        /// end of `LoadState`, the visualization should be complete in the
+        /// Unity scene.
         /// </summary>
         public JObject LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()

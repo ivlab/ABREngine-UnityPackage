@@ -1,20 +1,6 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
-- uid: Global
-  name: Global
-  href: api/Global.html
-  name.vb: ''
-  fullName: Global
-  fullName.vb: ''
-  nameWithType: Global
-  nameWithType.vb: ''
-- uid: Global.VolumeLightManager
-  name: VolumeLightManager
-  href: api/Global.VolumeLightManager.html
-  commentId: T:Global.VolumeLightManager
-  fullName: VolumeLightManager
-  nameWithType: VolumeLightManager
 - uid: IVLab.ABREngine
   name: IVLab.ABREngine
   href: api/IVLab.ABREngine.html
@@ -632,12 +618,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.HasDataImpressionGroup
   nameWithType: ABREngine.HasDataImpressionGroup
-- uid: IVLab.ABREngine.ABREngine.httpClient
-  name: httpClient
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_httpClient
-  commentId: F:IVLab.ABREngine.ABREngine.httpClient
-  fullName: IVLab.ABREngine.ABREngine.httpClient
-  nameWithType: ABREngine.httpClient
 - uid: IVLab.ABREngine.ABREngine.IsInitialized
   name: IsInitialized
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_IsInitialized
@@ -667,22 +647,6 @@ references:
   fullName.vb: IVLab.ABREngine.ABREngine.LoadState(Of T)(System.String)
   nameWithType: ABREngine.LoadState<T>(String)
   nameWithType.vb: ABREngine.LoadState(Of T)(String)
-- uid: IVLab.ABREngine.ABREngine.LoadStateAsync*
-  name: LoadStateAsync
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_LoadStateAsync_
-  commentId: Overload:IVLab.ABREngine.ABREngine.LoadStateAsync
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ABREngine.LoadStateAsync
-  nameWithType: ABREngine.LoadStateAsync
-- uid: IVLab.ABREngine.ABREngine.LoadStateAsync``1(System.String)
-  name: LoadStateAsync<T>(String)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_LoadStateAsync__1_System_String_
-  commentId: M:IVLab.ABREngine.ABREngine.LoadStateAsync``1(System.String)
-  name.vb: LoadStateAsync(Of T)(String)
-  fullName: IVLab.ABREngine.ABREngine.LoadStateAsync<T>(System.String)
-  fullName.vb: IVLab.ABREngine.ABREngine.LoadStateAsync(Of T)(System.String)
-  nameWithType: ABREngine.LoadStateAsync<T>(String)
-  nameWithType.vb: ABREngine.LoadStateAsync(Of T)(String)
 - uid: IVLab.ABREngine.ABREngine.MediaPath
   name: MediaPath
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_MediaPath
@@ -760,22 +724,22 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.Render
   nameWithType: ABREngine.Render
-- uid: IVLab.ABREngine.ABREngine.SaveStateAsync*
-  name: SaveStateAsync
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveStateAsync_
-  commentId: Overload:IVLab.ABREngine.ABREngine.SaveStateAsync
+- uid: IVLab.ABREngine.ABREngine.SaveState*
+  name: SaveState
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveState_
+  commentId: Overload:IVLab.ABREngine.ABREngine.SaveState
   isSpec: "True"
-  fullName: IVLab.ABREngine.ABREngine.SaveStateAsync
-  nameWithType: ABREngine.SaveStateAsync
-- uid: IVLab.ABREngine.ABREngine.SaveStateAsync``1(System.String)
-  name: SaveStateAsync<T>(String)
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveStateAsync__1_System_String_
-  commentId: M:IVLab.ABREngine.ABREngine.SaveStateAsync``1(System.String)
-  name.vb: SaveStateAsync(Of T)(String)
-  fullName: IVLab.ABREngine.ABREngine.SaveStateAsync<T>(System.String)
-  fullName.vb: IVLab.ABREngine.ABREngine.SaveStateAsync(Of T)(System.String)
-  nameWithType: ABREngine.SaveStateAsync<T>(String)
-  nameWithType.vb: ABREngine.SaveStateAsync(Of T)(String)
+  fullName: IVLab.ABREngine.ABREngine.SaveState
+  nameWithType: ABREngine.SaveState
+- uid: IVLab.ABREngine.ABREngine.SaveState``1(System.String)
+  name: SaveState<T>(String)
+  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_SaveState__1_System_String_
+  commentId: M:IVLab.ABREngine.ABREngine.SaveState``1(System.String)
+  name.vb: SaveState(Of T)(String)
+  fullName: IVLab.ABREngine.ABREngine.SaveState<T>(System.String)
+  fullName.vb: IVLab.ABREngine.ABREngine.SaveState(Of T)(System.String)
+  nameWithType: ABREngine.SaveState<T>(String)
+  nameWithType.vb: ABREngine.SaveState(Of T)(String)
 - uid: IVLab.ABREngine.ABREngine.State
   name: State
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_State
@@ -1594,19 +1558,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpression.HasTag
   nameWithType: DataImpression.HasTag
-- uid: IVLab.ABREngine.DataImpression.ImpressionMaterial
-  name: ImpressionMaterial
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterial
-  commentId: P:IVLab.ABREngine.DataImpression.ImpressionMaterial
-  fullName: IVLab.ABREngine.DataImpression.ImpressionMaterial
-  nameWithType: DataImpression.ImpressionMaterial
-- uid: IVLab.ABREngine.DataImpression.ImpressionMaterial*
-  name: ImpressionMaterial
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterial_
-  commentId: Overload:IVLab.ABREngine.DataImpression.ImpressionMaterial
+- uid: IVLab.ABREngine.DataImpression.ImpressionMaterials
+  name: ImpressionMaterials
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterials
+  commentId: P:IVLab.ABREngine.DataImpression.ImpressionMaterials
+  fullName: IVLab.ABREngine.DataImpression.ImpressionMaterials
+  nameWithType: DataImpression.ImpressionMaterials
+- uid: IVLab.ABREngine.DataImpression.ImpressionMaterials*
+  name: ImpressionMaterials
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterials_
+  commentId: Overload:IVLab.ABREngine.DataImpression.ImpressionMaterials
   isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpression.ImpressionMaterial
-  nameWithType: DataImpression.ImpressionMaterial
+  fullName: IVLab.ABREngine.DataImpression.ImpressionMaterials
+  nameWithType: DataImpression.ImpressionMaterials
 - uid: IVLab.ABREngine.DataImpression.InputIndexer
   name: InputIndexer
   href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_InputIndexer
@@ -1646,19 +1610,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.DataImpression.LayerName
   nameWithType: DataImpression.LayerName
-- uid: IVLab.ABREngine.DataImpression.MaterialName
-  name: MaterialName
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialName
-  commentId: P:IVLab.ABREngine.DataImpression.MaterialName
-  fullName: IVLab.ABREngine.DataImpression.MaterialName
-  nameWithType: DataImpression.MaterialName
-- uid: IVLab.ABREngine.DataImpression.MaterialName*
-  name: MaterialName
-  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialName_
-  commentId: Overload:IVLab.ABREngine.DataImpression.MaterialName
+- uid: IVLab.ABREngine.DataImpression.MaterialNames
+  name: MaterialNames
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialNames
+  commentId: P:IVLab.ABREngine.DataImpression.MaterialNames
+  fullName: IVLab.ABREngine.DataImpression.MaterialNames
+  nameWithType: DataImpression.MaterialNames
+- uid: IVLab.ABREngine.DataImpression.MaterialNames*
+  name: MaterialNames
+  href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialNames_
+  commentId: Overload:IVLab.ABREngine.DataImpression.MaterialNames
   isSpec: "True"
-  fullName: IVLab.ABREngine.DataImpression.MaterialName
-  nameWithType: DataImpression.MaterialName
+  fullName: IVLab.ABREngine.DataImpression.MaterialNames
+  nameWithType: DataImpression.MaterialNames
 - uid: IVLab.ABREngine.DataImpression.MatPropBlock
   name: MatPropBlock
   href: api/IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MatPropBlock
@@ -3342,19 +3306,19 @@ references:
   commentId: T:IVLab.ABREngine.HttpDataLoader
   fullName: IVLab.ABREngine.HttpDataLoader
   nameWithType: HttpDataLoader
-- uid: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
-  name: TryLoadDataAsync(String)
-  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_TryLoadDataAsync_System_String_
-  commentId: M:IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
-  fullName: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync(System.String)
-  nameWithType: HttpDataLoader.TryLoadDataAsync(String)
-- uid: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync*
-  name: TryLoadDataAsync
-  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_TryLoadDataAsync_
-  commentId: Overload:IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync
+- uid: IVLab.ABREngine.HttpDataLoader.LoadData(System.String)
+  name: LoadData(String)
+  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_LoadData_System_String_
+  commentId: M:IVLab.ABREngine.HttpDataLoader.LoadData(System.String)
+  fullName: IVLab.ABREngine.HttpDataLoader.LoadData(System.String)
+  nameWithType: HttpDataLoader.LoadData(String)
+- uid: IVLab.ABREngine.HttpDataLoader.LoadData*
+  name: LoadData
+  href: api/IVLab.ABREngine.HttpDataLoader.html#IVLab_ABREngine_HttpDataLoader_LoadData_
+  commentId: Overload:IVLab.ABREngine.HttpDataLoader.LoadData
   isSpec: "True"
-  fullName: IVLab.ABREngine.HttpDataLoader.TryLoadDataAsync
-  nameWithType: HttpDataLoader.TryLoadDataAsync
+  fullName: IVLab.ABREngine.HttpDataLoader.LoadData
+  nameWithType: HttpDataLoader.LoadData
 - uid: IVLab.ABREngine.HttpStateFileLoader
   name: HttpStateFileLoader
   href: api/IVLab.ABREngine.HttpStateFileLoader.html
@@ -3806,19 +3770,19 @@ references:
   commentId: T:IVLab.ABREngine.IDataLoader
   fullName: IVLab.ABREngine.IDataLoader
   nameWithType: IDataLoader
-- uid: IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
-  name: TryLoadDataAsync(String)
-  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_TryLoadDataAsync_System_String_
-  commentId: M:IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
-  fullName: IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)
-  nameWithType: IDataLoader.TryLoadDataAsync(String)
-- uid: IVLab.ABREngine.IDataLoader.TryLoadDataAsync*
-  name: TryLoadDataAsync
-  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_TryLoadDataAsync_
-  commentId: Overload:IVLab.ABREngine.IDataLoader.TryLoadDataAsync
+- uid: IVLab.ABREngine.IDataLoader.LoadData(System.String)
+  name: LoadData(String)
+  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_LoadData_System_String_
+  commentId: M:IVLab.ABREngine.IDataLoader.LoadData(System.String)
+  fullName: IVLab.ABREngine.IDataLoader.LoadData(System.String)
+  nameWithType: IDataLoader.LoadData(String)
+- uid: IVLab.ABREngine.IDataLoader.LoadData*
+  name: LoadData
+  href: api/IVLab.ABREngine.IDataLoader.html#IVLab_ABREngine_IDataLoader_LoadData_
+  commentId: Overload:IVLab.ABREngine.IDataLoader.LoadData
   isSpec: "True"
-  fullName: IVLab.ABREngine.IDataLoader.TryLoadDataAsync
-  nameWithType: IDataLoader.TryLoadDataAsync
+  fullName: IVLab.ABREngine.IDataLoader.LoadData
+  nameWithType: IDataLoader.LoadData
 - uid: IVLab.ABREngine.IDataVariable`1
   name: IDataVariable<T>
   href: api/IVLab.ABREngine.IDataVariable-1.html
@@ -4743,6 +4707,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.KeyData.GetRawABRInput
   nameWithType: KeyData.GetRawABRInput
+- uid: IVLab.ABREngine.KeyData.GetScalarVariable(System.String)
+  name: GetScalarVariable(String)
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariable_System_String_
+  commentId: M:IVLab.ABREngine.KeyData.GetScalarVariable(System.String)
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariable(System.String)
+  nameWithType: KeyData.GetScalarVariable(String)
+- uid: IVLab.ABREngine.KeyData.GetScalarVariable*
+  name: GetScalarVariable
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariable_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetScalarVariable
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariable
+  nameWithType: KeyData.GetScalarVariable
+- uid: IVLab.ABREngine.KeyData.GetScalarVariableNames
+  name: GetScalarVariableNames()
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariableNames
+  commentId: M:IVLab.ABREngine.KeyData.GetScalarVariableNames
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariableNames()
+  nameWithType: KeyData.GetScalarVariableNames()
+- uid: IVLab.ABREngine.KeyData.GetScalarVariableNames*
+  name: GetScalarVariableNames
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariableNames_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetScalarVariableNames
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetScalarVariableNames
+  nameWithType: KeyData.GetScalarVariableNames
 - uid: IVLab.ABREngine.KeyData.GetScalarVariables
   name: GetScalarVariables()
   href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetScalarVariables
@@ -4756,6 +4746,32 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.KeyData.GetScalarVariables
   nameWithType: KeyData.GetScalarVariables
+- uid: IVLab.ABREngine.KeyData.GetVectorVariable(System.String)
+  name: GetVectorVariable(String)
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariable_System_String_
+  commentId: M:IVLab.ABREngine.KeyData.GetVectorVariable(System.String)
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariable(System.String)
+  nameWithType: KeyData.GetVectorVariable(String)
+- uid: IVLab.ABREngine.KeyData.GetVectorVariable*
+  name: GetVectorVariable
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariable_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetVectorVariable
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariable
+  nameWithType: KeyData.GetVectorVariable
+- uid: IVLab.ABREngine.KeyData.GetVectorVariableNames
+  name: GetVectorVariableNames()
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariableNames
+  commentId: M:IVLab.ABREngine.KeyData.GetVectorVariableNames
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariableNames()
+  nameWithType: KeyData.GetVectorVariableNames()
+- uid: IVLab.ABREngine.KeyData.GetVectorVariableNames*
+  name: GetVectorVariableNames
+  href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariableNames_
+  commentId: Overload:IVLab.ABREngine.KeyData.GetVectorVariableNames
+  isSpec: "True"
+  fullName: IVLab.ABREngine.KeyData.GetVectorVariableNames
+  nameWithType: KeyData.GetVectorVariableNames
 - uid: IVLab.ABREngine.KeyData.GetVectorVariables
   name: GetVectorVariables()
   href: api/IVLab.ABREngine.KeyData.html#IVLab_ABREngine_KeyData_GetVectorVariables
@@ -5309,19 +5325,19 @@ references:
   commentId: T:IVLab.ABREngine.MediaDataLoader
   fullName: IVLab.ABREngine.MediaDataLoader
   nameWithType: MediaDataLoader
-- uid: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
-  name: TryLoadDataAsync(String)
-  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_TryLoadDataAsync_System_String_
-  commentId: M:IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
-  fullName: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync(System.String)
-  nameWithType: MediaDataLoader.TryLoadDataAsync(String)
-- uid: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync*
-  name: TryLoadDataAsync
-  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_TryLoadDataAsync_
-  commentId: Overload:IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync
+- uid: IVLab.ABREngine.MediaDataLoader.LoadData(System.String)
+  name: LoadData(String)
+  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_LoadData_System_String_
+  commentId: M:IVLab.ABREngine.MediaDataLoader.LoadData(System.String)
+  fullName: IVLab.ABREngine.MediaDataLoader.LoadData(System.String)
+  nameWithType: MediaDataLoader.LoadData(String)
+- uid: IVLab.ABREngine.MediaDataLoader.LoadData*
+  name: LoadData
+  href: api/IVLab.ABREngine.MediaDataLoader.html#IVLab_ABREngine_MediaDataLoader_LoadData_
+  commentId: Overload:IVLab.ABREngine.MediaDataLoader.LoadData
   isSpec: "True"
-  fullName: IVLab.ABREngine.MediaDataLoader.TryLoadDataAsync
-  nameWithType: MediaDataLoader.TryLoadDataAsync
+  fullName: IVLab.ABREngine.MediaDataLoader.LoadData
+  nameWithType: MediaDataLoader.LoadData
 - uid: IVLab.ABREngine.Notifier
   name: Notifier
   href: api/IVLab.ABREngine.Notifier.html
@@ -6131,6 +6147,15 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.RawDatasetAdapter.UnityPrimitiveToSurface
   nameWithType: RawDatasetAdapter.UnityPrimitiveToSurface
+- uid: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[],System.String,Vector3Int,Bounds)
+  name: VoxelsToVolume(Single[], String, Vector3Int, Bounds)
+  href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_VoxelsToVolume_System_Single___System_String_Vector3Int_Bounds_
+  commentId: M:IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[],System.String,Vector3Int,Bounds)
+  name.vb: VoxelsToVolume(Single(), String, Vector3Int, Bounds)
+  fullName: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[], System.String, Vector3Int, Bounds)
+  fullName.vb: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single(), System.String, Vector3Int, Bounds)
+  nameWithType: RawDatasetAdapter.VoxelsToVolume(Single[], String, Vector3Int, Bounds)
+  nameWithType.vb: RawDatasetAdapter.VoxelsToVolume(Single(), String, Vector3Int, Bounds)
 - uid: IVLab.ABREngine.RawDatasetAdapter.VoxelsToVolume(System.Single[][][],System.String,Vector3Int,Bounds)
   name: VoxelsToVolume(Single[][][], String, Vector3Int, Bounds)
   href: api/IVLab.ABREngine.RawDatasetAdapter.html#IVLab_ABREngine_RawDatasetAdapter_VoxelsToVolume_System_Single_______System_String_Vector3Int_Bounds_
@@ -6320,19 +6345,19 @@ references:
   commentId: T:IVLab.ABREngine.ResourcesDataLoader
   fullName: IVLab.ABREngine.ResourcesDataLoader
   nameWithType: ResourcesDataLoader
-- uid: IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync(System.String)
-  name: TryLoadDataAsync(String)
-  href: api/IVLab.ABREngine.ResourcesDataLoader.html#IVLab_ABREngine_ResourcesDataLoader_TryLoadDataAsync_System_String_
-  commentId: M:IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync(System.String)
-  fullName: IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync(System.String)
-  nameWithType: ResourcesDataLoader.TryLoadDataAsync(String)
-- uid: IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync*
-  name: TryLoadDataAsync
-  href: api/IVLab.ABREngine.ResourcesDataLoader.html#IVLab_ABREngine_ResourcesDataLoader_TryLoadDataAsync_
-  commentId: Overload:IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync
+- uid: IVLab.ABREngine.ResourcesDataLoader.LoadData(System.String)
+  name: LoadData(String)
+  href: api/IVLab.ABREngine.ResourcesDataLoader.html#IVLab_ABREngine_ResourcesDataLoader_LoadData_System_String_
+  commentId: M:IVLab.ABREngine.ResourcesDataLoader.LoadData(System.String)
+  fullName: IVLab.ABREngine.ResourcesDataLoader.LoadData(System.String)
+  nameWithType: ResourcesDataLoader.LoadData(String)
+- uid: IVLab.ABREngine.ResourcesDataLoader.LoadData*
+  name: LoadData
+  href: api/IVLab.ABREngine.ResourcesDataLoader.html#IVLab_ABREngine_ResourcesDataLoader_LoadData_
+  commentId: Overload:IVLab.ABREngine.ResourcesDataLoader.LoadData
   isSpec: "True"
-  fullName: IVLab.ABREngine.ResourcesDataLoader.TryLoadDataAsync
-  nameWithType: ResourcesDataLoader.TryLoadDataAsync
+  fullName: IVLab.ABREngine.ResourcesDataLoader.LoadData
+  nameWithType: ResourcesDataLoader.LoadData
 - uid: IVLab.ABREngine.ResourceStateFileLoader
   name: ResourceStateFileLoader
   href: api/IVLab.ABREngine.ResourceStateFileLoader.html
@@ -6818,19 +6843,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleGlyphDataImpression.LayerName
   nameWithType: SimpleGlyphDataImpression.LayerName
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_MaterialName
-  commentId: P:IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
-  nameWithType: SimpleGlyphDataImpression.MaterialName
-- uid: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName*
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_MaterialName_
-  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_MaterialNames
+  commentId: P:IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames
+  nameWithType: SimpleGlyphDataImpression.MaterialNames
+- uid: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames*
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_MaterialNames_
+  commentId: Overload:IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialName
-  nameWithType: SimpleGlyphDataImpression.MaterialName
+  fullName: IVLab.ABREngine.SimpleGlyphDataImpression.MaterialNames
+  nameWithType: SimpleGlyphDataImpression.MaterialNames
 - uid: IVLab.ABREngine.SimpleGlyphDataImpression.SetupGameObject(IVLab.ABREngine.EncodedGameObject)
   name: SetupGameObject(EncodedGameObject)
   href: api/IVLab.ABREngine.SimpleGlyphDataImpression.html#IVLab_ABREngine_SimpleGlyphDataImpression_SetupGameObject_IVLab_ABREngine_EncodedGameObject_
@@ -6994,19 +7019,19 @@ references:
   commentId: F:IVLab.ABREngine.SimpleLineDataImpression.lineWidth
   fullName: IVLab.ABREngine.SimpleLineDataImpression.lineWidth
   nameWithType: SimpleLineDataImpression.lineWidth
-- uid: IVLab.ABREngine.SimpleLineDataImpression.MaterialName
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_MaterialName
-  commentId: P:IVLab.ABREngine.SimpleLineDataImpression.MaterialName
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.MaterialName
-  nameWithType: SimpleLineDataImpression.MaterialName
-- uid: IVLab.ABREngine.SimpleLineDataImpression.MaterialName*
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_MaterialName_
-  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.MaterialName
+- uid: IVLab.ABREngine.SimpleLineDataImpression.MaterialNames
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_MaterialNames
+  commentId: P:IVLab.ABREngine.SimpleLineDataImpression.MaterialNames
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.MaterialNames
+  nameWithType: SimpleLineDataImpression.MaterialNames
+- uid: IVLab.ABREngine.SimpleLineDataImpression.MaterialNames*
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_MaterialNames_
+  commentId: Overload:IVLab.ABREngine.SimpleLineDataImpression.MaterialNames
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleLineDataImpression.MaterialName
-  nameWithType: SimpleLineDataImpression.MaterialName
+  fullName: IVLab.ABREngine.SimpleLineDataImpression.MaterialNames
+  nameWithType: SimpleLineDataImpression.MaterialNames
 - uid: IVLab.ABREngine.SimpleLineDataImpression.ribbonBrightness
   name: ribbonBrightness
   href: api/IVLab.ABREngine.SimpleLineDataImpression.html#IVLab_ABREngine_SimpleLineDataImpression_ribbonBrightness
@@ -7152,19 +7177,25 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.LayerName
   nameWithType: SimpleSurfaceDataImpression.LayerName
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_MaterialName
-  commentId: P:IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName
-  nameWithType: SimpleSurfaceDataImpression.MaterialName
-- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName*
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_MaterialName_
-  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_MaterialNames
+  commentId: P:IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames
+  nameWithType: SimpleSurfaceDataImpression.MaterialNames
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames*
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_MaterialNames_
+  commentId: Overload:IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialName
-  nameWithType: SimpleSurfaceDataImpression.MaterialName
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.MaterialNames
+  nameWithType: SimpleSurfaceDataImpression.MaterialNames
+- uid: IVLab.ABREngine.SimpleSurfaceDataImpression.opacity
+  name: opacity
+  href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_opacity
+  commentId: F:IVLab.ABREngine.SimpleSurfaceDataImpression.opacity
+  fullName: IVLab.ABREngine.SimpleSurfaceDataImpression.opacity
+  nameWithType: SimpleSurfaceDataImpression.opacity
 - uid: IVLab.ABREngine.SimpleSurfaceDataImpression.pattern
   name: pattern
   href: api/IVLab.ABREngine.SimpleSurfaceDataImpression.html#IVLab_ABREngine_SimpleSurfaceDataImpression_pattern
@@ -7322,19 +7353,19 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.SimpleVolumeDataImpression.LayerName
   nameWithType: SimpleVolumeDataImpression.LayerName
-- uid: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleVolumeDataImpression.html#IVLab_ABREngine_SimpleVolumeDataImpression_MaterialName
-  commentId: P:IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName
-  fullName: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName
-  nameWithType: SimpleVolumeDataImpression.MaterialName
-- uid: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName*
-  name: MaterialName
-  href: api/IVLab.ABREngine.SimpleVolumeDataImpression.html#IVLab_ABREngine_SimpleVolumeDataImpression_MaterialName_
-  commentId: Overload:IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName
+- uid: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleVolumeDataImpression.html#IVLab_ABREngine_SimpleVolumeDataImpression_MaterialNames
+  commentId: P:IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames
+  fullName: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames
+  nameWithType: SimpleVolumeDataImpression.MaterialNames
+- uid: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames*
+  name: MaterialNames
+  href: api/IVLab.ABREngine.SimpleVolumeDataImpression.html#IVLab_ABREngine_SimpleVolumeDataImpression_MaterialNames_
+  commentId: Overload:IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames
   isSpec: "True"
-  fullName: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialName
-  nameWithType: SimpleVolumeDataImpression.MaterialName
+  fullName: IVLab.ABREngine.SimpleVolumeDataImpression.MaterialNames
+  nameWithType: SimpleVolumeDataImpression.MaterialNames
 - uid: IVLab.ABREngine.SimpleVolumeDataImpression.opacitymap
   name: opacitymap
   href: api/IVLab.ABREngine.SimpleVolumeDataImpression.html#IVLab_ABREngine_SimpleVolumeDataImpression_opacitymap
@@ -8463,3 +8494,9 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.VolumeKeyData.VolumeKeyData
   nameWithType: VolumeKeyData.VolumeKeyData
+- uid: IVLab.ABREngine.VolumeLightManager
+  name: VolumeLightManager
+  href: api/IVLab.ABREngine.VolumeLightManager.html
+  commentId: T:IVLab.ABREngine.VolumeLightManager
+  fullName: IVLab.ABREngine.VolumeLightManager
+  nameWithType: VolumeLightManager

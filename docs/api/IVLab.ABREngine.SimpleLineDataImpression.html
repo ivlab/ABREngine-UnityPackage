@@ -112,7 +112,7 @@
       <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_Tags">DataImpression.Tags</a>
     </div>
     <div>
-      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterial">DataImpression.ImpressionMaterial</a>
+      <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_ImpressionMaterials">DataImpression.ImpressionMaterials</a>
     </div>
     <div>
       <a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MatPropBlock">DataImpression.MatPropBlock</a>
@@ -137,7 +137,6 @@
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_SimpleLineDataImpression_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ABRPlateType(&quot;Ribbons&quot;)]
@@ -206,21 +205,6 @@ single string argument with UUID.</p>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Smooth&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public IntegerPrimitive averageCount</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.IntegerPrimitive.html">IntegerPrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_colormap" data-uid="IVLab.ABREngine.SimpleLineDataImpression.colormap">colormap</h4>
@@ -231,21 +215,6 @@ public IntegerPrimitive averageCount</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Colormap&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public IColormapVisAsset colormap</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.IColormapVisAsset.html">IColormapVisAsset</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_colorVariable" data-uid="IVLab.ABREngine.SimpleLineDataImpression.colorVariable">colorVariable</h4>
@@ -256,21 +225,6 @@ public IColormapVisAsset colormap</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Color Variable&quot;, &quot;Color&quot;, UpdateLevel.Style)]
 public ScalarDataVariable colorVariable</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_defaultCurveDirection" data-uid="IVLab.ABREngine.SimpleLineDataImpression.defaultCurveDirection">defaultCurveDirection</h4>
@@ -280,21 +234,6 @@ public ScalarDataVariable colorVariable</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Vector3 defaultCurveDirection</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Vector3</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_keyData" data-uid="IVLab.ABREngine.SimpleLineDataImpression.keyData">keyData</h4>
@@ -305,21 +244,6 @@ public ScalarDataVariable colorVariable</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Key Data&quot;, &quot;Key Data&quot;, UpdateLevel.Data)]
 public KeyData keyData</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_lineTexture" data-uid="IVLab.ABREngine.SimpleLineDataImpression.lineTexture">lineTexture</h4>
@@ -330,21 +254,6 @@ public KeyData keyData</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public ILineTextureVisAsset lineTexture</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ILineTextureVisAsset.html">ILineTextureVisAsset</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_lineTextureVariable" data-uid="IVLab.ABREngine.SimpleLineDataImpression.lineTextureVariable">lineTextureVariable</h4>
@@ -355,21 +264,6 @@ public ILineTextureVisAsset lineTexture</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Variable&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public ScalarDataVariable lineTextureVariable</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_lineWidth" data-uid="IVLab.ABREngine.SimpleLineDataImpression.lineWidth">lineWidth</h4>
@@ -380,21 +274,6 @@ public ScalarDataVariable lineTextureVariable</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Width&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public LengthPrimitive lineWidth</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.LengthPrimitive.html">LengthPrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ribbonBrightness" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ribbonBrightness">ribbonBrightness</h4>
@@ -405,21 +284,6 @@ public LengthPrimitive lineWidth</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Brightness&quot;, &quot;Ribbon&quot;, UpdateLevel.Style)]
 public PercentPrimitive ribbonBrightness</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ribbonCurveAngle" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ribbonCurveAngle">ribbonCurveAngle</h4>
@@ -430,21 +294,6 @@ public PercentPrimitive ribbonBrightness</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Curve&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public AnglePrimitive ribbonCurveAngle</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.AnglePrimitive.html">AnglePrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_ribbonRotationAngle" data-uid="IVLab.ABREngine.SimpleLineDataImpression.ribbonRotationAngle">ribbonRotationAngle</h4>
@@ -455,21 +304,6 @@ public AnglePrimitive ribbonCurveAngle</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Ribbon Rotation&quot;, &quot;Ribbon&quot;, UpdateLevel.Data)]
 public AnglePrimitive ribbonRotationAngle</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.AnglePrimitive.html">AnglePrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_SimpleLineDataImpression_textureCutoff" data-uid="IVLab.ABREngine.SimpleLineDataImpression.textureCutoff">textureCutoff</h4>
@@ -480,21 +314,6 @@ public AnglePrimitive ribbonRotationAngle</code></pre>
     <pre><code class="lang-csharp hljs">[ABRInput(&quot;Texture Cutoff&quot;, &quot;Texture&quot;, UpdateLevel.Style)]
 public PercentPrimitive textureCutoff</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.PercentPrimitive.html">PercentPrimitive</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   
@@ -507,50 +326,20 @@ public PercentPrimitive textureCutoff</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override string LayerName { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_LayerName">DataImpression.LayerName</a></div>
   
   
-  <a id="IVLab_ABREngine_SimpleLineDataImpression_MaterialName_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.MaterialName*"></a>
-  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_MaterialName" data-uid="IVLab.ABREngine.SimpleLineDataImpression.MaterialName">MaterialName</h4>
+  <a id="IVLab_ABREngine_SimpleLineDataImpression_MaterialNames_" data-uid="IVLab.ABREngine.SimpleLineDataImpression.MaterialNames*"></a>
+  <h4 id="IVLab_ABREngine_SimpleLineDataImpression_MaterialNames" data-uid="IVLab.ABREngine.SimpleLineDataImpression.MaterialNames">MaterialNames</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override string MaterialName { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected override string[] MaterialNames { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialName">DataImpression.MaterialName</a></div>
+  <div><a class="xref" href="IVLab.ABREngine.DataImpression.html#IVLab_ABREngine_DataImpression_MaterialNames">DataImpression.MaterialNames</a></div>
   <h3 id="methods">Methods
   </h3>
   

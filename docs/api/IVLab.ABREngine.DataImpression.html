@@ -102,7 +102,6 @@
     <div><a class="xref" href="IVLab.ABREngine.IHasDataset.html">IHasDataset</a></div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_DataImpression_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public abstract class DataImpression : IDataImpression, IHasDataset</code></pre>
@@ -154,30 +153,15 @@ constructor bad things might happen.</p>
   </h3>
   
   
-  <a id="IVLab_ABREngine_DataImpression_ImpressionMaterial_" data-uid="IVLab.ABREngine.DataImpression.ImpressionMaterial*"></a>
-  <h4 id="IVLab_ABREngine_DataImpression_ImpressionMaterial" data-uid="IVLab.ABREngine.DataImpression.ImpressionMaterial">ImpressionMaterial</h4>
+  <a id="IVLab_ABREngine_DataImpression_ImpressionMaterials_" data-uid="IVLab.ABREngine.DataImpression.ImpressionMaterials*"></a>
+  <h4 id="IVLab_ABREngine_DataImpression_ImpressionMaterials" data-uid="IVLab.ABREngine.DataImpression.ImpressionMaterials">ImpressionMaterials</h4>
   <div class="markdown level1 summary"><p>Slot to load the material into at runtime</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual Material ImpressionMaterial { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected virtual Material[] ImpressionMaterials { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Material</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_InputIndexer_" data-uid="IVLab.ABREngine.DataImpression.InputIndexer*"></a>
@@ -188,21 +172,6 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ABRInputIndexerModule InputIndexer { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.ABRInputIndexerModule.html">ABRInputIndexerModule</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_KeyDataRenderInfo_" data-uid="IVLab.ABREngine.DataImpression.KeyDataRenderInfo*"></a>
@@ -214,21 +183,6 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.IKeyDataRenderInfo.html">IKeyDataRenderInfo</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_LayerName_" data-uid="IVLab.ABREngine.DataImpression.LayerName*"></a>
@@ -241,47 +195,17 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual string LayerName { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
-  <a id="IVLab_ABREngine_DataImpression_MaterialName_" data-uid="IVLab.ABREngine.DataImpression.MaterialName*"></a>
-  <h4 id="IVLab_ABREngine_DataImpression_MaterialName" data-uid="IVLab.ABREngine.DataImpression.MaterialName">MaterialName</h4>
+  <a id="IVLab_ABREngine_DataImpression_MaterialNames_" data-uid="IVLab.ABREngine.DataImpression.MaterialNames*"></a>
+  <h4 id="IVLab_ABREngine_DataImpression_MaterialNames" data-uid="IVLab.ABREngine.DataImpression.MaterialNames">MaterialNames</h4>
   <div class="markdown level1 summary"><p>Name of the material to use to render this DataImpression</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual string MaterialName { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">protected virtual string[] MaterialNames { get; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_MatPropBlock_" data-uid="IVLab.ABREngine.DataImpression.MatPropBlock*"></a>
@@ -293,21 +217,6 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual MaterialPropertyBlock MatPropBlock { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">MaterialPropertyBlock</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_RenderHints_" data-uid="IVLab.ABREngine.DataImpression.RenderHints*"></a>
@@ -318,21 +227,6 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public RenderHints RenderHints { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.RenderHints.html">RenderHints</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_RenderInfo_" data-uid="IVLab.ABREngine.DataImpression.RenderInfo*"></a>
@@ -344,21 +238,6 @@ constructor bad things might happen.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual IDataImpressionRenderInfo RenderInfo { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="IVLab.ABREngine.IDataImpressionRenderInfo.html">IDataImpressionRenderInfo</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_Tags_" data-uid="IVLab.ABREngine.DataImpression.Tags*"></a>
@@ -371,21 +250,6 @@ external purposes (the engine does nothing with them)</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public List&lt;string&gt; Tags { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_DataImpression_Uuid_" data-uid="IVLab.ABREngine.DataImpression.Uuid*"></a>
@@ -396,21 +260,6 @@ external purposes (the engine does nothing with them)</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Guid Uuid { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   

@@ -94,7 +94,6 @@ Unity scene and translates it back into text.</p>
     <div class="level1"><span class="xref">ABRStateParser</span></div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_ABRStateParser_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ABRStateParser</code></pre>
@@ -108,12 +107,13 @@ Unity scene and translates it back into text.</p>
   <div class="markdown level1 summary"><p>The <code>LoadState</code> method, the workhorse of this
 class, has side effects that range from populating new GameObjects for
 data impressions, to loading new data, to loading in VisAssets. By the
-end of <code>LoadState</code>, the visualization should be complete.</p>
+end of <code>LoadState</code>, the visualization should be complete in the
+Unity scene.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public async Task&lt;JObject&gt; LoadState&lt;T&gt;(string stateText, JObject previousState)
+    <pre><code class="lang-csharp hljs">public JObject LoadState&lt;T&gt;(string stateText, JObject previousState)
     where T : IABRStateLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -148,7 +148,7 @@ end of <code>LoadState</code>, the visualization should be complete.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<span class="xref">JObject</span>&gt;</td>
+        <td><span class="xref">JObject</span></td>
         <td></td>
       </tr>
     </tbody>

@@ -166,13 +166,23 @@ namespace IVLab.ABREngine
         /// Load a raw dataset into a RawDataset object by its data path and
         /// return the rawdataset after it has been successfully imported.
         /// </summary>
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <typeparam name="T">Any <see cref="IDataLoader"/> type</typeparam>
         /// <example>
-        /// Datasets may be loaded from any of the following locations:
+        /// If you're working with a pre-existing dataset (i.e., one that already
+        /// exists in ABR raw data format in your media folder), you can use <see
+        /// cref="DataManager.LoadRawDataset"/> to obtain a <see cref="RawDataset"/>.
         /// <code>
-        /// // From a file in the media directory
-        /// RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        /// // From a web resource
-        /// RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// // Load from a .bin/.json file pair in the datasets folder in the
+        /// // media directory. Most of the time when you're fetching an existing
+        /// // dataset, this is what you'll want to do. Just make sure the
+        /// // dataset actually exists in the media folder!
+        /// RawDataset ds1 = ABREngine.Instance.Data.LoadRawDataset&lt;MediaDataLoader&gt;("Test/Test/KeyData/Example");
+        ///
+        /// // You can also load an ABR raw dataset from a web resource. This requires setting up an ABR data server.
+        /// RawDataset ds2 = ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
         /// </example>
         /// <returns>
@@ -196,18 +206,12 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Unload a raw dataset from a RawDataset object by its data path. 
+        /// Entirely remove a RawDataset from ABR memory.
         /// </summary>
-        /// <examples>
-        /// Datasets may be unloaded from any of the following locations:
-        /// <code>
-        /// // From a file in the media directory
-        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        ///
-        /// // From a web resource
-        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
-        /// </code>
-        /// </examples> 
+        /// <param name="dataPath">The data path / key data to be unloaded</param>
+        /// <remarks>
+        /// This method *does not check if the dataset is currently in use*, so utilize this method with care!
+        /// </remarks>
         public void UnloadRawDataset(string dataPath)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);

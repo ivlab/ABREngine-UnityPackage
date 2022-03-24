@@ -87,7 +87,6 @@
 </div>
   <div class="markdown level0 conceptual"></div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_IDataLoader_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public interface IDataLoader</code></pre>
@@ -96,14 +95,14 @@
   </h3>
   
   
-  <a id="IVLab_ABREngine_IDataLoader_TryLoadDataAsync_" data-uid="IVLab.ABREngine.IDataLoader.TryLoadDataAsync*"></a>
-  <h4 id="IVLab_ABREngine_IDataLoader_TryLoadDataAsync_System_String_" data-uid="IVLab.ABREngine.IDataLoader.TryLoadDataAsync(System.String)">TryLoadDataAsync(String)</h4>
+  <a id="IVLab_ABREngine_IDataLoader_LoadData_" data-uid="IVLab.ABREngine.IDataLoader.LoadData*"></a>
+  <h4 id="IVLab_ABREngine_IDataLoader_LoadData_System_String_" data-uid="IVLab.ABREngine.IDataLoader.LoadData(System.String)">LoadData(String)</h4>
   <div class="markdown level1 summary"><p>Load data specified by <code>dataPath</code> from a particular source</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">Task&lt;RawDataset&gt; TryLoadDataAsync(string dataPath)</code></pre>
+    <pre><code class="lang-csharp hljs">RawDataset LoadData(string dataPath)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -132,7 +131,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;<a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a>&gt;</td>
+        <td><a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a></td>
         <td></td>
       </tr>
     </tbody>

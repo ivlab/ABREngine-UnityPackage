@@ -43,14 +43,46 @@ namespace IVLab.ABREngine
     public interface IKeyData : IABRInput
     {
         /// <summary>
-        ///     The DataPath that represents this KeyData
+        /// The <see cref="DataPath"/> that represents this KeyData
         /// </summary>
         string Path { get; }
     }
 
     /// <summary>
-    /// Lightweight container for a data object
+    /// Lightweight container for a data object. From Key Data objects, scalar
+    /// and vector variables can be obtained (see the example below).
     /// </summary>
+    /// <example>
+    /// KeyData can be used to easily get <see cref="ScalarDataVariable"/>s and
+    /// <see cref="VectorDataVariable"/>s from a dataset.
+    /// <code>
+    /// public class KeyDataExample : MonoBehaviour
+    /// {
+    ///     void Start()
+    ///     {
+    ///         // Load some point data
+    ///         string dataPath = "Demo/Wavelet/KeyData/Points";
+    ///         RawDataset rds = ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader&gt;(dataPath);
+    ///
+    ///         // Import the dataset and name it accordingly
+    ///         KeyData kd = ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
+    ///
+    ///         // Then, we can fetch variables:
+    ///         // ALL the variables
+    ///         kd.GetScalarVariables();
+    ///         kd.GetVectorVariables();
+    ///
+    ///         // Only the names of the variables
+    ///         kd.GetScalarVariableNames();
+    ///         kd.GetVectorVariableNames();
+    ///
+    ///         // Fetch a specific scalar or vector variable by its name
+    ///         kd.GetScalarVariable("XAxis");
+    ///         kd.GetVectorVariable("Inward");
+    ///     }
+    /// }
+    /// </code>
+    /// </example>
     public class KeyData : IKeyData, IHasDataset
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
@@ -69,11 +101,17 @@ namespace IVLab.ABREngine
             return GetDataset().GetScalarVariables(this);
         }
 
+        /// <summary>
+        /// Get the names of every scalar variable associated with this key data object
+        /// </summary>
         public string[] GetScalarVariableNames()
         {
             return GetDataset().GetScalarVariables(this).Select(var => DataPath.GetName(var.Path)).ToArray();
         }
 
+        /// <summary>
+        /// Get a specific scalar variable that exists within this key data object
+        /// </summary>
         public ScalarDataVariable GetScalarVariable(string varName)
         {
             ScalarDataVariable[] matches = GetDataset()
@@ -95,11 +133,17 @@ namespace IVLab.ABREngine
             return GetDataset().GetVectorVariables(this);
         }
 
+        /// <summary>
+        /// Get the names of every vector variable associated with this key data object
+        /// </summary>
         public string[] GetVectorVariableNames()
         {
             return GetDataset().GetVectorVariables(this).Select(var => DataPath.GetName(var.Path)).ToArray();
         }
 
+        /// <summary>
+        /// Get a specific vector variable that exists within this key data object
+        /// </summary>
         public VectorDataVariable GetVectorVariable(string varName)
         {
             VectorDataVariable[] matches = GetDataset()

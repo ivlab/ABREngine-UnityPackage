@@ -168,7 +168,10 @@ share a common coordinate space. Its bounding box contains all of data, and
 the rendered objects are children of this object&apos;s GameObject.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.EncodedGameObject.html">EncodedGameObject</a></h4>
-      <section><p>An EncodedGameObject connects a DataImpression with a Unity Game Object.</p>
+      <section><p>An EncodedGameObject connects a DataImpression with a Unity Game Object.
+Look under the ABREngine main GameObject, find the data impression group
+your impression exists in, and inspect the Data Impression GameObject to
+find the EncodedGameObject.</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.FilePathVisAssetFetcher.html">FilePathVisAssetFetcher</a></h4>
       <section><p>Fetch VisAsset from somewhere on local disk</p>
@@ -200,7 +203,8 @@ checked on the material that these glyphs are using.</p>
       <h4><a class="xref" href="IVLab.ABREngine.IntegerPrimitive.html">IntegerPrimitive</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></h4>
-      <section><p>Lightweight container for a data object</p>
+      <section><p>Lightweight container for a data object. From Key Data objects, scalar
+and vector variables can be obtained (see the example below).</p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.KeyDataMapping.html">KeyDataMapping</a></h4>
       <section><p>Mapping between topologies / types of geometry and actual key data</p>
@@ -227,7 +231,8 @@ checked on the material that these glyphs are using.</p>
       <h4><a class="xref" href="IVLab.ABREngine.PointKeyData.html">PointKeyData</a></h4>
       <section></section>
       <h4><a class="xref" href="IVLab.ABREngine.PrimitiveGradient.html">PrimitiveGradient</a></h4>
-      <section></section>
+      <section><p>A simple gradient of points associated with values.</p>
+</section>
       <h4><a class="xref" href="IVLab.ABREngine.RawABRInput.html">RawABRInput</a></h4>
       <section><p>Raw string values from a state JSON being passed to ABR</p>
 <p>Matches <code>InputValue</code> definition from ABR State Schema</p>
@@ -333,10 +338,19 @@ and construct the requisite Unity objects and IVisAsset to add.</p>
       <h4><a class="xref" href="IVLab.ABREngine.VisAssetManager.html">VisAssetManager</a></h4>
       <section><p>The VisAssetManager is where all VisAssets are stored within the
 ABREngine. VisAssets can be loaded and fetched from various sources
-defined in <code>VisAssetFetchers</code>.</p>
+defined in <code>VisAssetFetchers</code>. Currently, VisAssets may be loaded from any of the following:
+<ol>
+<li>The state itself (<code>localVisAssets</code>)</li>
+<li>The media directory on the machine ABR is running on</li>
+<li>Any Resources folder (in Assets or in any Package)</li>
+<li>A VisAsset server</li>
+</ol></p>
 </section>
       <h4><a class="xref" href="IVLab.ABREngine.VolumeKeyData.html">VolumeKeyData</a></h4>
       <section></section>
+      <h4><a class="xref" href="IVLab.ABREngine.VolumeLightManager.html">VolumeLightManager</a></h4>
+      <section><p>Transfer any lights in the ABR scene to variables in the volume rendering shader.</p>
+</section>
     <h3 id="structs">Structs
   </h3>
       <h4><a class="xref" href="IVLab.ABREngine.SocketTextData.html">SocketTextData</a></h4>
@@ -426,7 +440,7 @@ generic &quot;data&quot; topology, including voxels.</p>
       <section><p>Delegate callback that is called whenever the ABRState is updated.
 This is useful for applications that build on ABR and need to know
 when the state has been updated.
-See <a href="api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> for usage.</p>
+<a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> for usage.</p>
 </section>
 </article>
           </div>

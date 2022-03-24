@@ -1,6 +1,6 @@
 /* ABREngine.cs
  *
- * Copyright (c) 2021 University of Minnesota
+ * Copyright (c) 2022 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>, Seth Johnson <sethalanjohnson@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -49,9 +49,9 @@ namespace IVLab.ABREngine
     /// general process for making a visualization programmatically with ABR is:
     /// <ol>
     ///     <li>Define your data in some `List`s.</li>
-    ///     <li>Use the <see cref="RawDatasetAdapter"/> to convert the `List` into an ABR <see cref="RawDataset"/>.</li>
-    ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/>.</li>
-    ///     <li>Optionally, import any <see cref="VisAsset"/>s you want to use.</li>
+    ///     <li>Use the <see cref="RawDatasetAdapter"/> to convert the `List` into an ABR <see cref="RawDataset"/>, or import an existing ABR RawDataset using <see cref="DataManager.LoadRawDataset"/>.</li>
+    ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/> (optionally, giving the dataset a data path identifier for easier semantic access later).</li>
+    ///     <li>Optionally, import any <see cref="VisAsset"/>s you want to use using <see cref="VisAssetManager.GetVisAsset"/>.</li>
     ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together.</li>
     ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
     ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
@@ -197,7 +197,7 @@ namespace IVLab.ABREngine
         /// Delegate callback that is called whenever the ABRState is updated.
         /// This is useful for applications that build on ABR and need to know
         /// when the state has been updated.
-        /// See <a href="api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_OnStateChanged">OnStateChanged</a> for usage.
+        /// <see cref="ABREngine.OnStateChanged"/> for usage.
         /// </summary>
         public delegate void StateChangeDelegate(JObject state);
 
@@ -230,6 +230,14 @@ namespace IVLab.ABREngine
 
         private DataImpressionGroup _defaultGroup = null;
 
+        /// <summary>
+        /// True if the ABREngine is set up and completely ready to begin rendering. Only returns true once all setup has finished, including:
+        /// <ul>
+        ///     <li>Loading the ABRConfig</li>
+        ///     <li>Connecting to the server (if applicable)</li>
+        ///     <li>Loading any initial state specified by the programmer, or the remote state from the server</li>
+        /// </ul>
+        /// </summary>
         public bool IsInitialized { get; private set; } = false;
 
         /// <summary>
@@ -266,7 +274,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Client for internal application usage to make web requests.
         /// </summary>
-        public static readonly HttpClient httpClient = new HttpClient();
+        internal static readonly HttpClient httpClient = new HttpClient();
 
         protected override void Awake()
         {
@@ -392,6 +400,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Check to see if the data impression with a given uuid exists
         /// </summary>
+        /// <param name="uuid">Unique identifier (UUID) of the requisite data impression</param>
         /// <returns>
         /// A boolean whether or not this data impression is present in this ABR state
         /// </returns>
@@ -408,9 +417,11 @@ namespace IVLab.ABREngine
         /// <returns>
         /// A data impression if found, null otherwise.
         /// </returns>
+        /// <param name="uuid">Unique identifier (UUID) of the data impression to be fetched from the engine</param>
         /// <remarks>
-        /// It is often useful to cast the result of this data impression so individual inputs can be modified:
-        /// <code>SimpleSurfaceDataImpression di = ABREngine.Instance.GetDataImpression(someGuid) as SimpleSurfaceDataImpression</code>
+        /// It is often more useful to use the <see
+        /// cref="ABREngine.GetDataImpression{T}"/> method since it returns an
+        /// actual data impression instead of a <see cref="IDataImpression"/>.
         /// </remarks>
         public IDataImpression GetDataImpression(Guid uuid)
         {
@@ -421,10 +432,11 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retreive the first data impression found with a particular function crieteria
+        /// Retreive the first data impression found with a particular function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
+        /// <param name="criteria">Function that takes each data impression of any type and returns a boolean.</param>
         /// <returns>
-        /// A data impression if found, null otherwise.
+        /// The first data impression of any type that matches criteria, null otherwise.
         /// </returns>
         public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
         {
@@ -432,8 +444,13 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retreive the first data impression found with a particular type AND function crieteria
+        /// Retreive the first data impression found with a particular type AND function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
+        /// <param name="criteria">Function that takes each data impression matching type `T` and returns a boolean.</param>
+        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <returns>
+        /// The first data impression of type `T` that matches criteria, null otherwise.
+        /// </returns>
         public T GetDataImpression<T>(Func<T, bool> criteria)
         where T : IDataImpression
         {
@@ -443,6 +460,10 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Retreive the first data impression found with a particular type
         /// </summary>
+        /// <returns>
+        /// The first data impression of matching type `T`, null otherwise.
+        /// </returns>
+        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
         public T GetDataImpression<T>()
         where T : IDataImpression
         {
@@ -472,6 +493,7 @@ namespace IVLab.ABREngine
         /// tag. Note that the ABREngine does not do anything with tags; these
         /// exist solely for application developers.
         /// </summary>
+        /// <param name="tag">The tag to check for</param>
         /// <returns>
         /// A list of data impressions with a particular tag
         /// </returns>
@@ -484,16 +506,24 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retrieve all data impressions matching a particular criteria
+        /// Retreive the all data impressions found of any type matching function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
+        /// <param name="criteria">Function that takes each data impression and returns a boolean.</param>
+        /// <returns>
+        /// All data impressions of any type that matches criteria, null otherwise.
+        /// </returns>
         public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
         {
             return GetAllDataImpressions()?.Where(criteria).ToList();
         }
 
         /// <summary>
-        /// Retrieve all data impressions of a particular type
+        /// Retreive the all data impressions found of a particular type
         /// </summary>
+        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <returns>
+        /// All data impressions of type `T`.
+        /// </returns>
         public List<T> GetDataImpressions<T>()
         where T : IDataImpression
         {
@@ -503,8 +533,13 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retrieve all data impressions of a particular type AND matching criteria
+        /// Retreive the all data impressions found of a particular type matching function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
+        /// <param name="criteria">Function that takes each data impression of type `T` and returns a boolean.</param>
+        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <returns>
+        /// All data impressions of type `T` that match the criteria.
+        /// </returns>
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
         where T : IDataImpression
         {
@@ -515,6 +550,9 @@ namespace IVLab.ABREngine
         /// Retrieve ALL data impressions that currently exist within the
         /// Engine, over ALL data impression groups.
         /// </summary>
+        /// <returns>
+        /// All data impressions that exist in the ABREngine
+        /// </returns>
         public List<IDataImpression> GetAllDataImpressions()
         {
             return dataImpressionGroups?
@@ -526,8 +564,9 @@ namespace IVLab.ABREngine
         /// Retrieve the encoded game object in the Unity scene associated with
         /// a particular data impression, identified by its guid.
         /// </summary>
+        /// <param name="impressionGuid">Unique identifier (UUID) of the data impression to get the GameObject for</param>
         /// <returns>
-        /// An EncodedGameObject (MonoBehaviour) of the Data Impression as it
+        /// An <see cref="EncodedGameObject"/> (MonoBehaviour) of the Data Impression as it
         /// exists in the Unity Scene, or null if no such impression exists.
         /// </returns>
         public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
@@ -544,6 +583,7 @@ namespace IVLab.ABREngine
         /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
         /// zero.
         /// </summary>
+        /// <param name="name">Name of the new data impression group that will be created</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
@@ -557,6 +597,8 @@ namespace IVLab.ABREngine
         /// bounds defaults to the bounds found in
         /// `ABRConfig.Info.defaultBounds`, and the position is defined by the user.
         /// </summary>
+        /// <param name="name">Name of the new data impression group that will be created</param>
+        /// <param name="position">Where to place the data impression in space</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
@@ -571,6 +613,8 @@ namespace IVLab.ABREngine
         /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
         /// zero.
         /// </summary>
+        /// <param name="name">Name of the new data impression group that will be created</param>
+        /// <param name="uuid">UUID to use for the new data impression group</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
@@ -583,6 +627,11 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Add a new data impression group with a particular UUID, bounds, position, and rotation.
         /// </summary>
+        /// <param name="name">Name of the new data impression group that will be created</param>
+        /// <param name="uuid">UUID to use for the new data impression group</param>
+        /// <param name="bounds">Default bounds to use for this data impression group. Data will be "squished" inside this bounding box.</param>
+        /// <param name="position">Default position (in Unity coordinates) to use for the data impression group.</param>
+        /// <param name="rotation">Default rotation (in Unity angles) to use for the data impression group.</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
@@ -597,6 +646,7 @@ namespace IVLab.ABREngine
         /// Remove a given data impression group from the scene, destroying all
         /// of the data impressions within the group.
         /// </summary>
+        /// <param name="uuid">UUID of the data impression group that should be removed.</param>
         public void RemoveDataImpressionGroup(Guid uuid)
         {
             dataImpressionGroups[uuid].Clear();
@@ -619,6 +669,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Retrieve a particular data impression group from the scene
         /// </summary>
+        /// <param name="uuid">UUID of the data impression group that should be retrieved.</param>
         /// <returns>
         /// A data impression with a given UUID
         /// </returns>
@@ -636,8 +687,9 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retrieve the first data impression group found that is associated with a particular dataset.
+        /// Retrieve the first data impression group found that is associated with a particular <see cref="Dataset"/>.
         /// </summary>
+        /// <param name="ds">Dataset that should be matched with</param>
         /// <returns>
         /// A data impression with the given dataset.
         /// </returns>
@@ -649,8 +701,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Check if a particular data impression group exists.
         /// </summary>
+        /// <param name="uuid">UUID to check existence of</param>
         /// <returns>
-        /// Boolean - true if the given group exists in the ABR scene, false otherwise.
+        /// Boolean - true if the given group exists in the current ABR state, false otherwise.
         /// </returns>
         public bool HasDataImpressionGroup(Guid uuid)
         {
@@ -658,8 +711,12 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Get the group a particular data impression
+        /// Get the data impression group a particular data impression
         /// </summary>
+        /// <param name="dataImpression">Data impression to find out the group of</param>
+        /// <returns>
+        /// The data impression group `dataImpression` belongs to, otherwise null.
+        /// </returns>
         public DataImpressionGroup GetGroupFromImpression(IDataImpression dataImpression)
         {
             try
@@ -675,8 +732,12 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Add a new data impression, but add it to a specific group ID.
+        /// Register a new data impression with the ABREngine and add it to a
+        /// specific <see cref="DataImpressionGroup"/>.
         /// </summary>
+        /// <param name="dataImpression">The data impression to register with the engine</param>
+        /// <param name="newGroup">Group to add this data impression to</param>
+        /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
         public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // Create a new group if it doesn't exist
@@ -710,11 +771,13 @@ namespace IVLab.ABREngine
 
 
         /// <summary>
-        ///     Register a new data impression, or replace an existing one. If the
-        ///     data impression has a dataset, defaults to placing it inside the
-        ///     existing group with the same dataset, or creating a new
-        ///     DataImpressionGroup with that dataset if no group exists yet.
+        /// Register a new data impression, or replace an existing one. If the
+        /// data impression has a dataset, defaults to placing it inside the
+        /// existing group with the same dataset, or creating a new
+        /// <see cref="DataImpressionGroup"/> with that dataset if no group exists yet.
         /// </summary>
+        /// <param name="dataImpression">The data impression to register with the engine</param>
+        /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
         public void RegisterDataImpression(IDataImpression dataImpression, bool allowOverwrite = true)
         {
             Dataset ds = dataImpression.GetDataset();
@@ -746,8 +809,9 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Remove a data impression from the ABR scene
+        /// Remove a data impression from the ABR state.
         /// </summary>
+        /// <param name="uuid">The UUID data impression to remove (unregister) from the ABREngine</param>
         public void UnregisterDataImpression(Guid uuid)
         {
             var toRemove = new List<Guid>();
@@ -775,6 +839,7 @@ namespace IVLab.ABREngine
         /// the one being copied. By default duplicate data impressions will be
         /// placed in their default groups (grouped by dataset).
         /// </summary>
+        /// <param name="uuid">UUID of the data impression that should be duplicated.</param>
         /// <returns>
         /// The new data impression.
         /// </returns>
@@ -789,6 +854,7 @@ namespace IVLab.ABREngine
         /// the one being copied. By default duplicate data impressions will be
         /// placed in their default groups (grouped by dataset).
         /// </summary>
+        /// <param name="impression">The data impression that should be duplicated.</param>
         /// <returns>
         /// The new data impression.
         /// </returns>
@@ -804,6 +870,8 @@ namespace IVLab.ABREngine
         /// will be used (either conforming to the input dataset that the data
         /// impression has, or the default empty group)
         /// </summary>
+        /// <param name="dataImpression">The data impression that should be duplicated.</param>
+        /// <param name="group">The <see cref="DataImpressionGroup"/> that the new data impression should be placed into.</param>
         /// <returns>
         /// The new data impression.
         /// </returns>
@@ -829,6 +897,10 @@ namespace IVLab.ABREngine
         /// ensure that the copy is within the same data impression group as its
         /// source.
         /// </summary>
+        /// <param name="dataImpression">The data impression that should be duplicated.</param>
+        /// <param name="retainGroup">Ensure the copy of the data impression
+        /// will exist within the same group as the original, regardless of
+        /// whether different data have been applied.</param>
         /// <returns>
         /// The new data impression.
         /// </returns>
@@ -848,6 +920,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Move a data impression from its current group to a new group.
         /// </summary>
+        /// <param name="dataImpression">The data impression that should be moved.</param>
+        /// <param name="newGroup">The group to place the data impression into.</param>
+        /// <param name="allowOverwrite">Should we destroy any existing data impressions with this UUID within the `newGroup`?</param>
         public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // See if it's a part of a group already
@@ -872,6 +947,11 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Remove all data impression groups from the ABR scene (and in turn, remove all data impressions).
         /// </summary>
+        /// <remarks>
+        /// This method does remove all data impressions, but it does not clean
+        /// up other state values like custom colormaps, lighting, and
+        /// gradients.
+        /// </remarks>
         public void ClearState()
         {
             List<Guid> toRemove = new List<Guid>();
@@ -914,25 +994,30 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Load a state into ABR, asynchronously. This Task is finished when:
-        /// (1) All Data and VisAssets from the state have been loaded, (2) The
-        /// ABR scene has been rendered with all updates, and (3) the
-        /// OnStateChanged callback has been fired.
+        /// Load a state into ABR. This includes the following steps:
+        /// <ol>
+        ///     <li>All Data and VisAssets from the state have been loaded.</li>
+        ///     <li>The ABR scene has been rendered with all updates (including data impressions, lighting, etc.).</li>
+        ///     <li>The <see cref="ABREngine.OnStateChanged"/> callback has been fired.</li>
+        /// </ol>
         /// </summary>
+        /// <remarks>
+        /// Data impressions that have not changed will not be re-rendered. 
+        /// </remarks>
         /// <example>
         /// A state may be loaded from any of the following places:
         /// <code>
         /// // A Resources folder (in Assets or in a Package)
-        /// await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("exampleState.json");
-        ///
-        /// // A web resource
-        /// await ABREngine.Instance.LoadStateAsync&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");
+        /// ABREngine.Instance.LoadState&lt;ResourceStateFileLoader&gt;("exampleState.json");
         ///
         /// // A local file
-        /// await ABREngine.Instance.LoadStateAsync&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/test.json");
+        /// ABREngine.Instance.LoadState&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/test.json");
         ///
         /// // A JSON string
-        /// await ABREngine.Instance.LoadStateAsync&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
+        /// ABREngine.Instance.LoadState&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
+        ///
+        /// // A web resource
+        /// ABREngine.Instance.LoadState&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");
         /// </code>
         /// </example>
         public void LoadState<T>(string stateName)
@@ -967,14 +1052,29 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Save a state from the ABR Unity scene back to a particular destination.
+        /// Save a state from the ABR Unity scene back to a particular JSON destination.
         /// </summary>
         /// <remarks>
         /// The SaveState functionality is only implemented in a few
-        /// `IABRStateLoader`s, namely `PathStateFileLoader` and
-        /// `HttpStateFileLoader`.
+        /// <see cref="IABRStateLoader"/> classes, namely <see cref="PathStateFileLoader"/> and
+        /// <see cref="HttpStateFileLoader"/>.
+        ///
+        /// This method generally takes a long time so should not be called
+        /// frequently. Also, since this method manually looks through
+        /// GameObjects in the scene to reverse-engineer a JSON state, so the
+        /// resulting JSON state may not always be complete.
         /// </remarks>
-        public void SaveStateAsync<T>(string overrideStateName = null)
+        /// <example>
+        /// ABR states can be saved like this:
+        /// <code>
+        /// // Save the current state to a file on your computer
+        /// ABREngine.Instance.SaveState&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/exampleState.json");
+        ///
+        /// // Save the current state to a web resource
+        /// ABREngine.Instance.SaveState&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");
+        /// </code>
+        /// </example>
+        public void SaveState<T>(string overrideStateName = null)
         where T : IABRStateLoader, new()
         {
             if (overrideStateName != null)

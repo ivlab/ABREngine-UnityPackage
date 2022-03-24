@@ -32,7 +32,13 @@ namespace IVLab.ABREngine
     /// <summary>
     /// The VisAssetManager is where all VisAssets are stored within the
     /// ABREngine. VisAssets can be loaded and fetched from various sources
-    /// defined in `VisAssetFetchers`.
+    /// defined in `VisAssetFetchers`. Currently, VisAssets may be loaded from any of the following:
+    /// <ol>
+    ///     <li>The state itself (`localVisAssets`)</li>
+    ///     <li>The media directory on the machine ABR is running on</li>
+    ///     <li>Any Resources folder (in Assets or in any Package)</li>
+    ///     <li>A VisAsset server</li>
+    /// </ol>
     /// </summary>
     /// <example>
     /// VisAssets can be loaded manually from your media folder, resources
@@ -44,7 +50,10 @@ namespace IVLab.ABREngine
     /// {
     ///     void Start()
     ///     {
-    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
+    ///         // Note, we could've used `LoadVisAsset` explicitly here, but
+    ///         // GetVisAsset will automatically try to load the VisAsset if it
+    ///         // doesn't already exist.
+    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
     ///     }
     ///
     ///     void Update()
@@ -71,8 +80,14 @@ namespace IVLab.ABREngine
     /// </example>
     public class VisAssetManager
     {
+        /// <summary>
+        /// Application data path for internal access
+        /// </summary>
         public string appDataPath;
 
+        /// <summary>
+        /// Name of the artifact.json files that each VisAsset has
+        /// </summary>
         public const string VISASSET_JSON = "artifact.json";
 
         /// <summary>
@@ -94,6 +109,10 @@ namespace IVLab.ABREngine
 
         private bool _loadResourceVisAssets;
 
+        /// <summary>
+        /// Initialize a new VisAssetManager and define all of the places VisAssets may be loaded from.
+        /// </summary>
+        /// <param name="visassetPath">Path to the VisAssets folder within ABR's media folder.</param>
         public VisAssetManager(string visassetPath)
         {
             this.appDataPath = visassetPath;
@@ -132,8 +151,10 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Get a visasset by its unique identifier.
         /// </summary>
+        /// <param name="uuid">UUID of the VisAsset to get from the engine.</param>
+        /// <typeparam name="T">Any <see cref="VisAsset"/> type.</typeparam>
         /// <returns>
-        /// Returns the VisAsset, if found, otherwise returns null.
+        /// Returns the VisAsset, if found. If not found, tries to load the VisAsset then return it.
         /// </returns>
         public T GetVisAsset<T>(Guid uuid)
         where T: IVisAsset
@@ -177,10 +198,12 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Provides a convenience generic wrapper for VisAsset loading.
+        /// Load a VisAsset of a specific type.
         /// </summary>
+        /// <param name="visAssetUUID">UUID of the VisAsset to load from any VisAsset loader.</param>
+        /// <typeparam name="T">Any <see cref="VisAsset"/> type.</typeparam>
         /// <returns>
-        /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
+        /// Returns the VisAsset of type `T` that was loaded, or `null` if the VisAsset was not found.
         /// </returns>
         public T LoadVisAsset<T>(Guid visAssetUUID, bool replaceExisting = false)
         where T: IVisAsset
@@ -189,12 +212,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Load a particular VisAsset described by its UUID. VisAssets will
-        /// automatically be loaded from any of the following places:
-        /// 1. The state itself (`localVisAssets`)
-        /// 2. The media directory on the machine ABR is running on
-        /// 3. Any Resources folder (in Assets or in any Package)
-        /// 4. A VisAsset server
+        /// Load a particular VisAsset described by its UUID.
         /// </summary>
         /// <returns>
         /// Returns the <see cref="IVisAsset"/> that was loaded, or `null` if the VisAsset was not found.
@@ -331,6 +349,10 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Unload a particular VisAsset described by its UUID. 
         /// </summary>
+        /// <remarks>
+        /// Note that this method *does not check if the VisAsset is in use*, so
+        /// be careful when calling it!
+        /// </remarks>
         public void UnloadVisAsset(Guid visAssetUUID)
         {
             _visAssets.Remove(visAssetUUID);
@@ -339,6 +361,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Get the UUIDs of every VisAsset that's been imported into ABR
         /// </summary>
+        /// <returns>
+        /// Returns a list containing UUIDs of each VisAsset in ABR.
+        /// </returns>
         public List<Guid> GetVisAssets()
         {
             return _visAssets.Keys.ToList();

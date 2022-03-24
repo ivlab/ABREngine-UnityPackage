@@ -85,7 +85,13 @@
   </h1>
   <div class="markdown level0 summary"><p>The VisAssetManager is where all VisAssets are stored within the
 ABREngine. VisAssets can be loaded and fetched from various sources
-defined in <code>VisAssetFetchers</code>.</p>
+defined in <code>VisAssetFetchers</code>. Currently, VisAssets may be loaded from any of the following:
+<ol>
+<li>The state itself (<code>localVisAssets</code>)</li>
+<li>The media directory on the machine ABR is running on</li>
+<li>Any Resources folder (in Assets or in any Package)</li>
+<li>A VisAsset server</li>
+</ol></p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -94,7 +100,6 @@ defined in <code>VisAssetFetchers</code>.</p>
     <div class="level1"><span class="xref">VisAssetManager</span></div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="IVLab.ABREngine.html">IVLab.ABREngine</a></h6>
-  <h6><strong>Assembly</strong>: cs.temp.dll.dll</h6>
   <h5 id="IVLab_ABREngine_VisAssetManager_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class VisAssetManager</code></pre>
@@ -108,7 +113,10 @@ the ABREngine/Resources/media folder).</p>
 {
     void Start()
     {
-        ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset>(new System.Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;));
+        // Note, we could&apos;ve used `LoadVisAsset` explicitly here, but
+        // GetVisAsset will automatically try to load the VisAsset if it
+        // doesn&apos;t already exist.
+        ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset>(new System.Guid(&quot;66b3cde4-034d-11eb-a7e6-005056bae6d8&quot;));
     }
 
     void Update()
@@ -135,7 +143,8 @@ the VisAsset type that you want to get!</p>
   
   <a id="IVLab_ABREngine_VisAssetManager__ctor_" data-uid="IVLab.ABREngine.VisAssetManager.#ctor*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager__ctor_System_String_" data-uid="IVLab.ABREngine.VisAssetManager.#ctor(System.String)">VisAssetManager(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initialize a new VisAssetManager and define all of the places VisAssets may be loaded from.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -154,7 +163,8 @@ the VisAsset type that you want to get!</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">visassetPath</span></td>
-        <td></td>
+        <td><p>Path to the VisAssets folder within ABR&apos;s media folder.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -163,51 +173,23 @@ the VisAsset type that you want to get!</p>
   
   
   <h4 id="IVLab_ABREngine_VisAssetManager_appDataPath" data-uid="IVLab.ABREngine.VisAssetManager.appDataPath">appDataPath</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Application data path for internal access</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public string appDataPath</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <h4 id="IVLab_ABREngine_VisAssetManager_VISASSET_JSON" data-uid="IVLab.ABREngine.VisAssetManager.VISASSET_JSON">VISASSET_JSON</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Name of the artifact.json files that each VisAsset has</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public const string VISASSET_JSON = &quot;artifact.json&quot;</code></pre>
   </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="properties">Properties
   </h3>
   
@@ -222,21 +204,6 @@ exist on disk or on a server somewhere.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public JObject LocalVisAssets { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">JObject</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="IVLab_ABREngine_VisAssetManager_VisAssetGradients_" data-uid="IVLab.ABREngine.VisAssetManager.VisAssetGradients*"></a>
@@ -249,21 +216,6 @@ directly from state)</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Dictionary&lt;string, RawVisAssetGradient&gt; VisAssetGradients { get; set; }</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Dictionary</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a>, <a class="xref" href="IVLab.ABREngine.RawVisAssetGradient.html">RawVisAssetGradient</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="methods">Methods
   </h3>
   
@@ -336,7 +288,8 @@ directly from state)</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">uuid</span></td>
-        <td></td>
+        <td><p>UUID of the VisAsset to get from the engine.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -351,7 +304,7 @@ directly from state)</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>Returns the VisAsset, if found, otherwise returns null.</p>
+        <td><p>Returns the VisAsset, if found. If not found, tries to load the VisAsset then return it.</p>
 </td>
       </tr>
     </tbody>
@@ -367,7 +320,8 @@ directly from state)</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any <a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a> type.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -393,7 +347,8 @@ directly from state)</p>
     <tbody>
       <tr>
         <td><span class="xref">List</span>&lt;<a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a>&gt;</td>
-        <td></td>
+        <td><p>Returns a list containing UUIDs of each VisAsset in ABR.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -401,14 +356,7 @@ directly from state)</p>
   
   <a id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_System_Guid_System_Boolean_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset(System.Guid,System.Boolean)">LoadVisAsset(Guid, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Load a particular VisAsset described by its UUID. VisAssets will
-automatically be loaded from any of the following places:</p>
-<ol>
-<li>The state itself (<code>localVisAssets</code>)</li>
-<li>The media directory on the machine ABR is running on</li>
-<li>Any Resources folder (in Assets or in any Package)</li>
-<li>A VisAsset server</li>
-</ol>
+  <div class="markdown level1 summary"><p>Load a particular VisAsset described by its UUID.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -457,7 +405,7 @@ automatically be loaded from any of the following places:</p>
   
   <a id="IVLab_ABREngine_VisAssetManager_LoadVisAsset_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset*"></a>
   <h4 id="IVLab_ABREngine_VisAssetManager_LoadVisAsset__1_System_Guid_System_Boolean_" data-uid="IVLab.ABREngine.VisAssetManager.LoadVisAsset``1(System.Guid,System.Boolean)">LoadVisAsset&lt;T&gt;(Guid, Boolean)</h4>
-  <div class="markdown level1 summary"><p>Provides a convenience generic wrapper for VisAsset loading.</p>
+  <div class="markdown level1 summary"><p>Load a VisAsset of a specific type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -478,7 +426,8 @@ automatically be loaded from any of the following places:</p>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a></td>
         <td><span class="parametername">visAssetUUID</span></td>
-        <td></td>
+        <td><p>UUID of the VisAsset to load from any VisAsset loader.</p>
+</td>
       </tr>
       <tr>
         <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
@@ -498,7 +447,7 @@ automatically be loaded from any of the following places:</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>Returns the <a class="xref" href="IVLab.ABREngine.IVisAsset.html">IVisAsset</a> that was loaded, or <code>null</code> if the VisAsset was not found.</p>
+        <td><p>Returns the VisAsset of type <code>T</code> that was loaded, or <code>null</code> if the VisAsset was not found.</p>
 </td>
       </tr>
     </tbody>
@@ -514,7 +463,8 @@ automatically be loaded from any of the following places:</p>
     <tbody>
       <tr>
         <td><span class="parametername">T</span></td>
-        <td></td>
+        <td><p>Any <a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a> type.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -607,6 +557,10 @@ public void LoadVisAssetPalette()</code></pre>
       </tr>
     </tbody>
   </table>
+  <h5 id="IVLab_ABREngine_VisAssetManager_UnloadVisAsset_System_Guid__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Note that this method <em>does not check if the VisAsset is in use</em>, so
+be careful when calling it!</p>
+</div>
 </article>
           </div>
           
