@@ -26,6 +26,10 @@
             "_appFaviconPath": "resources/favicon.ico",
             "_enableSearch": true
         },
+        "template": [
+            "default",
+            "templates/custom"
+        ],
         "content": [
             {
                 "files": [
