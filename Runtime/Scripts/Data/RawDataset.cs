@@ -195,7 +195,7 @@ namespace IVLab.ABREngine
                 }
             }
 
-            public static byte[] Encode(JsonHeader bdh, in Vector3[] vertices, in int[] indices, in SerializableFloatArray[] scalars, in SerializableVectorArray[] vectors)
+            public static byte[] Encode(JsonHeader bdh, in Vector3[] vertices, in int[] indices, in int[] cellIndexOffsets, in int[] cellIndexCounts, in SerializableFloatArray[] scalars, in SerializableVectorArray[] vectors)
             {
                 // Convert everything to base types
                 float[] verticesFloat = new float[vertices.Length * 3];
@@ -225,6 +225,27 @@ namespace IVLab.ABREngine
                     }
                 }
 
+                // Calculate the ParaView-style indices from the current indices and cells
+
+                // Unstructured indices have {# indices in cell1, idx1, idx2, idx3, #indices in cell2....}
+                int[] unstructuredIndices = new int[bdh.num_cell_indices + bdh.num_cells];
+
+                int ui = 0;
+                for (int cellIndexInDataset = 0; cellIndexInDataset < bdh.num_cells; cellIndexInDataset++)
+                {
+                    // Set "count" for this cell
+                    unstructuredIndices[ui++] = cellIndexCounts[cellIndexInDataset];
+
+                    // Set index values for this cell
+                    int indexOffset = cellIndexOffsets[cellIndexInDataset];
+                    for (int indexInCell = 0; indexInCell < cellIndexCounts[cellIndexInDataset]; indexInCell++)
+                    {
+                        unstructuredIndices[ui++] = indices[indexOffset + indexInCell];
+                    }
+                }
+                // Debug.Log("unstruct " + string.Join(", ", unstructuredIndices));
+
+
                 int offset = 0;
 
                 int vertsByteLength = verticesFloat.Length * sizeof(float);
@@ -248,19 +269,21 @@ namespace IVLab.ABREngine
                 }
 
                 // Copy indices over
-                Buffer.BlockCopy(indices, 0, outBytes, offset, idxByteLength);
+                Buffer.BlockCopy(unstructuredIndices, 0, outBytes, offset, idxByteLength);
                 offset = offset + idxByteLength;
 
                 // Copy variables over
                 for (int i = 0; i < bdh.scalarArrayNames.Length; i++)
                 {
-                    Buffer.BlockCopy(scalarArrays[i], 0, outBytes, offset, scalarsByteLength);
-                    offset = offset + scalarsByteLength;
+                    int nbytes = scalarArrays[i].Length * sizeof(float);
+                    Buffer.BlockCopy(scalarArrays[i], 0, outBytes, offset, nbytes);
+                    offset = offset + nbytes;
                 }
                 for (int i = 0; i < bdh.vectorArrayNames.Length; i++)
                 {
-                    Buffer.BlockCopy(vectorArrays[i], 0, outBytes, offset, vectorsByteLength);
-                    offset = offset + vectorsByteLength;
+                    int nbytes = scalarArrays[i].Length * sizeof(float);
+                    Buffer.BlockCopy(vectorArrays[i], 0, outBytes, offset, nbytes);
+                    offset = offset + nbytes;
                 }
 
                 return outBytes;
@@ -299,6 +322,7 @@ namespace IVLab.ABREngine
                     vertexArray[i][2] = bd.vertices[i * 3 + 2];
                 }
             }
+            // Debug.Log("Loaded verts: " + string.Join(", ", vertexArray));
 
             // Determine how many indices are in the dataset.
             // If points or voxels, each point/voxel is a cell.
@@ -318,13 +342,10 @@ namespace IVLab.ABREngine
                     indx = indx + k + 1;
                 }
             }
+            // Debug.Log("Loaded idx: " + string.Join(", ", bd.index_array));
 
-            // HACK: This is bad form, but ParaView cells are so weirdly
-            // structured that I'm not going to bother reverse-engineering it
-            // since we're changing everything soon anyway
-            _origNumCells = jh.num_cells;
-            _origNumCellIndices = jh.num_cell_indices;
-            _origIndices = bd.index_array;
+            // Debug.Log("num cells " + jh.num_cells);
+            // Debug.Log("num cell indices " + jh.num_cell_indices);
 
             cellIndexOffsets = new int[jh.num_cells];
             cellIndexCounts = new int[jh.num_cells];
@@ -345,6 +366,10 @@ namespace IVLab.ABREngine
                     dst_indx++;
                 }
             }
+
+            // Debug.Log("out indices: " + string.Join(", ", indexArray));
+            // Debug.Log("out cellIndexOffsets: " + string.Join(", ", cellIndexOffsets));
+            // Debug.Log("out cellIndexCounts: " + string.Join(", ", cellIndexCounts));
 
             bounds = jh.bounds;
             scalarArrayNames = jh.scalarArrayNames;
@@ -385,8 +410,8 @@ namespace IVLab.ABREngine
             JsonHeader jh = new JsonHeader();
             jh.meshTopology = this.dataTopology;
             jh.num_points = this.vertexArray.Length;
-            jh.num_cells = this._origNumCells;
-            jh.num_cell_indices = this._origNumCellIndices;
+            jh.num_cells = this.cellIndexCounts.Length;
+            jh.num_cell_indices = this.cellIndexCounts.Sum() + this.cellIndexCounts.Length; // num_cell_indices actually includes the "counts" as well
             jh.bounds = this.bounds;
             jh.scalarArrayNames = this.scalarArrayNames;
             jh.vectorArrayNames = this.vectorArrayNames;
@@ -395,7 +420,7 @@ namespace IVLab.ABREngine
             jh.dimensions = new int[] { this.dimensions.x, this.dimensions.y, this.dimensions.z };
 
             string json = JsonUtility.ToJson(jh);
-            byte[] binData = BinaryData.Encode(jh, this.vertexArray, this._origIndices, this.scalarArrays, this.vectorArrays);
+            byte[] binData = BinaryData.Encode(jh, this.vertexArray, this.indexArray, this.cellIndexOffsets, this.cellIndexCounts, this.scalarArrays, this.vectorArrays);
 
             return Tuple.Create(json, binData);
         }
@@ -427,11 +452,6 @@ namespace IVLab.ABREngine
                 return vectorArrays?[index].array;
             else return null;
         }
-
-        // HACK: This is bad form, but we're rethinking the RawDataset soon anyway...
-        private int _origNumCells;
-        private int _origNumCellIndices;
-        private int[] _origIndices;
 
         private Dictionary<string, int> _scalarDictionary;
         private Dictionary<string, int> scalarDictionary
