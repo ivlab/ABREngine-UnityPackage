@@ -195,6 +195,77 @@ namespace IVLab.ABREngine
                 }
             }
 
+            public static byte[] Encode(JsonHeader bdh, in Vector3[] vertices, in int[] indices, in SerializableFloatArray[] scalars, in SerializableVectorArray[] vectors)
+            {
+                // Convert everything to base types
+                float[] verticesFloat = new float[vertices.Length * 3];
+                for (int vert = 0; vert < vertices.Length; vert++)
+                {
+                    verticesFloat[vert * 3 + 0] = vertices[vert].x;
+                    verticesFloat[vert * 3 + 1] = vertices[vert].y;
+                    verticesFloat[vert * 3 + 2] = vertices[vert].z;
+                }
+
+                float[][] scalarArrays = new float[scalars.Length][];
+                for (int scalarArray = 0; scalarArray < scalarArrays.Length; scalarArray++)
+                {
+                    scalarArrays[scalarArray] = scalars[scalarArray].array;
+                }
+
+                float[][] vectorArrays = new float[vectors.Length][];
+                for (int vectorArray = 0; vectorArray < vectorArrays.Length; vectorArray++)
+                {
+                    int numVectorValues = vectors[vectorArray].array.Length;
+                    vectorArrays[vectorArray] = new float[numVectorValues * 3];
+                    for (int vector = 0; vector < numVectorValues; vector++)
+                    {
+                        vectorArrays[vectorArray][vector * 3 + 0] = vectors[vectorArray].array[vector].x;
+                        vectorArrays[vectorArray][vector * 3 + 1] = vectors[vectorArray].array[vector].y;
+                        vectorArrays[vectorArray][vector * 3 + 2] = vectors[vectorArray].array[vector].z;
+                    }
+                }
+
+                int offset = 0;
+
+                int vertsByteLength = verticesFloat.Length * sizeof(float);
+                int idxByteLength = bdh.num_cell_indices * sizeof(int);
+                int scalarsByteLength = 0;
+                int vectorsByteLength = 0;
+                for (int i = 0; i < bdh.scalarArrayNames.Length; i++)
+                    scalarsByteLength += scalarArrays[i].Length * sizeof(float);
+                for (int i = 0; i < bdh.vectorArrayNames.Length; i++)
+                    vectorsByteLength += vectorArrays[i].Length * sizeof(float); // vec3s are already converted to floats
+
+                int outputNumBytes = vertsByteLength + idxByteLength + scalarsByteLength + vectorsByteLength;
+
+                byte[] outBytes = new byte[outputNumBytes];
+
+                // No vertices stored in binary for volumes
+                if (bdh.meshTopology != DataTopology.Voxels)
+                {
+                    Buffer.BlockCopy(verticesFloat, 0, outBytes, offset, vertsByteLength);
+                    offset = offset + vertsByteLength;
+                }
+
+                // Copy indices over
+                Buffer.BlockCopy(indices, 0, outBytes, offset, idxByteLength);
+                offset = offset + idxByteLength;
+
+                // Copy variables over
+                for (int i = 0; i < bdh.scalarArrayNames.Length; i++)
+                {
+                    Buffer.BlockCopy(scalarArrays[i], 0, outBytes, offset, scalarsByteLength);
+                    offset = offset + scalarsByteLength;
+                }
+                for (int i = 0; i < bdh.vectorArrayNames.Length; i++)
+                {
+                    Buffer.BlockCopy(vectorArrays[i], 0, outBytes, offset, vectorsByteLength);
+                    offset = offset + vectorsByteLength;
+                }
+
+                return outBytes;
+            }
+
             public BinaryData(JsonHeader bdh, string file)
             {
                 byte[] bytes = File.ReadAllBytes(file);
@@ -213,6 +284,7 @@ namespace IVLab.ABREngine
         {
             dataTopology = jh.meshTopology;
 
+            // Convert the vertices. Volumes don't have vertices, they have dimensions instead (number of voxels in x y z)
             if (dataTopology == DataTopology.Voxels)
             {
                 dimensions = new Vector3Int(jh.dimensions[0], jh.dimensions[1], jh.dimensions[2]);
@@ -228,6 +300,11 @@ namespace IVLab.ABREngine
                 }
             }
 
+            // Determine how many indices are in the dataset.
+            // If points or voxels, each point/voxel is a cell.
+            // If surface or line, extract the proper number of indices from the number of cells. Incoming format is:
+            // {# indices in cell 0, idx0, idx1, idx2, #indices in cell 1, idx0, idx1, idx2, ...}, for example on a cube made up of triangles:
+            // 3, 0, 1, 2,     3, 3, 2, 1,     3, 4, 6, 5,     3, 7, 5, 6,     3, 8, 10, 9, ....
             long numIndices = 0;
             if (dataTopology == DataTopology.Points || dataTopology == DataTopology.Voxels)
                 numIndices = jh.num_cells;
@@ -241,6 +318,13 @@ namespace IVLab.ABREngine
                     indx = indx + k + 1;
                 }
             }
+
+            // HACK: This is bad form, but ParaView cells are so weirdly
+            // structured that I'm not going to bother reverse-engineering it
+            // since we're changing everything soon anyway
+            _origNumCells = jh.num_cells;
+            _origNumCellIndices = jh.num_cell_indices;
+            _origIndices = bd.index_array;
 
             cellIndexOffsets = new int[jh.num_cells];
             cellIndexCounts = new int[jh.num_cells];
@@ -289,6 +373,33 @@ namespace IVLab.ABREngine
             }
         }
 
+        /// <summary>
+        /// Convert this raw dataset into a .json and .bin pair representation.
+        /// Does not save the file, only returns a tuple.
+        /// </summary>
+        /// <returns>
+        /// Returns a tuple (json data header, binary data file contents)
+        /// </returns>
+        public Tuple<string, byte[]> ToFilePair()
+        {
+            JsonHeader jh = new JsonHeader();
+            jh.meshTopology = this.dataTopology;
+            jh.num_points = this.vertexArray.Length;
+            jh.num_cells = this._origNumCells;
+            jh.num_cell_indices = this._origNumCellIndices;
+            jh.bounds = this.bounds;
+            jh.scalarArrayNames = this.scalarArrayNames;
+            jh.vectorArrayNames = this.vectorArrayNames;
+            jh.scalarMins = this.scalarMins;
+            jh.scalarMaxes = this.scalarMaxes;
+            jh.dimensions = new int[] { this.dimensions.x, this.dimensions.y, this.dimensions.z };
+
+            string json = JsonUtility.ToJson(jh);
+            byte[] binData = BinaryData.Encode(jh, this.vertexArray, this._origIndices, this.scalarArrays, this.vectorArrays);
+
+            return Tuple.Create(json, binData);
+        }
+
         private Dictionary<string, int> _vectorDictionary;
         private Dictionary<string, int> vectorDictionary
         {
@@ -317,7 +428,10 @@ namespace IVLab.ABREngine
             else return null;
         }
 
-
+        // HACK: This is bad form, but we're rethinking the RawDataset soon anyway...
+        private int _origNumCells;
+        private int _origNumCellIndices;
+        private int[] _origIndices;
 
         private Dictionary<string, int> _scalarDictionary;
         private Dictionary<string, int> scalarDictionary

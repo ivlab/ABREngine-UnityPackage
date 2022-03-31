@@ -287,10 +287,19 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Save a copy of a RawDataset into the media folder.
+        /// </summary>
+        public void CacheRawDataset(string dataPath, RawDataset rds)
+        {
+            Tuple<string, byte[]> dataPair = rds.ToFilePair();
+            CacheRawDataset(dataPath, dataPair.Item1, dataPair.Item2);
+        }
+
+        /// <summary>
         /// Save a copy of the RawDataset described by `json` and `data` to the
         /// media folder.
         /// </summary>
-        public async Task CacheRawDataset(string dataPath, string json, byte[] data)
+        public void CacheRawDataset(string dataPath, in string json, in byte[] data)
         {
             Debug.Log("Saving " + dataPath + " to " + this.appDataPath);
 
@@ -309,7 +318,7 @@ namespace IVLab.ABREngine
             FileInfo binFile = new FileInfo(Path.Combine(this.appDataPath, dataPath + ".bin"));
 
             FileStream fs = File.Create(binFile.FullName);
-            await fs.WriteAsync(data, 0, data.Length);
+            fs.Write(data, 0, data.Length);
             fs.Close();
         }
 

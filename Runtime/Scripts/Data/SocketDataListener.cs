@@ -162,7 +162,7 @@ namespace IVLab.ABREngine
                         try
                         {
                             ABREngine.Instance.Data.ImportRawDataset(textData.label, dataset);
-                            await ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                            ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
                         }
                         catch (Exception e)
                         {
