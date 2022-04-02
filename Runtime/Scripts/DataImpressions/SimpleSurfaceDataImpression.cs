@@ -83,7 +83,14 @@ namespace IVLab.ABREngine
         // with Volumes (volumes always render in front of transparent surfaces)
         public PercentPrimitive opacity;
 
-        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent" };
+        // TODO: There's not yet a good way to display a transparent surface
+        // w/outline (not sure if we care about this, probs not)
+        public BooleanPrimitive showOutline;
+        public BooleanPrimitive onlyOutline;
+        public LengthPrimitive outlineWidth;
+        public Color outlineColor;
+
+        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };
         protected override string LayerName { get; } = "ABR_Surface";
 
 
@@ -383,16 +390,32 @@ namespace IVLab.ABREngine
             // _Color input
             Color defaultColor = Color.white;
 
+            bool useOpaqueShader = true;
+
+            // If we want to show both the actual surface AND outline, use regular outline shader
+            if (showOutline != null && showOutline.Value)
+            {
+                // Use the "outline-only" shader if that's selected
+                if (onlyOutline != null && onlyOutline.Value)
+                    meshRenderer.material = ImpressionMaterials[2];
+                else 
+                    meshRenderer.material = ImpressionMaterials[3];
+                useOpaqueShader = false;
+            }
+
             // Set material based on opacity - if 100% opaque, use the regular
             // opaque shader. If <100% opaque, use transparent shader.
-            if (opacity == null || Mathf.Approximately(opacity.Value, 1.0f))
-            {
-                meshRenderer.material = ImpressionMaterials[0];
-            }
-            else
+            if (opacity != null && opacity.Value < 1.0f)
             {
                 meshRenderer.material = ImpressionMaterials[1];
                 defaultColor.a = opacity.Value;
+                useOpaqueShader = false;
+            }
+
+            // Use a regular opaque surface shader if nothing else is selected
+            if (useOpaqueShader)
+            {
+                meshRenderer.material = ImpressionMaterials[0];
             }
 
             // Apply changes to the mesh's shader / material
@@ -427,6 +450,9 @@ namespace IVLab.ABREngine
             MatPropBlock.SetFloat("_PatternDirectionBlend", 1.0f);
             MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
+
+            MatPropBlock.SetColor("_OutlineColor", outlineColor);
+            MatPropBlock.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
 
             if (patternVariable != null)
             {
