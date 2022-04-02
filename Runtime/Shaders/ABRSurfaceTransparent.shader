@@ -41,13 +41,18 @@ Shader "ABR/SurfaceTransparent"
         LOD 100
 
         CGPROGRAM
-        // Physically based Standard lighting model, and enable shadows on all light types
-        #pragma surface surf Standard vertex:vert alpha:fade
-
-        // Use shader model 3.0 target, to get nicer looking lighting
-        #pragma target 3.0
 
         #include "ABRSurfaceCore.cginc"
+        #pragma vertex ABRSurfaceVertex
+        #pragma surface surf Standard alpha:fade
+        #pragma target 3.0
+
+        void surf(Input IN, inout SurfaceOutputStandard o)
+        {
+            float4 finalColorWithAlpha = CalculateABRTexturedSurfaceColor(IN);
+            o.Albedo = finalColorWithAlpha.rgb;
+            o.Alpha = finalColorWithAlpha.a;
+        }
 
         ENDCG
     }

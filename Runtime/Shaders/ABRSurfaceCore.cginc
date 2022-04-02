@@ -58,13 +58,6 @@ half _Glossiness;
 half _Metallic;
 fixed4 _Color;
 
-// Vertex shader - simply compute positions and normals
-void vert(inout appdata_full v, out Input o) {
-    UNITY_INITIALIZE_OUTPUT(Input, o);
-    o.normal = abs(v.normal);  // Ensures weights in triplanar mapping are positive
-    o.position = (v.vertex);
-}
-
 // Converts from general 0->1 tex coords to *actual* tex coord within texture with given index
 float2 ActualTexCoord(float2 uv, int texIndex)
 {
@@ -189,8 +182,15 @@ float3 SeamBlend(float3 color, float2 uv, float2 buv, int texIndex)
     return color;
 }
 
-// The surface shader
-void surf(Input IN, inout SurfaceOutputStandard o)
+// Vertex shader - simply compute positions and normals
+void ABRSurfaceVertex(inout appdata_full v, out Input o) {
+    UNITY_INITIALIZE_OUTPUT(Input, o);
+    o.normal = abs(v.normal);  // Ensures weights in triplanar mapping are positive
+    o.position = (v.vertex);
+}
+
+// Main calculations for a colormapped, texture-mapped surface
+float4 CalculateABRTexturedSurfaceColor(Input IN)
 {
     uint SupportedChannels = 4u;
 
@@ -205,16 +205,13 @@ void surf(Input IN, inout SurfaceOutputStandard o)
     float groupOffset = 0.5 * groupSize;
 
     // DEBUG: ensure position coordinates are correct
-    // o.Albedo = poscoodinates;
-    // return;
+    // return poscoodinates;
 
     // DEBUG: Check actual data values
-    // o.Albedo = variables / 10;
-    // return;
+    // return variables / 10;
 
     // DEBUG: Check that texture coordinates exist
-    // o.Albedo = float4(IN.uv_MainTex, 0.0, 1.0);
-    // return;
+    // return float4(IN.uv_MainTex, 0.0, 1.0);
 
     // Compute UV coordinates for tri-planar projection
     // Scale UVs to account for seam blending and compute blend UVs (buv)
@@ -238,10 +235,9 @@ void surf(Input IN, inout SurfaceOutputStandard o)
     float2 buv2 = _PatternBlendWidth + uv2 * (1-2*_PatternBlendWidth);
 
     // DEBUG: UV coords
-    // o.Albedo = fixed4(uv0, 0, 1);
-    // o.Albedo = fixed4(uv1, 0, 1);
-    // o.Albedo = fixed4(uv2, 0, 1);
-    // return;
+    // return fixed4(uv0, 0, 1);
+    // return fixed4(uv1, 0, 1);
+    // return fixed4(uv2, 0, 1);
 
     float a = normal.x;
     float b = normal.y;
@@ -341,25 +337,25 @@ void surf(Input IN, inout SurfaceOutputStandard o)
     float vPattern = variables.g;
     float vColorNorm = clamp(Remap(vColor, _ColorDataMin,_ColorDataMax,0,1),0.01,0.99);
 
+    float3 finalColor = 0;
     // Apply colormap
     if (_UseColorMap == 1)
     {
         float3 colorMapColor = tex2D(_ColorMap, float2(vColorNorm, 0.5));
-        o.Albedo = colorMapColor;
+        finalColor = colorMapColor;
     }
     else
     {
-        o.Albedo = _Color.rgb;
+        finalColor = _Color.rgb;
     }
 
     // Use Multiply method (could use overlay instead)
     if (_NumTex > 0) {
-        o.Albedo = o.Albedo * textureColor;
+        finalColor = finalColor * textureColor;
         // o.Albedo = textureColor;
         //o.Albedo = overlayBlend(o.Albedo, textureColor);
     }
 
-    o.Metallic = _Metallic;
-    o.Smoothness = _Glossiness;
-    o.Alpha = _Color.a;
+    float4 finalColorWithAlpha = float4(finalColor.rgb, _Color.a);
+    return finalColorWithAlpha;
 }
