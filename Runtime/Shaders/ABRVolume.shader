@@ -91,6 +91,11 @@ Shader "ABR/Volume"
 			// Textures for colormap (RGB) and opacitymap (grayscale) transfer functions
 			sampler2D _ColorMap;
 			sampler2D _OpacityMap;
+
+			// NaN-specific values
+			float4 _NaNColor;
+			float _NaNOpacity;
+
 			// Default color/opacity for when not using color/opacity maps
 			float4 _Color;
 			float4 _Opacity;
@@ -143,6 +148,12 @@ Shader "ABR/Volume"
 			float Remap(float dataValue, float4 range)
 			{
 				return range.z + (dataValue - range.x) * (range.w - range.z) / (range.y - range.x);
+			}
+
+			//http://answers.unity.com/answers/1726150/view.html
+			float IsNaN_float(float In)
+			{
+				return (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
 			}
 
 			// Remaps vector from data range to 0-1
@@ -337,6 +348,12 @@ Shader "ABR/Volume"
 					// (we divide by _StepCount here for better styling consistency between volumes of different sizes
 					// as well as consistency of visualizations in case step count calculation changes in future)
 					float alpha = clamp(transferOpacity.r * _OpacityMultiplier / _StepCount * 100, 0, 1);
+
+					if (IsNaN_float(V))
+					{
+						transferColor = _NaNColor;
+						alpha = _NaNOpacity;
+					}
 
 					// Combine transfer color and opacity to get a full source color
 					float4 src = float4(transferColor.rgb, alpha);

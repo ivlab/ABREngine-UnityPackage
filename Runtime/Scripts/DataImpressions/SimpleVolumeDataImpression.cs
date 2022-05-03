@@ -52,6 +52,8 @@ namespace IVLab.ABREngine
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression, IDataImpression
     {
+        private static Color NaNColor = Color.yellow;
+
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -61,9 +63,11 @@ namespace IVLab.ABREngine
 
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
+        public IColormapVisAsset nanColor;
 
         [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
+        public PercentPrimitive nanOpacity;
 
 
         [ABRInput("Volume Brightness", "Volume", UpdateLevel.Style)]
@@ -324,6 +328,7 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
                 MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
+                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NaNColor);
             }
             else
             {
@@ -333,6 +338,7 @@ namespace IVLab.ABREngine
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
+                MatPropBlock.SetFloat("_NaNOpacity", nanOpacity?.Value ?? 0.0f);
                 if (MatPropBlock.GetTexture("_OpacityMap") == null)
                 {
                     Texture2D opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
