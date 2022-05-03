@@ -53,6 +53,9 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
+        private static Color DefaultColor = Color.white;
+        private static Color NanColor = Color.yellow;
+
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -62,12 +65,16 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        public IColormapVisAsset nanColor;
+
 
         [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset lineTexture;
+
+        public ILineTextureVisAsset nanLineTexture;
 
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
@@ -557,7 +564,7 @@ namespace IVLab.ABREngine
                     config.GetInputValueDefault<PercentPrimitive>(plateType, "Texture Cutoff").Value;
 
                 meshRenderer.GetPropertyBlock(MatPropBlock);
-                MatPropBlock.SetColor("_Color", Color.white);
+                MatPropBlock.SetColor("_Color", DefaultColor);
                 MatPropBlock.SetFloat("_TextureCutoff", textureCutoffOut);
                 MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightnessOut);
 
@@ -569,11 +576,16 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetFloatArray("_TextureAspect", lineTexture.BlendMaps.AspectRatios);
                     MatPropBlock.SetFloatArray("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
+
+                    if (nanLineTexture != null)
+                    {
+                        MatPropBlock.SetTexture("_NaNTexture", nanLineTexture?.BlendMaps.Textures);
+                        MatPropBlock.SetFloat("_NaNTextureAspect", nanLineTexture?.BlendMaps.AspectRatios[0] ?? 1.0f);
+                    }
                 }
                 else
                 {
                     MatPropBlock.SetInt("_UseLineTexture", 0);
-
                 }
                 MatPropBlock.SetVector("_ScalarMin", scalarMin);
                 MatPropBlock.SetVector("_ScalarMax", scalarMax);
@@ -581,6 +593,7 @@ namespace IVLab.ABREngine
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
                     MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                    MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NanColor);
                 }
                 else
                 {

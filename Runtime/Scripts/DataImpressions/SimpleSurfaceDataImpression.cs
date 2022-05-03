@@ -488,9 +488,10 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
                     MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
-                    MatPropBlock.SetTexture("_NaNPattern", nanPattern.BlendMaps.Textures);
-                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
+                    if (nanPattern != null)
+                        MatPropBlock.SetTexture("_NaNPattern", nanPattern?.BlendMaps.Textures);
+                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
                 }
                 else
                 {
