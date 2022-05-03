@@ -48,6 +48,7 @@ Shader "ABR/InstancedGlyphs" {
             // Colormap parameters
             int _UseColorMap;
             sampler2D _ColorMap;
+            float4 _NaNColor;
             float _ColorDataMin;
             float _ColorDataMax;
 
@@ -57,6 +58,12 @@ Shader "ABR/InstancedGlyphs" {
             struct Input {
                 float2 uv_MainTex;
             };
+
+            //http://answers.unity.com/answers/1726150/view.html
+            float IsNaN_float(float In)
+            {
+                return (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
+            }
 
 #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
             StructuredBuffer<float4> renderInfoBuffer;
@@ -125,7 +132,10 @@ Shader "ABR/InstancedGlyphs" {
                 float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0.01, 0.99);
                 if (_UseColorMap == 1)
                 {
-                    o.Albedo = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));
+                    if (!IsNaN_float(scalarValue))
+                        o.Albedo = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));
+                    else
+                        o.Albedo = _NaNColor;
                 }
                 else
                 {
