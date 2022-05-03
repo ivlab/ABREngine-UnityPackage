@@ -364,6 +364,15 @@ namespace IVLab.ABREngine
                     }
                 }
 
+                // Discard NaNs, if present, by finding the actual data range (ensure there are NEVER any NaNs in Range)
+                // NOTE: this may change the data range from the one imported in the RawDataset.
+                if (float.IsNaN(scalarDataVariable.Range.min) || float.IsNaN(scalarDataVariable.Range.max))
+                {
+                    var noNans = rawDataset.GetScalarArray(DataPath.GetName(scalarPath)).Where(v => !float.IsNaN(v));
+                    scalarDataVariable.Range.min = noNans.Min();
+                    scalarDataVariable.Range.max = noNans.Max();
+                }
+
                 scalarDataVariable.OriginalRange.min = scalarDataVariable.Range.min;
                 scalarDataVariable.OriginalRange.max = scalarDataVariable.Range.max;
             }
