@@ -51,8 +51,8 @@ namespace IVLab.ABREngine.Examples
                 // You may also get any information from the ABR configuration,
                 // such as the default room-scale data bounds or the schema
                 // version:
-                Bounds defaultBounds = ABREngine.Instance.Config.Info.defaultBounds.Value;
-                string schema = ABREngine.Instance.Config.Info.schemaName;
+                Bounds defaultBounds = ABREngine.Instance.Config.defaultBounds.Value;
+                string schema = ABREngine.Instance.Config.schemaName;
 
                 // If you want to dive into the ABR schema to get specific
                 // default values, you may do so through the schema:

@@ -82,7 +82,7 @@ namespace IVLab.ABREngine
     {
         public RawDataset LoadData(string dataPath)
         {
-            string url = ABREngine.Instance.Config.Info.dataServer;
+            string url = ABREngine.Instance.Config.dataServerUrl;
             Debug.Log("Loading " + dataPath + " from " + url);
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
 

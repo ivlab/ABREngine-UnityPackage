@@ -356,7 +356,7 @@ namespace IVLab.ABREngine
                 }
                 else
                 {
-                    Mesh mesh = ABREngine.Instance.Config.Defaults.defaultPrefab.GetComponent<MeshFilter>().mesh;
+                    Mesh mesh = ABREngine.Instance.Config.defaultGlyph.GetComponent<MeshFilter>().mesh;
                     imr.instanceMesh = mesh;
                 }
 

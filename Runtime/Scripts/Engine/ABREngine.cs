@@ -178,6 +178,9 @@ namespace IVLab.ABREngine
 
         private Notifier _notifier;
 
+        [SerializeField]
+        public ABRConfig configPrototype;
+
         /// <summary>
         /// System-wide manager for VisAssets (visual elements used in the visualization)
         /// </summary>
@@ -250,9 +253,9 @@ namespace IVLab.ABREngine
         {
             get
             {
-                if (Config.Info.mediaPath != null)
+                if (Config.mediaPath != null)
                 {
-                    return Path.GetFullPath(Config.Info.mediaPath);
+                    return Path.GetFullPath(Config.mediaPath);
                 }
                 else
                 {
@@ -292,7 +295,14 @@ namespace IVLab.ABREngine
             stateParser = new ABRStateParser();
 
             // Initialize the configuration from ABRConfig.json
-            Config = new ABRConfig();
+            if (configPrototype != null)
+            {
+                Config = Instantiate(configPrototype);
+            }
+            else
+            {
+                throw new Exception("ABR configuration not found, please create one first and select it in the ABREngine inspector.");
+            }
 
             // Initialize the default DataImpressionGroup (where impressions go
             // when they have no dataset) - guid zeroed out
@@ -300,15 +310,15 @@ namespace IVLab.ABREngine
 
             try
             {
-                if (Config.Info.serverAddress != null)
+                if (Config.serverUrl.Length > 0)
                 {
-                    _notifier = new Notifier(Config.Info.serverAddress);
+                    _notifier = new Notifier(Config.ServerUrl);
                     _notifier.Init();
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError("Unable to connect to state server " + Config.Info.serverAddress);
+                Debug.LogError("Unable to connect to state server " + Config.serverUrl);
                 Debug.LogError(e);
             }
 
@@ -316,9 +326,9 @@ namespace IVLab.ABREngine
             {
                 VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder));
                 Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
-                if (Config.Info.dataListenerPort != null)
+                if (Config.dataListenerPort != 0)
                 {
-                    DataListener = new SocketDataListener(Config.Info.dataListenerPort.Value);
+                    DataListener = new SocketDataListener(Config.dataListenerPort);
                     DataListener.StartServer();
                 }
             }
@@ -328,34 +338,31 @@ namespace IVLab.ABREngine
             }
 
             // Fetch the state from the server, if we're connected
-            if (Config.Info.serverAddress != null &&
-                    _notifier != null &&
-                    Config.Info.statePathOnServer != null
-            )
+            if (Config.serverUrl != null && _notifier != null)
             {
-                LoadState<HttpStateFileLoader>(Config.Info.serverAddress + Config.Info.statePathOnServer);
+                LoadState<HttpStateFileLoader>(Config.serverUrl.ToString());
             }
             IsInitialized = true;
 
             // If a state in streaming assets or resources is specified, load it
-            if (Config.Info.loadStateOnStart != null)
+            if (Config.loadStateOnStart.Length > 0)
             {
                 try
                 {
-                    LoadState<ResourceStateFileLoader>(Config.Info.loadStateOnStart);
+                    LoadState<ResourceStateFileLoader>(Config.loadStateOnStart);
                     if (previouslyLoadedState == null)
                     {
                         throw new Exception();
                     }
                     else
                     {
-                        Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from Resources");
+                        Debug.Log($"Loaded state `{Config.loadStateOnStart}` from Resources");
                     }
                 }
                 catch (Exception)
                 {
-                    LoadState<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.Info.loadStateOnStart));
-                    Debug.Log($"Loaded state `{Config.Info.loadStateOnStart}` from StreamingAssets");
+                    LoadState<PathStateFileLoader>(Path.Combine(streamingAssetsPath, Config.loadStateOnStart));
+                    Debug.Log($"Loaded state `{Config.loadStateOnStart}` from StreamingAssets");
                 }
             }
         }
@@ -378,7 +385,7 @@ namespace IVLab.ABREngine
         ///
         ///         // ... then print out some very important information that
         ///         // depends on ABR being initialized
-        ///         Debug.Log(ABREngine.Instance.Config.Info.defaultBounds);
+        ///         Debug.Log(ABREngine.Instance.Config.defaultBounds);
         ///     }
         /// }
         /// </code>
@@ -580,7 +587,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Add a bare data impression group into the ABR scene. The group
         /// bounds defaults to the bounds found in
-        /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
+        /// `ABRConfig.defaultBounds`, and the position/rotation default to
         /// zero.
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
@@ -589,13 +596,13 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name)
         {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, Vector3.zero, Quaternion.identity);
         }
 
         /// <summary>
         /// Add a bare data impression group into the ABR scene. The group
         /// bounds defaults to the bounds found in
-        /// `ABRConfig.Info.defaultBounds`, and the position is defined by the user.
+        /// `ABRConfig.defaultBounds`, and the position is defined by the user.
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <param name="position">Where to place the data impression in space</param>
@@ -604,13 +611,13 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name, Vector3 position)
         {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.Info.defaultBounds.Value, position, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, position, Quaternion.identity);
         }
 
         /// <summary>
         /// Add a new data impression group with a particular UUID. The group
         /// bounds defaults to the bounds found in
-        /// `ABRConfig.Info.defaultBounds`, and the position/rotation default to
+        /// `ABRConfig.defaultBounds`, and the position/rotation default to
         /// zero.
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
@@ -620,7 +627,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid)
         {
-            return CreateDataImpressionGroup(name, uuid, Config.Info.defaultBounds.Value, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, uuid, Config.dataContainer, Vector3.zero, Quaternion.identity);
         }
 
 

@@ -179,11 +179,9 @@ namespace IVLab.ABREngine
                         // Note: state does not (yet) automatically update when new
                         // data are received
                         // A HACK until ABRStateLoaders become more generic
-                        if (ABREngine.Instance.Config.Info.serverAddress != null &&
-                                ABREngine.Instance.Config.Info.statePathOnServer != null
-                        )
+                        if (ABREngine.Instance.Config.serverUrl.Length > 0)
                         {
-                            ABREngine.Instance.LoadState<HttpStateFileLoader>(ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                            ABREngine.Instance.LoadState<HttpStateFileLoader>(ABREngine.Instance.Config.serverUrl.ToString());
                         }
                         // });
                     }

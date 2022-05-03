@@ -84,7 +84,7 @@ namespace IVLab.ABREngine
 
         public void SaveState(string name, string serializedState)
         {
-            string stateUrl = ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer;
+            string stateUrl = ABREngine.Instance.Config.serverUrl.ToString();
             ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(serializedState));
             HttpResponseMessage stateResponse = ABREngine.httpClient.PutAsync(stateUrl, content).Result;
             stateResponse.EnsureSuccessStatusCode();

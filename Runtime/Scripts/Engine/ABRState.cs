@@ -53,7 +53,7 @@ namespace IVLab.ABREngine
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
             {
-                Debug.LogErrorFormat("State is not valid with ABR schema version {0}", ABREngine.Instance.Config.Info.version);
+                Debug.LogErrorFormat("State is not valid with this version of ABR");
                 foreach (var error in errors)
                 {
                     Debug.LogErrorFormat("Error '{0}': Line {1} ({2}):\n    {3}", error.ErrorType, error.LineNumber, error.Path, error.Message);
@@ -242,7 +242,7 @@ namespace IVLab.ABREngine
                             }
 
                             // If not found in cache, load from data server, if there is one
-                            if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
+                            if (ABREngine.Instance.Config.dataServerUrl.Length >= 0 && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                             {
                                 ABREngine.Instance.Data.LoadRawDataset<HttpDataLoader>(rawData);
                             }

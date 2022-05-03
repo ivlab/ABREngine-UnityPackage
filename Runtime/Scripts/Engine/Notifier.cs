@@ -58,7 +58,7 @@ namespace IVLab.ABREngine
         CancellationTokenSource cts;
 
         /// Addresses to connect to (main server and WS)
-        private Uri _serverAddress;
+        private Uri _serverPath;
         private Uri _subscriberWebSocket;
 
         class NotifierTarget
@@ -66,11 +66,11 @@ namespace IVLab.ABREngine
             public string target;
         }
 
-        public Notifier(Uri serverAddress)
+        public Notifier(Uri serverPath)
         {
-            _serverAddress = serverAddress;
+            _serverPath = serverPath;
             // The trailing slash is Very Important!
-            _subscriberWebSocket = new Uri("ws://" + this._serverAddress.Authority + "/ws/");
+            _subscriberWebSocket = new Uri("ws://" + this._serverPath.Authority + "/ws/");
         }
 
         public void Init()
@@ -146,7 +146,7 @@ namespace IVLab.ABREngine
                     // Load the state (make sure this happens in the main thread),
                     await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                     {
-                        ABREngine.Instance.LoadState<HttpStateFileLoader>(_serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
+                        ABREngine.Instance.LoadState<HttpStateFileLoader>(_serverPath.ToString());
                     });
 
                     // ... then immediately send back a thumbnail of what we just rendered

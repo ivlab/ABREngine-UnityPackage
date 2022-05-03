@@ -20,6 +20,7 @@
 #if UNITY_EDITOR
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -39,22 +40,55 @@ namespace IVLab.ABREngine
         private bool visassetToggleState = false;
         private bool datasetsToggleState = false;
 
+        private int configIndex = 0;
+
+        /// <summary>
+        /// Get all instances of scriptable objects with given type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        // http://answers.unity.com/answers/1878206/view.html
+        public static List<T> GetAllInstances<T>() where T : ScriptableObject
+        {
+            return AssetDatabase.FindAssets($"t: {typeof(T).Name}").ToList()
+                        .Select(AssetDatabase.GUIDToAssetPath)
+                        .Select(AssetDatabase.LoadAssetAtPath<T>)
+                        .ToList();
+        }
+
+        void Awake()
+        {
+            var configs = GetAllInstances<ABRConfig>();
+        }
+
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+            ABREngine script = (ABREngine) target;
+
             // Setup
             if (!EditorApplication.isPlaying || !ABREngine.Instance.IsInitialized)
             {
-                EditorGUILayout.LabelField("ABR Engine is Paused");
+                // Display and update ABREngine Configs
+                EditorGUILayout.LabelField("Choose ABR Configuration:");
+                var configs = GetAllInstances<ABRConfig>();
+                if (configs.Count == 0)
+                {
+                    EditorGUILayout.HelpBox("No ABR configurations available! Please create one first. Assets/ABR/ABR Configuration.", MessageType.Error);
+                }
+                else
+                {
+                    int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
+                    if (newIndex != configIndex)
+                    {
+                        Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
+                        configIndex = newIndex;
+                        var configProp = serializedObject.FindProperty("configPrototype");
+                        configProp.objectReferenceValue = configs[newIndex];
+                        serializedObject.ApplyModifiedProperties();
+                    }
+                }
                 return;
-            }
-
-            if (ABREngine.Instance.Config.ABRConfigFile != null)
-            {
-                EditorGUILayout.LabelField("Found config: " + ABREngine.Instance.Config.ABRConfigFile);
-            }
-            else
-            {
-                EditorGUILayout.LabelField("No config found");
             }
 
             EditorGUILayout.LabelField("ABR Engine is Running");
@@ -138,7 +172,7 @@ namespace IVLab.ABREngine
             configToggleState = EditorGUILayout.BeginFoldoutHeaderGroup(configToggleState, "ABR Configuration");
             if (configToggleState)
             {
-                EditorGUILayout.TextArea(ABREngine.Instance.Config.Info.ToString());
+                EditorGUILayout.TextArea(ABREngine.Instance.Config.ToString());
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
         }
