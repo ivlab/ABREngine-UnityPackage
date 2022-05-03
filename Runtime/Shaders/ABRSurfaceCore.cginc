@@ -20,8 +20,15 @@ float Remap(float dataValue, float from0, float to0, float from1, float to1)
     return from1 + (dataValue - from0) * (to1 - from1) / (to0 - from0);
 }
 
+//http://answers.unity.com/answers/1726150/view.html
+float IsNaN_float(float In)
+{
+    return (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
+}
+
 // Color parameters
 sampler2D _ColorMap;
+float4 _NaNColor;
 int _UseColorMap = false;
 int _UsePatternVariable;
 
@@ -30,6 +37,7 @@ float _ColorDataMax;
 
 // Texture / pattern parameters
 sampler2D _Pattern;
+sampler2D _NaNPattern;
 sampler2D _PatternNormal;
 
 // Number of textures in this gradient
@@ -208,7 +216,7 @@ float4 CalculateABRTexturedSurfaceColor(Input IN)
     // return poscoodinates;
 
     // DEBUG: Check actual data values
-    // return variables / 10;
+    // return variables;
 
     // DEBUG: Check that texture coordinates exist
     // return float4(IN.uv_MainTex, 0.0, 1.0);
@@ -324,6 +332,16 @@ float4 CalculateABRTexturedSurfaceColor(Input IN)
             textureColor += currentColor;
         }
     }
+    if (IsNaN_float(variables.y))
+    {
+        float3 colorA = float3(0,0,0);
+        float3 colorB = float3(0,0,0);
+        float3 colorC = float3(0,0,0);
+        colorA = tex2D(_NaNPattern, buv0);
+        colorB = tex2D(_NaNPattern, buv1);
+        colorC = tex2D(_NaNPattern, buv2);
+        textureColor = colorA * a + colorB * b + colorC * c;
+    }
 
     // Compute saturation
     float3 grayTextureColor = dot(textureColor, float3(0.3, 0.59, 0.11));
@@ -333,16 +351,17 @@ float4 CalculateABRTexturedSurfaceColor(Input IN)
     textureColor = lerp(1, textureColor, _PatternIntensity);
 
     // Get color / pattern variable data at at this fragment
-    float vColor = variables.r;
-    float vPattern = variables.g;
+    float vColor = variables.x;
     float vColorNorm = clamp(Remap(vColor, _ColorDataMin,_ColorDataMax,0,1),0.01,0.99);
 
     float3 finalColor = 0;
     // Apply colormap
     if (_UseColorMap == 1)
     {
-        float3 colorMapColor = tex2D(_ColorMap, float2(vColorNorm, 0.5));
-        finalColor = colorMapColor;
+        if (!IsNaN_float(vColor))
+            finalColor = tex2D(_ColorMap, float2(vColorNorm, 0.5));
+        else
+            finalColor = _NaNColor;
     }
     else
     {

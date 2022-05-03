@@ -50,6 +50,9 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
+        private static Color DefaultColor = Color.white;
+        private static Color NaNColor = Color.yellow;
+
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -59,12 +62,16 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        public IColormapVisAsset nanColor;
+
 
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset pattern;
+
+        public ISurfaceTextureVisAsset nanPattern;
 
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
@@ -388,7 +395,7 @@ namespace IVLab.ABREngine
 
             // Opacity currently just uses the alpha channel of the shader's
             // _Color input
-            Color defaultColor = Color.white;
+            Color defaultColor = DefaultColor;
 
             bool useOpaqueShader = true;
 
@@ -467,6 +474,7 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
                 MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NaNColor);
             }
             else
             {
@@ -480,6 +488,7 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
                     MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
+                    MatPropBlock.SetTexture("_NaNPattern", nanPattern.BlendMaps.Textures);
                     // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
                 }
