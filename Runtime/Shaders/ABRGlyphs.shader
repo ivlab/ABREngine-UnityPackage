@@ -48,6 +48,7 @@ Shader "ABR/InstancedGlyphs" {
             // Colormap parameters
             int _UseColorMap;
             sampler2D _ColorMap;
+            float4 _Color;
             float4 _NaNColor;
             float _ColorDataMin;
             float _ColorDataMax;
@@ -139,7 +140,7 @@ Shader "ABR/InstancedGlyphs" {
                 }
                 else
                 {
-                    o.Albedo = 1;
+                    o.Albedo = _Color;
                 }
 
                 // Look up and unpack normal from texture

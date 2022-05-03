@@ -50,9 +50,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
     {
-        private static Color DefaultColor = Color.white;
-        private static Color NaNColor = Color.yellow;
-
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -395,7 +392,7 @@ namespace IVLab.ABREngine
 
             // Opacity currently just uses the alpha channel of the shader's
             // _Color input
-            Color defaultColor = DefaultColor;
+            Color defaultColor = ABREngine.Instance.Config.defaultColor;
 
             bool useOpaqueShader = true;
 
@@ -461,6 +458,8 @@ namespace IVLab.ABREngine
             MatPropBlock.SetColor("_OutlineColor", outlineColor);
             MatPropBlock.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
 
+            MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
+
             if (patternVariable != null)
             {
                 MatPropBlock.SetInt("_UsePatternVariable", 1);
@@ -474,7 +473,6 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
                 MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NaNColor);
             }
             else
             {
@@ -489,8 +487,16 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
 
-                    if (nanPattern != null)
-                        MatPropBlock.SetTexture("_NaNPattern", nanPattern?.BlendMaps.Textures);
+                    Texture2D nanFinal = nanPattern?.BlendMaps.Textures ?? ABREngine.Instance.Config.defaultNanTexture;
+                    if (nanFinal != null)
+                    {
+                        MatPropBlock.SetTexture("_NaNPattern", nanFinal);
+                        MatPropBlock.SetInt("_HasNaNPattern", 1);
+                    }
+                    else
+                    {
+                        MatPropBlock.SetInt("_HasNaNPattern", 0);
+                    }
                     // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
                 }
                 else

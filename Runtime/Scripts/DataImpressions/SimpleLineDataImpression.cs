@@ -53,9 +53,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
     {
-        private static Color DefaultColor = Color.white;
-        private static Color NanColor = Color.yellow;
-
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -564,7 +561,7 @@ namespace IVLab.ABREngine
                     config.GetInputValueDefault<PercentPrimitive>(plateType, "Texture Cutoff").Value;
 
                 meshRenderer.GetPropertyBlock(MatPropBlock);
-                MatPropBlock.SetColor("_Color", DefaultColor);
+                MatPropBlock.SetColor("_Color", ABREngine.Instance.Config.defaultColor);
                 MatPropBlock.SetFloat("_TextureCutoff", textureCutoffOut);
                 MatPropBlock.SetFloat("_RibbonBrightness", ribbonBrightnessOut);
 
@@ -577,10 +574,12 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetFloatArray("_TextureHeightWidthAspect", lineTexture.BlendMaps.HeightWidthAspectRatios);
                     MatPropBlock.SetInt("_UseLineTexture", 1);
 
-                    if (nanLineTexture != null)
+                    Texture2D defaultNanLine = ABREngine.Instance.Config.defaultNanLine;
+                    Texture2D nanLine = nanLineTexture?.BlendMaps.Textures ?? defaultNanLine;
+                    if (nanLine != null)
                     {
-                        MatPropBlock.SetTexture("_NaNTexture", nanLineTexture?.BlendMaps.Textures);
-                        MatPropBlock.SetFloat("_NaNTextureAspect", nanLineTexture?.BlendMaps.AspectRatios[0] ?? 1.0f);
+                        MatPropBlock.SetTexture("_NaNTexture", nanLineTexture?.BlendMaps.Textures ?? defaultNanLine);
+                        MatPropBlock.SetFloat("_NaNTextureAspect", nanLineTexture?.BlendMaps.AspectRatios[0] ?? nanLine.width / (float)nanLine.height);
                     }
                 }
                 else
@@ -593,7 +592,7 @@ namespace IVLab.ABREngine
                 {
                     MatPropBlock.SetInt("_UseColorMap", 1);
                     MatPropBlock.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                    MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NanColor);
+                    MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
                 }
                 else
                 {

@@ -73,6 +73,18 @@ namespace IVLab.ABREngine
         [Tooltip("Default shape/color for glyphs in the Glyph layer")]
         public GameObject defaultGlyph;
 
+        [Tooltip("Default color for geometries that have not had a colormap applied yet")]
+        public Color defaultColor;
+
+        [Tooltip("Default color for NaN values")]
+        public Color defaultNanColor;
+
+        [Tooltip("Default texture for NaN values on surfaces")]
+        public Texture2D defaultNanTexture;
+
+        [Tooltip("Default line texture for NaN values on ribbons")]
+        public Texture2D defaultNanLine;
+
         [Header("Network-Based VisAssets and Data Configuration")]
 
         /// <summary>
@@ -131,6 +143,10 @@ namespace IVLab.ABREngine
 
             defaultGlyph = Resources.Load<GameObject>("DefaultSphere");
             defaultGlyph.SetActive(false);
+            defaultColor = Color.white;
+            defaultNanColor = Color.yellow;
+            defaultNanTexture = null;
+            defaultNanLine = null;
 
             visAssetServerUrl = "";
             dataServerUrl = "";

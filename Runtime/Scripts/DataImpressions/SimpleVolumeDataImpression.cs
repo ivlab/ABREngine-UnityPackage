@@ -52,8 +52,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression, IDataImpression
     {
-        private static Color NaNColor = Color.yellow;
-
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -328,7 +326,7 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
                 MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
-                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NaNColor);
+                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
             }
             else
             {

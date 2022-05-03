@@ -79,11 +79,11 @@ namespace IVLab.ABREngine
                 else
                 {
                     int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
-                    if (newIndex != configIndex)
+                    var configProp = serializedObject.FindProperty("configPrototype");
+                    if (newIndex != configIndex || configProp.objectReferenceValue == null)
                     {
                         Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
                         configIndex = newIndex;
-                        var configProp = serializedObject.FindProperty("configPrototype");
                         configProp.objectReferenceValue = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
                     }

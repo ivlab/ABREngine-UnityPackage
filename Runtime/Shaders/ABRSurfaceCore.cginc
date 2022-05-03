@@ -38,6 +38,7 @@ float _ColorDataMax;
 // Texture / pattern parameters
 sampler2D _Pattern;
 sampler2D _NaNPattern;
+int _HasNaNPattern = false;
 sampler2D _PatternNormal;
 
 // Number of textures in this gradient
@@ -334,13 +335,21 @@ float4 CalculateABRTexturedSurfaceColor(Input IN)
     }
     if (IsNaN_float(variables.y))
     {
-        float3 colorA = float3(0,0,0);
-        float3 colorB = float3(0,0,0);
-        float3 colorC = float3(0,0,0);
-        colorA = tex2D(_NaNPattern, buv0);
-        colorB = tex2D(_NaNPattern, buv1);
-        colorC = tex2D(_NaNPattern, buv2);
-        textureColor = colorA * a + colorB * b + colorC * c;
+        if (_HasNaNPattern)
+        {
+            float3 colorA = float3(0,0,0);
+            float3 colorB = float3(0,0,0);
+            float3 colorC = float3(0,0,0);
+            colorA = tex2D(_NaNPattern, buv0);
+            colorB = tex2D(_NaNPattern, buv1);
+            colorC = tex2D(_NaNPattern, buv2);
+            textureColor = colorA * a + colorB * b + colorC * c;
+        }
+        else
+        {
+            // Fall back to NaN color if no texture provided
+            textureColor = _NaNColor;
+        }
     }
 
     // Compute saturation

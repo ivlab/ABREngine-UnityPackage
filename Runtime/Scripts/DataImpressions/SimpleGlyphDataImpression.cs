@@ -49,9 +49,6 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression, IDataImpression
     {
-        private static Color DefaultColor = Color.white;
-        private static Color NanColor = Color.yellow;
-
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
@@ -356,7 +353,7 @@ namespace IVLab.ABREngine
                 }
                 else
                 {
-                    Mesh mesh = ABREngine.Instance.Config.defaultGlyph.GetComponent<MeshFilter>().mesh;
+                    Mesh mesh = ABREngine.Instance.Config.defaultGlyph.GetComponent<MeshFilter>().sharedMesh;
                     imr.instanceMesh = mesh;
                 }
 
@@ -485,13 +482,13 @@ namespace IVLab.ABREngine
                 // Apply changes to the mesh's shader / material
                 block.SetFloat("_ColorDataMin", colorVariableMin);
                 block.SetFloat("_ColorDataMax", colorVariableMax);
-                block.SetColor("_Color", DefaultColor);
+                block.SetColor("_Color", ABREngine.Instance.Config.defaultColor);
 
                 if (colormap?.GetColorGradient() != null)
                 {
                     block.SetInt("_UseColorMap", 1);
                     block.SetTexture("_ColorMap", colormap?.GetColorGradient());
-                    block.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? NanColor);
+                    block.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
                 }
                 else
                 {
