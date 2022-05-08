@@ -34,6 +34,53 @@ Shader "ABR/InstancedGlyphs" {
         #pragma multi_compile_instancing
         #pragma instancing_options procedural:setup
 
+        void surf(Input IN, inout SurfaceOutputStandard o) {
+            // Initialize render info
+            fixed4 renderInfo;
+#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+            renderInfo = renderInfoBuffer[unity_InstanceID];
+
+            // Discard this glyph if it's not visible
+            if (_HasPerGlyphVisibility) {
+                uint glyphVisibilityIndex = unity_InstanceID / 32;
+                uint glyphVisibilityRem = unity_InstanceID % 32;
+                if (!(_PerGlyphVisibility[glyphVisibilityIndex] & (1 << glyphVisibilityRem)))
+                    discard;
+            }
+#else
+            renderInfo = _RenderInfo;
+#endif
+            // Alpha channel of render info determines whether or not to render this glyph:
+            // a >= 0 -> render
+            // a < 0  -> discard
+            if (renderInfo.a < 0)
+                discard;
+
+            // Red channel of render info provides scalar value for this glyph
+            float scalarValue = renderInfo.r;
+
+            // Normalizing scalar allows us to use it for colormap-texture lookup
+            float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0.01, 0.99);
+            if (_UseColorMap == 1)
+            {
+                if (!IsNaN_float(scalarValue))
+                    o.Albedo = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));
+                else
+                    o.Albedo = _NaNColor;
+            }
+            else
+            {
+                o.Albedo = _Color;
+            }
+
+            // Look up and unpack normal from texture
+            float4 map1 = tex2D(_Normal, IN.uv_MainTex);
+            o.Normal = UnpackNormal(map1);
+
+            o.Metallic = 0;
+            o.Alpha = 1;
+        }
+
         ENDCG
     }
     FallBack "Diffuse"
