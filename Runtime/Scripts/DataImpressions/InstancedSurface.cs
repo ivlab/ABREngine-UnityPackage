@@ -50,6 +50,11 @@ namespace IVLab.ABREngine
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        ///    Compute buffer used to quickly pass per-glyph visibility flags to GPU
+        /// </summary>
+        private ComputeBuffer perGlyphVisibilityBuffer;
+
         protected override string[] MaterialNames { get; } = { "ABR_Glyphs" };
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -210,13 +215,19 @@ namespace IVLab.ABREngine
             // Hide/show glyphs based on per index visibility
             if (RenderHints.HasPerIndexVisibility())
             {
-                for (int i = 0; i < numPoints && i < RenderHints.PerIndexVisibility.Count; i++)
-                {
-                    if (RenderHints.PerIndexVisibility[i])
-                        glyphRenderInfo[i][3] = 1;
-                    else
-                        glyphRenderInfo[i][3] = -1;
-                }
+                int[] perGlyphVisibility = new int[(numPoints - 1) / sizeof(int) + 1];
+                RenderHints.PerIndexVisibility.CopyTo(perGlyphVisibility, 0);
+                // Initialize the compute buffer if it is uninitialized
+                if (perGlyphVisibilityBuffer == null)
+                    perGlyphVisibilityBuffer = new ComputeBuffer(perGlyphVisibility.Length, sizeof(int), ComputeBufferType.Default);
+                if (perGlyphVisibilityBuffer == null)
+                    perGlyphVisibilityBuffer = new ComputeBuffer(perGlyphVisibility.Length, sizeof(int), ComputeBufferType.Default);
+                // Set buffer data to int array and send to shader
+                perGlyphVisibilityBuffer.SetData(perGlyphVisibility);
+                block.SetBuffer("_PerGlyphVisibility", perGlyphVisibilityBuffer);
+                block.SetInt("_HasPerGlyphVisibility", 1);
+                block.SetBuffer("_PerGlyphVisibility", perGlyphVisibilityBuffer);
+                block.SetInt("_HasPerGlyphVisibility", 1);
             }
 
             // Get keydata-specific range, if there is one
