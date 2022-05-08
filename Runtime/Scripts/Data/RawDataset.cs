@@ -102,6 +102,11 @@ namespace IVLab.ABREngine
         [SerializeField]
         public SerializableFloatArray[] scalarArrays;
 
+        // NOTE: Matrix arrays not yet supported in data format
+        // Pending rewrite of data format.
+        public Matrix4x4[][] matrixArrays;
+        public string[] matrixArrayNames;
+
         [SerializeField]
         public string[] scalarArrayNames;
 
@@ -503,6 +508,16 @@ namespace IVLab.ABREngine
             int index;
             scalarDictionary.TryGetValue(name, out index);
             return scalarMaxes[index];
+        }
+
+        public Matrix4x4[] GetMatrixArray(string name)
+        {
+            int index = Array.IndexOf(matrixArrayNames, name);
+            if (index > 0)
+                return matrixArrays[index];
+            else
+                return null;
+
         }
 
         // TODO: Not implemented in the data schema yet
