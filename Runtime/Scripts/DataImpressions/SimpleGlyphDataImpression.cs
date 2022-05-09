@@ -90,14 +90,27 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool useRandomOrientation = true;
 
+        /// <summary>
+        /// Show/hide outline on this data impression
+        /// </summary>
+        public BooleanPrimitive showOutline;
+
+        /// <summary>
+        /// Width (in Unity world coords) of the outline
+        /// </summary>
+        public LengthPrimitive outlineWidth;
+
+        /// <summary>
+        /// Color of the outline
+        /// </summary>
+        public Color outlineColor;
 
         /// <summary>
         ///    Compute buffer used to quickly pass per-glyph visibility flags to GPU
         /// </summary>
         private ComputeBuffer perGlyphVisibilityBuffer;
 
-
-        protected override string[] MaterialNames { get; } = { "ABR_Glyphs" };
+        protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
         protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
@@ -316,6 +329,12 @@ namespace IVLab.ABREngine
                 imr.instanceLocalTransforms = SSrenderData.transforms;
                 imr.renderInfo = SSrenderData.scalars;
 
+                // Set up outline, if present
+                if (showOutline != null && showOutline.Value)
+                    imr.instanceMaterial = ImpressionMaterials[1];
+                else
+                    imr.instanceMaterial = ImpressionMaterials[0];
+
                 // Determine the number of points / glyphs via the number of transforms the
                 // instanced mesh renderer is currently tracking
                 int numPoints = imr.instanceLocalTransforms.Length;
@@ -394,6 +413,7 @@ namespace IVLab.ABREngine
                 else
                 {
                     block.SetInt("_HasPerGlyphVisibility", 0);
+                    block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
                 }
 
                 // Get keydata-specific range, if there is one
@@ -483,6 +503,9 @@ namespace IVLab.ABREngine
                 block.SetFloat("_ColorDataMin", colorVariableMin);
                 block.SetFloat("_ColorDataMax", colorVariableMax);
                 block.SetColor("_Color", ABREngine.Instance.Config.defaultColor);
+                block.SetColor("_OutlineColor", outlineColor);
+                block.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
+
 
                 if (colormap?.GetColorGradient() != null)
                 {
@@ -521,6 +544,7 @@ namespace IVLab.ABREngine
                 GameObject child = currentGameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
+            perGlyphVisibilityBuffer.Release();
         }
 
         // Samples k glyphs, modifying glyph render info so that only they will be rendered

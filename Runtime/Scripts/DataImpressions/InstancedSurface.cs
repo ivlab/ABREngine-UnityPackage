@@ -51,11 +51,26 @@ namespace IVLab.ABREngine
         public IColormapVisAsset colormap;
 
         /// <summary>
+        /// Show/hide outline on this data impression
+        /// </summary>
+        public BooleanPrimitive showOutline;
+
+        /// <summary>
+        /// Width (in Unity world coords) of the outline
+        /// </summary>
+        public LengthPrimitive outlineWidth;
+
+        /// <summary>
+        /// Color of the outline
+        /// </summary>
+        public Color outlineColor;
+
+        /// <summary>
         ///    Compute buffer used to quickly pass per-glyph visibility flags to GPU
         /// </summary>
         private ComputeBuffer perGlyphVisibilityBuffer;
 
-        protected override string[] MaterialNames { get; } = { "ABR_Glyphs" };
+        protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
         protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
@@ -179,6 +194,12 @@ namespace IVLab.ABREngine
             if (imr == null)
                 return;
 
+            // Set up outline, if present
+            if (showOutline != null && showOutline.Value)
+                imr.instanceMaterial = ImpressionMaterials[1];
+            else
+                imr.instanceMaterial = ImpressionMaterials[0];
+
             imr.instanceLocalTransforms = SSrenderData.transforms;
             imr.renderInfo = SSrenderData.scalars;
 
@@ -266,6 +287,8 @@ namespace IVLab.ABREngine
             block.SetFloat("_ColorDataMin", colorVariableMin);
             block.SetFloat("_ColorDataMax", colorVariableMax);
             block.SetColor("_Color", Color.white);
+            block.SetColor("_OutlineColor", outlineColor);
+            block.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
 
             if (colormap?.GetColorGradient() != null)
             {
@@ -302,6 +325,7 @@ namespace IVLab.ABREngine
                 GameObject child = currentGameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
+            perGlyphVisibilityBuffer.Release();
         }
 
         // Samples k glyphs, modifying glyph render info so that only they will be rendered

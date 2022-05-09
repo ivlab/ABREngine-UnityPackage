@@ -89,10 +89,26 @@ namespace IVLab.ABREngine
 
         // TODO: There's not yet a good way to display a transparent surface
         // w/outline (not sure if we care about this, probs not)
+        /// <summary>
+        /// Show/hide outline on this data impression (show the outline AND the
+        /// actual surface)
+        /// </summary>
         public BooleanPrimitive showOutline;
-        public BooleanPrimitive onlyOutline;
+
+        /// <summary>
+        /// Width (in Unity world coords) of the outline
+        /// </summary>
         public LengthPrimitive outlineWidth;
+
+        /// <summary>
+        /// Color of the outline
+        /// </summary>
         public Color outlineColor;
+
+        /// <summary>
+        /// ONLY show the outline (don't show the actual surface)
+        /// </summary>
+        public BooleanPrimitive onlyOutline;
 
         protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };
         protected override string LayerName { get; } = "ABR_Surface";
