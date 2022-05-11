@@ -29,6 +29,7 @@ float4 _RenderInfo;
 
 // Colormap parameters
 int _UseColorMap;
+int _ForceOutlineColor;
 sampler2D _ColorMap;
 float4 _Color;
 float4 _NaNColor;

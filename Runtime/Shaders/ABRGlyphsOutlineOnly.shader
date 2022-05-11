@@ -70,6 +70,28 @@ Shader "ABR/InstancedGlyphsOutline" {
 
             half4 frag(v2f i) : SV_TARGET {
                 UNITY_SETUP_INSTANCE_ID(i);
+
+                // Initialize render info
+                fixed4 renderInfo;
+    #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
+                renderInfo = renderInfoBuffer[unity_InstanceID];
+
+                // Discard this glyph if it's not visible
+                if (_HasPerGlyphVisibility) {
+                    uint glyphVisibilityIndex = unity_InstanceID / 32;
+                    uint glyphVisibilityRem = unity_InstanceID % 32;
+                    if (!(_PerGlyphVisibility[glyphVisibilityIndex] & (1 << glyphVisibilityRem)))
+                        discard;
+                }
+    #else
+                renderInfo = _RenderInfo;
+    #endif
+                // Alpha channel of render info determines whether or not to render this glyph:
+                // a >= 0 -> render
+                // a < 0  -> discard
+                if (renderInfo.a < 0)
+                    discard;
+
                 return 1;
             }
 
@@ -152,7 +174,29 @@ Shader "ABR/InstancedGlyphsOutline" {
                 if (renderInfo.a < 0)
                     discard;
 
-                return _OutlineColor;
+                half4 outColor = _Color;
+                if (_ForceOutlineColor == 1)
+                {
+                    // outColor = _OutlineColor;
+                    outColor = half4(0, 1, 0, 1);
+                }
+                else
+                {
+                    // Red channel of render info provides scalar value for this glyph
+                    float scalarValue = renderInfo.r;
+
+                    // Normalizing scalar allows us to use it for colormap-texture lookup
+                    float scalarValueNorm = clamp(Remap(scalarValue, _ColorDataMin, _ColorDataMax, 0, 1), 0.01, 0.99);
+                    if (_UseColorMap == 1)
+                    {
+                        if (!IsNaN_float(scalarValue))
+                            outColor = tex2D(_ColorMap, float2(scalarValueNorm, 0.25));
+                        else
+                            outColor = _NaNColor;
+                    }
+                }
+
+                return outColor;
             }
 
             ENDCG

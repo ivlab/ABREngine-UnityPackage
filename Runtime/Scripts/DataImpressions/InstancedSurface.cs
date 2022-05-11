@@ -66,6 +66,12 @@ namespace IVLab.ABREngine
         public Color outlineColor;
 
         /// <summary>
+        /// Force the use of <see cref="outlineColor"/> even if there's a
+        /// colormap applied to the data
+        /// </summary>
+        public BooleanPrimitive forceOutlineColor;
+
+        /// <summary>
         ///    Compute buffer used to quickly pass per-glyph visibility flags to GPU
         /// </summary>
         private ComputeBuffer perGlyphVisibilityBuffer;
@@ -289,6 +295,7 @@ namespace IVLab.ABREngine
             block.SetColor("_Color", Color.white);
             block.SetColor("_OutlineColor", outlineColor);
             block.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
+            block.SetInt("_ForceOutlineColor", (forceOutlineColor?.Value ?? false) ? 1 : 0);
 
             if (colormap?.GetColorGradient() != null)
             {
