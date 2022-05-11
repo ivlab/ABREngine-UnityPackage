@@ -44,6 +44,8 @@ namespace IVLab.ABREngine
 
         public Mesh instanceMesh;
 
+        public IColormapVisAsset nanColor;
+
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
@@ -301,6 +303,7 @@ namespace IVLab.ABREngine
             {
                 block.SetInt("_UseColorMap", 1);
                 block.SetTexture("_ColorMap", colormap?.GetColorGradient());
+                block.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
             }
             else
             {
