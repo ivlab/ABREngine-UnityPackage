@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>To install ABREngine in a Unity Project | ABREngine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="To install ABREngine in a Unity Project | ABREngine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../resources/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="../manual/intro.html" title="Manual">Manual</a>
+                      </li>
+                      <li>
+                          <a href="../api/index.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="active">
+                      <a href="install.html" title="Installation" class="active">Installation</a>
+                    </li>
+                    <li class="">
+                      <a href="concept1.html" title="Concept 1" class="">Concept 1</a>
+                    </li>
+                    <li class="">
+                      <a href="concept2.html" title="Concept 2" class="">Concept 2</a>
+                    </li>
+                    <li class="">
+                      <a href="license.html" title="License" class="">License</a>
+                    </li>
+                    <li class="">
+                      <a href="changelog.html" title="Change Log" class="">Change Log</a>
+                    </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="to-install-abrengine-in-a-unity-project">To install <code>ABREngine</code> in a Unity Project</h1>
+
+<h2 id="prereqs">Prereqs</h2>
+<p>There are no prereqs if you want to host this package on github.com, but to host this package on github.umn.edu, you will need to have SSH access to github.umn.edu and be a member of the IV/LAB Organization on github.umn.edu.</p>
+<ol>
+<li>Create a <a href="https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub SSH key</a> for your UMN GitHub account on your development machine.  Unity has trouble sshing with passwords; just leave the password for this key blank.</li>
+<li>If you cannot see the <a href="https://github.umn.edu/ivlab-cs">IV/LAB Organization on github.umn.edu</a>, then ask the <a href="https://docs.google.com/document/d/1p3N2YOQLKyyNpSSTtALgtXoB3Tchy4BVgEEbAG6KYfg/edit?skip_itp2_check=true&amp;pli=1">Current Lab GitHub and Software Development Czar</a> to please add you to the org.</li>
+</ol>
+<h2 id="install-via-the-unity-package-manager">Install via the Unity Package Manager</h2>
+<p>To use the package in a read-only mode, the same way you would for packages downloaded directly from Unity:</p>
+<ol>
+<li>In Unity, open Window -&gt; Package Manager.</li>
+<li>Click the <code>+</code> button</li>
+<li>Select <code>Add package from git URL</code></li>
+<li>Paste <code>git@github.umn.edu:ivlab-cs/ABREngine-UnityPackage.git</code> for the latest package</li>
+<li>Repeat steps 2-4 for each of these additional package dependencies:<ul>
+<li><code>ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git</code></li>
+<li><code>ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git</code></li>
+<li><code>ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git</code></li>
+<li><code>ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="development-mode">Development Mode</h2>
+<p>Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to &quot;temporarily&quot; switch into development mode by cloning a temporary copy of the package.  Then, edit this source as needed, test your edits for as long as you like, etc.  When you get to a good stopping point, commit and push the changes to github <em>from within this temporary clone inside the Packages directory</em>.  Once the latest version of your package is on github, you can then &quot;switch out of development mode&quot; by deleting the cloned repo.  This will cause Unity to revert to using the read-only version of the package, which it keeps in its internal package cache, and we can trigger Unity to update this version to the latest by removing the packages-lock.json file.  In summary:</p>
+<ol>
+<li>Follow the read-only mode steps above.</li>
+<li>Navigate your terminal or Git tool into your Unity project&#39;s main folder and clone this repository into the packages folder, e.g., <code>cd Packages; git clone git@github.umn.edu:ivlab-cs/ABREngine-UnityPackage.git</code>.  This will create a ABREngine-UnityPackage folder that contains all the sourcecode in the package.</li>
+<li>Go for it.  Edit the source you just checked out; add files, etc.  However, BE VERY CAREFUL NOT TO ADD THE ABREngine-UnityPackage FOLDER TO YOUR PROJECT&#39;S GIT REPO.  We are essentially cloning one git repo inside another here, but we do not want to add the package repo as a submodule or subdirectory of the project&#39;s repo, we just want to temporarily work with the source.</li>
+<li>When you are ready to commit and push changes to the package repo, go for it.  JUST MAKE SURE YOU DO THIS FROM WITHIN THE Packages/ABREngine-UnityPackage DIRECTORY!  </li>
+<li>Once these changes are up on github, you can switch out of &quot;development mode&quot; by simply deleting the ABREngine-UnityPackage directory.  The presence of that directory is like a temporary override.  Once it is gone, Unity will revert back to using the cached version of ABREngine that it originally downloaded from git.</li>
+<li>The final step is to force a refresh of the package cache so that Unity will pull in the new version of the package you just saved to github.  To do this, simply delete the <a href="https://docs.unity3d.com/Manual/upm-conflicts-auto.html">packages-lock.json</a> file inside your project&#39;s Packages folder.</li>
+</ol>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.umn.edu/ivlab-cs/ABREngine-UnityPackage/blob/master/DocumentationSrc~/manual/install.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
