@@ -1564,7 +1564,6 @@ actual data impression instead of a <a class="xref" href="IVLab.ABREngine.IDataI
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;()
-
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -1614,7 +1613,6 @@ actual data impression instead of a <a class="xref" href="IVLab.ABREngine.IDataI
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public T GetDataImpression&lt;T&gt;(Func&lt;T, bool&gt; criteria)
-
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1865,7 +1863,6 @@ Unity ABR scene.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;()
-
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -1915,7 +1912,6 @@ Unity ABR scene.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public List&lt;T&gt; GetDataImpressions&lt;T&gt;(Func&lt;T, bool&gt; criteria)
-
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -1985,7 +1981,6 @@ type (e.g., all <code>SimpleSurfaceDataImpression</code>s)</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[Obsolete(&quot;GetDataImpressionsOfType&lt;T&gt; is obsolete, use GetDataImpressions&lt;T&gt; instead&quot;)]
 public List&lt;T&gt; GetDataImpressionsOfType&lt;T&gt;()
-
     where T : IDataImpression</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
@@ -2293,7 +2288,6 @@ exists in the Unity Scene, or null if no such impression exists.</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LoadState&lt;T&gt;(string stateName)
-
     where T : IABRStateLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
@@ -2549,7 +2543,6 @@ needs to be recomputed (slow), or if only the style has changed (fast).</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void SaveState&lt;T&gt;(string overrideStateName = null)
-
     where T : IABRStateLoader, new()</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>

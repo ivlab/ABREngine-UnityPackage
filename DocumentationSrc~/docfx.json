@@ -5,8 +5,7 @@
         {
           "cwd": "../../../",
           "files": [
-            "IVLab.ABREngine.Runtime.csproj",
-            "Assembly-CSharp.csproj"
+            "*.csproj"
           ]
         }
       ],
