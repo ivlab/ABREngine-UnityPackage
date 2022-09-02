@@ -3,15 +3,19 @@
 The purpose of the Artifact-Based Rendering Engine (ABR Engine) is to provide artists with tools and techniques to create high-fidelity visualizations of multivariate spatiotemporal data using their own traditional-media creations, such as:
 
 Colormaps inspired by nature
+
 ![Linear brown to white colormap](resources/linear-brown.png)
 
 Sketched / inked lines
+
 ![Angled / semi-straight line](resources/angled-semi-straight.png)
 
 Textures gathered from the real world
+
 ![Desert sand texture](resources/desert.png)
 
 Hand-sculpted clay glyphs
+
 ![Clay rice point glyph](resources/clayrice-point.png)
 
 With ABR as a tool in their studio, artists have created images like the following:
@@ -39,7 +43,7 @@ through before diving into creating with ABR:
 
 ### Getting Started with ABR C#
 
-
+Please see [Creating your first C# ABR Visualization](creating-cs-abr-vis.md).
 
 ### Getting Started with ABR GUI
 
