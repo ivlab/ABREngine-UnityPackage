@@ -52,29 +52,71 @@ namespace IVLab.ABREngine
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
+        /// <summary>
+        /// Scalar color variable applied to each point of this data impression.
+        /// This example switches between X-axis monotonically increasing and
+        /// Y-axis monotonically increasing.
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
         public IColormapVisAsset nanColor;
 
+        /// <summary>
+        /// Variable used to determine which glyph to render at which data
+        /// values. This only has any effect if <see cref="glyph"/> is a <see
+        /// cref="GlyphGradient"/>.
+        /// </summary>
         [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
+        /// <summary>
+        /// What glyph(s) to apply to the dataset. This can also take a <see cref="GlyphGradient"/>.
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/glyph.gif"/>
+        /// </summary>
         [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
         public IGlyphVisAsset glyph;
 
+        /// <summary>
+        /// Adjust the size of the glyphs (in Unity-space meters).
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/glyphSize.gif"/>
+        /// </summary>
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
+        /// <summary>
+        /// Tweak the density of glyphs - subsamples the existing glyphs uniformly.
+        /// </summary>
         [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
         public PercentPrimitive glyphDensity;
 
+        /// <summary>
+        /// "Forward" direction that glyphs should point in.
+        /// </summary>
         [ABRInput("Forward Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable forwardVariable;
 
+        /// <summary>
+        /// "Up" direction that glyphs should point in.
+        /// </summary>
         [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
         public VectorDataVariable upVariable;
 
@@ -92,22 +134,32 @@ namespace IVLab.ABREngine
 
         /// <summary>
         /// Show/hide outline on this data impression
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
         /// </summary>
         public BooleanPrimitive showOutline;
 
         /// <summary>
         /// Width (in Unity world coords) of the outline
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
         /// </summary>
         public LengthPrimitive outlineWidth;
 
         /// <summary>
         /// Color of the outline
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
         public Color outlineColor;
 
         /// <summary>
         /// Force the use of <see cref="outlineColor"/> even if there's a
-        /// colormap applied to the data
+        /// colormap applied to the data. This example alternates between a
+        /// white-to-green linear colormap (false) and a solid purple-blue
+        /// (true)
+        ///
+        /// <img src="/resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
         /// </summary>
         public BooleanPrimitive forceOutlineColor;
 

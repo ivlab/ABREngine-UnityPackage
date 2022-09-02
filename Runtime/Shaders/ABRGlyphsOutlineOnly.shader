@@ -174,13 +174,8 @@ Shader "ABR/InstancedGlyphsOutline" {
                 if (renderInfo.a < 0)
                     discard;
 
-                half4 outColor = _Color;
-                if (_ForceOutlineColor == 1)
-                {
-                    // outColor = _OutlineColor;
-                    outColor = half4(0, 1, 0, 1);
-                }
-                else
+                half4 outColor = _OutlineColor;
+                if (_ForceOutlineColor != 1)
                 {
                     // Red channel of render info provides scalar value for this glyph
                     float scalarValue = renderInfo.r;
