@@ -36,7 +36,8 @@
     "resource": [
       {
         "files": [
-          "resources/**"
+          "resources/**",
+          "manual/resources/**"
         ]
       }
     ],
