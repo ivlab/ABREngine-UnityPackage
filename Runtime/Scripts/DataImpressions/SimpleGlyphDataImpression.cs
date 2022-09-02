@@ -67,7 +67,7 @@ namespace IVLab.ABREngine
         /// switches between a linear white-to-green colormap and a linear
         /// black-to-white colormap.
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
+        /// <img src="/resources/api/SimpleGlyphDataImpression/colormap.gif"/>
         /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
@@ -87,7 +87,9 @@ namespace IVLab.ABREngine
         public ScalarDataVariable glyphVariable;
 
         /// <summary>
-        /// What glyph(s) to apply to the dataset. This can also take a <see cref="GlyphGradient"/>.
+        /// What glyph(s) to apply to the dataset. This can also take a <see
+        /// cref="GlyphGradient"/>. This example alternates between spherical
+        /// and thin cylindrical glyphs.
         ///
         /// <img src="/resources/api/SimpleGlyphDataImpression/glyph.gif"/>
         /// </summary>
