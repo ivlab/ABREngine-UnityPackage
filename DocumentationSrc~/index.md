@@ -1,8 +1,7 @@
 
 ### Artifact-Based Rendering Engine
 
-**Here for the ABREngine examples and C# documentation? Head over to the API documentation:
-<xref:IVLab.ABREngine>.** A good place to start is the main <xref:IVLab.ABREngine.ABREngine> class.
+**Here for the ABREngine examples and C# documentation? Head over to the [API documentation](./api/index.md).** A good place to start is the main <xref:IVLab.ABREngine.ABREngine> class.
 
 We introduce Artifact-Based Rendering (ABR), a framework of tools, algorithms,
 and processes that makes it possible to produce real, data-driven 3D scientific

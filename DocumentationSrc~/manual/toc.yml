@@ -13,6 +13,8 @@
       href: data-impressions.md
     - name: Basic Terminology
       href: terminology-starter.md
+    - name: Media Folder
+      href: media-folder.md
 - name: Creating your first ABR C# Visualization
   href: creating-cs-abr-vis.md
 - name: License
