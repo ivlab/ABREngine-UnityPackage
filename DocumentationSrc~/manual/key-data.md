@@ -35,7 +35,7 @@ All in all, for a nitrate point sampling from the Gulf of Mexico, we might end u
 E3SM/GulfOfMexico/KeyData/NitrateSampling
 ```
 
-## Getting Key Data in Code
+## Using Key Data in Code
 
 In scripting, we can obtain an ABR KeyData object by importing some data into ABR. The key
 data object has some variables. For example, to get a KeyData object from a
@@ -52,4 +52,4 @@ foreach (ScalarDataVariable s in kd.GetScalarVariables())
 // Would print out something like "Temperature, Salinity, ..."
 ```
 
-Check out the @IVLab.ABREngine.DataManager class for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](creating-cs-abr-vis.md) tutorial.
+Check out the @IVLab.ABREngine.KeyData and @IVLab.ABREngine.DataManager classes for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](creating-cs-abr-vis.md) tutorial.
