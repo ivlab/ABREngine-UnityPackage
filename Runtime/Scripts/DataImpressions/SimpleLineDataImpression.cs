@@ -56,42 +56,124 @@ namespace IVLab.ABREngine
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
+        /// <summary>
+        /// Scalar color variable applied to each point on the line of this data
+        /// impression.  This example switches between X-axis monotonically
+        /// increasing and Y-axis monotonically increasing.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/colormap.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
         public IColormapVisAsset nanColor;
 
 
+        /// <summary>
+        /// Scalar variable used to vary the line texture across its length.
+        /// </summary>
         [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
+        /// <summary>
+        /// Texture applied to the line. Light areas on the texture are
+        /// discarded, dark areas are kept. Can also be a <see cref="LineTextureGradient"/>
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/lineTexture.gif"/>
+        /// </summary>
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset lineTexture;
 
+        /// <summary>
+        /// Override the line texture used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanLine"/>.
+        /// </summary>
         public ILineTextureVisAsset nanLineTexture;
 
+        /// <summary>
+        /// "Cutoff" point for discarding portions of the line. The cutoff is
+        /// between 0% (fully light) and 100% (fully dark). In practice, this is
+        /// performing a <a
+        /// href="https://en.wikipedia.org/wiki/Thresholding_(image_processing)">threshold</a>
+        /// filter.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/textureCutoff.gif"/>
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This input will have no effect if there's no <see
+        /// cref="lineTexture"/> applied. It has the most effect on textures
+        /// that are not fully black/white.
+        /// </remarks>
         [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
 
 
+        /// <summary>
+        /// Number of "averaging" samples taken across the line for a smoothing effect. This example ranges from 0 to 50.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/averageCount.gif"/>
+        /// </summary>
         [ABRInput("Ribbon Smooth", "Ribbon", UpdateLevel.Data)]
         public IntegerPrimitive averageCount;
 
+        /// <summary>
+        /// Width of the line, in Unity world units.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/lineWidth.gif"/>
+        /// </summary>
         [ABRInput("Ribbon Width", "Ribbon", UpdateLevel.Data)]
         public LengthPrimitive lineWidth;
 
+        /// <summary>
+        /// Rotate the ribbon along its central axis. This example goes from 0 degrees to 90 degrees.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
+        /// </summary>
         [ABRInput("Ribbon Rotation", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonRotationAngle;
 
+        /// <summary>
+        /// Manually adjust the brightness of the ribbon regardless of lighting in the scene.
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/ribbonBrightness.gif"/>
+        /// </summary>
         [ABRInput("Ribbon Brightness", "Ribbon", UpdateLevel.Style)]
         public PercentPrimitive ribbonBrightness;
 
+        /// <summary>
+        /// Subtly adjust the lighting by varying the lighting normal of the ribbon
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
+        /// </summary>
         [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
 
+        /// <summary>
+        /// Change the default curvature axis (if there are no existing tangents
+        /// on the curve, this axis will be used)
+        ///
+        /// <img src="/resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"/>
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This input mostly changes behaviour at the ends of ribbons,
+        /// unless your ribbon is perfectly straight. (This setting exists
+        /// because of perfectly straight ribbons which the existing ribbon has
+        /// trouble with).
+        /// </remarks>
         public Vector3 defaultCurveDirection = Vector3.up;
 
         protected override string[] MaterialNames { get; } = { "ABR_Ribbon" };
