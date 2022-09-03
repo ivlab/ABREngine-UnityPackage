@@ -53,38 +53,98 @@ namespace IVLab.ABREngine
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
+        /// <summary>
+        /// Scalar color variable applied to each point of this data impression.
+        /// This example switches between X-axis monotonically increasing and
+        /// Y-axis monotonically increasing.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/colormap.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
         public IColormapVisAsset nanColor;
 
 
+        /// <summary>
+        /// Scalar variable used to vary the pattern across the surface.
+        /// </summary>
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
+        /// <summary>
+        /// The pattern/texture applied to the surface - can also be a <see cref="SurfaceTextureGradient"/>.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/pattern.gif"/>
+        /// </summary>
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset pattern;
 
+        /// <summary>
+        /// Override the pattern/texture used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanTexture"/>.
+        /// </summary>
         public ISurfaceTextureVisAsset nanPattern;
 
+        /// <summary>
+        /// How large, in Unity meters, to make each "tile" of the
+        /// texture/pattern on the surface. This example goes from 0.5m to 1m.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/patternSize.gif"/>
+        /// </summary>
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
+        /// <summary>
+        /// Percentage to "blend" textures together at the seams to minimize the
+        /// tiling effect. This example goes from 0% seam blend to 20% seam
+        /// blend.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"/>
+        /// </summary>
         [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSeamBlend;
 
+        /// <summary>
+        /// Edit the saturation of the pattern(s) - 100% is full color, 0% is
+        /// full grayscale.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"/>
+        /// </summary>
         [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
 
+        /// <summary>
+        /// Edit the intensity which the pattern is overlaid on the surface. 0%
+        /// is not present at all, 10% is very faint, and 100% is full overlay.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"/>
+        /// </summary>
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
         // TODO: Integrate this with schema.
         // TODO: Opacity is not 100% correct, especially when working in tandem
         // with Volumes (volumes always render in front of transparent surfaces)
+        /// <summary>
+        /// Opacity of the surface - how see-through the surface is.
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/opacity.gif"/>
+        /// </summary>
         public PercentPrimitive opacity;
 
         // TODO: There's not yet a good way to display a transparent surface
@@ -92,21 +152,33 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Show/hide outline on this data impression (show the outline AND the
         /// actual surface)
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/showOutline.gif"/>
         /// </summary>
+        /// <remarks>
+        /// NOTE: Outlines work best on convex objects. The wavelet in this
+        /// example shows some artifacts due to its concavity.
+        /// </remarks>
         public BooleanPrimitive showOutline;
 
         /// <summary>
         /// Width (in Unity world coords) of the outline
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
         public LengthPrimitive outlineWidth;
 
         /// <summary>
         /// Color of the outline
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
         public Color outlineColor;
 
         /// <summary>
         /// ONLY show the outline (don't show the actual surface)
+        ///
+        /// <img src="/resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"/>
         /// </summary>
         public BooleanPrimitive onlyOutline;
 
