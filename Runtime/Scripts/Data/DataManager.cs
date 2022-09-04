@@ -204,7 +204,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
         /// </returns>
-        [Obsolete("It is recommended to use `LoadData` instead of this method.")]
+        [Obsolete("It is recommended to use `LoadData` or `LoadRawDataset` instead of this method.")]
         public RawDataset LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
@@ -223,6 +223,54 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Load a raw dataset into a RawDataset object by its data path and
+        /// return the rawdataset after it has been successfully imported.
+        /// </summary>
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <example>
+        /// If you're working with a pre-existing dataset (i.e., one that already
+        /// exists in ABR raw data format in your media folder), you can use <see
+        /// cref="DataManager.LoadRawDataset"/> to obtain a <see cref="RawDataset"/>.
+        /// <code>
+        /// // Load from a .bin/.json file pair in the datasets folder in the
+        /// // media directory. Most of the time when you're fetching an existing
+        /// // dataset, this is what you'll want to do. Just make sure the
+        /// // dataset actually exists in the media folder!
+        /// // Or, load from a Resources directory in Unity.
+        /// // You can also load an ABR raw dataset from a web resource. This requires setting up an ABR data server.
+        /// RawDataset ds1 = ABREngine.Instance.Data.LoadRawDataset("Test/Test/KeyData/Example");
+        /// </code>
+        /// </example>
+        /// <returns>
+        /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
+        /// </returns>
+        public RawDataset LoadRawDataset(string dataPath)
+        {
+            foreach (IDataLoader loader in dataLoaders)
+            {
+                try
+                {
+                    RawDataset ds = loader.LoadData(dataPath);
+                    if (ds != null)
+                    {
+                        Debug.Log($"Dataset `{dataPath} loaded from " + loader.GetType().Name);
+                        return ds;
+                    }
+                    else
+                        throw new Exception();
+                }
+                catch
+                {
+                    Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
+                }
+            }
+            Debug.LogWarning($"Dataset `{dataPath}` not found in any data loader");
+            return null;
+        }
+
+        /// <summary>
         /// Attempt to load the data described in `dataPath` from any available
         /// resource, including a Resources folder, the <see
         /// cref="media-folder.md"/>, or a HTTP web resource.
@@ -235,27 +283,9 @@ namespace IVLab.ABREngine
         /// </returns>
         public KeyData LoadData(string dataPath)
         {
-            foreach (IDataLoader loader in dataLoaders)
-            {
-                try
-                {
-                    RawDataset ds = loader.LoadData(dataPath);
-                    if (ds != null)
-                    {
-                        KeyData kd = ImportRawDataset(dataPath, ds);
-                        Debug.Log($"Dataset `{dataPath} loaded from " + loader.GetType().Name);
-                        return kd;
-                    }
-                    else
-                        throw new Exception();
-                }
-                catch
-                {
-                    Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
-                }
-            }
-            Debug.LogWarning($"Dataset `{dataPath}` not found in any data loader");
-            return null;
+            RawDataset ds = LoadRawDataset(dataPath);
+            KeyData kd = ImportRawDataset(dataPath, ds);
+            return kd;
         }
 
         /// <summary>

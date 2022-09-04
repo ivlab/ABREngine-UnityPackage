@@ -232,20 +232,8 @@ namespace IVLab.ABREngine
                         RawDataset existing;
                         if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                         {
-                            // Try to grab from media dir
-                            ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
-
-                            // ... if not found, then try to grab from Resources media dir
-                            if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
-                            {
-                                ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(rawData);
-                            }
-
-                            // If not found in cache, load from data server, if there is one
-                            if (ABREngine.Instance.Config.dataServerUrl.Length >= 0 && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
-                            {
-                                ABREngine.Instance.Data.LoadRawDataset<HttpDataLoader>(rawData);
-                            }
+                            // Try to load and import the dataset if not found
+                            ABREngine.Instance.Data.LoadData(rawData);
                         }
                     }
 
