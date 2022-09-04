@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "C:/Users/scoot/dev/SculptingVisApp/Packages/ABREngine-UnityPackage/DocumentationSrc~",
+  "source_base_path": "C:/Users/scoot/dev/ABRDocs/Packages/edu.umn.cs.ivlab.abrengine/DocumentationSrc~",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -30,7 +30,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ABRConfig.html",
-          "hash": "6e3KCO2qe1m4p/Sdkzcy8TvSqYFZuGdqynSb3L6sajA="
+          "hash": "2DVvjHhwDNmxL7qTrVpb2rC9Kn1sgnfvaLbDzjhE/xY="
         }
       },
       "is_incremental": false,
@@ -54,7 +54,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ABREngine.html",
-          "hash": "8uWhKsUXn9olKQecWtPohvWw8JIXNoOa4NytOz47zNY="
+          "hash": "SB7Hn4cFs2KPI19rmusE470wDp1FFql+BaNbi1fawJk="
         }
       },
       "is_incremental": false,
@@ -150,7 +150,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ColormapVisAsset.html",
-          "hash": "Tn3apM5IVeNebsQ7cqkdT9SRvo0H7QndBqb0NLrrGUI="
+          "hash": "qFnfe8jgma6xM56Wbp+UdklhQJmUtidyn9Mnt5r9dH8="
         }
       },
       "is_incremental": false,
@@ -162,7 +162,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.DataImpression.html",
-          "hash": "cfjpVsVKv7RKMrCBph0Yql0L7nAgoT3TLixSBb4goKc="
+          "hash": "0uCg2wD8qF08fhhPAjYIyhRVq/U5vup9CnmzhyMHgUo="
         }
       },
       "is_incremental": false,
@@ -174,7 +174,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.DataImpressionGroup.html",
-          "hash": "TBYUbVPMMepdzT/dhKYrEPv2/63wc8ZrueGXkkPUJds="
+          "hash": "dmCc5YZxJN/KlZsdAOzyjt8ad4y55kBhzs60e3mwgd4="
         }
       },
       "is_incremental": false,
@@ -246,7 +246,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.Dataset.html",
-          "hash": "81VtsmpX4Owxx/rOaf/I1kX9p/DvU5t75SD/4wjodxw="
+          "hash": "JHUayHKFprD7kiMws3fYe2WxbPXNnigEFUu93uZc9rI="
         }
       },
       "is_incremental": false,
@@ -258,7 +258,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.EncodedGameObject.html",
-          "hash": "yvRYK/9IyxkP7phvMgx0qfpk4jVrVL+NcIpBFo3uOP4="
+          "hash": "0PLwBhcqXP+yat6OjETvoLpJIHs/oUyuivcrDUzi6JY="
         }
       },
       "is_incremental": false,
@@ -270,7 +270,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.html",
-          "hash": "Z401dcnBKHfXuzFnwzBX4kwEPjPifzrqq5eJaRe9VPE="
+          "hash": "1doVU4wQNvY7FGbuIZaG18RAKwn2GvziRoKP/JCmRH0="
         }
       },
       "is_incremental": false,
@@ -294,7 +294,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.GlyphGradient.html",
-          "hash": "V5sRBVmyfMbJDum3DkkXz+poiUTNxWB0WI13EMmpBQE="
+          "hash": "SRl6qQXLuCyq2LNs8YWZjJDmAt5U4h2lHou/y8/41L0="
         }
       },
       "is_incremental": false,
@@ -306,7 +306,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.GlyphVisAsset.html",
-          "hash": "M0Xd/Ye/BFR1oZ9ulUqxR9rTQeiNJ//YPdmTH7gUrkc="
+          "hash": "nd4RKblLFLpii7IQn4GV74pJb8JsBD0m2qxUe7Nai0w="
         }
       },
       "is_incremental": false,
@@ -354,7 +354,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.html",
-          "hash": "XtGT/yhy+Zk35zTbW6RdPJv2K8T6X+ubDW4nI8FhObo="
+          "hash": "LHP3NSNs71M4i8Aj7XRfzOGmvhCPjhV4RqCH1thyiqA="
         }
       },
       "is_incremental": false,
@@ -390,7 +390,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.IColormapVisAsset.html",
-          "hash": "bdm+rwJAIcgILGWiV5bOBdWnE+9768Ww529isn6UnaY="
+          "hash": "4OOZKTlB+kyqslX/Vg7VcQJJlhQMqzFcrfCSLZRWvkg="
         }
       },
       "is_incremental": false,
@@ -462,7 +462,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.html",
-          "hash": "MlUVZkNnH+Ubb89gkwomdp9T4G6cK/uXgzbCAY1vNgA="
+          "hash": "8XB9cSV4zLgSylBUhuNO5V76ThNR81IhdiWSYxmyNs8="
         }
       },
       "is_incremental": false,
@@ -522,7 +522,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.html",
-          "hash": "nnfrNXqwrtwO7wLyUAmR8+274MD8R/zUnHLFoNnV4qc="
+          "hash": "t3AwLvS/GKyG+BdZc3VdZhNqQvKLH41SO1oReNlt/+4="
         }
       },
       "is_incremental": false,
@@ -558,7 +558,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.html",
-          "hash": "D6fi+P4lCczYYphQC8QvSl/+++eikMRrmSj6pCqWPms="
+          "hash": "Md9WzaQHjVyIIiWi0E/a+PohaFQ2J9yeuMhSm5sFfJk="
         }
       },
       "is_incremental": false,
@@ -618,7 +618,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.html",
-          "hash": "VSbVCspkrqN7WUXxX9P5fvqsSHw9jQE/f4tOJng3kP4="
+          "hash": "VqCbuRL1UhIUZotji10oYrNbjl0My9ZnolnEQxjzzfs="
         }
       },
       "is_incremental": false,
@@ -630,7 +630,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.html",
-          "hash": "IVLiicV/CQ/BKnj6cGbhvZ9SSKHWrPaKVj5ksWmfsCA="
+          "hash": "tbGhH8P17dGlGwzqDwojpWOrWEM90bb7rjbSizgVtuI="
         }
       },
       "is_incremental": false,
@@ -678,7 +678,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.html",
-          "hash": "TApLzP3IRY50tOGAGFtX59Vl2qDMhNizzU5ElwpTu2Q="
+          "hash": "jlfQ/1exwMlCE4rIQTQmxX4LNZxLgwRt8fBmp+A/Dro="
         }
       },
       "is_incremental": false,
@@ -702,7 +702,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.html",
-          "hash": "BcKkORTWfWWfq4YjWsPAVpwLpdlYhm8WtcpubRMJuu4="
+          "hash": "edYp0NQ0bmPaPlzMKAVjuQU4ZnTRTV6ms3CaYWZcTik="
         }
       },
       "is_incremental": false,
@@ -762,7 +762,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.LineTextureGradient.html",
-          "hash": "6TYkPAVDb/oKIcaAEgXm8eq6p+2ScfgRYj18s6R/9lE="
+          "hash": "LR6bfT6OhJ657mlp6qP/GIlRffHf8i4WzQlW1dLIeWI="
         }
       },
       "is_incremental": false,
@@ -774,7 +774,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.html",
-          "hash": "TzYEc4fSAJgdDSsywuh9FTzx0KAcCy3iuYw9x/WOi8M="
+          "hash": "jmVXoomQmraUvnnQHclvWP37r+QUGatt5qupDy/uD7I="
         }
       },
       "is_incremental": false,
@@ -966,7 +966,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.html",
-          "hash": "kdyalJhPVF6j03o9sWe3y+7fNtMF2zDt4Dd9hYmtnEw="
+          "hash": "rMsgMddJSU+JntvY2VWW4X5rROsfbAfripVr8EiZER8="
         }
       },
       "is_incremental": false,
@@ -1026,7 +1026,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.html",
-          "hash": "/Ht7B5mNTDMdgaH1ZlXFiZv/SuhW0h83fbGspinRvxU="
+          "hash": "wRuSxW3VJjNZ394JCzbhjw3JBVsbPJx486JBk3HdX+8="
         }
       },
       "is_incremental": false,
@@ -1038,7 +1038,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.html",
-          "hash": "+8OFlCrt6Ce8vp9h/r3uLUSxR3Xuaz/tA7+QvefykQE="
+          "hash": "wqCklnHVptdcsATN+s4jBpUIrUywET+VsUm/moKg4Gc="
         }
       },
       "is_incremental": false,
@@ -1050,7 +1050,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.html",
-          "hash": "FnnrOCzvow1qKoxIDvM7JpyvTxN+hFvW0Es0ZosBRTM="
+          "hash": "3hPNupsKSLxqwU66iUqONEvAcHx//o3D8Ax4pcbzcDQ="
         }
       },
       "is_incremental": false,
@@ -1062,7 +1062,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.html",
-          "hash": "KIkpSNa14V64EbaOy95DvrEM6c01gO9XQHoX1/dUMGY="
+          "hash": "5UmLOgTXX7sE5p3G/Iy7UTeJqb+vOz0cIYb1f1sltRA="
         }
       },
       "is_incremental": false,
@@ -1098,7 +1098,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.html",
-          "hash": "p1rGF+zsdpFlB74jatgkNnwLtkPo1mGna6UR7erqja0="
+          "hash": "5daJ2np8zESRwxaLgxszal9SY40vI8yM7WKRBfaXrL4="
         }
       },
       "is_incremental": false,
@@ -1122,7 +1122,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.html",
-          "hash": "a3U+2XXY1Y3OjNrQnWj/aoW1MWQsPpKpM8hvoG+drx8="
+          "hash": "VM62OJQRhxPQLv2jkWKK+VucGHPbQaE2d8uay/KBcB0="
         }
       },
       "is_incremental": false,
@@ -1134,7 +1134,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.html",
-          "hash": "BUrToSIaXwOs6hHwtRacKmZCytYBPe4VYhMSnlwg4po="
+          "hash": "DQm0NKdIWIor9LLFdFrmvNEJpbOsnKa3Yy8lDwrJtC8="
         }
       },
       "is_incremental": false,
@@ -1194,7 +1194,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.VectorDataVariable.html",
-          "hash": "VNTci0EPfktSxIxtN1V7srLWAqu4lHGe8W3zH9xigrE="
+          "hash": "o4pvQpjQnxty4HRvYSnnfBgLEgdUbG43EM+JxxOgIeM="
         }
       },
       "is_incremental": false,
@@ -1266,7 +1266,7 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.VolumeLightManager.html",
-          "hash": "JNKanNky/srB8+1BdVQsWLG0iPZKe9XJDVrXCNqsZH4="
+          "hash": "8JaJizLR91a9ylppvg3qKGXBwQb98Idjv713e25W4Mk="
         }
       },
       "is_incremental": false,
@@ -1290,7 +1290,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "T7SJRSIcafLY0TnZ5ULxmIkUY8QdwdHwNiPVFERGNv8="
+          "hash": "SaOBwRzTMUCQTXOnrSc4RX6MyxDNCzDQQJf6A5NMmHg="
         }
       },
       "is_incremental": false,
@@ -1302,7 +1302,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "oCavOwQQc+F9qvwa12BSHu+9yUgu1Zuro4u4oyyiO1Y="
+          "hash": "XvayiXL5A1O4dVPyXYW91MBv38K9aqFgXemwiO6tPII="
         }
       },
       "is_incremental": false,
@@ -1314,7 +1314,7 @@
       "output": {
         ".html": {
           "relative_path": "manual/changelog.html",
-          "hash": "RW4gLhTCqvQes3SYEAzgWiD2bGSsJ4RAR7P/1LJ0XOE="
+          "hash": "1H4woVsolYqmYXh9E8lslDrAyklRjuidhdeF8kzhhsM="
         }
       },
       "is_incremental": false,
@@ -1322,11 +1322,11 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/concept1.md",
+      "source_relative_path": "manual/core-concepts.md",
       "output": {
         ".html": {
-          "relative_path": "manual/concept1.html",
-          "hash": "V9uC6TkTogC2Rk44uij83pSANWXEiLyQVLKpeUfPHY4="
+          "relative_path": "manual/core-concepts.html",
+          "hash": "kJ2HUZ1W7y1jZnTrxVbB03pybgB1s/AfMZJHgMYk3Zk="
         }
       },
       "is_incremental": false,
@@ -1334,11 +1334,23 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/concept2.md",
+      "source_relative_path": "manual/creating-cs-abr-vis.md",
       "output": {
         ".html": {
-          "relative_path": "manual/concept2.html",
-          "hash": "6I4zZNPwD5cHdKv0scBGuuhLZqnjVqRKhHxmyhSE25w="
+          "relative_path": "manual/creating-cs-abr-vis.html",
+          "hash": "kBBIV2w02moPtkiohBFD9pgpQDJjfkAOfBnjHKSzDZo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/data-impressions.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/data-impressions.html",
+          "hash": "LA6W5hXHXIHY79+OLxm5+ePZkknPwP4CyW4Fyaq/K48="
         }
       },
       "is_incremental": false,
@@ -1350,7 +1362,7 @@
       "output": {
         ".html": {
           "relative_path": "manual/install.html",
-          "hash": "RJNQNYTaA8PED7sZSOn9G2T+LHZtuXCFu/AeuKGU5Dk="
+          "hash": "ibIgeSCmlatrZ2lTsYDTM4WWTLjXRUhMTd5v/Jbf/dM="
         }
       },
       "is_incremental": false,
@@ -1362,7 +1374,19 @@
       "output": {
         ".html": {
           "relative_path": "manual/intro.html",
-          "hash": "fFWe0AhTlvL+rI2N/59u1+MnMM7ut4e3Ujh2IygJhik="
+          "hash": "d+7X5J7pJ/70wuDlwODsRkz3XoA7AIVVD/6XsBLS/AM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/key-data.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/key-data.html",
+          "hash": "3YhvYKtJ3dUfxEIU7oiiX/f0bdOvTfTCT/yXBYziPYU="
         }
       },
       "is_incremental": false,
@@ -1374,7 +1398,912 @@
       "output": {
         ".html": {
           "relative_path": "manual/license.html",
-          "hash": "NXKU6x/H0peN8ksV4hkm5PwJQC2lZmDUawd+t3FCGm4="
+          "hash": "NNQa/Uvv8V9c1ow1QLnoqOUNGrxUBU/EsC8L22FD6ek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/media-folder.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/media-folder.html",
+          "hash": "zJdMBkwn1WxkGFbq9W/sN2zfWrDMg2jr0Bu40Yks3eI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/angled-semi-straight.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/angled-semi-straight.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/antarctic.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/antarctic.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/clayrice-point.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/clayrice-point.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/colormap.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/colormap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-teaser-nocolor.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-teaser-nocolor.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-teaser.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-teaser.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_1-abrengine.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_1-abrengine.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_10-colormap.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_10-colormap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_2-config-error.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_2-config-error.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_3-config-create.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_3-config-create.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_4-config-edit.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_4-config-edit.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_5-config-check.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_5-config-check.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_6-create-empty.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_6-create-empty.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_7-create-script.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_7-create-script.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_8-script-drag.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_8-script-drag.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_9-basic-vis.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_9-basic-vis.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-lines.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-lines.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-points.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-points.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-surface.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-surface.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-volume.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-volume.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/desert.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/desert.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/design-interface-fire-wide.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/design-interface-fire-wide.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/glyph.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/glyph.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/groundTower.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/groundTower.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/gulf.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/gulf.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/lineData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/lineData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/linear-brown.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/linear-brown.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/lineva.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/lineva.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/pointData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/pointData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/surfaceData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/surfaceData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tex.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tex.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/volumeData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/volumeData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/terminology-starter.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/terminology-starter.html",
+          "hash": "T/IQ+v209tAFUVzeTnsyuRKg9FQnE70JjxYy0E4Ohn0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/visassets.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/visassets.html",
+          "hash": "wzWlNAloX2TyAqs3yGxrLXPvlWQcjGkVv4g5KSMr8Tk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/instanceMesh.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/keyData.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/keyData.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/glyph.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/glyph.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/glyphSize.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/glyphSize.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/averageCount.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/averageCount.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/defaultCurveDirection.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/lineTexture.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/lineTexture.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/lineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/lineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonBrightness.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonBrightness.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/textureCutoff.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/textureCutoff.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/onlyOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/opacity.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/opacity.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/pattern.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/pattern.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternIntensity.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSaturation.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSize.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSize.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/opacitymap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/opacitymap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/transfer-fn.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/transfer-fn.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeBrightness.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeLighting.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeLighting.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeOpacityMultiplier.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeOpacityMultiplier.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap-alpha.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap-alpha.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap-combined.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap-combined.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap.png"
         }
       },
       "is_incremental": false,
@@ -1404,6 +2333,50 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "resources/stopmap-alpha.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap-alpha.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/stopmap-combined.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap-combined.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/stopmap.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/textures.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/textures.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "resources/xrefmap.yml",
       "output": {
         "resource": {
@@ -1417,25 +2390,23 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 8,
-          "skipped_file_count": 0
+          "total_file_count": 13,
+          "skipped_file_count": 13
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 106,
-          "skipped_file_count": 0
+          "skipped_file_count": 106
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,

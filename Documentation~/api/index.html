@@ -426,38 +426,171 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="api-overview">API Overview</h1>
 
-<p>Template Package provides two main features: (1) saving and loading 3D models and (2) rendering the models in a 3D scene.  The key classes for accomplishing these tasks are:</p>
-<h2 id="saving-and-loading-3d-models">Saving and Loading 3D models</h2>
+<p>Here are the most important classes start out making visualizations with C# and
+ABR. Check out the
+<a href="../manual/creating-cs-abr-vis.html">Creating a C# ABR visualization tutorial</a>
+for more examples.</p>
+<h2 id="abrengine">ABREngine</h2>
 <table>
 <thead>
 <tr>
 <th>Class</th>
-<th>Function</th>
+<th>Importance</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>@IVLab.Template.ExampleClass</td>
-<td>Use this to do X</td>
+<td><a class="xref" href="IVLab.ABREngine.ABREngine.html">ABREngine</a></td>
+<td>This is the main ABR Engine class. ABREngine is a singleton, meaning that you will most often access an instance of this class with <code>ABREngine.Instance</code>.</td>
 </tr>
 <tr>
-<td>@IVLab.Template.ExampleClass</td>
-<td>Use this to do Y</td>
+<td><a class="xref" href="IVLab.ABREngine.ABRConfig.html">ABRConfig</a></td>
+<td>Main configuration class for ABR. Create an ABRConfig using <em>Assets &gt; Create &gt; ABR &gt; ABR Configuration</em> and modify as necessary.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.ABRStateParser.html">ABRStateParser</a></td>
+<td>Main class for serializing and deserializing ABR states</td>
 </tr>
 </tbody>
 </table>
-<h2 id="rendering-3d-models">Rendering 3D models</h2>
+<h2 id="data">Data</h2>
+<h3 id="data-loading">Data Loading</h3>
 <table>
 <thead>
 <tr>
 <th>Class</th>
-<th>Function</th>
+<th>Importance</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>@IVLab.Template.ExampleClass</td>
-<td>Use this to do Z</td>
+<td><a class="xref" href="IVLab.ABREngine.DataManager.html">DataManager</a></td>
+<td>Main &quot;manager&quot; object where data are stored. Single instance of this class is <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_Data">ABREngine.Instance.Data</a>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.KeyData.html">KeyData</a></td>
+<td>High-level representation of geometric data. See <a href="../manual/key-data.html">Key Data</a>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.RawDataset.html">RawDataset</a></td>
+<td>Low-level representation of geometric data. See <a href="../manual/terminology-starter.html">Basic Terminology</a></td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.RawDatasetAdapter.html">RawDatasetAdapter</a></td>
+<td>Factory used to create ABR-compatible raw datasets from existing data you have (e.g., creating a surface out of a bunch of @UnityEngine.Vector3 s)</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.MediaDataLoader.html">MediaDataLoader</a></td>
+<td>Load data from the <a href="../manual/media-folder.html">media folder</a></td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.ResourcesDataLoader.html">ResourcesDataLoader</a></td>
+<td>Load data from any <a href="https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity6.html">Unity Resources folder</a> - useful for bundling data with a project.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.HttpDataLoader.html">HttpDataLoader</a></td>
+<td>Load data from a network (http) source (must be set up with ABR data server)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="data-variables-and-ranges">Data Variables and Ranges</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.ScalarDataVariable.html">ScalarDataVariable</a></td>
+<td>Scalar variables (single value at each point in the dataset)</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.VectorDataVariable.html">VectorDataVariable</a></td>
+<td>Vector variables (3 values at each point in the dataset)</td>
+</tr>
+<tr>
+<td>@IVLab.ABREngine.DataRange</td>
+<td>Representation of a data range (min/max, only meaningful for scalar variables</td>
+</tr>
+</tbody>
+</table>
+<h2 id="visassets">VisAssets</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.VisAssetManager.html">VisAssetManager</a></td>
+<td>Main &quot;manager&quot; object where VisAssets are stored. Single instance of this class is <a class="xref" href="IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_VisAssets">ABREngine.Instance.VisAssets</a>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.VisAssetLoader.html">VisAssetLoader</a></td>
+<td>Responsible for loading visassets, deciding which VisAsset fetcher to use, and error handling</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.VisAsset.html">VisAsset</a></td>
+<td>Every VisAsset is one of these</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></td>
+<td>Imported from a <code>colormap.xml</code> and have a <code>GetGradient()</code> method to get a @UnityEngine.Texture2D</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.LineTextureVisAsset.html">LineTextureVisAsset</a></td>
+<td>Imported from a <code>horizontal.png</code> texture, have a <code>GetTexture()</code> method to get a @UnityEngine.Texture2D</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.SurfaceTextureVisAsset.html">SurfaceTextureVisAsset</a></td>
+<td>Imported from a <code>texture.png</code> texture, have a <code>GetTexture()</code> method to get a @UnityEngine.Texture2D</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.GlyphVisAsset.html">GlyphVisAsset</a></td>
+<td>LOD-Separated, imported from a <code>LOD1.obj</code> and normal-mapped with a <code>LOD1.png</code>.</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.VisAssetGradient.html">VisAssetGradient</a></td>
+<td>Gradients of multiple VisAssets (applies to every VisAsset type except Colormaps)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-impressions">Data Impressions</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Importance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.DataImpression.html">DataImpression</a></td>
+<td>Main class that all data impressions inherit from</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.SimpleSurfaceDataImpression.html">SimpleSurfaceDataImpression</a></td>
+<td>Data impression for surfaces. Takes key data type &quot;Surface&quot;</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.SimpleLineDataImpression.html">SimpleLineDataImpression</a></td>
+<td>Data impression for ribbon-formed lines. Takes key data type &quot;Lines&quot;</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.SimpleGlyphDataImpression.html">SimpleGlyphDataImpression</a></td>
+<td>Data impression for glyphs. Takes key data type &quot;Points&quot;</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.SimpleVolumeDataImpression.html">SimpleVolumeDataImpression</a></td>
+<td>Data impression for volume data. Takes key data type &quot;Volume&quot; (a structured grid)</td>
+</tr>
+<tr>
+<td><a class="xref" href="IVLab.ABREngine.InstancedSurfaceDataImpression.html">InstancedSurfaceDataImpression</a></td>
+<td>Data impression for a series of instanced surfaces (same geometry repeated over many different transforms)</td>
 </tr>
 </tbody>
 </table>

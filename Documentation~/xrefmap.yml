@@ -8770,3 +8770,6 @@ references:
   commentId: T:IVLab.ABREngine.VolumeLightManager
   fullName: IVLab.ABREngine.VolumeLightManager
   nameWithType: VolumeLightManager
+- uid: key-data.md
+  name: Key Data
+  href: manual/key-data.html

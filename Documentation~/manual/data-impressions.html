@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Concept 1 | ABREngine </title>
+    <title>Data Impressions | ABREngine </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Concept 1 | ABREngine ">
+    <meta name="title" content="Data Impressions | ABREngine ">
     <meta name="generator" content="docfx 2.58.4.0">
     
     <link rel="shortcut icon" href="../resources/favicon.ico">
@@ -93,16 +93,34 @@
                   
                   <ul class="nav level1">
                     <li class="">
+                      <a href="install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="">
                       <a href="intro.html" title="Introduction" class="">Introduction</a>
                     </li>
                     <li class="">
-                      <a href="install.html" title="Installation" class="">Installation</a>
-                    </li>
-                    <li class="active">
-                      <a href="concept1.html" title="Concept 1" class="active">Concept 1</a>
-                    </li>
+                      <span class="expand-stub"></span>
+                      <a href="core-concepts.html" title="Core Concepts" class="">Core Concepts</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="key-data.html" title="Key Data" class="">Key Data</a>
+                          </li>
+                          <li class="">
+                            <a href="visassets.html" title="VisAssets" class="">VisAssets</a>
+                          </li>
+                          <li class="active">
+                            <a href="data-impressions.html" title="Data Impressions" class="active">Data Impressions</a>
+                          </li>
+                          <li class="">
+                            <a href="terminology-starter.html" title="Basic Terminology" class="">Basic Terminology</a>
+                          </li>
+                          <li class="">
+                            <a href="media-folder.html" title="Media Folder" class="">Media Folder</a>
+                          </li>
+                        </ul>  </li>
                     <li class="">
-                      <a href="concept2.html" title="Concept 2" class="">Concept 2</a>
+                      <a href="creating-cs-abr-vis.html" title="Creating your first ABR C# Visualization" class="">Creating your first ABR C# Visualization</a>
                     </li>
                     <li class="">
                       <a href="license.html" title="License" class="">License</a>
@@ -118,10 +136,46 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="concept-1">Concept 1</h1>
+<h1 id="data-impressions">Data Impressions</h1>
 
-<p>Understanding this concept will really help when working with the Template package...</p>
-</article>
+<p>Every &quot;layer&quot; in the visualization is represented by a data impression. In the ABR design interface, each impression is shown by a &quot;tower&quot;; for example this data impression represents the ground&#39;s surface in the simulation, and we&#39;ve applied some scalar data variables and styling to it.</p>
+<p><img src="resources/groundTower.png" alt=""></p>
+<p>ABR has four types of data impressions:</p>
+<table>
+<thead>
+<tr>
+<th><a class="xref" href="../api/IVLab.ABREngine.SimpleSurfaceDataImpression.html">SimpleSurfaceDataImpression</a></th>
+<th><a class="xref" href="../api/IVLab.ABREngine.SimpleLineDataImpression.html">SimpleLineDataImpression</a></th>
+<th><a class="xref" href="../api/IVLab.ABREngine.SimpleGlyphDataImpression.html">SimpleGlyphDataImpression</a></th>
+<th><a class="xref" href="../api/IVLab.ABREngine.SimpleVolumeDataImpression.html">SimpleVolumeDataImpression</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="resources/data-impression-surface.png" alt=""></td>
+<td><img src="resources/data-impression-lines.png" alt=""></td>
+<td><img src="resources/data-impression-points.png" alt=""></td>
+<td><img src="resources/data-impression-volume.png" alt=""></td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-data-impressions-in-code">Using Data Impressions in Code</h2>
+<p>To construct a data impression, use the KeyData, Variables, and VisAssets that you have loaded in in the previous examples and link them into the data impression by assigning to instance variables like <code>keyData</code>, <code>colormap</code>, <code>colorVariable</code> etc. See the documentation links above for the values that can be changed for each Data Impression. For example, to create the same effect as the &quot;tower&quot; in the previous image, we might use code like this:</p>
+<pre><code class="lang-cs">// Import ground data
+KeyData groundData = ABREngine.Instance.Data.ImportRawDataset(...);
+
+// Import the colormap
+ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(...);
+
+// Create a new data impression for the ground
+SimpleSurfaceDataImpression ground = new SimpleSurfaceDataImpression();
+ground.keyData = groundData;
+ground.colormap = cmap;
+ground.colorVariable = groundData.GetScalarVariable(...);
+
+// Register the data impression with the engine
+ABREngine.Instance.RegisterDataImpression(ground);
+</code></pre></article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">
@@ -129,7 +183,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.umn.edu/ivlab-cs/ABREngine-UnityPackage/blob/master/DocumentationSrc~/manual/concept1.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.umn.edu/ivlab-cs/ABREngine-UnityPackage/blob/master/DocumentationSrc~/manual/data-impressions.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

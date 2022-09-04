@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>VisAssets (Visualization Assets) | ABREngine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="VisAssets (Visualization Assets) | ABREngine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../resources/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="../manual/intro.html" title="Manual">Manual</a>
+                      </li>
+                      <li>
+                          <a href="../api/index.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="">
+                      <a href="intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="core-concepts.html" title="Core Concepts" class="">Core Concepts</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="key-data.html" title="Key Data" class="">Key Data</a>
+                          </li>
+                          <li class="active">
+                            <a href="visassets.html" title="VisAssets" class="active">VisAssets</a>
+                          </li>
+                          <li class="">
+                            <a href="data-impressions.html" title="Data Impressions" class="">Data Impressions</a>
+                          </li>
+                          <li class="">
+                            <a href="terminology-starter.html" title="Basic Terminology" class="">Basic Terminology</a>
+                          </li>
+                          <li class="">
+                            <a href="media-folder.html" title="Media Folder" class="">Media Folder</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <a href="creating-cs-abr-vis.html" title="Creating your first ABR C# Visualization" class="">Creating your first ABR C# Visualization</a>
+                    </li>
+                    <li class="">
+                      <a href="license.html" title="License" class="">License</a>
+                    </li>
+                    <li class="">
+                      <a href="changelog.html" title="Change Log" class="">Change Log</a>
+                    </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="visassets-visualization-assets">VisAssets (Visualization Assets)</h1>
+
+<p>VisAssets are visual building blocks or elements of a visualization sourced from real-world artifacts and materials. ABR currently supports four types of VisAssets:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th>Colormap</th>
+<th>Line</th>
+<th>Texture</th>
+<th>Glyph</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Example</strong></td>
+<td><img src="resources/colormap.png" alt=""></td>
+<td><img src="resources/lineva.png" alt=""></td>
+<td><img src="resources/tex.png" alt=""></td>
+<td><img src="resources/glyph.png" alt=""></td>
+</tr>
+<tr>
+<td><strong>C# Class</strong></td>
+<td><a class="xref" href="../api/IVLab.ABREngine.ColormapVisAsset.html">ColormapVisAsset</a></td>
+<td><a class="xref" href="../api/IVLab.ABREngine.LineTextureVisAsset.html">LineTextureVisAsset</a></td>
+<td><a class="xref" href="../api/IVLab.ABREngine.SurfaceTextureVisAsset.html">SurfaceTextureVisAsset</a></td>
+<td><a class="xref" href="../api/IVLab.ABREngine.GlyphVisAsset.html">GlyphVisAsset</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-visassets-in-code">Using VisAssets in code:</h2>
+<p>Each VisAsset has a unique identifier, known as a UUID (or a Guid in C# (Links to an external site.)) - this is the long hex number you may have seen in your ABR media folder. When programming with ABR, you&#39;ll need to use these UUIDs to load and reference VisAssets, since there&#39;s not an easy way to tell the computer &quot;I want that blue linear colormap over there&quot;.</p>
+<p>The general process for loading VisAssets in C# scripts is:</p>
+<ol>
+<li>Find the UUID of the VisAsset you want. Usually this can be accomplished by
+right/two-finger clicking the VisAsset in question in a browser (either from the
+<a href="http://localhost:8000">ABR Design Interface</a> or the <a href="https://sculptingvis.tacc.utexas.edu">Sculpting Vis Library</a>), then copy/pasting the long hex UUID from your browser&#39;s URL bar (e.g.
+<code>5a761a72-8bcb-11ea-9265-005056bae6d8</code>).</li>
+<li>Create a <a class="xref" href="https://docs.microsoft.com/dotnet/api/system.guid">Guid</a> object to store this UUID.</li>
+<li>Load the VisAsset using <a class="xref" href="../api/IVLab.ABREngine.VisAssetManager.html#IVLab_ABREngine_VisAssetManager_LoadVisAsset__1_System_Guid_System_Boolean_">VisAssetManager</a> LoadVisAsset method.</li>
+</ol>
+<p>For example, in code, you might load a colormap like this (note the use of <code>LoadVisAsset</code> and Guid):</p>
+<pre><code class="lang-cs">ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new Guid(&quot;5a761a72-8bcb-11ea-9265-005056bae6d8&quot;));
+</code></pre><p>See the <a class="xref" href="../api/IVLab.ABREngine.VisAssetManager.html">VisAssetManager</a> for more details and example loading code.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.umn.edu/ivlab-cs/ABREngine-UnityPackage/blob/master/DocumentationSrc~/manual/visassets.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
