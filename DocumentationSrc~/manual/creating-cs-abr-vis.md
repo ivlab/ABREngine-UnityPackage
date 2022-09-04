@@ -131,12 +131,9 @@ For simplicity, we're going to put all our visualization code in the `Start()` m
 Now, in the `Start()` method, we'll begin by importing some example data that's available for you to use in ABR. Copy and past the following code into your `Start()` method:
 
 ```cs
-// 1.a. Load the dataset from disk (see ABREngine-UnityPackage/Runtime/Resources/media/datasets) for the raw data files
+// 1. Load the dataset from disk (see ABREngine-UnityPackage/Runtime/Resources/media/datasets) for the raw data files
 string contourDataPath = "Demo/Wavelet/KeyData/Contour";
-RawDataset contourRaw = ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(contourDataPath);
-
-// 1.b. Import the contour surface dataset into ABR
-ABREngine.Instance.Data.ImportRawDataset(contourDataPath, contourRaw);
+KeyData contour = ABREngine.Instance.Data.LoadData(contourDataPath);
 ```
 
 ### 2. Putting it together in a data impression

@@ -62,10 +62,7 @@ namespace IVLab.ABREngine
     ///     {
     ///         // Load some point data
     ///         string dataPath = "Demo/Wavelet/KeyData/Points";
-    ///         RawDataset rds = ABREngine.Instance.Data.LoadRawDataset&lt;ResourcesDataLoader&gt;(dataPath);
-    ///
-    ///         // Import the dataset and name it accordingly
-    ///         KeyData kd = ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
+    ///         KeyData kd = ABREngine.Instance.Data.LoadData(dataPath);
     ///
     ///         // Then, we can fetch variables:
     ///         // ALL the variables

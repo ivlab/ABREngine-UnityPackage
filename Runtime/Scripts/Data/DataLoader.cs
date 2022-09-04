@@ -50,12 +50,7 @@ namespace IVLab.ABREngine
             FileInfo jsonFile = new FileInfo(Path.Combine(mediaDir, ABRConfig.Consts.DatasetFolder, dataPath) + ".json");
             if (!jsonFile.Exists)
             {
-                Debug.LogErrorFormat("Data path {0} does not exist!", jsonFile.ToString());
                 return null;
-            }
-            else
-            {
-                Debug.Log("Loading " + dataPath + " from " + mediaDir);
             }
 
             string metadataContent = "";
@@ -83,30 +78,21 @@ namespace IVLab.ABREngine
         public RawDataset LoadData(string dataPath)
         {
             string url = ABREngine.Instance.Config.dataServerUrl;
-            Debug.Log("Loading " + dataPath + " from " + url);
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
 
-            try
-            {
-                HttpResponseMessage metadataResponse = ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath).Result;
-                metadataResponse.EnsureSuccessStatusCode();
-                string responseBody = metadataResponse.Content.ReadAsStringAsync().Result;
+            HttpResponseMessage metadataResponse = ABREngine.httpClient.GetAsync(url + "/metadata/" + dataPath).Result;
+            metadataResponse.EnsureSuccessStatusCode();
+            string responseBody = metadataResponse.Content.ReadAsStringAsync().Result;
 
-                JToken metadataJson = JObject.Parse(responseBody)["metadata"];
-                RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
+            JToken metadataJson = JObject.Parse(responseBody)["metadata"];
+            RawDataset.JsonHeader metadata = metadataJson.ToObject<RawDataset.JsonHeader>();
 
-                HttpResponseMessage dataResponse = ABREngine.httpClient.GetAsync(url + "/data/" + dataPath).Result;
-                metadataResponse.EnsureSuccessStatusCode();
-                byte[] dataBytes = dataResponse.Content.ReadAsByteArrayAsync().Result;
+            HttpResponseMessage dataResponse = ABREngine.httpClient.GetAsync(url + "/data/" + dataPath).Result;
+            metadataResponse.EnsureSuccessStatusCode();
+            byte[] dataBytes = dataResponse.Content.ReadAsByteArrayAsync().Result;
 
-                RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
-                return new RawDataset(metadata, data);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-            return null;
+            RawDataset.BinaryData data = new RawDataset.BinaryData(metadata, dataBytes);
+            return new RawDataset(metadata, data);
         }
     }
 
@@ -121,34 +107,25 @@ namespace IVLab.ABREngine
     {
         public RawDataset LoadData(string dataPath)
         {
-            Debug.Log("Loading " + dataPath + " from Resources");
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
 
-            try
+            // Fetch both files from resources
+            TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
+            if (metadataData == null || metadataData.Length != 2)
             {
-                // Fetch both files from resources
-                TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
-                if (metadataData == null || metadataData.Length != 2)
-                {
-                    throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
-                }
-
-                string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
-                JObject metadata = JObject.Parse(metadataJson);
-                RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
-
-                byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
-                RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
-                Resources.UnloadAsset(metadataData[0]);
-                Resources.UnloadAsset(metadataData[1]);
-                
-                return new RawDataset(meta, data);
+                throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
             }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
-            return null;
+
+            string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
+            JObject metadata = JObject.Parse(metadataJson);
+            RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
+
+            byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
+            RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
+            Resources.UnloadAsset(metadataData[0]);
+            Resources.UnloadAsset(metadataData[1]);
+            
+            return new RawDataset(meta, data);
         }
     }
 }

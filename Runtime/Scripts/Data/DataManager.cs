@@ -118,11 +118,27 @@ namespace IVLab.ABREngine
             }
         }
 
+        private List<IDataLoader> dataLoaders = new List<IDataLoader>();
+
         public DataManager(string datasetPath)
         {
             this.appDataPath = datasetPath;
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("Dataset Path: " + appDataPath);
+
+            // Determine which loaders are available to use
+            // First, look in `Media` folder
+            dataLoaders.Add(new MediaDataLoader());
+
+            // Then, look in any `Resources` folder
+            dataLoaders.Add(new ResourcesDataLoader());
+
+            // Afterwards, if we're connected to a data server, look there...
+            if (ABREngine.Instance.Config.dataServerUrl?.Length > 0)
+            {
+                Debug.Log("Allowing loading of datasets from " + ABREngine.Instance.Config.dataServerUrl);
+                dataLoaders.Add(new HttpDataLoader());
+            }
         }
 
         /// <summary>
@@ -188,6 +204,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
         /// </returns>
+        [Obsolete("It is recommended to use `LoadData` instead of this method.")]
         public RawDataset LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
@@ -203,6 +220,42 @@ namespace IVLab.ABREngine
                 Debug.LogError("Unable to load Raw Dataset " + dataPath);
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Attempt to load the data described in `dataPath` from any available
+        /// resource, including a Resources folder, the <see
+        /// cref="media-folder.md"/>, or a HTTP web resource.
+        /// </summary>
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <returns>
+        /// Returns the <see cref="KeyData"/> object if the dataset was found, `null` if not found.
+        /// </returns>
+        public KeyData LoadData(string dataPath)
+        {
+            foreach (IDataLoader loader in dataLoaders)
+            {
+                try
+                {
+                    RawDataset ds = loader.LoadData(dataPath);
+                    if (ds != null)
+                    {
+                        KeyData kd = ImportRawDataset(dataPath, ds);
+                        Debug.Log($"Dataset `{dataPath} loaded from " + loader.GetType().Name);
+                        return kd;
+                    }
+                    else
+                        throw new Exception();
+                }
+                catch
+                {
+                    Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
+                }
+            }
+            Debug.LogWarning($"Dataset `{dataPath}` not found in any data loader");
+            return null;
         }
 
         /// <summary>

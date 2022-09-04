@@ -1,3 +1,8 @@
+---
+uid: media-folder.md
+name: Media Folder
+---
+
 # The Media Folder
 
 The media folder is where all datasets and visassets are stored. Every ABR project should have one or more `media` folders.
