@@ -153,30 +153,16 @@ namespace IVLab.ABREngine
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleGlyphDataImpression", LayerName);
             }
 
-            // Return all previous renderers to pool
-            while (currentGameObject.transform.childCount > 0)
-            {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
-                GenericObjectPool.Instance.ReturnObjectToPool(child);
-            }
-
-            // Create pooled game objects with mesh renderer and instanced mesh renderer
-            GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", currentGameObject.transform, (go) =>
-            {
-                go.name = "Glyph Renderer Object " + 0;
-            });
-            childRenderer.transform.parent = currentGameObject.transform;
-
             // Add mesh renderers to child object
             MeshRenderer mr = null;
             InstancedMeshRenderer imr = null;
-            if (!childRenderer.TryGetComponent<MeshRenderer>(out mr))
+            if (!currentGameObject.TryGetComponent<MeshRenderer>(out mr))
             {
-                mr = childRenderer.gameObject.AddComponent<MeshRenderer>();
+                mr = currentGameObject.gameObject.AddComponent<MeshRenderer>();
             }
-            if (!childRenderer.TryGetComponent<InstancedMeshRenderer>(out imr))
+            if (!currentGameObject.TryGetComponent<InstancedMeshRenderer>(out imr))
             {
-                imr = childRenderer.gameObject.AddComponent<InstancedMeshRenderer>();
+                imr = currentGameObject.gameObject.AddComponent<InstancedMeshRenderer>();
             }
 
             // Setup instanced rendering based on computed geometry
@@ -198,7 +184,7 @@ namespace IVLab.ABREngine
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
 
             // Go through each child glyph renderer and render it
-            InstancedMeshRenderer imr = currentGameObject?.transform.GetChild(0).GetComponent<InstancedMeshRenderer>();
+            InstancedMeshRenderer imr = currentGameObject?.GetComponent<InstancedMeshRenderer>();
             if (imr == null)
                 return;
 
