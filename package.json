@@ -1,7 +1,7 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "2022.09",
+    "version": "2022.9.0",
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
     "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
