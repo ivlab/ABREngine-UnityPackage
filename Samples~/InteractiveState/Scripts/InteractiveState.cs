@@ -46,7 +46,8 @@ namespace IVLab.ABREngine.Examples
     {
         // Look in this JSON file for more info on what's being loaded, and
         // where the various UUIDs come from.
-        private const string stateName = "exampleState.json";
+        [SerializeField]
+        private string stateName = "exampleState.json";
 
         Guid giUuid = new Guid("48cca33b-e1ae-4998-a0d1-2eee1e75e07d");
         SimpleGlyphDataImpression gi;
@@ -60,12 +61,9 @@ namespace IVLab.ABREngine.Examples
         void Start()
         {
             Debug.Log("Loading state " + stateName);
-            Task.Run(async () =>
-            {
-                await ABREngine.Instance.LoadStateAsync<ResourceStateFileLoader>(stateName);
-                gi = ABREngine.Instance.GetDataImpression(giUuid) as SimpleGlyphDataImpression;
-                ABREngine.Instance.VisAssets.TryGetVisAsset(greenCmapUuid, out greenCmap);
-            });
+            ABREngine.Instance.LoadState<ResourceStateFileLoader>(stateName);
+            gi = ABREngine.Instance.GetDataImpression(giUuid) as SimpleGlyphDataImpression;
+            ABREngine.Instance.VisAssets.TryGetVisAsset(greenCmapUuid, out greenCmap);
         }
 
         void Update()

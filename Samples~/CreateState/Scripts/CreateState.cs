@@ -1,6 +1,6 @@
-/* LoadJsonState.cs
+/* CreateState.cs
  *
- * Copyright (c) 2021 University of Minnesota
+ * Copyright (c) 2022 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,9 +19,6 @@
 
 using System;
 using UnityEngine;
-using IVLab.ABREngine;
-using IVLab.Utilities;
-using System.Threading.Tasks;
 
 namespace IVLab.ABREngine.Examples
 {
@@ -52,8 +49,8 @@ namespace IVLab.ABREngine.Examples
         private static Guid glyphUuid = new Guid("1af025aa-f1ed-11e9-a623-8c85900fd4af");
         private static Guid[] visAssetsToLoad = new Guid[] { cmapUuid, glyphUuid };
 
-        private IKeyData contour;
-        private IKeyData points;
+        private KeyData contour;
+        private KeyData points;
         private ScalarDataVariable xAxis;
         private ScalarDataVariable yAxis;
 
@@ -62,105 +59,57 @@ namespace IVLab.ABREngine.Examples
 
         void Start()
         {
-            // Kick off the async work
-            Task.Run(async () =>
-            {
-                // Pre-load all the necessary data/visuals
-                await LoadData();
-                Debug.Log("Loaded Data");
-                await LoadVisAssets();
-                Debug.Log("Loaded VisAssets");
+            // Pre-load all the necessary data/visuals
+            LoadData();
+            Debug.Log("Loaded Data");
+            LoadVisAssets();
+            Debug.Log("Loaded VisAssets");
 
-                // Hook up the data and visuals
-                await CreateDataImpressions();
-                Debug.Log("Created Data Impressions");
+            // Hook up the data and visuals
+            CreateDataImpressions();
+            Debug.Log("Created Data Impressions");
 
-                // Lastly, render the visualization
-                await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-                {
-                    ABREngine.Instance.Render();
-                });
-                Debug.Log("Finished rendering visualization");
-            });
+            // Lastly, render the visualization
+            ABREngine.Instance.Render();
+            Debug.Log("Finished rendering visualization");
         }
 
-        async Task LoadData()
+        void LoadData()
         {
             // Load the example data from Resources
-            await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(contourPath);
-            await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(pointsPath);
-
-            // Load the high-level dataset that both Contour and Points are contained within
-            Dataset ds = null;
-            if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out ds))
-            {
-                Debug.LogError("Unable to load dataset " + datasetPath);
-                return;
-            }
-
-            // Populate the key data objects from dataset
-            if (!ds.TryGetKeyData(contourPath, out contour))
-            {
-                Debug.LogError("Key data not found in dataset: " + contourPath);
-                return;
-            }
-            if (!ds.TryGetKeyData(pointsPath, out points))
-            {
-                Debug.LogError("Key data not found in dataset: " + pointsPath);
-                return;
-            }
+            contour = ABREngine.Instance.Data.LoadData(contourPath);
+            points = ABREngine.Instance.Data.LoadData(pointsPath);
 
             // Populate the variables from dataset
-            if (!ds.TryGetScalarVar(xAxisPath, out xAxis))
-            {
-                Debug.LogError("Dataset does not have variable " + xAxisPath);
-                return;
-            }
-            if (!ds.TryGetScalarVar(yAxisPath, out yAxis))
-            {
-                Debug.LogError("Dataset does not have variable " + yAxisPath);
-                return;
-            }
+            xAxis = contour.GetScalarVariable("XAxis");
+            yAxis = contour.GetScalarVariable("YAxis");
         }
 
-        async Task LoadVisAssets()
+        void LoadVisAssets()
         {
-            await UnityThreadScheduler.Instance.RunMainThreadWork(async () =>
-            {
-                await ABREngine.Instance.VisAssets.LoadVisAsset(cmapUuid);
-                await ABREngine.Instance.VisAssets.LoadVisAsset(glyphUuid);
-
-                if (!ABREngine.Instance.VisAssets.TryGetVisAsset(cmapUuid, out cmap))
-                {
-                    Debug.LogError("Colormap not loaded");
-                }
-                if (!ABREngine.Instance.VisAssets.TryGetVisAsset(glyphUuid, out glyph))
-                {
-                    Debug.LogError("Glyph not loaded");
-                }
-            });
+            // Best practice for loading VisAssets is now to use `GetVisAsset`,
+            // as this works for both VisAssets already loaded and ones that
+            // haven't been loaded yet.
+            cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(cmapUuid);
+            glyph = ABREngine.Instance.VisAssets.GetVisAsset<GlyphVisAsset>(glyphUuid);
         }
 
-        async Task CreateDataImpressions()
+        void CreateDataImpressions()
         {
-            // These need to be run in the Unity main thread because they
-            // interact with Unity internals like Transforms
-            await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                // Create a data impression for the Contour
-                SimpleSurfaceDataImpression di = new SimpleSurfaceDataImpression();
-                di.keyData = contour as SurfaceKeyData;
-                di.colorVariable = xAxis;
-                di.colormap = cmap as ColormapVisAsset;
-                ABREngine.Instance.RegisterDataImpression(di);
+            // Create a data impression for the Contour
+            SimpleSurfaceDataImpression di = new SimpleSurfaceDataImpression();
+            di.keyData = contour as SurfaceKeyData;
+            di.colorVariable = xAxis;
+            di.colormap = cmap as ColormapVisAsset;
+            ABREngine.Instance.RegisterDataImpression(di);
 
-                // And create a data impression for the Points
-                SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-                gi.keyData = points as PointKeyData;
-                gi.colorVariable = yAxis;
-                gi.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
-                gi.glyph = glyph as GlyphVisAsset;
-                ABREngine.Instance.RegisterDataImpression(gi);
-            });
+            // And create a data impression for the Points
+            SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
+            gi.keyData = points as PointKeyData;
+            gi.colorVariable = yAxis;
+            gi.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
+            gi.glyph = glyph as GlyphVisAsset;
+            ABREngine.Instance.RegisterDataImpression(gi);
         }
     }
 }
