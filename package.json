@@ -4,7 +4,11 @@
     "version": "2022.9.0",
     "unity": "2020.3",
     "description": "Artifact-Based Rendering Engine",
-    "documentationUrl": "https://ivlab.github.io/ABREngine-UnityPackage/",
+    "author": { "name": "IVLab", "email": "ivlab-admin@umn.edu", "url": "https://ivlab.cs.umn.edu" },
+    "documentationUrl": "https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage",
+    "changelogUrl": "https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/manual/changelog.html",
+    "licensesUrl": "https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage/manual/license.html",
+    "hideInEditor": "false",
     "dependencies": {
         "com.unity.textmeshpro": "3.0.6"
     },
