@@ -39,37 +39,85 @@ namespace IVLab.ABREngine
     [ABRPlateType("Instanced Surface")]
     public class InstancedSurfaceDataImpression : DataImpression, IDataImpression
     {
+        /// <summary>
+        /// KeyData for InstancedSurfaceDataImpression is an "unofficial" 5th
+        /// type of <see cref="key-data.md"/> - instanced matrices. These key
+        /// data have no geometry, only a single variable that is a series of
+        /// 4x4 matrices. Key data can be changed by modifying a <see
+        /// cref="RawDataset"/>'s <see cref="RawDataset.matrixArrays"/> and <see
+        /// cref="RawDataset.matrixArrayNames"/>. The key data transforms (like
+        /// every other key data in ABR) can be updated frame-by-frame so long
+        /// as `<see cref="RenderHints.DataChanged"/>= true` is specified. For
+        /// example, here we are spinning the transforms along the y axis.
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/keyData.gif"/>
+        /// </summary>
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
+        /// <summary>
+        /// The mesh to populate across all "instanced transforms" supplied by
+        /// key data.
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"/>
+        /// </summary>
         public Mesh instanceMesh;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
         public IColormapVisAsset nanColor;
 
+        /// <summary>
+        /// Scalar color variable applied to each point of this data impression.
+        /// This example switches between X-axis monotonically increasing and
+        /// Y-axis monotonically increasing.
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/colormap.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Show/hide outline on this data impression
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/showOutline.gif"/>
         /// </summary>
         public BooleanPrimitive showOutline;
 
         /// <summary>
         /// Width (in Unity world coords) of the outline
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
         public LengthPrimitive outlineWidth;
 
         /// <summary>
-        /// Color of the outline
+        /// Color of the outline (when <see cref="forceOutlineColor"/> is `true`
+        /// or there's no <see cref="colormap"/>/<see cref="colorVariable"/>)
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
         public Color outlineColor;
 
         /// <summary>
         /// Force the use of <see cref="outlineColor"/> even if there's a
-        /// colormap applied to the data
+        /// colormap applied to the data. This example alternates between a
+        /// white-to-green linear colormap (false) and a solid purple-blue
+        /// (true)
+        ///
+        /// <img src="/resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"/>
         /// </summary>
         public BooleanPrimitive forceOutlineColor;
 

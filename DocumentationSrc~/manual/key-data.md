@@ -1,3 +1,8 @@
+---
+uid: key-data.md
+title: Key Data
+---
+
 # Key Data
 
 For data visualizations that have a spatial structure, the geometric structure itself is a critical part of the data.  In fact, access to individual data variables is usually "keyed" off these geometric structures.  You can't ask, "What is the average temperature at _________", without filling in the blank with some geometric identifier.  There are some choices; we could fill in the blank with a point, a line, a surface, or a volume in space, but we need something to act as that structure upon which the data variables are defined.  We call this geometric structure the "key data".
