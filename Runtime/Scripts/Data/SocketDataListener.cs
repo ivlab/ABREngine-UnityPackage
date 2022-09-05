@@ -166,11 +166,16 @@ namespace IVLab.ABREngine
                         try
                         {
                             // Unload the outdated version of the dataset
-                            ABREngine.Instance.Data.UnloadRawDataset(textData.label);
+                            RawDataset _dataset;
+                            if (ABREngine.Instance.Data.TryGetRawDataset(textData.label, out _dataset))
+                            {
+                                ABREngine.Instance.Data.UnloadRawDataset(textData.label);
+                            }
 
                             // Load in the new data and save it to disk
                             ABREngine.Instance.Data.ImportRawDataset(textData.label, dataset);
                             ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                            updatedDataPaths.Enqueue(textData.label);
                         }
                         catch (Exception e)
                         {
@@ -189,15 +194,23 @@ namespace IVLab.ABREngine
                     // that essentially means flagging that data has changed for
                     // every data impression that depends on the updated data,
                     // then re-rendering the scene.
-                    while (!updatedDataPaths.IsEmpty)
+                    try
                     {
-                        string dataPathUpdated;
-                        if (updatedDataPaths.TryDequeue(out dataPathUpdated))
-                        {
-                            ABREngine.Instance.GetDataImpression(di => (di.InputIndexer.GetInputField("keyData").GetValue(di) as KeyData).Path == dataPathUpdated).RenderHints.DataChanged = true;
-                        }
+                        // while (!updatedDataPaths.IsEmpty)
+                        // {
+                        //     string dataPathUpdated;
+                        //     // if (updatedDataPaths.TryDequeue(out dataPathUpdated))
+                        //     // {
+                        //     //     ABREngine.Instance.GetDataImpression(di => (di.InputIndexer.GetInputField("keyData").GetValue(di) as KeyData).Path == dataPathUpdated).RenderHints.DataChanged = true;
+                        //     // }
+                        // }
+                        ABREngine.Instance.GetAllDataImpressions().ForEach(di => di.RenderHints.DataChanged = true);
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
                     }
-                    await UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
 
                     Debug.Log("All objects have been unpacked, Sent label \"" + textData.label + "\" " + " ok");
                 }
