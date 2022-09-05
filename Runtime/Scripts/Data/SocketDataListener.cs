@@ -196,15 +196,14 @@ namespace IVLab.ABREngine
                     // then re-rendering the scene.
                     try
                     {
-                        // while (!updatedDataPaths.IsEmpty)
-                        // {
-                        //     string dataPathUpdated;
-                        //     // if (updatedDataPaths.TryDequeue(out dataPathUpdated))
-                        //     // {
-                        //     //     ABREngine.Instance.GetDataImpression(di => (di.InputIndexer.GetInputField("keyData").GetValue(di) as KeyData).Path == dataPathUpdated).RenderHints.DataChanged = true;
-                        //     // }
-                        // }
-                        ABREngine.Instance.GetAllDataImpressions().ForEach(di => di.RenderHints.DataChanged = true);
+                        while (!updatedDataPaths.IsEmpty)
+                        {
+                            string dataPathUpdated;
+                            if (updatedDataPaths.TryDequeue(out dataPathUpdated))
+                            {
+                                ABREngine.Instance.GetDataImpression(di => di.GetKeyData()?.Path == dataPathUpdated).RenderHints.DataChanged = true;
+                            }
+                        }
                         await UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
                     }
                     catch (Exception e)
