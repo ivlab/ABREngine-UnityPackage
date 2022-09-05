@@ -59,12 +59,6 @@ namespace IVLab.ABREngine
         [Tooltip("Load a state from Resources or StreamingAssets folder on ABREngine startup. Example: `testState.json` Leave blank for no startup state.")]
         public string loadStateOnStart;
 
-        /// <summary>
-        ///     Default bounds for datasets when showing (in Unity world coordinates)
-        /// </summary>
-        [Tooltip("Unity world-space container to 'squish' all data into to avoid overflowing Unity coordinates")]
-        public Bounds dataContainer;
-
         [Header("Styling Defaults")]
 
         /// <summary>
@@ -113,6 +107,28 @@ namespace IVLab.ABREngine
         [Tooltip("Port to listen for data connections (e.g. from ParaView on). A port `0` is assumed to mean no connection.")]
         public int dataListenerPort;
 
+        [Header("Data Container Options")]
+        /// <summary>
+        /// Controls whether or not the <see cref="dataContainer"/> is used.
+        /// </summary>
+        [Tooltip("Use the automatic data container, or just import coordinates as-is")]
+        public bool useAutoDataContainer;
+
+        /// <summary>
+        ///     Default bounds for datasets when showing (in Unity world coordinates)
+        /// </summary>
+        [Tooltip("Unity world-space container to automatically 'squish' all data into to avoid overflowing Unity coordinates")]
+        public Bounds dataContainer;
+
+        /// <summary>
+        /// Override transform matrices for specific data impression groups.
+        /// This is useful to change the data-to-Unity mapping if you need more
+        /// fine-grained control than the auto-data-container gives you.
+        /// </summary>
+        [Tooltip("Unity world-space container to 'squish' all data into to avoid overflowing Unity coordinates")]
+        public List<GroupToDataMatrixOverrideFields> overrideGroupToDataMatrices;
+
+
         /// <summary>
         ///     The Json Schema to use for validation of ABR states
         /// </summary>
@@ -151,6 +167,8 @@ namespace IVLab.ABREngine
             visAssetServerUrl = "";
             dataServerUrl = "";
             dataListenerPort = 0;
+
+            overrideGroupToDataMatrices = new List<GroupToDataMatrixOverrideFields>();
         }
 
         void Awake()
@@ -319,6 +337,20 @@ namespace IVLab.ABREngine
             /// Name of VisAsset JSON specifier
             /// </summary>
             public const string VisAssetJson = "artifact.json";
+        }
+
+        [System.Serializable]
+        public class GroupToDataMatrixOverrideFields
+        {
+            [Header("Dataset path or Group name or UUID to affect (specify one)")]
+            [Tooltip("Dataset path to affect with this matrix")]
+            public string datasetPath;
+            [Tooltip("Name of the group to affect with this matrix")]
+            public string groupName;
+            [Tooltip("UUID of the group to affect with this matrix")]
+            public string groupUuid;
+            [Tooltip("4x4 transformation matrix to modify the `GroupToDataMatrix` of this group")]
+            public Matrix4x4 groupToDataMatrix = Matrix4x4.identity;
         }
     }
 }

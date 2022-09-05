@@ -362,12 +362,32 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
+            // If user specified to not use data container, skip the rest and
+            // don't auto-calculate new bounds
+            if (!ABREngine.Instance.Config.useAutoDataContainer)
+            {
+                GroupToDataMatrix = Matrix4x4.identity;
+                return false;
+            }
+
             float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
 
             Dataset ds = GetDataset();
             if (ds != null)
             {
+                // Look to see if this group's unity to data matrix has been
+                // overwritten... if so, skip the rest and don't auto-calculate
+                // new bounds
+                var overrideMatrix = ABREngine.Instance.Config.overrideGroupToDataMatrices.Find(
+                    o => o.groupUuid == this.Uuid.ToString() || o.groupName == this.Name || o.datasetPath == ds.Path
+                );
+                if (overrideMatrix != null)
+                {
+                    GroupToDataMatrix = overrideMatrix.groupToDataMatrix;
+                    return false;
+                }
+
                 // Build a list of keydata that are actually being used
                 List<string> activeKeyDataPaths = new List<string>();
                 foreach (IDataImpression impression in GetDataImpressions().Values)
