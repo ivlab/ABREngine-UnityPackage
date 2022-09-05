@@ -291,14 +291,14 @@ namespace IVLab.ABREngine
                                 {
                                     ScalarDataVariable variable;
                                     dataset.TryGetScalarVar(value.inputValue, out variable);
-                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
+                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
                                 else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
-                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
+                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
 
