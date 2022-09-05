@@ -186,6 +186,11 @@ namespace IVLab.ABREngine
             return keyData?.GetDataset();
         }
 
+        public override KeyData GetKeyData()
+        {
+            return keyData;
+        }
+
         public override void ComputeGeometry()
         {
             if (keyData == null)

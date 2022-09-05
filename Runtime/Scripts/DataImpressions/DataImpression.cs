@@ -27,7 +27,7 @@ namespace IVLab.ABREngine
     /// <summary>
     ///     Public interface for a single ABR visualization layer
     /// </summary>
-    public interface IDataImpression : IHasDataset
+    public interface IDataImpression : IHasDataset, IHasKeyData
     {
         /// <summary>
         ///     Unique identifier for this Data Impression
@@ -241,6 +241,8 @@ namespace IVLab.ABREngine
         {
             return null;
         }
+
+        public abstract KeyData GetKeyData();
     }
 
 

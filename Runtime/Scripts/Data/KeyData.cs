@@ -40,6 +40,18 @@ namespace IVLab.ABREngine
         };
     }
 
+    /// <summary>
+    /// Indicator that a particular object has some key data attached to it -
+    /// useful for most <see cref="DataImpression"/>s.
+    /// </summary>
+    public interface IHasKeyData
+    {
+        /// <summary>
+        /// Get any key data object associated with this object
+        /// </summary>
+        KeyData GetKeyData();
+    }
+
     public interface IKeyData : IABRInput
     {
         /// <summary>
