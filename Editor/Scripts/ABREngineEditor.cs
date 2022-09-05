@@ -59,6 +59,8 @@ namespace IVLab.ABREngine
         void Awake()
         {
             var configs = GetAllInstances<ABRConfig>();
+            var configProp = serializedObject.FindProperty("configPrototype");
+            configIndex = configs.FindIndex(i => i.name == configProp.objectReferenceValue.name);
         }
 
         public override void OnInspectorGUI()
@@ -86,6 +88,10 @@ namespace IVLab.ABREngine
                         configIndex = newIndex;
                         configProp.objectReferenceValue = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
+                    }
+                    if (GUILayout.Button("Open Current ABR Config..."))
+                    {
+                        AssetDatabase.OpenAsset(configs[configIndex]);
                     }
                 }
                 return;
