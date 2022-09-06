@@ -50,4 +50,4 @@ Please see [Creating your first C# ABR Visualization](creating-cs-abr-vis.md).
 ![ABR design interface](resources/design-interface-fire-wide.png)
 ABR design interface for a visualization of wildfire data.
 
-[more to come on this section]
+Please see @creating-design-interface-vis.md.

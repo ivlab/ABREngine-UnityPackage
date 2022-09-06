@@ -1,3 +1,8 @@
+---
+uid: creating-cs-abr-vis.md
+title: Creating your first C# ABR Visualization
+---
+
 # Creating your first C# ABR Visualization
 
 Before you begin, make sure you have Unity open and have followed the [ABR install instructions](install.md).
