@@ -32,6 +32,8 @@
       href: examples/create-dataset.md
     - name: Modify JSON State
       href: examples/interactive-state.md
+    - name: Advanced Usage
+      href: examples/advanced-usage.md
 - name: License
   href: license.md
 - name: Change Log

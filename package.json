@@ -29,6 +29,11 @@
             "path": "Samples~/CreateDataset"
         },
         {
+            "displayName": "Advanced Usage",
+            "description": "Advanced usage of the ABREngine, including importing external data, moving data impressions around, per-index visibility, and VisAsset Gradients",
+            "path": "Samples~/AdvancedUsage"
+        },
+        {
             "displayName": "ABR Testing",
             "description": "If you are contributing to the ABREngine, you may use this script as a framework to test your new features.",
             "path": "Samples~/TestingABR"

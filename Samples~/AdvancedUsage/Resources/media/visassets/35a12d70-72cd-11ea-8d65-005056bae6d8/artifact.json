@@ -1,0 +1,14 @@
+{
+  "artifactData": {
+    "image": "texturemap_0.png", 
+    "normalmap": "normalmap_0.png"
+  }, 
+  "artist": "Francesca Samsel", 
+  "class": "crosshatch", 
+  "family": "water", 
+  "hidden": false, 
+  "preview": "thumbnail.png", 
+  "tags": [], 
+  "type": "texture", 
+  "uuid": "35a12d70-72cd-11ea-8d65-005056bae6d8"
+}
