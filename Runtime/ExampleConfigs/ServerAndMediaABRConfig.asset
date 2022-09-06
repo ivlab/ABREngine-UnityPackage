@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c48af8e404cbbcbda1bf7ca5735cd01, type: 3}
   m_Name: ServerAndMediaABRConfig
   m_EditorClassIdentifier: 
-  mediaPath: ./media
+  mediaPath: ../media
   serverUrl: http://localhost:8000/api/state
   loadStateOnStart: 
   defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481, type: 3}
