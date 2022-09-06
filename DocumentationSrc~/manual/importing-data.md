@@ -55,7 +55,6 @@ visualization toolkit developed by [KitWare](https://www.kitware.com/).
 
 1. [Download ParaView](https://www.paraview.org/download/). We've tested the
 ABR-to-ParaView connector with ParaView version 5.9.
-2. Unzip the [EasyParaViewToABR](../../EasyParaViewToABR~/EasyParaViewToABR.zip) zip file to your home folder
-3. Follow the EasyParaViewToABR directions below:
+2. Follow the EasyParaViewToABR directions below:
 
 [!include[EasyParaViewToABR Instructions](../../EasyParaViewToABR~/README.md)]

@@ -23,6 +23,15 @@
       href: creating-design-interface-vis.md
     - name: ABR C# Visualization
       href: creating-cs-abr-vis.md
+- name: Examples
+  href: examples/examples.md
+  items:
+    - name: State Creation
+      href: examples/create-state.md
+    - name: Dataset Creation
+      href: examples/create-dataset.md
+    - name: Modify JSON State
+      href: examples/interactive-state.md
 - name: License
   href: license.md
 - name: Change Log

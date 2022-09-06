@@ -11,7 +11,7 @@ provided a way to create visualizations using a drag-and-drop approach: The ABR 
 ![ABR Design Interface](./resources/design-interface-fire-wide.png)
 
 If you haven't already, please follow all the instructions in
-[README_INSTALL.md](../../README_INSTALL.md) to install the ABREngine Unity
+[README_INSTALL.md](/README_INSTALL.md) to install the ABREngine Unity
 Package, design interface and visualization manager before continuing.
 
 
@@ -34,7 +34,7 @@ Save your scene by pressing Ctrl+S or Cmd+S or navigating to *File > Save*.
 ## Part 2: Verifying the design interface connection
 
 1. Ensure Docker is running and the Vis Manager (`sculpting-vis-app` container)
-is running as described in [README_INSTALL.md](../../README_INSTALL.md).
+is running as described in [README_INSTALL.md](/README_INSTALL.md).
 
 2. In a browser, go to <http://localhost:8000> to open the Design Interface.
 

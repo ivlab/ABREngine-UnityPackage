@@ -36,7 +36,7 @@ Next step for getting started with ABR in C#: Follow the @creating-cs-abr-vis.md
 
 If you'd rather create visualizations, well, visually (as opposed to with code), then we recommend that you install the ABR Vis Manager and Design Interface. Then, you'll be able to create visualization by dragging and dropping:
 
-![ABR Design Interface](./DocumentationSrc~/manual/resources/design-interface-fire-wide.png)
+![ABR Design Interface](/DocumentationSrc~/manual/resources/design-interface-fire-wide.png)
 
 The vis manager has several components; it's important to follow each step closely.
 
