@@ -108,8 +108,15 @@ if [[ "$buildMode" == "--clean" ]]; then
   exe find $apiSrcDir -type d -name "obj" -exec /bin/rm -rf "{}" +
   exit
 elif [[ "$buildMode" == "--publish" ]]; then
+  # CD into root of package
   cd $scriptDir/..
-  exe git subtree push --prefix Documentation\~ origin gh-pages
+  # Avoid git subtree method because it requires committing the whole
+  # Documentation~ folder, causing no end of pain (100,000s of lines of HTML - ew).
+  # exe git subtree push --prefix Documentation\~ origin gh-pages
+  # Instead, use a 3rd party script:
+  # https://github.com/X1011/git-directory-deploy
+  # GIT_DEPLOY_DIR is an env variable used by deploy-gh-pages.sh.
+  GIT_DEPLOY_DIR=./Documentation~ ./DocumentationSrc~/deploy-gh-pages.sh
   exit
 fi
 
