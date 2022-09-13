@@ -15,6 +15,7 @@ To use the package in a read-only mode, the same way you would for packages down
 4. Paste ```git@github.umn.edu:ivlab-cs/ABREngine-UnityPackage.git``` for the latest package
 5. Repeat steps 2-4 for each of these additional package dependencies:
   - `ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git`
+    - If you're using Unity 2020.x, you'll need an older version of JSON schema: `ssh://git@github.umn.edu/ivlab-cs/JsonSchema-UnityPackage.git#v3.0.13`
   - `ssh://git@github.umn.edu/ivlab-cs/OBJImport-UnityPackage.git`
   - `ssh://git@github.umn.edu/ivlab-cs/JsonDiffPatch-UnityPackage.git`
   - `ssh://git@github.umn.edu/ivlab-cs/IVLab-Utilities-UnityPackage.git`
