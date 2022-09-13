@@ -57,7 +57,7 @@ namespace IVLab.ABREngine
         /// This example switches between X-axis monotonically increasing and
         /// Y-axis monotonically increasing.
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
         /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
@@ -67,7 +67,7 @@ namespace IVLab.ABREngine
         /// switches between a linear white-to-green colormap and a linear
         /// black-to-white colormap.
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/colormap.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/colormap.gif"/>
         /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
@@ -91,7 +91,7 @@ namespace IVLab.ABREngine
         /// cref="GlyphGradient"/>. This example alternates between spherical
         /// and thin cylindrical glyphs.
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/glyph.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/glyph.gif"/>
         /// </summary>
         [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
         public IGlyphVisAsset glyph;
@@ -99,7 +99,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Adjust the size of the glyphs (in Unity-space meters).
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/glyphSize.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/glyphSize.gif"/>
         /// </summary>
         [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
@@ -137,21 +137,21 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Show/hide outline on this data impression
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
         /// </summary>
         public BooleanPrimitive showOutline;
 
         /// <summary>
         /// Width (in Unity world coords) of the outline
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
         /// </summary>
         public LengthPrimitive outlineWidth;
 
         /// <summary>
         /// Color of the outline
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
         public Color outlineColor;
 
@@ -161,7 +161,7 @@ namespace IVLab.ABREngine
         /// white-to-green linear colormap (false) and a solid purple-blue
         /// (true)
         ///
-        /// <img src="/resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
+        /// <img src="../resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
         /// </summary>
         public BooleanPrimitive forceOutlineColor;
 

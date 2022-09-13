@@ -69,7 +69,7 @@ namespace IVLab.ABREngine
         /// switches between a linear white-to-green colormap and a linear
         /// black-to-white colormap.
         ///
-        /// <img src="/resources/api/SimpleVolumeDataImpression/colormap.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/colormap.gif"/>
         /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
@@ -89,8 +89,8 @@ namespace IVLab.ABREngine
         /// like this, we can achieve a sort of contour or isosurface scanning
         /// through the volume.
         ///
-        /// <img src="/resources/api/SimpleVolumeDataImpression/transfer-fn.gif"/>
-        /// <img src="/resources/api/SimpleVolumeDataImpression/opacitymap.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/transfer-fn.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/opacitymap.gif"/>
         /// </summary>
         /// <examples>
         /// To achieve the "scanning"/"spike" effect shown in the gifs above, the
@@ -117,7 +117,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Brightness multiplier for the entire volume, irrespective of lighting.
         ///
-        /// <img src="/resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
         [ABRInput("Volume Brightness", "Volume", UpdateLevel.Style)]
         public PercentPrimitive volumeBrightness;
@@ -126,7 +126,7 @@ namespace IVLab.ABREngine
         /// Opacity multiplier for the entire volume; gets multiplied on top of
         /// the <see cref="opacitymap"/>.
         ///
-        /// <img src="/resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
         [ABRInput("Volume Opacity Multiplier", "Volume", UpdateLevel.Style)]
         public PercentPrimitive volumeOpacityMultiplier;
@@ -134,7 +134,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Should the current scene's lighting affect the volume or not?
         ///
-        /// <img src="/resources/api/SimpleVolumeDataImpression/volumeLighting.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeLighting.gif"/>
         /// </summary>
         /// <remarks>
         /// Lighting is often useful for understanding 3D structures and

@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
         /// as `<see cref="RenderHints.DataChanged"/>= true` is specified. For
         /// example, here we are spinning the transforms along the y axis.
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/keyData.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/keyData.gif"/>
         /// </summary>
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
         /// The mesh to populate across all "instanced transforms" supplied by
         /// key data.
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"/>
         /// </summary>
         public Mesh instanceMesh;
 
@@ -74,7 +74,7 @@ namespace IVLab.ABREngine
         /// This example switches between X-axis monotonically increasing and
         /// Y-axis monotonically increasing.
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/colorVariable.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/colorVariable.gif"/>
         /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
@@ -84,7 +84,7 @@ namespace IVLab.ABREngine
         /// switches between a linear white-to-green colormap and a linear
         /// black-to-white colormap.
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/colormap.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/colormap.gif"/>
         /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
@@ -92,14 +92,14 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Show/hide outline on this data impression
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/showOutline.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/showOutline.gif"/>
         /// </summary>
         public BooleanPrimitive showOutline;
 
         /// <summary>
         /// Width (in Unity world coords) of the outline
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
         public LengthPrimitive outlineWidth;
 
@@ -107,7 +107,7 @@ namespace IVLab.ABREngine
         /// Color of the outline (when <see cref="forceOutlineColor"/> is `true`
         /// or there's no <see cref="colormap"/>/<see cref="colorVariable"/>)
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/outlineColor.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
         public Color outlineColor;
 
@@ -117,7 +117,7 @@ namespace IVLab.ABREngine
         /// white-to-green linear colormap (false) and a solid purple-blue
         /// (true)
         ///
-        /// <img src="/resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"/>
+        /// <img src="../resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"/>
         /// </summary>
         public BooleanPrimitive forceOutlineColor;
 

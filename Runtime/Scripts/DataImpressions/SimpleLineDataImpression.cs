@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
         /// impression.  This example switches between X-axis monotonically
         /// increasing and Y-axis monotonically increasing.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/colorVariable.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/colorVariable.gif"/>
         /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
@@ -71,7 +71,7 @@ namespace IVLab.ABREngine
         /// switches between a linear white-to-green colormap and a linear
         /// black-to-white colormap.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/colormap.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/colormap.gif"/>
         /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
@@ -93,7 +93,7 @@ namespace IVLab.ABREngine
         /// Texture applied to the line. Light areas on the texture are
         /// discarded, dark areas are kept. Can also be a <see cref="LineTextureGradient"/>
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/lineTexture.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/lineTexture.gif"/>
         /// </summary>
         [ABRInput("Texture", "Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset lineTexture;
@@ -111,7 +111,7 @@ namespace IVLab.ABREngine
         /// href="https://en.wikipedia.org/wiki/Thresholding_(image_processing)">threshold</a>
         /// filter.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/textureCutoff.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/textureCutoff.gif"/>
         /// </summary>
         /// <remarks>
         /// NOTE: This input will have no effect if there's no <see
@@ -125,7 +125,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Number of "averaging" samples taken across the line for a smoothing effect. This example ranges from 0 to 50.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/averageCount.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/averageCount.gif"/>
         /// </summary>
         [ABRInput("Ribbon Smooth", "Ribbon", UpdateLevel.Data)]
         public IntegerPrimitive averageCount;
@@ -133,7 +133,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Width of the line, in Unity world units.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/lineWidth.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/lineWidth.gif"/>
         /// </summary>
         [ABRInput("Ribbon Width", "Ribbon", UpdateLevel.Data)]
         public LengthPrimitive lineWidth;
@@ -141,7 +141,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Rotate the ribbon along its central axis. This example goes from 0 degrees to 90 degrees.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
         /// </summary>
         [ABRInput("Ribbon Rotation", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonRotationAngle;
@@ -149,7 +149,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Manually adjust the brightness of the ribbon regardless of lighting in the scene.
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/ribbonBrightness.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/ribbonBrightness.gif"/>
         /// </summary>
         [ABRInput("Ribbon Brightness", "Ribbon", UpdateLevel.Style)]
         public PercentPrimitive ribbonBrightness;
@@ -157,7 +157,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Subtly adjust the lighting by varying the lighting normal of the ribbon
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
         /// </summary>
         [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
@@ -166,7 +166,7 @@ namespace IVLab.ABREngine
         /// Change the default curvature axis (if there are no existing tangents
         /// on the curve, this axis will be used)
         ///
-        /// <img src="/resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"/>
+        /// <img src="../resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"/>
         /// </summary>
         /// <remarks>
         /// NOTE: This input mostly changes behaviour at the ends of ribbons,
