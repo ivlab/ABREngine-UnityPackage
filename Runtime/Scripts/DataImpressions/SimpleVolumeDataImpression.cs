@@ -439,9 +439,14 @@ namespace IVLab.ABREngine
                 perVoxelVisibilityBuffer.SetData(perVoxelVisibility);
                 MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 1);
+                Debug.Log(perVoxelVisibilityBuffer);
             }
             else
             {
+                // Initialize the compute buffer if it is uninitialized
+                if (perVoxelVisibilityBuffer == null)
+                    perVoxelVisibilityBuffer = new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default);
+                MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 0);
             }
 
