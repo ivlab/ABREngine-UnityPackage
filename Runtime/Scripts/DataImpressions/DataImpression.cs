@@ -256,17 +256,17 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool DataChanged { get; set; } = false;
+        public bool DataChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the style of the impression been changed
         /// </summary>
-        public bool StyleChanged { get; set; } = false;
+        public bool StyleChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the visibility of the impression been changed (mesh renderer needs to be toggled)
         /// </summary>
-        public bool VisibilityChanged { get; set; } = false;
+        public bool VisibilityChanged { get; set; } = true;
 
         /// <summary>
         ///    Whether or not the impression is visible
