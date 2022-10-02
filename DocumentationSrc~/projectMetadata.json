@@ -1,11 +1,11 @@
 {
     "_appTitle": "ABREngine",
-    "_gitUrlPattern": "github.umn.edu",
+    "_gitUrlPattern": "github",
     "newFileRepository": {
       "branch": "master"
     },
     "_gitContribute": {
-      "repo": "git@github.umn.edu/ivlab-cs/ABREngine-UnityPackage",
+      "repo": "https://github.com/ivlab/ABREngine-UnityPackage",
       "branch": "master",
       "apiSpecFolder": "Documentation~/apidocs-overrides"
     }

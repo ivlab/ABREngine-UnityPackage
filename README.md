@@ -8,4 +8,4 @@ Please refer to <./README_INSTALL.md>.
 
 ## Documentation
 
-[Documentation for the UnityPackage is available](https://pages.github.umn.edu/ivlab-cs/ABREngine-UnityPackage).
+[Documentation for the UnityPackage is available](https://ivlab.github.io/ABREngine-UnityPackage).
