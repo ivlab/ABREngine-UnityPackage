@@ -24,9 +24,20 @@ namespace IVLab.ABREngine
 {
     /// <summary>
     /// An EncodedGameObject connects a DataImpression with a Unity Game Object.
+    /// Look under the ABREngine main GameObject, find the data impression group
+    /// your impression exists in, and inspect the Data Impression GameObject to
+    /// find the EncodedGameObject.
     /// </summary>
+    /// <remarks>
+    /// While this little class seems unobtrusive and unimportant, this is the
+    /// class that connects all of the underlying rendering work ABR is doing
+    /// with the Unity scene and geometry rendering!
+    /// </remarks>
     public class EncodedGameObject : MonoBehaviour
     {
+        /// <summary>
+        /// The UUID of the data impression this GameObject is encoding.
+        /// </summary>
         public Guid Uuid { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace IVLab.ABREngine
     /// <summary>
     ///     Public interface for a single ABR visualization layer
     /// </summary>
-    public interface IDataImpression : IHasDataset
+    public interface IDataImpression : IHasDataset, IHasKeyData
     {
         /// <summary>
         ///     Unique identifier for this Data Impression
@@ -121,12 +121,12 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Name of the material to use to render this DataImpression
         /// </summary>
-        protected virtual string MaterialName { get; }
+        protected virtual string[] MaterialNames { get; }
 
         /// <summary>
         ///     Slot to load the material into at runtime
         /// </summary>
-        protected virtual Material ImpressionMaterial { get; }
+        protected virtual Material[] ImpressionMaterials { get; }
 
         /// <summary>
         ///     Storage for the rendering data to be sent to the shader
@@ -161,10 +161,26 @@ namespace IVLab.ABREngine
             InputIndexer = new ABRInputIndexerModule(this);
             Uuid = new Guid(uuid);
             MatPropBlock = new MaterialPropertyBlock();
-            ImpressionMaterial = Resources.Load<Material>(MaterialName);
-            if (ImpressionMaterial == null)
+
+            // Initialize material list
+            if (ImpressionMaterials == null)
             {
-                Debug.LogWarningFormat("Material `{0}` not found for {1}", MaterialName, this.GetType().ToString());
+                ImpressionMaterials = new Material[MaterialNames.Length];
+            }
+
+            for (int m = 0; m < MaterialNames.Length; m++)
+            {
+                // Load each material, if it's not already loaded
+                if (ImpressionMaterials[m] == null)
+                {
+                    ImpressionMaterials[m] = Resources.Load<Material>(MaterialNames[m]);
+                }
+
+                // If it's still null, that means we didn't find it
+                if (ImpressionMaterials[m] == null)
+                {
+                    Debug.LogErrorFormat("Material `{0}` not found for {1}", MaterialNames[m], this.GetType().ToString());
+                }
             }
         }
 
@@ -225,6 +241,8 @@ namespace IVLab.ABREngine
         {
             return null;
         }
+
+        public abstract KeyData GetKeyData();
     }
 
 
@@ -238,17 +256,17 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool DataChanged { get; set; } = false;
+        public bool DataChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the style of the impression been changed
         /// </summary>
-        public bool StyleChanged { get; set; } = false;
+        public bool StyleChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the visibility of the impression been changed (mesh renderer needs to be toggled)
         /// </summary>
-        public bool VisibilityChanged { get; set; } = false;
+        public bool VisibilityChanged { get; set; } = true;
 
         /// <summary>
         ///    Whether or not the impression is visible

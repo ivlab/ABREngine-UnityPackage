@@ -1,0 +1,61 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "cwd": "../../../",
+          "files": [
+            "*.csproj"
+          ]
+        }
+      ],
+      "globalNamespaceId": "Global",
+      "filter": "filterConfig.yml",
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "globalMetadata": {
+      "_appFooter": "<a href=\"https://ivlab.cs.umn.edu\">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved",
+      "_appLogoPath": "resources/logo.svg",
+      "_appFaviconPath": "resources/favicon.ico",
+      "_enableSearch": true
+    },
+    "content": [
+      {
+        "files": [
+          "toc.yml",
+          "index.md",
+          "api/**.yml",
+          "api/**.md",
+          "manual/**.yml",
+          "manual/**.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "resources/**",
+          "manual/resources/**"
+        ]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidocs-edits/*.md"
+        ]
+      }
+    ],
+    "xref": [
+      "resources/xrefmap.yml"
+    ],
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
+    ],
+    "template": "templates/statictoc-with-github-umn-edu",
+    "globalMetadataFiles": "projectMetadata.json",
+    "dest": "../Documentation~"
+  }
+}

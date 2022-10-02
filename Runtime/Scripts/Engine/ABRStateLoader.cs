@@ -37,12 +37,12 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Load a state based on some text (perhaps a JSON string, a file path, or URL)
         /// </summary>
-        Task<JObject> GetState(string stateText);
+        JObject GetState(string stateText);
 
         /// <summary>
         /// Save a serialized JSON state with a particular name
         /// </summary>
-        Task SaveState(string name, string serializedState);
+        void SaveState(string name, string serializedState);
     }
 
     /// <summary>
@@ -52,19 +52,16 @@ namespace IVLab.ABREngine
     {
         public ResourceStateFileLoader() { }
 
-        public async Task<JObject> GetState(string fileName)
+        public JObject GetState(string fileName)
         {
             Debug.LogFormat("Loading state from resources: {0}", fileName);
             TextAsset textAsset = null;
-            await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-            {
-                string name = Path.GetFileNameWithoutExtension(fileName);
-                textAsset = Resources.Load<TextAsset>(name);
-            });
+            string name = Path.GetFileNameWithoutExtension(fileName);
+            textAsset = Resources.Load<TextAsset>(name);
             return JObject.Parse(textAsset?.text);
         }
 
-        public async Task SaveState(string name, string serializedState)
+        public void SaveState(string name, string serializedState)
         {
             throw new NotImplementedException("States cannot be saved to Resources folder");
         }
@@ -77,19 +74,19 @@ namespace IVLab.ABREngine
     {
         public HttpStateFileLoader() { }
 
-        public async Task<JObject> GetState(string url)
+        public JObject GetState(string url)
         {
-            HttpResponseMessage stateResponse = await ABREngine.httpClient.GetAsync(url);
+            HttpResponseMessage stateResponse = ABREngine.httpClient.GetAsync(url).Result;
             stateResponse.EnsureSuccessStatusCode();
-            string fullStateJson = await stateResponse.Content.ReadAsStringAsync();
+            string fullStateJson = stateResponse.Content.ReadAsStringAsync().Result;
             return JObject.Parse(fullStateJson)["state"].ToObject<JObject>();
         }
 
-        public async Task SaveState(string name, string serializedState)
+        public void SaveState(string name, string serializedState)
         {
-            string stateUrl = ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer;
+            string stateUrl = ABREngine.Instance.Config.serverUrl.ToString();
             ByteArrayContent content = new ByteArrayContent(Encoding.UTF8.GetBytes(serializedState));
-            HttpResponseMessage stateResponse = await ABREngine.httpClient.PutAsync(stateUrl, content);
+            HttpResponseMessage stateResponse = ABREngine.httpClient.PutAsync(stateUrl, content).Result;
             stateResponse.EnsureSuccessStatusCode();
         }
     }
@@ -101,12 +98,12 @@ namespace IVLab.ABREngine
     {
         public TextStateFileLoader() { }
 
-        public async Task<JObject> GetState(string jsonText)
+        public JObject GetState(string jsonText)
         {
-            return await Task.Run(() => JObject.Parse(jsonText));
+            return JObject.Parse(jsonText);
         }
 
-        public async Task SaveState(string name, string serializedState)
+        public void SaveState(string name, string serializedState)
         {
             throw new NotImplementedException("States cannot be saved to text");
         }
@@ -119,20 +116,20 @@ namespace IVLab.ABREngine
     {
         public PathStateFileLoader() { }
 
-        public async Task<JObject> GetState(string stateFilePath)
+        public JObject GetState(string stateFilePath)
         {
             using (StreamReader reader = new StreamReader(stateFilePath))
             {
-                string stateText = await reader.ReadToEndAsync();
+                string stateText = reader.ReadToEnd();
                 return JObject.Parse(stateText);
             }
         }
 
-        public async Task SaveState(string outPath, string serializedState)
+        public void SaveState(string outPath, string serializedState)
         {
             using (StreamWriter writer = new StreamWriter(outPath))
             {
-                await writer.WriteAsync(serializedState);
+                writer.Write(serializedState);
             }
         }
     }

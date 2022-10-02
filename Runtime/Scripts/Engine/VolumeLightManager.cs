@@ -21,30 +21,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VolumeLightManager : MonoBehaviour
+namespace IVLab.ABREngine
 {
-    private Material volumeMaterial;
-    private Vector4[] lightViewSpaceDirections = new Vector4[3];
-    private float[] lightIntensities = new float[3];
-
-    private void Start()
+    /// <summary>
+    /// Transfer any lights in the ABR scene to variables in the volume rendering shader.
+    /// </summary>
+    public class VolumeLightManager : MonoBehaviour
     {
-        volumeMaterial = Resources.Load<Material>("ABR_Volume");
-    }
+        private Material volumeMaterial;
+        private Vector4[] lightViewSpaceDirections = new Vector4[3];
+        private float[] lightIntensities = new float[3];
 
-    // Update is called once per frame
-    void Update()
-    {
-        int lightCount = 0;
-        foreach (Transform lightTransform in transform)
+        private void Start()
         {
-            lightViewSpaceDirections[lightCount] = Camera.main.worldToCameraMatrix.MultiplyVector(lightTransform.rotation * Vector3.forward);
-            lightIntensities[lightCount] = lightTransform.gameObject.GetComponent<Light>().intensity;
-            lightCount++;
+            volumeMaterial = Resources.Load<Material>("ABR_Volume");
         }
 
-        volumeMaterial.SetInt("_LightCount", lightCount);
-        volumeMaterial.SetVectorArray("_ViewSpaceLightDirections", lightViewSpaceDirections);
-        volumeMaterial.SetFloatArray("_LightIntensities", lightIntensities);
+        // Update is called once per frame
+        void Update()
+        {
+            int lightCount = 0;
+            foreach (Transform lightTransform in transform)
+            {
+                lightViewSpaceDirections[lightCount] = Camera.main.worldToCameraMatrix.MultiplyVector(lightTransform.rotation * Vector3.forward);
+                lightIntensities[lightCount] = lightTransform.gameObject.GetComponent<Light>().intensity;
+                lightCount++;
+            }
+
+            volumeMaterial.SetInt("_LightCount", lightCount);
+            volumeMaterial.SetVectorArray("_ViewSpaceLightDirections", lightViewSpaceDirections);
+            volumeMaterial.SetFloatArray("_LightIntensities", lightIntensities);
+        }
     }
 }

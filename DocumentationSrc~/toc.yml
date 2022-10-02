@@ -1,0 +1,9 @@
+### YamlMime:TableOfContent
+- name: Home
+  href: index.md
+- name: Manual
+  href: manual/
+  homepage: manual/intro.md
+- name: API Documentation
+  href: api/
+  homepage: api/index.md

@@ -599,32 +599,79 @@ namespace IVLab.ABREngine
         /// </example>
         public static RawDataset VoxelsToVolume(float[][][] voxels, string voxelsName, Vector3Int volumeDimensions, Bounds dataBounds)
         {
-            RawDataset ds = new RawDataset();
-            ds.bounds = dataBounds;
-            int volX = volumeDimensions.x;
-            int volY = volumeDimensions.y;
-            int volZ = volumeDimensions.z;
-            ds.dimensions = volumeDimensions;
-            ds.scalarArrayNames = new string[] { voxelsName };
-            float[] scalars = new float[volX * volY * volZ];
-
+            // Copy all the voxel values into 
+            float[] scalars = new float[volumeDimensions.x * volumeDimensions.y * volumeDimensions.z];
             int v = 0;
-            // Array expects right-hand coordinates, so flip it here...
-            // Essentially, flatten the voxels into a single scalar array
-            for (int z = volZ - 1; z >= 0; z--)
+            for (int z = 0; z < volumeDimensions.z; z++)
             {
-                for (int y = 0; y < volY; y++)
+                for (int y = 0; y < volumeDimensions.y; y++)
                 {
-                    for (int x = 0; x < volX; x++)
-                    {
-                        scalars[v] = voxels[z][y][x];
-                        v++;
-                    }
+                    Array.Copy(voxels[z][y], 0, scalars, v, volumeDimensions.x);
+                    v += volumeDimensions.x;
                 }
             }
-            ds.scalarMins = new float[] { scalars.Min() };
-            ds.scalarMaxes = new float[] { scalars.Max() };
-            ds.scalarArrays = new SerializableFloatArray[] { new SerializableFloatArray() { array = scalars }};
+
+            return VoxelsToVolume(scalars, voxelsName, volumeDimensions, dataBounds);
+        }
+
+        /// <summary>
+        /// Convert a 1D array into an ABR volume data object. There is assumed to be a single scalar variable described by the array `voxels`.
+        /// </summary>
+        /// <param name="voxels">Individual scalar values that make up the volume. All voxels are assumed to be the same size.</param>
+        /// <param name="voxelsName">Name of the variable the `voxels` are storing</param>
+        /// <param name="volumeDimensions">Dimensions of the volume (number of steps in x, y, and z).</param>
+        /// <param name="dataBounds">The bounds of volume in actual space.</param>
+        /// <example>
+        /// In this example, we create a volume from a series of voxels
+        /// <code>
+        /// public class RawDatasetAdapterExample : MonoBehaviour
+        /// {
+        ///     void Start()
+        ///     {
+        ///         // Define a 100x100x100 volume
+        ///         int volX = 100;
+        ///         int volY = 100;
+        ///         int volZ = 100;
+        ///         float[] voxels = new float[volX * volY * volZ];
+        ///
+        ///         // Populate voxels with "data" (x * y * z)
+        ///         int v = 0;
+        ///         for (int v = 0; v &lt; voxels.Length; v++)
+        ///         {
+        ///             int z = v / (volX * volY);
+        ///             int vAdjusted = v - (z * volX * volY);
+        ///             int x = vAdjusted % volX;
+        ///             int y = vAdjusted / volX;
+        ///             voxels[v] = x * y * z;
+        ///         }
+        ///
+        ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
+        ///
+        ///         RawDataset abrVolume = RawDatasetAdapter.VoxelsToVolume(voxels, "someData", new Vector3Int(volX, volY, volZ), b);
+        ///     }
+        /// }
+        /// </code>
+        /// </example>
+        public static RawDataset VoxelsToVolume(float[] voxels, string voxelsName, Vector3Int volumeDimensions, Bounds dataBounds)
+        {
+            RawDataset ds = new RawDataset();
+            ds.bounds = dataBounds;
+            ds.dimensions = volumeDimensions;
+            ds.scalarArrayNames = new string[] { voxelsName };
+
+            float minm = float.MaxValue;
+            float maxm = float.MinValue;
+            for (int v = 0; v < voxels.Length; v++)
+            {
+                if (voxels[v] > maxm)
+                    maxm = voxels[v];
+                if (voxels[v] < minm)
+                    minm = voxels[v];
+            }
+
+            ds.scalarMins = new float[] { minm };
+            ds.scalarMaxes = new float[] { maxm };
+            ds.scalarArrays = new SerializableFloatArray[] { new SerializableFloatArray() { array = voxels }};
 
             int numVectors = 0;
             ds.vectorArrayNames = new string[numVectors];

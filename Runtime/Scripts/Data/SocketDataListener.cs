@@ -19,6 +19,7 @@
  */
 
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
@@ -50,9 +51,12 @@ namespace IVLab.ABREngine
         [SerializeField]
         public TcpListener listener = null;
 
+        private ConcurrentQueue<string> updatedDataPaths;
+
         public SocketDataListener(int port)
         {
             this.port = port;
+            this.updatedDataPaths = new ConcurrentQueue<string>();
         }
 
         public void StartServer()
@@ -161,40 +165,53 @@ namespace IVLab.ABREngine
 
                         try
                         {
+                            // Unload the outdated version of the dataset
+                            RawDataset _dataset;
+                            if (ABREngine.Instance.Data.TryGetRawDataset(textData.label, out _dataset))
+                            {
+                                ABREngine.Instance.Data.UnloadRawDataset(textData.label);
+                            }
+
+                            // Load in the new data and save it to disk
                             ABREngine.Instance.Data.ImportRawDataset(textData.label, dataset);
-                            await ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                            ABREngine.Instance.Data.CacheRawDataset(textData.label, textData.json, textData.bindata);
+                            updatedDataPaths.Enqueue(textData.label);
                         }
                         catch (Exception e)
                         {
                             Debug.LogError(e);
                         }
-
-                        foreach (var ds in ABREngine.Instance.Data.GetDatasets())
-                        {
-                            foreach (var keydata in ds.GetAllKeyData())
-                            {
-                                Debug.Log(keydata.Value.Path + " " + keydata.Value.GetHashCode());
-                            }
-                        }
-                        // Note: state does not (yet) automatically update when new
-                        // data are received
-                        // A HACK until ABRStateLoaders become more generic
-                        if (ABREngine.Instance.Config.Info.serverAddress != null &&
-                                ABREngine.Instance.Config.Info.statePathOnServer != null
-                        )
-                        {
-                            ABREngine.Instance.LoadState<HttpStateFileLoader>(ABREngine.Instance.Config.Info.serverAddress + ABREngine.Instance.Config.Info.statePathOnServer);
-                        }
-                        // });
                     }
                 }
                 else
                 {
                     Debug.Log("Waiting for all objects to update...");
-                    await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "up", cancelToken);
-                    Debug.Log("All objects have been unpacked, Sent label \"" + textData.label + "\" " + " ok");
+                    // "Ack" and "OK" all data
+                    await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "ack", cancelToken);
                     await StreamMethods.WriteStringToStreamAsync(client.GetStream(), "ok", cancelToken);
-                    Debug.Log("Sent update ok");
+
+                    // After all data received, go ahead and update state...
+                    // that essentially means flagging that data has changed for
+                    // every data impression that depends on the updated data,
+                    // then re-rendering the scene.
+                    try
+                    {
+                        while (!updatedDataPaths.IsEmpty)
+                        {
+                            string dataPathUpdated;
+                            if (updatedDataPaths.TryDequeue(out dataPathUpdated))
+                            {
+                                ABREngine.Instance.GetDataImpression(di => di.GetKeyData()?.Path == dataPathUpdated).RenderHints.DataChanged = true;
+                            }
+                        }
+                        await UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(e);
+                    }
+
+                    Debug.Log("All objects have been unpacked, Sent label \"" + textData.label + "\" " + " ok");
                 }
             });
 

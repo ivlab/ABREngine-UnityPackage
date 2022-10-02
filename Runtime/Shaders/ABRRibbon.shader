@@ -45,10 +45,12 @@ Shader "ABR/Ribbon"
 
             // Ribbon parameters
             sampler2D _Texture;
+            sampler2D _NaNTexture;
             sampler2D _TextureNRM;
 
             // Aspect ratio (width / height) of textures
             float _TextureAspect[16];
+            float _NaNTextureAspect;
             // Aspect ratio (height / width) of textures
             float _TextureHeightWidthAspect[16];
 
@@ -59,6 +61,7 @@ Shader "ABR/Ribbon"
 
             // Colormap parameters
             sampler2D _ColorMap;
+            float4 _NaNColor;
             int _UseColorMap = false;
             float4 _ScalarMin;
             float4 _ScalarMax;
@@ -91,6 +94,12 @@ Shader "ABR/Ribbon"
             float Remap(float dataValue, float from0, float to0, float from1, float to1)
             {
                 return from1 + (dataValue - from0) * (to1 - from1) / (to0 - from0);
+            }
+
+            //http://answers.unity.com/answers/1726150/view.html
+            float IsNaN_float(float In)
+            {
+                return (In < 0.0 || In > 0.0 || In == 0.0) ? 0 : 1;
             }
 
             // Vertex shader - just compute screen position at each vertex
@@ -132,8 +141,10 @@ Shader "ABR/Ribbon"
                 float vColorNorm = clamp(Remap(vColor, _ScalarMin[0], _ScalarMax[0], 0, 1),0.01,0.99);
                 if (_UseColorMap == 1)
                 {
-                    float3 colorMapColor = tex2D(_ColorMap, float2(vColorNorm, 0.5));
-                    o.Albedo = colorMapColor;
+                    if (!IsNaN_float(vColor))
+                        o.Albedo = tex2D(_ColorMap, float2(vColorNorm, 0.5));
+                    else
+                        o.Albedo = _NaNColor;
                 }
                 else
                 {
@@ -190,6 +201,10 @@ Shader "ABR/Ribbon"
                         // sqrt() avoids this.
                         currentColor *= sqrt(blendPercentages[texIndex]);
                         textureColor += currentColor;
+                    }
+                    if (IsNaN_float(variables.y))
+                    {
+                        textureColor = tex2D(_NaNTexture, float2(IN.texcoord.x / _NaNTextureAspect, IN.texcoord.y));
                     }
 
                     // DEBUG: Check texture application

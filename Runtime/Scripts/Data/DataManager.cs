@@ -118,11 +118,27 @@ namespace IVLab.ABREngine
             }
         }
 
+        private List<IDataLoader> dataLoaders = new List<IDataLoader>();
+
         public DataManager(string datasetPath)
         {
             this.appDataPath = datasetPath;
             Directory.CreateDirectory(this.appDataPath);
             Debug.Log("Dataset Path: " + appDataPath);
+
+            // Determine which loaders are available to use
+            // First, look in `Media` folder
+            dataLoaders.Add(new MediaDataLoader());
+
+            // Then, look in any `Resources` folder
+            dataLoaders.Add(new ResourcesDataLoader());
+
+            // Afterwards, if we're connected to a data server, look there...
+            if (ABREngine.Instance.Config.dataServerUrl?.Length > 0)
+            {
+                Debug.Log("Allowing loading of datasets from " + ABREngine.Instance.Config.dataServerUrl);
+                dataLoaders.Add(new HttpDataLoader());
+            }
         }
 
         /// <summary>
@@ -166,22 +182,33 @@ namespace IVLab.ABREngine
         /// Load a raw dataset into a RawDataset object by its data path and
         /// return the rawdataset after it has been successfully imported.
         /// </summary>
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <typeparam name="T">Any <see cref="IDataLoader"/> type</typeparam>
         /// <example>
-        /// Datasets may be loaded from any of the following locations:
+        /// If you're working with a pre-existing dataset (i.e., one that already
+        /// exists in ABR raw data format in your media folder), you can use <see
+        /// cref="DataManager.LoadRawDataset"/> to obtain a <see cref="RawDataset"/>.
         /// <code>
-        /// // From a file in the media directory
-        /// RawDataset ds1 = await ABREngine.Instance.Data.LoadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        /// // From a web resource
-        /// RawDataset ds2 = await ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// // Load from a .bin/.json file pair in the datasets folder in the
+        /// // media directory. Most of the time when you're fetching an existing
+        /// // dataset, this is what you'll want to do. Just make sure the
+        /// // dataset actually exists in the media folder!
+        /// RawDataset ds1 = ABREngine.Instance.Data.LoadRawDataset&lt;MediaDataLoader&gt;("Test/Test/KeyData/Example");
+        ///
+        /// // You can also load an ABR raw dataset from a web resource. This requires setting up an ABR data server.
+        /// RawDataset ds2 = ABREngine.Instance.Data.LoadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
         /// </code>
         /// </example>
         /// <returns>
         /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
         /// </returns>
-        public async Task<RawDataset> LoadRawDataset<T>(string dataPath)
+        [Obsolete("It is recommended to use `LoadData` or `LoadRawDataset` instead of this method.")]
+        public RawDataset LoadRawDataset<T>(string dataPath)
         where T : IDataLoader, new()
         {
-            RawDataset ds = await (new T()).TryLoadDataAsync(dataPath);
+            RawDataset ds = (new T()).LoadData(dataPath);
             // Only import if there are actual data present
             if (ds != null)
             {
@@ -196,18 +223,78 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Unload a raw dataset from a RawDataset object by its data path. 
+        /// Load a raw dataset into a RawDataset object by its data path and
+        /// return the rawdataset after it has been successfully imported.
         /// </summary>
-        /// <examples>
-        /// Datasets may be unloaded from any of the following locations:
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <example>
+        /// If you're working with a pre-existing dataset (i.e., one that already
+        /// exists in ABR raw data format in your media folder), you can use <see
+        /// cref="DataManager.LoadRawDataset"/> to obtain a <see cref="RawDataset"/>.
         /// <code>
-        /// // From a file in the media directory
-        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;Media&gt;("Test/Test/KeyData/Example");
-        ///
-        /// // From a web resource
-        /// await ABREngine.Instance.Data.UnloadRawDataset&lt;HttpDataLoader&gt;("Test/Test/KeyData/Example");
+        /// // Load from a .bin/.json file pair in the datasets folder in the
+        /// // media directory. Most of the time when you're fetching an existing
+        /// // dataset, this is what you'll want to do. Just make sure the
+        /// // dataset actually exists in the media folder!
+        /// // Or, load from a Resources directory in Unity.
+        /// // You can also load an ABR raw dataset from a web resource. This requires setting up an ABR data server.
+        /// RawDataset ds1 = ABREngine.Instance.Data.LoadRawDataset("Test/Test/KeyData/Example");
         /// </code>
-        /// </examples> 
+        /// </example>
+        /// <returns>
+        /// Returns the actual <see cref="RawDataset"/> if the dataset was found, `null` if not found.
+        /// </returns>
+        public RawDataset LoadRawDataset(string dataPath)
+        {
+            foreach (IDataLoader loader in dataLoaders)
+            {
+                try
+                {
+                    RawDataset ds = loader.LoadData(dataPath);
+                    if (ds != null)
+                    {
+                        Debug.Log($"Dataset `{dataPath} loaded from " + loader.GetType().Name);
+                        return ds;
+                    }
+                    else
+                        throw new Exception();
+                }
+                catch
+                {
+                    Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
+                }
+            }
+            Debug.LogWarning($"Dataset `{dataPath}` not found in any data loader");
+            return null;
+        }
+
+        /// <summary>
+        /// Attempt to load the data described in `dataPath` from any available
+        /// resource, including a Resources folder, the <see
+        /// cref="media-folder.md"/>, or a HTTP web resource.
+        /// </summary>
+        /// <param name="dataPath">Data path to load. If loading from the media
+        /// directory, you can use the relative path inside that folder (but
+        /// exclude the .bin/.json extension)</param>
+        /// <returns>
+        /// Returns the <see cref="KeyData"/> object if the dataset was found, `null` if not found.
+        /// </returns>
+        public KeyData LoadData(string dataPath)
+        {
+            RawDataset ds = LoadRawDataset(dataPath);
+            KeyData kd = ImportRawDataset(dataPath, ds);
+            return kd;
+        }
+
+        /// <summary>
+        /// Entirely remove a RawDataset from ABR memory.
+        /// </summary>
+        /// <param name="dataPath">The data path / key data to be unloaded</param>
+        /// <remarks>
+        /// This method *does not check if the dataset is currently in use*, so utilize this method with care!
+        /// </remarks>
         public void UnloadRawDataset(string dataPath)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
@@ -254,7 +341,7 @@ namespace IVLab.ABREngine
                 Dataset dataset;
                 if (!TryGetDataset(datasetPath, out dataset))
                 {
-                    Bounds dataContainer = ABREngine.Instance.Config.Info.defaultBounds.Value;
+                    Bounds dataContainer = ABREngine.Instance.Config.dataContainer;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
                 }
 
@@ -283,10 +370,19 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Save a copy of a RawDataset into the media folder.
+        /// </summary>
+        public void CacheRawDataset(string dataPath, RawDataset rds)
+        {
+            Tuple<string, byte[]> dataPair = rds.ToFilePair();
+            CacheRawDataset(dataPath, dataPair.Item1, dataPair.Item2);
+        }
+
+        /// <summary>
         /// Save a copy of the RawDataset described by `json` and `data` to the
         /// media folder.
         /// </summary>
-        public async Task CacheRawDataset(string dataPath, string json, byte[] data)
+        public void CacheRawDataset(string dataPath, in string json, in byte[] data)
         {
             Debug.Log("Saving " + dataPath + " to " + this.appDataPath);
 
@@ -305,7 +401,7 @@ namespace IVLab.ABREngine
             FileInfo binFile = new FileInfo(Path.Combine(this.appDataPath, dataPath + ".bin"));
 
             FileStream fs = File.Create(binFile.FullName);
-            await fs.WriteAsync(data, 0, data.Length);
+            fs.Write(data, 0, data.Length);
             fs.Close();
         }
 
@@ -349,6 +445,15 @@ namespace IVLab.ABREngine
                         scalarDataVariable.Range.min = Mathf.Min(scalarDataVariable.Range.min, rawDataset.GetScalarMin(scalarArrayName));
                         scalarDataVariable.Range.max = Mathf.Max(scalarDataVariable.Range.max, rawDataset.GetScalarMax(scalarArrayName));
                     }
+                }
+
+                // Discard NaNs, if present, by finding the actual data range (ensure there are NEVER any NaNs in Range)
+                // NOTE: this may change the data range from the one imported in the RawDataset.
+                if (float.IsNaN(scalarDataVariable.Range.min) || float.IsNaN(scalarDataVariable.Range.max))
+                {
+                    var noNans = rawDataset.GetScalarArray(DataPath.GetName(scalarPath)).Where(v => !float.IsNaN(v));
+                    scalarDataVariable.Range.min = noNans.Min();
+                    scalarDataVariable.Range.max = noNans.Max();
                 }
 
                 scalarDataVariable.OriginalRange.min = scalarDataVariable.Range.min;

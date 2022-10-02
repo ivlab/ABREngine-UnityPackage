@@ -56,22 +56,91 @@ namespace IVLab.ABREngine
         public KeyData keyData;
 
 
+        /// <summary>
+        /// Scalar color variable applied to each voxel of this data impression
+        /// - affects both the <see cref="colormap"/> and the <see
+        /// cref="opacitymap"/>.
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Data)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="../resources/api/SimpleVolumeDataImpression/colormap.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
+        public IColormapVisAsset nanColor;
+
+        /// <summary>
+        /// The real power of <a
+        /// href="https://en.wikipedia.org/wiki/Volume_rendering">volume
+        /// rendering</a> is in the opacity map, or transfer function.
+        ///
+        /// For example, with a "spike" transfer function changing over time
+        /// like this, we can achieve a sort of contour or isosurface scanning
+        /// through the volume.
+        ///
+        /// <img src="../resources/api/SimpleVolumeDataImpression/transfer-fn.gif"/>
+        /// <img src="../resources/api/SimpleVolumeDataImpression/opacitymap.gif"/>
+        /// </summary>
+        /// <examples>
+        /// To achieve the "scanning"/"spike" effect shown in the gifs above, the
+        /// following code was used inside the `Update()` function of a MonoBehaviour script:
+        /// <code>
+        ///     var x = 1.0f + Mathf.Sin(3.0f * Time.time);
+        ///     float[] points = new float[] { 0.0f, x - 0.1f, x, x + 0.1f, 1.0f };
+        ///     string b = "0%";
+        ///     string[] values = new string[] { b, b, "100%", b, b };
+        ///     PrimitiveGradient pg = new PrimitiveGradient(System.Guid.NewGuid(), points, values);
+        ///     volumeDataImpression.opacitymap = pg;
+        /// </code>
+        /// </examples>
         [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will be 0% opacity.
+        /// </summary>
+        public PercentPrimitive nanOpacity;
 
+
+        /// <summary>
+        /// Brightness multiplier for the entire volume, irrespective of lighting.
+        ///
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
+        /// </summary>
         [ABRInput("Volume Brightness", "Volume", UpdateLevel.Style)]
         public PercentPrimitive volumeBrightness;
 
+        /// <summary>
+        /// Opacity multiplier for the entire volume; gets multiplied on top of
+        /// the <see cref="opacitymap"/>.
+        ///
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
+        /// </summary>
         [ABRInput("Volume Opacity Multiplier", "Volume", UpdateLevel.Style)]
         public PercentPrimitive volumeOpacityMultiplier;
 
+        /// <summary>
+        /// Should the current scene's lighting affect the volume or not?
+        ///
+        /// <img src="../resources/api/SimpleVolumeDataImpression/volumeLighting.gif"/>
+        /// </summary>
+        /// <remarks>
+        /// Lighting is often useful for understanding 3D structures and
+        /// creating atmospheric effects, but may not be useful for nitty-gritty
+        /// data interpretation.
+        /// </remarks>
         [ABRInput("Volume Lighting", "Volume", UpdateLevel.Style)]
         public BooleanPrimitive volumeLighting;
 
@@ -82,7 +151,7 @@ namespace IVLab.ABREngine
         private ComputeBuffer perVoxelVisibilityBuffer; 
 
 
-        protected override string MaterialName { get; } = "ABR_Volume";
+        protected override string[] MaterialNames { get; } = { "ABR_Volume" };
         protected override string LayerName { get; } = "ABR_Volume";
 
         /// <summary>
@@ -96,6 +165,11 @@ namespace IVLab.ABREngine
         public override Dataset GetDataset()
         {
             return keyData?.GetDataset();
+        }
+
+        public override KeyData GetKeyData()
+        {
+            return keyData;
         }
 
         public override void ComputeGeometry()
@@ -181,7 +255,6 @@ namespace IVLab.ABREngine
                         int zMinusOneOffset = z == 0 ? 0 : (z - 1) * dimensions.y * dimensions.x;
                         int zOffset = z * dimensions.y * dimensions.x;
                         int zPlusOneOffset = z == dimensions.z - 1 ? (dimensions.z - 1) * dimensions.y * dimensions.x : (z + 1) * dimensions.y * dimensions.x;
-                        int zOffsetFlipped = (dimensions.z - z - 1) * dimensions.y * dimensions.x;
                         for (int y = 0; y < dimensions.y; y++)
                         {
                             int yMinusOneOffset = y == 0 ? 0 : (y - 1) * dimensions.x;
@@ -199,8 +272,7 @@ namespace IVLab.ABREngine
                                 // Compute scalar data value
                                 float d = colorScalars[xOffset + yOffset + zOffset];
                                 // Store gradient in color rgb and data in alpha
-                                // (flip z to account for RH -> LH coordinate system conversion)
-                                pixels[xOffset + yOffset + zOffsetFlipped] = new Color(xPartial, yPartial, -zPartial, d);
+                                pixels[xOffset + yOffset + zOffset] = new Color(xPartial, yPartial, zPartial, d);
                             }
                         }
                     }
@@ -259,7 +331,7 @@ namespace IVLab.ABREngine
                 meshFilter.mesh = mesh;
 
                 // Apply the voxel texture to the mesh
-                meshRenderer.material = ImpressionMaterial;
+                meshRenderer.material = ImpressionMaterials[0];
                 meshRenderer.GetPropertyBlock(MatPropBlock);
                 Texture3D.DestroyImmediate(MatPropBlock.GetTexture("_VolumeTexture"));
                 MatPropBlock.SetTexture("_VolumeTexture", volumeRenderData.voxelTex);
@@ -326,6 +398,7 @@ namespace IVLab.ABREngine
             {
                 MatPropBlock.SetInt("_UseColorMap", 1);
                 MatPropBlock.SetTexture("_ColorMap", colormap.GetColorGradient());
+                MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
             }
             else
             {
@@ -335,6 +408,7 @@ namespace IVLab.ABREngine
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
+                MatPropBlock.SetFloat("_NaNOpacity", nanOpacity?.Value ?? 0.0f);
                 if (MatPropBlock.GetTexture("_OpacityMap") == null)
                 {
                     Texture2D opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
@@ -365,9 +439,14 @@ namespace IVLab.ABREngine
                 perVoxelVisibilityBuffer.SetData(perVoxelVisibility);
                 MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 1);
+                Debug.Log(perVoxelVisibilityBuffer);
             }
             else
             {
+                // Initialize the compute buffer if it is uninitialized
+                if (perVoxelVisibilityBuffer == null)
+                    perVoxelVisibilityBuffer = new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default);
+                MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 0);
             }
 

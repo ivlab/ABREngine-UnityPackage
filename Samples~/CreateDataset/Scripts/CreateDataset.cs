@@ -49,80 +49,49 @@ namespace IVLab.ABREngine.Examples
             }
         }
 
+        private KeyData kd;
+
         void Start()
         {
             ABREngine.GetInstance();
-            Task.Run(async () =>
-            {
-                try
-                {
                     // Initialize the ABREngine
-                    await ABREngine.Instance.WaitUntilInitialized();
+                    // await ABREngine.Instance.WaitUntilInitialized();
 
-                    await CreateCube();
-                    Debug.Log("Loaded Cube");
+            CreateCube();
+            Debug.Log("Loaded Cube");
 
-                    await CreateDataImpression();
-                    Debug.Log("Registered Data Impression");
+            CreateDataImpression();
+            Debug.Log("Registered Data Impression");
 
-                    await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                        ABREngine.Instance.Render();
-                    });
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError(e);
-                }
-            });
+            ABREngine.Instance.Render();
         }
 
         /// <summary>
         /// Create a data impression to render the cube. See the CreateState.cs
         /// file for a more complete example of creating a state.
         /// </summary>
-        private async Task CreateDataImpression()
+        private void CreateDataImpression()
         {
-            Dataset ds = null;
-            if (!ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(KeyDataPath), out ds))
-            {
-                Debug.LogError("Unable to load dataset " + KeyDataPath);
-                return;
-            }
+            ScalarDataVariable sv = kd.GetScalarVariable(ScalarVarPath);
 
-            IKeyData kd = null;
-            if (!ds.TryGetKeyData(KeyDataPath, out kd))
-            {
-                Debug.LogError("Key data not found in dataset: " + KeyDataPath);
-                return;
-            }
+            SimpleSurfaceDataImpression di = new SimpleSurfaceDataImpression();
+            di.keyData = kd as SurfaceKeyData;
+            di.colorVariable = sv;
+            di.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
 
-            ScalarDataVariable sv = null;
-            if (!ds.TryGetScalarVar(ScalarVarPath, out sv))
-            {
-                Debug.LogError("Dataset does not have variable " + ScalarVarPath);
-                return;
-            }
-
-            await UnityThreadScheduler.Instance.RunMainThreadWork(() => {
-                SimpleSurfaceDataImpression di = new SimpleSurfaceDataImpression();
-                di.keyData = kd as SurfaceKeyData;
-                di.colorVariable = sv;
-                di.colormap = ABREngine.Instance.VisAssets.GetDefault<ColormapVisAsset>() as ColormapVisAsset;
-
-                ABREngine.Instance.RegisterDataImpression(di);
-            });
+            ABREngine.Instance.RegisterDataImpression(di);
         }
 
         /// <summary>
         /// Create a 2x2x2 cube
         /// </summary>
-        private async Task CreateCube()
+        private void CreateCube()
         {
             RawDataset ds = new RawDataset();
 
             ds.vectorArrays = new SerializableVectorArray[0];
             ds.vectorArrayNames = new string[0];
-            ds.meshTopology = MeshTopology.Triangles;
+            ds.dataTopology = DataTopology.Triangles;
             ds.bounds = new Bounds(Vector3.zero, Vector3.one * 2.0f);
 
             ds.scalarArrayNames = new string[] { scalarVar };
@@ -196,15 +165,7 @@ namespace IVLab.ABREngine.Examples
 
             Debug.Log("Loading raw dataset " + KeyDataPath);
 
-            try
-            {
-                await ABREngine.Instance.Data.ImportRawDataset(KeyDataPath, ds);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Error loading dataset:");
-                Debug.LogError(e);
-            }
+            kd = ABREngine.Instance.Data.ImportRawDataset(KeyDataPath, ds);
         }
     }
 }

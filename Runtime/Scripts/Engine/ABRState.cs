@@ -42,22 +42,18 @@ namespace IVLab.ABREngine
         /// The `LoadState` method, the workhorse of this
         /// class, has side effects that range from populating new GameObjects for
         /// data impressions, to loading new data, to loading in VisAssets. By the
-        /// end of `LoadState`, the visualization should be complete.
+        /// end of `LoadState`, the visualization should be complete in the
+        /// Unity scene.
         /// </summary>
-        public async Task<JObject> LoadState<T>(string stateText, JObject previousState)
+        public JObject LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
-            try {
-            await ABREngine.Instance.WaitUntilInitialized();
-            } catch (Exception e) { Debug.LogError(e); }
-            UnityThreadScheduler.GetInstance();
-
-            JObject stateJson = await (new T()).GetState(stateText);
+            JObject stateJson = (new T()).GetState(stateText);
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
             {
-                Debug.LogErrorFormat("State is not valid with ABR schema version {0}", ABREngine.Instance.Config.Info.version);
+                Debug.LogErrorFormat("State is not valid with this version of ABR");
                 foreach (var error in errors)
                 {
                     Debug.LogErrorFormat("Error '{0}': Line {1} ({2}):\n    {3}", error.ErrorType, error.LineNumber, error.Path, error.Message);
@@ -236,20 +232,8 @@ namespace IVLab.ABREngine
                         RawDataset existing;
                         if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
                         {
-                            // Try to grab from media dir
-                            await ABREngine.Instance.Data.LoadRawDataset<MediaDataLoader>(rawData);
-
-                            // ... if not found, then try to grab from Resources media dir
-                            if (!ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
-                            {
-                                await ABREngine.Instance.Data.LoadRawDataset<ResourcesDataLoader>(rawData);
-                            }
-
-                            // If not found in cache, load from data server, if there is one
-                            if (ABREngine.Instance.Config.Info.dataServer != null && !ABREngine.Instance.Data.TryGetRawDataset(rawData, out existing))
-                            {
-                                await ABREngine.Instance.Data.LoadRawDataset<HttpDataLoader>(rawData);
-                            }
+                            // Try to load and import the dataset if not found
+                            ABREngine.Instance.Data.LoadData(rawData);
                         }
                     }
 
@@ -307,14 +291,14 @@ namespace IVLab.ABREngine
                                 {
                                     ScalarDataVariable variable;
                                     dataset.TryGetScalarVar(value.inputValue, out variable);
-                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
+                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
                                 else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
                                 {
                                     VectorDataVariable variable;
                                     dataset.TryGetVectorVar(value.inputValue, out variable);
-                                    variable.SpecificRanges.Clear(); // Will be repopulated later in state
+                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
                                     possibleInput = variable as IABRInput;
                                 }
 
@@ -326,10 +310,7 @@ namespace IVLab.ABREngine
                             else if (value?.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
                             {
                                 IVisAsset visAsset = null;
-                                await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
-                                {
-                                    ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
-                                });
+                                ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
                                 if (visAsset == null)
                                 {
                                     Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);

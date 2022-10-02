@@ -53,32 +53,136 @@ namespace IVLab.ABREngine
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
+        /// <summary>
+        /// Scalar color variable applied to each point of this data impression.
+        /// This example switches between X-axis monotonically increasing and
+        /// Y-axis monotonically increasing.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/colorVariable.gif"/>
+        /// </summary>
         [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
+        /// <summary>
+        /// Colormap applied to the <see cref="colorVariable"/>. This example
+        /// switches between a linear white-to-green colormap and a linear
+        /// black-to-white colormap.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/colormap.gif"/>
+        /// </summary>
         [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
+        /// <summary>
+        /// Override the color used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
+        /// </summary>
+        public IColormapVisAsset nanColor;
 
+
+        /// <summary>
+        /// Scalar variable used to vary the pattern across the surface.
+        /// </summary>
         [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
+        /// <summary>
+        /// The pattern/texture applied to the surface - can also be a <see cref="SurfaceTextureGradient"/>.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/pattern.gif"/>
+        /// </summary>
         [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset pattern;
 
+        /// <summary>
+        /// Override the pattern/texture used for NaN values in this data impression. If
+        /// not supplied, will use the <see cref="ABRConfig.defaultNanTexture"/>.
+        /// </summary>
+        public ISurfaceTextureVisAsset nanPattern;
+
+        /// <summary>
+        /// How large, in Unity meters, to make each "tile" of the
+        /// texture/pattern on the surface. This example goes from 0.5m to 1m.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSize.gif"/>
+        /// </summary>
         [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
+        /// <summary>
+        /// Percentage to "blend" textures together at the seams to minimize the
+        /// tiling effect. This example goes from 0% seam blend to 20% seam
+        /// blend.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"/>
+        /// </summary>
         [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSeamBlend;
 
+        /// <summary>
+        /// Edit the saturation of the pattern(s) - 100% is full color, 0% is
+        /// full grayscale.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"/>
+        /// </summary>
         [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
 
+        /// <summary>
+        /// Edit the intensity which the pattern is overlaid on the surface. 0%
+        /// is not present at all, 10% is very faint, and 100% is full overlay.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"/>
+        /// </summary>
         [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
-        protected override string MaterialName { get; } = "ABR_Surface";
+        // TODO: Integrate this with schema.
+        // TODO: Opacity is not 100% correct, especially when working in tandem
+        // with Volumes (volumes always render in front of transparent surfaces)
+        /// <summary>
+        /// Opacity of the surface - how see-through the surface is.
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/opacity.gif"/>
+        /// </summary>
+        public PercentPrimitive opacity;
+
+        // TODO: There's not yet a good way to display a transparent surface
+        // w/outline (not sure if we care about this, probs not)
+        /// <summary>
+        /// Show/hide outline on this data impression (show the outline AND the
+        /// actual surface)
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/showOutline.gif"/>
+        /// </summary>
+        /// <remarks>
+        /// NOTE: Outlines work best on convex objects. The wavelet in this
+        /// example shows some artifacts due to its concavity.
+        /// </remarks>
+        public BooleanPrimitive showOutline;
+
+        /// <summary>
+        /// Width (in Unity world coords) of the outline
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"/>
+        /// </summary>
+        public LengthPrimitive outlineWidth;
+
+        /// <summary>
+        /// Color of the outline
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineColor.gif"/>
+        /// </summary>
+        public Color outlineColor;
+
+        /// <summary>
+        /// ONLY show the outline (don't show the actual surface)
+        ///
+        /// <img src="../resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"/>
+        /// </summary>
+        public BooleanPrimitive onlyOutline;
+
+        protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };
         protected override string LayerName { get; } = "ABR_Surface";
 
 
@@ -96,6 +200,11 @@ namespace IVLab.ABREngine
         public override Dataset GetDataset()
         {
             return keyData?.GetDataset();
+        }
+
+        public override KeyData GetKeyData()
+        {
+            return keyData;
         }
 
         public override void ComputeGeometry()
@@ -287,7 +396,6 @@ namespace IVLab.ABREngine
                 mesh.UploadMeshData(false);
 
                 meshFilter.mesh = mesh;
-                meshRenderer.material = ImpressionMaterial;
             }
         }
 
@@ -375,9 +483,41 @@ namespace IVLab.ABREngine
             mesh.UploadMeshData(false);
             meshFilter.mesh = mesh;
 
+            // Opacity currently just uses the alpha channel of the shader's
+            // _Color input
+            Color defaultColor = ABREngine.Instance.Config.defaultColor;
+
+            bool useOpaqueShader = true;
+
+            // If we want to show both the actual surface AND outline, use regular outline shader
+            if (showOutline != null && showOutline.Value)
+            {
+                // Use the "outline-only" shader if that's selected
+                if (onlyOutline != null && onlyOutline.Value)
+                    meshRenderer.material = ImpressionMaterials[2];
+                else 
+                    meshRenderer.material = ImpressionMaterials[3];
+                useOpaqueShader = false;
+            }
+
+            // Set material based on opacity - if 100% opaque, use the regular
+            // opaque shader. If <100% opaque, use transparent shader.
+            if (opacity != null && opacity.Value < 1.0f)
+            {
+                meshRenderer.material = ImpressionMaterials[1];
+                defaultColor.a = opacity.Value;
+                useOpaqueShader = false;
+            }
+
+            // Use a regular opaque surface shader if nothing else is selected
+            if (useOpaqueShader)
+            {
+                meshRenderer.material = ImpressionMaterials[0];
+            }
+
             // Apply changes to the mesh's shader / material
             meshRenderer.GetPropertyBlock(MatPropBlock);
-            MatPropBlock.SetColor("_Color", Color.white);
+            MatPropBlock.SetColor("_Color", defaultColor);
             MatPropBlock.SetFloat("_ColorDataMin", scalarMin[0]);
             MatPropBlock.SetFloat("_ColorDataMax", scalarMax[0]);
             MatPropBlock.SetFloat("_PatternDataMin", scalarMin[1]);
@@ -408,6 +548,11 @@ namespace IVLab.ABREngine
             MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
+            MatPropBlock.SetColor("_OutlineColor", outlineColor);
+            MatPropBlock.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
+
+            MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
+
             if (patternVariable != null)
             {
                 MatPropBlock.SetInt("_UsePatternVariable", 1);
@@ -434,8 +579,18 @@ namespace IVLab.ABREngine
                     MatPropBlock.SetTexture("_Pattern", pattern.BlendMaps.Textures);
                     MatPropBlock.SetTexture("_BlendMaps", pattern.BlendMaps.BlendMaps);
                     MatPropBlock.SetInt("_NumTex", pattern.VisAssetCount);
-                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
 
+                    Texture2D nanFinal = nanPattern?.BlendMaps.Textures ?? ABREngine.Instance.Config.defaultNanTexture;
+                    if (nanFinal != null)
+                    {
+                        MatPropBlock.SetTexture("_NaNPattern", nanFinal);
+                        MatPropBlock.SetInt("_HasNaNPattern", 1);
+                    }
+                    else
+                    {
+                        MatPropBlock.SetInt("_HasNaNPattern", 0);
+                    }
+                    // MatPropBlock.SetTexture("_PatternNormal", pattern?.NormalMap);
                 }
                 else
                 {
