@@ -1,0 +1,2587 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Users/scoot/dev/VideoRigDocs/Packages/edu.umn.cs.ivlab.abrengine/DocumentationSrc~",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      },
+      "is_incremental": false
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRConfig.Consts.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.Consts.html",
+          "hash": "mZuAN+nUCgocW5L09pKBohfDD3qaSNx5qORkwb3O8rI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRConfig.GroupToDataMatrixOverrideFields.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.GroupToDataMatrixOverrideFields.html",
+          "hash": "a+1T7qCKNdWtfcTo2FsgKFOPeEBK39XQKlWP+gsqASU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRConfig.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.html",
+          "hash": "9Ys9uyZ+lCduWP0sUo8F3uPOodN8zYFt2YXsyX1cL1o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABREngine.StateChangeDelegate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABREngine.StateChangeDelegate.html",
+          "hash": "OCnH21KyawHqWumh0Eaq1kniEQbo7DaKdiZWnCNaJSo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABREngine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABREngine.html",
+          "hash": "Ml4iFBlTzJwRFXb4r4nJ6n1wfLCHspcCPY64f43J/b4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRInputAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRInputAttribute.html",
+          "hash": "9Igd4FiA3kazvea5pACJ3vZzsV7b9h6F+E3u1HXboGg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRInputGenre.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRInputGenre.html",
+          "hash": "LQFbKR5sfA+5QW29we9MbetirxV6nZXQZi3txIlvog0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRInputIndexerModule.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRInputIndexerModule.html",
+          "hash": "OIMnQWPFwohC7FE5aY1eEJrtnIKGKXNgyDxkDmm5wUU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRPlateType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRPlateType.html",
+          "hash": "jRuQqVZxyh+xvNldbZX4gkaobyTF9mVfXRc2oNpwDCs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ABRStateParser.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ABRStateParser.html",
+          "hash": "7kRJchgyFeEN4L/taKjYVR4WFFQjgbiTvsJHpahSnuE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.AnglePrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.AnglePrimitive.html",
+          "hash": "EmWDk3EByIwiGJygHbhWuVvb952SeEat2QiSgGIwuao="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.BooleanPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.BooleanPrimitive.html",
+          "hash": "2iTlIt9E4UYxqxtFnnfKgDEGeFdgVoiv1G4iEB3LdSQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ColormapVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ColormapVisAsset.html",
+          "hash": "Y75kz3vd5vRJQ34Zs5RxOn366F7F8IDzMhyrO9Ddc50="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataImpression.html",
+          "hash": "zu5M1+ec04/3QpFmWJr9BhAQZAaBTdiG1DoQ3XhUA5s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataImpressionGroup.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataImpressionGroup.html",
+          "hash": "/eXRp0mZsbww5lphLmTAH+6cORNcNCFsIIO3oVpplKU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataManager.html",
+          "hash": "Pky++Ct3alNIk0LES6ElTPKEi5VCulmuU+CMqGJp+4U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataPath.DataPathType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataPath.DataPathType.html",
+          "hash": "8HbHBREDBYnfDO0K6oz8cYtj8e1C6AOiEWZISLtJ3Kc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataPath.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataPath.html",
+          "hash": "Q8vpUp1WtrIqZM0PpC5JzNqqRyVbaioHTfMQjqBvs68="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataRange-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataRange-1.html",
+          "hash": "N30HlKvPHiME5faS8im2DqqHDMigJlngdR0AvDXMFoE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.DataTopology.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.DataTopology.html",
+          "hash": "TVz6zd26PO5+OVN7/ouV+ED8o2lBn+NNOPwAPCGYyks="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Dataset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Dataset.html",
+          "hash": "1eXi6nS5TZhdmze4Tz2MkqldB1j5CVo1hERuT1qG1N0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.EncodedGameObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.EncodedGameObject.html",
+          "hash": "psTzFia2oITog5mJDFhkYw79JC66boICbqEZWkE1drI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.html",
+          "hash": "OQA4anH8s1u7OU54hRmad4mNlEyo7GQOy6WgsfWj/68="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.FloatPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.FloatPrimitive.html",
+          "hash": "4eFwyYGaVHq9Br/80RT6/MeZQIVWAawHce4ozGHZY/A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.GlyphGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.GlyphGradient.html",
+          "hash": "hKF3WjkGvzZld4EVSoQyco05C6yUAiqyvnK6JL8RyC0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.GlyphVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.GlyphVisAsset.html",
+          "hash": "ln3DNPr9VDs3WHTR2/9/g2Xv267hgFUTMDnmNo2gJmQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.GradientBlendMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.GradientBlendMap.html",
+          "hash": "stQzZqI0ZShMqGX6UzYs0MGzJdSLk9KKm3H1KWmhgiI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.HttpDataLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.HttpDataLoader.html",
+          "hash": "peC8WdSA8sI4C6b+eWiASqJxS2GOJO/6ygnCAAwWlTo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.HttpStateFileLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.HttpStateFileLoader.html",
+          "hash": "oT94lTgJ8vJd0do6+n2a5nSu68/M/zg+4r7FO8fX0fE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.html",
+          "hash": "/vQGKspQwiH3D4fBpTR3AnzIIFT9nQvWsz7o27aRmc0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IABRInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IABRInput.html",
+          "hash": "IwWqt7icJp2OZIaL2rn1BQ6JqBBh3877YidleIpb1Cc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IABRStateLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IABRStateLoader.html",
+          "hash": "cuNyMhbNNtRuyiF+jQvLZzJVJ4CtFsHOBY18cmtvSCY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IColormapVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IColormapVisAsset.html",
+          "hash": "hEYiWvixrQfNau9JuCUjqwtNJa3xnAHoqih9iqMXXYo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IDataImpression.html",
+          "hash": "hQ0RVf/t/d0lvl8x4YbEJB4SmMdSz4KrLwy1b1wgADI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IDataImpressionRenderInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IDataImpressionRenderInfo.html",
+          "hash": "JuOW9XzFMtWaXBST6OedEJNugZdUCfM9EI6jSCQEsfU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IDataLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IDataLoader.html",
+          "hash": "7x9vyGYB3yhs4Q6S3yb4kcVaxRrWeXMKUU5r89JF9LY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IDataVariable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IDataVariable-1.html",
+          "hash": "W3oXHwV5D9xM4DBL6wZDVhQ1JADm65iAWZ/vYT7ka7M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IFloatPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IFloatPrimitive.html",
+          "hash": "3WW6TfOQypl7If/ET7Wxc/jZuGBkeJZ7NiA+KbraHHA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.html",
+          "hash": "zJfRhDkeY+QqpTNbM8XA0LB/IySjTAEt9nKTjVtOssM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IHasDataset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IHasDataset.html",
+          "hash": "2OGWCWJzfMS9M0T8aOcUZNtShpWsaucTZRm1kC5e6LA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IHasKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IHasKeyData.html",
+          "hash": "Cs7++C+tE/qV/NoEWbwS3rBrXa5EJVfIyL885Whflk8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IIntegerPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IIntegerPrimitive.html",
+          "hash": "WBksaEC6Ng1yXGpcgKqORhuQPlHNz8Nr07t+tp20xrA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IKeyData.html",
+          "hash": "9LwEz4Ped0EEwQ70W6gC+222q4/XUgeV2Y3p5KCK7Z0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IKeyDataRenderInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IKeyDataRenderInfo.html",
+          "hash": "HQAvLxA48FE/Vfb8X+2G0L4CkX+rd50WZSq4+tljCio="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.html",
+          "hash": "PvkUR4QAWtds7icl9er+GUQo1Ov6bHZivRGtytg/Jek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IPrimitive.html",
+          "hash": "PdtDqgPdVePOGFhiesq7JUTMdzPfxfxbfJeVQlhyXBo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IPrimitiveGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IPrimitiveGradient.html",
+          "hash": "IJHvpq7El7O2HIImwOc+tiGWKeRYvPCF5VHoKQg1UIA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.html",
+          "hash": "RLcC2mqn8haxlmiAcfVlNErkPDdnSpGJ7m0CTRdY5/U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ITextureGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ITextureGradient.html",
+          "hash": "LQTiC7rTbEI7e1M7Xfr+LxxxbdMon0+Fvstyk8Iwmrk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IVisAsset.html",
+          "hash": "QZt3/SziK0ctEN5r5vN7zHVvfNKs3yH2qMBPP6Gm3ic="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IVisAssetFetcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IVisAssetFetcher.html",
+          "hash": "YfPsPK9ozB2BfCEvhq3Nk18FCpgNQ6KiK63w/wTfnpo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IVisAssetGradient-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IVisAssetGradient-1.html",
+          "hash": "6m43Sr0I5aDSvCVZqOVfZBCvsde33TaDDBlptAr9hrk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.html",
+          "hash": "u0imXFgXq2RaGShFRMx/dp86bfw2bSqCxNUKtvCmbuc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.html",
+          "hash": "N4HohW35vx0n2utpAdspVEc8rX1/Dwmg9v7StWiL4W0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.IntegerPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.IntegerPrimitive.html",
+          "hash": "cnx1tfRdhaLsF/keUBZ1Azgd93moxl9LVdzeV6OMsCg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.KeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.KeyData.html",
+          "hash": "dUmBVQeDnpTa7Ve+QFMcRrmch5sVRMn31gqjYRq8l6Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.KeyDataMapping.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.KeyDataMapping.html",
+          "hash": "Oc1Kib53DZCKQb/tEQhsSA0f4nv6hDwoN7wvgNOEwuQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.html",
+          "hash": "4OliJBa1GWPpSxHlujMzBVQD6upNrLgjlYdMEq8IBcM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.html",
+          "hash": "3sb1VMIZhn3nh6gFhknlz5ImNknUpQE/Nri0fGFBNnI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.html",
+          "hash": "HS4QC2XlqunSBQaeqJlWBpaXYtbYAPbx8X57aXqf0ZI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendGeometry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendGeometry.html",
+          "hash": "9cDlWUqaF3QAWtgKdTtZL/a0xdWQNWUKGEPq8jteEh8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Legends.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Legends.html",
+          "hash": "Tn8eQxarWa0UfY0sAanrNuO88JWWM67K+Xpn4dm7VB8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.LengthPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.LengthPrimitive.html",
+          "hash": "3H/Sg5aAbLqNR8vuK7Nlz05YCmwFpBA9Oj0xyMnAHvE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.LineKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.LineKeyData.html",
+          "hash": "d+ijufxFKc+826zk740D7nF5OkUj2R0f8vCy9d+NAwE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.LineTextureGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.LineTextureGradient.html",
+          "hash": "CA/dcDtcq0WWp1KLFXXmgizFJoG86oqmsZIqSyJPuCQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.html",
+          "hash": "l7CLpqmzQxumqaX4P1ic9CrslEGtHR7Xv9JHXZ5EurY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.MediaDataLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.MediaDataLoader.html",
+          "hash": "C9TpUcj75Zly52BbtO/B86LKLggbBD01EFXKcW76reQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Notifier.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Notifier.html",
+          "hash": "9jSWXHmeRZOTKd0cy26lw4kob7Mu1RqvoGQDq+yu+Wk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.PathStateFileLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.PathStateFileLoader.html",
+          "hash": "Id62rR9A4cyhVJWOtG9Po5DHdnU1bN57mx1MwqD6oq8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.PercentPrimitive.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.PercentPrimitive.html",
+          "hash": "ejksJr3ViZlK//wKRQXVg+thfADW2yKGtosdSYvvVmY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.PointKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.PointKeyData.html",
+          "hash": "MlPvr2UA5A4dJpbpHtTGPHGXw9AJ6h5rYGhtOsoc48E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.PrimitiveGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.PrimitiveGradient.html",
+          "hash": "Hd+RjmZaatQ9RISq6KqG4qx5V9yxQdgMjfrCRLrQr18="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawABRInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawABRInput.html",
+          "hash": "zuPB20kYiGjY1lbdwI4ouYjPLH817Br7LZv4C29YSK0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawDataset.BinaryData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawDataset.BinaryData.html",
+          "hash": "EUNeq0lzcwkRsWZNGMcvFSiwj90e136DdSiBujf35TU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawDataset.JsonHeader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawDataset.JsonHeader.html",
+          "hash": "j0rf8sAMkw06jMUwv17yLB0a24OQaJqHcs9xbe92YqY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawDataset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawDataset.html",
+          "hash": "LTjaUZ2whKRZMHothxHzcdcSSewcIJIPVCXTwAXIiwA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawDatasetAdapter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawDatasetAdapter.html",
+          "hash": "tnXYF/Xekm708Rr6Bk7CfONml/Abz0EsX4GF4Gkrj2U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawPrimitiveGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawPrimitiveGradient.html",
+          "hash": "ul34Bwxn2SSOwZD7Tfzc5QQo6nPNs9hg1gYtgZkacRU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RawVisAssetGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RawVisAssetGradient.html",
+          "hash": "uQI7Mu5GQnQou7pWdwvUVjuvt9TwKEOOq1thaupZ0PU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.RenderHints.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.RenderHints.html",
+          "hash": "kxL4QnvPs47vOk6m7q8qvmG/VALJcELRCD3eU9EYNIA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ResourceStateFileLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ResourceStateFileLoader.html",
+          "hash": "tw9/aOu4jKtuN50IkkzVMTVnQ1YmkcAR2vNW3KAsQ1o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.html",
+          "hash": "0oT4ElbSOEgh1z0L1hdS7GPeXK0/OJoXSeoEdKzSrTQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ResourcesDataLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ResourcesDataLoader.html",
+          "hash": "FrVy5bxDHccncAeaE2LYJPHTPeUkrmPcqywCvYDrCX8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ScalarDataVariable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ScalarDataVariable.html",
+          "hash": "yLlxKADcHcT0YcSxPkRMraxG54GV/D/VBUzaPTpMP54="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SerializableFloatArray.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SerializableFloatArray.html",
+          "hash": "t1zHCnwZzia0W+m0FVGfIydVGutadGE786yrI9MkAaA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SerializableVectorArray.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SerializableVectorArray.html",
+          "hash": "+iovBZSui1pBu/9oQLSTt/NhgDI3tEJpBQuIE5rTTms="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.html",
+          "hash": "P40sWB6XoXYQvQSwnNQijXi0ckx3bbXbLS9lZ5WEMuM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.html",
+          "hash": "ZfN+OTtBfG+H3iX1OeYDVDKh2HI/PlrVExK5JjnR9fM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.html",
+          "hash": "JvufHuv5Ks3fiO+MG695UJl3o6mqHX3kc+4c4h/ciI8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.html",
+          "hash": "JXlajK1jvh4ZghKeq0bDtfeqRDkdbU7aN6LAH5sHxM4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SocketDataListener.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SocketDataListener.html",
+          "hash": "W4bTAIybH5ULx0eULDf1L4SK6fjprZ1fIl5upO3BNWM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SocketTextData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SocketTextData.html",
+          "hash": "Md5nxuZ7Okdh1TE9kS++Z0Lr4fYtT5ny5lSFET72BX4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.html",
+          "hash": "KFkVjy509zyvkvnfjXh/yU+lCy/DTpqMqe9WasBIvuI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SurfaceKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SurfaceKeyData.html",
+          "hash": "/Oev8MpNeE9P0ubAksaL6QXbosMcyHkay8rRc7kgoGg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.html",
+          "hash": "Ep3qi723qujS9m/Rh9wyn7fH1RFOfSxPg615H5TSHXI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.html",
+          "hash": "KE4vh0zGZeS7ZiOu/MEx9mkljrPfKqoIiJSh+5as8N0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.TextStateFileLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.TextStateFileLoader.html",
+          "hash": "OvAv9xvz08BqE2ytHN5FaUAFe7/oU4TLWfbIRxbFI30="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.TypeExtentions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.TypeExtentions.html",
+          "hash": "Ry5N99j2ehLYG+yIzkyzW4UIuHoOvnbTWwokbv//27I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.UnityObjectSerializer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.UnityObjectSerializer.html",
+          "hash": "/flbsqJ6GYJ5cA9CBfXemPPdZMgu7m6jopquOMG5kB0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.UpdateLevel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.UpdateLevel.html",
+          "hash": "gwk1Yg3Kz2/hVXDnTE5LO/Y4eeMROa7UE8KV7AipSGk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VectorDataVariable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VectorDataVariable.html",
+          "hash": "3EBBjchSFht78mE3CRb1hHXCaPPSodxA5LrtNpBTY90="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VisAsset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VisAsset.html",
+          "hash": "s4CKSKk65rTzTNznAQx4EDhH1+k+22k1Vstb9R0hmMY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VisAssetGradient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VisAssetGradient.html",
+          "hash": "n5r4mZzZ1WIQ9rLG+42Ttuxd8EsoR1PLWLBDBnWWac4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VisAssetLoader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VisAssetLoader.html",
+          "hash": "S0b3oy2DE36xLCtjxmeRL9HyRwGGrfSifjiJwLfa/lg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VisAssetManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VisAssetManager.html",
+          "hash": "UX2DxPL1Re0TVeEbf0wgZHP+ItKlPqM5QPtaHZXaYPk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VolumeKeyData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VolumeKeyData.html",
+          "hash": "M8iysSRmkrc5nc+NBdKa1ejfQ7XUP7S6pcGHo4GWH5M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.VolumeLightManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.VolumeLightManager.html",
+          "hash": "90Z3AqlTtkPREyVMnQzb2s3D4pUsuYLC4omu/23TQSQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.html",
+          "hash": "tdTbcw9YCo7RrcqH6SBbqu/954LnfI+DE76cd6YOUhc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "WnqW4xwKLsaP/x77hd6BjYbYfFxNYlIJ4pmyMSXSGvU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "yuJ8/DMPjy2iQOG0cHbD5kw+8fYlyOC85knadT7n3qE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/changelog.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/changelog.html",
+          "hash": "ve8UT5kmTFw3zR8yDhJcXX+25waIh7ODUWAi+QYEHAU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/core-concepts.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/core-concepts.html",
+          "hash": "5jPhfO6ofycf1y2dmhg5HjFgLpgFJ6ZhdJiE9NRWxAE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/creating-cs-abr-vis.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/creating-cs-abr-vis.html",
+          "hash": "cptq8uHxPOglAqE7MTY6Ff3BCv6XrRmMTJ34k5tGtrE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/creating-design-interface-vis.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/creating-design-interface-vis.html",
+          "hash": "f/AyoSYVhJl7ZwbhQ+rrnL3kaI6XRLXPHMeXP7O9ZyE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/data-impressions.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/data-impressions.html",
+          "hash": "ymQFISK8L1jwbqq8fXEb4UD8+4k3pQffmE+InohBT/U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/examples/advanced-usage.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/examples/advanced-usage.html",
+          "hash": "yEBwUeLguvOgUXLqyDtMH9HYHmzWwGJvyCQGoPZmf6g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/examples/create-dataset.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/examples/create-dataset.html",
+          "hash": "U+oP1b0YrHejVURNUB01qlUA1USrpQ1IEyPgBSKu7Pk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/examples/create-state.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/examples/create-state.html",
+          "hash": "KkKSl8SG3HyyBFS8Uf2u7ObOYIUcJcq4pqcQ0Sxu/Pw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/examples/examples.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/examples/examples.html",
+          "hash": "P8ctd2kqfrCo8W/b16clcgzpR5m/mDRkkrk+X2J48DY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/examples/interactive-state.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/examples/interactive-state.html",
+          "hash": "z5zp+YDDnGhwnCinOeQnTECu4Nj/Qpy06kEfYQZiRdE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/importing-data.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/importing-data.html",
+          "hash": "KVwdJIHGEzt/vyxpdKxmiP5uiq+iiWrY0mjrGhjt4Xg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/install.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/install.html",
+          "hash": "gzUMedYVgthCL7MqBESIvc3v9ZRjUxVai7vLv8HEPJw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/intro.html",
+          "hash": "+d8iCw5XZ284eAG5j3W9KbRC+kpXzbZzmUuCn0CwTgI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/key-data.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/key-data.html",
+          "hash": "2ZK33ndEdY2yz0eQdkwzvz6qIDdFfMyKchKJMdjjEuE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/license.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/license.html",
+          "hash": "W1hkNDPNqqCWFOQFl5faHH18jRJD3NrB76kigk0MCP4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/media-folder.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/media-folder.html",
+          "hash": "9OGWc5wSK9Xw7eIuXgCRLCbM28sNESdr1TVFxcyhRbU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/angled-semi-straight.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/angled-semi-straight.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/antarctic.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/antarctic.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/clayrice-point.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/clayrice-point.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/colormap.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/colormap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-teaser-nocolor.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-teaser-nocolor.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-teaser.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-teaser.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_1-abrengine.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_1-abrengine.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_10-colormap.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_10-colormap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_2-config-error.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_2-config-error.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_3-config-create.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_3-config-create.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_4-config-edit.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_4-config-edit.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_5-config-check.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_5-config-check.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_6-create-empty.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_6-create-empty.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_7-create-script.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_7-create-script.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_8-script-drag.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_8-script-drag.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis_9-basic-vis.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis_9-basic-vis.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-lines.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-lines.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-points.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-points.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-surface.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-surface.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/data-impression-volume.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/data-impression-volume.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/desert.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/desert.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/design-interface-fire-wide.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/design-interface-fire-wide.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/di-vis_config.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/di-vis_config.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/di-vis_connect.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/di-vis_connect.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/di-vis_server.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/di-vis_server.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/glyph.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/glyph.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/groundTower.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/groundTower.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/gulf.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/gulf.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/lineData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/lineData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/linear-brown.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/linear-brown.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/lineva.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/lineva.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/pointData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/pointData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/surfaceData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/surfaceData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tex.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tex.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/volumeData.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/volumeData.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/terminology-starter.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/terminology-starter.html",
+          "hash": "tVGAgWIbVzR3yDehjBjiRCw71gk62/vrIEQWBd6PYmE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/visassets.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/visassets.html",
+          "hash": "nNABmpSm8lgRJj0MKIRMnfQHMQJrzYaWxVUcI88mg8M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/instanceMesh.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/keyData.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/keyData.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/InstancedSurfaceDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/InstancedSurfaceDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/glyph.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/glyph.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/glyphSize.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/glyphSize.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleGlyphDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleGlyphDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/averageCount.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/averageCount.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/defaultCurveDirection.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/lineTexture.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/lineTexture.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/lineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/lineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonBrightness.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonBrightness.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleLineDataImpression/textureCutoff.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleLineDataImpression/textureCutoff.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/colorVariable.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/colorVariable.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/onlyOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/opacity.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/opacity.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/outlineColor.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineColor.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/outlineWidth.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/pattern.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/pattern.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternIntensity.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSaturation.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/patternSize.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSize.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleSurfaceDataImpression/showOutline.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleSurfaceDataImpression/showOutline.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/colormap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/colormap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/opacitymap.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/opacitymap.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/transfer-fn.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/transfer-fn.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeBrightness.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeLighting.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeLighting.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/api/SimpleVolumeDataImpression/volumeOpacityMultiplier.gif",
+      "output": {
+        "resource": {
+          "relative_path": "resources/api/SimpleVolumeDataImpression/volumeOpacityMultiplier.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap-alpha.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap-alpha.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap-combined.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap-combined.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/blendmap.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/blendmap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/favicon.ico",
+      "output": {
+        "resource": {
+          "relative_path": "resources/favicon.ico"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/logo.svg",
+      "output": {
+        "resource": {
+          "relative_path": "resources/logo.svg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/stopmap-alpha.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap-alpha.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/stopmap-combined.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap-combined.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/stopmap.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/stopmap.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/textures.png",
+      "output": {
+        "resource": {
+          "relative_path": "resources/textures.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/xrefmap.yml",
+      "output": {
+        "resource": {
+          "relative_path": "resources/xrefmap.yml"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 20,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 108,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
