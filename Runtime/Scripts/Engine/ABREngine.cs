@@ -439,6 +439,45 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Returns the first data impression that is associated with the keyDataPath.
+        /// Although it is often the case that there will be only one data impression per keyDataPath,
+        /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
+        /// of the data impressions with the same keyDataPath.
+        /// </summary>
+        public IDataImpression GetDataImpression(string keyDataPath)
+        {
+            return GetDataImpressions(keyDataPath).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Returns all of the data impressions associated with the specified keyDataPath
+        /// </summary>
+        public List<IDataImpression> GetDataImpressions(string keyDataPath)
+        {
+            return GetDataImpressions(di => { return di.GetKeyData().Path == keyDataPath; });
+        }
+
+        /// <summary>
+        /// Returns the first data impression within the group that is associated with the keyDataPath.
+        /// Although it is often the case that there will be only one data impression per keyDataPath,
+        /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
+        /// of the data impressions with the same keyDataPath.
+        /// </summary>
+        public T GetDataImpression<T>(string keyDataPath) where T : IDataImpression
+        {
+            return GetDataImpressions<T>(keyDataPath).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Returns all of the data impressions associated with the specified keyDataPath
+        /// </summary>
+        public List<T> GetDataImpressions<T>(string keyDataPath) where T : IDataImpression
+        {
+            return GetDataImpressions<T>(di => { return di.GetKeyData().Path == keyDataPath; });
+        }
+
+
+        /// <summary>
         /// Retreive the first data impression found with a particular function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
         /// <param name="criteria">Function that takes each data impression of any type and returns a boolean.</param>
@@ -692,6 +731,13 @@ namespace IVLab.ABREngine
                 return null;
             }
         }
+
+
+        public DataImpressionGroup GetDataImpressionGroup(string name)
+        {
+            return dataImpressionGroups.Values.FirstOrDefault(g => g.Name == name);
+        }
+
 
         /// <summary>
         /// Retrieve the first data impression group found that is associated with a particular <see cref="Dataset"/>.
@@ -950,6 +996,41 @@ namespace IVLab.ABREngine
 
             newGroup.AddDataImpression(dataImpression, allowOverwrite);
         }
+
+
+
+        public IKeyData GetKeyData(string keyDataPath)
+        {
+            List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
+            foreach (var ds in allDatasets) {
+                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                foreach (var kd in keyDatas) {
+                    if (kd.Key == keyDataPath) {
+                        return kd.Value;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+
+        public Dictionary<string, IKeyData> GetKeyDataStartsWith(string keyDataPathStartsWith)
+        {
+            Dictionary<string, IKeyData> results = new Dictionary<string, IKeyData>();
+            List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
+            foreach (var ds in allDatasets) {
+                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                foreach (var kd in keyDatas) {
+                    if (kd.Key.StartsWith(keyDataPathStartsWith)) {
+                        results.Add(kd.Key, kd.Value);
+                    }
+                }
+            }
+            return results;
+        }
+
+
 
         /// <summary>
         /// Remove all data impression groups from the ABR scene (and in turn, remove all data impressions).

@@ -27,7 +27,7 @@ using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
-    class SimpleLineRenderInfo : IDataImpressionRenderInfo
+    public class SimpleLineRenderInfo : IDataImpressionRenderInfo
     {
         public Vector3[][] vertices;
         public int[][] indices;

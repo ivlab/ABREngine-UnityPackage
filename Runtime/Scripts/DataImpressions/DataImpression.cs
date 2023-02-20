@@ -136,7 +136,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Cache of current rendering information
         /// </summary>
-        protected virtual IDataImpressionRenderInfo RenderInfo { get; set; }
+        public virtual IDataImpressionRenderInfo RenderInfo { get; set; }
 
         /// <summary>
         ///     Cache of current KeyData rendering information

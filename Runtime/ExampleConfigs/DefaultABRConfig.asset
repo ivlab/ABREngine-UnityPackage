@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultABRConfig
   m_EditorClassIdentifier: 
   mediaPath: ../media
-  serverUrl: 
+  serverUrl: http://localhost:8000/api/state
   loadStateOnStart: 
   defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481, type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
@@ -22,7 +22,7 @@ MonoBehaviour:
   defaultNanLine: {fileID: 0}
   visAssetServerUrl: 
   dataServerUrl: 
-  dataListenerPort: 0
+  dataListenerPort: 1900
   useAutoDataContainer: 0
   dataContainer:
     m_Center: {x: 0, y: 0, z: 0}

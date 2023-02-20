@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    class SimpleSurfaceRenderInfo : IDataImpressionRenderInfo
+    public class SimpleSurfaceRenderInfo : IDataImpressionRenderInfo
     {
         public Vector3[] vertices;
         public int[] indices;

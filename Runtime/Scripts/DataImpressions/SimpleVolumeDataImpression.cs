@@ -432,20 +432,37 @@ namespace IVLab.ABREngine
                 // Copy per-index bit array to int array so that it can be sent to GPU
                 int[] perVoxelVisibility = new int[(voxelCount - 1) / sizeof(int) + 1];
                 RenderHints.PerIndexVisibility.CopyTo(perVoxelVisibility, 0);
-                // Initialize the compute buffer if it is uninitialized
-                if (perVoxelVisibilityBuffer == null)
+                // If the compute buffer exists but is the wrong size, then release and delete it
+                if ((perVoxelVisibilityBuffer != null) && (perVoxelVisibilityBuffer.count != perVoxelVisibility.Length)) {
+                    perVoxelVisibilityBuffer.Release();
+                    perVoxelVisibilityBuffer = null;
+                }
+                // If the compute buffer does not exist, create it
+                if (perVoxelVisibilityBuffer == null) {
                     perVoxelVisibilityBuffer = new ComputeBuffer(perVoxelVisibility.Length, sizeof(int), ComputeBufferType.Default);
+                }
                 // Set buffer data to int array and send to shader
                 perVoxelVisibilityBuffer.SetData(perVoxelVisibility);
                 MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 1);
-                Debug.Log(perVoxelVisibilityBuffer);
             }
             else
             {
-                // Initialize the compute buffer if it is uninitialized
-                if (perVoxelVisibilityBuffer == null)
+                // dfk: While fixing bug related to compute buffer size and addressing Unity's warning that we need
+                // to add .Release() to this code, I notice that it seems strange that this section of code is
+                // creating a compute buffer of size 1.  I believe the reason is that something needs to be bound
+                // to the compute buffer (i.e., it cannot be null), so we use a buffer of size 1 for the cases where
+                // no per-index visibility flags are used.
+
+                // If the compute buffer exists but is the wrong size, then release and delete it
+                if ((perVoxelVisibilityBuffer != null) && (perVoxelVisibilityBuffer.count != 1)) {
+                    perVoxelVisibilityBuffer.Release();
+                    perVoxelVisibilityBuffer = null;
+                }
+                // If the compute buffer does not exist, create it
+                if (perVoxelVisibilityBuffer == null) {
                     perVoxelVisibilityBuffer = new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default);
+                }
                 MatPropBlock.SetBuffer("_PerVoxelVisibility", perVoxelVisibilityBuffer);
                 MatPropBlock.SetInt("_HasPerVoxelVisibility", 0);
             }

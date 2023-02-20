@@ -628,7 +628,9 @@ namespace IVLab.ABREngine
             else if (jsonData.ContainsKey("type"))
             {
                 type = jsonData["type"].ToString();
-                Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
+                // Removing warning until ABR Compose is updated to follow this advice so users do not think they have
+                // done something wrong.
+                //Debug.LogWarning(string.Format("VisAsset {0}: Use of field `artifactType` is deprecated. Use `type` instead.", guid.ToString().Substring(0, 8)));
             }
 
             if (!VisAsset.IsValidVisAssetType(type))
