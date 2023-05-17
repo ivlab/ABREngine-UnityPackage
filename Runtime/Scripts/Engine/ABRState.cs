@@ -912,9 +912,9 @@ namespace IVLab.ABREngine
             {
                 if (objectType.IsAssignableFrom(kv.Key))
                 {
-                    for (int f = 0; f < kv.Value.Length; f++)
+                    for (int fn = 0; fn < kv.Value.Length; fn++)
                     {
-                        string fieldName = kv.Value[f];
+                        string fieldName = kv.Value[fn];
 
                         // Use reflection to obtain actual value of the field,
                         // then assign it to the JObject
@@ -930,7 +930,7 @@ namespace IVLab.ABREngine
                         string newName = fieldName;
                         if (_remapFieldNames.ContainsKey(kv.Key))
                         {
-                            newName = _remapFieldNames[kv.Key][f];
+                            newName = _remapFieldNames[kv.Key][fn];
                         }
 
                         // Recursively deal with further Unity objects using the current serializer

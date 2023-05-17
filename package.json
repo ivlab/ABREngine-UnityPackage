@@ -1,7 +1,7 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "2022.9.0",
+    "version": "2023.3.0",
     "unity": "2021.3",
     "description": "Artifact-Based Rendering Engine",
     "author": { "name": "IVLab", "email": "ivlab-admin@umn.edu", "url": "https://ivlab.cs.umn.edu" },
@@ -10,7 +10,7 @@
     "licensesUrl": "https://ivlab.github.io/ABREngine-UnityPackage/manual/license.html",
     "hideInEditor": "false",
     "dependencies": {
-        "com.unity.textmeshpro": "3.0.6"
+        "com.unity.textmeshpro": "2.1.6"
     },
     "samples": [
         {
@@ -37,6 +37,11 @@
             "displayName": "ABR Testing",
             "description": "If you are contributing to the ABREngine, you may use this script as a framework to test your new features.",
             "path": "Samples~/TestingABR"
+        },
+        {
+            "displayName": "Documentation GIF Generation",
+            "description": "Generate GIFs for documentation",
+            "path": "Samples~/Documentation GIF Generation"
         }
     ]
 }
