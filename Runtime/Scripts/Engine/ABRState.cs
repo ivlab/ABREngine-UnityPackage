@@ -348,7 +348,7 @@ namespace IVLab.ABREngine
                                     int? valuesLength = state?.primitiveGradients?[uuid]?.values?.Count;
                                     if (pointsLength != valuesLength || pointsLength == null || valuesLength == null)
                                     {
-                                        Debug.LogError("Invalid Primitive Gradient: \"points\" and \"values\" arrays must have same length" +
+                                        Debug.LogWarning("Invalid Primitive Gradient: \"points\" and \"values\" arrays must have same length" +
                                             " and cannot be null.");
                                     }
                                     else
@@ -365,7 +365,7 @@ namespace IVLab.ABREngine
                                 }
                                 catch (KeyNotFoundException)
                                 {
-                                    Debug.LogErrorFormat("Invalid Primitive Gradient input: Primitive gradient with uuid {0} does not exist.", value.inputValue);
+                                    Debug.LogWarningFormat("Invalid Primitive Gradient input: Primitive gradient with uuid {0} does not exist.", value.inputValue);
                                 }
                             }
 
