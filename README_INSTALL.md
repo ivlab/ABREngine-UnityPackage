@@ -3,9 +3,10 @@
 The first three sections refer to the ABREngine Unity Package. For install instructions on the ABR Server / Visualization Manager, see the [Installing the Vis Manager](#installing-the-vis-manager). Note, if you intend to use the Vis Manager, this will affect where you create your Unity project (with the Vis Manager, the [Unity Project must be cloned in the folder the Vis Manager is Expecting](#step-0-create-an-abr-folder))
 
 ## Prereqs
-There are no prereqs if you want to host this package on github.com, but to host this package on github.umn.edu, you will need to have SSH access to github.umn.edu and be a member of the IV/LAB Organization on github.umn.edu.
-1. Create a [GitHub SSH key](https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for your UMN GitHub account on your development machine.  Unity has trouble sshing with passwords; just leave the password for this key blank.
-2. If you cannot see the [IV/LAB Organization on github.umn.edu](https://github.umn.edu/ivlab-cs), then ask the [Current Lab GitHub and Software Development Czar](https://docs.google.com/document/d/1p3N2YOQLKyyNpSSTtALgtXoB3Tchy4BVgEEbAG6KYfg/edit?skip_itp2_check=true&pli=1) to please add you to the org.
+To install dependencies from github.com as described in the next section, you will need to either:
+1. Setup your account for SSH access to github.com by creating a [GitHub SSH key](https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) and using a [Git credential helper](https://git-scm.com/docs/gitcredentials) or a blank ssh key password.
+2. Alternatively, since this repo is publicly accessible, you should be able to replace the `ssh://git@github.com` in the commands below with the HTTPS equivalent `https://github.com`.
+
 
 ## Install via the Unity Package Manager
 To use the package in a read-only mode, the same way you would for packages downloaded directly from Unity:
@@ -14,12 +15,11 @@ To use the package in a read-only mode, the same way you would for packages down
 3. Select ```Add package from git URL```
 4. Paste ```git@github.com:ivlab/ABREngine-UnityPackage.git``` for the latest package
 5. Repeat steps 2-4 for each of these additional package dependencies:
-  - First, in the Unity Package manager, search for "Newtonsoft Json" and
-  install the latest version (3.0.2 at the time of this writing). Then proceed to install the following packages:
   - `ssh://git@github.com/ivlab/JsonSchema-UnityPackage.git`
   - `ssh://git@github.com/ivlab/OBJImport-UnityPackage.git`
   - `ssh://git@github.com/ivlab/JsonDiffPatch-UnityPackage.git`
   - `ssh://git@github.com/ivlab/IVLab-Utilities-UnityPackage.git`
+6. Installing the Json packages in Step 5 should have triggered Unity to automatically install the Newtonsoft Json package; however, at the time of writing, it installs version 2.0.0, and we need a newer version.  To update to the latest version, in the Package Manager, go to the section for packages from Unity Technologies, then click on the Newtonsoft Json package to expand it.  Then, click on the button in the bottom right of the window that says "Update to 3.0.2" (or whatever the current latest version is.  If it shows a warning about upgrading potentially breaking your project, you can (probably) safely ignore this, since the project won't work unless you upgrade :)
 
 ## Development Mode
 Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to "temporarily" switch into development mode by cloning a temporary copy of the package.  Then, edit this source as needed, test your edits for as long as you like, etc.  When you get to a good stopping point, commit and push the changes to github *from within this temporary clone inside the Packages directory*.  Once the latest version of your package is on github, you can then "switch out of development mode" by deleting the cloned repo.  This will cause Unity to revert to using the read-only version of the package, which it keeps in its internal package cache, and we can trigger Unity to update this version to the latest by removing the packages-lock.json file.  In summary:
