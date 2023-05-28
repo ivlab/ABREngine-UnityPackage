@@ -349,7 +349,13 @@ namespace IVLab.ABREngine
                 {
                     go.name = "Glyph Renderer Object " + stopIndex;
                 });
-                childRenderer.transform.parent = currentGameObject.transform;
+
+                // Parent the glyph renderer to this Data Impression and ensure that it's centered correctly
+                // Unsure why necessary...
+                // See also: PrepareImpression method of DataImpressionGroup class
+                childRenderer.transform.SetParent(currentGameObject.transform, false);
+                childRenderer.transform.localPosition = Vector3.zero;
+                childRenderer.transform.localRotation = Quaternion.identity;
 
                 // Add mesh renderers to child object
                 MeshRenderer mr = null;
