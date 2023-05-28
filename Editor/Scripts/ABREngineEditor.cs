@@ -181,6 +181,15 @@ namespace IVLab.ABREngine
                 EditorGUILayout.TextArea(ABREngine.Instance.Config.ToString());
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
+
+
+            if (ABREngine.Instance.Config.dataServerUrl.Length > 0)
+            {
+                if (GUILayout.Button("Save State"))
+                {
+                    ABREngine.Instance.SaveState<HttpStateFileLoader>();
+                }
+            }
         }
     }
 }
