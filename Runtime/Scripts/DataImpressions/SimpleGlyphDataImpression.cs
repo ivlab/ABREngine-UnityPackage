@@ -616,7 +616,7 @@ namespace IVLab.ABREngine
                 GameObject child = currentGameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
-            perGlyphVisibilityBuffer.Release();
+            perGlyphVisibilityBuffer?.Release();
         }
 
         // Samples k glyphs, modifying glyph render info so that only they will be rendered
