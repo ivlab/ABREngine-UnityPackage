@@ -2,6 +2,7 @@
     "name": "IVLab.ABREngine.Runtime",
     "references": [
         "IVLab.Utilities.Runtime",
+        "IVLab.ABREngine.Importer",
         "IVLab.OBJImport",
         "JsonDiffPatchDotNet",
         "Unity.TextMeshPro"

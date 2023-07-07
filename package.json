@@ -10,7 +10,8 @@
     "licensesUrl": "https://ivlab.github.io/ABREngine-UnityPackage/manual/license.html",
     "hideInEditor": "false",
     "dependencies": {
-        "com.unity.textmeshpro": "2.1.6"
+        "com.unity.textmeshpro": "2.1.6",
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
     },
     "samples": [
         {
