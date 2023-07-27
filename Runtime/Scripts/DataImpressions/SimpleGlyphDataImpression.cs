@@ -170,6 +170,12 @@ namespace IVLab.ABREngine
         /// </summary>
         private ComputeBuffer perGlyphVisibilityBuffer;
 
+        /// <summary>
+        /// Random indices to draw from in <see cref="SampleGlyphs"/>. This
+        /// enables us to sample the glyphs consistently between frames.
+        /// </summary>
+        private int[] randomSelections;
+
         protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
         protected override string LayerName { get; } = "ABR_Glyph";
 
@@ -312,6 +318,14 @@ namespace IVLab.ABREngine
                 // Apply room-space bounds to renderer
                 encodingRenderInfo.bounds = group.GroupBounds;
                 RenderInfo = encodingRenderInfo;
+
+                // compute random values for SampleGlyphs
+                // for use as `j` in reservoir sampling... numbers go from 0 to the number of glyphs
+                randomSelections = new int[numPoints];
+                for (int i = 0; i < randomSelections.Length; i++)
+                {
+                    randomSelections[i] = UnityEngine.Random.Range(0, numPoints);
+                }
             }
         }
 
@@ -484,7 +498,8 @@ namespace IVLab.ABREngine
                 else
                 {
                     block.SetInt("_HasPerGlyphVisibility", 0);
-                    block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
+                    // This line generates a warning about disposing of compute buffers... commenting out for now
+                    // block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
                 }
 
                 // Get keydata-specific range, if there is one
@@ -643,7 +658,14 @@ namespace IVLab.ABREngine
             // Iterate through the remaining glyphs
             for (; i < n; i++)
             {
-                int j = UnityEngine.Random.Range(0, i + 1);
+                // int j = UnityEngine.Random.Range(0, i + 1);
+                // int j = i + 1;
+                // Choose `j` based on earlier random selections
+                // Technically not quite correct since it's not uniformly from
+                // the same distribution as Random.Range(0, i+1). But, it looks
+                // decent so we're leaving it for now...
+                int j = randomSelections[i] % (i + 1);
+
                 // Replace previous selections if the randomly
                 // picked index is smaller than k
                 if (j < k)
