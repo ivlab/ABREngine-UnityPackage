@@ -73,8 +73,20 @@ namespace IVLab.ABREngine
             ImportTime = DateTime.Now;
         }
 
-        public Mesh GetMesh(int lod) => MeshLods[Math.Min(lod, MeshLods.Count - 1)];
-        public Texture2D GetNormalMap(int lod) => NormalMapLods[Math.Min(lod, NormalMapLods.Count - 1)];
+        public Mesh GetMesh(int lod)
+        {
+            if (MeshLods?.Count > 0)
+                return MeshLods[Mathf.Clamp(lod, 0, MeshLods.Count - 1)];
+            else
+                return null;
+        }
+        public Texture2D GetNormalMap(int lod)
+        {
+            if (NormalMapLods?.Count > 0)
+                return NormalMapLods[Mathf.Clamp(lod, 0, NormalMapLods.Count - 1)];
+            else
+                return null;
+        }
         public Mesh GetMesh(int gradientIndex, int lod) => GetMesh(lod);
         public Texture2D GetNormalMap(int gradientIndex, int lod) => GetNormalMap(lod);
         public Mesh GetMesh(float gradientT, int lod) => GetMesh(lod);

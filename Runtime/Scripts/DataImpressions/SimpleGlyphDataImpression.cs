@@ -453,7 +453,11 @@ namespace IVLab.ABREngine
                 if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod) != null)
                 {
                     imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod);
-                    block.SetTexture("_Normal", glyph.GetNormalMap(glyphIndex, glyphLod));
+                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, glyphLod);
+                    if (normalMap != null)
+                    {
+                        block.SetTexture("_Normal", normalMap);
+                    }
                 }
                 else
                 {
