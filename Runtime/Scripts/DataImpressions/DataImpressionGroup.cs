@@ -62,33 +62,39 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Human-readable name for the data impression group
         /// </summary>
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         ///     Unique identifier for this group
         /// </summary>
-        public Guid Uuid { get; }
+        public Guid Uuid { get; private set; }
 
 
         private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        internal DataImpressionGroup(string name, Bounds bounds, Transform parent)
-            : this(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent) { }
-
-        internal DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+        internal static DataImpressionGroup Create(string name, Bounds bounds, Transform parent)
         {
-            Uuid = uuid;
-            Name = name;
+            return Create(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent);
+        }
 
-            GroupContainer = bounds;
+        internal static DataImpressionGroup Create(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+        {
+            GameObject go = new GameObject("DataImpressionGroup " + name);
+            DataImpressionGroup dig = go.AddComponent<DataImpressionGroup>();
 
-            this.name = "DataImpressionGroup " + name;
-            this.transform.SetParent(parent, false);
-            this.transform.localPosition = position;
-            this.transform.localRotation = rotation;
+            dig.Uuid = uuid;
+            dig.Name = name;
 
-            ResetBoundsAndTransformation();
+            dig.GroupContainer = bounds;
+
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = position;
+            go.transform.localRotation = rotation;
+
+            dig.ResetBoundsAndTransformation();
+
+            return dig;
         }
 
         /// <summary>

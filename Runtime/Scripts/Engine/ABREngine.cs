@@ -683,7 +683,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
         {
-            DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
+            DataImpressionGroup group = DataImpressionGroup.Create(name, uuid, bounds, position, rotation, this.transform);
             dataImpressionGroups[group.Uuid] = group;
             return group;
         }
