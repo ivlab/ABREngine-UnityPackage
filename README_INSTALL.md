@@ -15,6 +15,9 @@ To use the package in a read-only mode, the same way you would for packages down
 3. Select ```Add package from git URL```
 4. Paste ```git@github.com:ivlab/ABREngine-UnityPackage.git``` for the latest package
 5. After ABREngine is installed, install its dependencies by clicking the new "ABR" menu tab that has appeared on the top bar (next to "Window") and clicking **Import ABR Dependencies**.
+  - You may need to close and reopen the editor for the new "ABR" tab to show up on the top bar.
+  - Installing all the dependencies will take some time.
+  - If you get a permission denied error, try clicking "Import ABR Dependencies" again.
 
 ## Development Mode
 Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to "temporarily" switch into development mode by cloning a temporary copy of the package.  Then, edit this source as needed, test your edits for as long as you like, etc.  When you get to a good stopping point, commit and push the changes to github *from within this temporary clone inside the Packages directory*.  Once the latest version of your package is on github, you can then "switch out of development mode" by deleting the cloned repo.  This will cause Unity to revert to using the read-only version of the package, which it keeps in its internal package cache, and we can trigger Unity to update this version to the latest by removing the packages-lock.json file.  In summary:
