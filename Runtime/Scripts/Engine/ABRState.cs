@@ -701,8 +701,8 @@ namespace IVLab.ABREngine
 
                     // Save the group info
                     saveGroup.name = group.Name;
-                    saveGroup.rootPosition = group.GroupRoot.transform.localPosition;
-                    saveGroup.rootRotation = group.GroupRoot.transform.localRotation;
+                    saveGroup.rootPosition = group.transform.localPosition;
+                    saveGroup.rootRotation = group.transform.localRotation;
                     saveGroup.containerBounds = group.GroupContainer;
                     saveGroup.uuid = group.Uuid;
                     saveGroup.impressions = new List<Guid>();

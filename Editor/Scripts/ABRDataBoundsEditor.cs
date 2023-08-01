@@ -43,7 +43,7 @@ namespace IVLab.ABREngine
             ABRDataBounds script = (ABRDataBounds) target;
 
             Matrix4x4 bboxXform = Matrix4x4.Translate(script.bounds.center) * Matrix4x4.Scale(script.bounds.extents);
-            Handles.matrix = bboxXform;
+            Handles.matrix = script.transform.localToWorldMatrix * bboxXform;
             Handles.DrawWireCube(Vector3.zero, Vector3.one);
         }
     }

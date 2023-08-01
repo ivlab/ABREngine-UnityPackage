@@ -28,18 +28,18 @@ namespace IVLab.ABREngine
 {
     /// <summary>
     /// A DataImpressionGroup is, as the name suggests, a group of data
-    /// impressions within ABR. DataImpressionGroups are contained within a
-    /// defined bounding box, and automatically rescale all of their data to
-    /// stay within this container. Each time a new key data object is loaded
-    /// into a data impression in this group, the GroupToDataMatrix and
-    /// GroupBounds are updated.
+    /// impressions within ABR. DataImpressionGroups can be constrained within
+    /// a defined bounding box (see <see cref="ABRDataBounds"/>), and can
+    /// automatically rescale all of their data to stay within this container.
+    /// Each time a new key data object is loaded into a data impression in
+    /// this group, the GroupToDataMatrix and GroupBounds are updated.
     /// </summary>
     /// <remarks>
     /// DataImpressionGroups cannot be constructed directly, you MUST use the a
     /// variation of the <see cref="ABREngine.CreateDataImpressionGroup"/>
     /// method.
     /// </remarks>
-    public class DataImpressionGroup : IHasDataset
+    public class DataImpressionGroup : MonoBehaviour, IHasDataset
     {
         /// <summary>
         ///     Room-scale (Unity rendering space) bounds that all data should
@@ -58,11 +58,6 @@ namespace IVLab.ABREngine
         ///     group-scale dataset
         /// </summary>
         public Bounds GroupBounds;
-
-        /// <summary>
-        ///     GameObject to place all Data Impressions under
-        /// </summary>
-        public GameObject GroupRoot { get; }
 
         /// <summary>
         ///     Human-readable name for the data impression group
@@ -88,10 +83,10 @@ namespace IVLab.ABREngine
 
             GroupContainer = bounds;
 
-            GroupRoot = new GameObject("DataImpressionGroup " + name);
-            GroupRoot.transform.SetParent(parent, false);
-            GroupRoot.transform.localPosition = position;
-            GroupRoot.transform.localRotation = rotation;
+            this.name = "DataImpressionGroup " + name;
+            this.transform.SetParent(parent, false);
+            this.transform.localPosition = position;
+            this.transform.localRotation = rotation;
 
             ResetBoundsAndTransformation();
         }
@@ -132,7 +127,7 @@ namespace IVLab.ABREngine
             {
                 _impressions[impression.Uuid] = impression;
                 GameObject impressionGameObject = new GameObject();
-                impressionGameObject.transform.parent = GroupRoot.transform;
+                impressionGameObject.transform.parent = this.transform;
                 impressionGameObject.name = impression.GetType().ToString();
 
                 EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
@@ -507,7 +502,7 @@ namespace IVLab.ABREngine
         private void PrepareImpression(IDataImpression impression)
         {
             // Make sure the parent is assigned properly
-            gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(GroupRoot.transform, false);
+            gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(this.transform, false);
             
             // Unsure why this needs to be explicitly set but here it is,
             // zeroing position and rotation so each data impression encoded

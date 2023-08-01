@@ -696,7 +696,7 @@ namespace IVLab.ABREngine
         public void RemoveDataImpressionGroup(Guid uuid)
         {
             dataImpressionGroups[uuid].Clear();
-            Destroy(dataImpressionGroups[uuid].GroupRoot);
+            Destroy(dataImpressionGroups[uuid]);
             dataImpressionGroups.Remove(uuid);
         }
 
