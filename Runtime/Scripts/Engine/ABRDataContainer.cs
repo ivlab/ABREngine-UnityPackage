@@ -21,8 +21,8 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
-    [AddComponentMenu("ABR/ABR Data Bounds")]
-    public class ABRDataBounds : MonoBehaviour
+    [AddComponentMenu("ABR/ABR Data Container")]
+    public class ABRDataContainer : MonoBehaviour
     {
         [SerializeField, Tooltip("Bounds to constrain the data to")]
         public Bounds bounds = new Bounds(Vector3.zero, Vector3.one);

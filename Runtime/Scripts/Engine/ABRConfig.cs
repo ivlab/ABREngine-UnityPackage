@@ -109,24 +109,16 @@ namespace IVLab.ABREngine
 
         [Header("Data Container Options")]
         /// <summary>
-        /// Controls whether or not the <see cref="dataContainer"/> is used.
+        /// Controls whether or not the <see cref="defaultDataContainer"/> is used.
         /// </summary>
-        [Tooltip("Use the automatic data container, or just import coordinates as-is")]
-        public bool useAutoDataContainer;
+        [Tooltip("Use the automatic data containers (defined in-scene with ABRDataBounds or the defaultDataBounds), or just import coordinates as-is")]
+        public bool useAutoDataContainers;
 
         /// <summary>
         ///     Default bounds for datasets when showing (in Unity world coordinates)
         /// </summary>
         [Tooltip("Unity world-space container to automatically 'squish' all data into to avoid overflowing Unity coordinates")]
-        public Bounds dataContainer;
-
-        /// <summary>
-        /// Override transform matrices for specific data impression groups.
-        /// This is useful to change the data-to-Unity mapping if you need more
-        /// fine-grained control than the auto-data-container gives you.
-        /// </summary>
-        [Tooltip("Unity world-space container to 'squish' all data into to avoid overflowing Unity coordinates")]
-        public List<GroupToDataMatrixOverrideFields> overrideGroupToDataMatrices;
+        public Bounds defaultDataContainer;
 
 
         /// <summary>
@@ -147,15 +139,16 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Where to find the Schema online
         /// </summary>
-        private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
-        private string schemaName = "ABRSchema_0-2-0.json";
+        private const string SchemaUrl = "http://localhost:9000/";
+        // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
+        private string schemaName = "ABRSchema_2023-7-0.json";
 
         void Reset()
         {
             mediaPath = Application.persistentDataPath;
             serverUrl = "";
             loadStateOnStart = "";
-            dataContainer = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+            defaultDataContainer = new Bounds(Vector3.zero, Vector3.one * 2.0f);
 
             defaultGlyph = Resources.Load<GameObject>("DefaultSphere");
             defaultGlyph.SetActive(false);
@@ -167,8 +160,6 @@ namespace IVLab.ABREngine
             visAssetServerUrl = "";
             dataServerUrl = "";
             dataListenerPort = 0;
-
-            overrideGroupToDataMatrices = new List<GroupToDataMatrixOverrideFields>();
         }
 
         void Awake()

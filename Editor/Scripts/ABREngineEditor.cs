@@ -182,13 +182,34 @@ namespace IVLab.ABREngine
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
 
+            EditorGUILayout.LabelField("Save State", EditorStyles.boldLabel);
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Save State to .json file"))
+            {
+                string path = EditorUtility.SaveFilePanel(
+                    "Save ABR state file as .json",
+                    "",
+                    "ABRState.json",
+                    "json"
+                );
+                ABREngine.Instance.SaveState<PathStateFileLoader>(path);
+                Debug.Log("Saved state JSON to " + path);
+            }
 
             if (ABREngine.Instance.Config.dataServerUrl.Length > 0)
             {
-                if (GUILayout.Button("Save State"))
+                if (GUILayout.Button("Save State to Server"))
                 {
                     ABREngine.Instance.SaveState<HttpStateFileLoader>();
                 }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.LabelField("Options for ABREngine", EditorStyles.boldLabel);
+            if (GUILayout.Button("Render"))
+            {
+                ABREngine.Instance.Render();
             }
         }
     }

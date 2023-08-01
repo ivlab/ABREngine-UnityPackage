@@ -1,6 +1,6 @@
-/* DataManager.cs
+/* DataImpressionGroup.cs
  *
- * Copyright (c) 2021 University of Minnesota
+ * Copyright (c) 2023 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@ namespace IVLab.ABREngine
     /// <summary>
     /// A DataImpressionGroup is, as the name suggests, a group of data
     /// impressions within ABR. DataImpressionGroups can be constrained within
-    /// a defined bounding box (see <see cref="ABRDataBounds"/>), and can
+    /// a defined bounding box (see <see cref="ABRDataContainer"/>), and can
     /// automatically rescale all of their data to stay within this container.
     /// Each time a new key data object is loaded into a data impression in
     /// this group, the GroupToDataMatrix and GroupBounds are updated.
@@ -39,14 +39,9 @@ namespace IVLab.ABREngine
     /// variation of the <see cref="ABREngine.CreateDataImpressionGroup"/>
     /// method.
     /// </remarks>
+    [AddComponentMenu("ABR/Data Impression Group")]
     public class DataImpressionGroup : MonoBehaviour, IHasDataset
     {
-        /// <summary>
-        ///     Room-scale (Unity rendering space) bounds that all data should
-        ///     be contained within
-        /// </summary>
-        public Bounds GroupContainer { get; set; }
-
         /// <summary>
         ///     Transformation from the original data space into the room-scale
         ///     bounds. Multiply by a vector to go from group-space into data-space.
@@ -60,11 +55,6 @@ namespace IVLab.ABREngine
         public Bounds GroupBounds;
 
         /// <summary>
-        ///     Human-readable name for the data impression group
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
         ///     Unique identifier for this group
         /// </summary>
         public Guid Uuid { get; private set; }
@@ -73,28 +63,58 @@ namespace IVLab.ABREngine
         private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
         private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
 
-        internal static DataImpressionGroup Create(string name, Bounds bounds, Transform parent)
+        internal static DataImpressionGroup Create(string name)
         {
-            return Create(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent);
+            return Create(name, Guid.NewGuid(), null, Matrix4x4.identity);
         }
 
-        internal static DataImpressionGroup Create(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+        internal static DataImpressionGroup Create(string name, Bounds? containerBounds)
         {
-            GameObject go = new GameObject("DataImpressionGroup " + name);
-            DataImpressionGroup dig = go.AddComponent<DataImpressionGroup>();
+            return Create(name, Guid.NewGuid(), containerBounds, Matrix4x4.identity);
+        }
 
-            dig.Uuid = uuid;
-            dig.Name = name;
+        internal static DataImpressionGroup Create(string name, Guid uuid, Bounds? containerBounds, Matrix4x4 localMatrix)
+        {
+            // First, try to find any DataImpressionGroups that might exist in the scene already and see if any match name
+            DataImpressionGroup groupInScene = null;
+            foreach (DataImpressionGroup group in MonoBehaviour.FindObjectsOfType<DataImpressionGroup>())
+            {
+                if (group.name == name)
+                {
+                    groupInScene = group;
+                }
+            }
 
-            dig.GroupContainer = bounds;
+            // If it was found, we just use the position/rotation/hierarchy of the already existing GameObject.
+            // If it wasn't found, create one under ABREngine. Use the defined position/rotation/parent.
+            if (groupInScene == null)
+            {
+                GameObject go = new GameObject(name);
+                go.transform.SetParent(ABREngine.Instance.transform);
+                groupInScene = go.AddComponent<DataImpressionGroup>();
 
-            go.transform.SetParent(parent, false);
-            go.transform.localPosition = position;
-            go.transform.localRotation = rotation;
+                go.transform.localPosition = localMatrix.ExtractPosition();
+                go.transform.localRotation = localMatrix.ExtractRotation();
+                go.transform.localScale = localMatrix.ExtractScale();
+            }
 
-            dig.ResetBoundsAndTransformation();
+            groupInScene.Uuid = uuid;
+            groupInScene.name = name;
 
-            return dig;
+            // Set the bounds, if defined
+            if (containerBounds.HasValue)
+            {
+                ABRDataContainer container;
+                if (!groupInScene.TryGetComponent<ABRDataContainer>(out container))
+                {
+                    container = groupInScene.gameObject.AddComponent<ABRDataContainer>();
+                }
+                container.bounds = containerBounds.Value;
+            }
+
+            groupInScene.ResetBoundsAndTransformation();
+
+            return groupInScene;
         }
 
         /// <summary>
@@ -355,6 +375,28 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Get the bounds of the container containing all the data in this DataImpressionGroup
+        /// </summary>
+        public Bounds GetContainerBounds()
+        {
+            // If we're using auto data containers, try to find one attached to
+            // the same object as the DataImpressionGroup:
+            ABRDataContainer containerInEditor = this.GetComponent<ABRDataContainer>();
+            Bounds groupContainer;
+            if (containerInEditor != null)
+            {
+                // ... if found, use it
+                groupContainer = containerInEditor.bounds;
+            }
+            else
+            {
+                // ... otherwise, use default data container
+                groupContainer = ABREngine.Instance.Config.defaultDataContainer;
+            }
+            return groupContainer;
+        }
+
+        /// <summary>
         ///     From scratch, recalculate the bounds of this DataImpressionGroup. Start with
         ///     a zero-size bounding box and expand until it encapsulates all
         ///     datasets.
@@ -364,13 +406,15 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
-            // If user specified to not use data container, skip the rest and
+            // If user specified to not use data containers, skip the rest and
             // don't auto-calculate new bounds
-            if (!ABREngine.Instance.Config.useAutoDataContainer)
+            if (!ABREngine.Instance.Config.useAutoDataContainers)
             {
                 GroupToDataMatrix = Matrix4x4.identity;
                 return false;
             }
+
+            Bounds groupContainer = GetContainerBounds();
 
             float currentBoundsSize = GroupBounds.size.magnitude;
             ResetBoundsAndTransformation();
@@ -378,18 +422,6 @@ namespace IVLab.ABREngine
             Dataset ds = GetDataset();
             if (ds != null)
             {
-                // Look to see if this group's unity to data matrix has been
-                // overwritten... if so, skip the rest and don't auto-calculate
-                // new bounds
-                var overrideMatrix = ABREngine.Instance.Config.overrideGroupToDataMatrices.Find(
-                    o => o.groupUuid == this.Uuid.ToString() || o.groupName == this.Name || o.datasetPath == ds.Path
-                );
-                if (overrideMatrix != null)
-                {
-                    GroupToDataMatrix = overrideMatrix.groupToDataMatrix;
-                    return false;
-                }
-
                 // Build a list of keydata that are actually being used
                 List<string> activeKeyDataPaths = new List<string>();
                 foreach (IDataImpression impression in GetDataImpressions().Values)
@@ -420,12 +452,12 @@ namespace IVLab.ABREngine
                         // bounds (make sure to not assume we're including (0, 0, 0) in
                         // the bounds)
                         ds.DataSpaceBounds = originalBounds;
-                        NormalizeWithinBounds.Normalize(GroupContainer, originalBounds, out GroupToDataMatrix, out GroupBounds);
+                        NormalizeWithinBounds.Normalize(groupContainer, originalBounds, out GroupToDataMatrix, out GroupBounds);
                     }
                     else
                     {
                         NormalizeWithinBounds.NormalizeAndExpand(
-                            GroupContainer,
+                            groupContainer,
                             originalBounds,
                             ref GroupBounds,
                             ref GroupToDataMatrix,

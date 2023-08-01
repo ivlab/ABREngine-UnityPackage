@@ -24,7 +24,7 @@ using UnityEditor;
 
 namespace IVLab.ABREngine
 {
-    [CustomEditor(typeof(ABRDataBounds))]
+    [CustomEditor(typeof(ABRDataContainer))]
     public class ABRDataBoundsEditor : Editor
     {
         // Make sure OnSceneGui actually gets called regardless of how many inspectors are open
@@ -40,9 +40,9 @@ namespace IVLab.ABREngine
 
         void OnSceneGUI(SceneView sceneView)
         {
-            ABRDataBounds script = (ABRDataBounds) target;
+            ABRDataContainer script = (ABRDataContainer) target;
 
-            Matrix4x4 bboxXform = Matrix4x4.Translate(script.bounds.center) * Matrix4x4.Scale(script.bounds.extents);
+            Matrix4x4 bboxXform = Matrix4x4.Translate(script.bounds.center) * Matrix4x4.Scale(script.bounds.extents * 2.0f);
             Handles.matrix = script.transform.localToWorldMatrix * bboxXform;
             Handles.DrawWireCube(Vector3.zero, Vector3.one);
         }

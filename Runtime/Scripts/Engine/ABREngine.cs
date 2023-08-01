@@ -623,11 +623,9 @@ namespace IVLab.ABREngine
                 .GetEncodedGameObject(impressionGuid);
         }
 
+
         /// <summary>
-        /// Add a bare data impression group into the ABR scene. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position/rotation default to
-        /// zero.
+        /// Add a new data impression group with a particular name
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <returns>
@@ -635,29 +633,11 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name)
         {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), null, Matrix4x4.identity);
         }
 
         /// <summary>
-        /// Add a bare data impression group into the ABR scene. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position is defined by the user.
-        /// </summary>
-        /// <param name="name">Name of the new data impression group that will be created</param>
-        /// <param name="position">Where to place the data impression in space</param>
-        /// <returns>
-        /// The group that has been added.
-        /// </returns>
-        public DataImpressionGroup CreateDataImpressionGroup(string name, Vector3 position)
-        {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, position, Quaternion.identity);
-        }
-
-        /// <summary>
-        /// Add a new data impression group with a particular UUID. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position/rotation default to
-        /// zero.
+        /// Add a new data impression group with a particular UUID
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <param name="uuid">UUID to use for the new data impression group</param>
@@ -666,24 +646,22 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid)
         {
-            return CreateDataImpressionGroup(name, uuid, Config.dataContainer, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, uuid, null, Matrix4x4.identity);
         }
 
-
         /// <summary>
-        /// Add a new data impression group with a particular UUID, bounds, position, and rotation.
+        /// Add a new data impression group with a particular UUID, bounds, and transformation
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <param name="uuid">UUID to use for the new data impression group</param>
-        /// <param name="bounds">Default bounds to use for this data impression group. Data will be "squished" inside this bounding box.</param>
-        /// <param name="position">Default position (in Unity coordinates) to use for the data impression group.</param>
-        /// <param name="rotation">Default rotation (in Unity angles) to use for the data impression group.</param>
+        /// <param name="containerBounds">Default bounds to use for this data impression group. Data will be "squished" inside this bounding box.</param>
+        /// <param name="transformMatrix">Default position/rotation/scale (in Unity coordinates) to use for the data impression group.</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
+        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds? containerBounds, Matrix4x4? transformMatrix)
         {
-            DataImpressionGroup group = DataImpressionGroup.Create(name, uuid, bounds, position, rotation, this.transform);
+            DataImpressionGroup group = DataImpressionGroup.Create(name, uuid, containerBounds, transformMatrix.GetValueOrDefault(Matrix4x4.identity));
             dataImpressionGroups[group.Uuid] = group;
             return group;
         }
@@ -735,7 +713,7 @@ namespace IVLab.ABREngine
 
         public DataImpressionGroup GetDataImpressionGroup(string name)
         {
-            return dataImpressionGroups.Values.FirstOrDefault(g => g.Name == name);
+            return dataImpressionGroups.Values.FirstOrDefault(g => g.name == name);
         }
 
 

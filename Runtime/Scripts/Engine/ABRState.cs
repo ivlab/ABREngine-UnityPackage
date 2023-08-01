@@ -546,8 +546,7 @@ namespace IVLab.ABREngine
                                         group.Value.name,
                                         group.Value.uuid,
                                         group.Value.containerBounds,
-                                        group.Value.rootPosition,
-                                        group.Value.rootRotation
+                                        group.Value.transformMatrix
                                     );
                                 }
                                 ABREngine.Instance.RegisterDataImpression(dataImpression, g, true);
@@ -700,23 +699,15 @@ namespace IVLab.ABREngine
                     RawImpressionGroup saveGroup = new RawImpressionGroup();
 
                     // Save the group info
-                    saveGroup.name = group.Name;
-                    saveGroup.rootPosition = group.transform.localPosition;
-                    saveGroup.rootRotation = group.transform.localRotation;
-                    saveGroup.containerBounds = group.GroupContainer;
+                    saveGroup.name = group.name;
+                    saveGroup.transformMatrix = Matrix4x4.TRS(group.transform.localPosition, group.transform.localRotation, group.transform.localScale);
+                    saveGroup.containerBounds = group.GetContainerBounds();
                     saveGroup.uuid = group.Uuid;
                     saveGroup.impressions = new List<Guid>();
 
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
-                        // Skip serializing impressions that aren't inside the ABREngine GameObject
-                        GameObject child = group.GetEncodedGameObject(impression.Uuid).gameObject;
-                        if (child.GetComponentInParent<ABREngine>() == null)
-                        {
-                            continue;
-                        }
-
                         RawDataImpression saveImpression = new RawDataImpression();
 
                         // Retrieve easy values
@@ -879,8 +870,12 @@ namespace IVLab.ABREngine
         {
             _saveFields.Add(typeof(Vector3), new string[] {"x", "y", "z"});
             _saveFields.Add(typeof(Quaternion), new string[] {"x", "y", "z", "w"});
+            _saveFields.Add(typeof(Matrix4x4), new string[] {"m00", "m01", "m02", "m03", "m10", "m11", "m12", "m13","m20", "m21", "m22", "m23", "m30", "m31", "m32", "m33"});
+            _saveFields.Add(typeof(Matrix4x4?), new string[] {"m00", "m01", "m02", "m03", "m10", "m11", "m12", "m13","m20", "m21", "m22", "m23", "m30", "m31", "m32", "m33"});
             _saveFields.Add(typeof(Bounds), new string[] {"m_Center", "m_Extents"});
             _remapFieldNames.Add(typeof(Bounds), new string[] {"center", "extents"});
+            _saveFields.Add(typeof(Bounds?), new string[] {"m_Center", "m_Extents"});
+            _remapFieldNames.Add(typeof(Bounds?), new string[] {"center", "extents"});
         }
 
 
@@ -908,6 +903,7 @@ namespace IVLab.ABREngine
 
             // Check each type to see if it matches with the serialized object
             Type objectType = value.GetType();
+            Debug.Log("serializing " + objectType + " value " + value);
             foreach (var kv in _saveFields)
             {
                 if (objectType.IsAssignableFrom(kv.Key))
@@ -1001,9 +997,7 @@ namespace IVLab.ABREngine
         public List<Guid> impressions;
         public string name;
         public Guid uuid;
-        public Bounds containerBounds;
-        public Vector3 rootPosition;
-        public Quaternion rootRotation;
-        // Not including scale because that would mess with artifacts
+        public Bounds? containerBounds;
+        public Matrix4x4? transformMatrix;
     }
 }
