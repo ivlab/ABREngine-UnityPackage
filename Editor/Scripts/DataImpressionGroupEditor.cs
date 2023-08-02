@@ -29,6 +29,14 @@ namespace IVLab.ABREngine
     {
         public override void OnInspectorGUI()
         {
+            EditorGUILayout.HelpBox(
+                "Data Impression Groups contain related data impressions - " +
+                "i.e., data impressions with data that share a common reference frame." +
+                "Data impression groups defined in the scene will become 'templates' for ABR when a new ABR state is loaded." +
+                "In editor, you can rename data impression groups and add a 'Data Container' to constrain the Unity-space data bounds.",
+                MessageType.None
+            );
+
             DataImpressionGroup group = (DataImpressionGroup) target;
 
             EditorGUILayout.LabelField($"Data Impression Group '{group.name}'", EditorStyles.boldLabel);
@@ -38,12 +46,42 @@ namespace IVLab.ABREngine
             {
                 foreach (IDataImpression di in group.GetDataImpressions().Values)
                 {
-                    EditorGUILayout.LabelField($"    {di.GetType().Name}: {di.Uuid}");
+                    if (GUILayout.Button($"    {di.GetType().Name}: {di.Uuid}", EditorStyles.linkLabel))
+                    {
+                        // Selection.activeGameObject
+                        Debug.LogWarning("Selecting Data Impressions from Groups Not implemented yet (need DataImpressions to be MonoBehaviours)");
+                    }
                 }
             }
             else
             {
                 EditorGUILayout.LabelField("    (displayed when ABR is running)");
+            }
+
+            EditorGUILayout.LabelField("Data Container:", EditorStyles.boldLabel);
+            ABRDataContainer dataContainer;
+            if (group.TryGetComponent<ABRDataContainer>(out dataContainer))
+            {
+                EditorGUILayout.LabelField("    " + dataContainer.bounds);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("    No data container found.");
+                if (GUILayout.Button("+ Add ABR Data Container"))
+                {
+                    group.gameObject.AddComponent<ABRDataContainer>();
+                }
+            }
+
+            if (Application.isPlaying)
+            {
+                EditorGUILayout.LabelField("Bounds and Matrix within Container:", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField(new GUIContent("    Bounds: " + group.GroupBounds, "Actual, Unity-Space bounds of the data inside the data container"));
+                EditorGUILayout.LabelField(new GUIContent("    Group To Data Matrix:", "Transform matrix from group (Unity) space to Data Space"));
+                Rect lastRect = GUILayoutUtility.GetLastRect();
+                Rect matrixRect = new Rect(0, lastRect.y + EditorGUIUtility.singleLineHeight, EditorGUIUtility.currentViewWidth, EditorGUIUtility.singleLineHeight * 4);
+                EditorGUILayout.Space(matrixRect.height);
+                GUI.Label(matrixRect, group.GroupToDataMatrix.ToString("F3"), EditorStyles.centeredGreyMiniLabel);
             }
         }
     }

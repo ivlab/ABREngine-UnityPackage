@@ -27,11 +27,11 @@ using IVLab.Utilities;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    /// A DataImpressionGroup is, as the name suggests, a group of data
+    /// A DataImpressionGroup is a group of data
     /// impressions within ABR. DataImpressionGroups can be constrained within
     /// a defined bounding box (see <see cref="ABRDataContainer"/>), and can
     /// automatically rescale all of their data to stay within this container.
-    /// Each time a new key data object is loaded into a data impression in
+    /// Each time a new <see cref="KeyData"/> object is loaded into a data impression in
     /// this group, the GroupToDataMatrix and GroupBounds are updated.
     /// </summary>
     /// <remarks>

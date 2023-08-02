@@ -141,7 +141,7 @@ namespace IVLab.ABREngine
         /// </summary>
         private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
-        private string schemaName = "ABRSchema_2023-7-0.json";
+        private string schemaName = "ABRSchema_2023-8-0.json";
 
         void Reset()
         {
