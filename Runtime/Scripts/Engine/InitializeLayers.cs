@@ -83,7 +83,8 @@ namespace IVLab.ABREngine
                 if (it.name == "layers")
                 {
                     int numLayers = it.arraySize;
-                    for (int i = 0; i < numLayers && actualLayer < 0; i++)
+                    // Unity 2019: Layers < 8 are not user-definable
+                    for (int i = 8; i < numLayers && actualLayer < 0; i++)
                     {
                         SerializedProperty element = it.GetArrayElementAtIndex(i);
                         // First empty element of layers list
