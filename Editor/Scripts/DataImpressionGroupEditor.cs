@@ -66,7 +66,16 @@ namespace IVLab.ABREngine
             }
             else
             {
-                EditorGUILayout.LabelField("    No data container found.");
+                if (ABREngine.configPrototype.useAutoDataContainers)
+                {
+                    EditorGUILayout.LabelField("    No data container found. Using default data container:");
+                    EditorGUILayout.LabelField("    " + ABREngine.configPrototype.defaultDataContainer);
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("    No data container found.");
+                }
+
                 if (GUILayout.Button("+ Add ABR Data Container"))
                 {
                     group.gameObject.AddComponent<ABRDataContainer>();

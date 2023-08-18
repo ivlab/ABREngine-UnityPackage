@@ -20,10 +20,12 @@
 #if UNITY_EDITOR
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using IVLab.ABREngine.ExtensionMethods;
 
 namespace IVLab.ABREngine
 {
@@ -42,25 +44,21 @@ namespace IVLab.ABREngine
 
         private int configIndex = 0;
 
-        /// <summary>
-        /// Get all instances of scriptable objects with given type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        // http://answers.unity.com/answers/1878206/view.html
-        public static List<T> GetAllInstances<T>() where T : ScriptableObject
-        {
-            return AssetDatabase.FindAssets($"t: {typeof(T).Name}").ToList()
-                        .Select(AssetDatabase.GUIDToAssetPath)
-                        .Select(AssetDatabase.LoadAssetAtPath<T>)
-                        .ToList();
-        }
+        private string configNamePath;
 
         void Awake()
         {
-            var configs = GetAllInstances<ABRConfig>();
-            var configProp = serializedObject.FindProperty("configPrototype");
-            configIndex = configs.FindIndex(i => i.name == configProp.objectReferenceValue.name);
+            // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
+            configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
+            if (File.Exists(configNamePath))
+            {
+                string configName = File.ReadAllText(configNamePath);
+                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                configIndex = configs.FindIndex(cfg => cfg.name == configName);
+                ABRConfig config = configs[configIndex];
+                ABREngine.configPrototype = config;
+                Debug.Log("Loaded ABR config " + config.name);
+            }
         }
 
         public override void OnInspectorGUI()
@@ -73,7 +71,7 @@ namespace IVLab.ABREngine
             {
                 // Display and update ABREngine Configs
                 EditorGUILayout.LabelField("Choose ABR Configuration:");
-                var configs = GetAllInstances<ABRConfig>();
+                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
                 if (configs.Count == 0)
                 {
                     EditorGUILayout.HelpBox("No ABR configurations available! Please create one first. Assets/ABR/ABR Configuration.", MessageType.Error);
@@ -81,12 +79,12 @@ namespace IVLab.ABREngine
                 else
                 {
                     int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
-                    var configProp = serializedObject.FindProperty("configPrototype");
-                    if (newIndex != configIndex || configProp.objectReferenceValue == null)
+                    if (newIndex != configIndex || ABREngine.configPrototype == null)
                     {
                         Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
                         configIndex = newIndex;
-                        configProp.objectReferenceValue = configs[newIndex];
+                        File.WriteAllText(configNamePath, configs[newIndex].name);
+                        ABREngine.configPrototype = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
                     }
                     if (GUILayout.Button("Open Current ABR Config..."))

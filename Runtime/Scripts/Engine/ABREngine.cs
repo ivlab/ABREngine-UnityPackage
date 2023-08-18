@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using IVLab.Utilities;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using IVLab.ABREngine.ExtensionMethods;
 
 namespace IVLab.ABREngine
 {
@@ -179,7 +179,7 @@ namespace IVLab.ABREngine
         private Notifier _notifier;
 
         [SerializeField]
-        public ABRConfig configPrototype;
+        public static ABRConfig configPrototype;
 
         /// <summary>
         /// System-wide manager for VisAssets (visual elements used in the visualization)
@@ -295,6 +295,18 @@ namespace IVLab.ABREngine
             stateParser = new ABRStateParser();
 
             // Initialize the configuration from ABRConfig.json
+            // First, load the name of the current configuration from text file
+            // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
+            string configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
+            if (File.Exists(configNamePath))
+            {
+                string configName = File.ReadAllText(configNamePath);
+                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                int configIndex = configs.FindIndex(cfg => cfg.name == configName);
+                ABRConfig config = configs[configIndex];
+                ABREngine.configPrototype = config;
+                Debug.Log("Loaded ABR config " + config.name);
+            }
             if (configPrototype != null)
             {
                 Config = Instantiate(configPrototype);
