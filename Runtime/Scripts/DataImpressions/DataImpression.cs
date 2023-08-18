@@ -25,81 +25,6 @@ using UnityEngine;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    ///     Public interface for a single ABR visualization layer
-    /// </summary>
-    // public interface IDataImpression : IHasDataset, IHasKeyData
-    // {
-    //     /// <summary>
-    //     ///     Unique identifier for this Data Impression
-    //     ///
-    //     ///     Assigned on object creation
-    //     /// </summary>
-    //     Guid Uuid { get; set; }
-
-    //     /// <summary>
-    //     ///     Used for getting/setting ABRInputs on this DataImpression
-    //     /// </summary>
-    //     ABRInputIndexerModule InputIndexer { get; }
-
-    //     /// <summary>
-    //     ///     1. Populate rendering information (Geometry) for the
-    //     ///     DataImpression. This is triggered by the `DataImpressionGroup`
-    //     ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
-    //     /// </summary>
-    //     void ComputeGeometry();
-
-    //     /// <summary>
-    //     ///     2. Take geometric rendering information computed in
-    //     ///     `ComputeGeometry()` and sets up proper game object(s) and
-    //     ///     components for this Data Impression. Transfers geometry into
-    //     ///     Unity format (e.g. a `Mesh`). No geometric computations should
-    //     ///     happen in this method, and it should generally be *lightweight*.
-    //     /// </summary>
-    //     void SetupGameObject(EncodedGameObject currentGameObject);
-
-    //     /// <summary>
-    //     ///     3. Update the "styling" of an impression by sending each
-    //     ///     styling parameter to the shader. Occasionally will need to set
-    //     ///     per-vertex items like transforms. This method should generally be *lightweight*.
-    //     /// </summary>
-    //     void UpdateStyling(EncodedGameObject currentGameObject);
-
-    //     /// <summary>
-    //     ///     Update the visibility of an impression (hidden or shown)
-    //     /// </summary>
-    //     void UpdateVisibility(EncodedGameObject currentGameObject);
-
-    //     /// <summary>
-    //     ///     Copy a data impression, giving a new Uuid
-    //     /// </summary>
-    //     IDataImpression Copy();
-
-    //     /// <summary>
-    //     /// Update this data impression from an existing (possibly temporary) one.
-    //     /// </summary>
-    //     void CopyExisting(IDataImpression other);
-
-    //     /// <summary>
-    //     /// When this data impression is done being used, clean up after itself
-    //     /// if necessary. This method may need access to the GameObject the data
-    //     /// impression is applied to.
-    //     /// </summary>
-    //     void Cleanup(EncodedGameObject encodedGameObject);
-
-    //     /// <summary>
-    //     ///     Return if this data impression has a particular string tag (for
-    //     ///     external purposes only, the engine currently does nothing with tags)
-    //     /// </summary>
-    //     bool HasTag(string tagName);
-
-    //     /// <summary>
-    //     ///     Any hints to provide the rendering engine, such as if the impression
-    //     ///     should be hidden
-    //     /// </summary>
-    //     RenderHints RenderHints { get; set; }
-    // }
-
-    /// <summary>
     ///     Private data for a single data impression
     ///
     ///     Should contain properties with attributes for all of the inputs
@@ -154,13 +79,6 @@ namespace IVLab.ABREngine
         ///     Cache of current KeyData rendering information
         /// </summary>
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
-
-        /// <summary>
-        ///     The layer to put this data impression in
-        ///
-        ///     Warning: layer must exist in the Unity project!
-        /// </summary>
-        protected virtual string LayerName { get; } = "ABR";
 
         /// <summary>
         ///     Construct a data impession with a given UUID. Note that this

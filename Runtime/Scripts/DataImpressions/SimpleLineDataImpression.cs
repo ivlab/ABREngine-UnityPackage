@@ -177,7 +177,16 @@ namespace IVLab.ABREngine
         public Vector3 defaultCurveDirection = Vector3.up;
 
         protected override string[] MaterialNames { get; } = { "ABR_Ribbon" };
-        protected override string LayerName { get; } = "ABR_Line";
+
+        /// <summary>
+        /// Define the layer name for this Data Impression
+        /// </summary>
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Line";
 
         public override Dataset GetDataset()
         {

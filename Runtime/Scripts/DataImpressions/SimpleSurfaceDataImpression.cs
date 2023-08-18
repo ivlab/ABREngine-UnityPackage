@@ -183,7 +183,16 @@ namespace IVLab.ABREngine
         public BooleanPrimitive onlyOutline;
 
         protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };
-        protected override string LayerName { get; } = "ABR_Surface";
+
+        /// <summary>
+        /// Define the layer name for this Data Impression
+        /// </summary>
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Surface";
 
 
         // Whether or not to render the back faces of the mesh

@@ -127,7 +127,16 @@ namespace IVLab.ABREngine
         private ComputeBuffer perGlyphVisibilityBuffer;
 
         protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
-        protected override string LayerName { get; } = "ABR_Glyph";
+
+        /// <summary>
+        /// Define the layer name for this Data Impression
+        /// </summary>
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Glyph";
 
         public override Dataset GetDataset()
         {

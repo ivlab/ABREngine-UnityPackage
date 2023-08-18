@@ -152,7 +152,16 @@ namespace IVLab.ABREngine
 
 
         protected override string[] MaterialNames { get; } = { "ABR_Volume" };
-        protected override string LayerName { get; } = "ABR_Volume";
+
+        /// <summary>
+        /// Define the layer name for this Data Impression
+        /// </summary>
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Volume";
 
         public override Dataset GetDataset()
         {
