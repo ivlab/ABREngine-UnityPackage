@@ -156,9 +156,6 @@ namespace IVLab.ABREngine
             else
             {
                 gameObjectMapping[impression.Uuid] = impression;
-                GameObject impressionGameObject = new GameObject();
-                impressionGameObject.transform.parent = this.transform;
-                impressionGameObject.name = impression.GetType().ToString();
             }
 
             PrepareImpression(impression);
@@ -537,16 +534,13 @@ namespace IVLab.ABREngine
         private void PrepareImpression(DataImpression impression)
         {
             // Make sure the parent is assigned properly
-            gameObjectMapping[impression.Uuid].transform.SetParent(this.transform, false);
+            impression.transform.SetParent(this.transform, false);
             
             // Unsure why this needs to be explicitly set but here it is,
             // zeroing position and rotation so each data impression encoded
             // game object is centered on the dataset...
-            gameObjectMapping[impression.Uuid].transform.localPosition = Vector3.zero;
-            gameObjectMapping[impression.Uuid].transform.localRotation = Quaternion.identity;
-
-            // Display the UUID in editor
-            gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;
+            impression.transform.localPosition = Vector3.zero;
+            impression.transform.localRotation = Quaternion.identity;
         }
     }
 }

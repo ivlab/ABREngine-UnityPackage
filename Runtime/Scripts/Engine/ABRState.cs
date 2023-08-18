@@ -240,10 +240,10 @@ namespace IVLab.ABREngine
                     // Make the data impression; should only match one type
                     // use the generic `Create` method on the type.
                     Type impressionType = impressionTypes[foundIndex];
-                    MethodInfo createMethod = impressionType.GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
-                    // ConstructorInfo impressionCtor =
-                    //     impressionType.GetConstructor(new Type[] { typeof(string) });
-                    string[] impressionArgs = new string[] { impression.Value.uuid };
+                    MethodInfo createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
+                    createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
+
+                    string[] impressionArgs = new string[] { impression.Value.uuid, impression.Value.name };
                     DataImpression dataImpression = createMethod.Invoke(null, impressionArgs) as DataImpression;
                     ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 

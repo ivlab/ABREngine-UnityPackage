@@ -371,7 +371,6 @@ namespace IVLab.ABREngine
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleSurfaceDataImpression", LayerName);
             }
-            gameObject.name = this + " surface Mesh";
 
             // Populate surface mesh from calculated geometry
             var SSrenderData = RenderInfo as SimpleSurfaceRenderInfo;

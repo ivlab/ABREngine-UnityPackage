@@ -81,16 +81,17 @@ namespace IVLab.ABREngine
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
 
         /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID - if you override this
-        ///     constructor bad things might happen.
+        ///     Construct a data impession with a given UUID and name. Note that
+        ///     this will be called from <see cref="ABRStateParser"/> and must
+        ///     assume that there are two arguments with UUID and name - if you
+        ///     override this method bad things might happen.
         /// </summary>
-        public static T Create<T>(string uuid)
+        public static T Create<T>(string uuid, string name)
         where T : DataImpression
         {
-            GameObject go = new GameObject(uuid);
+            GameObject go = new GameObject();
             T di = go.AddComponent<T>();
+            go.name = name + " (" + di.GetType().Name + ")";
 
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Uuid = new Guid(uuid);
@@ -170,7 +171,7 @@ namespace IVLab.ABREngine
             di.Tags = new List<string>(di.Tags);
             di.Uuid = Guid.NewGuid();
             di.RenderHints = this.RenderHints.Copy();
-            return di as DataImpression;
+            return di;
         }
 
         /// <summary>
