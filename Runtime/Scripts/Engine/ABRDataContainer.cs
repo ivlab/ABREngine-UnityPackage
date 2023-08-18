@@ -1,4 +1,4 @@
-/* ABRDataBounds.cs
+/* ABRDataContainer.cs
  *
  * Copyright (c) 2023 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
@@ -26,5 +26,8 @@ namespace IVLab.ABREngine
     {
         [SerializeField, Tooltip("Bounds to constrain the data to")]
         public Bounds bounds = new Bounds(Vector3.zero, Vector3.one);
+
+        [SerializeField, Tooltip("Overwrite the bounds for this group found in an ABR state file that is loaded, if any exist")]
+        public bool overwriteStateBounds = false;
     }
 }

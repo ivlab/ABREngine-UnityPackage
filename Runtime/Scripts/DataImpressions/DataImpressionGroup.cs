@@ -109,7 +109,12 @@ namespace IVLab.ABREngine
                 {
                     container = groupInScene.gameObject.AddComponent<ABRDataContainer>();
                 }
-                container.bounds = containerBounds.Value;
+                
+                // Check if we should use the bounds found in the state or the bounds defined in-editor
+                if (!container.overwriteStateBounds)
+                {
+                    container.bounds = containerBounds.Value;
+                }
             }
 
             groupInScene.ResetBoundsAndTransformation();

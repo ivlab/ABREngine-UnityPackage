@@ -1,4 +1,4 @@
-/* ABRDataBoundsEditor.cs
+/* ABRDataContainerEditor.cs
  *
  * Copyright (c) 2023 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
@@ -30,15 +30,15 @@ namespace IVLab.ABREngine
         // Make sure OnSceneGui actually gets called regardless of how many inspectors are open
         void OnEnable()
         {
-            SceneView.duringSceneGui += OnSceneGUI;
+            SceneView.duringSceneGui += SceneGUI;
         }
         
         void OnDisable()
         {
-            SceneView.duringSceneGui -= OnSceneGUI;
+            SceneView.duringSceneGui -= SceneGUI;
         }
 
-        void OnSceneGUI(SceneView sceneView)
+        void SceneGUI(SceneView sceneView)
         {
             ABRDataContainer script = (ABRDataContainer) target;
 
