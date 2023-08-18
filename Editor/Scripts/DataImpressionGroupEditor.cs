@@ -66,10 +66,10 @@ namespace IVLab.ABREngine
             }
             else
             {
-                if (ABREngine.configPrototype.useAutoDataContainers)
+                if (ABREngine.ConfigPrototype.useAutoDataContainers)
                 {
                     EditorGUILayout.LabelField("    No data container found. Using default data container:");
-                    EditorGUILayout.LabelField("    " + ABREngine.configPrototype.defaultDataContainer);
+                    EditorGUILayout.LabelField("    " + ABREngine.ConfigPrototype.defaultDataContainer);
                 }
                 else
                 {

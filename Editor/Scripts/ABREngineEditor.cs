@@ -48,17 +48,8 @@ namespace IVLab.ABREngine
 
         void Awake()
         {
-            // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
-            configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
-            if (File.Exists(configNamePath))
-            {
-                string configName = File.ReadAllText(configNamePath);
-                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
-                configIndex = configs.FindIndex(cfg => cfg.name == configName);
-                ABRConfig config = configs[configIndex];
-                ABREngine.configPrototype = config;
-                Debug.Log("Loaded ABR config " + config.name);
-            }
+            // "prime" the config - make sure the engine has loaded it
+            ABRConfig cfg = ABREngine.ConfigPrototype;
         }
 
         public override void OnInspectorGUI()
@@ -79,12 +70,12 @@ namespace IVLab.ABREngine
                 else
                 {
                     int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
-                    if (newIndex != configIndex || ABREngine.configPrototype == null)
+                    if (newIndex != configIndex || ABREngine.ConfigPrototype == null)
                     {
                         Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
                         configIndex = newIndex;
                         File.WriteAllText(configNamePath, configs[newIndex].name);
-                        ABREngine.configPrototype = configs[newIndex];
+                        ABREngine.ConfigPrototype = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
                     }
                     if (GUILayout.Button("Open Current ABR Config..."))

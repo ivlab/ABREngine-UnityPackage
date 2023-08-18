@@ -178,8 +178,45 @@ namespace IVLab.ABREngine
 
         private Notifier _notifier;
 
-        [SerializeField]
-        public static ABRConfig configPrototype;
+        /// <summary>
+        /// Config "Prototype" to use for the current ABR configuration. This is
+        /// set in edit-mode and should NOT be changed at runtime. Instead, use
+        /// <see cref="Config"/>.
+        /// </summary>
+        public static ABRConfig ConfigPrototype
+        {
+            get
+            {
+                if (s_ConfigPrototype == null)
+                {
+                    // First, load the name of the current configuration from text file
+                    // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
+                    string configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
+                    if (File.Exists(configNamePath))
+                    {
+                        string configName = File.ReadAllText(configNamePath);
+                        var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                        int configIndex = configs.FindIndex(cfg => cfg.name == configName);
+                        ABRConfig config = configs[configIndex];
+                        s_ConfigPrototype = config;
+                        Debug.Log("Loaded ABR config " + config.name);
+                    }
+                }
+                return s_ConfigPrototype;
+            }
+            set
+            {
+                if (Application.isPlaying)
+                {
+                    Debug.LogWarning(
+                        "ABREngine.ConfigPrototype should not be modified at runtime. Instead, use ABREngine.Instance.Config.\n" +
+                        "This ensures that any config changes made during runtime are temporary, mimicking the behaviour of Unity editor."
+                    );
+                }
+                s_ConfigPrototype = value;
+            }
+        }
+        private static ABRConfig s_ConfigPrototype;
 
         /// <summary>
         /// System-wide manager for VisAssets (visual elements used in the visualization)
@@ -270,7 +307,10 @@ namespace IVLab.ABREngine
         public Transform ABRTransform { get; private set; }
 
         /// <summary>
-        /// Provides access to all of the ABRConfig options that were loaded in at startup
+        /// Provides access to all of the <see cref="ABRConfig"/> options that
+        /// were loaded in at startup. You can safely change this config at
+        /// runtime without messing up the ScriptableObject representing the
+        /// underlying <see cref="ABRConfig"/>.
         /// </summary>
         public ABRConfig Config { get; private set; }
 
@@ -295,21 +335,9 @@ namespace IVLab.ABREngine
             stateParser = new ABRStateParser();
 
             // Initialize the configuration from ABRConfig.json
-            // First, load the name of the current configuration from text file
-            // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
-            string configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
-            if (File.Exists(configNamePath))
+            if (ConfigPrototype != null)
             {
-                string configName = File.ReadAllText(configNamePath);
-                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
-                int configIndex = configs.FindIndex(cfg => cfg.name == configName);
-                ABRConfig config = configs[configIndex];
-                ABREngine.configPrototype = config;
-                Debug.Log("Loaded ABR config " + config.name);
-            }
-            if (configPrototype != null)
-            {
-                Config = Instantiate(configPrototype);
+                Config = Instantiate(ConfigPrototype);
             }
             else
             {
