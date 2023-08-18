@@ -25,6 +25,7 @@ using System;
 using UnityEditor;
 using UnityEditor.PackageManager.Requests;
 using UnityEditor.PackageManager;
+using System.IO;
 
 namespace IVLab.ABREngine.Importer
 {
@@ -57,6 +58,12 @@ namespace IVLab.ABREngine.Importer
             EditorApplication.update += Progress;
         }
 
+        [MenuItem("ABR/Reopen Unity Project")]
+        static void ReopenUnityProject()
+        {
+            EditorApplication.OpenProject(Directory.GetCurrentDirectory());
+        }
+
         static void Progress()
         {
             if (readyToAddNext)
@@ -84,6 +91,10 @@ namespace IVLab.ABREngine.Importer
             {
                 EditorApplication.update -= Progress;
                 Debug.Log("Finished importing ABR dependencies");
+                if (EditorUtility.DisplayDialog("Editor restart needed.", "Finished importing ABR dependencies. To begin using ABR, restart the Unity editor.", "Restart Unity", "Cancel"))
+                {
+                    ReopenUnityProject();
+                }
             }
         }
     }
