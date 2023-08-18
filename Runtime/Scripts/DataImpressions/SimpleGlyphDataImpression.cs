@@ -47,7 +47,7 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Glyphs")]
-    public class SimpleGlyphDataImpression : DataImpression, IDataImpression
+    public class SimpleGlyphDataImpression : DataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
@@ -178,14 +178,6 @@ namespace IVLab.ABREngine
 
         protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
         protected override string LayerName { get; } = "ABR_Glyph";
-
-        /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
-        /// </summary>
-        public SimpleGlyphDataImpression(string uuid) : base(uuid) { }
-        public SimpleGlyphDataImpression() : base() { }
 
         public override Dataset GetDataset()
         {
@@ -329,11 +321,12 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
+                // should never get here
                 return;
             }
 
@@ -341,7 +334,7 @@ namespace IVLab.ABREngine
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
-                currentGameObject.gameObject.layer = layerID;
+                gameObject.layer = layerID;
             }
             else
             {
@@ -349,9 +342,9 @@ namespace IVLab.ABREngine
             }
 
             // Return all previous renderers to pool
-            while (currentGameObject.transform.childCount > 0)
+            while (gameObject.transform.childCount > 0)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
 
@@ -359,7 +352,7 @@ namespace IVLab.ABREngine
             int rendererCount = glyph?.VisAssetCount - 1 ?? 0;
             for (int stopIndex = -1; stopIndex < rendererCount; stopIndex++)
             {
-                GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", currentGameObject.transform, (go) =>
+                GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", gameObject.transform, (go) =>
                 {
                     go.name = "Glyph Renderer Object " + stopIndex;
                 });
@@ -367,7 +360,7 @@ namespace IVLab.ABREngine
                 // Parent the glyph renderer to this Data Impression and ensure that it's centered correctly
                 // Unsure why necessary...
                 // See also: PrepareImpression method of DataImpressionGroup class
-                childRenderer.transform.SetParent(currentGameObject.transform, false);
+                childRenderer.transform.SetParent(gameObject.transform, false);
                 childRenderer.transform.localPosition = Vector3.zero;
                 childRenderer.transform.localRotation = Quaternion.identity;
 
@@ -397,17 +390,17 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Default to using every transform in the data (re-populate and discard old transforms)
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
 
             // Go through each child glyph renderer and render it
-            for (int glyphIndex = 0; glyphIndex < currentGameObject.transform.childCount; glyphIndex++)
+            for (int glyphIndex = 0; glyphIndex < gameObject.transform.childCount; glyphIndex++)
             {
                 // Exit immediately if the game object or instanced mesh renderer relevant to this
                 // impression do not yet exist
-                InstancedMeshRenderer imr = currentGameObject?.transform.GetChild(glyphIndex).GetComponent<InstancedMeshRenderer>();
+                InstancedMeshRenderer imr = gameObject?.transform.GetChild(glyphIndex).GetComponent<InstancedMeshRenderer>();
                 if (imr == null)
                     continue;
 
@@ -615,9 +608,9 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            foreach (InstancedMeshRenderer imr in currentGameObject?.GetComponentsInChildren<InstancedMeshRenderer>())
+            foreach (InstancedMeshRenderer imr in gameObject?.GetComponentsInChildren<InstancedMeshRenderer>())
             {
                 if (imr != null)
                 {
@@ -626,13 +619,13 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void Cleanup(EncodedGameObject currentGameObject)
+        public override void Cleanup()
         {
-            base.Cleanup(currentGameObject);
+            base.Cleanup();
             // Return all previous renderers to pool
-            while (currentGameObject.transform.childCount > 0)
+            while (gameObject.transform.childCount > 0)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
             perGlyphVisibilityBuffer?.Release();

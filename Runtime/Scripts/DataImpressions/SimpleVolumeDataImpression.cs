@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Volumes")]
-    public class SimpleVolumeDataImpression : DataImpression, IDataImpression
+    public class SimpleVolumeDataImpression : DataImpression
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
@@ -153,14 +153,6 @@ namespace IVLab.ABREngine
 
         protected override string[] MaterialNames { get; } = { "ABR_Volume" };
         protected override string LayerName { get; } = "ABR_Volume";
-
-        /// <summary>
-        ///     Construct a data impression with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
-        /// </summary>
-        public SimpleVolumeDataImpression(string uuid) : base(uuid) { }
-        public SimpleVolumeDataImpression() : base() { }
 
         public override Dataset GetDataset()
         {
@@ -293,36 +285,37 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
+                // should never get here
                 return;
             }
 
             // Setup mesh renderer and mesh filter
             MeshFilter meshFilter = null;
             MeshRenderer meshRenderer = null;
-            if (!currentGameObject.TryGetComponent<MeshFilter>(out meshFilter))
+            if (!gameObject.TryGetComponent<MeshFilter>(out meshFilter))
             {
-                meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
+                meshFilter = gameObject.AddComponent<MeshFilter>();
             }
-            if (!currentGameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
+            if (!gameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
             {
-                meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
+                meshRenderer = gameObject.AddComponent<MeshRenderer>();
             }
 
             // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
-                currentGameObject.gameObject.layer = layerID;
+                gameObject.layer = layerID;
             }
             else
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleVolumeDataImpression", LayerName);
             }
-            currentGameObject.name = this + " volume";
+            gameObject.name = this + " volume";
 
             // Populate volume mesh from calculated geometry
             var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;
@@ -352,14 +345,14 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Return immediately if the game object, mesh filter, or mesh renderer do not exist
             // (this should only really happen if the gameobject/renderers for this impression have not yet been initialized,
             // which equivalently indicates that KeyData has yet to be applied to this impression and therefore there
             // is no point in styling it anyway)
-            MeshFilter meshFilter = currentGameObject?.GetComponent<MeshFilter>();
-            MeshRenderer meshRenderer = currentGameObject?.GetComponent<MeshRenderer>();
+            MeshFilter meshFilter = gameObject?.GetComponent<MeshFilter>();
+            MeshRenderer meshRenderer = gameObject?.GetComponent<MeshRenderer>();
             if (meshFilter == null || meshRenderer == null)
             {
                 return;
@@ -479,9 +472,9 @@ namespace IVLab.ABREngine
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            MeshRenderer mr = currentGameObject?.GetComponent<MeshRenderer>();
+            MeshRenderer mr = gameObject?.GetComponent<MeshRenderer>();
             if (mr != null)
             {
                 mr.enabled = RenderHints.Visible;

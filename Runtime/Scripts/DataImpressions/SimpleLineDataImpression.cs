@@ -51,7 +51,7 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Ribbons")]
-    public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
+    public class SimpleLineDataImpression : DataImpression, IHasDataset
     {
         [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
@@ -178,14 +178,6 @@ namespace IVLab.ABREngine
 
         protected override string[] MaterialNames { get; } = { "ABR_Ribbon" };
         protected override string LayerName { get; } = "ABR_Line";
-
-        /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
-        /// </summary>
-        public SimpleLineDataImpression(string uuid) : base(uuid) { }
-        public SimpleLineDataImpression() : base() { }
 
         public override Dataset GetDataset()
         {
@@ -434,10 +426,10 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
             var lineResources = RenderInfo as SimpleLineRenderInfo;
-            if (currentGameObject == null || lineResources == null)
+            if (gameObject == null || lineResources == null)
             {
                 return;
             }
@@ -451,28 +443,28 @@ namespace IVLab.ABREngine
 
             // Create a new GameObject for each line in the data, and return any unused ones to the pool
             int numLines = lineResources?.indices?.Length ?? 0;
-            while (currentGameObject.transform.childCount < numLines)
+            while (gameObject.transform.childCount < numLines)
             {
-                GameObject renderObject = GenericObjectPool.Instance.GetObjectFromPool(this.GetType().Name + " meshRenderer", currentGameObject.transform, go =>
+                GameObject renderObject = GenericObjectPool.Instance.GetObjectFromPool(this.GetType().Name + " meshRenderer", gameObject.transform, go =>
                 {
                     go.name = "Line Render Object";
                 });
-                renderObject.transform.SetParent(currentGameObject.transform, false);
+                renderObject.transform.SetParent(gameObject.transform, false);
                 renderObject.transform.localPosition = Vector3.zero;
                 renderObject.transform.localScale = Vector3.one;
                 renderObject.transform.localRotation = Quaternion.identity;
             }
 
-            while (currentGameObject.transform.childCount > numLines)
+            while (gameObject.transform.childCount > numLines)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
 
             // Create mesh filters and renderers for each line
             for (int i = 0; i < numLines; i++)
             {
-                var renderObject = currentGameObject.transform.GetChild(i).gameObject;
+                var renderObject = gameObject.transform.GetChild(i).gameObject;
                 MeshFilter meshFilter = null;
                 MeshRenderer meshRenderer = null;
                 if (!renderObject.TryGetComponent<MeshFilter>(out meshFilter))
@@ -514,10 +506,10 @@ namespace IVLab.ABREngine
         // Updates line styling based on scalars, color, texture and ribbon brightness,
         // but none of the other ribbon attributes (width, rotation, curve, smooth)
         // since those involve actually rebuilding geometry
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Exit immediately if the game object or key data does not exist
-            if (currentGameObject == null || keyData == null)
+            if (gameObject == null || keyData == null)
             {
                 return;
             }
@@ -572,7 +564,7 @@ namespace IVLab.ABREngine
             for (int i = 0; i < numLines; i++)
             {
                 // Get the current line renderer gameobject
-                GameObject renderObject = currentGameObject.transform.GetChild(i).gameObject;
+                GameObject renderObject = gameObject.transform.GetChild(i).gameObject;
                 // Obtain its mesh renderer and filter components
                 MeshFilter meshFilter = renderObject?.GetComponent<MeshFilter>();
                 MeshRenderer meshRenderer = renderObject?.GetComponent<MeshRenderer>();
@@ -689,15 +681,15 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
                 return;
             }
-            for (int i = 0; i < currentGameObject.transform.childCount; i++)
+            for (int i = 0; i < gameObject.transform.childCount; i++)
             {
-                MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
+                MeshRenderer mr = gameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
                 if (mr !=  null)
                 {
                     if (RenderHints.Visible)

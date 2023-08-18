@@ -163,12 +163,12 @@ namespace IVLab.ABREngine.Legends
             // Move each Data Impression GameObject underneath the legend GameObject
             foreach (var go in legendEntryGameObjects)
             {
-                EncodedGameObject ego = ABREngine.Instance.GetEncodedGameObject(new Guid(go.name));
+                DataImpression ego = ABREngine.Instance.GetDataImpression(new Guid(go.name));
                 ego.gameObject.transform.SetParent(go.transform, false);
             }
         }
 
-        private ABRLegendEntry SetupLegendEntry(IDataImpression di, Color backgroundColor, int entryIndex)
+        private ABRLegendEntry SetupLegendEntry(DataImpression di, Color backgroundColor, int entryIndex)
         {
             GameObject entryGo = Instantiate(legendEntry2DPrefab);
             entryGo.transform.SetParent(this.transform, false);

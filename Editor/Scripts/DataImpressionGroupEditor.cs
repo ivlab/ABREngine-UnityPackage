@@ -44,7 +44,7 @@ namespace IVLab.ABREngine
             EditorGUILayout.LabelField("Data Impressions:", EditorStyles.boldLabel);
             if (Application.isPlaying)
             {
-                foreach (IDataImpression di in group.GetDataImpressions().Values)
+                foreach (DataImpression di in group.GetDataImpressions().Values)
                 {
                     if (GUILayout.Button($"    {di.GetType().Name}: {di.Uuid}", EditorStyles.linkLabel))
                     {

@@ -60,8 +60,7 @@ namespace IVLab.ABREngine
         public Guid Uuid { get; private set; }
 
 
-        private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
-        private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
+        private Dictionary<Guid, DataImpression> gameObjectMapping = new Dictionary<Guid, DataImpression>();
 
         internal static DataImpressionGroup Create(string name)
         {
@@ -127,7 +126,7 @@ namespace IVLab.ABREngine
         /// same group NEED to have the same dataset, error will be displayed
         /// otherwise.
         /// </summary>
-        public void AddDataImpression(IDataImpression impression, bool allowOverwrite = true)
+        public void AddDataImpression(DataImpression impression, bool allowOverwrite = true)
         {
             // Make sure the new impression matches the rest of the impressions'
             // datasets. ImpressionsGroups MUST have only one dataset.
@@ -146,7 +145,7 @@ namespace IVLab.ABREngine
                     // Instead of actually assigning a completely new
                     // DataImpression, copy the temporary one's inputs and let
                     // the temp be GC'd.
-                    _impressions[impression.Uuid].CopyExisting(impression);
+                    gameObjectMapping[impression.Uuid].CopyExisting(impression);
                 }
                 else
                 {
@@ -156,13 +155,10 @@ namespace IVLab.ABREngine
             }
             else
             {
-                _impressions[impression.Uuid] = impression;
+                gameObjectMapping[impression.Uuid] = impression;
                 GameObject impressionGameObject = new GameObject();
                 impressionGameObject.transform.parent = this.transform;
                 impressionGameObject.name = impression.GetType().ToString();
-
-                EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
-                gameObjectMapping[impression.Uuid] = ego;
             }
 
             PrepareImpression(impression);
@@ -174,14 +170,14 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool RemoveDataImpression(Guid uuid)
         {
-            if (_impressions.ContainsKey(uuid))
+            if (gameObjectMapping.ContainsKey(uuid))
             {
-                _impressions[uuid].Cleanup(gameObjectMapping[uuid]);
-                _impressions.Remove(uuid);
-                GameObject.Destroy(gameObjectMapping[uuid].gameObject);
+                gameObjectMapping[uuid].Cleanup();
+                gameObjectMapping.Remove(uuid);
+                GameObject.Destroy(gameObjectMapping[uuid]);
                 gameObjectMapping.Remove(uuid);
             }
-            return _impressions.Count == 0;
+            return gameObjectMapping.Count == 0;
         }
 
         /// <summary>
@@ -190,10 +186,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression, if found, otherwise `null`
         /// </returns>
-        public IDataImpression GetDataImpression(Guid uuid)
+        public DataImpression GetDataImpression(Guid uuid)
         {
-            IDataImpression dataImpression = null;
-            _impressions.TryGetValue(uuid, out dataImpression);
+            gameObjectMapping.TryGetValue(uuid, out DataImpression dataImpression);
             return dataImpression;
         }
 
@@ -224,7 +219,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression, if found, otherwise `null`
         /// </returns>
-        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        public DataImpression GetDataImpression(Func<DataImpression, bool> criteria)
         {
             return GetDataImpressions(criteria).FirstOrDefault();
         }
@@ -245,7 +240,7 @@ namespace IVLab.ABREngine
         /// </code>
         /// </example>
         public T GetDataImpression<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>(criteria).FirstOrDefault();
         }
@@ -254,7 +249,7 @@ namespace IVLab.ABREngine
         /// Get a data impression matching a type
         /// </summary>
         public T GetDataImpression<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault();
         }
@@ -264,17 +259,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool HasDataImpression(Guid uuid)
         {
-            return _impressions.ContainsKey(uuid);
-        }
-
-        /// <summary>
-        /// Return the Unity GameObject associated with this particular UUID.
-        /// </summary>
-        public EncodedGameObject GetEncodedGameObject(Guid uuid)
-        {
-            EncodedGameObject dataImpression = null;
-            gameObjectMapping.TryGetValue(uuid, out dataImpression);
-            return dataImpression;
+            return gameObjectMapping.ContainsKey(uuid);
         }
 
         /// <summary>
@@ -282,9 +267,9 @@ namespace IVLab.ABREngine
         /// </summary>
         [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
                 .Select((imp) => (T) imp).ToList();
@@ -296,9 +281,9 @@ namespace IVLab.ABREngine
         /// useful for keeping track of data impressions in applications that
         /// use ABR.
         /// </summary>
-        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        public List<DataImpression> GetDataImpressionsWithTag(string tag)
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.HasTag(tag)).ToList();
         }
@@ -315,26 +300,26 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Return all data impressions inside this data impression group
         /// </summary>
-        public Dictionary<Guid, IDataImpression> GetDataImpressions()
+        public Dictionary<Guid, DataImpression> GetDataImpressions()
         {
-            return _impressions;
+            return gameObjectMapping;
         }
 
         /// <summary>
         /// Return all data impressions that match a particular criteria
         /// </summary>
-        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        public List<DataImpression> GetDataImpressions(Func<DataImpression, bool> criteria)
         {
-            return _impressions.Values.Where(criteria).ToList();
+            return gameObjectMapping.Values.Where(criteria).ToList();
         }
 
         /// <summary>
         /// Return all data impressions that have a particular type
         /// </summary>
         public List<T> GetDataImpressions<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
                 .Select((imp) => (T) imp).ToList();
@@ -344,7 +329,7 @@ namespace IVLab.ABREngine
         /// Return all data impressions that match a particular criteria AND have a particular type
         /// </summary>
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().Where(criteria).ToList();
         }
@@ -354,7 +339,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public void Clear()
         {
-            List<Guid> toRemove = _impressions.Keys.ToList();
+            List<Guid> toRemove = gameObjectMapping.Keys.ToList();
             foreach (var impressionUuid in toRemove)
             {
                 RemoveDataImpression(impressionUuid);
@@ -367,7 +352,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public Dataset GetDataset()
         {
-            foreach (var impression in _impressions)
+            foreach (var impression in gameObjectMapping)
             {
                 Dataset impressionDs = impression.Value.GetDataset();
                 // Find the first one that exists and return it
@@ -436,7 +421,7 @@ namespace IVLab.ABREngine
             {
                 // Build a list of keydata that are actually being used
                 List<string> activeKeyDataPaths = new List<string>();
-                foreach (IDataImpression impression in GetDataImpressions().Values)
+                foreach (DataImpression impression in GetDataImpressions().Values)
                 {
                     string keyDataPath = impression.InputIndexer.GetInputValue("Key Data")?.GetRawABRInput().inputValue;
                     if (keyDataPath != null && DataPath.GetDatasetPath(keyDataPath) == ds.Path)
@@ -498,7 +483,7 @@ namespace IVLab.ABREngine
                 // Mostly matters if there's a live ParaView connection
                 bool boundsChanged = RecalculateBounds();
 
-                foreach (var impression in _impressions)
+                foreach (var impression in gameObjectMapping)
                 {
                     // Fully compute render info and apply it to the impression object
                     // if (key) data was changed
@@ -507,9 +492,9 @@ namespace IVLab.ABREngine
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
-                        impression.Value.SetupGameObject(gameObjectMapping[uuid]);
-                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
-                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
+                        impression.Value.SetupGameObject();
+                        impression.Value.UpdateStyling();
+                        impression.Value.UpdateVisibility();
                         impression.Value.RenderHints.DataChanged = false;
                         impression.Value.RenderHints.StyleChanged = false;
                     }
@@ -519,14 +504,14 @@ namespace IVLab.ABREngine
                     else if (impression.Value.RenderHints.StyleChanged)
                     {
                         Guid uuid = impression.Key;
-                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
+                        impression.Value.UpdateStyling();
                         impression.Value.RenderHints.StyleChanged = false;
                     }
                     // Set the visibility of the impression if it has been changed
                     if (impression.Value.RenderHints.VisibilityChanged)
                     {
                         Guid uuid = impression.Key;
-                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
+                        impression.Value.UpdateVisibility();
                         impression.Value.RenderHints.VisibilityChanged = false;
                     }
                 }
@@ -549,16 +534,16 @@ namespace IVLab.ABREngine
             }
         }
 
-        private void PrepareImpression(IDataImpression impression)
+        private void PrepareImpression(DataImpression impression)
         {
             // Make sure the parent is assigned properly
-            gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(this.transform, false);
+            gameObjectMapping[impression.Uuid].transform.SetParent(this.transform, false);
             
             // Unsure why this needs to be explicitly set but here it is,
             // zeroing position and rotation so each data impression encoded
             // game object is centered on the dataset...
-            gameObjectMapping[impression.Uuid].gameObject.transform.localPosition = Vector3.zero;
-            gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
+            gameObjectMapping[impression.Uuid].transform.localPosition = Vector3.zero;
+            gameObjectMapping[impression.Uuid].transform.localRotation = Quaternion.identity;
 
             // Display the UUID in editor
             gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;

@@ -27,89 +27,101 @@ namespace IVLab.ABREngine
     /// <summary>
     ///     Public interface for a single ABR visualization layer
     /// </summary>
-    public interface IDataImpression : IHasDataset, IHasKeyData
-    {
-        /// <summary>
-        ///     Unique identifier for this Data Impression
-        ///
-        ///     Assigned on object creation
-        /// </summary>
-        Guid Uuid { get; set; }
+    // public interface IDataImpression : IHasDataset, IHasKeyData
+    // {
+    //     /// <summary>
+    //     ///     Unique identifier for this Data Impression
+    //     ///
+    //     ///     Assigned on object creation
+    //     /// </summary>
+    //     Guid Uuid { get; set; }
 
-        /// <summary>
-        ///     Used for getting/setting ABRInputs on this DataImpression
-        /// </summary>
-        ABRInputIndexerModule InputIndexer { get; }
+    //     /// <summary>
+    //     ///     Used for getting/setting ABRInputs on this DataImpression
+    //     /// </summary>
+    //     ABRInputIndexerModule InputIndexer { get; }
 
-        /// <summary>
-        ///     1. Populate rendering information (Geometry) for the
-        ///     DataImpression. This is triggered by the `DataImpressionGroup`
-        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
-        /// </summary>
-        void ComputeGeometry();
+    //     /// <summary>
+    //     ///     1. Populate rendering information (Geometry) for the
+    //     ///     DataImpression. This is triggered by the `DataImpressionGroup`
+    //     ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
+    //     /// </summary>
+    //     void ComputeGeometry();
 
-        /// <summary>
-        ///     2. Take geometric rendering information computed in
-        ///     `ComputeGeometry()` and sets up proper game object(s) and
-        ///     components for this Data Impression. Transfers geometry into
-        ///     Unity format (e.g. a `Mesh`). No geometric computations should
-        ///     happen in this method, and it should generally be *lightweight*.
-        /// </summary>
-        void SetupGameObject(EncodedGameObject currentGameObject);
+    //     /// <summary>
+    //     ///     2. Take geometric rendering information computed in
+    //     ///     `ComputeGeometry()` and sets up proper game object(s) and
+    //     ///     components for this Data Impression. Transfers geometry into
+    //     ///     Unity format (e.g. a `Mesh`). No geometric computations should
+    //     ///     happen in this method, and it should generally be *lightweight*.
+    //     /// </summary>
+    //     void SetupGameObject(EncodedGameObject currentGameObject);
 
-        /// <summary>
-        ///     3. Update the "styling" of an impression by sending each
-        ///     styling parameter to the shader. Occasionally will need to set
-        ///     per-vertex items like transforms. This method should generally be *lightweight*.
-        /// </summary>
-        void UpdateStyling(EncodedGameObject currentGameObject);
+    //     /// <summary>
+    //     ///     3. Update the "styling" of an impression by sending each
+    //     ///     styling parameter to the shader. Occasionally will need to set
+    //     ///     per-vertex items like transforms. This method should generally be *lightweight*.
+    //     /// </summary>
+    //     void UpdateStyling(EncodedGameObject currentGameObject);
 
-        /// <summary>
-        ///     Update the visibility of an impression (hidden or shown)
-        /// </summary>
-        void UpdateVisibility(EncodedGameObject currentGameObject);
+    //     /// <summary>
+    //     ///     Update the visibility of an impression (hidden or shown)
+    //     /// </summary>
+    //     void UpdateVisibility(EncodedGameObject currentGameObject);
 
-        /// <summary>
-        ///     Copy a data impression, giving a new Uuid
-        /// </summary>
-        IDataImpression Copy();
+    //     /// <summary>
+    //     ///     Copy a data impression, giving a new Uuid
+    //     /// </summary>
+    //     IDataImpression Copy();
 
-        /// <summary>
-        /// Update this data impression from an existing (possibly temporary) one.
-        /// </summary>
-        void CopyExisting(IDataImpression other);
+    //     /// <summary>
+    //     /// Update this data impression from an existing (possibly temporary) one.
+    //     /// </summary>
+    //     void CopyExisting(IDataImpression other);
 
-        /// <summary>
-        /// When this data impression is done being used, clean up after itself
-        /// if necessary. This method may need access to the GameObject the data
-        /// impression is applied to.
-        /// </summary>
-        void Cleanup(EncodedGameObject encodedGameObject);
+    //     /// <summary>
+    //     /// When this data impression is done being used, clean up after itself
+    //     /// if necessary. This method may need access to the GameObject the data
+    //     /// impression is applied to.
+    //     /// </summary>
+    //     void Cleanup(EncodedGameObject encodedGameObject);
 
-        /// <summary>
-        ///     Return if this data impression has a particular string tag (for
-        ///     external purposes only, the engine currently does nothing with tags)
-        /// </summary>
-        bool HasTag(string tagName);
+    //     /// <summary>
+    //     ///     Return if this data impression has a particular string tag (for
+    //     ///     external purposes only, the engine currently does nothing with tags)
+    //     /// </summary>
+    //     bool HasTag(string tagName);
 
-        /// <summary>
-        ///     Any hints to provide the rendering engine, such as if the impression
-        ///     should be hidden
-        /// </summary>
-        RenderHints RenderHints { get; set; }
-    }
+    //     /// <summary>
+    //     ///     Any hints to provide the rendering engine, such as if the impression
+    //     ///     should be hidden
+    //     /// </summary>
+    //     RenderHints RenderHints { get; set; }
+    // }
 
     /// <summary>
     ///     Private data for a single data impression
     ///
     ///     Should contain properties with attributes for all of the inputs
     /// </summary>
-    public abstract class DataImpression : IDataImpression, IHasDataset
+    public abstract class DataImpression : MonoBehaviour, IHasDataset
     {
+        /// <summary>
+        ///     Unique identifier for this Data Impression
+        ///
+        ///     Assigned on object creation
+        /// </summary>
         public Guid Uuid { get; set; }
 
+        /// <summary>
+        ///     Used for getting/setting ABRInputs on this DataImpression
+        /// </summary>
         public ABRInputIndexerModule InputIndexer { get; set; }
 
+        /// <summary>
+        ///     Any hints to provide the rendering engine, such as if the impression
+        ///     should be hidden
+        /// </summary>
         public RenderHints RenderHints { get; set; } = new RenderHints();
 
         /// <summary>
@@ -126,7 +138,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Slot to load the material into at runtime
         /// </summary>
-        protected virtual Material[] ImpressionMaterials { get; }
+        protected virtual Material[] ImpressionMaterials { get; private set; }
 
         /// <summary>
         ///     Storage for the rendering data to be sent to the shader
@@ -156,69 +168,99 @@ namespace IVLab.ABREngine
         ///     single string argument with UUID - if you override this
         ///     constructor bad things might happen.
         /// </summary>
-        public DataImpression(string uuid)
+        public static T Create<T>(string uuid)
+        where T : DataImpression
         {
-            InputIndexer = new ABRInputIndexerModule(this);
-            Uuid = new Guid(uuid);
-            MatPropBlock = new MaterialPropertyBlock();
+            GameObject go = new GameObject(uuid);
+            T di = go.AddComponent<T>();
+
+            di.InputIndexer = new ABRInputIndexerModule(di);
+            di.Uuid = new Guid(uuid);
+            di.MatPropBlock = new MaterialPropertyBlock();
 
             // Initialize material list
-            if (ImpressionMaterials == null)
+            if (di.ImpressionMaterials == null)
             {
-                ImpressionMaterials = new Material[MaterialNames.Length];
+                di.ImpressionMaterials = new Material[di.MaterialNames.Length];
             }
 
-            for (int m = 0; m < MaterialNames.Length; m++)
+            for (int m = 0; m < di.MaterialNames.Length; m++)
             {
                 // Load each material, if it's not already loaded
-                if (ImpressionMaterials[m] == null)
+                if (di.ImpressionMaterials[m] == null)
                 {
-                    ImpressionMaterials[m] = Resources.Load<Material>(MaterialNames[m]);
+                    di.ImpressionMaterials[m] = Resources.Load<Material>(di.MaterialNames[m]);
                 }
 
                 // If it's still null, that means we didn't find it
-                if (ImpressionMaterials[m] == null)
+                if (di.ImpressionMaterials[m] == null)
                 {
-                    Debug.LogErrorFormat("Material `{0}` not found for {1}", MaterialNames[m], this.GetType().ToString());
+                    Debug.LogErrorFormat("Material `{0}` not found for {1}", di.MaterialNames[m], di.GetType().ToString());
                 }
             }
+            return di;
         }
 
+        /// <summary>
+        /// Check if the DataImpression has a particular tag
+        /// </summary>
+        /// <param name="tag">The tag</param>
+        /// <returns>Returns <see langword="true"/> if the data impression's tag list contains the specified tag</returns>
         public bool HasTag(string tag)
         {
             return Tags.Contains(tag);
         }
 
-        public DataImpression() : this(Guid.NewGuid().ToString()) { }
+        /// <summary>
+        ///     RENDERING STEP 1. Populate rendering information (Geometry) for the
+        ///     DataImpression. This is triggered by the `DataImpressionGroup`
+        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
+        /// </summary>
+        public abstract void ComputeGeometry();
 
-        public virtual void ComputeGeometry() { }
+        /// <summary>
+        ///     RENDERING STEP 2. Take geometric rendering information computed in
+        ///     `ComputeGeometry()` and sets up proper game object(s) and
+        ///     components for this Data Impression. Transfers geometry into
+        ///     Unity format (e.g. a `Mesh`). No geometric computations should
+        ///     happen in this method, and it should generally be *lightweight*.
+        /// </summary>
+        public abstract void SetupGameObject();
 
-        public virtual void SetupGameObject(EncodedGameObject currentGameObject) { }
 
-        public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
+        /// <summary>
+        ///     RENDERING STEP 3. Update the "styling" of an impression by sending each
+        ///     styling parameter to the shader. Occasionally will need to set
+        ///     per-vertex items like transforms. This method should generally be *lightweight*.
+        /// </summary>
+        public abstract void UpdateStyling();
 
-        public virtual void UpdateVisibility(EncodedGameObject currentGameObject) { }
+
+        /// <summary>
+        ///     RENDERING STEP 4. Update the visibility of an impression (hidden or shown)
+        /// </summary>
+        public abstract void UpdateVisibility();
 
         /// <summary>
         ///     Unknown why it's necessary to copy each input individually, but here
         ///     we are.
         /// </summary>
-        public virtual IDataImpression Copy()
+        public virtual DataImpression Copy()
         {
             DataImpression di = (DataImpression) this.MemberwiseClone();
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Tags = new List<string>(di.Tags);
             di.Uuid = Guid.NewGuid();
             di.RenderHints = this.RenderHints.Copy();
-            return di as IDataImpression;
+            return di as DataImpression;
         }
 
         /// <summary>
         /// Update this data impression from an existing (possibly temporary) one.
         /// </summary>
-        public virtual void CopyExisting(IDataImpression other)
+        public virtual void CopyExisting(DataImpression other)
         {
-            this.Tags = new List<string>((other as DataImpression).Tags);
+            this.Tags = new List<string>(other.Tags);
             this.RenderHints = other.RenderHints.Copy();
             foreach (string inputName in other.InputIndexer.InputNames)
             {
@@ -227,7 +269,12 @@ namespace IVLab.ABREngine
             }
         }
 
-        public virtual void Cleanup(EncodedGameObject encodedGameObject)
+        /// <summary>
+        /// When this data impression is done being used, clean up after itself
+        /// if necessary. This method may need access to the GameObject the data
+        /// impression is applied to.
+        /// </summary>
+        public virtual void Cleanup()
         {
             RenderInfo = null;
         }
@@ -237,11 +284,15 @@ namespace IVLab.ABREngine
         ///     one dataset, and it's up to them individually to enforce that
         ///     they correctly implement this.
         /// </summary>
-        public virtual Dataset GetDataset()
-        {
-            return null;
-        }
+        public abstract Dataset GetDataset();
 
+        /// <summary>
+        ///     By default, there's no data. DataImpressions should only have
+        ///     one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        ///     they correctly implement this.
+        ///     
+        ///     TODO: Implement IHasKeyData interface.
+        /// </summary>
         public abstract KeyData GetKeyData();
     }
 

@@ -122,7 +122,7 @@ namespace IVLab.ABREngine
     /// position than the original one (e.g., to create a side-by-side
     /// visualization). This example shows how to use the <see
     /// cref="ABREngine.CreateDataImpressionGroup(string, Vector3)"/> and the
-    /// <see cref="ABREngine.DuplicateDataImpression(IDataImpression)"/> method
+    /// <see cref="ABREngine.DuplicateDataImpression(DataImpression)"/> method
     /// to create a side-by-side visualization.
     /// <code>
     /// public class ABREngineExample
@@ -468,9 +468,9 @@ namespace IVLab.ABREngine
         /// <remarks>
         /// It is often more useful to use the <see
         /// cref="ABREngine.GetDataImpression{T}"/> method since it returns an
-        /// actual data impression instead of a <see cref="IDataImpression"/>.
+        /// actual data impression instead of a <see cref="DataImpression"/>.
         /// </remarks>
-        public IDataImpression GetDataImpression(Guid uuid)
+        public DataImpression GetDataImpression(Guid uuid)
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -484,7 +484,7 @@ namespace IVLab.ABREngine
         /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
         /// of the data impressions with the same keyDataPath.
         /// </summary>
-        public IDataImpression GetDataImpression(string keyDataPath)
+        public DataImpression GetDataImpression(string keyDataPath)
         {
             return GetDataImpressions(keyDataPath).FirstOrDefault();
         }
@@ -492,7 +492,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Returns all of the data impressions associated with the specified keyDataPath
         /// </summary>
-        public List<IDataImpression> GetDataImpressions(string keyDataPath)
+        public List<DataImpression> GetDataImpressions(string keyDataPath)
         {
             return GetDataImpressions(di => { return di.GetKeyData().Path == keyDataPath; });
         }
@@ -503,7 +503,7 @@ namespace IVLab.ABREngine
         /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
         /// of the data impressions with the same keyDataPath.
         /// </summary>
-        public T GetDataImpression<T>(string keyDataPath) where T : IDataImpression
+        public T GetDataImpression<T>(string keyDataPath) where T : DataImpression
         {
             return GetDataImpressions<T>(keyDataPath).FirstOrDefault();
         }
@@ -511,7 +511,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Returns all of the data impressions associated with the specified keyDataPath
         /// </summary>
-        public List<T> GetDataImpressions<T>(string keyDataPath) where T : IDataImpression
+        public List<T> GetDataImpressions<T>(string keyDataPath) where T : DataImpression
         {
             return GetDataImpressions<T>(di => { return di.GetKeyData().Path == keyDataPath; });
         }
@@ -524,7 +524,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The first data impression of any type that matches criteria, null otherwise.
         /// </returns>
-        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        public DataImpression GetDataImpression(Func<DataImpression, bool> criteria)
         {
             return GetAllDataImpressions().FirstOrDefault(criteria);
         }
@@ -533,12 +533,12 @@ namespace IVLab.ABREngine
         /// Retreive the first data impression found with a particular type AND function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
         /// <param name="criteria">Function that takes each data impression matching type `T` and returns a boolean.</param>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// The first data impression of type `T` that matches criteria, null otherwise.
         /// </returns>
         public T GetDataImpression<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault(criteria);
         }
@@ -549,9 +549,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The first data impression of matching type `T`, null otherwise.
         /// </returns>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         public T GetDataImpression<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault();
         }
@@ -565,7 +565,7 @@ namespace IVLab.ABREngine
         /// </returns>
         [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -583,7 +583,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// A list of data impressions with a particular tag
         /// </returns>
-        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        public List<DataImpression> GetDataImpressionsWithTag(string tag)
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -598,7 +598,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// All data impressions of any type that matches criteria, null otherwise.
         /// </returns>
-        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        public List<DataImpression> GetDataImpressions(Func<DataImpression, bool> criteria)
         {
             return GetAllDataImpressions()?.Where(criteria).ToList();
         }
@@ -606,12 +606,12 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Retreive the all data impressions found of a particular type
         /// </summary>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// All data impressions of type `T`.
         /// </returns>
         public List<T> GetDataImpressions<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetAllDataImpressions()?
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
@@ -622,12 +622,12 @@ namespace IVLab.ABREngine
         /// Retreive the all data impressions found of a particular type matching function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
         /// <param name="criteria">Function that takes each data impression of type `T` and returns a boolean.</param>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// All data impressions of type `T` that match the criteria.
         /// </returns>
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>()?.Where(criteria).ToList();
         }
@@ -639,30 +639,12 @@ namespace IVLab.ABREngine
         /// <returns>
         /// All data impressions that exist in the ABREngine
         /// </returns>
-        public List<IDataImpression> GetAllDataImpressions()
+        public List<DataImpression> GetAllDataImpressions()
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value.GetDataImpressions().Values.ToList())
                 .Aggregate((all, imps) => all.Concat(imps).ToList());
         }
-
-        /// <summary>
-        /// Retrieve the encoded game object in the Unity scene associated with
-        /// a particular data impression, identified by its guid.
-        /// </summary>
-        /// <param name="impressionGuid">Unique identifier (UUID) of the data impression to get the GameObject for</param>
-        /// <returns>
-        /// An <see cref="EncodedGameObject"/> (MonoBehaviour) of the Data Impression as it
-        /// exists in the Unity Scene, or null if no such impression exists.
-        /// </returns>
-        public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
-        {
-            return dataImpressionGroups?
-                .Select((kv) => kv.Value)
-                .FirstOrDefault((v) => v.HasEncodedGameObject(impressionGuid))?
-                .GetEncodedGameObject(impressionGuid);
-        }
-
 
         /// <summary>
         /// Add a new data impression group with a particular name
@@ -788,7 +770,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression group `dataImpression` belongs to, otherwise null.
         /// </returns>
-        public DataImpressionGroup GetGroupFromImpression(IDataImpression dataImpression)
+        public DataImpressionGroup GetGroupFromImpression(DataImpression dataImpression)
         {
             try
             {
@@ -809,7 +791,7 @@ namespace IVLab.ABREngine
         /// <param name="dataImpression">The data impression to register with the engine</param>
         /// <param name="newGroup">Group to add this data impression to</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
-        public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        public void RegisterDataImpression(DataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // Create a new group if it doesn't exist
             // OR, if it's in the default group but now has a dataset, move it to its proper group
@@ -849,7 +831,7 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="dataImpression">The data impression to register with the engine</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
-        public void RegisterDataImpression(IDataImpression dataImpression, bool allowOverwrite = true)
+        public void RegisterDataImpression(DataImpression dataImpression, bool allowOverwrite = true)
         {
             Dataset ds = dataImpression.GetDataset();
             if (ds != null)
@@ -914,7 +896,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(Guid uuid)
+        public DataImpression DuplicateDataImpression(Guid uuid)
         {
             return DuplicateDataImpression(GetDataImpression(uuid));
         }
@@ -929,7 +911,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression impression)
+        public DataImpression DuplicateDataImpression(DataImpression impression)
         {
             return DuplicateDataImpression(impression, null);
         }
@@ -946,9 +928,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, DataImpressionGroup group)
+        public DataImpression DuplicateDataImpression(DataImpression dataImpression, DataImpressionGroup group)
         {
-            IDataImpression newDataImpression = dataImpression.Copy();
+            DataImpression newDataImpression = dataImpression.Copy();
             newDataImpression.Uuid = Guid.NewGuid();
 
             if (group == null)
@@ -975,7 +957,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, bool retainGroup = true)
+        public DataImpression DuplicateDataImpression(DataImpression dataImpression, bool retainGroup = true)
         {
             if (retainGroup)
             {
@@ -994,7 +976,7 @@ namespace IVLab.ABREngine
         /// <param name="dataImpression">The data impression that should be moved.</param>
         /// <param name="newGroup">The group to place the data impression into.</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions with this UUID within the `newGroup`?</param>
-        public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        public void MoveImpressionToGroup(DataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // See if it's a part of a group already
             DataImpressionGroup oldGroup = GetGroupFromImpression(dataImpression);
