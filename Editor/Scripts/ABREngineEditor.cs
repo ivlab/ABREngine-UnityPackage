@@ -44,8 +44,6 @@ namespace IVLab.ABREngine
 
         private int configIndex = 0;
 
-        private string configNamePath;
-
         void Awake()
         {
             // "prime" the config - make sure the engine has loaded it
@@ -72,9 +70,7 @@ namespace IVLab.ABREngine
                     int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
                     if (newIndex != configIndex || ABREngine.ConfigPrototype == null)
                     {
-                        Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
                         configIndex = newIndex;
-                        File.WriteAllText(configNamePath, configs[newIndex].name);
                         ABREngine.ConfigPrototype = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
                     }

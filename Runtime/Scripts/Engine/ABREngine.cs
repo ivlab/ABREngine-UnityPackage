@@ -178,6 +178,7 @@ namespace IVLab.ABREngine
 
         private Notifier _notifier;
 
+        private static string ConfigNamePath { get => Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt"); }
         /// <summary>
         /// Config "Prototype" to use for the current ABR configuration. This is
         /// set in edit-mode and should NOT be changed at runtime. Instead, use
@@ -191,10 +192,9 @@ namespace IVLab.ABREngine
                 {
                     // First, load the name of the current configuration from text file
                     // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
-                    string configNamePath = Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt");
-                    if (File.Exists(configNamePath))
+                    if (File.Exists(ConfigNamePath))
                     {
-                        string configName = File.ReadAllText(configNamePath);
+                        string configName = File.ReadAllText(ConfigNamePath);
                         var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
                         int configIndex = configs.FindIndex(cfg => cfg.name == configName);
                         ABRConfig config = configs[configIndex];
@@ -212,8 +212,11 @@ namespace IVLab.ABREngine
                         "ABREngine.ConfigPrototype should not be modified at runtime. Instead, use ABREngine.Instance.Config.\n" +
                         "This ensures that any config changes made during runtime are temporary, mimicking the behaviour of Unity editor."
                     );
+                    return;
                 }
                 s_ConfigPrototype = value;
+                File.WriteAllText(ConfigNamePath, s_ConfigPrototype.name);
+                Debug.Log("Changed ABR Configuration to " + s_ConfigPrototype.name);
             }
         }
         private static ABRConfig s_ConfigPrototype;
