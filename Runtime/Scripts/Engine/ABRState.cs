@@ -17,7 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +26,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using JsonDiffPatchDotNet;
-using IVLab.Utilities;
+using UnityEditor;
+
 
 namespace IVLab.ABREngine
 {
@@ -615,25 +615,29 @@ namespace IVLab.ABREngine
                 }
             }
 
-            // Create/update lights, carefully select/create by name
+            // Create/update lights, carefully select/create by name (anywhere in the scene)
             if (state?.scene?.lighting != null)
             {
-                GameObject lightParent = GameObject.Find("ABRLightParent");
-                if (lightParent == null)
-                {
-                    lightParent = new GameObject("ABRLightParent");
-                    lightParent.transform.parent = GameObject.Find("ABREngine").transform;
-                }
-                if (lightParent.GetComponent<VolumeLightManager>() == null)
-                    lightParent.AddComponent<VolumeLightManager>();
-
+                List<ABRLight> existingSceneLights = MonoBehaviour.FindObjectsOfType<ABRLight>().ToList();
+                ABRLightManager lightManager = MonoBehaviour.FindObjectOfType<ABRLightManager>();
                 foreach (var light in state.scene.lighting)
                 {
-                    GameObject existing = GameObject.Find(light.name);
+                    // Carefully select ABRLight by its name
+                    ABRLight existing = existingSceneLights.Find(l => l.name == light.name);
+
+                    // If not found, create a new one under ABREngine or ABRLightManager
                     if (existing == null)
                     {
-                        existing = new GameObject(light.name);
-                        existing.transform.parent = lightParent.transform;
+                        GameObject go = new GameObject(light.name);
+                        existing = go.AddComponent<ABRLight>();
+                        if (lightManager != null)
+                        {
+                            existing.transform.SetParent(lightManager.transform);
+                        }
+                        else
+                        {
+                            existing.transform.SetParent(ABREngine.Instance.transform);
+                        }
                     }
 
                     existing.transform.localPosition = light.position;
@@ -642,7 +646,7 @@ namespace IVLab.ABREngine
                     Light lightComponent;
                     if (!existing.TryGetComponent<Light>(out lightComponent))
                     {
-                        lightComponent = existing.AddComponent<Light>();
+                        lightComponent = existing.gameObject.AddComponent<Light>();
                     }
 
                     lightComponent.intensity = light.intensity;
@@ -652,7 +656,7 @@ namespace IVLab.ABREngine
 
                 List<string> lightsInState = state.scene.lighting.Select((l) => l.name).ToList();
 
-                foreach (Transform light in lightParent.transform)
+                foreach (ABRLight light in existingSceneLights)
                 {
                     if (!lightsInState.Contains(light.gameObject.name))
                     {
@@ -663,7 +667,7 @@ namespace IVLab.ABREngine
 
             if (state?.scene?.backgroundColor != null)
             {
-                Camera.main.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
+                ABREngine.Instance.Config.DefaultCamera.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
             }
 
             return stateJson;
@@ -787,23 +791,20 @@ namespace IVLab.ABREngine
                 }
 
                 // Update the lights
-                GameObject lightParent = GameObject.Find("ABRLightParent");
-                if (lightParent != null)
+                ABRLight[] lightsInScene = MonoBehaviour.FindObjectsOfType<ABRLight>();
+                foreach (ABRLight light in lightsInScene)
                 {
-                    foreach (Transform light in lightParent.transform)
+                    Light l = light.GetComponent<Light>();
+                    saveScene.lighting.Add(new RawLight
                     {
-                        Light l = light.GetComponent<Light>();
-                        saveScene.lighting.Add(new RawLight
-                        {
-                            name = light.gameObject.name,
-                            intensity = l.intensity,
-                            position = light.localPosition,
-                            rotation = light.localRotation,
-                        });
-                    }
+                        name = light.gameObject.name,
+                        intensity = l.intensity,
+                        position = light.transform.localPosition,
+                        rotation = light.transform.localRotation,
+                    });
                 }
 
-                saveScene.backgroundColor = IVLab.Utilities.ColorUtilities.ColorToHex(Camera.main.backgroundColor);
+                saveScene.backgroundColor = IVLab.Utilities.ColorUtilities.ColorToHex(ABREngine.Instance.Config.DefaultCamera.backgroundColor);
 
                 saveState.scene = saveScene;
                 saveState.dataRanges = saveRanges;

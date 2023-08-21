@@ -87,7 +87,7 @@ namespace IVLab.ABREngine.Legends
             legendEntryGameObjects.Clear();
 
             // Obtain background color from state
-            Color background = Camera.main.backgroundColor;
+            Color background = ABREngine.Instance.Config.DefaultCamera.backgroundColor;
 
             int entryIndex = 0;
             // Create legend clones of each data impression type, register them

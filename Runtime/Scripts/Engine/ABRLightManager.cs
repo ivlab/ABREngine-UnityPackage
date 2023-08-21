@@ -26,7 +26,7 @@ namespace IVLab.ABREngine
     /// <summary>
     /// Transfer any lights in the ABR scene to variables in the volume rendering shader.
     /// </summary>
-    public class VolumeLightManager : MonoBehaviour
+    public class ABRLightManager : MonoBehaviour
     {
         private Material volumeMaterial;
         private Vector4[] lightViewSpaceDirections = new Vector4[3];
@@ -43,7 +43,7 @@ namespace IVLab.ABREngine
             int lightCount = 0;
             foreach (Transform lightTransform in transform)
             {
-                lightViewSpaceDirections[lightCount] = Camera.main.worldToCameraMatrix.MultiplyVector(lightTransform.rotation * Vector3.forward);
+                lightViewSpaceDirections[lightCount] = ABREngine.Instance.Config.DefaultCamera.worldToCameraMatrix.MultiplyVector(lightTransform.rotation * Vector3.forward);
                 lightIntensities[lightCount] = lightTransform.gameObject.GetComponent<Light>().intensity;
                 lightCount++;
             }

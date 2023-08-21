@@ -155,7 +155,7 @@ namespace IVLab.ABREngine
                     Screenshot scr = null;
                     await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                     {
-                        if (Camera.main.TryGetComponent<Screenshot>(out scr))
+                        if (ABREngine.Instance.Config.DefaultCamera.TryGetComponent<Screenshot>(out scr))
                         {
                             // 1. Capture the screen bytes in LateUpdate
                             thumbnail = scr.CaptureView(128, 128, false, -1);

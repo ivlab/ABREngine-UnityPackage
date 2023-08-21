@@ -324,10 +324,6 @@ namespace IVLab.ABREngine
 
         protected override void Awake()
         {
-            // Enable depth texture write on main cam so that volume rendering
-            // functions correctly
-            Camera.main.depthTextureMode = DepthTextureMode.Depth;
-
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             streamingAssetsPath = Application.streamingAssetsPath;
@@ -350,6 +346,13 @@ namespace IVLab.ABREngine
             // Initialize the default DataImpressionGroup (where impressions go
             // when they have no dataset) - guid zeroed out
             _defaultGroup = CreateDataImpressionGroup("Default", new Guid());
+
+            // Enable depth texture write on main cam so that volume rendering
+            // functions correctly
+            Config.DefaultCamera.depthTextureMode = DepthTextureMode.Depth;
+
+            // Check the scene to ensure assumptions are met
+            ABREngine.CheckABRScene();
 
             try
             {
@@ -441,10 +444,42 @@ namespace IVLab.ABREngine
             }
         }
 
+        void OnEnable()
+        {
+            ABREngine.CheckABRScene();
+        }
+
         void OnDisable()
         {
             _notifier?.Stop();
             DataListener?.StopServer();
+        }
+
+        /// <summary>
+        /// Checks the ABR scene configuration and supplies warnings for each component that is not present
+        /// </summary>
+        [UnityEditor.MenuItem("ABR/Check ABR Scene")]
+        private static void CheckABRScene()
+        {
+            // TODO: Finish adding warnings for assumptions ABR is making
+
+            var config = Application.isPlaying ? ABREngine.Instance.Config : ABREngine.ConfigPrototype;
+
+            // Obvious assumptions, should not get to either of these warnings.
+            if (MonoBehaviour.FindObjectOfType<ABREngine>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): ABREngine singleton not present in scene.");
+            if (MonoBehaviour.FindObjectsOfType<ABREngine>().Length > 1)
+                Debug.LogWarning("ABREngine.CheckABRScene(): Multiple ABREngines present in scene.");
+
+            // Light manager present somewhere in scene
+            if (MonoBehaviour.FindObjectOfType<ABRLightManager>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): ABR Light Manager not found in scene. Lights may not behave as expected, particularly with Volume layers.");
+            if (MonoBehaviour.FindObjectsOfType<ABREngine>().Length > 1)
+                Debug.LogWarning("ABREngine.CheckABRScene(): More than one ABR Light Manager found in scene. The first one found in the scene will be used.");
+
+            // Screenshot component on default camera
+            if (config.DefaultCamera.GetComponent<Screenshot>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): Screenshot component not found on ABR default camera. State thumbnails will not be saved.");
         }
 
         /// <summary>

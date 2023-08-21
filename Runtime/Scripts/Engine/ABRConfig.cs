@@ -120,6 +120,18 @@ namespace IVLab.ABREngine
         [Tooltip("Unity world-space container to automatically 'squish' all data into to avoid overflowing Unity coordinates")]
         public Bounds defaultDataContainer;
 
+        [SerializeField, Tooltip("Camera to use as ABR's main camera. If left blank, will assume Camera.main.")]
+        private Camera defaultCamera;
+
+        /// <summary>
+        /// Camera to use as ABR's main camera. If left blank, will assume @Camera.main.
+        /// </summary>
+        public Camera DefaultCamera
+        {
+            get => defaultCamera != null ? defaultCamera : Camera.main; 
+            set => defaultCamera = value;
+        }
+
 
         /// <summary>
         ///     The Json Schema to use for validation of ABR states
@@ -139,8 +151,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Where to find the Schema online
         /// </summary>
-        private const string SchemaUrl = "http://localhost:9000/";
+        // private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
+        private const string SchemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/";
         private string schemaName = "ABRSchema_2023-8-0.json";
 
         void Reset()
