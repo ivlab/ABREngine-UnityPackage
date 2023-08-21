@@ -17,9 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
+using IVLab.Utilities;
+using PlasticGui;
 
 namespace IVLab.ABREngine
 {
@@ -39,11 +43,45 @@ namespace IVLab.ABREngine
             foreach (string inputName in di.InputIndexer.InputNames)
             {
                 var value = di.InputIndexer.GetInputValue(inputName);
-                string inputValue = value != null ? value.GetRawABRInput().inputValue : "[None]";
-                EditorGUILayout.LabelField($"    - {inputName}: {inputValue}", EditorStyles.miniLabel);
+                EditorGUILayout.LabelField($"    - {inputName}:");
+                if (value != null)
+                {
+                    ParameterField(di, value.GetRawABRInput());
+                }
+                else
+                {
+                    EditorGUILayout.LabelField($"        [None]");
+                }
             }
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void ParameterField(DataImpression di, RawABRInput input)
+        {
+            if (input.inputType == typeof(KeyData).ToString())
+            {
+
+            }
+            else if (input.inputType == typeof(ColormapVisAsset).ToString())
+            {
+                ColormapField(input);
+            }
+            else
+            {
+                EditorGUILayout.LabelField("        " + input.inputValue);
+            }
+        }
+
+        private void ColormapField(RawABRInput input)
+        {
+            Colormap cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(new Guid(input.inputValue)).Colormap;
+            EditorGUILayout.GradientField(cmap.ToUnityGradient());
+        }
+
+        private void KeyDataField(RawABRInput input)
+        {
+            // List<KeyData> allKeyData = ABREngine.Instance.Data.Data
         }
     }
 }

@@ -31,8 +31,8 @@ namespace IVLab.ABREngine
         {
             EditorGUILayout.HelpBox(
                 "Data Impression Groups contain related data impressions - " +
-                "i.e., data impressions with data that share a common reference frame." +
-                "Data impression groups defined in the scene will become 'templates' for ABR when a new ABR state is loaded." +
+                "i.e., data impressions with data that share a common reference frame. " +
+                "Data impression groups defined in the scene will become 'templates' for ABR when a new ABR state is loaded. " +
                 "In editor, you can rename data impression groups and add a 'Data Container' to constrain the Unity-space data bounds.",
                 MessageType.None
             );

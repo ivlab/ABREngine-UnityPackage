@@ -179,6 +179,21 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
+        /// Gets ALL the key data that have been loaded into the ABREngine,
+        /// regardless of dataset.
+        /// </summary>
+        /// <returns>List of currently loaded KeyData</returns>
+        public List<KeyData> GetKeyData()
+        {
+            List<KeyData> allKeyData = new List<KeyData>();
+            foreach (var ds in datasets.Values)
+            {
+                // allKeyData.AddRange(ds.GetKeyData())
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Load a raw dataset into a RawDataset object by its data path and
         /// return the rawdataset after it has been successfully imported.
         /// </summary>
