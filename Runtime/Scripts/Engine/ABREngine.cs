@@ -1140,7 +1140,7 @@ namespace IVLab.ABREngine
         /// ABREngine.Instance.LoadState&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/test.json");
         ///
         /// // A JSON string
-        /// ABREngine.Instance.LoadState&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
+        /// ABREngine.Instance.LoadState&lt;TextStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
         ///
         /// // A web resource
         /// ABREngine.Instance.LoadState&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");

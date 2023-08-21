@@ -48,8 +48,7 @@ namespace IVLab.ABREngine
                 {
                     if (GUILayout.Button($"    {di.GetType().Name}: {di.Uuid}", EditorStyles.linkLabel))
                     {
-                        // Selection.activeGameObject
-                        Debug.LogWarning("Selecting Data Impressions from Groups Not implemented yet (need DataImpressions to be MonoBehaviours)");
+                        Selection.activeGameObject = di.gameObject;
                     }
                 }
             }

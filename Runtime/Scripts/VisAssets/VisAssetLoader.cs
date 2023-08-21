@@ -707,10 +707,11 @@ namespace IVLab.ABREngine
                 {
                     if (artifactData is JArray)
                     {
-                        Debug.LogWarning(string.Format(
-                            "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
-                            guid.ToString().Substring(0, 8)
-                        ));
+                        // Removing warning - just handle both cases silently
+                        // Debug.LogWarning(string.Format(
+                        //     "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
+                        //     guid.ToString().Substring(0, 8)
+                        // ));
                         lodsList = artifactData.ToObject<List<JObject>>();
                     }
                 }

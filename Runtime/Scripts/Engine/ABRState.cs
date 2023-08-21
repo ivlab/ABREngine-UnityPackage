@@ -48,7 +48,17 @@ namespace IVLab.ABREngine
         public JObject LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
-            JObject stateJson = (new T()).GetState(stateText);
+            if (stateText == null)
+            {
+                return null;
+            }
+
+            JObject stateJson = new T().GetState(stateText);
+
+            if (stateJson == null)
+            {
+                return null;
+            }
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
