@@ -36,7 +36,9 @@ namespace IVLab.ABREngine
     {
         string GetArtifactJsonPath(Guid uuid);
         JObject GetArtifactJson(Guid uuid);
+        [Obsolete("GetColormapTexture() is obsolete; use GetColormap() instead")]
         Texture2D GetColormapTexture(Guid uuid);
+        Colormap GetColormap(Guid uuid);
         GameObject GetGlyphGameObject(Guid uuid, JObject lodJson);
         Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
         Texture2D GetLineTexture(Guid uuid);
@@ -116,6 +118,12 @@ namespace IVLab.ABREngine
         {
             CheckExists(uuid);
             return _fpFetcher.GetColormapTexture(uuid);
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            CheckExists(uuid);
+            return _fpFetcher.GetColormap(uuid);
         }
 
         public GameObject GetGlyphGameObject(Guid uuid, JObject lodInfo)
@@ -317,7 +325,20 @@ namespace IVLab.ABREngine
 
             if (File.Exists(colormapfilePath))
             {
-                return ColormapUtilities.ColormapFromFile(colormapfilePath, 1024, 100);
+                return Colormap.FromXMLFile(colormapfilePath).ToTexture2D(1024, 100);
+            }
+            return null;
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string relativeColormapPath = artifactJson["artifactData"]["colormap"].ToString();
+            string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), relativeColormapPath);
+
+            if (File.Exists(colormapfilePath))
+            {
+                return Colormap.FromXMLFile(colormapfilePath);
             }
             return null;
         }
@@ -463,8 +484,15 @@ namespace IVLab.ABREngine
             JObject artifactJson = GetArtifactJson(uuid);
             string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["colormap"].ToString());
             TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
-            Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML.text, 1024, 100);
-            return texture;
+            return Colormap.FromXML(colormapXML.text).ToTexture2D(1024, 100);
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["colormap"].ToString());
+            TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
+            return Colormap.FromXML(colormapXML.text);
         }
 
         public GameObject GetGlyphGameObject(Guid uuid, JObject lodJson)
@@ -544,8 +572,27 @@ namespace IVLab.ABREngine
                     return null;
                 }
                 string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
-                Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML, 1024, 100);
+                Texture2D texture = Colormap.FromXML(colormapXML).ToTexture2D(1024, 100);
                 return texture;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return null;
+            }
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            try
+            {
+                JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                if (!visAssets.ContainsKey(uuid.ToString()))
+                {
+                    return null;
+                }
+                string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
+                return Colormap.FromXML(colormapXML);
             }
             catch (Exception e)
             {
@@ -641,8 +688,8 @@ namespace IVLab.ABREngine
 
             if (type == "colormap")
             {
-                Texture2D colormapTexture = _fetcher.GetColormapTexture(guid);
-                ColormapVisAsset visAsset = new ColormapVisAsset(guid, colormapTexture);
+                Colormap cmap = _fetcher.GetColormap(guid);
+                ColormapVisAsset visAsset = new ColormapVisAsset(guid, cmap);
                 return visAsset;
             }
 

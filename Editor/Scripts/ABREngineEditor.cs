@@ -44,10 +44,12 @@ namespace IVLab.ABREngine
 
         private int configIndex = 0;
 
-        void Awake()
+        void OnEnable()
         {
             // "prime" the config - make sure the engine has loaded it
-            ABRConfig cfg = ABREngine.ConfigPrototype;
+            ABRConfig config = ABREngine.ConfigPrototype;
+            var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+            configIndex = configs.FindIndex(cfg => cfg.name == config.name);
         }
 
         public override void OnInspectorGUI()
