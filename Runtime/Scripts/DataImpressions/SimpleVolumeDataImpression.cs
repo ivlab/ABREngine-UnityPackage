@@ -163,15 +163,9 @@ namespace IVLab.ABREngine
         /// </remarks>
         protected const string LayerName = "ABR_Volume";
 
-        public override Dataset GetDataset()
-        {
-            return keyData?.GetDataset();
-        }
-
-        public override KeyData GetKeyData()
-        {
-            return keyData;
-        }
+        public override Dataset GetDataset() => keyData?.GetDataset();
+        public override KeyData GetKeyData() => keyData;
+        public override void SetKeyData(KeyData kd) => keyData = kd;
 
         public override void ComputeGeometry()
         {

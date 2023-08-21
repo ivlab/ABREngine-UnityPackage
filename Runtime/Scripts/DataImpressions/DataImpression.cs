@@ -25,11 +25,10 @@ using UnityEngine;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    ///     Private data for a single data impression
-    ///
-    ///     Should contain properties with attributes for all of the inputs
+    /// Main class for Data Impressions (layers) in an ABR visualization. Every
+    /// Data Impression is a GameObject in the scene.
     /// </summary>
-    public abstract class DataImpression : MonoBehaviour, IHasDataset
+    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData
     {
         /// <summary>
         ///     Unique identifier for this Data Impression
@@ -63,7 +62,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Slot to load the material into at runtime
         /// </summary>
-        protected virtual Material[] ImpressionMaterials { get; private set; }
+        protected virtual Material[] ImpressionMaterials { get; set; }
 
         /// <summary>
         ///     Storage for the rendering data to be sent to the shader
@@ -206,13 +205,18 @@ namespace IVLab.ABREngine
         public abstract Dataset GetDataset();
 
         /// <summary>
-        ///     By default, there's no data. DataImpressions should only have
-        ///     one <see cref="KeyData"/>, and it's up to them individually to enforce that
-        ///     they correctly implement this.
-        ///     
-        ///     TODO: Implement IHasKeyData interface.
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
         /// </summary>
         public abstract KeyData GetKeyData();
+
+        /// <summary>
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
+        /// </summary>
+        public abstract void SetKeyData(KeyData kd);
     }
 
 

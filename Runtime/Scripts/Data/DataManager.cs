@@ -489,15 +489,8 @@ namespace IVLab.ABREngine
         // Build the key data associations
         private void ImportKeyData(string dataPath, RawDataset rawDataset, Dataset dataset)
         {
-            // Infer the type of data from the topology
-            Type dataType = KeyDataMapping.typeMap[rawDataset.dataTopology];
-
-            // Use reflection to construct the object (should only match one)
-            ConstructorInfo[] constructors = dataType.GetConstructors();
-
-            // Construct the object with the data path argument
-            string[] args = new string[] { dataPath };
-            IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
+            // Build the key data from the given type
+            IKeyData keyData = new KeyData(dataPath, rawDataset.dataTopology);
 
             dataset.AddKeyData(keyData);
         }

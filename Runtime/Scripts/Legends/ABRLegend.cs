@@ -206,7 +206,7 @@ namespace IVLab.ABREngine.Legends
             gi.CopyExisting(i);
 
             // Apply legend-specific entries
-            gi.keyData = glyphKeyData as PointKeyData;
+            gi.keyData = glyphKeyData as KeyData;
             gi.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             gi.glyphVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
             gi.forwardVariable = ds.GetAllVectorVars().FirstOrDefault(v => v.Key.Contains("Forward")).Value;
@@ -242,7 +242,7 @@ namespace IVLab.ABREngine.Legends
 
             // Apply legend-specific entries
             li.defaultCurveDirection = Vector3.forward;
-            li.keyData = kd as LineKeyData;
+            li.keyData = kd as KeyData;
             li.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             li.lineTextureVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
             li.lineWidth = new LengthPrimitive("0.3m");
@@ -270,7 +270,7 @@ namespace IVLab.ABREngine.Legends
             si.CopyExisting(i);
 
             // Then, apply legend-specific entries
-            si.keyData = kd as SurfaceKeyData;
+            si.keyData = kd as KeyData;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             si.patternVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
 
@@ -297,7 +297,7 @@ namespace IVLab.ABREngine.Legends
             si.CopyExisting(i);
 
             // Apply legend-specific entries
-            si.keyData = kd as VolumeKeyData;
+            si.keyData = kd as KeyData;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
 
             return si;

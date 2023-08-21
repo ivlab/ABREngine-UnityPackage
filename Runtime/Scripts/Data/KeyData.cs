@@ -25,22 +25,6 @@ using System.Linq;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    /// Mapping between topologies / types of geometry and actual key data
-    /// </summary>
-    public static class KeyDataMapping
-    {
-        public static Dictionary<DataTopology, Type> typeMap = new Dictionary<DataTopology, Type>()
-        {
-            { DataTopology.Points, typeof(PointKeyData) },
-            { DataTopology.Triangles, typeof(SurfaceKeyData) },
-            { DataTopology.Quads, typeof(SurfaceKeyData) },
-            { DataTopology.Lines, typeof(LineKeyData) },
-            { DataTopology.LineStrip, typeof(LineKeyData) },
-            { DataTopology.Voxels, typeof(VolumeKeyData) }
-        };
-    }
-
-    /// <summary>
     /// Indicator that a particular object has some key data attached to it -
     /// useful for most <see cref="DataImpression"/>s.
     /// </summary>
@@ -50,6 +34,12 @@ namespace IVLab.ABREngine
         /// Get any key data object associated with this object
         /// </summary>
         KeyData GetKeyData();
+
+        /// <summary>
+        /// Set the Key Data for this object
+        /// </summary>
+        /// <param name="kd"></param>
+        void SetKeyData(KeyData kd);
     }
 
     public interface IKeyData : IABRInput
@@ -58,6 +48,11 @@ namespace IVLab.ABREngine
         /// The <see cref="DataPath"/> that represents this KeyData
         /// </summary>
         string Path { get; }
+
+        /// <summary>
+        /// Type of data that this KeyData contains
+        /// </summary>
+        DataTopology Topology { get; }
     }
 
     /// <summary>
@@ -96,10 +91,12 @@ namespace IVLab.ABREngine
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
         public string Path { get; }
+        public DataTopology Topology { get; }
 
-        public KeyData(string path)
+        public KeyData(string path, DataTopology topology)
         {
             Path = path;
+            Topology = topology;
         }
 
         /// <summary>
@@ -183,26 +180,6 @@ namespace IVLab.ABREngine
                 inputGenre = Genre.ToString("G"),
             };
         }
-    }
-
-    public class SurfaceKeyData : KeyData, IKeyData
-    {
-        public SurfaceKeyData(string path) : base(path) { }
-    }
-
-    public class PointKeyData : KeyData, IKeyData
-    {
-        public PointKeyData(string path) : base (path) { }
-    }
-
-    public class LineKeyData : KeyData, IKeyData
-    {
-        public LineKeyData(string path) : base(path) { }
-    }
-
-    public class VolumeKeyData : KeyData, IKeyData
-    {
-        public VolumeKeyData(string path) : base(path) { }
     }
 
     public interface IKeyDataRenderInfo { }
