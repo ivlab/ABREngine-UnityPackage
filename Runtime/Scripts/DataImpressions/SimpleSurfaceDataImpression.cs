@@ -402,7 +402,7 @@ namespace IVLab.ABREngine
             // is no point in styling it anyway)
             MeshFilter meshFilter = gameObject?.GetComponent<MeshFilter>();
             MeshRenderer meshRenderer = gameObject?.GetComponent<MeshRenderer>();
-            if (meshFilter == null || meshRenderer == null)
+            if (keyData == null || meshFilter == null || meshRenderer == null)
             {
                 return;
             }

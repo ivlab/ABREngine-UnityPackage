@@ -18,12 +18,11 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
-using System.Reflection;
 using IVLab.Utilities;
-using PlasticGui;
+using UnityEngine;
 
 namespace IVLab.ABREngine
 {
@@ -31,6 +30,12 @@ namespace IVLab.ABREngine
     [CustomEditor(typeof(DataImpression), true)]
     public class DataImpressionEditor : Editor
     {
+        /// <summary>
+        /// Trigger an <see cref="ABREngine.Render"/> when a parameter is
+        /// changed in editor
+        /// </summary>
+        public static bool ReRenderOnParameterChange = true;
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -46,7 +51,7 @@ namespace IVLab.ABREngine
                 EditorGUILayout.LabelField($"    - {inputName}:");
                 if (value != null)
                 {
-                    ParameterField(di, value.GetRawABRInput());
+                    ParameterField(di, inputName, value);
                 }
                 else
                 {
@@ -54,34 +59,103 @@ namespace IVLab.ABREngine
                 }
             }
 
+            EditorGUILayout.LabelField("Render Hints:", EditorStyles.boldLabel);
+
+            bool changed = false;
+            bool oldVisibility = di.RenderHints.Visible;
+            di.RenderHints.Visible = EditorGUILayout.Toggle("Visible", di.RenderHints.Visible);
+            changed = changed || (oldVisibility != di.RenderHints.Visible);
+
+
+            ReRenderOnParameterChange = EditorGUILayout.Toggle("Re-Render on parameter changed in editor", ReRenderOnParameterChange);
+
+            if (changed && ReRenderOnParameterChange)
+            {
+                ABREngine.Instance.Render();
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void ParameterField(DataImpression di, RawABRInput input)
+        private void ParameterField(DataImpression di, string inputName, IABRInput input)
         {
-            if (input.inputType == typeof(KeyData).ToString())
-            {
+            RawABRInput originalInput = input.GetRawABRInput();
+            RawABRInput changedInput = null;
+            if (originalInput.inputType == typeof(KeyData).ToString())
+                changedInput = KeyDataField(originalInput);
+            else if (originalInput.inputType == typeof(ScalarDataVariable).ToString())
+                changedInput = ScalarVariableField(originalInput, di);
+            else if (originalInput.inputType == typeof(ColormapVisAsset).ToString())
+                changedInput = ColormapField(originalInput);
+            else
+                EditorGUILayout.LabelField("        " + originalInput.inputValue);
 
-            }
-            else if (input.inputType == typeof(ColormapVisAsset).ToString())
+            if (changedInput != null)
             {
-                ColormapField(input);
+                IABRInput newInput = changedInput.ToABRInput();
+                di.InputIndexer.AssignInput(inputName, newInput);
+                var fieldInfo = di.InputIndexer.GetInputField(inputName);
+                ABRInputAttribute abrAttr = fieldInfo.GetCustomAttributes(false).ToList().Find(att => att.GetType() == typeof(ABRInputAttribute)) as ABRInputAttribute;
+                if (abrAttr.updateLevel == UpdateLevel.Data)
+                    di.RenderHints.DataChanged = true;
+                if (abrAttr.updateLevel == UpdateLevel.Style)
+                    di.RenderHints.StyleChanged = true;
+
+                if (ReRenderOnParameterChange)
+                {
+                    ABREngine.Instance.Render();
+                }
+            }
+        }
+
+        private RawABRInput ColormapField(RawABRInput input)
+        {
+            Colormap cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(new Guid(input.inputValue)).Colormap;
+            Gradient newGradient = EditorGUILayout.GradientField(cmap.ToUnityGradient());
+            Colormap newCmap = Colormap.FromUnityGradient(newGradient);
+            // TODO: Compare cmap == newCmap
+            return null;
+        }
+
+        private RawABRInput KeyDataField(RawABRInput input)
+        {
+            KeyData currentKeyData = ABREngine.Instance.Data.GetKeyData(input.inputValue);
+            var allKeyData = ABREngine.Instance.Data.GetAllKeyData().Where(kd => kd.Topology == currentKeyData.Topology);
+            string[] keyDataPaths = allKeyData.Select(kd => kd.Path).ToArray();
+            int currentlySelected = Array.IndexOf(keyDataPaths, input.inputValue);
+            int newlySelected = EditorGUILayout.Popup(currentlySelected, keyDataPaths);
+            if (currentlySelected != newlySelected)
+            {
+                string newKeyDataPath = keyDataPaths[newlySelected];
+                input.inputValue = newKeyDataPath;
+                return input;
             }
             else
             {
-                EditorGUILayout.LabelField("        " + input.inputValue);
+                return null;
             }
         }
 
-        private void ColormapField(RawABRInput input)
+        private RawABRInput ScalarVariableField(RawABRInput input, DataImpression di)
         {
-            Colormap cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(new Guid(input.inputValue)).Colormap;
-            EditorGUILayout.GradientField(cmap.ToUnityGradient());
-        }
-
-        private void KeyDataField(RawABRInput input)
-        {
-            // List<KeyData> allKeyData = ABREngine.Instance.Data.Data
+            // KeyData kd = di.GetKeyData();
+            // ScalarDataVariable v = kd.GetScalarVariable(DataPath.GetName(input.inputValue));
+            // Debug.Log(input.inputValue);
+            // string[] allScalarVars = kd.GetScalarVariableNames();
+            // Debug.Log(string.Join(", ", allScalarVars));
+            // int currentlySelected = Array.IndexOf(allScalarVars, v.Path);
+            // int newlySelected = EditorGUILayout.Popup(currentlySelected, allScalarVars);
+            // if (currentlySelected != newlySelected)
+            // {
+            //     string newVarPath = allScalarVars[newlySelected];
+            //     input.inputValue = newVarPath;
+            //     return input;
+            // }
+            // else
+            // {
+            //     return null;
+            // }
+            return null;
         }
     }
 }

@@ -226,6 +226,11 @@ namespace IVLab.ABREngine
 
         public override void UpdateStyling()
         {
+            if (keyData == null)
+            {
+                return;
+            }
+
             // Default to using every transform in the data (re-populate and discard old transforms)
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
 

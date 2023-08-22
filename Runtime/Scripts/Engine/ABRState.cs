@@ -270,90 +270,14 @@ namespace IVLab.ABREngine
                             {
                                 value = impression.Value.inputValues[inputName];
                             }
-                            IABRInput possibleInput = null;
-                            if (value?.inputGenre == ABRInputGenre.KeyData.ToString("G"))
-                            {
-                                KeyData keyData = ABREngine.Instance.Data.GetKeyData(value.inputValue);
-                                Debug.Log("Loaded key data " + keyData.Path);
-                                // string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                                // Dataset dataset;
-                                // ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                                // if (dataset == null)
-                                // {
-                                //     Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                                //     continue;
-                                // }
-                                // KeyData keyData;
-                                // if (!dataset.TryGetKeyData(value.inputValue, out keyData))
-                                if (keyData == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
-                                    continue;
-                                }
-                                possibleInput = keyData as IABRInput;
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.Variable.ToString("G"))
-                            {
-                                string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                                Dataset dataset;
-                                if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset))
-                                {
-                                    Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                                    continue;
-                                }
 
-                                if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
-                                {
-                                    ScalarDataVariable variable;
-                                    dataset.TryGetScalarVar(value.inputValue, out variable);
-                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
-                                    possibleInput = variable as IABRInput;
-                                }
-                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
-                                {
-                                    VectorDataVariable variable;
-                                    dataset.TryGetVectorVar(value.inputValue, out variable);
-                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
-                                    possibleInput = variable as IABRInput;
-                                }
+                            // Try to convert to ABR input
+                            IABRInput possibleInput = value?.ToABRInput();
 
-                                if (possibleInput == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
-                                }
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
-                            {
-                                IVisAsset visAsset = null;
-                                ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
-                                if (visAsset == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
-                                    continue;
-                                }
-                                possibleInput = visAsset as IABRInput;
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.Primitive.ToString("G"))
-                            {
-                                // Attempt to construct the primitive from the type
-                                // provided in the state file
-                                Type inputType = Type.GetType(value.inputType);
-                                ConstructorInfo inputCtor =
-                                    inputType.GetConstructor(
-                                        BindingFlags.Instance | BindingFlags.Public,
-                                        null,
-                                        CallingConventions.HasThis,
-                                        new Type[] { typeof(string) },
-                                        null
-                                );
-                                string[] args = new string[] { value.inputValue };
-                                possibleInput = inputCtor?.Invoke(args) as IABRInput;
-                                if (possibleInput == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
-                                }
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
+                            // Special case: need to use values from State to
+                            // create PrimitiveGradients (in theory, the only
+                            // place we'll be doing this...)
+                            if (possibleInput == null && value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
                             {
                                 // Attempt to construct a primitive gradient
                                 try
@@ -919,7 +843,6 @@ namespace IVLab.ABREngine
 
             // Check each type to see if it matches with the serialized object
             Type objectType = value.GetType();
-            Debug.Log("serializing " + objectType + " value " + value);
             foreach (var kv in _saveFields)
             {
                 if (objectType.IsAssignableFrom(kv.Key))
