@@ -427,7 +427,7 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                foreach (IKeyData keyData in ds.GetAllKeyData().Values)
+                foreach (KeyData keyData in ds.GetAllKeyData().Values)
                 {
                     if (!activeKeyDataPaths.Contains(keyData.Path))
                     {

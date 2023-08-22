@@ -183,12 +183,27 @@ namespace IVLab.ABREngine
         /// regardless of dataset.
         /// </summary>
         /// <returns>List of currently loaded KeyData</returns>
-        public List<KeyData> GetKeyData()
+        public List<KeyData> GetAllKeyData()
         {
             List<KeyData> allKeyData = new List<KeyData>();
             foreach (var ds in datasets.Values)
             {
-                // allKeyData.AddRange(ds.GetKeyData())
+                allKeyData.AddRange(ds.GetKeyData());
+            }
+            return allKeyData;
+        }
+
+        /// <summary>
+        /// Gets key data with a particular path
+        /// </summary>
+        public KeyData GetKeyData(string keyDataPath)
+        {
+            foreach (var ds in datasets.Values)
+            {
+                if (ds.TryGetKeyData(keyDataPath, out KeyData kd))
+                {
+                    return kd;
+                }
             }
             return null;
         }
@@ -367,7 +382,7 @@ namespace IVLab.ABREngine
                 ImportKeyData(dataPath, importing, dataset);
 
                 // Retrieve the KeyData object that was just imported
-                IKeyData keyData;
+                KeyData keyData;
                 if (!dataset.TryGetKeyData(dataPath, out keyData))
                 {
                     Debug.LogError($"Failed to import Key Data for {dataPath} properly");
@@ -505,7 +520,7 @@ namespace IVLab.ABREngine
         private void ImportKeyData(string dataPath, RawDataset rawDataset, Dataset dataset)
         {
             // Build the key data from the given type
-            IKeyData keyData = new KeyData(dataPath, rawDataset.dataTopology);
+            KeyData keyData = new KeyData(dataPath, rawDataset.dataTopology);
 
             dataset.AddKeyData(keyData);
         }

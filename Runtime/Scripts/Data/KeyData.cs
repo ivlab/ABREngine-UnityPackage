@@ -42,19 +42,6 @@ namespace IVLab.ABREngine
         void SetKeyData(KeyData kd);
     }
 
-    public interface IKeyData : IABRInput
-    {
-        /// <summary>
-        /// The <see cref="DataPath"/> that represents this KeyData
-        /// </summary>
-        string Path { get; }
-
-        /// <summary>
-        /// Type of data that this KeyData contains
-        /// </summary>
-        DataTopology Topology { get; }
-    }
-
     /// <summary>
     /// Lightweight container for a data object. From Key Data objects, scalar
     /// and vector variables can be obtained (see the example below).
@@ -87,7 +74,7 @@ namespace IVLab.ABREngine
     /// }
     /// </code>
     /// </example>
-    public class KeyData : IKeyData, IHasDataset
+    public class KeyData : IHasDataset, IABRInput
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
         public string Path { get; }

@@ -273,16 +273,19 @@ namespace IVLab.ABREngine
                             IABRInput possibleInput = null;
                             if (value?.inputGenre == ABRInputGenre.KeyData.ToString("G"))
                             {
-                                string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                                Dataset dataset;
-                                ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                                if (dataset == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                                    continue;
-                                }
-                                IKeyData keyData;
-                                if (!dataset.TryGetKeyData(value.inputValue, out keyData))
+                                KeyData keyData = ABREngine.Instance.Data.GetKeyData(value.inputValue);
+                                Debug.Log("Loaded key data " + keyData.Path);
+                                // string datasetPath = DataPath.GetDatasetPath(value.inputValue);
+                                // Dataset dataset;
+                                // ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
+                                // if (dataset == null)
+                                // {
+                                //     Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
+                                //     continue;
+                                // }
+                                // KeyData keyData;
+                                // if (!dataset.TryGetKeyData(value.inputValue, out keyData))
+                                if (keyData == null)
                                 {
                                     Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
                                     continue;

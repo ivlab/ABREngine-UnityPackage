@@ -1037,11 +1037,11 @@ namespace IVLab.ABREngine
 
 
 
-        public IKeyData GetKeyData(string keyDataPath)
+        public KeyData GetKeyData(string keyDataPath)
         {
             List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
             foreach (var ds in allDatasets) {
-                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                Dictionary<string, KeyData> keyDatas = ds.GetAllKeyData();
                 foreach (var kd in keyDatas) {
                     if (kd.Key == keyDataPath) {
                         return kd.Value;
@@ -1053,12 +1053,12 @@ namespace IVLab.ABREngine
 
 
 
-        public Dictionary<string, IKeyData> GetKeyDataStartsWith(string keyDataPathStartsWith)
+        public Dictionary<string, KeyData> GetKeyDataStartsWith(string keyDataPathStartsWith)
         {
-            Dictionary<string, IKeyData> results = new Dictionary<string, IKeyData>();
+            Dictionary<string, KeyData> results = new Dictionary<string, KeyData>();
             List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
             foreach (var ds in allDatasets) {
-                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                Dictionary<string, KeyData> keyDatas = ds.GetAllKeyData();
                 foreach (var kd in keyDatas) {
                     if (kd.Key.StartsWith(keyDataPathStartsWith)) {
                         results.Add(kd.Key, kd.Value);

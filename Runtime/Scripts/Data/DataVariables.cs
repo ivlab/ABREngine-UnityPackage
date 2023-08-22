@@ -93,12 +93,12 @@ namespace IVLab.ABREngine
         ///     Get the actual data values in the context of this particular Key
         ///     Data object
         /// </summary>
-        T[] GetArray(IKeyData keyData);
+        T[] GetArray(KeyData keyData);
 
         /// <summary>
         ///     Determine if this variable is a part of the key data
         /// </summary>
-        bool IsPartOf(IKeyData keyData);
+        bool IsPartOf(KeyData keyData);
     }
 
     public class ScalarDataVariable : IDataVariable<float>, IHasDataset
@@ -116,7 +116,7 @@ namespace IVLab.ABREngine
             Path = path;
         }
 
-        public bool IsPartOf(IKeyData keyData)
+        public bool IsPartOf(KeyData keyData)
         {
             // Get the actual name of this variable
             string varName = DataPath.GetName(Path);
@@ -133,7 +133,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        public float[] GetArray(IKeyData keyData) {
+        public float[] GetArray(KeyData keyData) {
             // Get the actual name of this variable
             string varName = DataPath.GetName(Path);
 
@@ -179,7 +179,7 @@ namespace IVLab.ABREngine
             Path = path;
         }
 
-        public bool IsPartOf(IKeyData keyData)
+        public bool IsPartOf(KeyData keyData)
         {
             // Get the actual name of this variable
             string varName = DataPath.GetName(Path);
@@ -196,7 +196,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        public Vector3[] GetArray(IKeyData keyData) {
+        public Vector3[] GetArray(KeyData keyData) {
             // Get the actual name of this variable
             string varName = DataPath.GetName(Path);
 

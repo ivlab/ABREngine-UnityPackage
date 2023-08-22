@@ -132,9 +132,9 @@ namespace IVLab.ABREngine
                 {
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField("----- " + ds.Path + " -----");
-                    Dictionary<string, IKeyData> allKeyData = ds.GetAllKeyData();
+                    Dictionary<string, KeyData> allKeyData = ds.GetAllKeyData();
                     EditorGUILayout.LabelField("Key Data:");
-                    foreach (IKeyData kd in allKeyData.Values)
+                    foreach (KeyData kd in allKeyData.Values)
                     {
                         string keyData = "    " + DataPath.GetName(kd.Path);
                         RawDataset rawDs = null;
