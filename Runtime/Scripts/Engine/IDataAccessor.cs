@@ -161,4 +161,52 @@ namespace IVLab.ABREngine
         /// </summary>
         public int vertexIndex;
     }
+
+    /// <summary>
+    /// Interface to implement to share easier access to volume data within ABR.
+    /// </summary>
+    public interface IVolumeDataAccessor
+    {
+        /// <summary>
+        /// Looks up the value in the original voxel data based upon a position
+        /// specified in Unity World coordinates.
+        /// </summary>
+        float GetScalarValueAtWorldSpacePoint(Vector3 worldSpacePoint);
+
+        /// <summary>
+        /// Looks up the value in the original voxel data based upon a position specified in data space coordinates
+        /// (i.e., real-world units).
+        /// </summary>
+        float GetScalarValueAtDataSpacePoint(Vector3 dataSpacePoint);
+
+        /// <summary>
+        /// Looks up the value in the original voxel data based upon a point in
+        /// voxel space.  In the raw volume data each voxel contains one data
+        /// value.  If we think of those being the values of the data at a point
+        /// right in the center of each voxel, then the point we are querying
+        /// will rarely align perfectly with those center points; rather, it
+        /// will fall somewhere between them.  That is why the pointInVoxelSpace
+        /// is allowed to include a fractional component.  This function uses
+        /// the fractional portion to perform a tri-linear interpolation of the
+        /// data from the eight surrounding voxels to estimate the data value at
+        /// the exact 3D location requested.  See also
+        /// GetValueAtNearestVoxel(), which is faster but less precise because
+        /// it does not use interpolation.  Or, GetValueAtVoxel(), which is
+        /// even faster but does not support fractional voxel coordinates.
+        /// </summary>
+        float GetScalarValueAtVoxelSpacePoint(Vector3 voxelSpacePoint);
+
+        /// <summary>
+        /// Looks up the value in the original voxel data based upon a point in voxel space.  This function does
+        /// not use interpolation.  It simply returns that data value stored for the center point of the closest
+        /// voxel.
+        /// </summary>
+        float GetScalarValueAtNearestVoxel(Vector3Int voxelCoords);
+
+        /// <summary>
+        /// Uses the min and max values in the volume data to remap a data value to
+        /// a normalized range between 0 and 1.
+        /// </summary>
+        float NormalizeScalarValue(float value, KeyData keyData);
+    }
 }
