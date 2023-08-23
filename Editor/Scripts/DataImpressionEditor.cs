@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using IVLab.Utilities;
 using UnityEngine;
-using PlasticPipe.PlasticProtocol.Messages;
-using System.Reflection;
 
 namespace IVLab.ABREngine
 {
@@ -61,6 +59,19 @@ namespace IVLab.ABREngine
             di.RenderHints.Visible = EditorGUILayout.Toggle("Visible", di.RenderHints.Visible);
             changed = changed || (oldVisibility != di.RenderHints.Visible);
 
+            List<DataImpression> allDataImpressionsExceptThis = ABREngine.Instance.GetDataImpressions(d => d.Uuid != di.Uuid);
+            bool soloOrig = allDataImpressionsExceptThis.All(d => d.RenderHints.Visible == false);
+            bool solo = EditorGUILayout.Toggle("Only show this data impression", soloOrig);
+            bool soloChanged = solo != soloOrig;
+            if (soloChanged)
+            {
+                foreach (DataImpression d in allDataImpressionsExceptThis)
+                    d.RenderHints.Visible = !solo;
+                di.RenderHints.Visible = true;
+            }
+
+            changed = changed || soloChanged;
+
 
             ReRenderOnParameterChange = EditorGUILayout.Toggle("Re-Render on parameter changed in editor", ReRenderOnParameterChange);
 
@@ -85,8 +96,12 @@ namespace IVLab.ABREngine
                 changedInput = KeyDataField(rawInput, di);
             else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ScalarDataVariable)))
                 changedInput = ScalarVariableField(rawInput, di);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(VectorDataVariable)))
+                changedInput = VectorVariableField(rawInput, di);
             else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ColormapVisAsset)))
                 changedInput = ColormapField(rawInput);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(GlyphVisAsset)))
+                changedInput = GlyphField(rawInput);
             else
                 EditorGUILayout.LabelField("        " + rawInput?.inputValue);
 
@@ -108,12 +123,10 @@ namespace IVLab.ABREngine
                 if (rawInput.inputValue != null)
                 {
                     IABRInput newInput = rawInput.ToABRInput();
-                    Debug.Log("assigned" + rawInput.inputValue);
                     di.InputIndexer.AssignInput(inputName, newInput);
                 }
                 else
                 {
-                    Debug.Log("Assigned null");
                     di.InputIndexer.AssignInput(inputName, null);
                 }
                 if (abrAttr.updateLevel == UpdateLevel.Data)
@@ -126,10 +139,28 @@ namespace IVLab.ABREngine
 
         private RawABRInput ColormapField(RawABRInput input)
         {
-            Colormap cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(new Guid(input.inputValue)).Colormap;
-            Gradient newGradient = EditorGUILayout.GradientField(cmap.ToUnityGradient());
-            Colormap newCmap = Colormap.FromUnityGradient(newGradient);
-            // TODO: Compare cmap == newCmap
+            // TODO: make new cmap
+            if (input?.inputValue != null)
+            {
+                Colormap cmap = ABREngine.Instance.VisAssets.GetVisAsset<ColormapVisAsset>(new Guid(input.inputValue)).Colormap;
+                Gradient newGradient = EditorGUILayout.GradientField(cmap.ToUnityGradient());
+                Colormap newCmap = Colormap.FromUnityGradient(newGradient);
+                // TODO: Compare cmap == newCmap
+            }
+            return null;
+        }
+
+        private RawABRInput GlyphField(RawABRInput input)
+        {
+            // TODO: make new cmap
+            // if (input?.inputValue != null)
+            // {
+            //     GlyphVisAsset glyph = ABREngine.Instance.VisAssets.GetVisAsset<GlyphVisAsset>(new Guid(input.inputValue));
+            //     // stuck here because Unity 2019 doesn't have MeshPreview
+            //     // Gradient newGradient = EditorGUILayout.GradientField(cmap.ToUnityGradient());
+            //     // Colormap newCmap = Colormap.FromUnityGradient(newGradient);
+            //     // // TODO: Compare cmap == newCmap
+            // }
             return null;
         }
 
@@ -191,6 +222,41 @@ namespace IVLab.ABREngine
                 }
                 string newVarName = allScalarVars[newlySelected];
                 input.inputValue = DataPath.Join(DataPath.GetDatasetPath(kd.Path), DataPath.DataPathType.ScalarVar, newVarName);
+                return input;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private RawABRInput VectorVariableField(RawABRInput input, DataImpression di)
+        {
+            KeyData kd = di.GetKeyData();
+            if (kd == null)
+                return null;
+
+            int currentlySelected = -1;
+            string[] allVectorVars = kd.GetVectorVariableNames();
+            if (input != null && input.inputValue != null)
+            {
+                VectorDataVariable v = kd.GetVectorVariable(DataPath.GetName(input.inputValue));
+                currentlySelected = Array.IndexOf(allVectorVars, DataPath.GetName(v.Path));
+            }
+
+            int newlySelected = EditorGUILayout.Popup(currentlySelected, allVectorVars);
+            if (currentlySelected != newlySelected)
+            {
+                if (input == null)
+                {
+                    input = new RawABRInput()
+                    {
+                        inputGenre = ABRInputGenre.Variable.ToString(),
+                        inputType = typeof(VectorDataVariable).ToString(),
+                    };
+                }
+                string newVarName = allVectorVars[newlySelected];
+                input.inputValue = DataPath.Join(DataPath.GetDatasetPath(kd.Path), DataPath.DataPathType.VectorVar, newVarName);
                 return input;
             }
             else
