@@ -21,6 +21,10 @@ using UnityEngine;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Interface to implement for helpers to convert between Data Space and
+    /// Unity's World Space.
+    /// </summary>
     public interface ICoordSpaceConverter
     {
         /// <summary>
@@ -66,20 +70,12 @@ namespace IVLab.ABREngine
         /// like meters.
         /// </summary>
         bool ContainsDataSpacePoint(Vector3 dataSpacePoint);
-
-        // not implementing these yet... closest "data" is ambiguous.
-        // We could get points, lines, surfaces, voxels, ...
-        // How do we define what data to get?
-        // could specify another param (dataType = DataTopology.xxx)
-        // Or, use cell/index terminology (students may not be as familiar)
-        //
-        // actually, these probably belong in IDataAccessor anyway.
-        // - GetClosestDataInWorldSpace
-        // - GetClosestDataInDataSpace
-        // - GetNearbyDataInWorldSpace
-        // - GetNearbyDataInDataSpace
     }
 
+    /// <summary>
+    /// Interface to implement for helpers to convert between Data Space and
+    /// Unity's World Space.
+    /// </summary>
     public interface IVolumeCoordSpaceConverter
     {
         /// <summary>

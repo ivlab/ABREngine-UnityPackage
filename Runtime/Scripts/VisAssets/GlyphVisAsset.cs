@@ -73,6 +73,7 @@ namespace IVLab.ABREngine
 
         public GlyphVisAsset() : this(new Guid(), null, null, null) { }
         public GlyphVisAsset(List<Mesh> meshLods, List<Texture2D> normalMapLods, Texture2D preview) : this(Guid.NewGuid(), meshLods, normalMapLods, preview) { }
+        public GlyphVisAsset(List<Mesh> meshLods, List<Texture2D> normalMapLods) : this(Guid.NewGuid(), meshLods, normalMapLods, null) { }
         public GlyphVisAsset(Guid uuid, List<Mesh> meshLods, List<Texture2D> normalMapLods, Texture2D preview)
         {
             Uuid = uuid;
