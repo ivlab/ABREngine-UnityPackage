@@ -40,6 +40,11 @@ namespace IVLab.ABREngine
         ///     the state
         /// </summary>
         string ToString();
+
+        /// <summary>
+        /// Set the value of the primitive from a string (similar to using the string constructor)
+        /// </summary>
+        void SetFromString(string value);
     }
 
     /// <summary>
@@ -79,12 +84,17 @@ namespace IVLab.ABREngine
 
         public IntegerPrimitive(string value)
         {
-            Value = int.Parse(ParsingRegex.Match(value).Groups["value"].ToString());
+            SetFromString(value);
         }
 
         public override string ToString()
         {
             return Value.ToString() + Units;
+        }
+
+        public void SetFromString(string value)
+        {
+            Value = int.Parse(ParsingRegex.Match(value).Groups["value"].ToString());
         }
 
         public RawABRInput GetRawABRInput()
@@ -119,12 +129,17 @@ namespace IVLab.ABREngine
 
         public FloatPrimitive(string value)
         {
-            Value = float.Parse(ParsingRegex.Match(value).Groups["value"].ToString());
+            SetFromString(value);
         }
 
         public override string ToString()
         {
             return Value.ToString() + Units;
+        }
+
+        public virtual void SetFromString(string value)
+        {
+            Value = float.Parse(ParsingRegex.Match(value).Groups["value"].ToString());
         }
 
         public RawABRInput GetRawABRInput()
@@ -147,6 +162,11 @@ namespace IVLab.ABREngine
 
         public LengthPrimitive(string value)
         {
+            SetFromString(value);
+        }
+
+        public override void SetFromString(string value)
+        {
             var match = ParsingRegex.Match(value);
             Value = float.Parse(match.Groups["value"].ToString());
             var tempUnits = match.Groups["units"].ToString();
@@ -167,6 +187,11 @@ namespace IVLab.ABREngine
         public AnglePrimitive(float value) : base(value) { }
 
         public AnglePrimitive(string value)
+        {
+            SetFromString(value);
+        }
+
+        public override void SetFromString(string value)
         {
             var match = ParsingRegex.Match(value);
             Value = float.Parse(match.Groups["value"].ToString());
@@ -191,6 +216,11 @@ namespace IVLab.ABREngine
         }
 
         public PercentPrimitive(string value)
+        {
+            SetFromString(value);
+        }
+
+        public override void SetFromString(string value)
         {
             var match = ParsingRegex.Match(value);
             Value = float.Parse(match.Groups["value"].ToString()) / 100.0f;
@@ -226,6 +256,11 @@ namespace IVLab.ABREngine
         }
 
         public BooleanPrimitive(string value)
+        {
+            SetFromString(value);
+        }
+
+        public void SetFromString(string value)
         {
             Value = bool.Parse(ParsingRegex.Match(value).Value);
         }

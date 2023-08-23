@@ -41,6 +41,7 @@ namespace IVLab.ABREngine
         Colormap GetColormap(Guid uuid);
         GameObject GetGlyphGameObject(Guid uuid, JObject lodJson);
         Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
+        Texture2D GetGlyphPreview(Guid uuid);
         Texture2D GetLineTexture(Guid uuid);
         Texture2D GetSurfaceTexture(Guid uuid);
         Texture2D GetSurfaceNormalMap(Guid uuid);
@@ -136,6 +137,12 @@ namespace IVLab.ABREngine
         {
             CheckExists(uuid);
             return _fpFetcher.GetGlyphNormalMapTexture(uuid, lodInfo);
+        }
+
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            CheckExists(uuid);
+            return _fpFetcher.GetGlyphPreview(uuid);
         }
 
         public Texture2D GetLineTexture(Guid uuid)
@@ -361,6 +368,21 @@ namespace IVLab.ABREngine
             return normalMap;
         }
 
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string artifactJsonPath = GetArtifactJsonPath(uuid);
+            string previewPath = VisAssetDataPath(artifactJsonPath, artifactJson["preview"].ToString());
+            if (File.Exists(previewPath))
+            {
+                byte[] pngBytes = File.ReadAllBytes(previewPath);
+                Texture2D preview = new Texture2D(2, 2);
+                preview.LoadImage(pngBytes);
+                return preview;
+            }
+            return null;
+        }
+
         public Texture2D GetLineTexture(Guid uuid)
         {
             JObject artifactJson = GetArtifactJson(uuid);
@@ -507,6 +529,14 @@ namespace IVLab.ABREngine
             return Resources.Load<Texture2D>(normalPath);
         }
 
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string artifactJsonPath = GetArtifactJsonPath(uuid);
+            string previewPath = VisAssetDataPath(artifactJsonPath, artifactJson["preview"].ToString());
+            return Resources.Load<Texture2D>(previewPath);
+        }
+
         public Texture2D GetLineTexture(Guid uuid)
         {
             JObject artifactJson = GetArtifactJson(uuid);
@@ -611,6 +641,12 @@ namespace IVLab.ABREngine
             return null;
         }
 
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            return null;
+        }
+
+
         public Texture2D GetLineTexture(Guid uuid)
         {
             return null;
@@ -699,6 +735,7 @@ namespace IVLab.ABREngine
                 List<JObject> lodsList = null;
                 List<Mesh> meshLods = new List<Mesh>();
                 List<Texture2D> normalMapLods = new List<Texture2D>();
+                Texture2D preview = null;
                 try
                 {
                     lodsList = artifactData["lods"].ToObject<List<JObject>>();
@@ -730,10 +767,23 @@ namespace IVLab.ABREngine
                     catch (Exception) { }
                     meshLods.Add(loadedMesh);
 
-                    Texture2D normalMap = _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
-                    normalMapLods.Add(normalMap);
+                    try
+                    {
+                        // Normal maps are not critical to the operation of ABR;
+                        // so silently accept when they're not present
+                        Texture2D normalMap = _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
+                        normalMapLods.Add(normalMap);
+                    }
+                    catch (Exception) { }
+
+                    try
+                    {
+                        // previews also not critical, silently accept any errors
+                        preview = _fetcher.GetGlyphPreview(uuid);
+                    }
+                    catch { }
                 }
-                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods);
+                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods, preview);
                 return visAsset;
             }
 

@@ -302,6 +302,24 @@ namespace IVLab.ABREngine
             }
         }
 
+        public RawABRInput GetDefaultRawABRInput(string plateName, string inputName)
+        {
+            if (SchemaJson == null)
+            {
+                Debug.LogErrorFormat("Schema is null, cannot get input type for {0}", inputName);
+                return null;
+            }
+            RawABRInput input = new RawABRInput();
+            input.inputType = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputType"]["const"].ToString();
+            input.parameterName = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["parameterName"]["const"].ToString();
+            input.inputGenre = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputGenre"]["const"].ToString();
+            if ((SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"] as JObject).ContainsKey("default"))
+            {
+                input.inputValue = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
+            }
+            return input;
+        }
+
         /// <summary>
         ///     Obtain a full list of all inputs available to this plate
         /// </summary>

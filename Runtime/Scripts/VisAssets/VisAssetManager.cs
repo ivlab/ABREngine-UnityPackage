@@ -394,7 +394,7 @@ namespace IVLab.ABREngine
                 List<Mesh> lods = new List<Mesh> { glyphMesh };
                 List<Texture2D> nrms = new List<Texture2D> { Texture2D.normalTexture };
                 GameObject.Destroy(cube);
-                return new GlyphVisAsset(lods, nrms);
+                return new GlyphVisAsset(lods, nrms, null);
             }
             else
             {

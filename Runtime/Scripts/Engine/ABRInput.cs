@@ -173,6 +173,11 @@ namespace IVLab.ABREngine
             }
             return possibleInput;
         }
+
+        public RawABRInput Copy()
+        {
+            return (RawABRInput) this.MemberwiseClone();
+        }
     }
 
     /// <summary>

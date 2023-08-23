@@ -201,7 +201,13 @@ namespace IVLab.ABREngine
         public override Dataset GetDataset() => keyData?.GetDataset();
         public override KeyData GetKeyData() => keyData;
         public override void SetKeyData(KeyData kd) => keyData = kd;
-        public override DataTopology GetKeyDataTopology() => DataTopology.Triangles;
+        public override DataTopology GetKeyDataTopology()
+        {
+            if (keyData != null)
+                return keyData.Topology;
+            else
+                return DataTopology.Triangles;
+        }
 
         public override void ComputeGeometry()
         {

@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using IVLab.Utilities;
 using UnityEngine;
+using System.Reflection;
 
 namespace IVLab.ABREngine
 {
@@ -40,6 +41,11 @@ namespace IVLab.ABREngine
         {
             serializedObject.Update();
             DataImpression di = (DataImpression)target;
+            EditorGUILayout.HelpBox(
+                "This data impression editor is provided for developer convenience only. " +
+                "Please use ABR Compose for full functionality.",
+                MessageType.None
+            );
 
             EditorGUILayout.LabelField($"Data Impression: {di.name}", EditorStyles.boldLabel);
 
@@ -98,10 +104,16 @@ namespace IVLab.ABREngine
                 changedInput = ScalarVariableField(rawInput, di);
             else if (fieldInfo.FieldType.IsAssignableFrom(typeof(VectorDataVariable)))
                 changedInput = VectorVariableField(rawInput, di);
-            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ColormapVisAsset)))
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(IColormapVisAsset)))
                 changedInput = ColormapField(rawInput);
-            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(GlyphVisAsset)))
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(IGlyphVisAsset)))
                 changedInput = GlyphField(rawInput);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ILineTextureVisAsset)))
+                changedInput = LineTextureField(rawInput);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ISurfaceTextureVisAsset)))
+                changedInput = SurfaceTextureField(rawInput);
+            else if (fieldInfo.FieldType.GetInterfaces().Contains(typeof(IPrimitive)))
+                changedInput = PrimitiveField(rawInput, inputName, di);
             else
                 EditorGUILayout.LabelField("        " + rawInput?.inputValue);
 
@@ -152,16 +164,65 @@ namespace IVLab.ABREngine
 
         private RawABRInput GlyphField(RawABRInput input)
         {
-            // TODO: make new cmap
-            // if (input?.inputValue != null)
-            // {
-            //     GlyphVisAsset glyph = ABREngine.Instance.VisAssets.GetVisAsset<GlyphVisAsset>(new Guid(input.inputValue));
-            //     // stuck here because Unity 2019 doesn't have MeshPreview
-            //     // Gradient newGradient = EditorGUILayout.GradientField(cmap.ToUnityGradient());
-            //     // Colormap newCmap = Colormap.FromUnityGradient(newGradient);
-            //     // // TODO: Compare cmap == newCmap
-            // }
+            if (input?.inputValue != null)
+            {
+                IGlyphVisAsset glyph = ABREngine.Instance.VisAssets.GetVisAsset<IGlyphVisAsset>(new Guid(input.inputValue));
+                Texture2D preview = glyph.GetPreview();
+                GUIContent content = new GUIContent(preview);
+                Rect previewRect = GUILayoutUtility.GetRect(content, GUIStyle.none);
+                EditorGUI.DrawPreviewTexture(previewRect, preview, mat: null, scaleMode: ScaleMode.ScaleToFit);
+            }
             return null;
+        }
+
+        private RawABRInput LineTextureField(RawABRInput input)
+        {
+            if (input?.inputValue != null)
+            {
+                ILineTextureVisAsset tex = ABREngine.Instance.VisAssets.GetVisAsset<ILineTextureVisAsset>(new Guid(input.inputValue));
+                Texture2D preview = tex.GetTexture();
+                GUIContent content = new GUIContent(preview);
+                Rect previewRect = GUILayoutUtility.GetRect(content, GUIStyle.none);
+                EditorGUI.DrawPreviewTexture(previewRect, preview, mat: null, scaleMode: ScaleMode.ScaleToFit);
+            }
+            return null;
+        }
+
+        private RawABRInput SurfaceTextureField(RawABRInput input)
+        {
+            if (input?.inputValue != null)
+            {
+                ISurfaceTextureVisAsset tex = ABREngine.Instance.VisAssets.GetVisAsset<ISurfaceTextureVisAsset>(new Guid(input.inputValue));
+                Texture2D preview = tex.GetTexture();
+                GUIContent content = new GUIContent(preview);
+                Rect previewRect = GUILayoutUtility.GetRect(content, GUIStyle.none);
+                EditorGUI.DrawPreviewTexture(previewRect, preview, mat: null, scaleMode: ScaleMode.ScaleToFit);
+            }
+            return null;
+        }
+
+        private RawABRInput PrimitiveField(RawABRInput origInput, string inputName, DataImpression di)
+        {
+            string plateType = di.GetType().GetCustomAttribute<ABRPlateType>(false).plateType;
+            if (origInput == null)
+            {
+                origInput = ABREngine.Instance.Config.GetDefaultRawABRInput(plateType, inputName);
+            }
+
+            IPrimitive input = origInput.ToABRInput() as IPrimitive;
+            try
+            {
+                string newValue = EditorGUILayout.DelayedTextField(input.ToString());
+                input.SetFromString(newValue);
+            }
+            catch {}
+            RawABRInput newInput = input.GetRawABRInput();
+
+            bool changed = origInput.inputValue != newInput.inputValue;
+            if (changed)
+                return newInput;
+            else
+                return null;
         }
 
         private RawABRInput KeyDataField(RawABRInput input, DataImpression di)
