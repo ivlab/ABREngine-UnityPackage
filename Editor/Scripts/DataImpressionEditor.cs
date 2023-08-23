@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using IVLab.Utilities;
 using UnityEngine;
+using PlasticPipe.PlasticProtocol.Messages;
+using System.Reflection;
 
 namespace IVLab.ABREngine
 {
@@ -45,23 +47,16 @@ namespace IVLab.ABREngine
 
             EditorGUILayout.LabelField("Parameters:", EditorStyles.boldLabel);
 
+            bool changed = false;
             foreach (string inputName in di.InputIndexer.InputNames)
             {
                 var value = di.InputIndexer.GetInputValue(inputName);
-                EditorGUILayout.LabelField($"    - {inputName}:");
-                if (value != null)
-                {
-                    ParameterField(di, inputName, value);
-                }
-                else
-                {
-                    EditorGUILayout.LabelField($"        [None]");
-                }
+                EditorGUILayout.LabelField($"{inputName}:");
+                changed = changed || ParameterField(di, inputName, value);
             }
 
             EditorGUILayout.LabelField("Render Hints:", EditorStyles.boldLabel);
 
-            bool changed = false;
             bool oldVisibility = di.RenderHints.Visible;
             di.RenderHints.Visible = EditorGUILayout.Toggle("Visible", di.RenderHints.Visible);
             changed = changed || (oldVisibility != di.RenderHints.Visible);
@@ -77,35 +72,56 @@ namespace IVLab.ABREngine
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void ParameterField(DataImpression di, string inputName, IABRInput input)
+        private bool ParameterField(DataImpression di, string inputName, IABRInput input)
         {
-            RawABRInput originalInput = input.GetRawABRInput();
-            RawABRInput changedInput = null;
-            if (originalInput.inputType == typeof(KeyData).ToString())
-                changedInput = KeyDataField(originalInput);
-            else if (originalInput.inputType == typeof(ScalarDataVariable).ToString())
-                changedInput = ScalarVariableField(originalInput, di);
-            else if (originalInput.inputType == typeof(ColormapVisAsset).ToString())
-                changedInput = ColormapField(originalInput);
-            else
-                EditorGUILayout.LabelField("        " + originalInput.inputValue);
+            bool changed = false;
+            var fieldInfo = di.InputIndexer.GetInputField(inputName);
+            ABRInputAttribute abrAttr = fieldInfo.GetCustomAttributes(false).ToList().Find(att => att.GetType() == typeof(ABRInputAttribute)) as ABRInputAttribute;
 
-            if (changedInput != null)
+            RawABRInput rawInput = input?.GetRawABRInput();
+            RawABRInput changedInput = null;
+            EditorGUILayout.BeginHorizontal();
+            if (fieldInfo.FieldType.IsAssignableFrom(typeof(KeyData)))
+                changedInput = KeyDataField(rawInput, di);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ScalarDataVariable)))
+                changedInput = ScalarVariableField(rawInput, di);
+            else if (fieldInfo.FieldType.IsAssignableFrom(typeof(ColormapVisAsset)))
+                changedInput = ColormapField(rawInput);
+            else
+                EditorGUILayout.LabelField("        " + rawInput?.inputValue);
+
+            changed = changedInput != null;
+            if (changed)
             {
-                IABRInput newInput = changedInput.ToABRInput();
-                di.InputIndexer.AssignInput(inputName, newInput);
-                var fieldInfo = di.InputIndexer.GetInputField(inputName);
-                ABRInputAttribute abrAttr = fieldInfo.GetCustomAttributes(false).ToList().Find(att => att.GetType() == typeof(ABRInputAttribute)) as ABRInputAttribute;
+                rawInput = changedInput;
+            }
+
+            if (GUILayout.Button("x", GUILayout.Width(20)) && rawInput != null)
+            {
+                rawInput.inputValue = null;
+                changed = true;
+            }
+            EditorGUILayout.EndHorizontal();
+
+            if (changed)
+            {
+                if (rawInput.inputValue != null)
+                {
+                    IABRInput newInput = rawInput.ToABRInput();
+                    Debug.Log("assigned" + rawInput.inputValue);
+                    di.InputIndexer.AssignInput(inputName, newInput);
+                }
+                else
+                {
+                    Debug.Log("Assigned null");
+                    di.InputIndexer.AssignInput(inputName, null);
+                }
                 if (abrAttr.updateLevel == UpdateLevel.Data)
                     di.RenderHints.DataChanged = true;
                 if (abrAttr.updateLevel == UpdateLevel.Style)
                     di.RenderHints.StyleChanged = true;
-
-                if (ReRenderOnParameterChange)
-                {
-                    ABREngine.Instance.Render();
-                }
             }
+            return changed;
         }
 
         private RawABRInput ColormapField(RawABRInput input)
@@ -117,15 +133,27 @@ namespace IVLab.ABREngine
             return null;
         }
 
-        private RawABRInput KeyDataField(RawABRInput input)
+        private RawABRInput KeyDataField(RawABRInput input, DataImpression di)
         {
-            KeyData currentKeyData = ABREngine.Instance.Data.GetKeyData(input.inputValue);
-            var allKeyData = ABREngine.Instance.Data.GetAllKeyData().Where(kd => kd.Topology == currentKeyData.Topology);
+            int currentlySelected = -1;
+            var allKeyData = ABREngine.Instance.Data.GetAllKeyData().Where(kd => kd.Topology == di.GetKeyDataTopology());
             string[] keyDataPaths = allKeyData.Select(kd => kd.Path).ToArray();
-            int currentlySelected = Array.IndexOf(keyDataPaths, input.inputValue);
+            if (input != null)
+            {
+                KeyData currentKeyData = ABREngine.Instance.Data.GetKeyData(input.inputValue);
+                currentlySelected = Array.IndexOf(keyDataPaths, input.inputValue);
+            }
             int newlySelected = EditorGUILayout.Popup(currentlySelected, keyDataPaths);
             if (currentlySelected != newlySelected)
             {
+                if (input == null)
+                {
+                    input = new RawABRInput()
+                    {
+                        inputGenre = ABRInputGenre.KeyData.ToString(),
+                        inputType = typeof(KeyData).ToString(),
+                    };
+                }
                 string newKeyDataPath = keyDataPaths[newlySelected];
                 input.inputValue = newKeyDataPath;
                 return input;
@@ -138,24 +166,37 @@ namespace IVLab.ABREngine
 
         private RawABRInput ScalarVariableField(RawABRInput input, DataImpression di)
         {
-            // KeyData kd = di.GetKeyData();
-            // ScalarDataVariable v = kd.GetScalarVariable(DataPath.GetName(input.inputValue));
-            // Debug.Log(input.inputValue);
-            // string[] allScalarVars = kd.GetScalarVariableNames();
-            // Debug.Log(string.Join(", ", allScalarVars));
-            // int currentlySelected = Array.IndexOf(allScalarVars, v.Path);
-            // int newlySelected = EditorGUILayout.Popup(currentlySelected, allScalarVars);
-            // if (currentlySelected != newlySelected)
-            // {
-            //     string newVarPath = allScalarVars[newlySelected];
-            //     input.inputValue = newVarPath;
-            //     return input;
-            // }
-            // else
-            // {
-            //     return null;
-            // }
-            return null;
+            KeyData kd = di.GetKeyData();
+            if (kd == null)
+                return null;
+
+            int currentlySelected = -1;
+            string[] allScalarVars = kd.GetScalarVariableNames();
+            if (input != null && input.inputValue != null)
+            {
+                ScalarDataVariable v = kd.GetScalarVariable(DataPath.GetName(input.inputValue));
+                currentlySelected = Array.IndexOf(allScalarVars, DataPath.GetName(v.Path));
+            }
+
+            int newlySelected = EditorGUILayout.Popup(currentlySelected, allScalarVars);
+            if (currentlySelected != newlySelected)
+            {
+                if (input == null)
+                {
+                    input = new RawABRInput()
+                    {
+                        inputGenre = ABRInputGenre.Variable.ToString(),
+                        inputType = typeof(ScalarDataVariable).ToString(),
+                    };
+                }
+                string newVarName = allScalarVars[newlySelected];
+                input.inputValue = DataPath.Join(DataPath.GetDatasetPath(kd.Path), DataPath.DataPathType.ScalarVar, newVarName);
+                return input;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

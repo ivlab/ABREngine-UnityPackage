@@ -217,6 +217,13 @@ namespace IVLab.ABREngine
         /// they correctly implement this.
         /// </summary>
         public abstract void SetKeyData(KeyData kd);
+
+        /// <summary>
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
+        /// </summary>
+        public abstract DataTopology GetKeyDataTopology();
     }
 
 

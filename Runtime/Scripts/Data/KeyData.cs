@@ -40,6 +40,11 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="kd"></param>
         void SetKeyData(KeyData kd);
+
+        /// <summary>
+        /// Get the KeyData's expected topology
+        /// </summary>
+        DataTopology GetKeyDataTopology();
     }
 
     /// <summary>

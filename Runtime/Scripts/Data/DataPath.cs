@@ -105,6 +105,30 @@ namespace IVLab.ABREngine
             }
         }
 
+        public static string Join(string datasetPath, DataPathType pathType3, string path4)
+        {
+            if (FollowsConvention(datasetPath, DataPathType.Dataset))
+            {
+                string path = datasetPath;
+                path = Join(path, pathType3);
+                path = Join(path, path4);
+                return path;
+            }
+            else
+            {
+                Debug.LogWarning("Refusing to join non-dataset path with DataPathType");
+                return datasetPath;
+            }
+        }
+
+        public static string Join(string path1, string path2, DataPathType pathType3, string path4)
+        {
+            string path = Join(path1, path2);
+            path = Join(path, pathType3);
+            path = Join(path, path4);
+            return path;
+        }
+
         public static string Join(string path1, DataPathType pathType)
         {
             if (FollowsConvention(path1, DataPathType.Dataset))
