@@ -40,6 +40,16 @@ namespace IVLab.ABREngine
         Bounds BoundsInDataSpace { get; }
 
         /// <summary>
+        /// Transformation matrix from world space to data space.
+        /// </summary>
+        Matrix4x4 WorldToDataMatrix { get; }
+
+        /// <summary>
+        /// Transformation matrix from data space to world space.
+        /// </summary>
+        Matrix4x4 DataToWorldMatrix { get; }
+
+        /// <summary>
         /// Converts a point in Unity world coordinates to a point within the
         /// original data coordinate space.  The data coordinate space is
         /// typically defined in real-world units, like cm or meters.  Those
@@ -57,6 +67,25 @@ namespace IVLab.ABREngine
         /// visualization is designed.
         /// </summary>
         Vector3 DataSpacePointToWorldSpace(Vector3 dataSpacePoint);
+
+        /// <summary>
+        /// Converts a vector in Unity world coordinates to a vector within the
+        /// original data coordinate space.  The data coordinate space is
+        /// typically defined in real-world units, like cm or meters.  Those
+        /// coordinates are often scaled or repositioned within Unity World
+        /// space as we zoom into the data or place multiple datasets
+        /// side-by-side or do other visualization tasks.
+        /// </summary>
+        Vector3 WorldSpaceVectorToDataSpace(Vector3 worldSpaceVector);
+
+        /// <summary>
+        /// Converts a Vector in the original data coordinate space, which is
+        /// typically defined in real-world units, like meters, to its current
+        /// position in Unity's World coordinate system, which might include a
+        /// scale or translation or other transformation based on how the
+        /// visualization is designed.
+        /// </summary>
+        Vector3 DataSpaceVectorToWorldSpace(Vector3 dataSpaceVector);
 
         /// <summary>
         /// Returns true if the point in Unity World coordinates lies within the

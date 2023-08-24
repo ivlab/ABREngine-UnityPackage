@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using IVLab.Utilities;
+using PlasticGui.WebApi.Responses;
 
 namespace IVLab.ABREngine
 {
@@ -40,8 +41,9 @@ namespace IVLab.ABREngine
     /// method.
     /// </remarks>
     [AddComponentMenu("ABR/Data Impression Group")]
-    public class DataImpressionGroup : MonoBehaviour, IHasDataset
+    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter
     {
+#region Member variables
         /// <summary>
         ///     Transformation from the original data space into the room-scale
         ///     bounds. Multiply by a vector to go from group-space into data-space.
@@ -61,7 +63,9 @@ namespace IVLab.ABREngine
 
 
         private Dictionary<Guid, DataImpression> gameObjectMapping = new Dictionary<Guid, DataImpression>();
+#endregion
 
+#region Constructor (Create) methods
         internal static DataImpressionGroup Create(string name)
         {
             return Create(name, Guid.NewGuid(), null, Matrix4x4.identity);
@@ -120,7 +124,9 @@ namespace IVLab.ABREngine
 
             return groupInScene;
         }
+#endregion
 
+#region Public member methods
         /// <summary>
         /// Add a data impression to this group. All data impressions in the
         /// same group NEED to have the same dataset, error will be displayed
@@ -169,9 +175,9 @@ namespace IVLab.ABREngine
         {
             if (gameObjectMapping.ContainsKey(uuid))
             {
-                gameObjectMapping[uuid].Cleanup();
-                gameObjectMapping.Remove(uuid);
-                GameObject.Destroy(gameObjectMapping[uuid]);
+                // gameObjectMapping[uuid].Cleanup();
+                // GameObject.Destroy(gameObjectMapping[uuid].gameObject);
+                gameObjectMapping[uuid].gameObject.SetActive(false);
                 gameObjectMapping.Remove(uuid);
             }
             return gameObjectMapping.Count == 0;
@@ -344,24 +350,6 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Get the dataset that all impressions in this DataImpressionGroup are
-        ///     associated with. All DataImpressionGroups MUST have only one dataset.
-        /// </summary>
-        public Dataset GetDataset()
-        {
-            foreach (var impression in gameObjectMapping)
-            {
-                Dataset impressionDs = impression.Value.GetDataset();
-                // Find the first one that exists and return it
-                if (impressionDs != null)
-                {
-                    return impressionDs;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Get the bounds of the container containing all the data in this DataImpressionGroup
         /// </summary>
         public Bounds? GetContainerBounds()
@@ -519,7 +507,9 @@ namespace IVLab.ABREngine
                 Debug.LogError(e);
             }
         }
+#endregion
 
+#region Private helper methods
         private void ResetBoundsAndTransformation()
         {
             GroupToDataMatrix = Matrix4x4.identity;
@@ -542,5 +532,56 @@ namespace IVLab.ABREngine
             impression.transform.localPosition = Vector3.zero;
             impression.transform.localRotation = Quaternion.identity;
         }
+#endregion
+
+#region IHasDataset implementation
+        /// <summary>
+        ///     Get the dataset that all impressions in this DataImpressionGroup are
+        ///     associated with. All DataImpressionGroups MUST have only one dataset.
+        /// </summary>
+        public Dataset GetDataset()
+        {
+            foreach (var impression in gameObjectMapping)
+            {
+                Dataset impressionDs = impression.Value.GetDataset();
+                // Find the first one that exists and return it
+                if (impressionDs != null)
+                {
+                    return impressionDs;
+                }
+            }
+            return null;
+        }
+#endregion
+
+#region ICoordSpaceConverter implementation
+        public Bounds BoundsInWorldSpace { get => GroupBounds; }
+
+        public Bounds BoundsInDataSpace
+        {
+            get
+            {
+                Vector3 dataCenter = WorldToDataMatrix.MultiplyPoint3x4(GroupBounds.center);
+                Vector3 dataSize = WorldToDataMatrix.MultiplyVector(GroupBounds.size);
+                return new Bounds(dataCenter, dataSize);
+            }
+        }
+
+        public Matrix4x4 WorldToDataMatrix { get => GroupToDataMatrix; }
+
+        public Matrix4x4 DataToWorldMatrix { get => GroupToDataMatrix.inverse; }
+
+        public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
+
+        public Vector3 DataSpacePointToWorldSpace(Vector3 dataSpacePoint) => DataToWorldMatrix.MultiplyPoint3x4(dataSpacePoint);
+
+        public Vector3 WorldSpaceVectorToDataSpace(Vector3 worldSpaceVector) => WorldToDataMatrix.MultiplyVector(worldSpaceVector);
+
+        public Vector3 DataSpaceVectorToWorldSpace(Vector3 dataSpaceVector) => DataToWorldMatrix.MultiplyVector(dataSpaceVector);
+
+        public bool ContainsWorldSpacePoint(Vector3 worldSpacePoint) => BoundsInWorldSpace.Contains(worldSpacePoint);
+
+        public bool ContainsDataSpacePoint(Vector3 dataSpacePoint) => BoundsInDataSpace.Contains(dataSpacePoint);
+#endregion
     }
 }

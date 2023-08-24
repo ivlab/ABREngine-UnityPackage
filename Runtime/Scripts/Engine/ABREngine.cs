@@ -857,6 +857,7 @@ namespace IVLab.ABREngine
                     }
                 }
             }
+            dataImpression.gameObject.SetActive(true);
             MoveImpressionToGroup(dataImpression, newGroup, allowOverwrite);
         }
 

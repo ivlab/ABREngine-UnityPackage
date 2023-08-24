@@ -26,6 +26,7 @@ using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
+using UnityEditor;
 
 namespace IVLab.ABREngine
 {
@@ -761,8 +762,13 @@ namespace IVLab.ABREngine
                     GameObject.Destroy(loadedObjGameObject);
                     try
                     {
-                        // Destroy doesn't work if we imported from resources.
-                        GameObject.Destroy(prefab);
+                        // Only destroy if not imported from Resources, and fail
+                        // silently if something goes wrong during destroying
+                        // the prefab. It'll just look weird in the scene.
+                        if (!AssetDatabase.Contains(prefab))
+                        {
+                            GameObject.Destroy(prefab);
+                        }
                     }
                     catch (Exception) { }
                     meshLods.Add(loadedMesh);

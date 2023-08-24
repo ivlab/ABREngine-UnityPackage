@@ -467,8 +467,11 @@ namespace IVLab.ABREngine
                     // Add any tags
                     if (impression.Value.tags != null)
                     {
-                        (dataImpression as DataImpression).Tags = impression.Value.tags;
+                        dataImpression.Tags = impression.Value.tags;
                     }
+
+                    // Hide/show the data impression in scene if it has data
+                    dataImpression.gameObject.SetActive(dataImpression.GetKeyData() != null);
 
                     // Put the impressions in their proper groups, if any
                     bool registered = false;

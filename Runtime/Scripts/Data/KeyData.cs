@@ -175,4 +175,24 @@ namespace IVLab.ABREngine
     }
 
     public interface IKeyDataRenderInfo { }
+
+    public class SurfaceKeyData : KeyData
+    {
+        public SurfaceKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    public class PointKeyData : KeyData
+    {
+        public PointKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    public class LineKeyData : KeyData
+    {
+        public LineKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    public class VolumeKeyData : KeyData
+    {
+        public VolumeKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
 }

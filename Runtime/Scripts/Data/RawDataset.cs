@@ -382,6 +382,9 @@ namespace IVLab.ABREngine
             scalarMins = jh.scalarMins;
             scalarMaxes = jh.scalarMaxes;
 
+            // Debug.Log("scalar array names: " + string.Join(", ", scalarArrayNames));
+            // Debug.Log("vector array names: " + string.Join(", ", vectorArrayNames));
+
             scalarArrays = new SerializableFloatArray[jh.scalarArrayNames.Count()];
             for (int i = 0; i < scalarArrayNames.Count(); i++)
             {

@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,9 +89,18 @@ namespace IVLab.ABREngine
         public static T Create<T>(string uuid, string name)
         where T : DataImpression
         {
-            GameObject go = new GameObject();
-            T di = go.AddComponent<T>();
-            go.name = name + " (" + di.GetType().Name + ")";
+            Guid guid = new Guid(uuid);
+
+            // Check if a data impression with this UUID already exists in the
+            // ABREngine
+            GameObject go;
+            T di = ABREngine.Instance.GetDataImpression<T>(d => d.Uuid == guid);
+            if (di == null)
+            {
+                go = new GameObject();
+                di = go.AddComponent<T>();
+                go.name = name + " (" + di.GetType().Name + ")";
+            }
 
             di.InputIndexer = new ABRInputIndexerModule(di);
             di.Uuid = new Guid(uuid);
@@ -116,6 +126,10 @@ namespace IVLab.ABREngine
                     Debug.LogErrorFormat("Material `{0}` not found for {1}", di.MaterialNames[m], di.GetType().ToString());
                 }
             }
+
+            // by default, data impressions are disabled, until they have data.
+            di.gameObject.SetActive(false);
+
             return di;
         }
 
