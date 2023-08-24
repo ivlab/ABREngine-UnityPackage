@@ -1,7 +1,7 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "2023.3.0",
+    "version": "2023.8.0",
     "unity": "2021.3",
     "description": "Artifact-Based Rendering Engine",
     "author": { "name": "IVLab", "email": "ivlab-admin@umn.edu", "url": "https://ivlab.cs.umn.edu" },
@@ -38,6 +38,11 @@
             "displayName": "ABR Testing",
             "description": "If you are contributing to the ABREngine, you may use this script as a framework to test your new features.",
             "path": "Samples~/TestingABR"
+        },
+        {
+            "displayName": "Interactive filtering and querying",
+            "description": "This sample contains several examples of using ABR to create interactive visualizations with zoom, filter, and details-on-demand.",
+            "path": "Samples~/Interactive filtering and querying"
         },
         {
             "displayName": "Documentation GIF Generation",

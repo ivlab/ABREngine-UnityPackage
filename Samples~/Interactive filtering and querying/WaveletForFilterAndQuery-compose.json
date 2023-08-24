@@ -1,0 +1,300 @@
+{
+  "version": "0.2.0",
+  "impressions": {
+    "709c289f-8220-4790-82a3-4ee58e51bcbe": {
+      "plateType": "Surfaces",
+      "uuid": "709c289f-8220-4790-82a3-4ee58e51bcbe",
+      "name": "RTData100",
+      "inputValues": {
+        "Key Data": {
+          "inputType": "IVLab.ABREngine.SurfaceKeyData",
+          "parameterName": "Key Data",
+          "inputGenre": "KeyData",
+          "inputValue": "Demo/Wavelet/KeyData/RTData100"
+        },
+        "Pattern": {
+          "inputType": "IVLab.ABREngine.SurfaceTextureVisAsset",
+          "parameterName": "Pattern",
+          "inputGenre": "VisAsset",
+          "inputValue": "3bbc2064-6a0a-11ea-9014-005056bae6d8"
+        },
+        "Colormap": {
+          "inputType": "IVLab.ABREngine.ColormapVisAsset",
+          "parameterName": "Color",
+          "inputGenre": "VisAsset",
+          "inputValue": "0a14e42b-b9ae-464b-9809-2026388ccf85"
+        },
+        "Color Variable": {
+          "inputType": "IVLab.ABREngine.ScalarDataVariable",
+          "parameterName": "Color",
+          "inputGenre": "Variable",
+          "inputValue": "Demo/Wavelet/ScalarVar/Radius"
+        }
+      },
+      "renderHints": {
+        "Visible": true
+      }
+    },
+    "a4ec5825-ca99-41a8-8cd5-0747b7806569": {
+      "plateType": "Surfaces",
+      "uuid": "a4ec5825-ca99-41a8-8cd5-0747b7806569",
+      "name": "RTData230",
+      "inputValues": {
+        "Key Data": {
+          "inputType": "IVLab.ABREngine.SurfaceKeyData",
+          "parameterName": "Key Data",
+          "inputGenre": "KeyData",
+          "inputValue": "Demo/Wavelet/KeyData/RTData230"
+        },
+        "Pattern": {
+          "inputType": "IVLab.ABREngine.SurfaceTextureVisAsset",
+          "parameterName": "Pattern",
+          "inputGenre": "VisAsset",
+          "inputValue": "91095a14-72c5-11ea-bfdd-005056bae6d8"
+        },
+        "Colormap": {
+          "inputType": "IVLab.ABREngine.ColormapVisAsset",
+          "parameterName": "Color",
+          "inputGenre": "VisAsset",
+          "inputValue": "94f863cb-1f50-48d5-a7e3-9af665aa06ac"
+        },
+        "Color Variable": {
+          "inputType": "IVLab.ABREngine.ScalarDataVariable",
+          "parameterName": "Color",
+          "inputGenre": "Variable",
+          "inputValue": "Demo/Wavelet/ScalarVar/YAxis"
+        }
+      },
+      "renderHints": {
+        "Visible": true
+      }
+    },
+    "94c0059c-8615-4a07-9671-2fe0fc63af43": {
+      "plateType": "Glyphs",
+      "uuid": "94c0059c-8615-4a07-9671-2fe0fc63af43",
+      "name": "DensityRadius^5",
+      "inputValues": {
+        "Key Data": {
+          "inputType": "IVLab.ABREngine.PointKeyData",
+          "parameterName": "Key Data",
+          "inputGenre": "KeyData",
+          "inputValue": "Demo/Wavelet/KeyData/DensityRadius^5"
+        },
+        "Color Variable": {
+          "inputType": "IVLab.ABREngine.ScalarDataVariable",
+          "parameterName": "Color",
+          "inputGenre": "Variable",
+          "inputValue": "Demo/Wavelet/ScalarVar/XAxis"
+        },
+        "Colormap": {
+          "inputType": "IVLab.ABREngine.ColormapVisAsset",
+          "parameterName": "Color",
+          "inputGenre": "VisAsset",
+          "inputValue": "b85f1c2e-36b7-41c2-a7cf-7216551a1e03"
+        }
+      },
+      "renderHints": {
+        "Visible": true
+      }
+    },
+    "3cf91a81-703a-4d29-a139-1a2124cba1b5": {
+      "plateType": "Ribbons",
+      "uuid": "3cf91a81-703a-4d29-a139-1a2124cba1b5",
+      "name": "InputFlow",
+      "inputValues": {
+        "Key Data": {
+          "inputType": "IVLab.ABREngine.LineKeyData",
+          "parameterName": "Key Data",
+          "inputGenre": "KeyData",
+          "inputValue": "Demo/Wavelet/KeyData/InputFlow"
+        },
+        "Colormap": {
+          "inputType": "IVLab.ABREngine.ColormapVisAsset",
+          "parameterName": "Color",
+          "inputGenre": "VisAsset",
+          "inputValue": "66b3cde4-034d-11eb-a7e6-005056bae6d8"
+        },
+        "Color Variable": {
+          "inputType": "IVLab.ABREngine.ScalarDataVariable",
+          "parameterName": "Color",
+          "inputGenre": "Variable",
+          "inputValue": "Demo/Wavelet/ScalarVar/RTData"
+        },
+        "Texture": {
+          "inputType": "IVLab.ABREngine.LineTextureVisAsset",
+          "parameterName": "Texture",
+          "inputGenre": "VisAsset",
+          "inputValue": "6e2f8662-7905-11ea-9472-005056bae6d8"
+        },
+        "Ribbon Width": {
+          "inputType": "IVLab.ABREngine.LengthPrimitive",
+          "parameterName": "Ribbon",
+          "inputValue": "0.08m",
+          "inputGenre": "Primitive"
+        }
+      }
+    },
+    "a8548103-8da9-4e2a-8ec6-87ccf574756a": {
+      "plateType": "Ribbons",
+      "uuid": "a8548103-8da9-4e2a-8ec6-87ccf574756a",
+      "name": "OutputFlow",
+      "inputValues": {
+        "Key Data": {
+          "inputType": "IVLab.ABREngine.LineKeyData",
+          "parameterName": "Key Data",
+          "inputGenre": "KeyData",
+          "inputValue": "Demo/Wavelet/KeyData/OutputFlow"
+        },
+        "Colormap": {
+          "inputType": "IVLab.ABREngine.ColormapVisAsset",
+          "parameterName": "Color",
+          "inputGenre": "VisAsset",
+          "inputValue": "66b3cde4-034d-11eb-a7e6-005056bae6d8"
+        },
+        "Color Variable": {
+          "inputType": "IVLab.ABREngine.ScalarDataVariable",
+          "parameterName": "Color",
+          "inputGenre": "Variable",
+          "inputValue": "Demo/Wavelet/ScalarVar/RTData"
+        },
+        "Texture": {
+          "inputType": "IVLab.ABREngine.LineTextureVisAsset",
+          "parameterName": "Texture",
+          "inputGenre": "VisAsset",
+          "inputValue": "6e2f8662-7905-11ea-9472-005056bae6d8"
+        },
+        "Ribbon Width": {
+          "inputType": "IVLab.ABREngine.LengthPrimitive",
+          "parameterName": "Ribbon",
+          "inputValue": "0.08m",
+          "inputGenre": "Primitive"
+        }
+      }
+    }
+  },
+  "uiData": {
+    "compose": {
+      "impressionData": {
+        "709c289f-8220-4790-82a3-4ee58e51bcbe": {
+          "position": {
+            "top": 66.55000305175781,
+            "left": 33
+          }
+        },
+        "a4ec5825-ca99-41a8-8cd5-0747b7806569": {
+          "position": {
+            "top": 75.55000305175781,
+            "left": 274
+          }
+        },
+        "94c0059c-8615-4a07-9671-2fe0fc63af43": {
+          "position": {
+            "top": 443.99998474121094,
+            "left": 24
+          }
+        },
+        "3cf91a81-703a-4d29-a139-1a2124cba1b5": {
+          "position": {
+            "top": 805.5500183105469,
+            "left": 40
+          }
+        },
+        "a8548103-8da9-4e2a-8ec6-87ccf574756a": {
+          "position": {
+            "top": 762.5500183105469,
+            "left": 356
+          }
+        }
+      }
+    }
+  },
+  "dataRanges": {
+    "scalarRanges": {
+      "Demo/Wavelet/ScalarVar/AngularVelocity": {
+        "min": -0.03436,
+        "max": 0.0373
+      },
+      "Demo/Wavelet/ScalarVar/Rotation": {
+        "min": -0.38904,
+        "max": 0.46103
+      },
+      "Demo/Wavelet/ScalarVar/IntegrationTime": {
+        "min": -1.4429,
+        "max": 377.64282
+      },
+      "Demo/Wavelet/ScalarVar/RTData": {
+        "min": 70.33422088623047,
+        "max": 275.8234558105469
+      },
+      "Demo/Wavelet/ScalarVar/Radius": {
+        "min": 132.87376403808594,
+        "max": 250.5418243408203
+      },
+      "Demo/Wavelet/ScalarVar/YAxis": {
+        "min": -5.802361488342285,
+        "max": 4.486077785491943
+      },
+      "Demo/Wavelet/ScalarVar/XAxis": {
+        "min": -9.99993896484375,
+        "max": 9.9915771484375
+      }
+    }
+  },
+  "localVisAssets": {
+    "0a14e42b-b9ae-464b-9809-2026388ccf85": {
+      "artifactJson": {
+        "artifactData": {
+          "colormap": "colormap.xml"
+        },
+        "artist": "Francesca Samsel",
+        "class": "linear",
+        "family": "Green",
+        "hidden": false,
+        "preview": "thumbnail.png",
+        "tags": [],
+        "type": "colormap",
+        "uuid": "0a14e42b-b9ae-464b-9809-2026388ccf85"
+      },
+      "artifactDataContents": {
+        "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.9019607843137255\" g=\"0.9764705882352941\" b=\"0.9803921568627451\" x=\"0.01701509163354742\"></Point><Point r=\"0.07450980392156863\" g=\"0.4745098039215686\" b=\"0.48627450980392156\" x=\"1.010046450518565\"></Point></ColorMap></ColorMaps>"
+      }
+    },
+    "94f863cb-1f50-48d5-a7e3-9af665aa06ac": {
+      "artifactJson": {
+        "artifactData": {
+          "colormap": "colormap.xml"
+        },
+        "artist": "Francesca Samsel",
+        "class": "linear",
+        "family": "Green",
+        "hidden": false,
+        "preview": "thumbnail.png",
+        "tags": [],
+        "type": "colormap",
+        "uuid": "94f863cb-1f50-48d5-a7e3-9af665aa06ac"
+      },
+      "artifactDataContents": {
+        "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.9333333333333333\" g=\"0.9019607843137255\" b=\"0.9803921568627451\" x=\"0.01701509163354742\"></Point><Point r=\"0.5450980392156862\" g=\"0.4549019607843137\" b=\"0.6784313725490196\" x=\"1.010046450518565\"></Point></ColorMap></ColorMaps>"
+      }
+    },
+    "b85f1c2e-36b7-41c2-a7cf-7216551a1e03": {
+      "artifactJson": {
+        "artifactData": {
+          "colormap": "colormap.xml"
+        },
+        "artist": "Francesca Samsel",
+        "class": "linear",
+        "family": "Green",
+        "hidden": false,
+        "preview": "thumbnail.png",
+        "tags": [],
+        "type": "colormap",
+        "uuid": "b85f1c2e-36b7-41c2-a7cf-7216551a1e03"
+      },
+      "artifactDataContents": {
+        "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.9411764705882353\" g=\"0.9803921568627451\" b=\"0.9019607843137255\" x=\"0.05882693832344299\"></Point><Point r=\"0.8470588235294118\" g=\"0.9294117647058824\" b=\"0.7333333333333333\" x=\"0.2184669414879138\"></Point><Point r=\"0.7490196078431373\" g=\"0.8666666666666667\" b=\"0.5647058823529412\" x=\"0.3871951219512195\"></Point><Point r=\"0.6745098039215687\" g=\"0.8274509803921568\" b=\"0.43137254901960786\" x=\"0.558826938323443\"></Point><Point r=\"0.592156862745098\" g=\"0.7490196078431373\" b=\"0.3058823529411765\" x=\"0.7087107801271233\"></Point><Point r=\"0.48627450980392156\" g=\"0.6078431372549019\" b=\"0.17647058823529413\" x=\"0.8880081176757812\"></Point><Point r=\"0.42745098039215684\" g=\"0.48627450980392156\" b=\"0.07450980392156863\" x=\"1.058826938323443\"></Point></ColorMap></ColorMaps>"
+      }
+    }
+  },
+  "name": "WaveletForFilterAndQuery"
+}

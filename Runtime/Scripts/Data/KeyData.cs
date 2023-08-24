@@ -163,6 +163,18 @@ namespace IVLab.ABREngine
             return dataset;
         }
 
+        public RawDataset GetRawDataset()
+        {
+            if (ABREngine.Instance.Data.TryGetRawDataset(this.Path, out RawDataset rds))
+            {
+                return rds;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public RawABRInput GetRawABRInput()
         {
             return new RawABRInput {

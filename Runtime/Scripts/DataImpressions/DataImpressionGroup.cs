@@ -41,7 +41,7 @@ namespace IVLab.ABREngine
     /// method.
     /// </remarks>
     [AddComponentMenu("ABR/Data Impression Group")]
-    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter
+    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter, IDataAccessor
     {
 #region Member variables
         /// <summary>
@@ -567,8 +567,10 @@ namespace IVLab.ABREngine
             }
         }
 
+        // TODO: Take group root into account
         public Matrix4x4 WorldToDataMatrix { get => GroupToDataMatrix; }
 
+        // TODO: Take group root into account
         public Matrix4x4 DataToWorldMatrix { get => GroupToDataMatrix.inverse; }
 
         public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
@@ -582,6 +584,30 @@ namespace IVLab.ABREngine
         public bool ContainsWorldSpacePoint(Vector3 worldSpacePoint) => BoundsInWorldSpace.Contains(worldSpacePoint);
 
         public bool ContainsDataSpacePoint(Vector3 dataSpacePoint) => BoundsInDataSpace.Contains(dataSpacePoint);
+#endregion
+
+#region IDataAccessor implementation
+        // public DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
+
+        // public DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
+
+        // public List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
+
+        // public List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
+
+        // public float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
 #endregion
     }
 }

@@ -29,8 +29,9 @@ namespace IVLab.ABREngine
     /// Main class for Data Impressions (layers) in an ABR visualization. Every
     /// Data Impression is a GameObject in the scene.
     /// </summary>
-    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData
+    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData, ICoordSpaceConverter, IDataAccessor
     {
+#region Properties
         /// <summary>
         ///     Unique identifier for this Data Impression
         ///
@@ -79,7 +80,9 @@ namespace IVLab.ABREngine
         ///     Cache of current KeyData rendering information
         /// </summary>
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
+#endregion
 
+#region Constructor (Create) method
         /// <summary>
         ///     Construct a data impession with a given UUID and name. Note that
         ///     this will be called from <see cref="ABRStateParser"/> and must
@@ -132,7 +135,9 @@ namespace IVLab.ABREngine
 
             return di;
         }
+#endregion
 
+#region DataImpression methods
         /// <summary>
         /// Check if the DataImpression has a particular tag
         /// </summary>
@@ -141,6 +146,15 @@ namespace IVLab.ABREngine
         public bool HasTag(string tag)
         {
             return Tags.Contains(tag);
+        }
+
+        /// <summary>
+        /// Get the group that this <see cref="DataImpression"/> is a part of.
+        /// </summary>
+        /// <returns></returns>
+        public DataImpressionGroup GetDataImpressionGroup()
+        {
+            return ABREngine.Instance.GetGroupFromImpression(this);
         }
 
         /// <summary>
@@ -210,14 +224,18 @@ namespace IVLab.ABREngine
         {
             RenderInfo = null;
         }
+#endregion
 
+#region IHasDataset implementation
         /// <summary>
         ///     By default, there's no dataset. DataImpressions should only have
         ///     one dataset, and it's up to them individually to enforce that
         ///     they correctly implement this.
         /// </summary>
         public abstract Dataset GetDataset();
+#endregion
 
+#region IHasKeyData implementation
         /// <summary>
         /// By default, there's no data. DataImpressions should only have
         /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
@@ -238,6 +256,69 @@ namespace IVLab.ABREngine
         /// they correctly implement this.
         /// </summary>
         public abstract DataTopology GetKeyDataTopology();
+#endregion
+
+#region ICoordSpaceConverter implementation
+        public Bounds BoundsInWorldSpace
+        {
+            get => new Bounds(
+                DataToWorldMatrix.MultiplyPoint3x4(BoundsInDataSpace.center),
+                DataToWorldMatrix.MultiplyVector(BoundsInDataSpace.size)
+            );
+        }
+
+        public Bounds BoundsInDataSpace
+        {
+            get
+            {
+                RawDataset rds = this.GetKeyData()?.GetRawDataset();
+                if (rds != null)
+                    return rds.bounds;
+                else
+                    return new Bounds();
+            }
+        }
+
+        public Matrix4x4 WorldToDataMatrix { get => GetDataImpressionGroup().WorldToDataMatrix; }
+
+        public Matrix4x4 DataToWorldMatrix { get => GetDataImpressionGroup().DataToWorldMatrix; }
+
+        public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
+
+        public Vector3 DataSpacePointToWorldSpace(Vector3 dataSpacePoint) => DataToWorldMatrix.MultiplyPoint3x4(dataSpacePoint);
+
+        public Vector3 WorldSpaceVectorToDataSpace(Vector3 worldSpaceVector) => WorldToDataMatrix.MultiplyVector(worldSpaceVector);
+
+        public Vector3 DataSpaceVectorToWorldSpace(Vector3 dataSpaceVector) => DataToWorldMatrix.MultiplyVector(dataSpaceVector);
+
+        public bool ContainsWorldSpacePoint(Vector3 worldSpacePoint) => BoundsInWorldSpace.Contains(worldSpacePoint);
+
+        public bool ContainsDataSpacePoint(Vector3 dataSpacePoint) => BoundsInDataSpace.Contains(dataSpacePoint);
+#endregion
+
+#region IDataAccessor implementation
+        public abstract DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
+
+        public abstract DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
+
+        public abstract List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
+
+        public abstract List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
+
+        public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        public abstract float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
+#endregion
     }
 
 
