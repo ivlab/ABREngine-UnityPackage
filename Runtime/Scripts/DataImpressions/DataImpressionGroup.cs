@@ -41,7 +41,7 @@ namespace IVLab.ABREngine
     /// method.
     /// </remarks>
     [AddComponentMenu("ABR/Data Impression Group")]
-    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter, IDataAccessor
+    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter
     {
 #region Member variables
         /// <summary>

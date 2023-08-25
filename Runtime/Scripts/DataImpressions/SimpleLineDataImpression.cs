@@ -193,6 +193,18 @@ namespace IVLab.ABREngine
         public override void SetKeyData(KeyData kd) => keyData = kd;
         public override DataTopology GetKeyDataTopology() => DataTopology.LineStrip;
 
+        // protected override int GetIndexForPackedScalarVariable(ScalarDataVariable variable)
+        // {
+        //     for (int i = 0; i < InputIndexer.InputCount; i++)
+        //     {
+        //         if (InputIndexer.GetInputValue(i) == variable)
+        //         {
+        //             return i;
+        //         }
+        //     }
+        //     return -1;
+        // }
+
         public override void ComputeGeometry()
         {
             SimpleLineRenderInfo renderInfo = null;
@@ -712,117 +724,122 @@ namespace IVLab.ABREngine
         }
 
 #region IDataAccessor implementation
-        public override DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint)
-        {
-            return GetClosestDataInDataSpace(WorldSpacePointToDataSpace(worldSpacePoint));
-        }
+        // public override DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint)
+        // {
+        //     return GetClosestDataInDataSpace(WorldSpacePointToDataSpace(worldSpacePoint));
+        // }
 
-        public override DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint)
-        {
-            SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
-            DataPoint closest = null;
-            if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
-            {
-                closest = new DataPoint()
-                {
-                    cellIndex = 0,
-                    dataSpacePoint = renderInfo.vertices[0][0],
-                };
-                // int closestLine = 0;
-                float closestDist = (dataSpacePoint - closest.dataSpacePoint).magnitude;
-                for (int l = 0; l < renderInfo.vertices.Length; l++)
-                {
-                    for (int v = 0; v < renderInfo.vertices[l].Length; v++)
-                    {
-                        float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
-                        if (dist < closestDist)
-                        {
-                            closest.cellIndex = l;
-                            closest.vertexIndex = v;
-                            closest.dataSpacePoint = renderInfo.vertices[l][v];
-                            closestDist = dist;
-                        }
-                    }
-                }
-            }
+        // public override DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint)
+        // {
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     DataPoint closest = null;
+        //     if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
+        //     {
+        //         closest = new DataPoint()
+        //         {
+        //             cellIndex = 0,
+        //             dataSpacePoint = renderInfo.vertices[0][0],
+        //         };
+        //         // int closestLine = 0;
+        //         float closestDist = (dataSpacePoint - closest.dataSpacePoint).magnitude;
+        //         for (int l = 0; l < renderInfo.vertices.Length; l++)
+        //         {
+        //             for (int v = 0; v < renderInfo.vertices[l].Length; v++)
+        //             {
+        //                 float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
+        //                 if (dist < closestDist)
+        //                 {
+        //                     closest.cellIndex = l;
+        //                     closest.vertexIndex = v;
+        //                     closest.dataSpacePoint = renderInfo.vertices[l][v];
+        //                     closestDist = dist;
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            closest.worldSpacePoint = DataSpacePointToWorldSpace(closest.dataSpacePoint);
-            return closest;
-        }
+        //     closest.worldSpacePoint = DataSpacePointToWorldSpace(closest.dataSpacePoint);
+        //     return closest;
+        // }
 
-        public override List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace)
-        {
+        // public override List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace)
+        // {
+        //     Vector3 radiusVecWorld = new Vector3(radiusInWorldSpace, 0, 0);
+        //     Vector3 radiusVecData = WorldSpaceVectorToDataSpace(radiusVecWorld);
 
-        }
+        //     return GetNearbyDataInDataSpace(WorldSpacePointToDataSpace(worldSpacePoint), radiusVecData.magnitude);
+        // }
 
-        public override List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace)
-        {
-            List<DataPoint> nearbyPoints = new List<DataPoint>();
-            SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
-            if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
-            {
-                for (int l = 0; l < renderInfo.vertices.Length; l++)
-                {
-                    for (int v = 0; v < renderInfo.vertices[l].Length; v++)
-                    {
-                        float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
-                        if (dist < radiusInDataSpace)
-                        {
-                            DataPoint point = new DataPoint()
-                            {
-                                cellIndex = l,
-                                vertexIndex = v,
-                                dataSpacePoint = renderInfo.vertices[l][v],
-                                worldSpacePoint = DataSpacePointToWorldSpace(renderInfo.vertices[l][v]),
-                            };
-                            nearbyPoints.Add(point);
-                        }
-                    }
-                }
-            }
-            return nearbyPoints;
-        }
+        // public override List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace)
+        // {
+        //     List<DataPoint> nearbyPoints = new List<DataPoint>();
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
+        //     {
+        //         for (int l = 0; l < renderInfo.vertices.Length; l++)
+        //         {
+        //             for (int v = 0; v < renderInfo.vertices[l].Length; v++)
+        //             {
+        //                 float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
+        //                 if (dist < radiusInDataSpace)
+        //                 {
+        //                     DataPoint point = new DataPoint()
+        //                     {
+        //                         cellIndex = l,
+        //                         vertexIndex = v,
+        //                         dataSpacePoint = renderInfo.vertices[l][v],
+        //                         worldSpacePoint = DataSpacePointToWorldSpace(renderInfo.vertices[l][v]),
+        //                     };
+        //                     nearbyPoints.Add(point);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return nearbyPoints;
+        // / }
 
-        public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
-        {
+        // public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
+        // {
+        //     // Vector3 closestPointInWorldSpace = GetClosestDataInWorldSpace(point).worldSpacePoint;
+        // }
+        // public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
 
-        }
-        public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
-        {
+        // }
 
-        }
+        // public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
+        // {
+        //     DataPoint closestPointInWorldSpace = GetClosestDataInDataSpace(point);
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     Color scalarsAtPoint = renderInfo.scalars[closestPointInWorldSpace.cellIndex][closestPointInWorldSpace.vertexIndex];
+        // }
+        // public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
 
-        public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
-        {
+        // }
 
-        }
-        public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
-        {
+        // public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
+        // {
 
-        }
+        // }
+        // public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
 
-        public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
-        {
+        // {
 
-        }
-        public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+        // }
+        // public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
+        // {
 
-        {
+        // }
+        // public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
 
-        }
-        public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
-        {
+        // }
 
-        }
-        public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
-        {
+        // public override float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable)
+        // {
 
-        }
-
-        public override float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable)
-        {
-
-        }
+        // }
 #endregion
     }
 }

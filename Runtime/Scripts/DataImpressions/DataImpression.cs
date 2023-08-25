@@ -29,7 +29,7 @@ namespace IVLab.ABREngine
     /// Main class for Data Impressions (layers) in an ABR visualization. Every
     /// Data Impression is a GameObject in the scene.
     /// </summary>
-    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData, ICoordSpaceConverter, IDataAccessor
+    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData, ICoordSpaceConverter
     {
 #region Properties
         /// <summary>
@@ -188,6 +188,11 @@ namespace IVLab.ABREngine
         public abstract void UpdateVisibility();
 
         /// <summary>
+        /// Get the index for the "packed" scalar variable in the <see cref="RenderInfo"/>
+        /// </summary>
+        // protected abstract int GetIndexForPackedScalarVariable(ScalarDataVariable variable);
+
+        /// <summary>
         ///     Unknown why it's necessary to copy each input individually, but here
         ///     we are.
         /// </summary>
@@ -297,27 +302,27 @@ namespace IVLab.ABREngine
 #endregion
 
 #region IDataAccessor implementation
-        public abstract DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
+        // public abstract DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
 
-        public abstract DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
+        // public abstract DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
 
-        public abstract List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
+        // public abstract List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
 
-        public abstract List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
+        // public abstract List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
 
-        public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
-        public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
 
-        public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
-        public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
 
-        public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
-        public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
 
-        public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
-        public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
 
-        public abstract float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
+        // public abstract float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
 #endregion
     }
 
