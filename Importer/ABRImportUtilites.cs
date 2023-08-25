@@ -32,7 +32,7 @@ namespace IVLab.ABREngine.Importer
     /// <summary>
     /// Editor utilities to assist developers when first importing ABR
     /// </summary>
-    [InitializeOnLoad]
+    // [InitializeOnLoad]
     public class ABRImportUtilities
     {
         private static string[] Dependencies = new string[]
@@ -47,13 +47,15 @@ namespace IVLab.ABREngine.Importer
         private static int dependencyIndex = 0;
         private static bool readyToAddNext = false;
 
-        static ABRImportUtilities()
-        {
-            if (EditorUtility.DisplayDialog("Editor restart needed.", "Finished importing ABR dependencies. To begin using ABR, restart the Unity editor.", "Restart Unity", "Cancel"))
-            {
-                ReopenUnityProject();
-            }
-        }
+        // TODO: Unity does not import the script until after an editor restart
+        // anyway so this code never runs.
+        // static ABRImportUtilities()
+        // {
+        //     if (EditorUtility.DisplayDialog("Editor restart needed.", "Finished importing ABR dependencies. To begin using ABR, restart the Unity editor.", "Restart Unity", "Cancel"))
+        //     {
+        //         ReopenUnityProject();
+        //     }
+        // }
 
         /// <summary>
         /// Import ABR dependencies from GitHub.
