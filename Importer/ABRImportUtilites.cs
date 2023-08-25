@@ -32,7 +32,8 @@ namespace IVLab.ABREngine.Importer
     /// <summary>
     /// Editor utilities to assist developers when first importing ABR
     /// </summary>
-    public class ABRImportUtilities : MonoBehaviour
+    [InitializeOnLoad]
+    public class ABRImportUtilities
     {
         private static string[] Dependencies = new string[]
         {
@@ -45,6 +46,14 @@ namespace IVLab.ABREngine.Importer
         private static AddRequest request;
         private static int dependencyIndex = 0;
         private static bool readyToAddNext = false;
+
+        static ABRImportUtilities()
+        {
+            if (EditorUtility.DisplayDialog("Editor restart needed.", "Finished importing ABR dependencies. To begin using ABR, restart the Unity editor.", "Restart Unity", "Cancel"))
+            {
+                ReopenUnityProject();
+            }
+        }
 
         /// <summary>
         /// Import ABR dependencies from GitHub.
@@ -91,10 +100,6 @@ namespace IVLab.ABREngine.Importer
             {
                 EditorApplication.update -= Progress;
                 Debug.Log("Finished importing ABR dependencies");
-                if (EditorUtility.DisplayDialog("Editor restart needed.", "Finished importing ABR dependencies. To begin using ABR, restart the Unity editor.", "Restart Unity", "Cancel"))
-                {
-                    ReopenUnityProject();
-                }
             }
         }
     }
