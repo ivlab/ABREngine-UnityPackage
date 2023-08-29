@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mediaPath: C:\V\demos\ABRDemo\media
   serverUrl: 
-  loadStateOnStart: WaveletForFilterAndQuery-compose.json
-  defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481,
-    type: 3}
+  loadStateOnStart: ABRState.json
+  defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481, type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   defaultNanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   defaultNanTexture: {fileID: 0}
@@ -29,3 +28,5 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 1, y: 1, z: 1}
   defaultCamera: {fileID: 0}
+  schemaUrl: http://localhost:9000/
+  schemaName: ABRSchema_2023-8-0.json

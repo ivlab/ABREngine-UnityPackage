@@ -197,7 +197,7 @@ namespace IVLab.ABREngine
                         string configName = File.ReadAllText(ConfigNamePath);
                         var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
                         int configIndex = configs.FindIndex(cfg => cfg.name == configName);
-                        if (configIndex > 0)
+                        if (configIndex >= 0)
                         {
                             ABRConfig config = configs[configIndex];
                             s_ConfigPrototype = config;

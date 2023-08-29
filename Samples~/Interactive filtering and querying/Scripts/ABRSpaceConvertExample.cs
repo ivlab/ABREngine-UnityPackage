@@ -28,14 +28,29 @@ public class ABRSpaceConvertExample : MonoBehaviour
         {
             Vector3 point1DataSpace = group.WorldSpacePointToDataSpace(measurePoint1.position);
             Vector3 point2DataSpace = group.WorldSpacePointToDataSpace(measurePoint2.position);
+            Vector3 point1WorldSpace = group.DataSpacePointToWorldSpace(point1DataSpace);
+            Vector3 point2WorldSpace = group.DataSpacePointToWorldSpace(point2DataSpace);
+
 
             Vector3 diffWorldSpace = measurePoint2.position - measurePoint1.position;
             Vector3 diffDataSpace = point2DataSpace - point1DataSpace;
             Vector3 half = measurePoint1.position + diffWorldSpace * 0.5f;
 
             DebugDraw.Line(measurePoint2.position, measurePoint1.position, Color.cyan, thickness: 0.01f);
-            DebugDraw.Text(half + Vector3.up * 0.1f, "World Space Distance: " + diffWorldSpace.magnitude.ToString("F2"), Color.cyan);
-            DebugDraw.Text(half + Vector3.up * 0.2f, "Data Space Distance: " + diffDataSpace.magnitude.ToString("F2"), Color.cyan);
+            DebugDraw.Text(half + Vector3.up * 0.1f, "World Space Distance: " + diffWorldSpace.magnitude.ToString("F3"), Color.cyan);
+            DebugDraw.Text(half + Vector3.up * 0.2f, "Data Space Distance: " + diffDataSpace.magnitude.ToString("F3"), Color.cyan);
+
+            DebugDraw.Text(measurePoint1.position + Vector3.up * 0.3f, "Point 1 World Space from data space: " + point1WorldSpace.ToString("F3"), Color.cyan);
+            DebugDraw.Text(measurePoint1.position + Vector3.up * 0.2f, "Point 1 Data Space: " + point1DataSpace.ToString("F3"), Color.cyan);
+            DebugDraw.Text(measurePoint1.position + Vector3.up * 0.1f, "Point 1 World Space: " + measurePoint1.position.ToString("F3"), Color.cyan);
+
+            DebugDraw.Text(measurePoint2.position + Vector3.up * 0.3f, "Point 2 World Space from data space: " + point2WorldSpace.ToString("F3"), Color.cyan);
+            DebugDraw.Text(measurePoint2.position + Vector3.up * 0.2f, "Point 2 Data Space: " + point2DataSpace.ToString("F3"), Color.cyan);
+            DebugDraw.Text(measurePoint2.position + Vector3.up * 0.1f, "Point 2 World Space: " + measurePoint2.position.ToString("F3"), Color.cyan);
+
+            DebugDraw.Text(group.BoundsInWorldSpace.center + group.BoundsInWorldSpace.extents + Vector3.up * 0.1f, "World Space Bounds", Color.green);
+            DebugDraw.Bounds(group.BoundsInWorldSpace, Color.green, thickness: 0.01f);
+
         }
     }
 }

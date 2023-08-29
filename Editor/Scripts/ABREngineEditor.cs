@@ -49,7 +49,7 @@ namespace IVLab.ABREngine
             // "prime" the config - make sure the engine has loaded it
             ABRConfig config = ABREngine.ConfigPrototype;
             var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
-            if (configs.Count > 0)
+            if (configs.Count > 0 && config != null)
                 configIndex = configs.FindIndex(cfg => cfg.name == config.name);
             else
                 configIndex = 0;

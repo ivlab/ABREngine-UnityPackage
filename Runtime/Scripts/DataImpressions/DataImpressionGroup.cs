@@ -555,23 +555,47 @@ namespace IVLab.ABREngine
 #endregion
 
 #region ICoordSpaceConverter implementation
-        public Bounds BoundsInWorldSpace { get => GroupBounds; }
+        /// <summary>
+        /// Get the bounds of this data impression group in Unity world space.
+        /// </summary>
+        /// <remarks>
+        /// > [!INFO]
+        /// > If the data impression group has a transform applied, this returns
+        /// > different bounds than those specified by the <see cref="GroupBounds"/>.
+        /// </remarks>
+        public Bounds BoundsInWorldSpace
+        {
+            get
+            {
+                Vector3 dataCenter = transform.localToWorldMatrix.MultiplyPoint3x4(GroupBounds.center);
+                Vector3 dataSize = transform.localToWorldMatrix.MultiplyVector(GroupBounds.size);
+                return new Bounds(dataCenter, dataSize);
+            }
+        }
 
         public Bounds BoundsInDataSpace
         {
             get
             {
-                Vector3 dataCenter = WorldToDataMatrix.MultiplyPoint3x4(GroupBounds.center);
-                Vector3 dataSize = WorldToDataMatrix.MultiplyVector(GroupBounds.size);
+                Vector3 dataCenter = GroupToDataMatrix.MultiplyPoint3x4(GroupBounds.center);
+                Vector3 dataSize = GroupToDataMatrix.MultiplyVector(GroupBounds.size);
                 return new Bounds(dataCenter, dataSize);
             }
         }
 
-        // TODO: Take group root into account
-        public Matrix4x4 WorldToDataMatrix { get => GroupToDataMatrix; }
+        /// <summary>
+        /// Transforms from world space to data space (the Data Impression Group's dataset space)
+        ///
+        /// World Space ==(transform.worldToLocalMatrix)=> Group local space ==(GroupToDataMatrix)==> Data space
+        /// </summary>
+        public Matrix4x4 WorldToDataMatrix { get => GroupToDataMatrix.inverse * this.transform.worldToLocalMatrix; }
 
-        // TODO: Take group root into account
-        public Matrix4x4 DataToWorldMatrix { get => GroupToDataMatrix.inverse; }
+        /// <summary>
+        /// Transforms from data space (Data Impression Group's data space) to world space
+        ///
+        /// Data Space ==(DataToGroupMatrix)=> Group local space ==(transform.localToWorldMatrix)==> World space
+        /// </summary>
+        public Matrix4x4 DataToWorldMatrix { get => this.transform.localToWorldMatrix * GroupToDataMatrix; }
 
         public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
 

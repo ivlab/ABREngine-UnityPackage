@@ -148,13 +148,17 @@ namespace IVLab.ABREngine
         /// </summary>
         public Uri ServerUrl { get => new Uri(serverUrl); }
 
+        [Header("ABR Schema Configuration")]
         /// <summary>
         /// Where to find the Schema online
         /// </summary>
         // private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
-        private const string SchemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/";
-        private string schemaName = "ABRSchema_2023-8-0.json";
+        [Tooltip("Root URL to find the ABR schema at")]
+        public string schemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/";
+
+        [Tooltip("Filename that ABR schema is located at in the SchemaURL")]
+        public string schemaName = "ABRSchema_2023-8-0.json";
 
         void Reset()
         {
@@ -200,11 +204,11 @@ namespace IVLab.ABREngine
             }
 
             // Load the schema
-            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(SchemaUrl + schemaName).Result;
+            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(schemaUrl + schemaName).Result;
             string schemaContents = null;
             if (!resp.IsSuccessStatusCode)
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", SchemaUrl + schemaName, backupSchema);
+                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", schemaUrl + schemaName, backupSchema);
                 using (StreamReader reader = new StreamReader(backupSchema))
                 {
                     schemaContents = reader.ReadToEnd();
