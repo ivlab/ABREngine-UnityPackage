@@ -504,8 +504,14 @@ namespace IVLab.ABREngine
                 else
                 {
                     block.SetInt("_HasPerGlyphVisibility", 0);
+                    // Bridger 2023-07:
                     // This line generates a warning about disposing of compute buffers... commenting out for now
-                    // block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
+                    // 2023-08-29:
+                    // This line being commented out causes glyphs to not work on MacOS.
+                    // For now, we just check if we're on MacOS to do this line...
+#if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+                    block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
+#endif
                 }
 
                 // Get keydata-specific range, if there is one
