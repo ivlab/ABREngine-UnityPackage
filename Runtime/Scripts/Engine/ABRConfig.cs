@@ -59,6 +59,9 @@ namespace IVLab.ABREngine
         [Tooltip("Load a state from Resources or StreamingAssets folder on ABREngine startup. Example: `testState.json` Leave blank for no startup state.")]
         public string loadStateOnStart;
 
+        [Tooltip("ABREngine should persist between scenes")]
+        public bool persistBetweenScenes = true;
+
         [Header("Styling Defaults")]
 
         /// <summary>
@@ -155,10 +158,7 @@ namespace IVLab.ABREngine
         // private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
         [Tooltip("Root URL to find the ABR schema at")]
-        public string schemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/";
-
-        [Tooltip("Filename that ABR schema is located at in the SchemaURL")]
-        public string schemaName = "ABRSchema_2023-8-0.json";
+        public string schemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/ABRSchema_2023-8-0.json";
 
         void Reset()
         {
@@ -204,11 +204,11 @@ namespace IVLab.ABREngine
             }
 
             // Load the schema
-            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(schemaUrl + schemaName).Result;
+            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(schemaUrl).Result;
             string schemaContents = null;
             if (!resp.IsSuccessStatusCode)
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", schemaUrl + schemaName, backupSchema);
+                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", schemaUrl, backupSchema);
                 using (StreamReader reader = new StreamReader(backupSchema))
                 {
                     schemaContents = reader.ReadToEnd();
@@ -222,12 +222,12 @@ namespace IVLab.ABREngine
             Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
-                Debug.LogErrorFormat("Unable to parse schema `{0}`.", schemaName);
+                Debug.LogErrorFormat("Unable to parse schema `{0}`.", schemaUrl);
                 return;
             }
             if (Schema.Valid ?? false)
             {
-                Debug.LogErrorFormat("Schema `{0}` is invalid.", schemaName);
+                Debug.LogErrorFormat("Schema `{0}` is invalid.", schemaUrl);
                 return;
             }
             SchemaJson = JObject.Parse(schemaContents);

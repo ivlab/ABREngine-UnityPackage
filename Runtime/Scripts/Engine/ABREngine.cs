@@ -300,7 +300,7 @@ namespace IVLab.ABREngine
         {
             get
             {
-                if (Config.mediaPath != null)
+                if (Config.mediaPath != null && Config.mediaPath.Length != 0)
                 {
                     return Path.GetFullPath(Config.mediaPath);
                 }
@@ -348,6 +348,12 @@ namespace IVLab.ABREngine
             else
             {
                 throw new Exception("ABR configuration not found, please create one first and select it in the ABREngine inspector.");
+            }
+
+            // Don't destroy ABREngine on new scene loading, if desired
+            if (Config.persistBetweenScenes)
+            {
+                DontDestroyOnLoad(this);
             }
 
             // Initialize the default DataImpressionGroup (where impressions go
