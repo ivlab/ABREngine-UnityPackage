@@ -89,6 +89,8 @@ namespace IVLab.ABREngine
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in
         ///     persistentData, it will be downloaded. Default: null
+        ///     TODO: support library downloads as well. might work already out of the box
+        ///     (https://sculptingvis.tacc.utexas.edu/library/[uuid] )... not sure though
         /// </summary>
         [Tooltip("Server to load VisAssets from (e.g. `http://192.168.137.1:8000/media/visassets`")]
         public string visAssetServerUrl;
@@ -353,6 +355,13 @@ namespace IVLab.ABREngine
             /// Dataset folder within media folder
             /// </summary>
             public const string DatasetFolder = "datasets";
+
+            /// <summary>
+            /// Folder to save thumbnail screenshots of state in
+            ///
+            /// TODO: ABRScreenshot component into ABR core
+            /// </summary>
+            public const string ThumbnailsFolder = "thumbnails";
 
             /// <summary>
             /// Default name for the media folder
