@@ -108,6 +108,9 @@ namespace IVLab.ABREngine
         public RawDataset LoadData(string dataPath)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
+#if !UNITY_2020_OR_NEWER
+            Debug.LogWarning("Loading data from Resources folder may not work correctly in Unity < 2020");
+#endif
 
             // Fetch both files from resources
             TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
