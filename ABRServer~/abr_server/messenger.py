@@ -28,17 +28,11 @@ logger = logging.getLogger('django.server')
 
 class ClientMessenger(WebsocketConsumer):
     def __init__(self, *args, **kwargs):
-        resp = requests.get(settings.WS_SEND_SCHEMA)
-        if resp.status_code != 200:
-            logger.error('Unable to load schema from url {0}'.format(settings.WS_SEND_SCHEMA))
-            return
-        self.outgoing_schema = resp.json()
+        with open(settings.WS_SEND_SCHEMA_PATH) as fin:
+            self.outgoing_schema = json.load(fin)
 
-        resp = requests.get(settings.WS_RECEIVE_SCHEMA)
-        if resp.status_code != 200:
-            logger.error('Unable to load schema from url {0}'.format(settings.WS_RECEIVE_SCHEMA))
-            return
-        self.incoming_schema = resp.json()
+        with open(settings.WS_RECEIVE_SCHEMA_PATH) as fin:
+            self.incoming_schema = json.load(fin)
 
         self.id = None
         super().__init__(*args, **kwargs)

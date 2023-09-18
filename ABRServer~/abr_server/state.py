@@ -40,45 +40,9 @@ logger = logging.getLogger('django.server')
 
 class State():
     def __init__(self):
-        # Make sure the backup location exists
-        if not settings.BACKUP_PATH.parent.exists():
-            os.makedirs(settings.BACKUP_PATH.parent)
-        settings.BACKUP_PATH.touch()
-        self.backup_path = settings.BACKUP_PATH.resolve()
-
-        resp = requests.get(settings.SCHEMA_URL)
-
-        # Get most recent backed up schema
-        try:
-            backup_schema_dir = os.path.join(settings.STATIC_ROOT, 'schemas')
-            backup_schema = list(sorted(os.listdir(backup_schema_dir), reverse=True))[0]
-        except:
-            logger.error('Unable to find backup schema in {0}'.format(backup_schema_dir))
-            backup_schema = None
-
-        if backup_schema is not None:
-            backup_schema = os.path.join(backup_schema_dir, backup_schema)
-
-        if resp.status_code != 200:
-            logger.error('Unable to load schema from url {0}, using backup schema {1}'.format(settings.SCHEMA_URL, backup_schema))
-            with open(backup_schema) as fin:
-                self.state_schema = json.load(fin)
-        else:
-            self.state_schema = resp.json()
-            # And save a backup copy to the folder if necessary
-            need_backup = True
-            if backup_schema is not None:
-                with open(backup_schema) as fin:
-                    if fin.read() == resp.text:
-                        need_backup = False
-            if need_backup:
-                schema_name = datetime.datetime.now().isoformat().replace(':', '_') + '.json'
-                if not os.path.isdir(backup_schema_dir):
-                    os.makedirs(backup_schema_dir)
-                schema_bak_path = Path(backup_schema_dir).joinpath(schema_name)
-                with open(schema_bak_path, 'w') as fout:
-                    fout.write(resp.text)
-                logger.info('Saved backup schema to ' + str(schema_bak_path))
+        # load the schema
+        with open(settings.ABR_SCHEMA_PATH) as fin:
+            self.state_schema = json.load(fin)
 
         # Lock around state modifications
         self._state_lock = Lock()

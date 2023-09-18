@@ -183,10 +183,11 @@ if not THUMBNAILS_PATH.exists():
 VISASSET_JSON = 'artifact.json'
 VISASSET_LIBRARY = config['VisAssets']['download_missing_from']
 
-WS_SEND_SCHEMA = config['Schemas']['notifier_send']
-WS_RECEIVE_SCHEMA = config['Schemas']['notifier_receive']
+SCHEMA_PATH = Path(BASE_DIR).parent.joinpath('ABRSchemas~')
 
-SCHEMA_URL = config['Schemas']['abr']
+WS_SEND_SCHEMA_PATH = SCHEMA_PATH.joinpath(config['Schemas']['notifier_send'])
+WS_RECEIVE_SCHEMA_PATH = SCHEMA_PATH.joinpath(config['Schemas']['notifier_receive'])
+ABR_SCHEMA_PATH = SCHEMA_PATH.joinpath(config['Schemas']['abr_schema_name'])
 
 BACKUP_LOCATIONS = {
     'linux': Path('~/.config/abr/'),
