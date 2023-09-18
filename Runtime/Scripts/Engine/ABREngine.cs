@@ -195,8 +195,7 @@ namespace IVLab.ABREngine
                     if (File.Exists(ConfigNamePath))
                     {
                         string configName = File.ReadAllText(ConfigNamePath);
-                        // var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
-                        var configs = Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
+                        var configs = GetABRConfigs();
                         int configIndex = configs.FindIndex(cfg => cfg.name == configName);
                         if (configIndex >= 0)
                         {
@@ -500,6 +499,15 @@ namespace IVLab.ABREngine
             // Screenshot component on default camera
             if (config.DefaultCamera.GetComponent<Screenshot>() == null)
                 Debug.LogWarning("ABREngine.CheckABRScene(): Screenshot component not found on ABR default camera. State thumbnails will not be saved.");
+        }
+
+        /// <summary>
+        /// Get all the configurations available to ABR
+        /// </summary>
+        /// <returns></returns>
+        public static List<ABRConfig> GetABRConfigs()
+        {
+            return Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
         }
 
         /// <summary>
