@@ -352,12 +352,12 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Get the bounds of the container containing all the data in this DataImpressionGroup
         /// </summary>
-        public Bounds? GetContainerBounds()
+        public bool TryGetContainerBoundsInGroupSpace(out Bounds container)
         {
             // If we're using auto data containers, try to find one attached to
             // the same object as the DataImpressionGroup:
             ABRDataContainer containerInEditor = this.GetComponent<ABRDataContainer>();
-            Bounds? groupContainer;
+            Bounds groupContainer;
             if (containerInEditor != null)
             {
                 // ... if found, use it
@@ -372,10 +372,24 @@ namespace IVLab.ABREngine
                 }
                 else
                 {
-                    groupContainer = null;
+                    container = new Bounds();
+                    return false;
                 }
             }
-            return groupContainer;
+            container = groupContainer;
+            return true;
+        }
+
+        public bool TryGetContainerBoundsInWorldSpace(out Bounds container)
+        {
+            if (TryGetContainerBoundsInGroupSpace(out container))
+            {
+                container.center = this.transform.localToWorldMatrix.MultiplyPoint3x4(container.center);
+                container.extents = this.transform.localToWorldMatrix.MultiplyVector(container.extents);
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -388,11 +402,11 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
-            Bounds? groupContainer = GetContainerBounds();
+            Bounds groupContainer;
 
             // Skip recalculating bounds if there's not an ABRDataContainer on
             // this group AND the ABRConfig has auto data containers disabled
-            if (!groupContainer.HasValue)
+            if (!TryGetContainerBoundsInGroupSpace(out groupContainer))
             {
                 GroupToDataMatrix = Matrix4x4.identity;
                 return false;
@@ -434,12 +448,12 @@ namespace IVLab.ABREngine
                         // bounds (make sure to not assume we're including (0, 0, 0) in
                         // the bounds)
                         ds.DataSpaceBounds = originalBounds;
-                        NormalizeWithinBounds.Normalize(groupContainer.Value, originalBounds, out GroupToDataMatrix, out GroupBounds);
+                        NormalizeWithinBounds.Normalize(groupContainer, originalBounds, out GroupToDataMatrix, out GroupBounds);
                     }
                     else
                     {
                         NormalizeWithinBounds.NormalizeAndExpand(
-                            groupContainer.Value,
+                            groupContainer,
                             originalBounds,
                             ref GroupBounds,
                             ref GroupToDataMatrix,

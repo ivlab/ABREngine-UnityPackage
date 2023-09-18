@@ -647,7 +647,11 @@ namespace IVLab.ABREngine
                     // Save the group info
                     saveGroup.name = group.name;
                     saveGroup.transformMatrix = Matrix4x4.TRS(group.transform.localPosition, group.transform.localRotation, group.transform.localScale);
-                    saveGroup.containerBounds = group.GetContainerBounds();
+                    Bounds containerBounds;
+                    if (group.TryGetContainerBoundsInGroupSpace(out containerBounds))
+                        saveGroup.containerBounds = containerBounds;
+                    else
+                        saveGroup.containerBounds = null;
                     saveGroup.uuid = group.Uuid;
                     saveGroup.impressions = new List<Guid>();
 

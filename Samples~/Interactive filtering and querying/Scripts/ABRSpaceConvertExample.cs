@@ -51,6 +51,12 @@ public class ABRSpaceConvertExample : MonoBehaviour
             DebugDraw.Text(group.BoundsInWorldSpace.center + group.BoundsInWorldSpace.extents + Vector3.up * 0.1f, "World Space Bounds", Color.green);
             DebugDraw.Bounds(group.BoundsInWorldSpace, Color.green, thickness: 0.01f);
 
+            Bounds groupContainer;
+            if (group.TryGetContainerBoundsInWorldSpace(out groupContainer))
+            {
+                DebugDraw.Text(groupContainer.center + groupContainer.extents + Vector3.up * 0.1f, "Data Container " + group.name, Color.blue);
+                DebugDraw.Bounds(groupContainer, Color.blue, thickness: 0.01f);
+            }
         }
     }
 }
