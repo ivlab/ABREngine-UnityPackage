@@ -162,6 +162,24 @@ namespace IVLab.ABREngine
     /// </example>
     public class ABREngine : Singleton<ABREngine>
     {
+        /// <summary>
+        /// The package path defined in package.json.
+        /// 
+        /// > [!WARNING]
+        /// > If the package path changes for any reason, this will need to be updated!
+        /// </summary>
+        public const string PackagePath = "Packages/edu.umn.cs.ivlab.abrengine/";
+        
+        /// <summary>
+        /// Folder, relative to this package, where the ABR JSON schemas are located.
+        /// </summary>
+        public const string SchemasFolder = "ABRSchemas~";
+
+        /// <summary>
+        /// Full path where the ABR JSON schemas are located.
+        /// </summary>
+        public static string SchemasPath { get => Path.Combine(PackagePath, SchemasFolder); }
+
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
         /// <summary>

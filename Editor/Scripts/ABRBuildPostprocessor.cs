@@ -19,6 +19,7 @@
 
 #if UNITY_EDITOR
 using System.IO;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
@@ -26,24 +27,52 @@ using UnityEditor.Build.Reporting;
 
 namespace IVLab.ABREngine
 {
+    /// <summary>
+    /// Defines an ABR-specific post-processing build step that copies some critical files to the build location.
+    /// </summary>
     public class ABRBuildPostprocessor : IPostprocessBuildWithReport
     {
-        private const string PackagePath = "Packages/edu.umn.cs.ivlab.abrengine/";
-        private const string ABRServerFolder = "ABRServer~";
 
         public int callbackOrder { get { return 0; } }
 
         public void OnPostprocessBuild(BuildReport report)
         {
-            string buildFolder = Directory.GetParent(report.summary.outputPath).FullName;
-            string packageFolder = Path.GetFullPath(PackagePath);
+            try
+            {
+                string buildFolder = Directory.GetParent(report.summary.outputPath).FullName;
 
-            string buildPath = Path.Combine(buildFolder, ABRServerFolder);
-            string packagePath = Path.Combine(packageFolder, ABRServerFolder);
+                // source => dest
+                Dictionary<string, string> copyPathsOnBuild = new Dictionary<string, string>()
+            {
+                // ABR Server
+                { ABRServer.ServerFolder, Path.Combine(buildFolder, ABRServer.ServerFolder) },
 
-            // Copy folder to build location
-            CopyDirectory(packagePath, buildPath, true);
-            Debug.Log($"ABRBuildPostprocessor: Copied folder from {packagePath} to {buildPath}");
+                // ABR Schemas
+                { ABREngine.SchemasPath, Path.Combine(buildFolder, ABREngine.SchemasFolder) },
+            };
+
+                foreach (var srcDest in copyPathsOnBuild)
+                {
+                    var attrs = File.GetAttributes(srcDest.Key);
+                    if ((attrs & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        // Copy folder to build location
+                        CopyDirectory(srcDest.Key, srcDest.Value, true);
+                        Debug.Log($"ABRBuildPostprocessor: Copied folder from {srcDest.Key} to {srcDest.Value}");
+                    }
+                    else
+                    {
+                        // Copy file to build location
+                        File.Copy(srcDest.Key, srcDest.Value);
+                        Debug.Log($"ABRBuildPostprocessor: Copied file from {srcDest.Key} to {srcDest.Value}");
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                // don't build if there's a problem for any reason
+                throw new BuildFailedException("ABRBuildPostprocessor: " + e.Message);
+            }
         }
 
         // https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
