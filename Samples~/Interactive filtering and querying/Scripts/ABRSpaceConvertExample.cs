@@ -18,6 +18,11 @@ public class ABRSpaceConvertExample : MonoBehaviour
     [Header("Constrain the endpoint measurements to the data")]
     bool measureFromClosestDataPoint = false;
 
+    void Start()
+    {
+        Debug.Log(System.IO.Path.GetFullPath("Packages/edu.umn.cs.ivlab/DocumentationSrc~/docfx.json"));
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -58,5 +63,36 @@ public class ABRSpaceConvertExample : MonoBehaviour
                 DebugDraw.Bounds(groupContainer, Color.blue, thickness: 0.01f);
             }
         }
+
+        float moveAmt = 0.5f;
+        Vector3 moveVector1 = Vector3.zero;
+        Vector3 moveVector2 = Vector3.zero;
+        if (Input.GetKeyDown(KeyCode.W))
+            moveVector1 += moveAmt * Vector3.forward;
+        if (Input.GetKeyDown(KeyCode.A))
+            moveVector1 += moveAmt * Vector3.left;
+        if (Input.GetKeyDown(KeyCode.S))
+            moveVector1 += moveAmt * Vector3.back;
+        if (Input.GetKeyDown(KeyCode.D))
+            moveVector1 += moveAmt * Vector3.right;
+        if (Input.GetKeyDown(KeyCode.Q))
+            moveVector1 += moveAmt * Vector3.down;
+        if (Input.GetKeyDown(KeyCode.E))
+            moveVector1 += moveAmt * Vector3.up;
+        if (Input.GetKeyDown(KeyCode.I))
+            moveVector2 += moveAmt * Vector3.forward;
+        if (Input.GetKeyDown(KeyCode.J))
+            moveVector2 += moveAmt * Vector3.left;
+        if (Input.GetKeyDown(KeyCode.K))
+            moveVector2 += moveAmt * Vector3.back;
+        if (Input.GetKeyDown(KeyCode.L))
+            moveVector2 += moveAmt * Vector3.right;
+        if (Input.GetKeyDown(KeyCode.U))
+            moveVector2 += moveAmt * Vector3.down;
+        if (Input.GetKeyDown(KeyCode.O))
+            moveVector2 += moveAmt * Vector3.up;
+
+        measurePoint1.transform.position += moveVector1;
+        measurePoint2.transform.position += moveVector2;
     }
 }

@@ -178,7 +178,7 @@ namespace IVLab.ABREngine
 
         private Notifier _notifier;
 
-        private static string ConfigNamePath { get => Path.Combine(Application.persistentDataPath, "ABRConfigIndexPath.txt"); }
+        private static string ConfigNamePath { get => Path.Combine(Application.streamingAssetsPath, "_ABRConfigNamePath.txt"); }
         /// <summary>
         /// Config "Prototype" to use for the current ABR configuration. This is
         /// set in edit-mode and should NOT be changed at runtime. Instead, use
@@ -195,7 +195,8 @@ namespace IVLab.ABREngine
                     if (File.Exists(ConfigNamePath))
                     {
                         string configName = File.ReadAllText(ConfigNamePath);
-                        var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                        // var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                        var configs = Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
                         int configIndex = configs.FindIndex(cfg => cfg.name == configName);
                         if (configIndex >= 0)
                         {
@@ -227,6 +228,18 @@ namespace IVLab.ABREngine
             }
         }
         private static ABRConfig s_ConfigPrototype;
+
+        /// <summary>
+        /// Provides access to all of the <see cref="ABRConfig"/> options that
+        /// were loaded in at startup. You can safely change this config at
+        /// runtime without messing up the ScriptableObject representing the
+        /// underlying <see cref="ABRConfig"/>.
+        /// </summary>
+        public ABRConfig Config { get => config; private set => config = value; }
+
+        [SerializeField]
+        private ABRConfig config;
+
 
         /// <summary>
         /// System-wide manager for VisAssets (visual elements used in the visualization)
@@ -315,14 +328,6 @@ namespace IVLab.ABREngine
         /// Cached, readonly version of the ABREngine transform so it can be accessed in a non-main thread
         /// </summary>
         public Transform ABRTransform { get; private set; }
-
-        /// <summary>
-        /// Provides access to all of the <see cref="ABRConfig"/> options that
-        /// were loaded in at startup. You can safely change this config at
-        /// runtime without messing up the ScriptableObject representing the
-        /// underlying <see cref="ABRConfig"/>.
-        /// </summary>
-        public ABRConfig Config { get; private set; }
 
         /// <summary>
         /// Client for internal application usage to make web requests.
@@ -471,7 +476,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Checks the ABR scene configuration and supplies warnings for each component that is not present
         /// </summary>
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("ABR/Check ABR Scene")]
+#endif
         private static void CheckABRScene()
         {
             // TODO: Finish adding warnings for assumptions ABR is making

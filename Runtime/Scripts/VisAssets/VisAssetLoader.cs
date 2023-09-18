@@ -765,7 +765,9 @@ namespace IVLab.ABREngine
                         // Only destroy if not imported from Resources, and fail
                         // silently if something goes wrong during destroying
                         // the prefab. It'll just look weird in the scene.
+#if UNITY_EDITOR
                         if (!AssetDatabase.Contains(prefab))
+#endif
                         {
                             GameObject.Destroy(prefab);
                         }

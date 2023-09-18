@@ -48,7 +48,9 @@ namespace IVLab.ABREngine
         {
             // "prime" the config - make sure the engine has loaded it
             ABRConfig config = ABREngine.ConfigPrototype;
-            var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+            // var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+            // var configs = Resources.FindObjectsOfTypeAll<ABRConfig>().ToList();
+            var configs = Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
             if (configs.Count > 0 && config != null)
                 configIndex = configs.FindIndex(cfg => cfg.name == config.name);
             else
@@ -65,7 +67,9 @@ namespace IVLab.ABREngine
             {
                 // Display and update ABREngine Configs
                 EditorGUILayout.LabelField("Choose ABR Configuration:");
-                var configs = ScriptableObjectExtensions.GetAllInstances<ABRConfig>();
+                // var configs = ScriptableObjectExtenss.GetAllInstances<ABRConfig>();
+                // var configs = Resources.FindObjectsOfTypeAll<ABRConfig>().ToList();
+                var configs = Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
                 if (configs.Count == 0)
                 {
                     EditorGUILayout.HelpBox("No ABR configurations available! Please create one first. Assets/ABR/ABR Configuration.", MessageType.Error);
