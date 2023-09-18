@@ -1,0 +1,64 @@
+/* main.css
+ * 
+ * Copyright (c) 2020, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ * 
+ * Theme:
+ * Text color: #3d3d3d
+ * Background color: #dae1e7
+ * Dark background: #928e89
+ * Light background: #f8f4f4
+ * Hover background: #dae1e7
+ * Dark Accent: #605e5b
+ * Data impressions: #716e6ab0
+ * Accent 1 light blue: #7fb8da
+ * Accent 2 lighter blue: #ceedff
+ */
+
+html, body {
+    height: 100vh;
+    font-family: Droid Sans,Futura,Trebuchet MS,Arial,sans-serif;
+    padding: 0;
+    margin: 0;
+    color: #3d3d3d;
+    background-color: #dae1e7;
+    font-size: 14px;
+    overflow: hidden;
+
+    /* disable selection because the click-and-drag scrolling feature 
+       accidentally selects text. */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+.rounded {
+   border-radius: 4px;
+}
+
+.rounded-top {
+   border-radius: 4px 4px 0 0;
+}
+
+.rounded-bottom {
+   border-radius: 0 0 4px 4px;
+}
+
+p {
+   margin: 0;
+}
+
+button {
+   margin: 0;
+   background-color: #f8f4f4;
+   border: 0;
+   color: #3d3d3d;
+   cursor: pointer;
+}
+
+.ui-menu {
+   z-index: 100;
+}

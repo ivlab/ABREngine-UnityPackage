@@ -1,0 +1,106 @@
+/* A puzzle piece container that's sitting in a palette */
+.puzzle-list-item {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+/* The whole puzzle piece */
+.puzzle-piece {
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: 100;
+}
+
+.keydata.puzzle-piece {
+    height: 5rem; /* Including margin */
+    width: 8rem;
+}
+
+.keydata.puzzle-piece button.solo-button:not(.soloed) {
+    background-color: #999;
+}
+
+/* The body of the puzzle piece */
+.puzzle-piece .puzzle-label {
+    width: 8rem;
+    background-color: #bbb;
+    color: #3d3d3d;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+.puzzle-piece .puzzle-label p {
+    text-align: right;
+    margin: 0 0.5em 0 0;
+}
+.puzzle-piece .puzzle-label input[type='text'] {
+    width: 90%;
+    padding: 0.4em;
+}
+
+/* The connector of the puzzle piece (svgs) */
+.puzzle-connector {
+    flex-shrink: 0;
+    height: 3rem; /* Same as parent .parameter; explicitly redefined here */
+    width: 1.2rem; /* Aspect ratio of puzzle connectors should be 2:5 */
+    mask-size: contain !important; /* Unsure why `mask` is overwriting this */
+    -webkit-mask-size: contain !important; /* Unsure why `mask` is overwriting this */
+}
+
+.puzzle-connector.keydata-connector {
+    width: 3rem; /* Keydata connector aspect ratio is 1:1 */
+}
+
+.puzzle-connector.background {
+    background: #666; /* The background color of the sockets (refer to renderingStrategy.css) */
+}
+
+.puzzle-connector.foreground {
+    background: white;
+}
+
+.puzzle-connector.foreground-contrast {
+    background: #bbb;
+}
+
+.puzzle-piece input, .puzzle-piece button {
+    font-size: 11px;
+}
+
+.puzzle-piece-input {
+    padding: 0 0.5em;
+    width: calc(100% - 1em);
+    height: 100%;
+    background-color: inherit;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background: #bbb;
+}
+.puzzle-piece-input input {
+    text-align: center;
+    width: 80%;
+}
+.puzzle-piece-input button {
+    width: 100%;
+}
+
+div.inline {
+    display: inline-block;
+}
+
+.artifact.numeric-input .puzzle-label {
+    width: 5rem;
+}
+
+.artifact-thumbnail {
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0.25em;
+}
