@@ -7,9 +7,10 @@ This package contains all the necessary components to run ABR, including:
     - This repo is a Unity Package.
 - ABR Server
     - The Python server that hosts the ABR Compose visualization design interface
-    - Please see the [ABRCompose folder](./Runtime/)
+    - Please see the [ABRServer~](./ABRServer~) folder
 - ABR Schemas
     - Defines the JSON schemas necessary to create an artist-designed data visualization
+    - Please see the [ABRSchemas~](./ABRSchemas~) folder
 
 ## Installation
 
