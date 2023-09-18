@@ -159,8 +159,8 @@ namespace IVLab.ABREngine
         /// </summary>
         // private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
-        [Tooltip("Root URL to find the ABR schema at")]
-        public string schemaUrl = "https://raw.githubusercontent.com/bridger-herman/abr-schema/master/ABRSchema_2023-8-0.json";
+        [Tooltip("Name of the schema to use in ABRSchemas~ folder at root of this package")]
+        public string schemaName = "ABRSchema_2023-8-0.json";
 
         void Reset()
         {
@@ -185,82 +185,25 @@ namespace IVLab.ABREngine
         {
             // Debug.Log("ABR Config Loaded");
 
-            // Check for a backed up schema
-            string backupSchemaDir = Path.Combine(Application.streamingAssetsPath, "schemas");
-            string backupSchema = null;
-            try
-            {
-                List<string> schemas = Directory.GetFiles(backupSchemaDir).Where(f => f.EndsWith(".json")).ToList();
-                schemas.Sort();
-                schemas.Reverse();
-                backupSchema = schemas[0];
-            }
-            catch
-            {
-                Debug.LogErrorFormat("Unable to find a backup schema in {0}", backupSchemaDir);
-            }
-
-            if (backupSchema != null)
-            {
-                backupSchema = Path.Combine(backupSchemaDir, backupSchema);
-            }
-
             // Load the schema
-            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(schemaUrl).Result;
             string schemaContents = null;
-            if (!resp.IsSuccessStatusCode)
+            using (StreamReader reader = new StreamReader(Path.Combine(ABREngine.SchemasPath, schemaName)))
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", schemaUrl, backupSchema);
-                using (StreamReader reader = new StreamReader(backupSchema))
-                {
-                    schemaContents = reader.ReadToEnd();
-                }
-            }
-            else
-            {
-                schemaContents = (resp.Content.ReadAsStringAsync().Result);
+                schemaContents = reader.ReadToEnd();
             }
 
             Schema = JSchema.Parse(schemaContents);
             if (Schema == null)
             {
-                Debug.LogErrorFormat("Unable to parse schema `{0}`.", schemaUrl);
+                Debug.LogErrorFormat("Unable to parse schema `{0}`.", schemaName);
                 return;
             }
             if (Schema.Valid ?? false)
             {
-                Debug.LogErrorFormat("Schema `{0}` is invalid.", schemaUrl);
+                Debug.LogErrorFormat("Schema `{0}` is invalid.", schemaName);
                 return;
             }
             SchemaJson = JObject.Parse(schemaContents);
-
-            // Save a copy if needed
-            bool needBackup = true;
-            if (backupSchema != null) {
-                using (StreamReader reader = new StreamReader(backupSchema))
-                {
-                    string bakContents = reader.ReadToEnd();
-                    if (bakContents == schemaContents)
-                    {
-                        needBackup = false;
-                    }
-                }
-            }
-            if (needBackup)
-            {
-                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture).Replace(":", "_") + ".json";
-                if (!Directory.Exists(backupSchemaDir))
-                {
-                    Directory.CreateDirectory(backupSchemaDir);
-                }
-                string schemaBakPath = Path.Combine(backupSchemaDir, schemaName);
-                using (StreamWriter writer = new StreamWriter(schemaBakPath))
-                {
-                    writer.Write(schemaContents);
-                }
-                Debug.Log("Saved backup schema to " + schemaBakPath);
-            }
-
 
             Debug.LogFormat("Using ABR Schema, version {0}", SchemaJson["properties"]["version"]["default"]);
         }

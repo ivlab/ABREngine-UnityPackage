@@ -165,6 +165,12 @@ namespace IVLab.ABREngine
         /// <summary>
         /// The package path defined in package.json.
         /// 
+        /// > [!NOTE]
+        /// > With project builds, the PackagePath assumes that everything is
+        /// > located relative to the built executable. If the current working
+        /// > directory is something besides the directory ABR is located in,
+        /// > there may be problems.
+        /// 
         /// > [!WARNING]
         /// > If the package path changes for any reason, this will need to be updated!
         /// </summary>

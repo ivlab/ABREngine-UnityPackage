@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "description": "Messages that are sent from the ABR server to all connected clients",
+    "properties": {
+        "target": {
+            "description": "What has *actually* been updated on the server? State? A cache?",
+            "type": "string",
+            "enum": [
+                "state",
+                "CacheUpdate-visassets"
+            ]
+        }
+    }
+}

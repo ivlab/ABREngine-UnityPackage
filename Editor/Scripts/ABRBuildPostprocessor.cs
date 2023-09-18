@@ -45,10 +45,10 @@ namespace IVLab.ABREngine
                 Dictionary<string, string> copyPathsOnBuild = new Dictionary<string, string>()
             {
                 // ABR Server
-                { ABRServer.ServerFolder, Path.Combine(buildFolder, ABRServer.ServerFolder) },
+                // { ABRServer.ServerFolder, Path.Combine(buildFolder, ABRServer.ServerPath) },
 
                 // ABR Schemas
-                { ABREngine.SchemasPath, Path.Combine(buildFolder, ABREngine.SchemasFolder) },
+                { ABREngine.SchemasPath, Path.Combine(buildFolder, ABREngine.SchemasPath) },
             };
 
                 foreach (var srcDest in copyPathsOnBuild)

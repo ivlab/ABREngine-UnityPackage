@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "description": "Messages that are sent to the server from any connected client",
+    "properties": {
+        "target": {
+            "description": "To where should this message be routed?",
+            "type": "string",
+            "enum": [
+                "thumbnail"
+            ]
+        },
+        "contents": {
+            "type": "string",
+            "description": "The actual message, serialized into a string"
+        }
+    }
+}
