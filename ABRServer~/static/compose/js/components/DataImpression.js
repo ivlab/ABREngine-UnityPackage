@@ -120,7 +120,10 @@ export function DataImpression(plateType, uuid, name, impressionData) {
 
     let plateSchema = globals.schema.definitions.Plates[plateType].properties;
 
-    $element.append(DataImpressionSummary(uuid, name, impressionData, inputValues));
+    // Get inputs for this plate type
+    let parameterTiers = DataImpressionInputTopology[plateType];
+
+    $element.append(DataImpressionSummary(uuid, name, impressionData, inputValues, parameterTiers));
 
     // Construct KeyData input
     let kdInputName = 'Key Data';
@@ -139,9 +142,6 @@ export function DataImpression(plateType, uuid, name, impressionData) {
     let $parameterList = $('<div>', {
         class: 'parameter-list',
     });
-
-    // Get inputs for this plate type
-    let parameterTiers = DataImpressionInputTopology[plateType];
 
     // Add a new row of inputs for each parameter
     for (const tier of parameterTiers) {

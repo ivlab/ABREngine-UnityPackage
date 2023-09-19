@@ -35,9 +35,10 @@ namespace IVLab.ABREngine
         {
             get
             {
-                if (changed)
+                if (changed || _texture == null)
                 {
                     _texture = Colormap.ToTexture2D();
+                    changed = false;
                 }
                 return _texture;
             }
@@ -45,7 +46,17 @@ namespace IVLab.ABREngine
         private Texture2D _texture;
 
         private bool changed = true;
-        public Colormap Colormap { get; private set; }
+
+        public Colormap Colormap
+        {
+            get => _colormap;
+            private set
+            {
+                _colormap = value;
+                changed = true;
+            }
+        }
+        private Colormap _colormap;
 
         public ColormapVisAsset() : this(new Guid(), (Colormap) null) { }
 

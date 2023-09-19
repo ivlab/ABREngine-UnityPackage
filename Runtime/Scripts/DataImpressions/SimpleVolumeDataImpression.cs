@@ -151,6 +151,8 @@ namespace IVLab.ABREngine
         /// </summary>
         private ComputeBuffer perVoxelVisibilityBuffer; 
 
+        private Texture2D opacityMapTexture;
+
 
         protected override string[] MaterialNames { get; } = { "ABR_Volume" };
 
@@ -410,20 +412,19 @@ namespace IVLab.ABREngine
             else
             {
                 MatPropBlock.SetInt("_UseColorMap", 0);
-
             }
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
                 MatPropBlock.SetFloat("_NaNOpacity", nanOpacity?.Value ?? 0.0f);
-                if (MatPropBlock.GetTexture("_OpacityMap") == null)
+                if (opacityMapTexture == null)
                 {
-                    Texture2D opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
+                    opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
                     opacityMapTexture.wrapMode = TextureWrapMode.Clamp;
                     opacityMapTexture.filterMode = FilterMode.Bilinear;
-                    MatPropBlock.SetTexture("_OpacityMap", opacityMapTexture);
                 }
-                UpdateOpacityMap((Texture2D)MatPropBlock.GetTexture("_OpacityMap"));
+                UpdateOpacityMap(opacityMapTexture);
+                MatPropBlock.SetTexture("_OpacityMap", opacityMapTexture);
             }
             else
             {
@@ -475,6 +476,7 @@ namespace IVLab.ABREngine
             }
 
             meshRenderer.SetPropertyBlock(MatPropBlock);
+            Debug.Log("After set " + MatPropBlock.GetTexture("_OpacityMap").GetHashCode());
         }
 
         public override void UpdateVisibility()
@@ -534,7 +536,7 @@ namespace IVLab.ABREngine
 
             // Apply updated pixels to texture
             opacityMapTexture.SetPixels(pixelColors);
-            opacityMapTexture.Apply(false);
+            opacityMapTexture.Apply();
         }
 
         void OnDisable()

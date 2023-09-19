@@ -1,8 +1,6 @@
 # ABR Server
 
-THIS REPOSITORY IS ARCHIVED and no longer maintained. The ABR Server core code
-is now maintained inside the
-[ABREngine-UnityPackage](https://github.com/ivlab/ABREngine-UnityPackage).
+This folder contains the code for the ABR server and the ABR Compose Design Interface.
 
 ## Installation
 
@@ -56,6 +54,30 @@ pyinstaller  --name="abr-server" --hidden-import="compose" --hidden-import="comp
 ```
 
 this will output an executable (for the OS/architecture that you run pyinstaller on) to the folder `./dist/abr-server`. You can zip this up, etc. for distribution.
+
+## Running the server
+
+The server can be run local-only (on localhost:8000 by default):
+
+```
+python manage.py runserver
+```
+
+The server can also be broadcast to other devices:
+
+```
+python manage.py runserver 0.0.0.0:8000
+```
+
+To enable live-reloading (automatically refresh browser when a file is changed), run this command in another terminal *before* the above commands:
+
+```
+python manage.py livereload
+```
+
+
+
+-----------------------------
 
 ## Old news below here, probably delete
 

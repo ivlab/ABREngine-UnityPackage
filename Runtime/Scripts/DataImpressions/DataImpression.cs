@@ -103,30 +103,30 @@ namespace IVLab.ABREngine
                 go = new GameObject();
                 di = go.AddComponent<T>();
                 go.name = name + " (" + di.GetType().Name + ")";
-            }
 
-            di.InputIndexer = new ABRInputIndexerModule(di);
-            di.Uuid = new Guid(uuid);
-            di.MatPropBlock = new MaterialPropertyBlock();
+                di.InputIndexer = new ABRInputIndexerModule(di);
+                di.Uuid = new Guid(uuid);
+                di.MatPropBlock = new MaterialPropertyBlock();
 
-            // Initialize material list
-            if (di.ImpressionMaterials == null)
-            {
-                di.ImpressionMaterials = new Material[di.MaterialNames.Length];
-            }
-
-            for (int m = 0; m < di.MaterialNames.Length; m++)
-            {
-                // Load each material, if it's not already loaded
-                if (di.ImpressionMaterials[m] == null)
+                // Initialize material list
+                if (di.ImpressionMaterials == null)
                 {
-                    di.ImpressionMaterials[m] = Resources.Load<Material>(di.MaterialNames[m]);
+                    di.ImpressionMaterials = new Material[di.MaterialNames.Length];
                 }
 
-                // If it's still null, that means we didn't find it
-                if (di.ImpressionMaterials[m] == null)
+                for (int m = 0; m < di.MaterialNames.Length; m++)
                 {
-                    Debug.LogErrorFormat("Material `{0}` not found for {1}", di.MaterialNames[m], di.GetType().ToString());
+                    // Load each material, if it's not already loaded
+                    if (di.ImpressionMaterials[m] == null)
+                    {
+                        di.ImpressionMaterials[m] = Resources.Load<Material>(di.MaterialNames[m]);
+                    }
+
+                    // If it's still null, that means we didn't find it
+                    if (di.ImpressionMaterials[m] == null)
+                    {
+                        Debug.LogErrorFormat("Material `{0}` not found for {1}", di.MaterialNames[m], di.GetType().ToString());
+                    }
                 }
             }
 

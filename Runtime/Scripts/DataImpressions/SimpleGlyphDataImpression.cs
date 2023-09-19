@@ -135,7 +135,7 @@ namespace IVLab.ABREngine
         /// applied for forward/up.
         /// </summary>
         [ABRInput("Use Random Orientation", UpdateLevel.Data)]
-        public bool useRandomOrientation = true;
+        public BooleanPrimitive useRandomOrientation = true;
 
         /// <summary>
         /// Show/hide outline on this data impression
@@ -222,6 +222,11 @@ namespace IVLab.ABREngine
 
                 int numPoints = dataset.vertexArray.Length;
 
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                bool randomOrientation = useRandomOrientation?.Value ??
+                    config.GetInputValueDefault<BooleanPrimitive>(plateType, "Use Random Orientation").Value;
+
                 // Compute positions for each point, in room (Unity) space
                 Vector3[] positions = new Vector3[numPoints];
                 for (int i = 0; i < numPoints; i++)
@@ -242,7 +247,7 @@ namespace IVLab.ABREngine
                     dataForwards = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        if (useRandomOrientation)
+                        if (randomOrientation)
                             dataForwards[i] = new Vector3(
                                 (float)rand.NextDouble() * 2 - 1,
                                 (float)rand.NextDouble() * 2 - 1,
@@ -262,7 +267,7 @@ namespace IVLab.ABREngine
                     dataUp = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        if (useRandomOrientation)
+                        if (randomOrientation)
                             dataUp[i] = new Vector3(
                                 (float)rand.NextDouble() * 2 - 1,
                                 (float)rand.NextDouble() * 2 - 1,
@@ -308,8 +313,6 @@ namespace IVLab.ABREngine
                 };
 
                 // Get glyph scale and apply to instance mesh renderer transform
-                ABRConfig config = ABREngine.Instance.Config;
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
                 float glyphScale = glyphSize?.Value ??
                     config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
 

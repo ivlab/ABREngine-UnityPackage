@@ -322,11 +322,11 @@ export async function VisAssetGradientEditor(inputProps) {
             points: [],
             visAssets: [],
         }
+        saveGradient();
     }
 
     $visAssetGradientDialog.on('ABR_AddedToEditor', () => {
         updateGradientDisplay();
-
     });
 
     return $visAssetGradientDialog;

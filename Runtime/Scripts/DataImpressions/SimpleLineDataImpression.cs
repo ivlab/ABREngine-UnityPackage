@@ -461,16 +461,18 @@ namespace IVLab.ABREngine
 
             // Create a new GameObject for each line in the data, and return any unused ones to the pool
             int numLines = lineResources?.indices?.Length ?? 0;
+            int lineIndex = 0;
             while (gameObject.transform.childCount < numLines)
             {
                 GameObject renderObject = GenericObjectPool.Instance.GetObjectFromPool(this.GetType().Name + " meshRenderer", gameObject.transform, go =>
                 {
-                    go.name = "Line Render Object";
+                    go.name = "Line Render Object " + lineIndex;
                 });
                 renderObject.transform.SetParent(gameObject.transform, false);
                 renderObject.transform.localPosition = Vector3.zero;
                 renderObject.transform.localScale = Vector3.one;
                 renderObject.transform.localRotation = Quaternion.identity;
+                lineIndex += 1;
             }
 
             while (gameObject.transform.childCount > numLines)
@@ -590,6 +592,7 @@ namespace IVLab.ABREngine
                 // fully initialized with KeyData yet
                 if (meshFilter == null || meshRenderer == null)
                 {
+                    Debug.LogError("SimpleLineDataImpression: GameObject not yet initialized " + i);
                     return;
                 }
 
