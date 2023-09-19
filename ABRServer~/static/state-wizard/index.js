@@ -68,7 +68,6 @@ function getSchemaInputWithDefault(plateType, inputName) {
     let resolvedProps = resolveSchemaConsts(inputProps);
     return {
         inputType: resolvedProps.inputType,
-        parameterName: resolvedProps.parameterName,
         inputValue: resolvedProps.inputValue,
         inputGenre: resolvedProps.inputGenre,
     }

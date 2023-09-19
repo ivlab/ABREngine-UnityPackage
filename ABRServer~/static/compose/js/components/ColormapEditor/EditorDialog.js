@@ -90,9 +90,7 @@ export async function EditorDialog(inputProps, impressionUuid) {
         let keyDataInput = null;
         let keyDataStatePath = globals.stateManager.findPath((s) => {
             return s.hasOwnProperty('inputGenre') &&
-                s['inputGenre'] == 'KeyData' && 
-                s.hasOwnProperty('parameterName') &&
-                s['parameterName'] == 'Key Data'
+                s['inputGenre'] == 'KeyData';
         }).find((p) => p.split('/')[2] == impressionUuid);
         if (keyDataStatePath) {
             keyDataInput = globals.stateManager.getPath(keyDataStatePath);
@@ -100,29 +98,23 @@ export async function EditorDialog(inputProps, impressionUuid) {
 
         // Then, get the all other variables associated with this input
         // Find the variable that's paired with this input
-        let paramName = inputProps.parameterName
         let associatedVars = globals.stateManager.findAll((s) => {
             return s.hasOwnProperty('inputGenre') &&
-                s['inputGenre'] == 'Variable' && 
-                s.hasOwnProperty('parameterName') &&
-                s['parameterName'] == paramName
+                s['inputGenre'] == 'Variable';
         }, `/impressions/${impressionUuid}/inputValues`).map((v) => v.inputValue);
 
         // Find every variable input that's the same as this one
         let impressionInputs = globals.stateManager.state.impressions[impressionUuid].inputValues;
         let relevantInputNames = Object.keys(impressionInputs).filter((n) => associatedVars.indexOf(impressionInputs[n].inputValue) >= 0);
-        let relevantParamNames = relevantInputNames.map((n) => impressionInputs[n].parameterName);
 
         // And map it back to its design / visasset input
         let associatedDesignInputs = globals.stateManager.findAll((s) => {
             return s.hasOwnProperty('inputGenre') &&
-                (s['inputGenre'] == 'VisAsset' || s['inputGenre'] == 'PrimitiveGradient')  && 
-                s.hasOwnProperty('parameterName') &&
-                relevantParamNames.indexOf(s['parameterName']) >= 0
+                (s['inputGenre'] == 'VisAsset' || s['inputGenre'] == 'PrimitiveGradient');
         }, `/impressions/${impressionUuid}/inputValues`);
         inputsToConsider.push(...associatedDesignInputs);
         // Also add any more design inputs that are associated in this current param name
-        inputsToConsider.push(...Object.values((v) => v.parameterName == inputProps.parameterName));
+        // inputsToConsider.push(...Object.values((v) => v.parameterName == inputProps.parameterName));
 
         let trueVariable = impressionInputs[relevantInputNames[0]];
         if (trueVariable) {

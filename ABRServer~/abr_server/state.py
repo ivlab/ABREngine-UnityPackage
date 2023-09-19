@@ -79,10 +79,6 @@ class State():
                 except RuntimeError:
                     pass
 
-            # If we've successfully validated the state, make a backup. Keep
-            # up to a certain amount of backups if something crashes
-            self.make_backup()
-
             # Save the new state
             # Also store a stack of undos, based on json diff
             # Clear the redo stack, because if we made a change to the state all
@@ -211,43 +207,6 @@ class State():
                 if isinstance(sub_state[sub_value], dict):
                     self._find_all(condition, sub_state[sub_value], out_items)
             return out_items
-
-
-    def make_backup(self):
-        '''
-            Save a backup of the state to the backup file. Discard backups more
-            than a certain amount.
-        '''
-        try:
-            with open(self.backup_path, 'r') as backup_file:
-                backup_json = json.load(backup_file)
-        except FileNotFoundError:
-            backup_json = {}
-        except json.decoder.JSONDecodeError:
-            backup_json = {}
-
-        to_delete = set()
-        for time_key in backup_json:
-            t = float(time_key)
-            if time.time() - t > settings.BACKUP_DELETE_INTERVAL:
-                to_delete.add(time_key)
-        for time_key in to_delete:
-            del backup_json[time_key]
-
-        with self._state_lock:
-            backup_json[time.time()] = json.dumps(self._state)
-
-        with open(self.backup_path, 'w') as backup_file:
-            json.dump(backup_json, backup_file)
-
-    def restore_backup(self):
-        '''
-            Restore a backup from a file
-        '''
-        # Sort the backup entries and obtain the first (newest) one
-        # backup_entries = list(sorted(map(lambda d: (float(d[0]), d[1]), backup_json.items()), key=lambda d: d[0]))
-        # key_time, most_recent_diff = backup_entries[-1]
-        raise NotImplementedError()
 
     def undo(self):
         '''

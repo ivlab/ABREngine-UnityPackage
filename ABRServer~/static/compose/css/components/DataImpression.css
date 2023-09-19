@@ -60,6 +60,7 @@
 
 .data-impression .parameter-list {
     overflow: visible;
+    width: 15rem;
 }
 
 .data-impression .parameter {

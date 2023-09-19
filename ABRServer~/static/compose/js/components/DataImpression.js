@@ -2,7 +2,7 @@
  *
  * Instantiated form of a Plate, contains inputs that can be changed by an artist
  *
- * Copyright (C) 2021, University of Minnesota
+ * Copyright (C) 2023, University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,6 +25,54 @@ import { CACHE_UPDATE, resolveSchemaConsts } from '../../../common/StateManager.
 import { COMPOSITION_LOADER_ID } from '../components/Components.js';
 import { InputPuzzlePiece, AssignedInputPuzzlePiece } from "./PuzzlePiece.js";
 import { uuid } from "../../../common/UUID.js";
+
+// This defines the "topology" of the data impression inputs - i.e., which
+// inputs are "paired" with which. This is a change from past behaviour because
+// previously, we assumed that the schema would have `parameterName`... now we
+// are explicitly defining the UI relationships here and NOT in the schema.
+//
+// We take a tiered approach to building the UI:
+// - Tier 1 is the "must-have" inputs. This is usually for the immediate visual design and data variable mappings.
+// - Tier 2 are the inputs that artists like to use to fine tune a visualization.
+// - Tier 3 contains the inputs that are not often used.
+//
+// The tiers are defined as individual list elements in the below object.
+// The string keys in this object should line up with the ABR Schema.
+// Key Data are assumed to be a "special" input that doesn't go in here
+//
+// Each input is defined as pairs: [left input, right input]
+const DataImpressionInputTopology = {
+    "Glyphs": [
+        // Tier 1
+        [
+            ["Color Variable", "Colormap"],
+            ["Glyph Variable", "Glyph"],
+            ["Forward Variable", null],
+            ["Up Variable", null],
+        ]
+    ],
+    "Ribbons": [
+        // Tier 1
+        [
+            ["Color Variable", "Colormap"],
+            ["Texture Variable", "Texture"]
+        ]
+    ],
+    "Surfaces": [
+        // Tier 1
+        [
+            ["Color Variable", "Colormap"],
+            ["Pattern Variable", "Pattern"],
+        ]
+    ],
+    "Volumes": [
+        // Tier 1
+        [
+            ["Color Variable", "Colormap"],
+            [null, "Opacitymap"]
+        ]
+    ]
+}
 
 export function DataImpression(plateType, uuid, name, impressionData) {
     let $element = $('<div>', { class: 'data-impression rounded' })
@@ -72,22 +120,7 @@ export function DataImpression(plateType, uuid, name, impressionData) {
 
     let plateSchema = globals.schema.definitions.Plates[plateType].properties;
 
-    // Separate out all the inputs into their individual parameters
-    let parameterMapping = {};
-    for (const inputName in plateSchema) {
-        // Skip Key Data (these are constructed separately)
-        if (plateSchema[inputName].properties.inputGenre.const == 'KeyData') {
-            continue;
-        }
-        let parameterName = plateSchema[inputName].properties.parameterName.const;
-        if (parameterName in parameterMapping) {
-            parameterMapping[parameterName].push(inputName);
-        } else {
-            parameterMapping[parameterName] = [inputName];
-        }
-    }
-
-    $element.append(DataImpressionSummary(uuid, name, impressionData, inputValues, parameterMapping));
+    $element.append(DataImpressionSummary(uuid, name, impressionData, inputValues));
 
     // Construct KeyData input
     let kdInputName = 'Key Data';
@@ -107,28 +140,36 @@ export function DataImpression(plateType, uuid, name, impressionData) {
         class: 'parameter-list',
     });
 
-    // Add a new row of inputs for each parameter
-    for (const parameter in parameterMapping) {
-        let $param = Parameter(parameter);
-        // Construct each input, and overlay the value puzzle piece if it exists
-        for (const inputName of parameterMapping[parameter]) {
-            let $socket = InputSocket(inputName, plateSchema[inputName].properties);
-            if (inputValues && inputValues[inputName]) {
-                let $input = AssignedInputPuzzlePiece(inputName, inputValues[inputName]);
-                $input.appendTo($socket);
+    // Get inputs for this plate type
+    let parameterTiers = DataImpressionInputTopology[plateType];
 
-                // Prime the input to be reloaded and replaced when visassets
-                // get updated
-                globals.stateManager.subscribeCache('visassets', $socket);
-                $socket.on(CACHE_UPDATE + 'visassets', (evt) => {
-                    evt.stopPropagation();
-                    let $reloaded = AssignedInputPuzzlePiece(inputName, inputValues[inputName]);
-                    $input.replaceWith($reloaded);
-                });
+    // Add a new row of inputs for each parameter
+    for (const tier of parameterTiers) {
+        for (const inputPair of tier) {
+            let $param = Parameter();
+            // Construct each input, and overlay the value puzzle piece if it exists
+            for (const inputName of inputPair) {
+                if (!inputName)
+                    continue;
+
+                let $socket = InputSocket(inputName, plateSchema[inputName].properties);
+                if (inputValues && inputValues[inputName]) {
+                    let $input = AssignedInputPuzzlePiece(inputName, inputValues[inputName]);
+                    $input.appendTo($socket);
+
+                    // Prime the input to be reloaded and replaced when visassets
+                    // get updated
+                    globals.stateManager.subscribeCache('visassets', $socket);
+                    $socket.on(CACHE_UPDATE + 'visassets', (evt) => {
+                        evt.stopPropagation();
+                        let $reloaded = AssignedInputPuzzlePiece(inputName, inputValues[inputName]);
+                        $input.replaceWith($reloaded);
+                    });
+                }
+                $param.append($socket);
             }
-            $param.append($socket);
+            $parameterList.append($param);
         }
-        $parameterList.append($param);
     }
 
     if (!collapsed) {
@@ -241,11 +282,11 @@ function InputSocket(inputName, inputProps, addClass=undefined) {
     return $socket;
 }
 
-function Parameter(parameterName) {
+function Parameter() {
     return $('<div>', { class: 'parameter' });
 }
 
-function DataImpressionSummary(uuid, name, impressionData, inputValues, parameterMapping) {
+function DataImpressionSummary(uuid, name, impressionData, inputValues, parameterTiers) {
     let collapsed = false;
     if (impressionData && impressionData.collapsed) {
         collapsed = true;
@@ -298,26 +339,29 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
         if (inputValues && inputValues[kdInputName]) {
             $props.append(AssignedInputPuzzlePiece(kdInputName, inputValues[kdInputName], 'summary'));
         }
-        for (const parameter in parameterMapping) {
-            for (const inputName of parameterMapping[parameter]) {
-                if (inputValues && inputValues[inputName]) {
-                    // Display a non-editable version of the piece in the summary block
-                    let $input = AssignedInputPuzzlePiece(inputName, inputValues[inputName], 'summary');
-                    $input.off('click');
-                    if ($input.hasClass('ui-draggable')) {
-                        $input.draggable('destroy');
-                    }
 
-                    // Special case for primitive inputs
-                    let textInput = $input.find('input');
-                    let inputVal = textInput.val();
-                    if (inputVal) {
-                        textInput.remove();
-                        let text = $input.find('.puzzle-label').text();
-                        $input.find('.puzzle-label').text(`${text}: ${inputVal}`);
+        for (const tier of parameterTiers) {
+            for (const inputPair of tier) {
+                for (const inputName of inputPair) {
+                    if (inputValues && inputValues[inputName]) {
+                        // Display a non-editable version of the piece in the summary block
+                        let $input = AssignedInputPuzzlePiece(inputName, inputValues[inputName], 'summary');
+                        $input.off('click');
+                        if ($input.hasClass('ui-draggable')) {
+                            $input.draggable('destroy');
+                        }
+
+                        // Special case for primitive inputs
+                        let textInput = $input.find('input');
+                        let inputVal = textInput.val();
+                        if (inputVal) {
+                            textInput.remove();
+                            let text = $input.find('.puzzle-label').text();
+                            $input.find('.puzzle-label').text(`${text}: ${inputVal}`);
+                        }
+                        $input.removeClass('hover-bright');
+                        $props.append($input);
                     }
-                    $input.removeClass('hover-bright');
-                    $props.append($input);
                 }
             }
         }

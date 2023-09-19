@@ -321,9 +321,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
             let impressionUuid = $(evt.target).parents('.data-impression').data('uuid');
             let keyDatas = globals.stateManager.findPath((s) => {
                 return s.hasOwnProperty('inputGenre') &&
-                    s['inputGenre'] == 'KeyData' && 
-                s.hasOwnProperty('parameterName') &&
-                    s['parameterName'] == 'Key Data'
+                    s['inputGenre'] == 'KeyData';
             });
             let keyDataPath = keyDatas.find((p) => p.split('/')[2] == impressionUuid);
             if (!keyDataPath)
@@ -406,7 +404,6 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
     }
 
     $el.data('inputName', inputName);
-    $el.data('parameterName', resolvedProps.parameterName);
     $el.data('inputGenre', resolvedProps.inputGenre);
     $el.data('inputType', resolvedProps.inputType);
     $el.data('inputValue', resolvedProps.inputValue);
@@ -487,9 +484,7 @@ function getColorVar($el) {
         return s.hasOwnProperty('inputGenre') &&
             s['inputGenre'] == 'Variable' && 
         s.hasOwnProperty('inputType') &&
-            s['inputType'] == 'IVLab.ABREngine.ScalarDataVariable' && 
-        s.hasOwnProperty('parameterName') &&
-            s['parameterName'] == 'Color'
+            s['inputType'] == 'IVLab.ABREngine.ScalarDataVariable'
     });
     let colorVarPath = colorVars.find((p) => p.split('/')[2] == impressionUuid);
 
@@ -507,9 +502,7 @@ function getKeyData($el) {
     let impressionUuid = $el.parents('.data-impression').data('uuid');
     let keyDatas = globals.stateManager.findPath((s) => {
         return s.hasOwnProperty('inputGenre') &&
-            s['inputGenre'] == 'KeyData' && 
-        s.hasOwnProperty('parameterName') &&
-            s['parameterName'] == 'Key Data'
+            s['inputGenre'] == 'KeyData';
     });
 
     let keyDataPath = keyDatas.find((p) => p.split('/')[2] == impressionUuid);

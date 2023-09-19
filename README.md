@@ -8,6 +8,10 @@ This package contains all the necessary components to run ABR, including:
 - ABR Server
     - The Python server that hosts the ABR Compose visualization design interface
     - Please see the [ABRServer~](./ABRServer~) folder
+    - Check out the [abr_server.cfg](./ABRServer~) configuration file as well -
+    particularly, ensure this matches with your use case (especially if you want
+    ABREngine's media folder to point to the same location as the ABRServer's
+    media folder.)
 - ABR Schemas
     - Defines the JSON schemas necessary to create an artist-designed data visualization
     - Please see the [ABRSchemas~](./ABRSchemas~) folder

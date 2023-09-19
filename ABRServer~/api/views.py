@@ -36,7 +36,12 @@ def index(request):
     return HttpResponse('Nothing to see here; this URL is for computers')
 
 def schema(request, schema_name):
-    return redirect(settings.STATIC_URL + 'schemas/{}'.format(schema_name))
+    schema_path = settings.SCHEMA_PATH.joinpath(schema_name)
+    try:
+        with open(schema_path) as fin:
+            return JsonResponse(json.load(fin))
+    except:
+        return HttpResponse('Schema not found', status=404)
 
 # State access and modification methods
 @csrf_exempt

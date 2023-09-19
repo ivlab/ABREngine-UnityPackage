@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const SCHEMA_URL = 'https://raw.githubusercontent.com/ivlab/abr-schema/master/ABRSchema_0-2-0.json';
+const SCHEMA_URL = '/api/schemas/ABRSchema_2023-9-0.json';
 
 export class Validator {
     constructor() {

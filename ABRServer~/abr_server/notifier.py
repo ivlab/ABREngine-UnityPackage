@@ -37,7 +37,6 @@ class NotifierMessage:
 
     def to_json(self):
         return {
-            '$schema': settings.WS_SEND_SCHEMA,
             'target': self.target
         }
 

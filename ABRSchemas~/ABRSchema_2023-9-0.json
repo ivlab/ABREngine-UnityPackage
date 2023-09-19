@@ -919,7 +919,7 @@
                             "inputValue": { "$ref": "#/definitions/InputStringTypes/UUID" }
                         }
                     },
-                    "NaN opacity": {
+                    "NaN Opacity": {
                         "description": "Make NaN values have this opacity",
                         "properties": {
                                 "inputType": { "const": "IVLab.ABREngine.PercentPrimitive" },
