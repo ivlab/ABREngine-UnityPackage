@@ -15,7 +15,9 @@ MonoBehaviour:
   mediaPath: ../media
   serverUrl: http://localhost:8000/api/state
   loadStateOnStart: 
-  defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481, type: 3}
+  persistBetweenScenes: 1
+  defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481,
+    type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   defaultNanColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   defaultNanTexture: {fileID: 0}
@@ -23,8 +25,9 @@ MonoBehaviour:
   visAssetServerUrl: 
   dataServerUrl: 
   dataListenerPort: 1900
-  useAutoDataContainer: 0
-  dataContainer:
+  useAutoDataContainers: 0
+  defaultDataContainer:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 1, y: 1, z: 1}
-  overrideGroupToDataMatrices: []
+    m_Extent: {x: 0, y: 0, z: 0}
+  defaultCamera: {fileID: 0}
+  schemaName: ABRSchema_2023-9-0.json

@@ -64,11 +64,6 @@ namespace IVLab.ABREngine
         public string inputValue;
 
         /// <summary>
-        ///     The name of the parent parameter this input is associated with
-        /// </summary>
-        public string parameterName;
-
-        /// <summary>
         ///     What type of input is it (variable, visasset, etc.)
         /// </summary>
         public string inputGenre;

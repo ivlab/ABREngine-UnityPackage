@@ -53,7 +53,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IHasDataset
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -73,20 +73,21 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
 
         /// <summary>
         /// Scalar variable used to vary the line texture across its length.
         /// </summary>
-        [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture Variable", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
         /// <summary>
@@ -95,13 +96,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/lineTexture.gif"/>
         /// </summary>
-        [ABRInput("Texture", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset lineTexture;
 
         /// <summary>
         /// Override the line texture used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanLine"/>.
         /// </summary>
+        [ABRInput("NaN Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset nanLineTexture;
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace IVLab.ABREngine
         /// cref="lineTexture"/> applied. It has the most effect on textures
         /// that are not fully black/white.
         /// </remarks>
-        [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture Cutoff", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
 
 
@@ -127,7 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/averageCount.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Smooth", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Smooth", UpdateLevel.Data)]
         public IntegerPrimitive averageCount;
 
         /// <summary>
@@ -135,7 +137,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/lineWidth.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Width", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Width", UpdateLevel.Data)]
         public LengthPrimitive lineWidth;
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Rotation", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Rotation", UpdateLevel.Data)]
         public AnglePrimitive ribbonRotationAngle;
 
         /// <summary>
@@ -151,7 +153,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonBrightness.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Brightness", "Ribbon", UpdateLevel.Style)]
+        [ABRInput("Ribbon Brightness", UpdateLevel.Style)]
         public PercentPrimitive ribbonBrightness;
 
         /// <summary>
@@ -159,7 +161,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Curve", UpdateLevel.Data)]
         public AnglePrimitive ribbonCurveAngle;
 
         /// <summary>

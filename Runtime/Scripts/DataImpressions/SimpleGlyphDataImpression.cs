@@ -49,7 +49,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -69,13 +69,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace IVLab.ABREngine
         /// values. This only has any effect if <see cref="glyph"/> is a <see
         /// cref="GlyphGradient"/>.
         /// </summary>
-        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Variable", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/glyph.gif"/>
         /// </summary>
-        [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
+        [ABRInput("Glyph", UpdateLevel.Data)]
         public IGlyphVisAsset glyph;
 
         /// <summary>
@@ -101,37 +102,39 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/glyphSize.gif"/>
         /// </summary>
-        [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Size", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
         /// <summary>
         /// Tweak the density of glyphs - subsamples the existing glyphs uniformly.
         /// </summary>
-        [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Density", UpdateLevel.Style)]
         public PercentPrimitive glyphDensity;
 
         /// <summary>
         /// "Forward" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Forward Variable", "Direction", UpdateLevel.Data)]
+        [ABRInput("Forward Variable", UpdateLevel.Data)]
         public VectorDataVariable forwardVariable;
 
         /// <summary>
         /// "Up" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
+        [ABRInput("Up Variable", UpdateLevel.Data)]
         public VectorDataVariable upVariable;
 
         /// <summary>
         /// Level of detail to use for glyph rendering (higher number = lower
         /// level of detail; most glyphs have 3 LODs)
         /// </summary>
+        [ABRInput("Glyph Level Of Detail", UpdateLevel.Data)]
         public int glyphLod = 1;
 
         /// <summary>
         /// Use random forward/up directions when no Vector variables are
         /// applied for forward/up.
         /// </summary>
+        [ABRInput("Use Random Orientation", UpdateLevel.Data)]
         public bool useRandomOrientation = true;
 
         /// <summary>
@@ -139,6 +142,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
         /// </summary>
+        [ABRInput("Show Outline", UpdateLevel.Data)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -146,6 +150,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
         /// </summary>
+        [ABRInput("Outline Width", UpdateLevel.Data)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -153,6 +158,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
+        [ABRInput("Outline Color", UpdateLevel.Data)]
         public Color outlineColor;
 
         /// <summary>
@@ -163,6 +169,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
         /// </summary>
+        [ABRInput("Force Outline Color", UpdateLevel.Data)]
         public BooleanPrimitive forceOutlineColor;
 
         /// <summary>

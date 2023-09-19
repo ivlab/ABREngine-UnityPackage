@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -70,20 +70,21 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
 
         /// <summary>
         /// Scalar variable used to vary the pattern across the surface.
         /// </summary>
-        [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Variable", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         /// <summary>
@@ -91,13 +92,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/pattern.gif"/>
         /// </summary>
-        [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset pattern;
 
         /// <summary>
         /// Override the pattern/texture used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanTexture"/>.
         /// </summary>
+        [ABRInput("NaN Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset nanPattern;
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSize.gif"/>
         /// </summary>
-        [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Size", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
         /// <summary>
@@ -116,7 +118,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"/>
         /// </summary>
-        [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Seam Blend", UpdateLevel.Style)]
         public PercentPrimitive patternSeamBlend;
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"/>
         /// </summary>
-        [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Saturation", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
 
         /// <summary>
@@ -134,7 +136,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"/>
         /// </summary>
-        [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Intensity", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
         // TODO: Integrate this with schema.
@@ -145,6 +147,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/opacity.gif"/>
         /// </summary>
+        [ABRInput("Opacity", UpdateLevel.Style)]
         public PercentPrimitive opacity;
 
         // TODO: There's not yet a good way to display a transparent surface
@@ -159,6 +162,7 @@ namespace IVLab.ABREngine
         /// NOTE: Outlines work best on convex objects. The wavelet in this
         /// example shows some artifacts due to its concavity.
         /// </remarks>
+        [ABRInput("Show Outline", UpdateLevel.Style)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -166,6 +170,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
+        [ABRInput("Outline Width", UpdateLevel.Style)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -173,6 +178,8 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
+        /// TODO: Support Primitive Color inputs
+        [ABRInput("Outline Color", UpdateLevel.Style)]
         public Color outlineColor;
 
         /// <summary>
@@ -180,6 +187,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"/>
         /// </summary>
+        [ABRInput("Show Only Outline", UpdateLevel.Style)]
         public BooleanPrimitive onlyOutline;
 
         protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };

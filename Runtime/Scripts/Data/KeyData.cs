@@ -180,7 +180,6 @@ namespace IVLab.ABREngine
             return new RawABRInput {
                 inputType = this.GetType().ToString(),
                 inputValue = this.Path,
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
         }

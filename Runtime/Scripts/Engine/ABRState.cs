@@ -314,7 +314,7 @@ namespace IVLab.ABREngine
                                 // Verify that the input matches with the parameter (to
                                 // avoid possible name collisions), and check that it's
                                 // assignable from the possibleInput
-                                var actualInput = actualInputs.First((i) => inputName == i.inputName && i.parameterName == value.parameterName);
+                                var actualInput = actualInputs.First((i) => inputName == i.inputName);
                                 if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
                                 {
                                     impressionInputs.AssignInput(inputName, possibleInput);
@@ -696,8 +696,6 @@ namespace IVLab.ABREngine
                             if (input != null)
                             {
                                 RawABRInput saveInput = input.GetRawABRInput();
-                                saveInput.parameterName = actualInputs
-                                    .First((i) => i.inputName == inputName).parameterName;
                                 saveInputs[inputName] = saveInput;
 
                                 // If it's a variable, gather the custom min/max if

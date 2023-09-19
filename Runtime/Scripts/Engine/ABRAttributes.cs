@@ -44,13 +44,11 @@ namespace IVLab.ABREngine
     public class ABRInputAttribute : System.Attribute
     {
         public string inputName;
-        public string parameterName;
         // Which level of update (e.g. data, style, etc) this input necessitates if changed.
         public UpdateLevel updateLevel;
-        public ABRInputAttribute(string inputName, string parameterName, UpdateLevel updateLevel)
+        public ABRInputAttribute(string inputName, UpdateLevel updateLevel)
         {
             this.inputName = inputName;
-            this.parameterName = parameterName;
             this.updateLevel = updateLevel;
         }
     }

@@ -30,4 +30,4 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   defaultCamera: {fileID: 0}
-  schemaUrl: https://raw.githubusercontent.com/bridger-herman/abr-schema/master/ABRSchema_2023-8-0.json
+  schemaName: ABRSchema_2023-9-0.json

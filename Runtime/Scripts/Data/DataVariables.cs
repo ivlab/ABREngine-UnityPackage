@@ -158,7 +158,6 @@ namespace IVLab.ABREngine
             return new RawABRInput {
                 inputType = this.GetType().ToString(),
                 inputValue = Path,
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
         }
@@ -221,7 +220,6 @@ namespace IVLab.ABREngine
             return new RawABRInput {
                 inputType = this.GetType().ToString(),
                 inputValue = Path,
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
         }

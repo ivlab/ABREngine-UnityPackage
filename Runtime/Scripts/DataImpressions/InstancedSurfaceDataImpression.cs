@@ -35,6 +35,11 @@ namespace IVLab.ABREngine
     /// <summary>
     /// An Instanced Surface data impression (very similar to glyphs, except
     /// geometries are specified from data rather than VisAssets)
+    /// 
+    /// > [!NOTE]
+    /// > This data impression type is not supported by the ABR design
+    /// > interface, hence the lack of <see cref="ABRInput"/> annotations for its
+    /// > instance variables.
     /// </summary>
     [ABRPlateType("Instanced Surface")]
     public class InstancedSurfaceDataImpression : DataImpression
@@ -52,7 +57,6 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/keyData.gif"/>
         /// </summary>
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
         /// <summary>
@@ -76,7 +80,6 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -86,7 +89,6 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>

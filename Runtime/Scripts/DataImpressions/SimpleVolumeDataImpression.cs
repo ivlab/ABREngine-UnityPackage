@@ -52,7 +52,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Data)]
         public KeyData keyData;
 
 
@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
         /// - affects both the <see cref="colormap"/> and the <see
         /// cref="opacitymap"/>.
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Data)]
+        [ABRInput("Color Variable", UpdateLevel.Data)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -71,13 +71,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace IVLab.ABREngine
         ///     volumeDataImpression.opacitymap = pg;
         /// </code>
         /// </examples>
-        [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
+        [ABRInput("Opacitymap", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
-        [ABRInput("Volume Brightness", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Brightness", UpdateLevel.Style)]
         public PercentPrimitive volumeBrightness;
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
-        [ABRInput("Volume Opacity Multiplier", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Opacity Multiplier", UpdateLevel.Style)]
         public PercentPrimitive volumeOpacityMultiplier;
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace IVLab.ABREngine
         /// creating atmospheric effects, but may not be useful for nitty-gritty
         /// data interpretation.
         /// </remarks>
-        [ABRInput("Volume Lighting", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Lighting", UpdateLevel.Style)]
         public BooleanPrimitive volumeLighting;
 
 

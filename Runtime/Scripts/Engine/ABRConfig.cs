@@ -160,7 +160,7 @@ namespace IVLab.ABREngine
         // private const string SchemaUrl = "http://localhost:9000/";
         // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
         [Tooltip("Name of the schema to use in ABRSchemas~ folder at root of this package")]
-        public string schemaName = "ABRSchema_2023-8-0.json";
+        public string schemaName = "ABRSchema_2023-9-0.json";
 
         void Reset()
         {
@@ -183,8 +183,11 @@ namespace IVLab.ABREngine
 
         void Awake()
         {
-            // Debug.Log("ABR Config Loaded");
+            LoadSchema();
+        }
 
+        public void LoadSchema()
+        {
             // Load the schema
             string schemaContents = null;
             using (StreamReader reader = new StreamReader(Path.Combine(ABREngine.SchemasPath, schemaName)))
@@ -260,7 +263,6 @@ namespace IVLab.ABREngine
             }
             RawABRInput input = new RawABRInput();
             input.inputType = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputType"]["const"].ToString();
-            input.parameterName = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["parameterName"]["const"].ToString();
             input.inputGenre = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputGenre"]["const"].ToString();
             if ((SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"] as JObject).ContainsKey("default"))
             {
