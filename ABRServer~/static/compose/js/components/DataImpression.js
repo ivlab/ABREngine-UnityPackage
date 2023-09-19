@@ -41,6 +41,7 @@ import { uuid } from "../../../common/UUID.js";
 // Key Data are assumed to be a "special" input that doesn't go in here
 //
 // Each input is defined as pairs: [left input, right input]
+// Non-draggable (e.g. primitive) inputs are just one per row
 const DataImpressionInputTopology = {
     "Glyphs": [
         // Tier 1
@@ -49,6 +50,19 @@ const DataImpressionInputTopology = {
             ["Glyph Variable", "Glyph"],
             ["Forward Variable", null],
             ["Up Variable", null],
+        ],
+        // Tier 2
+        [
+            ["Glyph Size"],
+            ["Glyph Density"],
+            ["Use Random Orientation"]
+        ],
+        // Tier 3
+        [
+            ["Show Outline", "Outline Width"],
+            ["Force Outline Color", "Outline Color"],
+            ["Glyph Level Of Detail"],
+            [null, "NaN Color"]
         ]
     ],
     "Ribbons": [
@@ -56,6 +70,20 @@ const DataImpressionInputTopology = {
         [
             ["Color Variable", "Colormap"],
             ["Texture Variable", "Texture"]
+        ],
+        // Tier 2
+        [
+            ["Ribbon Width"],
+            ["Ribbon Rotation"],
+            ["Ribbon Curve"],
+            ["Ribbon Smooth"],
+            ["Ribbon Brightness"],
+            ["Texture Cutoff"]
+        ],
+        // Tier 3
+        [
+            [null, "NaN Color"],
+            [null, "NaN Texture"],
         ]
     ],
     "Surfaces": [
@@ -63,6 +91,21 @@ const DataImpressionInputTopology = {
         [
             ["Color Variable", "Colormap"],
             ["Pattern Variable", "Pattern"],
+        ],
+        // Tier 2
+        [
+            ["Pattern Size"],
+            ["Pattern Saturation"],
+            ["Pattern Intensity"],
+            ["Pattern Seam Blend"]
+        ],
+        // Tier 3
+        [
+            ["Opacity"],
+            ["Show Outline", "Show Only Outline"],
+            ["Outline Width", "Outline Color"],
+            [null, "NaN Color"],
+            [null, "NaN Pattern"]
         ]
     ],
     "Volumes": [
@@ -70,9 +113,22 @@ const DataImpressionInputTopology = {
         [
             ["Color Variable", "Colormap"],
             [null, "Opacitymap"]
+        ],
+        // Tier 2
+        [
+            ["Volume Brightness"],
+            ["Volume Opacity Multiplier"],
+            ["Volume Lighting"]
+        ],
+        // Tier 3
+        [
+            [null, "NaN Color"],
+            ["NaN Opacity"]
         ]
     ]
 }
+
+const MaxInputTierToShow = 1;
 
 export function DataImpression(plateType, uuid, name, impressionData) {
     let $element = $('<div>', { class: 'data-impression rounded' })
@@ -144,13 +200,32 @@ export function DataImpression(plateType, uuid, name, impressionData) {
     });
 
     // Add a new row of inputs for each parameter
-    for (const tier of parameterTiers) {
+    for (const tierIndex in parameterTiers) {
+        if (tierIndex + 1 > MaxInputTierToShow) {
+            break;
+        }
+
+        const tier = parameterTiers[tierIndex];
+        let $tier = $('<div>', {
+            class: 'input-tier rounded'
+        });
+
+        let isOnlyPrimitives = tier.every(t => t.length == 1);
+        if (isOnlyPrimitives) {
+            $tier.addClass('primitive-tier');
+        }
+
         for (const inputPair of tier) {
             let $param = Parameter();
+            if (inputPair.length == 1) {
+                $param = Parameter('narrow');
+            }
             // Construct each input, and overlay the value puzzle piece if it exists
             for (const inputName of inputPair) {
-                if (!inputName)
+                if (!inputName) {
+                    $param.append($('<div>'));
                     continue;
+                }
 
                 let $socket = InputSocket(inputName, plateSchema[inputName].properties);
                 if (inputValues && inputValues[inputName]) {
@@ -168,8 +243,9 @@ export function DataImpression(plateType, uuid, name, impressionData) {
                 }
                 $param.append($socket);
             }
-            $parameterList.append($param);
+            $tier.append($param);
         }
+        $parameterList.append($tier);
     }
 
     if (!collapsed) {
@@ -282,8 +358,8 @@ function InputSocket(inputName, inputProps, addClass=undefined) {
     return $socket;
 }
 
-function Parameter() {
-    return $('<div>', { class: 'parameter' });
+function Parameter(addClass) {
+    return $('<div>', { class: 'parameter ' + addClass });
 }
 
 function DataImpressionSummary(uuid, name, impressionData, inputValues, parameterTiers) {

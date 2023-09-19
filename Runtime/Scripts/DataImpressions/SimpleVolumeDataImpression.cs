@@ -476,7 +476,6 @@ namespace IVLab.ABREngine
             }
 
             meshRenderer.SetPropertyBlock(MatPropBlock);
-            Debug.Log("After set " + MatPropBlock.GetTexture("_OpacityMap").GetHashCode());
         }
 
         public override void UpdateVisibility()

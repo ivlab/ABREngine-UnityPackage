@@ -61,15 +61,21 @@
 .data-impression .parameter-list {
     overflow: visible;
     width: 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .data-impression .parameter {
-    font-size: smaller;
+    font-size: x-small;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    border-bottom: 1px dotted #3d3d3d;
+}
+
+.data-impression .parameter.narrow {
+    width: fit-content;
 }
 
 .data-impression .parameter .parameter-label {
@@ -77,6 +83,20 @@
     flex-basis: 100%;
     font-size: x-small;
     color: #3d3d3d;
+}
+
+.input-tier.primitive-tier {
+    padding: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #f8f4f4;
+    width: 75%; /* to match header */
+}
+
+.input-tier {
+    padding: 0.5rem;
+    width: 15rem; /* match DI width */
 }
 
 /* keydata-specific styling */
