@@ -27,8 +27,8 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="16.869251"
-     inkscape:cx="-4.0606427"
-     inkscape:cy="20.243934"
+     inkscape:cx="-4.5052386"
+     inkscape:cy="20.303213"
      inkscape:window-width="2560"
      inkscape:window-height="1411"
      inkscape:window-x="-9"
@@ -37,18 +37,6 @@
      inkscape:current-layer="svg139" />
   <title
      id="title133">Asset 34</title>
-  <g
-     id="Layer_2"
-     data-name="Layer 2"
-     transform="translate(0,9.78)">
-    <g
-       id="Layer_1-2"
-       data-name="Layer 1">
-      <path
-         d="M 20,0 V 30.44 C 8.82,30.14 0,26.6 0,22.28 A 2.48,2.48 0 0 1 0,21.89 H 15.71 V 8.55 H 0 A 2.48,2.48 0 0 1 0,8.16 C 0,3.84 8.82,0.3 20,0 Z"
-         id="path135" />
-    </g>
-  </g>
   <metadata
      id="metadata387">
     <rdf:RDF>
@@ -58,4 +46,9 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <path
+     style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+     d="M 20,9.78 10.522575,16.553739 10.966699,29.046933 0,38.819825 20,40.22 V 9.78"
+     id="path443"
+     sodipodi:nodetypes="cccccc" />
 </svg>

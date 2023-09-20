@@ -367,7 +367,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
         let args = [
             resolvedProps.inputValue,
             resolvedProps.inputType,
-            false,
+            true,
             addClass,
             'fill'
         ];
@@ -376,7 +376,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
             $el.attr('title', 'Click to edit gradient');
             gradientUuid = resolvedProps.inputValue;
         } else {
-            $el = PuzzlePiece(inputName, resolvedProps.inputType, false, addClass);
+            $el = PuzzlePiece(inputName, resolvedProps.inputType, true, addClass);
             $el.attr('title', 'Click to add gradient');
         }
         $el.css('cursor', 'pointer');
