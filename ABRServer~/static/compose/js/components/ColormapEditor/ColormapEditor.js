@@ -27,18 +27,30 @@ import { ColorMap, floatToHex, hexToFloat } from './color.js';
 import { width, height } from '../dialogConsts.js';
 import { ColorThumb } from './components.js';
 
+const DefaultVisAssetJsonFields = {
+    "artifactData": {
+            "colormap": "colormap.xml"
+    },
+    "artist": "ABR Artist",
+    "class": "Custom",
+    "family": "Custom",
+    "hidden": false,
+    "preview": "thumbnail.png",
+    "tags": [],
+    "type": "colormap",
+}
+
+// white colormap w/one control point in the center
+var defaultColormap = new ColorMap();
+defaultColormap.addControlPt(0.5, {r: 1, g: 1, b: 1});
+
 var activeColormap = null;
 var currentColormapUuid = null;
 var currentVisAssetJson = null;
 
-export async function ColormapEditor(inputProps) {
-    let vaUuid = inputProps.inputValue;
-
-    // Ensure all globals are zeroed out on initilization of new dialog
-    activeColormap = null;
-    currentColormapUuid = null;
-    currentVisAssetJson = null;
-
+// Get colormap from state-local vis assets, cache, or server
+// Optionally, create the VisAsset JSON if not found
+export async function getColormapFromAnySource(vaUuid, createIfNotFound=false) {
     let visassetJson = null;
     let colormapXml = null;
     if (globals.stateManager.keyExists(['localVisAssets'], vaUuid)) {
@@ -58,6 +70,25 @@ export async function ColormapEditor(inputProps) {
             colormapXml = await fetch(xmlUrl).then((resp) => resp.text());
         }
     }
+
+    if (visassetJson == null && colormapXml == null && createIfNotFound) {
+        visassetJson = JSON.parse(JSON.stringify(DefaultVisAssetJsonFields));
+        visassetJson['uuid'] = vaUuid;
+        colormapXml = defaultColormap.toXML();
+    }
+
+    return [visassetJson, colormapXml];
+}
+
+export async function ColormapEditor(inputProps) {
+    let vaUuid = inputProps.inputValue;
+
+    // Ensure all globals are zeroed out on initilization of new dialog
+    activeColormap = null;
+    currentColormapUuid = null;
+    currentVisAssetJson = null;
+
+    let [visassetJson, colormapXml] = await getColormapFromAnySource(vaUuid, true);
 
     if (visassetJson == null || colormapXml == null) {
         alert('No colormap to edit!');
@@ -108,6 +139,17 @@ export async function ColormapEditor(inputProps) {
     });
 
     $buttons.append($('<button>', {
+        class: 'colormap-button',
+        text: 'Save copy to library',
+        title: 'Save a copy of this colormap to the local library for reuse in other visualizations',
+    }).on('click', (evt) => {
+        updateColormap();
+        saveColormap().then((u) => {
+            saveColormapToLibrary(u);
+        });
+    }).prepend($('<span>', { class: 'ui-icon ui-icon-disk'})));
+
+    $buttons.append($('<button>', {
         class: 'flip-colormap colormap-button',
         text: 'Flip',
         title: 'Flip colormap',
@@ -118,17 +160,6 @@ export async function ColormapEditor(inputProps) {
             updateColorThumbPositions();
         });
     }).prepend($('<span>', { class: 'ui-icon ui-icon-transferthick-e-w'})));
-
-    $buttons.append($('<button>', {
-        class: 'colormap-button',
-        text: 'Save copy to library',
-        title: 'Save a copy of this colormap to the local library for reuse in other visualizations',
-    }).on('click', (evt) => {
-        updateColormap();
-        saveColormap().then((u) => {
-            saveColormapToLibrary(u);
-        });
-    }).prepend($('<span>', { class: 'ui-icon ui-icon-disk'})));
 
     $colormapEditor.append($buttons);
 

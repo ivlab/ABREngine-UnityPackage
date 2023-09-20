@@ -44,6 +44,7 @@ export const typeMap = {
 };
 
 export const gradientTypeMap = {
+    'colormap': 'IVLab.ABREngine.ColormapVisAsset',
     'glyph': 'IVLab.ABREngine.GlyphGradient',
     'line': 'IVLab.ABREngine.LineTextureGradient',
     'texture': 'IVLab.ABREngine.SurfaceTextureGradient',
@@ -181,8 +182,8 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
         if (resolvedProps && !resolvedProps.inputValue) {
             $el = PuzzlePiece(inputName, resolvedProps.inputType, true, addClass);
 
-            // Special case to enable visasset gradients to be created by clicking
             let visassetType = Object.keys(typeMap).find((k) => typeMap[k] == resolvedProps.inputType);
+            // Special case to enable visasset gradients and colormaps to be created by clicking
             if (Object.keys(gradientTypeMap).indexOf(visassetType) >= 0) {
                 let gradientType = gradientTypeMap[visassetType];
                 let humanReadable = TITLE_STRINGS[gradientType];
@@ -234,25 +235,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
             $el = PuzzlePieceWithThumbnail(...args);
             $el.attr('title', familyClass);
 
-            // Allow the colormap to be edited
-            if (resolvedProps.inputType == 'IVLab.ABREngine.ColormapVisAsset') {
-                $el.attr('title', $el.attr('title') + '\nClick to customize');
-                $el.addClass('hover-bright');
-                let dragging = false;
-                $el.on('dragstart', () => dragging = true);
-                $el.on('dragend', () => dragging = false);
-                $el.css('cursor', 'pointer');
-                let clickEvt = (evt) => {
-                    if (!dragging) {
-                        let impressionUuid = $el.parents('.data-impression').data('uuid');
-                        EditorDialog(resolvedProps, impressionUuid);
-                    }
-                };
-                $el.on('dblclick', clickEvt);
-                $el.on('click', clickEvt);
-            }
-
-            // Allow the gradient to be edited
+            // Allow the colormap OR gradient to be edited
             let gradient = false;
             if (Object.values(gradientTypeMap).indexOf(resolvedProps.inputType) >= 0) {
                 $el.attr('title', $el.attr('title') + '\nClick to customize');

@@ -409,7 +409,7 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
         }
     }
     let $el = $('<div>', {
-        class: 'data-impression-summary rounded-bottom'
+        class: 'data-impression-summary'
     }).append(
         $('<div>', { class: 'impression-controls' }).append(
             $('<button>', {
@@ -441,6 +441,7 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
     );
 
     if (collapsed) {
+        $el.addClass('rounded-bottom');
         $el.append($('<hr>'))
         let $props = $('<div>', {
             class: 'summary-properties parameter'
