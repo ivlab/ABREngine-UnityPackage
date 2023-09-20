@@ -24,7 +24,7 @@
 import { globals } from '../../../../common/globals.js';
 import { uuid } from '../../../../common/UUID.js';
 import { ColorMap, floatToHex, hexToFloat } from './color.js';
-import { width, height } from './dialogConsts.js';
+import { width, height } from '../dialogConsts.js';
 import { ColorThumb } from './components.js';
 
 var activeColormap = null;

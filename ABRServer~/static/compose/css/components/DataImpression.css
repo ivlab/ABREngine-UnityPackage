@@ -141,3 +141,13 @@
     width: calc(15rem - 2*5rem - 2*0.2rem);
     left: calc(50% - (15rem - 2*5rem - 2*0.2rem) * 0.5);
 }
+
+.data-impression-editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-impression-editor>* {
+    margin: auto;
+    padding: 0.5em;
+}

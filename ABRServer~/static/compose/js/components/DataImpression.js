@@ -21,6 +21,7 @@
 
 import { DataPath } from "../../../common/DataPath.js";
 import { globals } from "../../../common/globals.js";
+import { dialogWidth } from './dialogConsts.js';
 import { CACHE_UPDATE, resolveSchemaConsts } from '../../../common/StateManager.js';
 import { COMPOSITION_LOADER_ID } from '../components/Components.js';
 import { InputPuzzlePiece, AssignedInputPuzzlePiece } from "./PuzzlePiece.js";
@@ -408,7 +409,7 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
         }
     }
     let $el = $('<div>', {
-        class: 'data-impression-summary'
+        class: 'data-impression-summary rounded-bottom'
     }).append(
         $('<div>', { class: 'impression-controls' }).append(
             $('<button>', {
@@ -417,6 +418,15 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
                 title: oldVisibility ? 'This data impression is visible' : 'This data impression is not shown',
             }).on('click', (evt) => {
                 globals.stateManager.update(`/impressions/${uuid}/renderHints/Visible`, !oldVisibility);
+            })
+        ).append(
+            $('<button>', {
+                class: 'rounded',
+                title: 'Edit this data impression\'s properties'
+            }).append(
+                $('<span>', { class: 'material-icons', text: 'edit'})
+            ).on('click', (evt) => {
+                editDataImpression(uuid);
             })
         ).append(
             $('<button>', {
@@ -489,4 +499,81 @@ function duplicateDataImpression(oldUuid) {
     newImpressionData.position.left += 100;
     globals.stateManager.update(`/impressions/${newUuid}`, newImpression);
     globals.stateManager.update('uiData/compose/impressionData/' + newUuid, newImpressionData);
+}
+
+function editDataImpression(uuid) {
+    let $diEditor = $('<div>', {
+        class: 'data-impression-editor',
+    });
+
+    if ($('.data-impression-editor').length > 0 && $('.data-impression-editor').dialog('isOpen')) {
+        alert('There is already an editor dialog open.');
+        return;
+    }
+
+    // Get rid of any previous instances of the editor dialog that were hidden
+    // jQuery UI dialogs just hide the dialog when it's closed
+    $('.data-impression-editor').remove();
+
+    let name = 'Data Impression';
+    if (globals.stateManager.state.impressions[uuid]) {
+        name = globals.stateManager.state.impressions[uuid].name;
+    }
+
+    let tags = [];
+    if (globals.stateManager.state.impressions[uuid] && globals.stateManager.state.impressions[uuid].tags) {
+        tags = globals.stateManager.state.impressions[uuid].tags;
+    }
+
+    let $nameEditor = $('<label>', {
+        id: 'di-name',
+        text: 'Name:'
+    }).append($('<input>', {
+        type: 'text',
+        val: name
+    }));
+    $diEditor.append($nameEditor);
+
+    let $tagEditor = $('<label>', {
+        id: 'di-tags',
+        text: 'Tags:'
+    }).append($('<input>', {
+        type: 'text',
+        title: 'Enter tags, separated by commas',
+        val: tags.join(',')
+    }));
+    $diEditor.append($tagEditor);
+
+    let saveProperties = () => {
+        let newName = $('#di-name input').val();
+        globals.stateManager.update('impressions/' + uuid + '/name', newName);
+
+        let newTagsRaw = $('#di-tags input').val();
+        if (newTagsRaw.length > 0) {
+            let newTags = newTagsRaw.split(',');
+            globals.stateManager.update('impressions/' + uuid + '/tags', newTags);
+        } else {
+            globals.stateManager.removePath('impressions/' + uuid + '/tags');
+        }
+    }
+
+    let $saveButton = $('<button>', {
+        text: 'Save'
+    }).prepend($('<span>', { class: 'material-icons', text: 'save' })).on('click', (evt) => {
+        saveProperties();
+        $diEditor.dialog('close');
+    });
+    $diEditor.append($saveButton);
+
+    $diEditor.on('keypress', (evt) => {
+        if (evt.key == 'Enter') {
+            saveProperties();
+            $diEditor.dialog('close')
+        }
+    });
+    
+    $diEditor.dialog({
+        'title': 'Edit Data Impression',
+        position: {my: 'center center', at: 'center center', of: window}
+    });
 }

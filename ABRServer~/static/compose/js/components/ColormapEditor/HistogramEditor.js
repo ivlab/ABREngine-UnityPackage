@@ -23,7 +23,7 @@
 
 import { globals } from '../../../../common/globals.js';
 import { DataPath } from '../../../../common/DataPath.js';
-import { margin, width } from './dialogConsts.js';
+import { margin, width } from '../dialogConsts.js';
 import { DataRemappingSlider } from './components.js';
 
 const fullHeight = 200;

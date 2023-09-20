@@ -26,7 +26,7 @@ import { ColorMap } from './color.js';
 import { getDisplayVal, getFloatVal } from '../Primitives.js';
 import { STATE_UPDATE_EVENT } from '../../../../common/StateManager.js';
 import { createSvg } from '../../../../common/helpers.js';
-import { width, height } from './dialogConsts.js';
+import { width, height } from '../dialogConsts.js';
 import { histogramDragIndicator, histogramDragIndicatorDone, histogramExists } from './HistogramEditor.js';
 
 const DEFAULT_GRADIENT = {

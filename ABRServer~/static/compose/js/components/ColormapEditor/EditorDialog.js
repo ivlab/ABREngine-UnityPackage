@@ -24,7 +24,7 @@
 
 import { globals } from '../../../../common/globals.js';
 import { ColormapEditor } from './ColormapEditor.js';
-import { dialogWidth } from './dialogConsts.js';
+import { dialogWidth } from '../dialogConsts.js';
 import { GradientEditor } from './GradientEditor.js';
 import { HistogramEditor } from './HistogramEditor.js';
 import { VisAssetGradientEditor } from './VisAssetGradientEditor.js';

@@ -19,7 +19,7 @@
 
 import { globals } from "../../../../common/globals.js";
 import { gradientTypeMap, PuzzlePiece, typeMap } from "../PuzzlePiece.js";
-import { width } from "./dialogConsts.js";
+import { width } from "../dialogConsts.js";
 import { histogramDragIndicator, histogramDragIndicatorDone } from "./HistogramEditor.js";
 
 var currentGradient = null;
