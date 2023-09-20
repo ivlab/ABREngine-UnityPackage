@@ -146,24 +146,15 @@
                                             "description": "Should the data impression be expanded or not?",
                                             "type": "boolean",
                                             "default": false
+                                        },
+                                        "maxInputTierToShow": {
+                                            "type": "number",
+                                            "minimum": 1,
+                                            "maximum": 3
                                         }
                                     }
                                 }
                             }
-                        }
-                    }
-                },
-                "dataQuery": {
-                    "type": "object",
-                    "description": "Data for the data querying UI",
-                    "properties": {
-                        "mode": {
-                            "type": "string",
-                            "enum": ["Slices", "Streams"],
-                            "default": "Slices"
-                        },
-                        "timestep": {
-                            "type": "number"
                         }
                     }
                 }

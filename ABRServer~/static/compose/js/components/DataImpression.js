@@ -42,6 +42,8 @@ import { uuid } from "../../../common/UUID.js";
 //
 // Each input is defined as pairs: [left input, right input]
 // Non-draggable (e.g. primitive) inputs are just one per row
+//
+// These names correspond to the schema loaded in Validator.js.
 const DataImpressionInputTopology = {
     "Glyphs": [
         // Tier 1
@@ -128,9 +130,12 @@ const DataImpressionInputTopology = {
     ]
 }
 
-const MaxInputTierToShow = 1;
-
 export function DataImpression(plateType, uuid, name, impressionData) {
+    let maxInputTierToShow = 1;
+    if (impressionData && impressionData.maxInputTierToShow) {
+        maxInputTierToShow = impressionData.maxInputTierToShow;
+    }
+
     let $element = $('<div>', { class: 'data-impression rounded' })
         .data({
             uuid,
@@ -200,8 +205,28 @@ export function DataImpression(plateType, uuid, name, impressionData) {
     });
 
     // Add a new row of inputs for each parameter
+    const $moreButton = $('<button>', {
+        class: 'material-icons',
+        text: 'expand_more'
+    }).on('click', () => {
+        globals.stateManager.update('uiData/compose/impressionData/' + uuid + '/maxInputTierToShow', maxInputTierToShow + 1);
+    });
+    const $lessButton = ($('<button>', {
+        class: 'material-icons',
+        text: 'expand_less'
+    }).on('click', () => {
+        globals.stateManager.update('uiData/compose/impressionData/' + uuid + '/maxInputTierToShow', maxInputTierToShow - 1);
+    }));
+    let $expandButtons = $('<div>');
+
+    let everyTierShown = true;
     for (const tierIndex in parameterTiers) {
-        if (tierIndex + 1 > MaxInputTierToShow) {
+        if (+tierIndex + 1 > maxInputTierToShow) {
+            if (+tierIndex > 1) {
+                $expandButtons.append($lessButton);
+            }
+            $expandButtons.append($moreButton);
+            everyTierShown = false;
             break;
         }
 
@@ -247,6 +272,12 @@ export function DataImpression(plateType, uuid, name, impressionData) {
         }
         $parameterList.append($tier);
     }
+
+    if (everyTierShown) {
+        $expandButtons.append($lessButton);
+    }
+
+    $parameterList.append($expandButtons);
 
     if (!collapsed) {
         $element.append($parameterList);

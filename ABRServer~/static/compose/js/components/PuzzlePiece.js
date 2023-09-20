@@ -359,6 +359,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
         $el.attr('title', resolvedProps && resolvedProps.inputValue ? resolvedProps.inputValue : null);
     } else if (resolvedProps.inputGenre == 'Primitive') {
         $el = PrimitiveInput(inputName, inputName, resolvedProps);
+        $el.addClass('primitive-input')
         $el.addClass('no-drag');
         $el.addClass(addClass);
     } else if (resolvedProps.inputGenre == 'PrimitiveGradient') {

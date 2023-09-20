@@ -14,7 +14,7 @@
     margin: 0.1rem 0;
 }
 
-.puzzle-piece:not(.drop-zone) {
+.puzzle-piece:not(.drop-zone):not(.primitive-input) {
     font-size: larger;
 }
 
