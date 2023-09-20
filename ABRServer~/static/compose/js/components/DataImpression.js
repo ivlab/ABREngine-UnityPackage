@@ -132,7 +132,7 @@ const DataImpressionInputTopology = {
 
 export function DataImpression(plateType, uuid, name, impressionData) {
     let maxInputTierToShow = 1;
-    if (impressionData && impressionData.maxInputTierToShow) {
+    if (impressionData && typeof(impressionData.maxInputTierToShow !== 'undefined')) {
         maxInputTierToShow = impressionData.maxInputTierToShow;
     }
 
@@ -161,7 +161,7 @@ export function DataImpression(plateType, uuid, name, impressionData) {
     });
 
     let collapsed = false;
-    if (impressionData && impressionData.collapsed) {
+    if (maxInputTierToShow == 0) {
         collapsed = true;
     }
 
@@ -204,7 +204,6 @@ export function DataImpression(plateType, uuid, name, impressionData) {
         class: 'parameter-list',
     });
 
-    // Add a new row of inputs for each parameter
     const $moreButton = $('<button>', {
         class: 'material-icons',
         text: 'expand_more'
@@ -217,12 +216,15 @@ export function DataImpression(plateType, uuid, name, impressionData) {
     }).on('click', () => {
         globals.stateManager.update('uiData/compose/impressionData/' + uuid + '/maxInputTierToShow', maxInputTierToShow - 1);
     }));
-    let $expandButtons = $('<div>');
+    let $expandButtons = $('<div>', {
+        class: 'impression-expand-buttons'
+    });
 
     let everyTierShown = true;
+    // Add a new row of inputs for each parameter
     for (const tierIndex in parameterTiers) {
         if (+tierIndex + 1 > maxInputTierToShow) {
-            if (+tierIndex > 1) {
+            if (+tierIndex > 0) {
                 $expandButtons.append($lessButton);
             }
             $expandButtons.append($moreButton);
@@ -277,11 +279,11 @@ export function DataImpression(plateType, uuid, name, impressionData) {
         $expandButtons.append($lessButton);
     }
 
-    $parameterList.append($expandButtons);
-
     if (!collapsed) {
         $element.append($parameterList);
     }
+
+    $element.append($expandButtons);
 
     // Only need to update the UI position when dragging, not the whole impression
     $element.draggable({
@@ -395,7 +397,7 @@ function Parameter(addClass) {
 
 function DataImpressionSummary(uuid, name, impressionData, inputValues, parameterTiers) {
     let collapsed = false;
-    if (impressionData && impressionData.collapsed) {
+    if (impressionData && typeof(impressionData.maxInputTierToShow !== 'undefined'), impressionData.maxInputTierToShow == 0) {
         collapsed = true;
     }
 
@@ -419,15 +421,6 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
         ).append(
             $('<button>', {
                 class: 'rounded',
-                title: collapsed ? 'Show More' : 'Show Less'
-            }).append(
-                $('<span>', { class: 'material-icons', text: collapsed ? 'lock' : 'lock_open'})
-            ).on('click', (evt) => {
-                globals.stateManager.update(`/uiData/compose/impressionData/${uuid}/collapsed`, !collapsed);
-            })
-        ).append(
-            $('<button>', {
-                class: 'rounded',
                 title: 'Duplicate this data impression'
             }).append(
                 $('<span>', { class: 'material-icons', text: 'content_copy'})
@@ -437,39 +430,43 @@ function DataImpressionSummary(uuid, name, impressionData, inputValues, paramete
         )
     );
 
-    if (impressionData && impressionData.collapsed) {
+    if (collapsed) {
         $el.append($('<hr>'))
         let $props = $('<div>', {
             class: 'summary-properties parameter'
         });
         let kdInputName = 'Key Data';
         if (inputValues && inputValues[kdInputName]) {
-            $props.append(AssignedInputPuzzlePiece(kdInputName, inputValues[kdInputName], 'summary'));
+            let $kd = AssignedInputPuzzlePiece(kdInputName, inputValues[kdInputName], 'summary');
+            $kd.off('click');
+            if ($kd.hasClass('ui-draggable')) {
+                $kd.draggable('destroy');
+            }
+            $props.append($kd);
         }
 
         for (const tier of parameterTiers) {
+            // Summary skips all inputs besides Tier 1
+            if (+tier > 0) {
+                break;
+            }
             for (const inputPair of tier) {
+                let $row = $('<div>');
                 for (const inputName of inputPair) {
                     if (inputValues && inputValues[inputName]) {
                         // Display a non-editable version of the piece in the summary block
                         let $input = AssignedInputPuzzlePiece(inputName, inputValues[inputName], 'summary');
-                        $input.off('click');
-                        if ($input.hasClass('ui-draggable')) {
-                            $input.draggable('destroy');
-                        }
+                        let $inputLabel = $input.find('.puzzle-label');
+                        $inputLabel.addClass('summary');
 
-                        // Special case for primitive inputs
-                        let textInput = $input.find('input');
-                        let inputVal = textInput.val();
-                        if (inputVal) {
-                            textInput.remove();
-                            let text = $input.find('.puzzle-label').text();
-                            $input.find('.puzzle-label').text(`${text}: ${inputVal}`);
+                        // Special case for primitive inputs - skip them
+                        let textInput = $inputLabel.find('input');
+                        if (textInput.length == 0) {
+                            $row.append($inputLabel);
                         }
-                        $input.removeClass('hover-bright');
-                        $props.append($input);
                     }
                 }
+                $props.append($row);
             }
         }
         $el.append($props);

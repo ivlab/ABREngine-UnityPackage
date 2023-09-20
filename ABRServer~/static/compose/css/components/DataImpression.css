@@ -46,12 +46,15 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
 }
 
 .data-impression .data-impression-summary .puzzle-label * {
     width: 75%;
     margin: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .data-impression .data-impression-thumbnail {
@@ -91,12 +94,16 @@
     flex-wrap: wrap;
     justify-content: center;
     background-color: #f8f4f4;
-    width: 75%; /* to match header */
+    width: 75% !important; /* to match header */
 }
 
-.input-tier {
+.data-impression .input-tier {
     padding: 0.5rem;
     width: 15rem; /* match DI width */
+}
+
+.data-impression .impression-expand-buttons {
+    margin: auto;
 }
 
 /* keydata-specific styling */

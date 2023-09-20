@@ -142,14 +142,9 @@
                                                 "y": { "type": "number" }
                                             }
                                         },
-                                        "collapsed": {
-                                            "description": "Should the data impression be expanded or not?",
-                                            "type": "boolean",
-                                            "default": false
-                                        },
                                         "maxInputTierToShow": {
                                             "type": "number",
-                                            "minimum": 1,
+                                            "minimum": 0,
                                             "maximum": 3
                                         }
                                     }

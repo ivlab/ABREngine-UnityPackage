@@ -133,13 +133,14 @@ div.inline {
 }
 
 /* define behaviour for summary puzzle pieces (displayed when DI is locked) */
-.puzzle-piece.summary {
-    height: 2rem;
+.summary {
+    height: 2rem !important;
+    width: 5rem;
     position: relative !important;
 }
-.puzzle-piece.summary .puzzle-connector:not(.keydata) {
-    height: 2rem; /* maintain 2:5 ratio */
-    width: 0.8rem;
+.puzzle-label.summary {
+    display: flex;
+    justify-content: center;
 }
 
 @keyframes pulse {
