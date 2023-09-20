@@ -18,11 +18,6 @@ public class ABRSpaceConvertExample : MonoBehaviour
     [Header("Constrain the endpoint measurements to the data")]
     bool measureFromClosestDataPoint = false;
 
-    void Start()
-    {
-        Debug.Log(System.IO.Path.GetFullPath("Packages/edu.umn.cs.ivlab/DocumentationSrc~/docfx.json"));
-    }
-
     // Update is called once per frame
     void Update()
     {
