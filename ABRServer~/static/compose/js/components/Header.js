@@ -215,12 +215,13 @@ export function Header() {
             }
         });
 
-        let $allStates = $('<div>', {
-            class: 'state-list'
-        });
-        for (const item in localStorage) {
-            if (item.startsWith(STORAGE_STATE_PREFIX)) {
-                let stateName = item.replace(STORAGE_STATE_PREFIX, '');
+        globals.stateManager.listStates().then(resp => resp.json()).then(stateListObj => {
+            let $allStates = $('<div>', {
+                class: 'state-list'
+            });
+            let states = stateListObj.states;
+
+            for (const stateName of states) {
                 $allStates.append($('<div>', {
                     class: 'state-selector rounded',
                     title: 'Select a state and click "Load" or double click a state',
@@ -238,14 +239,15 @@ export function Header() {
                         .css('background-color', '#ceedff');
                 }).on('dblclick', (evt) => {
                     let stateName = $(evt.target).parents().find('.selected-state .state-name').text();
-                    $('#state-header #state-name').text(stateName);
                     // Tell the server to update
-                    globals.stateManager.updateState(localStorage.getItem(STORAGE_STATE_PREFIX + stateName));
+                    globals.stateManager.loadState(stateName).then(() => {
+                        $('#state-header #state-name').text(globals.stateManager.state.name ? globals.stateManager.state.name : defaultStateName);
+                    });
                     $('#load-state-dialog').dialog('destroy');
                 }).append(
                     $('<img>', {
                         class: 'state-thumbnail',
-                        src: localStorage[STORAGE_THUMB_PREFIX + stateName],
+                        src: '/api/thumbnail/' + stateName.replace('.json', '.png') + '?' + Date.now(),
                     })
                 ).append(
                     $('<p>', {
@@ -271,11 +273,12 @@ export function Header() {
                     )
                 ))
             }
-        }
-        $loadDialog.append($allStates);
+
+            $loadDialog.append($allStates);
+        });
     }));
 
-    // Save a state to localStorage
+    // Save a state to server
     $fileHeader.append($('<button>', {
         class: 'material-icons rounded',
         html: 'save',
@@ -378,8 +381,10 @@ export function Header() {
 
 function saveState(stateName) {
     globals.stateManager.update('/name', stateName).then(() => {
-        localStorage[STORAGE_STATE_PREFIX + stateName] = JSON.stringify(globals.stateManager.state);
-        localStorage[STORAGE_THUMB_PREFIX + stateName] = globals.stateManager.latestThumbnail;
+        // localStorage[STORAGE_STATE_PREFIX + stateName] = JSON.stringify(globals.stateManager.state);
+        // localStorage[STORAGE_THUMB_PREFIX + stateName] = globals.stateManager.latestThumbnail;
+        // save state to server instead of in browser
+        globals.stateManager.saveState(stateName);
         $('#state-header #state-name').text(stateName);
     });
 }

@@ -43,7 +43,7 @@ class ImageManager:
         #     fout.write(content_binary)
 
         # Write the thumbnail for most-recent
-        with open(thumbnail_path.joinpath('latest-thumbnail.png'), 'wb') as fout:
+        with open(thumbnail_path.joinpath(settings.LATEST_THUMBNAIL_NAME), 'wb') as fout:
             fout.write(content_binary)
 
 image_manager = ImageManager()

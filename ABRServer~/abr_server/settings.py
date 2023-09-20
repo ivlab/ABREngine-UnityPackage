@@ -170,6 +170,7 @@ DOWNLOAD_VISASSETS = config['VisAssets']['download_missing']
 VISASSET_PATH = Path(MEDIA_ROOT).joinpath('visassets')
 DATASET_PATH = Path(MEDIA_ROOT).joinpath('datasets')
 THUMBNAILS_PATH = Path(MEDIA_ROOT).joinpath('thumbnails')
+STATES_PATH = Path(MEDIA_ROOT).joinpath('states')
 
 print('Media path:', MEDIA_ROOT)
 
@@ -179,6 +180,9 @@ if not VISASSET_PATH.exists():
     VISASSET_PATH.mkdir()
 if not THUMBNAILS_PATH.exists():
     THUMBNAILS_PATH.mkdir()
+LATEST_THUMBNAIL_NAME = 'latest-thumbnail.png'
+if not STATES_PATH.exists():
+    STATES_PATH.mkdir()
 
 VISASSET_JSON = 'artifact.json'
 VISASSET_LIBRARY = config['VisAssets']['download_missing_from']

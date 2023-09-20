@@ -74,6 +74,30 @@ export class StateManager {
         this.updateLatestThumbnail();
     }
 
+    // get a particular state's thumbnail (leave blank for latest)
+    async getThumbnail(stateName) {
+        return fetch('/api/thumbnail/' + stateName);
+    }
+
+    // list all the states available on the server
+    async listStates() {
+        return fetch('/api/list-states');
+    }
+
+    // save a state to disk on the server
+    async saveState(stateName) {
+        return fetch('/api/save-state/' + stateName, {
+            method: 'POST'
+        });
+    }
+
+    // load a state from disk on the server
+    async loadState(stateName) {
+        return fetch('/api/load-state/' + stateName, {
+            method: 'POST'
+        });
+    }
+
     // Retrieve the latest thumbnail from the server
     async updateLatestThumbnail() {
         let b = await fetch('/media/thumbnails/latest-thumbnail.png?' + Date.now()).then((resp) => resp.blob());
@@ -115,18 +139,19 @@ export class StateManager {
             });
 
         // Poll for updates to the thumbnail, stop trying when there's a new thumbnail or if we've tried more than 10 times
-        if (!this._thumbnailPoll) {
-            this._thumbnailPoll = setInterval(async () => {
-                let prevThumbnail = `${this.latestThumbnail}`;
-                await this.updateLatestThumbnail();
-                if (this._thumbPollAttempts > 10 || this.latestThumbnail != prevThumbnail) {
-                    clearInterval(this._thumbnailPoll);
-                    this._thumbnailPoll = null;
-                    this._thumbPollAttempts = 0;
-                }
-                this._thumbPollAttempts += 1;
-            }, 500);
-        }
+        // Now unnecessary because states and their thumbnails are saved on server-side
+        // if (!this._thumbnailPoll) {
+        //     this._thumbnailPoll = setInterval(async () => {
+        //         let prevThumbnail = `${this.latestThumbnail}`;
+        //         await this.updateLatestThumbnail();
+        //         if (this._thumbPollAttempts > 10 || this.latestThumbnail != prevThumbnail) {
+        //             clearInterval(this._thumbnailPoll);
+        //             this._thumbnailPoll = null;
+        //             this._thumbPollAttempts = 0;
+        //         }
+        //         this._thumbPollAttempts += 1;
+        //     }, 500);
+        // }
     }
 
     async updateState(newState) {

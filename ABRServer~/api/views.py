@@ -17,6 +17,8 @@
 import os
 import json
 import fnmatch
+import shutil
+import logging
 import numpy as np
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -27,6 +29,8 @@ from django.conf import settings
 from abr_server.state import state
 from abr_server.notifier import MessageTarget, NotifierMessage, notifier
 from abr_server import visasset_manager
+
+logger = logging.getLogger('django.server')
 
 VISASSET_CACHE = {}
 DATA_CACHE = {}
@@ -277,3 +281,56 @@ def get_histogram(request, org_name, dataset_name, key_data_name, variable_label
         })
 
         return JsonResponse({'histogram': zipped, 'keyDataMin': variable_kd_min, 'keyDataMax': variable_kd_max})
+
+@csrf_exempt
+def state_thumbnail(request, name=None):
+    if name is None:
+        name = settings.LATEST_THUMBNAIL_NAME
+    try:
+        print('NAME IS ', name)
+        with open(settings.THUMBNAILS_PATH.joinpath(name), 'rb') as fin:
+            data = fin.read()
+        resp = HttpResponse(data, content_type='image/png')
+        resp['Content-Disposition'] = f'attachment; filename="{name}"'
+        return resp
+    except:
+        return HttpResponse('Error loading thumbnail ' + name, status=400)
+
+@csrf_exempt
+def list_states(request):
+    state_path = settings.STATES_PATH
+    states = os.listdir(state_path)
+    states.sort()
+    return JsonResponse({'states': states})
+
+@csrf_exempt
+def save_state(request, name):
+    state_path = settings.STATES_PATH
+    if not name.endswith('.json'):
+        name += '.json'
+    try:
+        # Save the state
+        with open(state_path.joinpath(name), 'w') as fout:
+            state_json = state.get_path([])
+            json.dump(state_json, fout, indent=4)
+            logger.info('Saved state ' + name)
+
+        # save the current thumbnail as state name
+        src_file = settings.THUMBNAILS_PATH.joinpath(settings.LATEST_THUMBNAIL_NAME)
+        dst_file = settings.THUMBNAILS_PATH.joinpath(name.replace('.json', '.png'))
+        shutil.copy(src_file, dst_file)
+        return HttpResponse('Saved state' + name)
+    except:
+        return HttpResponse('Error saving state: ' + name, status=400)
+
+@csrf_exempt
+def load_state(request, name):
+    state_path = settings.STATES_PATH
+    try:
+        with open(state_path.joinpath(name), 'r') as fin:
+            tmp_state = json.load(fin)
+            state.set_path([], tmp_state)
+            logger.info('Loaded state ' + name)
+        return HttpResponse('Loaded state ' + name)
+    except:
+        return HttpResponse('State does not exist: ' + name, status=404)

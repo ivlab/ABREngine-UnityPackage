@@ -133,7 +133,7 @@ const DataImpressionInputTopology = {
 
 export function DataImpression(plateType, uuid, name, impressionData) {
     let maxInputTierToShow = 1;
-    if (impressionData && typeof(impressionData.maxInputTierToShow !== 'undefined')) {
+    if (impressionData && typeof(impressionData.maxInputTierToShow) !== 'undefined') {
         maxInputTierToShow = impressionData.maxInputTierToShow;
     }
 

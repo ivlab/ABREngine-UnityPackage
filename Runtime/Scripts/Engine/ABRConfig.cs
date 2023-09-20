@@ -287,7 +287,8 @@ namespace IVLab.ABREngine
 
 
         /// <summary>
-        /// Global access to constants in the ABR Engine
+        /// Global access to constants in the ABR Engine. Sync this with
+        /// settings.py in the ABRServer~.
         /// </summary>
         public static class Consts
         {
@@ -303,8 +304,6 @@ namespace IVLab.ABREngine
 
             /// <summary>
             /// Folder to save thumbnail screenshots of state in
-            ///
-            /// TODO: ABRScreenshot component into ABR core
             /// </summary>
             public const string ThumbnailsFolder = "thumbnails";
 
