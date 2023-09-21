@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 1139519243}
   - component: {fileID: 1139519244}
   m_Layer: 0
-  m_Name: Generate data and convert spaces
+  m_Name: Generate data, use styles, and convert spaces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,7 +808,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfGlyphs: 1000
-  dataPath: GeneratedExample/Points/KeyData/Points
+  pointsDataPath: GeneratedExample/Points/KeyData/Points
+  lineDataPath: GeneratedExample/Points/KeyData/Lines
+  pointStyleTag: PointStyle
+  lineStyleName: LineStyle
 --- !u!1 &1327887285
 GameObject:
   m_ObjectHideFlags: 0
