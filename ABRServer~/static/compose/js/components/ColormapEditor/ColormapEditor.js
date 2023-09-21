@@ -71,7 +71,7 @@ export async function getColormapFromAnySource(vaUuid, createIfNotFound=false) {
         }
     }
 
-    if (visassetJson == null && colormapXml == null && createIfNotFound) {
+    if ((!visassetJson || !colormapXml) && createIfNotFound) {
         visassetJson = JSON.parse(JSON.stringify(DefaultVisAssetJsonFields));
         visassetJson['uuid'] = vaUuid;
         colormapXml = defaultColormap.toXML();

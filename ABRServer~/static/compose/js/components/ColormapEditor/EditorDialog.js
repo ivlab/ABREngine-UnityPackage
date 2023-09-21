@@ -64,7 +64,7 @@ export const TITLE_STRINGS = {
 //
 // Each dialog unit is represented as a "Module" that is included or not based
 // on inputs from the current data impression.
-export async function EditorDialog(inputProps, impressionUuid) {
+export async function EditorDialog(inputName, inputProps, impressionUuid) {
     let $editorDialog = $('<div>', {
         class: 'editor-dialog puzzle-piece-overlay-dialog' // enable puzzle pieces to float *over* dialog
     });
@@ -104,7 +104,8 @@ export async function EditorDialog(inputProps, impressionUuid) {
         }, `/impressions/${impressionUuid}/inputValues`).map((v) => v.inputValue);
 
         // Find every variable input that's the same as this one
-        let impressionInputs = globals.stateManager.state.impressions[impressionUuid].inputValues;
+        let di = globals.stateManager.state.impressions[impressionUuid];
+        let impressionInputs = di.inputValues;
         let relevantInputNames = Object.keys(impressionInputs).filter((n) => associatedVars.indexOf(impressionInputs[n].inputValue) >= 0);
 
         // And map it back to its design / visasset input
@@ -112,7 +113,18 @@ export async function EditorDialog(inputProps, impressionUuid) {
             return s.hasOwnProperty('inputGenre') &&
                 (s['inputGenre'] == 'VisAsset' || s['inputGenre'] == 'PrimitiveGradient');
         }, `/impressions/${impressionUuid}/inputValues`);
-        inputsToConsider.push(...associatedDesignInputs);
+
+        // ... we only support one editor of each type...
+        let actualDesignInputs = [];
+        let addedTypes = [];
+        for (const adi in associatedDesignInputs) {
+            if (addedTypes.indexOf(adi.inputType) < 0) {
+                actualDesignInputs.push(adi);
+                addedTypes.push(adi.inputType);
+            }
+        }
+
+        inputsToConsider.push(...actualDesignInputs);
         // Also add any more design inputs that are associated in this current param name
         // inputsToConsider.push(...Object.values((v) => v.parameterName == inputProps.parameterName));
 

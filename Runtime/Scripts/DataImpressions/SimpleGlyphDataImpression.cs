@@ -159,7 +159,7 @@ namespace IVLab.ABREngine
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
         [ABRInput("Outline Color", UpdateLevel.Data)]
-        public Color outlineColor;
+        public IColormapVisAsset outlineColor;
 
         /// <summary>
         /// Force the use of <see cref="outlineColor"/> even if there's a
@@ -611,7 +611,7 @@ namespace IVLab.ABREngine
                 block.SetFloat("_ColorDataMin", colorVariableMin);
                 block.SetFloat("_ColorDataMax", colorVariableMax);
                 block.SetColor("_Color", ABREngine.Instance.Config.defaultColor);
-                block.SetColor("_OutlineColor", outlineColor);
+                block.SetColor("_OutlineColor", outlineColor?.GetColorGradient()?.GetPixel(0, 0) ?? Color.black);
                 block.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
                 block.SetInt("_ForceOutlineColor", (forceOutlineColor?.Value ?? false) ? 1 : 0);
 

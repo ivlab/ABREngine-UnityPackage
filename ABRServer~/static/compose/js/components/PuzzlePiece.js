@@ -202,7 +202,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
                         updatePromise = new Promise((resolve, reject) => resolve());
                     }
                     updatePromise.then(() => {
-                        EditorDialog(resolvedProps, impressionUuid);
+                        EditorDialog(inputName, resolvedProps, impressionUuid);
                     });
                 };
                 $el.on('dblclick', clickEvt);
@@ -249,19 +249,21 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
                         // let gradUuid = $el.data('inputValue');
                         // VisAssetGradientDialog(gradUuid);
                         let impressionUuid = $el.parents('.data-impression').data('uuid');
-                        EditorDialog(resolvedProps, impressionUuid);
+                        EditorDialog(inputName, resolvedProps, impressionUuid);
                     }
                 };
                 $el.on('dblclick', clickEvt);
                 $el.on('click', clickEvt);
 
-                gradient = true;
+                if (resolvedProps.inputType != 'IVLab.ABREngine.ColormapVisAsset') {
+                    gradient = true;
+                }
             }
 
             // Handle right-click to copy VisAsset import code for ABR
             $el.attr('title', $el.attr('title') + '\nRight-click to copy C# ABR code');
             $el.on('contextmenu', (evt) => {
-                evt.preventDefault();
+                // evt.preventDefault();
                 // Get the UUID
                 let uuid = $el.data('inputValue');
                 if (!gradient) {
@@ -382,7 +384,7 @@ export function InputPuzzlePiece(inputName, inputProps, addClass) {
                 updatePromise = new Promise((resolve, reject) => resolve());
             }
             updatePromise.then(() => {
-                EditorDialog(resolvedProps, impressionUuid);
+                EditorDialog(inputName, resolvedProps, impressionUuid);
             });
         });
     }

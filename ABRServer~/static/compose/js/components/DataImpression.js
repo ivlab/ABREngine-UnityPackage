@@ -21,7 +21,6 @@
 
 import { DataPath } from "../../../common/DataPath.js";
 import { globals } from "../../../common/globals.js";
-import { dialogWidth } from './dialogConsts.js';
 import { CACHE_UPDATE, resolveSchemaConsts } from '../../../common/StateManager.js';
 import { COMPOSITION_LOADER_ID } from '../components/Components.js';
 import { InputPuzzlePiece, AssignedInputPuzzlePiece } from "./PuzzlePiece.js";
@@ -45,7 +44,7 @@ import { uuid } from "../../../common/UUID.js";
 // Non-draggable (e.g. primitive) inputs are just one per row
 //
 // These names correspond to the schema loaded in Validator.js.
-const DataImpressionInputTopology = {
+export const DataImpressionInputTopology = {
     "Glyphs": [
         // Tier 1
         [

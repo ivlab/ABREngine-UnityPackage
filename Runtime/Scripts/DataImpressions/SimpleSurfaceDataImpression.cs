@@ -180,7 +180,7 @@ namespace IVLab.ABREngine
         /// </summary>
         /// TODO: Support Primitive Color inputs
         [ABRInput("Outline Color", UpdateLevel.Style)]
-        public Color outlineColor;
+        public IColormapVisAsset outlineColor;
 
         /// <summary>
         /// ONLY show the outline (don't show the actual surface)
@@ -558,7 +558,7 @@ namespace IVLab.ABREngine
             MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
-            MatPropBlock.SetColor("_OutlineColor", outlineColor);
+            MatPropBlock.SetColor("_OutlineColor", outlineColor?.GetColorGradient()?.GetPixel(0, 0) ?? Color.black);
             MatPropBlock.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
 
             MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);

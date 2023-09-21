@@ -65,19 +65,27 @@ export function getDisplayVal(newValue, shortType) {
     if (PRIMITIVE_VALUE_MULTIPLIERS.hasOwnProperty(shortType)) {
         newValue *= PRIMITIVE_VALUE_MULTIPLIERS[shortType];
     }
-    let truncatedValue = newValue.toFixed(2);
-    let intValue = parseInt(newValue, 10);
-    if (Math.abs(truncatedValue - intValue) < 0.01) {
-        newValue = intValue;
-    } else {
-        newValue = truncatedValue;
+    const truncatedValue0 = parseInt(newValue, 10);
+    const truncatedValue1 = +newValue.toFixed(1);
+    const truncatedValue2 = +newValue.toFixed(2);
+    const truncatedValue3 = +newValue.toFixed(3);
+    const levels = [
+        truncatedValue3, truncatedValue2, truncatedValue1, truncatedValue0
+    ];
+    let diff = 0.01;
+    for (const level in levels) {
+        if (level < levels.length - 1 && Math.abs(levels[+level] - levels[+level + 1]) < diff) {
+            newValue = levels[+level];
+            break;
+        }
+        diff *= 10;
     }
 
     return newValue + unitStr;
 }
 
 // Increment a primitive value (e.g. 1m) up or down (positive / negative increment)
-function incrementPrimitive(primitiveString, inputType, positive) {
+function incrementPrimitive(primitiveString, inputType, positive, decreaseIncrement) {
     let shortType = inputType.replace('IVLab.ABREngine.', '');
 
     // Boolean scrubbing
@@ -93,6 +101,12 @@ function incrementPrimitive(primitiveString, inputType, positive) {
     if (PRIMITIVE_INCREMENTS.hasOwnProperty(shortType)) {
         amount = PRIMITIVE_INCREMENTS[shortType];
     }
+
+    // if shift is held, decrease increment by factor of 10
+    if (decreaseIncrement) {
+        amount /= 10.0;
+    }
+
     if (!positive) {
         amount *= -1.0;
     }
@@ -176,6 +190,7 @@ export function ScrubbableInput($input, inputType) {
 
     let dragging = false;
     let previousX = null;
+    let shiftDown = false;
     $label.append(
         $('<span>', {
             class: 'input-scrubbable no-drag ui-icon ui-icon-triangle-2-e-w',
@@ -187,11 +202,13 @@ export function ScrubbableInput($input, inputType) {
 
     $('body').on('mousemove', (evt) => {
         if (dragging) {
+            const moveThreshold = 1;
             let newValue = $input.val();
-            if (evt.clientX > previousX) {
-                newValue = incrementPrimitive(newValue, inputType, true);
-            } else {
-                newValue = incrementPrimitive(newValue, inputType, false);
+            let diff = evt.clientX - previousX;
+            if (diff > moveThreshold) {
+                newValue = incrementPrimitive(newValue, inputType, true, shiftDown);
+            } else if (diff < -moveThreshold) {
+                newValue = incrementPrimitive(newValue, inputType, false, shiftDown);
             }
             $input.val(newValue);
             evt.stopPropagation();
@@ -202,6 +219,14 @@ export function ScrubbableInput($input, inputType) {
             $input.trigger('change');
             dragging = false;
             evt.stopPropagation();
+        }
+    }).on('keydown', (evt) => {
+        if (evt.key == 'Shift') {
+            shiftDown = true;
+        }
+    }).on('keyup', (evt) => {
+        if (evt.key == 'Shift') {
+            shiftDown = false;
         }
     });
 
