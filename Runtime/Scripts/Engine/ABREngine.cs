@@ -584,7 +584,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public List<DataImpression> GetDataImpressions(string keyDataPath)
         {
-            return GetDataImpressions(di => { return di.GetKeyData().Path == keyDataPath; });
+            return GetDataImpressions(di => { return di.GetKeyData()?.Path == keyDataPath; });
         }
 
         /// <summary>

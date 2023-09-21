@@ -102,7 +102,7 @@ namespace IVLab.ABREngine
             {
                 go = new GameObject();
                 di = go.AddComponent<T>();
-                go.name = name + " (" + di.GetType().Name + ")";
+                go.name = name;
 
                 di.InputIndexer = new ABRInputIndexerModule(di);
                 di.Uuid = new Guid(uuid);
