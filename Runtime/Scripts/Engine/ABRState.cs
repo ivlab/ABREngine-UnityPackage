@@ -253,7 +253,8 @@ namespace IVLab.ABREngine
                     MethodInfo createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
                     createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
 
-                    string[] impressionArgs = new string[] { impression.Value.uuid, impression.Value.name };
+                    // args are: UUID, name, syncWithServer
+                    object[] impressionArgs = new object[] { new Guid(impression.Value.uuid), impression.Value.name, true };
                     DataImpression dataImpression = createMethod.Invoke(null, impressionArgs) as DataImpression;
                     ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 
@@ -311,9 +312,7 @@ namespace IVLab.ABREngine
                             // Verify that we have something to put in the input
                             if (possibleInput != null)
                             {
-                                // Verify that the input matches with the parameter (to
-                                // avoid possible name collisions), and check that it's
-                                // assignable from the possibleInput
+                                // Verify that the input is assignable from the possibleInput
                                 var actualInput = actualInputs.First((i) => inputName == i.inputName);
                                 if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
                                 {
@@ -663,14 +662,7 @@ namespace IVLab.ABREngine
                         // Retrieve easy values
                         string guid = impression.Uuid.ToString();
                         saveImpression.uuid = guid;
-                        if (previousState?["impressions"]?.ToObject<JObject>().ContainsKey(guid) ?? false)
-                        {
-                            saveImpression.name = previousState["impressions"][guid]["name"].ToString();
-                        }
-                        else
-                        {
-                            saveImpression.name = "DataImpression";
-                        }
+                        saveImpression.name = impression.name;
                         saveImpression.renderHints = impression.RenderHints;
                         saveImpression.tags = (impression as DataImpression).Tags;
 

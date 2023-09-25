@@ -80,24 +80,36 @@ namespace IVLab.ABREngine
         ///     Cache of current KeyData rendering information
         /// </summary>
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
+
+        /// <summary>
+        /// Synchronize this Data Impression with any server ABREngine is
+        /// connected to. Sometimes, it's desireable to create data impressions
+        /// that *only* exist in the Unity Editor. By default, this is `false`.
+        /// For data impressions created in <see cref="ABRStateParser"/>, it is
+        /// `true`.
+        /// </summary>
+        public bool SyncWithServer { get; set; }
 #endregion
 
 #region Constructor (Create) method
         /// <summary>
-        ///     Construct a data impession with a given UUID and name. Note that
-        ///     this will be called from <see cref="ABRStateParser"/> and must
-        ///     assume that there are two arguments with UUID and name - if you
-        ///     override this method bad things might happen.
+        /// Construct a data impession with a given UUID and name.
+        ///     
+        /// > [!WARNING]
+        /// > This method will be called from <see cref="ABRStateParser"/> and MUST
+        /// > have the given arguments. If you override this method, bad things
+        /// > might happen.
         /// </summary>
-        public static T Create<T>(string uuid, string name)
+        /// <param name="uuid">Unique identifier for this data impression</param>
+        /// <param name="name">Non-unique, human-readable identifier for this data impression</param>
+        /// <param name="syncWithServer">Should this data impression be synced with a connected ABR server?</param>
+        public static T Create<T>(Guid uuid, string name, bool syncWithServer = false)
         where T : DataImpression
         {
-            Guid guid = new Guid(uuid);
-
             // Check if a data impression with this UUID already exists in the
             // ABREngine
             GameObject go;
-            T di = ABREngine.Instance.GetDataImpression<T>(d => d.Uuid == guid);
+            T di = ABREngine.Instance.GetDataImpression<T>(d => d.Uuid == uuid);
             if (di == null)
             {
                 go = new GameObject();
@@ -105,8 +117,9 @@ namespace IVLab.ABREngine
                 go.name = name;
 
                 di.InputIndexer = new ABRInputIndexerModule(di);
-                di.Uuid = new Guid(uuid);
+                di.Uuid = uuid;
                 di.MatPropBlock = new MaterialPropertyBlock();
+                di.SyncWithServer = syncWithServer;
 
                 // Initialize material list
                 if (di.ImpressionMaterials == null)
