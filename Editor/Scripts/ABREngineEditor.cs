@@ -187,7 +187,7 @@ namespace IVLab.ABREngine
                 Debug.Log("Saved state JSON to " + path);
             }
 
-            if (ABREngine.Instance.Config.dataServerUrl.Length > 0)
+            if (ABREngine.Instance.Config.serverUrl.Length > 0)
             {
                 if (GUILayout.Button("Save State to Server"))
                 {

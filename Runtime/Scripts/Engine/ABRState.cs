@@ -657,6 +657,12 @@ namespace IVLab.ABREngine
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
+                        // if specified to not save it to state, skip it
+                        if (!impression.SaveToState)
+                        {
+                            continue;
+                        }
+
                         RawDataImpression saveImpression = new RawDataImpression();
 
                         // Retrieve easy values

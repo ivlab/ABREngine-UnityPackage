@@ -82,13 +82,12 @@ namespace IVLab.ABREngine
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
 
         /// <summary>
-        /// Synchronize this Data Impression with any server ABREngine is
-        /// connected to. Sometimes, it's desireable to create data impressions
-        /// that *only* exist in the Unity Editor. By default, this is `false`.
-        /// For data impressions created in <see cref="ABRStateParser"/>, it is
-        /// `true`.
+        /// Save this DataImpression to state. Sometimes, it's desireable to
+        /// create data impressions that *only* exist in the Unity Editor and
+        /// DON'T get saved to state. By default, this is `false`. For data
+        /// impressions created in <see cref="ABRStateParser"/>, it is `true`.
         /// </summary>
-        public bool SyncWithServer { get; set; }
+        public bool SaveToState { get; set; }
 #endregion
 
 #region Constructor (Create) method
@@ -102,8 +101,9 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="uuid">Unique identifier for this data impression</param>
         /// <param name="name">Non-unique, human-readable identifier for this data impression</param>
-        /// <param name="syncWithServer">Should this data impression be synced with a connected ABR server?</param>
-        public static T Create<T>(Guid uuid, string name, bool syncWithServer = false)
+        /// <param name="saveToState">Should this data impression be saved when
+        /// <see cref="ABREngine.SaveState{T}(string)"/> is called?</param>
+        public static T Create<T>(Guid uuid, string name, bool saveToState = false)
         where T : DataImpression
         {
             // Check if a data impression with this UUID already exists in the
@@ -119,7 +119,7 @@ namespace IVLab.ABREngine
                 di.InputIndexer = new ABRInputIndexerModule(di);
                 di.Uuid = uuid;
                 di.MatPropBlock = new MaterialPropertyBlock();
-                di.SyncWithServer = syncWithServer;
+                di.SaveToState = saveToState;
 
                 // Initialize material list
                 if (di.ImpressionMaterials == null)

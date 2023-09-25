@@ -322,7 +322,6 @@ namespace IVLab.ABREngine
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleVolumeDataImpression", LayerName);
             }
-            gameObject.name = this + " volume";
 
             // Populate volume mesh from calculated geometry
             var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;

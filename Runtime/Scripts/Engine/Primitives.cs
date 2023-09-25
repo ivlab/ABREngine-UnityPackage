@@ -255,6 +255,7 @@ namespace IVLab.ABREngine
 
         public BooleanPrimitive(string value)
         {
+            value = value.ToLower();
             SetFromString(value);
         }
 
