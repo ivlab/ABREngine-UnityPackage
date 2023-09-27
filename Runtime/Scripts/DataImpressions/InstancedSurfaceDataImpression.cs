@@ -52,7 +52,7 @@ namespace IVLab.ABREngine
         /// cref="RawDataset"/>'s <see cref="RawDataset.matrixArrays"/> and <see
         /// cref="RawDataset.matrixArrayNames"/>. The key data transforms (like
         /// every other key data in ABR) can be updated frame-by-frame so long
-        /// as `<see cref="RenderHints.DataChanged"/>= true` is specified. For
+        /// as `<see cref="RenderHints.GeometryChanged"/>= true` is specified. For
         /// example, here we are spinning the transforms along the y axis.
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/keyData.gif"/>

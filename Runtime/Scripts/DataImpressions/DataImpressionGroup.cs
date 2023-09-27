@@ -150,7 +150,7 @@ namespace IVLab.ABREngine
                     // Instead of actually assigning a completely new
                     // DataImpression, copy the temporary one's inputs and let
                     // the temp be GC'd.
-                    gameObjectMapping[impression.Uuid].CopyExisting(impression);
+                    gameObjectMapping[impression.Uuid].CopyFrom(impression);
                 }
                 else
                 {
@@ -483,27 +483,34 @@ namespace IVLab.ABREngine
 
                 foreach (var impression in gameObjectMapping)
                 {
+                    // Update the style dependencies for this impression so the
+                    // RenderHints and inputs are synchronized
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
+                    {
+                        impression.Value.UpdateStyleDependencies();
+                    }
+
                     // Fully compute render info and apply it to the impression object
                     // if (key) data was changed
-                    if (boundsChanged || impression.Value.RenderHints.DataChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged)
                     {
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
                         impression.Value.SetupGameObject();
-                        impression.Value.RenderHints.DataChanged = false;
+                        impression.Value.RenderHints.GeometryChanged = false;
                     }
                     // Compute and apply style info to the impression object if its
                     // styling has changed (but only if we haven't already performed 
                     // data changed computations since those inherently update styling)
-                    if (boundsChanged || impression.Value.RenderHints.DataChanged || impression.Value.RenderHints.StyleChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged)
                     {
                         Guid uuid = impression.Key;
                         impression.Value.UpdateStyling();
                         impression.Value.RenderHints.StyleChanged = false;
                     }
                     // Set the visibility of the impression if it has been changed
-                    if (boundsChanged || impression.Value.RenderHints.DataChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
                     {
                         Guid uuid = impression.Key;
                         impression.Value.UpdateVisibility();

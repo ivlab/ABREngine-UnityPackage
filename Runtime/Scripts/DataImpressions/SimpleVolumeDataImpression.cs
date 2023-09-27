@@ -52,7 +52,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Volumes")]
     public class SimpleVolumeDataImpression : DataImpression
     {
-        [ABRInput("Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
 
@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
         /// - affects both the <see cref="colormap"/> and the <see
         /// cref="opacitymap"/>.
         /// </summary>
-        [ABRInput("Color Variable", UpdateLevel.Data)]
+        [ABRInput("Color Variable", UpdateLevel.Geometry)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>

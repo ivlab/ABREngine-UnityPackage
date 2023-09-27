@@ -203,7 +203,7 @@ namespace IVLab.ABREngine.Legends
 
             // Copy all inputs from the actual impression
             SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-            gi.CopyExisting(i);
+            gi.CopyFrom(i);
 
             // Apply legend-specific entries
             gi.keyData = glyphKeyData;
@@ -238,7 +238,7 @@ namespace IVLab.ABREngine.Legends
 
             // Copy all inputs from the actual impression
             SimpleLineDataImpression li = new SimpleLineDataImpression();
-            li.CopyExisting(i);
+            li.CopyFrom(i);
 
             // Apply legend-specific entries
             li.defaultCurveDirection = Vector3.forward;
@@ -267,7 +267,7 @@ namespace IVLab.ABREngine.Legends
 
             // Copy all inputs from the actual impression
             SimpleSurfaceDataImpression si = new SimpleSurfaceDataImpression();
-            si.CopyExisting(i);
+            si.CopyFrom(i);
 
             // Then, apply legend-specific entries
             si.keyData = kd;
@@ -294,7 +294,7 @@ namespace IVLab.ABREngine.Legends
 
             // Copy all inputs from the actual impression
             SimpleVolumeDataImpression si = new SimpleVolumeDataImpression();
-            si.CopyExisting(i);
+            si.CopyFrom(i);
 
             // Apply legend-specific entries
             si.keyData = kd;

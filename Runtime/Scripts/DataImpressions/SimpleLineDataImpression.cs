@@ -53,7 +53,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Ribbons")]
     public class SimpleLineDataImpression : DataImpression, IHasDataset
     {
-        [ABRInput("Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/averageCount.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Smooth", UpdateLevel.Data)]
+        [ABRInput("Ribbon Smooth", UpdateLevel.Geometry)]
         public IntegerPrimitive averageCount;
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/lineWidth.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Width", UpdateLevel.Data)]
+        [ABRInput("Ribbon Width", UpdateLevel.Geometry)]
         public LengthPrimitive lineWidth;
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Rotation", UpdateLevel.Data)]
+        [ABRInput("Ribbon Rotation", UpdateLevel.Geometry)]
         public AnglePrimitive ribbonRotationAngle;
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Curve", UpdateLevel.Data)]
+        [ABRInput("Ribbon Curve", UpdateLevel.Geometry)]
         public AnglePrimitive ribbonCurveAngle;
 
         /// <summary>

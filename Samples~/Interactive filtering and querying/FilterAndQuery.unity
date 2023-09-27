@@ -446,7 +446,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &743438068
 Transform:
   m_ObjectHideFlags: 0
@@ -808,10 +808,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfGlyphs: 1000
+  numberOfLines: 10
   pointsDataPath: GeneratedExample/Points/KeyData/Points
   lineDataPath: GeneratedExample/Points/KeyData/Lines
   pointStyleTag: PointStyle
   lineStyleName: LineStyle
+  copyLinkStyle: 1
 --- !u!1 &1327887285
 GameObject:
   m_ObjectHideFlags: 0

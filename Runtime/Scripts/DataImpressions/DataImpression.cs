@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Reflection;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -88,6 +89,43 @@ namespace IVLab.ABREngine
         /// impressions created in <see cref="ABRStateParser"/>, it is `true`.
         /// </summary>
         public bool SaveToState { get; set; }
+
+        /// <summary>
+        /// Genres of ABRInput that are "styles" - i.e., they can apply to
+        /// multiple data impressions
+        /// </summary>
+        private HashSet<ABRInputGenre> StyleGenres
+        {
+            get => new HashSet<ABRInputGenre>
+            {
+                ABRInputGenre.VisAsset,
+                ABRInputGenre.Primitive,
+                ABRInputGenre.PrimitiveGradient,
+            };
+        }
+
+        /// <summary>
+        /// Other data impressions that depend on this DI's style
+        /// </summary>
+        private HashSet<DataImpression> styleDependencies;
+
+        /// <summary>
+        /// Reflection: generic create method so it can be called/invoked with
+        /// the correct args. Can't just call regular create() method because
+        /// MonoBehaviours can't be abstract...
+        /// when cloning
+        /// </summary>
+        private MethodInfo createMethod;
+#endregion
+
+#region MonoBehaviour methods
+
+        void Awake()
+        {
+            Type impressionType = this.GetType();
+            createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
+            createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
+        }
 #endregion
 
 #region Constructor (Create) method
@@ -120,6 +158,7 @@ namespace IVLab.ABREngine
                 di.Uuid = uuid;
                 di.MatPropBlock = new MaterialPropertyBlock();
                 di.SaveToState = saveToState;
+                di.styleDependencies = new HashSet<DataImpression>();
 
                 // Initialize material list
                 if (di.ImpressionMaterials == null)
@@ -171,17 +210,19 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     RENDERING STEP 1. Populate rendering information (Geometry) for the
-        ///     DataImpression. This is triggered by the `DataImpressionGroup`
-        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
+        ///     RENDERING STEP 1. Populate rendering information (Geometry) for
+        ///     the DataImpression. This is triggered by the <see
+        ///     cref="DataImpressionGroup"/> when an <see
+        ///     cref="UpdateLevel.Geometry"/> happens. This step is generally
+        ///     *expensive*.
         /// </summary>
         public abstract void ComputeGeometry();
 
         /// <summary>
         ///     RENDERING STEP 2. Take geometric rendering information computed in
-        ///     `ComputeGeometry()` and sets up proper game object(s) and
+        ///     <see cref="ComputeGeometry()"/> and sets up proper game object(s) and
         ///     components for this Data Impression. Transfers geometry into
-        ///     Unity format (e.g. a `Mesh`). No geometric computations should
+        ///     Unity format (e.g. a <see cref="Mesh"/>). No geometric computations should
         ///     happen in this method, and it should generally be *lightweight*.
         /// </summary>
         public abstract void SetupGameObject();
@@ -206,30 +247,127 @@ namespace IVLab.ABREngine
         // protected abstract int GetIndexForPackedScalarVariable(ScalarDataVariable variable);
 
         /// <summary>
-        ///     Unknown why it's necessary to copy each input individually, but here
-        ///     we are.
+        /// Create and return a copy of this data impression (with a new UUID)
         /// </summary>
-        public virtual DataImpression Copy()
+        public DataImpression Clone()
         {
-            DataImpression di = (DataImpression) this.MemberwiseClone();
-            di.InputIndexer = new ABRInputIndexerModule(di);
-            di.Tags = new List<string>(di.Tags);
-            di.Uuid = Guid.NewGuid();
-            di.RenderHints = this.RenderHints.Copy();
-            return di;
+            // Clone (create a new Data impression) and copy over all the fields that don't come
+            // with (due to Unity Serialization)
+            object[] impressionArgs = new object[] { Guid.NewGuid(), this.name + " Copy", this.SaveToState };
+            DataImpression newDi = createMethod.Invoke(null, impressionArgs) as DataImpression;
+
+            // Copy over the fields that might have values
+            newDi.RenderHints = this.RenderHints.Copy();
+            newDi.Tags = new List<string>(this.Tags);
+
+            // Copy all style inputs
+            foreach (string inputName in this.InputIndexer.InputNames)
+            {
+                IABRInput thisInput = this.InputIndexer.GetInputValue(inputName);
+                newDi.InputIndexer.AssignInput(inputName, thisInput);
+            }
+
+            return newDi;
         }
 
         /// <summary>
-        /// Update this data impression from an existing (possibly temporary) one.
+        /// Create a copy of this data impression, but only its "style" inputs.
         /// </summary>
-        public virtual void CopyExisting(DataImpression other)
+        public DataImpression CloneStyle()
+        {
+            // Clone (create a new Data impression) and copy over all the fields that don't come
+            // with (due to Unity Serialization)
+            // Need to use reflection here because we can't create abstract MonoBehaviours
+            object[] impressionArgs = new object[] { Guid.NewGuid(), this.name + " StyleCopy", this.SaveToState };
+            DataImpression newDi = createMethod.Invoke(null, impressionArgs) as DataImpression;
+
+            // Copy over the fields that might have values
+            newDi.RenderHints = this.RenderHints.Copy();
+            newDi.Tags = new List<string>(this.Tags);
+
+            // Copy all style inputs
+            foreach (string inputName in this.InputIndexer.InputNames)
+            {
+                IABRInput thisInput = this.InputIndexer.GetInputValue(inputName);
+                if (thisInput != null && StyleGenres.Contains(thisInput.Genre))
+                {
+                    newDi.InputIndexer.AssignInput(inputName, thisInput);
+                }
+                else
+                {
+                    newDi.InputIndexer.AssignInput(inputName, null);
+                }
+            }
+
+            return newDi;
+        }
+
+        /// <summary>
+        /// Clone a data impression's style and link
+        /// </summary>
+        public DataImpression CloneStyleLinked()
+        {
+            DataImpression newDi = CloneStyle();
+            newDi.name = this.name + " StyleLink";
+            this.styleDependencies.Add(newDi);
+            return newDi;
+        }
+
+        /// <summary>
+        /// Update this data impression's fields from an existing data impression.
+        /// </summary>
+        public void CopyFrom(DataImpression other)
         {
             this.Tags = new List<string>(other.Tags);
+            this.name = other.name;
             this.RenderHints = other.RenderHints.Copy();
             foreach (string inputName in other.InputIndexer.InputNames)
             {
                 IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
                 this.InputIndexer.AssignInput(inputName, otherInput);
+            }
+        }
+
+        /// <summary>
+        /// Update the style of this data impression from another data impression's style
+        /// </summary>
+        public void CopyStyleFrom(DataImpression other)
+        {
+            foreach (string inputName in other.InputIndexer.InputNames)
+            {
+                IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
+
+                if (otherInput != null && StyleGenres.Contains(otherInput.Genre))
+                {
+                    this.InputIndexer.AssignInput(inputName, otherInput);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Copy the style from another data impression and link their styles so
+        /// this data impression updates all its style dependencies when it is
+        /// changed
+        /// </summary>
+        public void LinkStyleFrom(DataImpression other)
+        {
+            // Perform an initial copy
+            CopyStyleFrom(other);
+
+            // Add this as a dependency of `other`
+            other.styleDependencies.Add(this);
+        }
+
+        /// <summary>
+        /// Update all the style dependencies for this data impression - ensure
+        /// they have the same styling and render hints.
+        /// </summary>
+        public void UpdateStyleDependencies()
+        {
+            foreach (DataImpression dependent in styleDependencies)
+            {
+                dependent.CopyStyleFrom(this);
+                dependent.RenderHints = this.RenderHints.Copy();
             }
         }
 
@@ -350,7 +488,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool DataChanged { get; set; } = true;
+        public bool GeometryChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the style of the impression been changed

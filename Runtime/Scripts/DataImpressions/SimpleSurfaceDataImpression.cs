@@ -50,7 +50,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Surfaces")]
     public class SimpleSurfaceDataImpression : DataImpression
     {
-        [ABRInput("Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>

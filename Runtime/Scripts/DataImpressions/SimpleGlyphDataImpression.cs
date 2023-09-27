@@ -49,7 +49,7 @@ namespace IVLab.ABREngine
     [ABRPlateType("Glyphs")]
     public class SimpleGlyphDataImpression : DataImpression
     {
-        [ABRInput("Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/glyph.gif"/>
         /// </summary>
-        [ABRInput("Glyph", UpdateLevel.Data)]
+        [ABRInput("Glyph", UpdateLevel.Geometry)]
         public IGlyphVisAsset glyph;
 
         /// <summary>
@@ -114,27 +114,27 @@ namespace IVLab.ABREngine
         /// <summary>
         /// "Forward" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Forward Variable", UpdateLevel.Data)]
+        [ABRInput("Forward Variable", UpdateLevel.Geometry)]
         public VectorDataVariable forwardVariable;
 
         /// <summary>
         /// "Up" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Up Variable", UpdateLevel.Data)]
+        [ABRInput("Up Variable", UpdateLevel.Geometry)]
         public VectorDataVariable upVariable;
 
         /// <summary>
         /// Level of detail to use for glyph rendering (higher number = lower
         /// level of detail; most glyphs have 3 LODs)
         /// </summary>
-        [ABRInput("Glyph Level Of Detail", UpdateLevel.Data)]
+        [ABRInput("Glyph Level Of Detail", UpdateLevel.Geometry)]
         public int glyphLod = 1;
 
         /// <summary>
         /// Use random forward/up directions when no Vector variables are
         /// applied for forward/up.
         /// </summary>
-        [ABRInput("Use Random Orientation", UpdateLevel.Data)]
+        [ABRInput("Use Random Orientation", UpdateLevel.Geometry)]
         public BooleanPrimitive useRandomOrientation = true;
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
         /// </summary>
-        [ABRInput("Show Outline", UpdateLevel.Data)]
+        [ABRInput("Show Outline", UpdateLevel.Geometry)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
         /// </summary>
-        [ABRInput("Outline Width", UpdateLevel.Data)]
+        [ABRInput("Outline Width", UpdateLevel.Geometry)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
-        [ABRInput("Outline Color", UpdateLevel.Data)]
+        [ABRInput("Outline Color", UpdateLevel.Geometry)]
         public IColormapVisAsset outlineColor;
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
         /// </summary>
-        [ABRInput("Force Outline Color", UpdateLevel.Data)]
+        [ABRInput("Force Outline Color", UpdateLevel.Geometry)]
         public BooleanPrimitive forceOutlineColor;
 
         /// <summary>
@@ -359,7 +359,17 @@ namespace IVLab.ABREngine
             while (gameObject.transform.childCount > 0)
             {
                 GameObject child = gameObject.transform.GetChild(0).gameObject;
-                GenericObjectPool.Instance.ReturnObjectToPool(child);
+                if (child.TryGetComponent<PooledObject>(out PooledObject po))
+                {
+                    if (po.PoolName != null)
+                    {
+                        GenericObjectPool.Instance.ReturnObjectToPool(child);
+                    }
+                    else
+                    {
+                        DestroyImmediate(child);
+                    }
+                }
             }
 
             // Create pooled game objects with mesh renderer and instanced mesh renderer

@@ -36,7 +36,7 @@ namespace IVLab.ABREngine
         /// Trigger an <see cref="ABREngine.Render"/> when a parameter is
         /// changed in editor
         /// </summary>
-        public static bool ReRenderOnParameterChange = true;
+        public static bool ReRenderOnParameterChange = false;
 
         public override void OnInspectorGUI()
         {
@@ -142,8 +142,8 @@ namespace IVLab.ABREngine
                 {
                     di.InputIndexer.AssignInput(inputName, null);
                 }
-                if (abrAttr.updateLevel == UpdateLevel.Data)
-                    di.RenderHints.DataChanged = true;
+                if (abrAttr.updateLevel == UpdateLevel.Geometry)
+                    di.RenderHints.GeometryChanged = true;
                 if (abrAttr.updateLevel == UpdateLevel.Style)
                     di.RenderHints.StyleChanged = true;
             }

@@ -1021,7 +1021,7 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpression DuplicateDataImpression(DataImpression dataImpression, DataImpressionGroup group)
         {
-            DataImpression newDataImpression = dataImpression.Copy();
+            DataImpression newDataImpression = dataImpression.Clone();
             newDataImpression.Uuid = Guid.NewGuid();
 
             if (group == null)

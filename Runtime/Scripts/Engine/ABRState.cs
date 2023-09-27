@@ -421,9 +421,9 @@ namespace IVLab.ABREngine
                                 Guid gradientUuid = new Guid(gradInput.inputValue);
                                 if (visAssetsToUpdate.Contains(gradientUuid))
                                 {
-                                    if (gradientInput.updateLevel == UpdateLevel.Data)
+                                    if (gradientInput.updateLevel == UpdateLevel.Geometry)
                                     {
-                                        dataImpression.RenderHints.DataChanged = true;
+                                        dataImpression.RenderHints.GeometryChanged = true;
                                     }
                                     else if (gradientInput.updateLevel == UpdateLevel.Style)
                                     {
@@ -452,9 +452,9 @@ namespace IVLab.ABREngine
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
                             // Enable changed flags according to the input that was changed
-                            if (input.updateLevel == UpdateLevel.Data)
+                            if (input.updateLevel == UpdateLevel.Geometry)
                             {
-                                dataImpression.RenderHints.DataChanged = true;
+                                dataImpression.RenderHints.GeometryChanged = true;
                             }
                             else if (input.updateLevel == UpdateLevel.Style)
                             {
