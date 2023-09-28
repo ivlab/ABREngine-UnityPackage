@@ -34,27 +34,6 @@ python3 -m pipenv shell
 From here, you should have access to all the dependencies of the project.
 
 
-## Building the executable version
-
-The ABR server can also be built to an executable for easy distribution.
-
-First, you need the `pyinstaller` package:
-
-```
-python3 -m pip install pyinstaller
-```
-
-Restart your terminal to make sure `pyinstaller` ends up on your PATH.
-
-
-Then, to build the executable, run the following command:
-
-```
-pyinstaller  --name="abr-server" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" manage.py
-```
-
-this will output an executable (for the OS/architecture that you run pyinstaller on) to the folder `./dist/abr-server`. You can zip this up, etc. for distribution.
-
 ## Running the server
 
 The server can be run local-only (on localhost:8000 by default):
@@ -69,11 +48,66 @@ The server can also be broadcast to other devices:
 python manage.py runserver 0.0.0.0:8000
 ```
 
-To enable live-reloading (automatically refresh browser when a file is changed), run this command in another terminal *before* the above commands:
+
+To enable live-reloading (automatically refresh browser when a file is
+changed), run these commands in separate terminals (the settings_dev above
+enables live-reloading to work):
 
 ```
 python manage.py livereload
 ```
+
+```
+python manage.py runserver --settings=abr_server.settings_dev
+```
+
+
+
+## Building the executable version
+
+The ABR server can also be built to an executable for easy distribution.
+
+First, you need the `pyinstaller` package. If you've followed the steps above
+with installing and activating the pipenv shell, this should already be taken care of. You can check by running:
+
+```
+pyinstaller --version
+```
+
+If for some reason that doesn't work, you can run:
+
+```
+python3 -m pip install pyinstaller
+```
+
+Restart your terminal to make sure `pyinstaller` ends up on your PATH.
+
+
+Then, to build the executable, run one of the following commands depending on
+your OS (add more here for OS's that aren't supported yet):
+
+Windows x64:
+
+```
+pyinstaller  --name="ABRServer-Win64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+```
+
+Mac x64 (Intel):
+
+```
+pyinstaller  --name="ABRServer-Mac64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+```
+
+Mac ARM (M1 or M2):
+
+```
+pyinstaller  --name="ABRServer-MacARM" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+```
+
+this will output an executable (for the OS/architecture that you run
+pyinstaller on) to the folder `./dist/ABRServer`. You can zip this up, etc.
+for distribution. In Unity, the ABRServer script will also look in these
+folders depending on what OS you're on.
 
 
 

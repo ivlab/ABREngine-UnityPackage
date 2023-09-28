@@ -15,6 +15,7 @@ requests = "==2.25.1"
 django-livereload-server = "==0.3.2"
 pillow = "*"
 asgiref = "==3.2.10"
+pyinstaller = "*"
 
 [dev-packages]
 
