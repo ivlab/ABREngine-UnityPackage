@@ -157,8 +157,16 @@ STATICFILES_DIRS = [os.path.join('static')]
 config = configparser.ConfigParser()
 config.read(os.path.join(BASE_DIR, 'abr_server.cfg'))
 
-# Serve media files in media dir (using cors_server.py)
-MEDIA_ROOT = os.path.realpath(config['Media']['path'])
+# Find the root ABRServer~ folder
+SERVER_PATH = None
+SERVER_FOLDER = 'ABRServer~'
+for p in Path(BASE_DIR).parents:
+    files = os.listdir(p)
+    if SERVER_FOLDER in files:
+        SERVER_PATH = p.joinpath(SERVER_FOLDER)
+
+# media root is always relative to the server folder
+MEDIA_ROOT = os.path.realpath(os.path.join(SERVER_PATH, config['Media']['path']))
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
 
@@ -191,7 +199,7 @@ SCHEMAS_FOLDER = 'ABRSchemas~'
 for p in Path(BASE_DIR).parents:
     files = os.listdir(p)
     if SCHEMAS_FOLDER in files:
-        SCHEMA_PATH = p.joinpath('ABRSchemas~')
+        SCHEMA_PATH = p.joinpath(SCHEMAS_FOLDER)
 
 WS_SEND_SCHEMA_PATH = SCHEMA_PATH.joinpath(config['Schemas']['notifier_send'])
 WS_RECEIVE_SCHEMA_PATH = SCHEMA_PATH.joinpath(config['Schemas']['notifier_receive'])

@@ -395,6 +395,12 @@ namespace IVLab.ABREngine
             // Check the scene to ensure assumptions are met
             ABREngine.CheckABRScene();
 
+            // Start the server, if desired
+            if (Config.startServer)
+            {
+                ABRServer.StartServer(true);
+            }
+
             try
             {
                 if (Config.serverUrl.Length > 0)

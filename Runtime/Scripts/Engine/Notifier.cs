@@ -87,7 +87,7 @@ namespace IVLab.ABREngine
 
                 // Wait for a max of ~5s to see if the client can connect
                 int tries = 0;
-                while (this._client.State != WebSocketState.Open && tries < 50)
+                while (this._client.State != WebSocketState.Open && tries < 100)
                 {
                     tries++;
                     Thread.Sleep(100);

@@ -18,6 +18,9 @@
  */
 
 using System.IO;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using UnityEditor;
 
 namespace IVLab.ABREngine
 {
@@ -34,8 +37,104 @@ namespace IVLab.ABREngine
         public const string ServerFolder = "ABRServer~";
 
         /// <summary>
+        /// Relative path to where the ABR server is located.
+        /// </summary>
+        public static string ServerRootPath { get => Path.Combine(ABREngine.PackagePath, ServerFolder); }
+
+        /// <summary>
         /// Full path to where the ABR server is located.
         /// </summary>
-        public static string ServerPath { get => Path.Combine(ABREngine.PackagePath, "ABRServer~"); }
+        public static string ServerRootFullPath { get => Path.GetFullPath(ServerRootPath); }
+
+        /// <summary>
+        /// Full path where ABR Server executables are located (created by pyinstaller)
+        /// </summary>
+        private static string ServerDistPath { get => Path.Combine(ServerRootFullPath, "dist"); }
+
+        /// <summary>
+        /// Working directory that pyinstaller expects everything to be in
+        /// </summary>
+        private static string ServerInternalPath { get => Path.Combine(ServerDistPath, ServerExeName(), "_internal"); }
+
+        /// <summary>
+        /// Path to the server executable on this platform
+        /// </summary>
+        public static string ServerPath { get => Path.Combine(ServerDistPath, ServerExeName(), ServerExeName() + ServerExeExtension()); }
+
+        /// <summary>
+        /// Django command to run the server
+        /// </summary>
+        private const string RunserverArg = "runserver";
+
+        /// <summary>
+        /// Django command to broadcast the server
+        /// </summary>
+        private const string BroadcastArg = "0.0.0.0:8000";
+
+        /// <summary>
+        /// Per-platform paths for server pyinstaller executable files.
+        /// </summary>
+        private static string ServerExeName()
+        {
+            string outString = "ABRServer-";
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    outString += "Windows";
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    outString += "OSX";
+
+            outString += "-" + RuntimeInformation.ProcessArchitecture.ToString("G");
+
+            return outString;
+        }
+
+        /// <summary>
+        /// Any extension that is applied to the <see cref="ServerDistPath"/>.
+        /// </summary>
+        /// <returns></returns>
+        private static string ServerExeExtension()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return ".exe";
+            else
+                return "";
+        }
+
+// Editor convenience functions
+#if UNITY_EDITOR
+        [MenuItem("ABR/Server/Start Server")]
+        private static void StartServerLocal() => StartServer(false);
+
+        [MenuItem("ABR/Server/Start Server - Broadcast (use this if you need to connect other devices over the network)")]
+        private static void StartServerBroadcast() => StartServer(true);
+#endif
+
+        /// <summary>
+        /// Convenience function to start the Python ABR server. Uses the
+        /// pyinstaller executables.
+        /// </summary>
+        public static void StartServer(bool broadcast)
+        {
+            try
+            {
+                var startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.FileName = ServerPath;
+                startInfo.Arguments = RunserverArg;
+                if (broadcast)
+                    startInfo.Arguments += " " + BroadcastArg;
+                startInfo.WorkingDirectory = ServerInternalPath;
+
+                var serverProcess = new System.Diagnostics.Process();
+                serverProcess.StartInfo = startInfo;
+                bool started = serverProcess.Start();
+                if (started)
+                    Debug.Log("Started ABR Server " + ServerPath);
+                else
+                    Debug.Log("ABR Server already running");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Unable to start ABR Server. Is the ABRServer executable build for this platform? Details:\n" + e);
+            }
+        }
     }
 }

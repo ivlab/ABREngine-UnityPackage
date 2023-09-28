@@ -53,13 +53,16 @@ namespace IVLab.ABREngine
         [Tooltip("Full URL of the ABR server / visualization manager that this app should connect to. Leave blank for no server.")]
         public string serverUrl;
 
+        [Tooltip("Should the ABREngine try to start the ABRServer when it is started? Use this option with caution. In most cases the ABR Server should be started externally.")]
+        public bool startServer;
+
         /// <summary>
         /// Load a state from resources on ABREngine startup
         /// </summary>
         [Tooltip("Load a state from Resources or StreamingAssets folder on ABREngine startup. Example: `testState.json` Leave blank for no startup state.")]
         public string loadStateOnStart;
 
-        [Tooltip("ABREngine should persist between scenes")]
+        [Tooltip("Should the ABREngine GameObject persist between scenes?")]
         public bool persistBetweenScenes = true;
 
         [Header("Styling Defaults")]

@@ -45,7 +45,7 @@ namespace IVLab.ABREngine
                 Dictionary<string, string> copyPathsOnBuild = new Dictionary<string, string>()
             {
                 // ABR Server
-                // { ABRServer.ServerFolder, Path.Combine(buildFolder, ABRServer.ServerPath) },
+                { ABRServer.ServerRootPath, Path.Combine(buildFolder, ABRServer.ServerRootPath) },
 
                 // ABR Schemas
                 { ABREngine.SchemasPath, Path.Combine(buildFolder, ABREngine.SchemasPath) },
@@ -56,12 +56,18 @@ namespace IVLab.ABREngine
                     var attrs = File.GetAttributes(srcDest.Key);
                     if ((attrs & FileAttributes.Directory) == FileAttributes.Directory)
                     {
+                        // First, delete the old one
+                        Directory.Delete(srcDest.Value, true);
+
                         // Copy folder to build location
                         CopyDirectory(srcDest.Key, srcDest.Value, true);
                         Debug.Log($"ABRBuildPostprocessor: Copied folder from {srcDest.Key} to {srcDest.Value}");
                     }
                     else
                     {
+                        // First, delete the old one
+                        File.Delete(srcDest.Value);
+
                         // Copy file to build location
                         File.Copy(srcDest.Key, srcDest.Value);
                         Debug.Log($"ABRBuildPostprocessor: Copied file from {srcDest.Key} to {srcDest.Value}");
