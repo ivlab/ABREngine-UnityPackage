@@ -1,0 +1,122 @@
+#colormap-editor {
+    padding: 0;
+    padding-top: 2rem;
+}
+
+.centered {
+    display: flex;
+    justify-content: center;
+}
+
+#histogram-container {
+    margin-top: 1rem;
+}
+
+#histogram-data-label {
+    display: flex;
+    align-items: center;
+}
+#histogram-data-label button.custom-range {
+    filter: invert();
+}
+
+#trash {
+    width: 2em;
+    height: 2em;
+    margin: 0 1rem;
+}
+
+.color-thumb {
+    display: flex;
+    flex-direction: column;
+    width: 50px; /* Hardcoded based on Spectrum colorpicker width */
+    align-items: center;
+}
+
+.variable-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 1rem 0;
+}
+.variable-labels p {
+    margin: 0;
+}
+.variable-labels > input {
+    text-align: center;
+    width: 8rem;
+    height: 2rem;
+    border: 2px solid steelblue;
+    border-radius: 7px;
+}
+.variable-labels button {
+    font-size: 0.7em;
+    margin: 0 1rem;
+}
+
+.percentage-display {
+    text-align: center;
+}
+
+#colormap * {
+    z-index: 1000;
+    border: 1px solid #3d3d3d;
+}
+
+#data-remapper {
+    margin-bottom: 0.75em;
+}
+
+.data-remapping-slider > .ui-slider-range {
+    background-color: steelblue;
+}
+
+.data-remapping-slider > .ui-slider-handle {
+    border: 2px solid steelblue;
+    border-radius: 100%;
+}
+
+.slider-label {
+    text-align: center;
+    width: 80px;
+    position: absolute;
+    top: -30;
+    left: -30;
+}
+
+.marker-bar {
+    width: 0;
+    z-index: -1;
+    border-left: 1px solid #727272;
+    position: absolute;
+}
+
+.handle-marker-bar {
+    height: 10px;
+    top: -11px;
+    left: 7px;
+    border-left: 2.5px solid steelblue;
+}
+
+.colormap-button {
+    padding: 1rem;
+    margin: 0 0.5rem;
+}
+
+/* Make the color picker for color thumbs bigger (default 200px) */
+.sp-picker-container {
+    width: 400px;
+}
+#color-slider {
+    height: 2rem;
+}
+
+/* make the color preview bigger */
+.sp-initial span {
+    width: 100px;
+}
+
+/* Gradient editor */
+#gradient-vis {
+    border: 1px solid black;
+}

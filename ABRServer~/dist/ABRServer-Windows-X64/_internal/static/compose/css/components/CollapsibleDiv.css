@@ -1,0 +1,45 @@
+/* components/CollapsibleDiv.css
+ * 
+ * Copyright (c) 2020, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ */
+
+.collapsible-div {
+    margin: 0.5rem;
+    width: calc(100% - 1rem);
+    background-color: white;
+}
+
+.collapsible-div:hover {
+    background-color: #dae1e7;
+}
+
+.collapsible-header {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+}
+
+.collapsible-header:after {
+    content: '\002B'; /* plus sign */
+    color: #3d3d3d;
+    font-weight: bold;
+    float: right;
+}
+
+.active:after {
+    content: '\2212'; /* minus sign */
+}
+
+.collapsible-content {
+    margin: 0 auto;
+    padding: 0 0.5rem;
+    max-height: 0;
+    overflow: hidden;
+    background-color: white;
+}

@@ -37,7 +37,7 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
+# dist/ # including pyinstaller executables
 downloads/
 eggs/
 lib/

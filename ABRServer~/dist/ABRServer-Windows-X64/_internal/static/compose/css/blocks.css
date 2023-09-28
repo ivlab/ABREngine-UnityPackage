@@ -1,0 +1,30 @@
+.swatch {
+    /* border: 1px solid #9e9e9e; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.block-title>* {
+    background-color: #c4e4ff;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    width: calc(100% - 20px);
+    margin: 0;
+}
+
+.light-info p {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+}
+
+.light-info input {
+    width: 100%;
+}
+
+.light-info {
+    background-color: #eee;
+    width: 70%;
+    margin: 1rem auto;
+    padding: 0.5rem 1rem;
+}

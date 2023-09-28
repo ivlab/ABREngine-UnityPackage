@@ -1,0 +1,153 @@
+.data-impression {
+    width: 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: -1;
+}
+
+.data-impression>* {
+    padding: 0.25rem 0;
+}
+
+.data-impression .data-impression-header {
+    width: 75%;
+    margin: auto;
+    background-color: #ceedff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.data-impression .data-impression-header p {
+    margin: auto;
+    text-align: center;
+}
+
+.data-impression .data-impression-header button {
+    background-color: #ceedff;
+}
+
+.data-impression .data-impression-summary {
+    width: 75%;
+    margin: auto;
+    background-color: #f8f4f4;
+}
+
+.data-impression .data-impression-summary .impression-controls {
+    display: flex;
+    justify-content: space-around;
+}
+
+.data-impression .data-impression-summary .impression-controls * {
+    font-size: 1rem;
+}
+
+.data-impression .data-impression-summary .summary-properties {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.data-impression .data-impression-summary .puzzle-label * {
+    width: 75%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.data-impression .data-impression-thumbnail {
+    width: 5rem;
+}
+
+.data-impression .parameter-list {
+    overflow: visible;
+    width: 15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.data-impression .parameter {
+    font-size: x-small;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.data-impression .parameter.narrow {
+    width: fit-content;
+}
+
+.data-impression .parameter .parameter-label {
+    text-align: center;
+    flex-basis: 100%;
+    font-size: x-small;
+    color: #3d3d3d;
+}
+
+.input-tier.primitive-tier {
+    padding: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #f8f4f4;
+    width: 75% !important; /* to match header */
+}
+
+.data-impression .input-tier {
+    padding: 0.5rem;
+    width: 15rem; /* match DI width */
+}
+
+.data-impression .impression-expand-buttons {
+    margin: auto;
+}
+
+/* keydata-specific styling */
+.data-impression .parameter.keydata {
+    width: calc(15rem * 0.75);/* to match parent data impression - margin */
+    margin: auto;
+    background-color: #f8f4f4; /* to match white bg */
+    border: none;
+}
+
+/* The 'tower' that the sockets appear to connect to
+ * Width is calculated based on tower width
+ */
+.data-impression .parameter .parameter-label > p{
+    width: calc(15rem - 2*5rem - 2*0.2rem);
+    margin: auto;
+}
+
+.data-impression .input-socket {
+    position: relative;
+    margin: 0 0.2rem;
+}
+
+/* The 'tower' that the sockets appear to connect to
+ * Width is calculated:
+ * .data-impression - 2x .puzzle-piece - 2x .puzzle-piece margin
+ *
+ * Height is calculated from border radius
+ */
+.data-impression .data-impression-tower {
+    position: absolute;
+    background: #f8f4f4;
+    height: calc(100% - 8px);
+    z-index: -1;
+    width: calc(15rem - 2*5rem - 2*0.2rem);
+    left: calc(50% - (15rem - 2*5rem - 2*0.2rem) * 0.5);
+}
+
+.data-impression-editor {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-impression-editor>* {
+    margin: auto;
+    padding: 0.5em;
+}

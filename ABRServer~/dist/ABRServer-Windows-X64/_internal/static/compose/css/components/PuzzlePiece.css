@@ -1,0 +1,150 @@
+/* components/PuzzlePiece.css
+ * 
+ * Copyright (c) 2021, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ */
+
+/* The whole puzzle piece */
+.puzzle-piece {
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* z-index: 100; */
+    margin: 0.1rem 0;
+}
+
+.puzzle-piece:not(.drop-zone):not(.primitive-input) {
+    font-size: larger;
+}
+
+.puzzle-piece.tentative {
+    opacity: 50%;
+}
+
+/* keydata-specific tweaks */
+.keydata.puzzle-piece {
+    width: 8rem;
+    height: 5rem;
+}
+.input-socket.keydata {
+    margin: auto;
+}
+.puzzle-connector.keydata {
+    width: 3rem; /* Keydata connector aspect ratio is 1:1 (match puzzle piece) */
+}
+.keydata.puzzle-piece button.solo-button:not(.soloed) {
+    background-color: #999;
+}
+
+/* The body of the puzzle piece */
+.puzzle-piece .puzzle-label {
+    position: relative;
+    width: 5rem;
+    background-color: #bbb;
+    color: #3d3d3d;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+.puzzle-piece .puzzle-label p {
+    text-align: center;
+}
+
+/* The connector of the puzzle piece (svgs) */
+.puzzle-connector {
+    flex-shrink: 0;
+    height: 3rem; /* Same as parent .parameter; explicitly redefined here */
+    width: 1.2rem; /* Aspect ratio of puzzle connectors should be 2:5 */
+    mask-size: contain !important; /* Unsure why `mask` is overwriting this */
+    -webkit-mask-size: contain !important; /* Unsure why `mask` is overwriting this */
+}
+
+.puzzle-connector.background {
+    background: #666; /* The background color of the sockets (refer to renderingStrategy.css) */
+}
+
+.puzzle-connector.foreground {
+    background: white;
+}
+
+.puzzle-connector.foreground-contrast {
+    background: #bbb;
+}
+
+.puzzle-piece input, .puzzle-piece button {
+    font-size: 11px;
+}
+
+.puzzle-piece p.primitive-name {
+    text-align: center;
+}
+.puzzle-piece input.primitive-input {
+    width: 75%;
+    align-self: center;
+    text-align: center;
+}
+
+div.inline {
+    display: inline-block;
+}
+
+.artifact-thumbnail {
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0.25em;
+    height: 100%;
+}
+
+.puzzle-piece.hover-bright:hover {
+    filter: brightness(120%);
+    z-index: 1000;
+}
+.puzzle-piece .puzzle-label .custom-indicator {
+    position: absolute;
+    margin: 0.5rem;
+    background: #eeeeee;
+    width: 0.8rem;
+}
+
+.input-scrubbable {
+    cursor: ew-resize;
+    background-color: #eeeeee;
+}
+
+
+.puzzle-piece.drop-zone:not(.highlighted) .puzzle-label, .puzzle-piece.drop-zone:not(.highlighted) .puzzle-connector {
+    background-color: #605e5b !important;
+}
+.puzzle-piece.drop-zone .puzzle-label, .puzzle-piece.drop-zone .puzzle-connector {
+    color: #f8f4f4 !important;
+}
+
+.input-socket .puzzle-piece.highlighted .puzzle-label, .input-socket .puzzle-piece.highlighted .puzzle-connector {
+    animation-name: pulse;
+    animation-duration: 1.7s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+.input-socket .puzzle-piece.highlighted .puzzle-label p {
+    filter: drop-shadow(0px 0px 0.5rem #000);
+}
+
+/* define behaviour for summary puzzle pieces (displayed when DI is locked) */
+.summary {
+    height: 2rem !important;
+    width: 5rem;
+    position: relative !important;
+}
+.puzzle-label.summary {
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes pulse {
+    0% {background-color: #666;}
+    50% {background-color: #97aec1;}
+    100% {background-color: #666;}
+}

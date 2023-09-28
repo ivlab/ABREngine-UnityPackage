@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw State Editor</title>
+</head>
+<body>
+    <div style="display: inline;">
+        <textarea rows="50" cols="80" id="editor"></textarea>
+        <button id="update" style="vertical-align: top;" onclick="updateState()">Update state</button>
+        <button id="undo" style="vertical-align: top;" onclick="undo()">Undo</button>
+        <button id="redo" style="vertical-align: top;"
+        onclick="redo()">Redo</button>
+        <input type="text" name="" id="remove-value" placeholder="value">
+        <button id="remove-value-button" onclick="remove()">Remove Element</button>
+        <input type="text" name="" id="remove-path" placeholder="value">
+        <button id="remove-path-button" onclick="removePath()">Remove Path</button>
+    </div>
+
+    <script src="{% static 'common/csrf.js' %}"></script>
+
+    <script>
+        let ws = new WebSocket(`ws://${window.location.host}/ws/`);
+        let initialized = false;
+        // Once the WS is open, tell the ABR Engine to send us the state since
+        // we're connected
+        ws.onopen = (_evt) => {
+            let data = 'Web client connected';
+            ws.send(data);
+            initialized = true;
+        }
+        // When a message is received, forward it to all of the subscribers
+        ws.onmessage = (evt) => {
+            let data = evt.data;
+            console.log(data);
+            fetch('/api/state').then((resp) => resp.text())
+                .then((state) => {
+                    let t = JSON.parse(state)['state'];
+                    editor.value = JSON.stringify(t, null, 5);
+            });
+        }
+
+        let editor = document.getElementById('editor');
+        fetch('/api/state').then((resp) => resp.text())
+            .then((state) => {
+                let t = JSON.parse(state)['state'];
+                editor.value = JSON.stringify(t, null, 5);
+        });
+        function updateState() {
+            document.getElementById('update').disabled = true;
+            fetch('/api/state', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': csrftoken,
+                },
+                mode: 'same-origin',
+                body: editor.value,
+            }).then((resp) => {
+                if (resp.status != 200) {
+                    alert(resp.statusText);
+                }
+                document.getElementById('update').disabled = false;
+            });
+        }
+        function undo() {
+            document.getElementById('undo').disabled = true;
+            fetch('/api/undo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': csrftoken,
+                },
+                mode: 'same-origin',
+            }).then((resp) => {
+                if (resp.status != 200) {
+                    alert(resp.statusText);
+                }
+                document.getElementById('undo').disabled = false;
+            });
+        }
+        function redo() {
+            document.getElementById('redo').disabled = true;
+            fetch('/api/redo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': csrftoken,
+                },
+                mode: 'same-origin',
+            }).then((resp) => {
+                if (resp.status != 200) {
+                    alert(resp.statusText);
+                }
+                document.getElementById('redo').disabled = false;
+            });
+        }
+        function remove() {
+            document.getElementById('remove-value-button').disabled = true;
+            document.getElementById('remove-value').disabled = true;
+            let value = document.getElementById('remove-value').value;
+            fetch('/api/remove/' + value, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': csrftoken,
+                },
+                mode: 'same-origin',
+            }).then((resp) => {
+                if (resp.status != 200) {
+                    alert(resp.statusText);
+                }
+                document.getElementById('remove-value-button').disabled = false;
+                document.getElementById('remove-value').disabled = false;
+            });
+        }
+        function removePath() {
+            document.getElementById('remove-path-button').disabled = true;
+            document.getElementById('remove-path').disabled = true;
+            let path = document.getElementById('remove-path').value;
+            fetch('/api/remove-path/' + path, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': csrftoken,
+                },
+                mode: 'same-origin',
+            }).then((resp) => {
+                if (resp.status != 200) {
+                    alert(resp.statusText);
+                }
+                document.getElementById('remove-path-button').disabled = false;
+                document.getElementById('remove-path').disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>

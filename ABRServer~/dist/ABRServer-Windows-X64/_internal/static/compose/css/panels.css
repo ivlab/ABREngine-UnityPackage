@@ -1,0 +1,145 @@
+/* panels.css
+ * 
+ * Copyright (c) 2020, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ */
+
+#panel-container {
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 1.8rem); /* Minus height of header */
+    width: 100vw;
+    min-height: 0;
+    display: flex;
+    position: fixed;
+}
+
+.panel {
+    background-color: #928e89;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: scroll;
+}
+
+.panel-header {
+    background-color: #c5c5c5;
+    color: #928e89;
+    margin: 0;
+    padding: 0.1rem 0;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+}
+
+#data-panel {
+    width: 12rem;
+    z-index: 1;
+}
+
+.data-chooser-row {
+    display: flex;
+}
+
+#design-panel {
+    width: 12rem;
+    z-index: 1;
+}
+
+#composition-panel {
+    width: calc(100% - 25rem);
+    margin: 0 0.5rem 0 0.5rem;
+    overflow: hidden !important;
+}
+
+#composition-scrollbox {
+    overflow: scroll;
+    width: 100%;
+    height: calc(100% - 2.3rem); /* Minus height of header... ish? 2.3rem seems to look good */
+    background-color: #534d4d;
+}
+
+#composition-loader {
+    z-index: 0;
+    /* make it a giant square for scrolling */
+    width: 1000rem;
+    height: 1000rem;
+    position: relative;
+
+    /* grid background for composition: https://stackoverflow.com/q/5218927 */
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, grey 1px, transparent 1px),
+        linear-gradient(to bottom, grey 1px, #928e89ff 1px);
+}
+
+/* .panel-header p {
+    flex-grow: 1;
+    font-variant: small-caps;
+    margin: 0;
+    font-size: 0.75rem;
+    text-align: center;
+    color: #3d3d3d;
+} */
+
+.section-header {
+    font-variant: small-caps;
+    margin: 0;
+    padding: 1rem 0 0 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    text-align: left;
+    font-size: 1rem;
+    width: calc(100% - 1.5rem);
+}
+
+.trash {
+    position: fixed;
+    bottom: 0;
+    right: 12rem;
+    height: 3rem;
+    width: 3rem;
+    margin: 2rem;
+    padding: 0.5rem;
+}
+
+.trash-droppable-hover {
+    /* Animation */
+    animation: bounce 0.5s;
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(.5, 0.05, 1, .5);
+    animation-iteration-count: infinite;
+
+    /* Prefix support */
+    -webkit-animation-name: bounce;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: cubic-bezier(.5, 0.05, 1, .5);
+    -webkit-animation-iteration-count: infinite;
+}
+    
+@keyframes bounce {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(0, -15px, 0);
+    }
+}
+
+/* Prefix support */
+@-webkit-keyframes bounce {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, -15px, 0);
+        transform: translate3d(0, -15px, 0);
+    }
+}

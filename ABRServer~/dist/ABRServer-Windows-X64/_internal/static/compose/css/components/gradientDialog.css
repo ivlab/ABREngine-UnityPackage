@@ -1,0 +1,139 @@
+/* gradientDialog.css
+ * 
+ * Copyright (c) 2021, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ */
+
+.editor-dialog {
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+.editor-source::before {
+    animation-name: editor-source-indicator;
+    animation-duration: 0.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: 2;
+    animation-delay: 0.3s;
+    opacity: 0%;
+    content: ' ';
+    background-color: #39a7e7;
+    width: 2rem;
+    height: 5rem;
+    border-radius: 2rem;
+    position: absolute;
+    left: 1rem;
+}
+@keyframes editor-source-indicator {
+    0% {opacity: 0%;}
+    50% {opacity: 100%;}
+    100% {opacity: 0%;}
+}
+
+#gradient-view {
+    position: relative;
+    margin: 1em auto;
+    border-top: 1px solid #cecece;
+    background-size: calc(100% - 1px) 25%;
+    background-image: linear-gradient(to right, #cecece 1px, transparent 1px), linear-gradient(to top, #cecece 1px, white 1px);
+}
+
+#vis-asset-gradient-dialog {
+    overflow: hidden;
+    margin: auto;
+}
+
+.gradient-panel {
+    border: 1px solid #3d3d3d;
+    height: 8rem;
+    width: calc(100% - 2px);
+}
+
+.quick-drop {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    top: 0;
+}
+.quick-drop.quick-drop-left {
+    left: 0;
+}
+.quick-drop.quick-drop-center {
+    left: 25%;
+    width: 50%;
+}
+.quick-drop.quick-drop-center.active {
+    background-color: #ffd4ce;
+}
+.quick-drop.quick-drop-center.active::after {
+    content: '-';
+}
+.quick-drop.quick-drop-right {
+    left: 75%;
+}
+
+.gradient-panel.active, .quick-drop.active {
+    background-color: #ceedff;
+    text-align: center;
+}
+.gradient-panel.active::after, .quick-drop.active::after {
+    width: 100%;
+    font-size: 35px;
+    content: '+';
+}
+.gradient-panel .ui-resizable-handle {
+    width: 2rem;
+    height: 100%;
+    left: 100%;
+}
+
+.resizable-section {
+    display: flex;
+    background-color: #ddd;
+    border-right: 1px solid gray;
+    float: left;
+    height: 100%;
+    position: relative;
+}
+
+.resizable-section img {
+    display: block;
+    margin: auto;
+    max-height: 90%;
+}
+
+.resizable-section p {
+    vertical-align: middle;
+    margin: 0 0.5rem;
+    position: absolute;
+    top: 0;
+}
+
+.right-section-label {
+    right: 0;
+}
+.left-section-label {
+    left: 0;
+}
+
+.vis-asset-gradient-thumb {
+    display: flex;
+}
+
+.vis-asset-gradient-thumb img {
+    object-fit: cover;
+    height: calc(0.9 * 3rem); /* same as puzzle piece */
+}
+
+#visasset-trash {
+    width: 2em;
+    height: 2em;
+    margin: 1rem;
+}
+
+.visasset-starter-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+}
