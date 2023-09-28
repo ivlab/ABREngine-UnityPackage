@@ -72,6 +72,10 @@ public class GenerateDataAndUseStyle : MonoBehaviour
         {
             List<Vector3> line = new List<Vector3>();
             var startPt = UnityEngine.Random.insideUnitSphere * 0.5f;
+            if (l == 0)
+            {
+                startPt = Vector3.zero;
+            }
             var currentPt = startPt;
             while (currentPt.magnitude < 0.5f)
             {
@@ -125,7 +129,6 @@ public class GenerateDataAndUseStyle : MonoBehaviour
         gdi.colorVariable = pointsSqrMag;
 
         // Create a line data impression from a defined style
-        ldi = DataImpression.Create<SimpleLineDataImpression>(Guid.NewGuid(), "Generated Lines");
         try
         {
             var ldiStyle = ABREngine.Instance.GetDataImpression(di => di.name == lineStyleName);

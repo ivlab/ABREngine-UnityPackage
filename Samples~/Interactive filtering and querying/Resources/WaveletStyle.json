@@ -1,0 +1,374 @@
+{
+    "version": "2023.9.0",
+    "impressions": {
+        "064bca58-a834-4f9b-9a42-caf3a8056f1d": {
+            "plateType": "Surfaces",
+            "uuid": "064bca58-a834-4f9b-9a42-caf3a8056f1d",
+            "name": "RTData100",
+            "inputValues": {
+                "Key Data": {
+                    "inputType": "IVLab.ABREngine.SurfaceKeyData",
+                    "inputGenre": "KeyData",
+                    "inputValue": "Demo/Wavelet/KeyData/RTData100"
+                },
+                "Color Variable": {
+                    "inputType": "IVLab.ABREngine.ScalarDataVariable",
+                    "inputGenre": "Variable",
+                    "inputValue": "Demo/Wavelet/ScalarVar/YAxis"
+                },
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "557228f4-296f-4623-b2de-044aef28be31"
+                }
+            },
+            "renderHints": {
+                "Visible": true
+            }
+        },
+        "ac5606d5-b65e-43e9-a0f8-18c49333d46c": {
+            "plateType": "Volumes",
+            "uuid": "ac5606d5-b65e-43e9-a0f8-18c49333d46c",
+            "name": "FullVolume",
+            "inputValues": {
+                "Key Data": {
+                    "inputType": "IVLab.ABREngine.VolumeKeyData",
+                    "inputGenre": "KeyData",
+                    "inputValue": "Demo/Wavelet/KeyData/FullVolume"
+                },
+                "Color Variable": {
+                    "inputType": "IVLab.ABREngine.ScalarDataVariable",
+                    "inputGenre": "Variable",
+                    "inputValue": "Demo/Wavelet/ScalarVar/RTData"
+                },
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "6c2f7767-5a65-4814-bad2-501000923c30"
+                },
+                "Opacitymap": {
+                    "inputType": "IVLab.ABREngine.PrimitiveGradient",
+                    "inputGenre": "PrimitiveGradient",
+                    "inputValue": "8a62bc26-94e0-4453-bc32-b95cbd7cb209"
+                },
+                "Volume Opacity Multiplier": {
+                    "inputType": "IVLab.ABREngine.PercentPrimitive",
+                    "inputValue": "3%",
+                    "inputGenre": "Primitive"
+                }
+            },
+            "renderHints": {
+                "Visible": true
+            }
+        },
+        "79d76352-ba43-472d-85e4-2d8bf953cf26": {
+            "plateType": "Ribbons",
+            "uuid": "79d76352-ba43-472d-85e4-2d8bf953cf26",
+            "name": "OutputFlow",
+            "inputValues": {
+                "Key Data": {
+                    "inputType": "IVLab.ABREngine.LineKeyData",
+                    "inputGenre": "KeyData",
+                    "inputValue": "Demo/Wavelet/KeyData/OutputFlow"
+                },
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "26975e70-8bce-11ea-85c7-005056bae6d8"
+                },
+                "Color Variable": {
+                    "inputType": "IVLab.ABREngine.ScalarDataVariable",
+                    "inputGenre": "Variable",
+                    "inputValue": "Demo/Wavelet/ScalarVar/AngularVelocity"
+                },
+                "Texture": {
+                    "inputType": "IVLab.ABREngine.LineTextureVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "6e2f8662-7905-11ea-9472-005056bae6d8"
+                },
+                "Ribbon Width": {
+                    "inputType": "IVLab.ABREngine.LengthPrimitive",
+                    "inputValue": "0.05m",
+                    "inputGenre": "Primitive"
+                }
+            }
+        },
+        "81e4a327-87d8-4dad-b7d2-99b9cc97ce7c": {
+            "plateType": "Ribbons",
+            "uuid": "81e4a327-87d8-4dad-b7d2-99b9cc97ce7c",
+            "name": "InputFlow",
+            "inputValues": {
+                "Key Data": {
+                    "inputType": "IVLab.ABREngine.LineKeyData",
+                    "inputGenre": "KeyData",
+                    "inputValue": "Demo/Wavelet/KeyData/InputFlow"
+                },
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "141c089c-04fe-4d2d-ab83-74beb4cd5ead"
+                },
+                "Color Variable": {
+                    "inputType": "IVLab.ABREngine.ScalarDataVariable",
+                    "inputGenre": "Variable",
+                    "inputValue": "Demo/Wavelet/ScalarVar/AngularVelocity"
+                },
+                "Texture": {
+                    "inputType": "IVLab.ABREngine.LineTextureVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "6e2f8662-7905-11ea-9472-005056bae6d8"
+                },
+                "Ribbon Width": {
+                    "inputType": "IVLab.ABREngine.LengthPrimitive",
+                    "inputValue": "0.05m",
+                    "inputGenre": "Primitive"
+                }
+            }
+        },
+        "cc95452f-8a64-41f7-93cb-31a6348ac806": {
+            "plateType": "Glyphs",
+            "uuid": "cc95452f-8a64-41f7-93cb-31a6348ac806",
+            "name": "Data Impression",
+            "tags": [
+                "PointStyle"
+            ],
+            "inputValues": {
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "80c5683a-a4c1-4b97-8215-453d7fcfc223"
+                },
+                "Glyph": {
+                    "inputType": "IVLab.ABREngine.GlyphVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "1af025aa-f1ed-11e9-a623-8c85900fd4af"
+                },
+                "Glyph Size": {
+                    "inputType": "IVLab.ABREngine.LengthPrimitive",
+                    "inputGenre": "Primitive",
+                    "inputValue": "0.02m"
+                },
+                "Glyph Density": {
+                    "inputType": "IVLab.ABREngine.PercentPrimitive",
+                    "inputGenre": "Primitive",
+                    "inputValue": "57%"
+                }
+            }
+        },
+        "36e85e6f-cf56-4cb5-aad6-7a1cce9d69e6": {
+            "plateType": "Ribbons",
+            "uuid": "36e85e6f-cf56-4cb5-aad6-7a1cce9d69e6",
+            "name": "LineStyle",
+            "inputValues": {
+                "Texture": {
+                    "inputType": "IVLab.ABREngine.LineTextureVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "6e2f8662-7905-11ea-9472-005056bae6d8"
+                },
+                "Colormap": {
+                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
+                    "inputGenre": "VisAsset",
+                    "inputValue": "10e685a4-ba51-466b-a44c-afc75b3faa7d"
+                },
+                "Ribbon Width": {
+                    "inputType": "IVLab.ABREngine.LengthPrimitive",
+                    "inputValue": "0.04m",
+                    "inputGenre": "Primitive"
+                }
+            }
+        }
+    },
+    "uiData": {
+        "compose": {
+            "impressionData": {
+                "064bca58-a834-4f9b-9a42-caf3a8056f1d": {
+                    "position": {
+                        "top": 106.55000305175781,
+                        "left": 155
+                    },
+                    "maxInputTierToShow": 1
+                },
+                "ac5606d5-b65e-43e9-a0f8-18c49333d46c": {
+                    "position": {
+                        "top": 21.333328247070312,
+                        "left": 890.2000122070312
+                    },
+                    "maxInputTierToShow": 2
+                },
+                "79d76352-ba43-472d-85e4-2d8bf953cf26": {
+                    "position": {
+                        "top": 375.5500183105469,
+                        "left": 782.2000122070312
+                    },
+                    "maxInputTierToShow": 2
+                },
+                "81e4a327-87d8-4dad-b7d2-99b9cc97ce7c": {
+                    "position": {
+                        "top": 339.54998779296875,
+                        "left": 561.2000122070312
+                    },
+                    "maxInputTierToShow": 2
+                },
+                "cc95452f-8a64-41f7-93cb-31a6348ac806": {
+                    "position": {
+                        "top": 442.3999938964844,
+                        "left": 98
+                    },
+                    "maxInputTierToShow": 2
+                },
+                "36e85e6f-cf56-4cb5-aad6-7a1cce9d69e6": {
+                    "position": {
+                        "top": 424.3500061035156,
+                        "left": 357
+                    },
+                    "maxInputTierToShow": 2
+                }
+            }
+        }
+    },
+    "name": "FooBar",
+    "dataRanges": {
+        "scalarRanges": {
+            "Demo/Wavelet/ScalarVar/RTData": {
+                "min": 37.35310363769531,
+                "max": 276.8288269042969
+            },
+            "Demo/Wavelet/ScalarVar/YAxis": {
+                "min": -10,
+                "max": 10
+            },
+            "Demo/Wavelet/ScalarVar/AngularVelocity": {
+                "min": -0.04346,
+                "max": 0.03975
+            }
+        }
+    },
+    "localVisAssets": {
+        "cfa1ada8-f5da-4edd-a221-083951c289be": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "ABR Artist",
+                "class": "Custom",
+                "family": "Custom",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "cfa1ada8-f5da-4edd-a221-083951c289be"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0037593984962406013\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"0.9843358395989975\"></Point></ColorMap></ColorMaps>"
+            }
+        },
+        "6c2f7767-5a65-4814-bad2-501000923c30": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "ABR Artist",
+                "class": "Custom",
+                "family": "Custom",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "6c2f7767-5a65-4814-bad2-501000923c30"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.8784313725490196\" g=\"0.4\" b=\"0.4\" x=\"0.626567986784081\"></Point></ColorMap></ColorMaps>"
+            }
+        },
+        "557228f4-296f-4623-b2de-044aef28be31": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "Francesca Samsel",
+                "class": "hue cycle",
+                "family": "blue",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "557228f4-296f-4623-b2de-044aef28be31"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"1\" g=\"0.984313725490196\" b=\"0.9372549019607843\" x=\"0\"></Point><Point r=\"0.984313725490196\" g=\"0.984313725490196\" b=\"0.8862745098039215\" x=\"0.025000010633302483\"></Point><Point r=\"0.9568627450980393\" g=\"0.9764705882352941\" b=\"0.8392156862745098\" x=\"0.04999999468334876\"></Point><Point r=\"0.9294117647058824\" g=\"0.9647058823529412\" b=\"0.803921568627451\" x=\"0.07500000531665124\"></Point><Point r=\"0.8941176470588236\" g=\"0.9568627450980393\" b=\"0.7647058823529411\" x=\"0.09999998936669752\"></Point><Point r=\"0.8588235294117647\" g=\"0.9490196078431372\" b=\"0.7372549019607844\" x=\"0.125\"></Point><Point r=\"0.8196078431372549\" g=\"0.9372549019607843\" b=\"0.7098039215686275\" x=\"0.15000001063330248\"></Point><Point r=\"0.7647058823529411\" g=\"0.9294117647058824\" b=\"0.6862745098039216\" x=\"0.17500002126660497\"></Point><Point r=\"0.6941176470588235\" g=\"0.9215686274509803\" b=\"0.6666666666666666\" x=\"0.19999997873339503\"></Point><Point r=\"0.6549019607843137\" g=\"0.9098039215686274\" b=\"0.6549019607843137\" x=\"0.22499998936669752\"></Point><Point r=\"0.6313725490196078\" g=\"0.9019607843137255\" b=\"0.6666666666666666\" x=\"0.25\"></Point><Point r=\"0.6039215686274509\" g=\"0.8862745098039215\" b=\"0.6823529411764706\" x=\"0.2750000106333025\"></Point><Point r=\"0.5764705882352941\" g=\"0.8745098039215686\" b=\"0.7019607843137254\" x=\"0.30000002126660497\"></Point><Point r=\"0.5568627450980392\" g=\"0.8666666666666667\" b=\"0.7215686274509804\" x=\"0.32499997873339503\"></Point><Point r=\"0.5294117647058824\" g=\"0.8588235294117647\" b=\"0.7490196078431373\" x=\"0.3499999893666975\"></Point><Point r=\"0.5098039215686274\" g=\"0.8470588235294118\" b=\"0.7764705882352941\" x=\"0.375\"></Point><Point r=\"0.49411764705882355\" g=\"0.8392156862745098\" b=\"0.7843137254901961\" x=\"0.4000000106333025\"></Point><Point r=\"0.4823529411764706\" g=\"0.8313725490196079\" b=\"0.792156862745098\" x=\"0.42500002126660497\"></Point><Point r=\"0.4666666666666667\" g=\"0.8196078431372549\" b=\"0.803921568627451\" x=\"0.44999997873339503\"></Point><Point r=\"0.4549019607843137\" g=\"0.8117647058823529\" b=\"0.8117647058823529\" x=\"0.4749999893666975\"></Point><Point r=\"0.4392156862745098\" g=\"0.7764705882352941\" b=\"0.8\" x=\"0.5\"></Point><Point r=\"0.42745098039215684\" g=\"0.7490196078431373\" b=\"0.7843137254901961\" x=\"0.5250000106333025\"></Point><Point r=\"0.4117647058823529\" g=\"0.7215686274509804\" b=\"0.7764705882352941\" x=\"0.550000021266605\"></Point><Point r=\"0.4\" g=\"0.6941176470588235\" b=\"0.7647058823529411\" x=\"0.574999978733395\"></Point><Point r=\"0.3843137254901961\" g=\"0.6666666666666666\" b=\"0.7568627450980392\" x=\"0.5999999893666975\"></Point><Point r=\"0.3764705882352941\" g=\"0.6392156862745098\" b=\"0.7490196078431373\" x=\"0.625\"></Point><Point r=\"0.3568627450980392\" g=\"0.6039215686274509\" b=\"0.7372549019607844\" x=\"0.6499999574667901\"></Point><Point r=\"0.34901960784313724\" g=\"0.5764705882352941\" b=\"0.7294117647058823\" x=\"0.675000021266605\"></Point><Point r=\"0.33725490196078434\" g=\"0.5490196078431373\" b=\"0.7215686274509804\" x=\"0.699999978733395\"></Point><Point r=\"0.32941176470588235\" g=\"0.5215686274509804\" b=\"0.7098039215686275\" x=\"0.7250000425332099\"></Point><Point r=\"0.3215686274509804\" g=\"0.48627450980392156\" b=\"0.7019607843137254\" x=\"0.75\"></Point><Point r=\"0.3137254901960784\" g=\"0.4666666666666667\" b=\"0.6862745098039216\" x=\"0.7749999574667901\"></Point><Point r=\"0.30196078431372547\" g=\"0.43137254901960786\" b=\"0.6745098039215687\" x=\"0.800000021266605\"></Point><Point r=\"0.30196078431372547\" g=\"0.4117647058823529\" b=\"0.6666666666666666\" x=\"0.824999978733395\"></Point><Point r=\"0.28627450980392155\" g=\"0.3764705882352941\" b=\"0.6588235294117647\" x=\"0.8500000425332099\"></Point><Point r=\"0.28627450980392155\" g=\"0.3411764705882353\" b=\"0.6470588235294118\" x=\"0.875\"></Point><Point r=\"0.27450980392156865\" g=\"0.30196078431372547\" b=\"0.6392156862745098\" x=\"0.8999999574667901\"></Point><Point r=\"0.26666666666666666\" g=\"0.26666666666666666\" b=\"0.6196078431372549\" x=\"0.925000021266605\"></Point><Point r=\"0.28627450980392155\" g=\"0.24705882352941178\" b=\"0.6\" x=\"0.949999978733395\"></Point><Point r=\"0.30980392156862746\" g=\"0.23921568627450981\" b=\"0.5764705882352941\" x=\"0.9750000425332099\"></Point><Point r=\"0.32941176470588235\" g=\"0.23137254901960785\" b=\"0.5568627450980392\" x=\"1\"></Point></ColorMap></ColorMaps>"
+            }
+        },
+        "80c5683a-a4c1-4b97-8215-453d7fcfc223": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "Francesca Samsel",
+                "class": "linear cycle",
+                "family": "Orange",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "80c5683a-a4c1-4b97-8215-453d7fcfc223"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"1\" g=\"1\" b=\"0.8470588235294118\" x=\"0.05882693832344294\"></Point><Point r=\"1\" g=\"0.9764705882352941\" b=\"0.7215686274509804\" x=\"0.07883275261324042\"></Point><Point r=\"1\" g=\"0.9215686274509803\" b=\"0.5568627450980392\" x=\"0.1088269330067917\"></Point><Point r=\"1\" g=\"0.8588235294117647\" b=\"0.4470588235294118\" x=\"0.15882698085665287\"></Point><Point r=\"1\" g=\"0.7764705882352941\" b=\"0.33725490196078434\" x=\"0.20882694895674542\"></Point><Point r=\"0.984313725490196\" g=\"0.7019607843137254\" b=\"0.27450980392156865\" x=\"0.25882691705683797\"></Point><Point r=\"0.9764705882352941\" g=\"0.6039215686274509\" b=\"0.23137254901960785\" x=\"0.30882693832344293\"></Point><Point r=\"0.9568627450980393\" g=\"0.49411764705882355\" b=\"0.19215686274509805\" x=\"0.3588269595900479\"></Point><Point r=\"0.9372549019607843\" g=\"0.42745098039215684\" b=\"0.16470588235294117\" x=\"0.40882698085665287\"></Point><Point r=\"0.9098039215686274\" g=\"0.33725490196078434\" b=\"0.1411764705882353\" x=\"0.4588269489567454\"></Point><Point r=\"0.8745098039215686\" g=\"0.2196078431372549\" b=\"0.12156862745098039\" x=\"0.508826917056838\"></Point><Point r=\"0.8196078431372549\" g=\"0.10196078431372549\" b=\"0.10196078431372549\" x=\"0.558826938323443\"></Point><Point r=\"0.7568627450980392\" g=\"0.12156862745098039\" b=\"0.12156862745098039\" x=\"0.608826959590048\"></Point><Point r=\"0.7019607843137254\" g=\"0.13725490196078433\" b=\"0.13725490196078433\" x=\"0.6588269808566529\"></Point><Point r=\"0.6196078431372549\" g=\"0.16862745098039217\" b=\"0.16862745098039217\" x=\"0.7088270021232579\"></Point><Point r=\"0.5568627450980392\" g=\"0.17647058823529413\" b=\"0.19215686274509805\" x=\"0.758826917056838\"></Point><Point r=\"0.5019607843137255\" g=\"0.17647058823529413\" b=\"0.2\" x=\"0.808826938323443\"></Point><Point r=\"0.4588235294117647\" g=\"0.1843137254901961\" b=\"0.21176470588235294\" x=\"0.858826959590048\"></Point><Point r=\"0.4196078431372549\" g=\"0.1843137254901961\" b=\"0.21176470588235294\" x=\"0.9088269808566529\"></Point><Point r=\"0.3764705882352941\" g=\"0.1843137254901961\" b=\"0.21176470588235294\" x=\"0.9588270021232579\"></Point><Point r=\"0.3215686274509804\" g=\"0.16470588235294117\" b=\"0.2\" x=\"1.008826917056838\"></Point><Point r=\"0.25882352941176473\" g=\"0.1568627450980392\" b=\"0.17647058823529413\" x=\"1.058826938323443\"></Point></ColorMap></ColorMaps>"
+            }
+        },
+        "10e685a4-ba51-466b-a44c-afc75b3faa7d": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "Francesca Samsel",
+                "class": "hue cycle",
+                "family": "Green",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "10e685a4-ba51-466b-a44c-afc75b3faa7d"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.28627450980392155\" g=\"0.3215686274509804\" b=\"0.1411764705882353\" x=\"0.016173066993208297\"></Point><Point r=\"0.34901960784313724\" g=\"0.4470588235294118\" b=\"0.12156862745098039\" x=\"0.17206735644190985\"></Point><Point r=\"0.26666666666666666\" g=\"0.5372549019607843\" b=\"0.10980392156862745\" x=\"0.32351918502967114\"></Point><Point r=\"0.28627450980392155\" g=\"0.6588235294117647\" b=\"0.16862745098039217\" x=\"0.47941350106162894\"></Point><Point r=\"0.4666666666666667\" g=\"0.7647058823529411\" b=\"0.29411764705882354\" x=\"0.5882404074851644\"></Point><Point r=\"0.7764705882352941\" g=\"0.8588235294117647\" b=\"0.4470588235294118\" x=\"0.7485192062962761\"></Point><Point r=\"0.9019607843137255\" g=\"0.9215686274509803\" b=\"0.5294117647058824\" x=\"0.8646921829064134\"></Point><Point r=\"0.9137254901960784\" g=\"0.9215686274509803\" b=\"0.7411764705882353\" x=\"0.9779326010248802\"></Point></ColorMap></ColorMaps>"
+            }
+        },
+        "141c089c-04fe-4d2d-ab83-74beb4cd5ead": {
+            "artifactJson": {
+                "artifactData": {
+                    "colormap": "colormap.xml"
+                },
+                "artist": "Francesca Samsel",
+                "class": "hue cycle",
+                "family": "Orange",
+                "hidden": false,
+                "preview": "thumbnail.png",
+                "tags": [],
+                "type": "colormap",
+                "uuid": "141c089c-04fe-4d2d-ab83-74beb4cd5ead"
+            },
+            "artifactDataContents": {
+                "colormap.xml": "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0.984313725490196\" g=\"0.984313725490196\" b=\"0.9098039215686274\" x=\"0\"></Point><Point r=\"0.9764705882352941\" g=\"0.9764705882352941\" b=\"0.8196078431372549\" x=\"0.04999999468334876\"></Point><Point r=\"0.9647058823529412\" g=\"0.9568627450980393\" b=\"0.7411764705882353\" x=\"0.09999998936669752\"></Point><Point r=\"0.9568627450980393\" g=\"0.9294117647058824\" b=\"0.6823529411764706\" x=\"0.15000001063330248\"></Point><Point r=\"0.9490196078431372\" g=\"0.8941176470588236\" b=\"0.6313725490196078\" x=\"0.19999997873339503\"></Point><Point r=\"0.9372549019607843\" g=\"0.8549019607843137\" b=\"0.6\" x=\"0.25\"></Point><Point r=\"0.9294117647058824\" g=\"0.8117647058823529\" b=\"0.5647058823529412\" x=\"0.30000002126660497\"></Point><Point r=\"0.9098039215686274\" g=\"0.7647058823529411\" b=\"0.5294117647058824\" x=\"0.3499999893666975\"></Point><Point r=\"0.8862745098039215\" g=\"0.7215686274509804\" b=\"0.49411764705882355\" x=\"0.4000000106333025\"></Point><Point r=\"0.8862745098039215\" g=\"0.6862745098039216\" b=\"0.4823529411764706\" x=\"0.44999997873339503\"></Point><Point r=\"0.8745098039215686\" g=\"0.6588235294117647\" b=\"0.4588235294117647\" x=\"0.5\"></Point><Point r=\"0.8745098039215686\" g=\"0.611764705882353\" b=\"0.4117647058823529\" x=\"0.550000021266605\"></Point><Point r=\"0.8666666666666667\" g=\"0.5764705882352941\" b=\"0.39215686274509803\" x=\"0.5999999893666975\"></Point><Point r=\"0.8666666666666667\" g=\"0.5372549019607843\" b=\"0.3686274509803922\" x=\"0.6499999574667901\"></Point><Point r=\"0.8588235294117647\" g=\"0.5019607843137255\" b=\"0.34901960784313724\" x=\"0.699999978733395\"></Point><Point r=\"0.8470588235294118\" g=\"0.4588235294117647\" b=\"0.32941176470588235\" x=\"0.75\"></Point><Point r=\"0.8313725490196079\" g=\"0.4196078431372549\" b=\"0.30980392156862746\" x=\"0.800000021266605\"></Point><Point r=\"0.8117647058823529\" g=\"0.36470588235294116\" b=\"0.29411764705882354\" x=\"0.8500000425332099\"></Point><Point r=\"0.7843137254901961\" g=\"0.30980392156862746\" b=\"0.28627450980392155\" x=\"0.8999999574667901\"></Point><Point r=\"0.7647058823529411\" g=\"0.27450980392156865\" b=\"0.30196078431372547\" x=\"0.949999978733395\"></Point><Point r=\"0.7490196078431373\" g=\"0.26666666666666666\" b=\"0.34901960784313724\" x=\"1\"></Point></ColorMap></ColorMaps>"
+            }
+        }
+    },
+    "primitiveGradients": {
+        "8a62bc26-94e0-4453-bc32-b95cbd7cb209": {
+            "points": [
+                0,
+                0.3804157122376268,
+                0.4267467916265575,
+                0.509391419725731,
+                0.6819433703805879
+            ],
+            "values": [
+                "0%",
+                "5.36%",
+                "97.50%",
+                "100%",
+                "0%"
+            ]
+        }
+    }
+}

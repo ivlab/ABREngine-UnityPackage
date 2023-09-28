@@ -283,7 +283,7 @@ namespace IVLab.ABREngine
 
             // Copy over the fields that might have values
             newDi.RenderHints = this.RenderHints.Copy();
-            newDi.Tags = new List<string>(this.Tags);
+            newDi.Tags = new List<string>();
 
             // Copy all style inputs
             foreach (string inputName in this.InputIndexer.InputNames)
