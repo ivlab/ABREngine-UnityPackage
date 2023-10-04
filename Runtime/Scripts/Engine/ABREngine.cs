@@ -232,6 +232,13 @@ namespace IVLab.ABREngine
                             Debug.Log($"ABRConfig {configName} not found");
                         }
                     }
+                    else
+                    {
+                        // If nothing found, try to use the first available ABRConfig
+                        var configs = GetABRConfigs();
+                        if (configs.Count > 0)
+                            s_ConfigPrototype = configs[0];
+                    }
                 }
                 return s_ConfigPrototype;
             }

@@ -16,7 +16,8 @@ To use the package in a read-only mode, the same way you would for packages down
 2. Click the ```+``` button
 3. Select ```Add package from git URL```
 4. Paste ```git@github.com:ivlab/ABREngine-UnityPackage.git``` for the latest package
-5. After ABREngine is installed, close and reopen your Unity project.
+5. After ABREngine is installed, close and reopen your Unity project. Click
+"Ignore" when it prompts you about compile errors in the project.
 6. Now, there should be a new "ABR" menu tab that has appeared on the top bar
 (next to "Window"). Click **ABR > Import ABR Dependencies**.
   - This will install all of ABR's dependencies automatically.

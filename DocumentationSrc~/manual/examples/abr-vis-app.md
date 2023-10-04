@@ -32,7 +32,7 @@ interface and the ABR Engine!
 
 To design visualizations with the ABR design interface, you'll need to start the
 ABR server. In a perfect world, you'll be able to launch it directly from the
-editor, but that may not work so we will provide two sets of instructions for
+editor, but that may not work so we will provide two sets ,questionnaire!of instructions for
 this part.
 
 ### Option 1: Start ABR Server from Unity
@@ -41,7 +41,8 @@ In the Unity editor, click *ABR > Server > Start Server*. Wait a few moments
 while the Python window pops up and logs some information - this window is the
 ABR server so don't close it!
 
-If there were errors in the Unity console, you'll need to try Option 2.
+If there were errors in the Unity console or the server doesn't start for any
+reason, you'll need to try Option 2.
 
 
 ### Option 2: Start ABR Server with Python
