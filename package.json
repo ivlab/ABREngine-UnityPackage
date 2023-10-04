@@ -15,6 +15,11 @@
     },
     "samples": [
         {
+            "displayName": "ABR Vis App",
+            "description": "This is the main visualization app that should be used if you want to just connect to an ABR design interface.",
+            "path": "Samples~/ABR Vis App"
+        },
+        {
             "displayName": "State Creation",
             "description": "Contains a script to manually create a state using commands from the ABREngine.",
             "path": "Samples~/CreateState"

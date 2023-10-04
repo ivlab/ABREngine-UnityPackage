@@ -1,3 +1,4 @@
 **/obj
 api/*.yml
 api/.manifest
+api-documentation.csproj

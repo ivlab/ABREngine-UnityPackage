@@ -1,6 +1,10 @@
 # Generating a Documentation Website
 
-This package uses currently recommended documentation guidelines from the [IVLab Template Project](https://github.umn.edu/ivlab-cs/Template-UnityPackage). Please see this project and its' [README_DOCUMENTATION.md](https://github.umn.edu/ivlab-cs/Template-UnityPackage/blob/main/README_DOCUMENTATION.md) for more information and reasoning behind the documentation structure.
+This package uses currently recommended documentation guidelines from the [IVLab
+Template Project](https://github.umn.edu/ivlab-cs/Template-UnityPackage). Please
+see this project and its'
+[README_DOCUMENTATION.md](https://github.umn.edu/ivlab-cs/Template-UnityPackage/blob/main/README_DOCUMENTATION.md)
+for more information and reasoning behind the documentation structure.
 
 ## Prereqs: Installing DocFx
 
@@ -12,20 +16,37 @@ Step 1 is to install a recent stable release of DocFx by following [the instruct
 
 The important script: [build-docs](DocumentationSrc~/build-docs).
 
-1. Make sure you already have docfx installed, if not, go back to the top of this document to find the link to download it.
-2. Open your usual unix-style shell (use Terminal on OSX, use Git Bash or similar on Windows).
-3. Check to make sure that the docfx executable is in your PATH by running ```which docfx```.  If it prints a path to docfx, then proceed.  If not, figure out which directory you installed docfx in and add it to your path OR open up the [build-docs](DocumentationSrc~/build-docs) script and edit it to hardcode a path in the docfxExe variable.  
-4. Build the docs by running the script.  You can call it from any directory, or you could cd into the `DocumentationSrc~` directory first, like this:
+1. Make sure you already have docfx installed, if not, go back to the top of
+this document to find the link to download it.
+2. Open your usual unix-style shell (use Terminal on OSX, use Git Bash or
+similar on Windows).
+3. Check to make sure that the docfx executable is in your PATH by running
+```docfx --version```.  If it prints out version info, then proceed.  If not,
+figure out which directory you installed docfx in and add it to your path OR
+open up the [build-docs](DocumentationSrc~/build-docs) script and edit it to
+hardcode a path in the docfxExe variable.  
+4. Build the docs by running the script.  You can call it from any directory, or
+you could cd into the `DocumentationSrc~` directory first, like this:
 
 ```
 cd DocumentationSrc\~
 ./build-docs
 ```
 
+By default, this will build all the docs and launch a server on
+http://localhost:8080 to preview your documentation.
+
+There are other options in the script, please see the [build-docs
+script](DocumentationSrc~/build-docs) for more information.
+
 
 ## Building ABR-specific pages and generating fancy .gifs for data impression inputs
 
-So, you may have seen the gifs that are included in every data impression page. If not, take a look over at @IVLab.ABREngine.SimpleSurfaceDataImpression for a quick example. Generating the gifs on those pages isn't a hard task but it does take some effort. The following script is included in case someone else ever wants to go though and generate gifs for ABR features.
+So, you may have seen the gifs that are included in every data impression page.
+If not, take a look over at @IVLab.ABREngine.SimpleSurfaceDataImpression for a
+quick example. Generating the gifs on those pages isn't a hard task but it does
+take some effort. The following script is included in case someone else ever
+wants to go though and generate gifs for ABR features.
 
 
 ```cs
