@@ -116,6 +116,7 @@ namespace IVLab.ABREngine
         {
             try
             {
+                Debug.Log("Attempting to start ABR Server at " + ServerPath);
                 var startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.FileName = ServerPath;
                 startInfo.Arguments = RunserverArg;

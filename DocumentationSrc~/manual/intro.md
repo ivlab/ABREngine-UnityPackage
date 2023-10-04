@@ -39,9 +39,15 @@ Before getting into specifics of either of these modes, it is important to
 understand a few concepts about ABR. Give each of these core concepts a read
 through before diving into creating with ABR:
 
-[!include[core-concepts.md](core-concepts.md)]
+[!INCLUDE [core-concepts.md](core-concepts.md)]
 
-### Getting Started with ABR C#
+### Next steps
+
+Follow along with the @abr-vis-app.md tutorial to set up ABR to create your
+first visualization.
+
+
+<!-- ### Getting Started with ABR C#
 
 Please see [Creating your first C# ABR Visualization](creating-cs-abr-vis.md).
 
@@ -50,4 +56,4 @@ Please see [Creating your first C# ABR Visualization](creating-cs-abr-vis.md).
 ![ABR design interface](resources/design-interface-fire-wide.png)
 ABR design interface for a visualization of wildfire data.
 
-Please see @creating-design-interface-vis.md.
+Please see @creating-design-interface-vis.md. -->

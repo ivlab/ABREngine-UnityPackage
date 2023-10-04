@@ -246,6 +246,11 @@ namespace IVLab.ABREngine
                     return;
                 }
                 s_ConfigPrototype = value;
+                var cnp = new FileInfo(ConfigNamePath);
+                if (!cnp.Directory.Exists)
+                {
+                    cnp.Directory.Create();
+                }
                 File.WriteAllText(ConfigNamePath, s_ConfigPrototype.name);
                 Debug.Log("Changed ABR Configuration to " + s_ConfigPrototype.name);
             }

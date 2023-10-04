@@ -15,7 +15,8 @@
       href: terminology-starter.md
     - name: Media Folder
       href: media-folder.md
-- name: Creating your first ABR Visualizations
+- name: "Getting Started: ABR Vis App"
+  href: examples/abr-vis-app.md
   items:
     - name: Importing Data
       href: importing-data.md

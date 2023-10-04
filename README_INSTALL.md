@@ -24,6 +24,16 @@ To use the package in a read-only mode, the same way you would for packages down
   - If you get a permission denied error, try clicking "Import ABR Dependencies" again.
 
 
+## Next steps: Get started creating a visualization
+
+To get started creating a visualization, we recommend that you begin by
+importing the ABR Vis App example. You can do this by opening the package
+manager and navigating to the ABR package, twirling down "Samples", and clicking
+"Import" for the "ABR Vis App" sample. Follow the @abr-vis-app.md tutorial to
+get started.
+
+
+
 ## Development Mode
 Collectively, the lab now recommends a development process where you start by
 adding the package to your project in read-only mode, as described above.  This
@@ -64,13 +74,6 @@ simply delete the
 [packages-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html)
 file inside your project's Packages folder.
 
-## Next steps: Get started creating a visualization
-
-To get started creating a visualization, we recommend that you begin by
-importing the ABR Vis App example. You can do this by opening the package
-manager and navigating to the ABR package, twirling down "Samples", and clicking
-"Import" for the "ABR Vis App" sample.
-
 <!-- 
 To get started creating visualizations, one option is to create visualizations
 with ABR C# - follow the @creating-cs-abr-vis.md tutorial to get started.
@@ -81,12 +84,12 @@ instructions in the [ABR Server](#abr-server) section to get started.
 After this, you can create a visualization by following along with the
 @creating-design-interface-vis.md tutorial. -->
 
-## ABR Server
+<!-- ## ABR Server
 
 The ABR server enables you to quickly create visualizations by dragging and
 dropping puzzle pieces of visual elements and data.
 
-![ABR Design Interface](/DocumentationSrc~/manual/resources/design-interface-fire-wide.png)
+![ABR Design Interface](/DocumentationSrc~/manual/resources/design-interface-fire-wide.png) -->
 
 [!INCLUDE [ABR Server](./ABRServer~/README.md)]
 
