@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Advanced usage of ABR and C# | ABREngine </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Advanced usage of ABR and C# | ABREngine ">
+    <meta name="generator" content="docfx 2.58.4.0">
+    
+    <link rel="shortcut icon" href="../../resources/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc">
+    <meta property="docfx:tocrel" content="../toc">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="../../manual/intro.html" title="Manual">Manual</a>
+                      </li>
+                      <li>
+                          <a href="../../api/index.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="../install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="">
+                      <a href="../intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="../core-concepts.html" title="Core Concepts" class="">Core Concepts</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../key-data.html" title="Key Data" class="">Key Data</a>
+                          </li>
+                          <li class="">
+                            <a href="../visassets.html" title="VisAssets" class="">VisAssets</a>
+                          </li>
+                          <li class="">
+                            <a href="../data-impressions.html" title="Data Impressions" class="">Data Impressions</a>
+                          </li>
+                          <li class="">
+                            <a href="../terminology-starter.html" title="Basic Terminology" class="">Basic Terminology</a>
+                          </li>
+                          <li class="">
+                            <a href="../media-folder.html" title="Media Folder" class="">Media Folder</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="../examples/abr-vis-app.html" title="Getting Started: ABR Vis App" class="">Getting Started: ABR Vis App</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../importing-data.html" title="Importing Data" class="">Importing Data</a>
+                          </li>
+                          <li class="">
+                            <a href="../creating-design-interface-vis.html" title="ABR Design Interface" class="">ABR Design Interface</a>
+                          </li>
+                          <li class="">
+                            <a href="../creating-cs-abr-vis.html" title="ABR C# Visualization" class="">ABR C# Visualization</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="../examples/examples.html" title="Examples" class="">Examples</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="../examples/create-state.html" title="State Creation" class="">State Creation</a>
+                          </li>
+                          <li class="">
+                            <a href="../examples/create-dataset.html" title="Dataset Creation" class="">Dataset Creation</a>
+                          </li>
+                          <li class="">
+                            <a href="../examples/interactive-state.html" title="Modify JSON State" class="">Modify JSON State</a>
+                          </li>
+                          <li class="active">
+                            <a href="../examples/advanced-usage.html" title="Advanced Usage" class="active">Advanced Usage</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <a href="../license.html" title="License" class="">License</a>
+                    </li>
+                    <li class="">
+                      <a href="../changelog.html" title="Change Log" class="">Change Log</a>
+                    </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="advanced-usage.md">
+<h1 id="advanced-usage-of-abr-and-c">Advanced usage of ABR and C#</h1>
+
+<p>This example shows advanced features of ABR, including loading an external dataset from scratch, manipulating data impression groups, using per-index visibility, and using vis asset gradients.</p>
+<pre><code class="lang-cs" name="Advanced">using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace IVLab.ABREngine.Examples
+{
+    /// &lt;summary&gt;
+    /// This sample contains examples of using more advanced parts of ABR, including: 
+    /// 1. Using the &lt;see cref=&quot;RawDatasetAdapter&quot;/&gt; to create ABR-compatible data from C# data structures
+    /// 2. Using &lt;see cref=&quot;DataImpressionGroup&quot;/&gt;s to control individual positioning of data in the scene
+    /// 3. Use of the &lt;see cref=&quot;RenderHints.PerIndexVisibility&quot;/&gt; bit array
+    /// 4. Using &lt;see cref=&quot;VisAssetGradient&quot;/&gt;s in multivariate visualizations
+    ///
+    /// Data are sourced from the USGS.
+    /// &lt;/summary&gt;
+    public class AdvancedUsage : MonoBehaviour
+    {
+        [SerializeField, Tooltip(&quot;Data container for Mount St. Helens Data. Must be assigned to start.&quot;)]
+        private MtStHelensData data;
+
+        private Guid surfaceColormap = new Guid(&quot;30de3664-c36b-475e-a12d-3a3739ceb876&quot;); // in this example
+        private Guid tex1Uuid = new Guid(&quot;35a12d70-72cd-11ea-8d65-005056bae6d8&quot;); // in this example
+        private Guid tex2Uuid = new Guid(&quot;3bbc2064-6a0a-11ea-9014-005056bae6d8&quot;); // already in ABREngine Resources
+
+        // Important data impressions to save for later
+        private SimpleGlyphDataImpression beforePoints = null;
+        private SimpleGlyphDataImpression beforePointsHighlighted = null;
+        private SimpleSurfaceDataImpression afterSurface = null;
+        private SimpleSurfaceDataImpression beforeSurface = null;
+
+        // Definitions for data paths
+        private const string Dataset = &quot;USGS/MtStHelens&quot;;
+        private const string AfterSurfacePath = Dataset + &quot;/KeyData/AfterSurface&quot;;
+        private const string BeforeSurfacePath = Dataset + &quot;/KeyData/BeforeSurface&quot;;
+        private const string PointsPath = Dataset + &quot;/KeyData/BeforePoints&quot;;
+        private const string ElevationChangeName = &quot;ElevationChange&quot;;
+
+        // Time counter for animated highlighting
+        private float highlightTimeout = 0.0f;
+        private int maxIndexHighlight = 0;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            CreateDataImpressions();
+
+            ABREngine.Instance.Render();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            // ********************************************************************************
+            // Point 3: Using Per Index Visibility (this &quot;animates&quot; per-index
+            // visibility) once per second
+            // ********************************************************************************
+
+            // Change highlight 1x / second
+            if (highlightTimeout &gt; 1.0f)
+            {
+                const int NumPointsToHighlight = 500;
+                for (int i = maxIndexHighlight; i &lt; maxIndexHighlight + NumPointsToHighlight &amp;&amp; i &lt; beforePoints.RenderHints.PerIndexVisibility.Length; i++)
+                {
+                    beforePoints.RenderHints.PerIndexVisibility[i] = false;
+                    beforePointsHighlighted.RenderHints.PerIndexVisibility[i] = true;
+                }
+                maxIndexHighlight = (maxIndexHighlight + NumPointsToHighlight) % beforePoints.RenderHints.PerIndexVisibility.Length;
+
+                beforePoints.RenderHints.StyleChanged = true;
+                beforePointsHighlighted.RenderHints.StyleChanged = true;
+
+                ABREngine.Instance.Render();
+                highlightTimeout = 0.0f;
+            }
+
+            highlightTimeout += Time.deltaTime;
+        }
+
+        // The general process for creating a data impression w/some data is:
+        //  1. Obtain a RawDataset by using the RawDatasetAdapter
+        //  2. Import the raw dataset into ABR
+        //  3. Create your data impression(s) and style them with size, color, texture, etc.
+        //  4. Register the data impressions with the ABREngine
+        void CreateDataImpressions()
+        {
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Create glyph data impressions
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            // ********************************************************************************
+            // Point 1: using the RawDatasetAdapter
+            // ********************************************************************************
+
+            // Convert the point lists into ABR format
+            RawDataset beforePointsRaw = RawDatasetAdapter.PointsToPoints(data.beforePointList, data.pointsBounds, null, null);
+
+            // Import the point data into ABR (NEW: define the data path)
+            KeyData beforeInfo = ABREngine.Instance.Data.ImportRawDataset(PointsPath, beforePointsRaw);
+
+            // Create a layer for non-highlighted points
+            beforePoints = new SimpleGlyphDataImpression();
+            beforePoints.useRandomOrientation = false;
+            beforePoints.keyData = beforeInfo;
+            beforePoints.glyph = ABREngine.Instance.VisAssets.GetDefault&lt;GlyphVisAsset&gt;() as GlyphVisAsset;
+            beforePoints.glyphSize = 0.002f;
+            beforePoints.colormap = ColormapVisAsset.SolidColor(Color.black);
+            beforePoints.RenderHints.PerIndexVisibility = new BitArray(data.beforePointList.Count, true);
+
+            // Create a layer for highlighted points
+            beforePointsHighlighted = ABREngine.Instance.DuplicateDataImpression(beforePoints) as SimpleGlyphDataImpression;
+            beforePointsHighlighted.colormap = ColormapVisAsset.SolidColor(new Color(0.22f, 0.74f, 1.0f));
+            beforePointsHighlighted.glyphSize = 0.005f;
+            beforePointsHighlighted.RenderHints.PerIndexVisibility = new BitArray(data.beforePointList.Count, false);
+
+            // Register impression with the engine
+            ABREngine.Instance.RegisterDataImpression(beforePoints);
+            ABREngine.Instance.RegisterDataImpression(beforePointsHighlighted);
+
+
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Create surface data impressions
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            // Load a VisAsset from the project&#39;s Resources folder
+            ColormapVisAsset cmap = ABREngine.Instance.VisAssets.GetVisAsset&lt;ColormapVisAsset&gt;(surfaceColormap);
+
+            // ********************************************************************************
+            // Point 4: Using vis asset gradients
+            // ********************************************************************************
+            // Load a couple textures from the Resources folder and create a
+            // SurfaceTextureGradient. Later, figure out where &quot;zero&quot; is in the data
+            // and map it so there&#39;s one texture above zero and one texture
+            // below zero.
+            SurfaceTextureVisAsset tex1 = ABREngine.Instance.VisAssets.GetVisAsset&lt;SurfaceTextureVisAsset&gt;(tex1Uuid);
+            SurfaceTextureVisAsset tex2 = ABREngine.Instance.VisAssets.GetVisAsset&lt;SurfaceTextureVisAsset&gt;(tex2Uuid);
+            SurfaceTextureGradient grad = new SurfaceTextureGradient();
+            grad.Initialize(
+                Guid.NewGuid(),
+                new List&lt;SurfaceTextureVisAsset&gt;() { tex1, tex2 },
+                new List&lt;float&gt;() { 0.5f } // default to the middle, figure out where &quot;zero&quot; is later
+            );
+
+            // ********************************************************************************
+            // Point 1: using the RawDatasetAdapter
+            // ********************************************************************************
+            // Add surface for before/after eruption (including the ElevationChange scalar data variable)
+            RawDataset beforeSurfaceData = RawDatasetAdapter.GridPointsToSurface(
+                data.beforePointList,
+                new Vector2Int(MtStHelensData.gridX, MtStHelensData.gridY),
+                data.pointsBounds,
+                new Dictionary&lt;string, List&lt;float&gt;&gt; {{ ElevationChangeName, data.differences }}
+            );
+            RawDataset afterSurfaceData = RawDatasetAdapter.GridPointsToSurface(
+                data.afterPointList,
+                new Vector2Int(MtStHelensData.gridX, MtStHelensData.gridY),
+                data.pointsBounds,
+                new Dictionary&lt;string, List&lt;float&gt;&gt; {{ ElevationChangeName, data.differences }}
+            );
+            
+            // Define the data path when importing
+            KeyData beforeSurfaceInfo = ABREngine.Instance.Data.ImportRawDataset(BeforeSurfacePath, beforeSurfaceData);
+            KeyData afterSurfaceInfo = ABREngine.Instance.Data.ImportRawDataset(AfterSurfacePath, afterSurfaceData);
+
+            // Create surface data impressions
+            afterSurface = new SimpleSurfaceDataImpression();
+            afterSurface.keyData = afterSurfaceInfo;
+            beforeSurface = new SimpleSurfaceDataImpression();
+            beforeSurface.keyData = beforeSurfaceInfo;
+
+            // Get scalar variable by name
+            afterSurface.colorVariable = afterSurfaceInfo.GetScalarVariable(ElevationChangeName);
+            afterSurface.colormap = cmap;
+
+            ScalarDataVariable beforeElevation = beforeSurfaceInfo.GetScalarVariable(ElevationChangeName);
+            // beforeSurface.colorVariable = beforeElevation;
+            // beforeSurface.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
+
+            // Find the &quot;zero&quot; point in real data, and normalize it
+            var range = beforeElevation.Range;
+            float normalizedZero = (-range.min) / (range.max - range.min);
+            grad.Stops[0] = normalizedZero;
+            beforeSurface.patternVariable = beforeElevation;
+            beforeSurface.pattern = grad;
+
+            // ********************************************************************************
+            // Point 2: Using DataImpressionGroups to move data impressions around
+            // ********************************************************************************
+
+            // Create a data impression group for the &quot;before&quot; surface so we can move it off to the side
+            DataImpressionGroup beforeGroup = ABREngine.Instance.CreateDataImpressionGroup(&quot;Side by side vis&quot;, new Vector3(5.0f, 0.0f, 0.0f));
+
+            // Register impressions with the engine
+            ABREngine.Instance.RegisterDataImpression(afterSurface);
+
+            // Register &quot;before&quot; group with new data impression
+            ABREngine.Instance.RegisterDataImpression(beforeSurface, beforeGroup);
+        }
+    }
+}
+</code></pre></article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ivlab/ABREngine-UnityPackage/blob/master/DocumentationSrc~/manual/examples/advanced-usage.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
