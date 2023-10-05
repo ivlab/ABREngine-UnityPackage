@@ -12,7 +12,7 @@ with your system Python installation. Check out the [pipenv
 project](https://docs.pipenv.org/) for more information. If you're on Windows,
 replace `python3` with `py`.
 
-All these commands are tested with Python 3.8; they are NOT guaranteed to work
+All these commands are tested with Python 3.10; they are NOT guaranteed to work
 with other versions of Python.
 
 ```
@@ -23,6 +23,12 @@ Then, install the local dependencies:
 
 ```
 python3 -m pipenv install
+```
+
+The first time you run this command, you may need to provide Python path:
+
+```
+python3 -m pipenv --python=/c/Python311/python.exe install
 ```
 
 Then, to begin development, "activate" the Pipenv by entering a shell:

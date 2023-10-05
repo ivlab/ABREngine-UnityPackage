@@ -18,6 +18,9 @@ First, import the ABR Vis App sample. You can do this by opening the package
 manager and navigating to the ABR package, twirling down "Samples", and clicking
 "Import" for the "ABR Vis App" sample.
 
+When Unity asks about importing the TextMeshPro (TMP) essentials, click *Import
+TMP Essential*.
+
 Once the sample has loaded, open the "Main" scene in the "Scenes" folder of "ABR
 Vis App". You should see a scene like the following:
 
