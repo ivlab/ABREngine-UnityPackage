@@ -95,19 +95,19 @@ your OS (add more here for OS's that aren't supported yet):
 Windows x64:
 
 ```
-pyinstaller  --name="ABRServer-Windows-X64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+pyinstaller  --name="ABRServer-Windows-X64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --hidden-import="_socket" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
 ```
 
 Mac x64 (Intel):
 
 ```
-pyinstaller  --name="ABRServer-OSX-X64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+pyinstaller  --name="ABRServer-OSX-X64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --hidden-import="_socket" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
 ```
 
 Mac ARM (M1 or M2):
 
 ```
-pyinstaller  --name="ABRServer-OSX-ARM64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
+pyinstaller  --name="ABRServer-OSX-ARM64" --hidden-import="compose" --hidden-import="compose.urls" --hidden-import="api" --hidden-import="api.urls" --hidden-import="abr_server.routing" --hidden-import="_socket" --add-data="templates:templates" --add-data="static:static" --add-data="abr_server.cfg:." manage.py
 ```
 
 this will output an executable (for the OS/architecture that you run
