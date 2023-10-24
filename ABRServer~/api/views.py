@@ -287,7 +287,6 @@ def state_thumbnail(request, name=None):
     if name is None:
         name = settings.LATEST_THUMBNAIL_NAME
     try:
-        print('NAME IS ', name)
         with open(settings.THUMBNAILS_PATH.joinpath(name), 'rb') as fin:
             data = fin.read()
         resp = HttpResponse(data, content_type='image/png')
