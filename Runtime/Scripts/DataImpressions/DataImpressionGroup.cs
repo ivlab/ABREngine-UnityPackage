@@ -498,7 +498,6 @@ namespace IVLab.ABREngine
                         impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
                         impression.Value.SetupGameObject();
-                        impression.Value.RenderHints.GeometryChanged = false;
                     }
                     // Compute and apply style info to the impression object if its
                     // styling has changed (but only if we haven't already performed 
@@ -507,15 +506,17 @@ namespace IVLab.ABREngine
                     {
                         Guid uuid = impression.Key;
                         impression.Value.UpdateStyling();
-                        impression.Value.RenderHints.StyleChanged = false;
                     }
                     // Set the visibility of the impression if it has been changed
                     if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
                     {
                         Guid uuid = impression.Key;
                         impression.Value.UpdateVisibility();
-                        impression.Value.RenderHints.VisibilityChanged = false;
                     }
+
+                    impression.Value.RenderHints.GeometryChanged = false;
+                    impression.Value.RenderHints.StyleChanged = false;
+                    impression.Value.RenderHints.VisibilityChanged = false;
                 }
             }
             catch (Exception e)

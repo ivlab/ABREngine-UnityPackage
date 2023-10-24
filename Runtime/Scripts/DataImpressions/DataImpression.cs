@@ -126,6 +126,12 @@ namespace IVLab.ABREngine
             createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
             createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
         }
+
+        void Update()
+        {
+            // Immediately enable/disable the GameObject based on if it has KeyData or not
+            this.gameObject.SetActive(GetKeyData() != null);
+        }
 #endregion
 
 #region Constructor (Create) method
@@ -181,9 +187,6 @@ namespace IVLab.ABREngine
                     }
                 }
             }
-
-            // by default, data impressions are disabled, until they have data.
-            di.gameObject.SetActive(false);
 
             return di;
         }

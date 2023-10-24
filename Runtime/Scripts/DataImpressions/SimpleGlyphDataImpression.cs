@@ -128,7 +128,7 @@ namespace IVLab.ABREngine
         /// level of detail; most glyphs have 3 LODs)
         /// </summary>
         [ABRInput("Glyph Level Of Detail", UpdateLevel.Geometry)]
-        public int glyphLod = 1;
+        public int glyphLod = 3;
 
         /// <summary>
         /// Use random forward/up directions when no Vector variables are
@@ -202,6 +202,7 @@ namespace IVLab.ABREngine
 
         public override void ComputeGeometry()
         {
+            //Debug.Log("ComputeGeometry " + this.name);
             if (keyData == null)
             {
                 RenderInfo = new SimpleGlyphRenderInfo
@@ -337,6 +338,7 @@ namespace IVLab.ABREngine
 
         public override void SetupGameObject()
         {
+            //Debug.Log("SetupGameObject " + this.name);
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
             if (gameObject == null)
             {
@@ -416,6 +418,7 @@ namespace IVLab.ABREngine
 
         public override void UpdateStyling()
         {
+            //Debug.Log("UpdateStyling " + this.name);
             if (keyData == null)
             {
                 return;
@@ -714,7 +717,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             if (perGlyphVisibilityBuffer != null)
                 perGlyphVisibilityBuffer.Release();

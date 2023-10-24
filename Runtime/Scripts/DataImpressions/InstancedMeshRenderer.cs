@@ -52,8 +52,8 @@ namespace IVLab.ABREngine
         private ComputeBuffer transformBufferInverse;
 
 
-        private ComputeBuffer argsBuffer;
-        private uint[] args = new uint[5] { 0, 0, 0, 0, 0 };
+        //private ComputeBuffer argsBuffer;
+        //private uint[] args = new uint[5] { 0, 0, 0, 0, 0 };
         bool invalid = true;
 
         public MaterialPropertyBlock block;
@@ -62,7 +62,7 @@ namespace IVLab.ABREngine
 
         void OnEnable()
         {
-            argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
+            //argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
             UpdateBuffers();
 
             //block = new MaterialPropertyBlock();
@@ -75,10 +75,14 @@ namespace IVLab.ABREngine
         //void LateUpdate()
         void Update()
         {
-            if (argsBuffer == null) cachedInstanceCount = -1;
+            //if (argsBuffer == null) cachedInstanceCount = -1;
             // Update starting position buffer
             if (cachedInstanceCount != instanceCount || cachedSubMeshIndex != subMeshIndex)
+            {
+                //Debug.Log(Time.frameCount + " Updating buffers " + this.cachedInstanceCount + " " + this.instanceCount + " " + this.cachedSubMeshIndex + " " + this.subMeshIndex);
                 UpdateBuffers();
+            }
+            //Debug.Log(Time.frameCount + " No update...");
             if (invalid) return;
             //// Pad input
             //if (Input.GetAxisRaw("Horizontal") != 0.0f)
@@ -156,24 +160,24 @@ namespace IVLab.ABREngine
             block.SetBuffer("renderInfoBuffer", renderInfoBuffer);
 
             // Indirect args
-            if (instanceMesh != null)
-            {
-                args[0] = (uint)instanceMesh.GetIndexCount(subMeshIndex);
-                args[1] = (uint)instanceCount;
-                args[2] = (uint)instanceMesh.GetIndexStart(subMeshIndex);
-                args[3] = (uint)instanceMesh.GetBaseVertex(subMeshIndex);
-            }
-            else
-            {
-                args[0] = args[1] = args[2] = args[3] = 0;
-            }
-            argsBuffer.SetData(args);
+            //if (instanceMesh != null)
+            //{
+            //    args[0] = (uint)instanceMesh.GetIndexCount(subMeshIndex);
+            //    args[1] = (uint)instanceCount;
+            //    args[2] = (uint)instanceMesh.GetIndexStart(subMeshIndex);
+            //    args[3] = (uint)instanceMesh.GetBaseVertex(subMeshIndex);
+            //}
+            //else
+            //{
+            //    args[0] = args[1] = args[2] = args[3] = 0;
+            //}
+            //argsBuffer.SetData(args);
 
             cachedInstanceCount = instanceCount;
             cachedSubMeshIndex = subMeshIndex;
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             if (renderInfoBuffer != null)
                 renderInfoBuffer.Release();
@@ -187,9 +191,9 @@ namespace IVLab.ABREngine
                 transformBufferInverse.Release();
             transformBufferInverse = null;
 
-            if (argsBuffer != null)
-                argsBuffer.Release();
-            argsBuffer = null;
+            //if (argsBuffer != null)
+            //    argsBuffer.Release();
+            //argsBuffer = null;
         }
     }
 }

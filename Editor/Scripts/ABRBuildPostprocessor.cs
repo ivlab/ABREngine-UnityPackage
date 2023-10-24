@@ -57,20 +57,26 @@ namespace IVLab.ABREngine
                     if ((attrs & FileAttributes.Directory) == FileAttributes.Directory)
                     {
                         // First, delete the old one
-                        Directory.Delete(srcDest.Value, true);
+                        if (Directory.Exists(srcDest.Value))
+                        {
+                            Directory.Delete(srcDest.Value, true);
+                        }
 
                         // Copy folder to build location
+                        Debug.Log($"ABRBuildPostprocessor: Copying folder from {srcDest.Key} to {srcDest.Value}");
                         CopyDirectory(srcDest.Key, srcDest.Value, true);
-                        Debug.Log($"ABRBuildPostprocessor: Copied folder from {srcDest.Key} to {srcDest.Value}");
                     }
                     else
                     {
                         // First, delete the old one
-                        File.Delete(srcDest.Value);
+                        if (File.Exists(srcDest.Value))
+                        {
+                            File.Delete(srcDest.Value);
+                        }
 
                         // Copy file to build location
+                        Debug.Log($"ABRBuildPostprocessor: Copying file from {srcDest.Key} to {srcDest.Value}");
                         File.Copy(srcDest.Key, srcDest.Value);
-                        Debug.Log($"ABRBuildPostprocessor: Copied file from {srcDest.Key} to {srcDest.Value}");
                     }
                 }
             }
