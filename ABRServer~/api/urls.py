@@ -26,6 +26,7 @@ urlpatterns = [
     re_path('^state/*', views.modify_state),
     path('save-state/<str:name>', views.save_state),
     path('load-state/<str:name>', views.load_state),
+    path('delete-state/<str:name>', views.delete_state),
     path('list-states', views.list_states),
     path('thumbnail/<str:name>', views.state_thumbnail),
     re_path('^remove-path/*', views.remove_path),

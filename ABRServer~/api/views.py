@@ -20,6 +20,7 @@ import fnmatch
 import shutil
 import logging
 import numpy as np
+from pathlib import Path
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
@@ -331,5 +332,14 @@ def load_state(request, name):
             state.set_path([], tmp_state)
             logger.info('Loaded state ' + name)
         return HttpResponse('Loaded state ' + name)
+    except:
+        return HttpResponse('State does not exist: ' + name, status=404)
+
+@csrf_exempt
+def delete_state(request, name):
+    state_path: Path = settings.STATES_PATH
+    try:
+        state_path.joinpath(name).unlink()
+        return HttpResponse('Deleted state ' + name)
     except:
         return HttpResponse('State does not exist: ' + name, status=404)

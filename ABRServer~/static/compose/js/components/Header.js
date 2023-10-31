@@ -266,7 +266,7 @@ export function Header() {
                         )).on('click', (evt) => {
                             let sure = confirm(`Are you sure you want to delete state '${stateName}'?`)
                             if (sure) {
-                                localStorage.removeItem(item);
+                                globals.stateManager.deleteState(stateName);
                                 $(evt.target).closest('.state-selector').remove();
                             }
                         })

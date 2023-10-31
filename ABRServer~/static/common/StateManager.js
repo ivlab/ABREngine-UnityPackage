@@ -98,6 +98,13 @@ export class StateManager {
         });
     }
 
+    // delete a state on disk
+    async deleteState(stateName) {
+        return fetch('/api/delete-state/' + stateName, {
+            method: 'POST'
+        });
+    }
+
     // Retrieve the latest thumbnail from the server
     async updateLatestThumbnail() {
         let b = await fetch('/media/thumbnails/latest-thumbnail.png?' + Date.now()).then((resp) => resp.blob());
