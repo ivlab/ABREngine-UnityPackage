@@ -105,6 +105,9 @@
 .data-impression .impression-expand-buttons {
     margin: auto;
 }
+.data-impression .impression-expand-buttons>button {
+    padding: 0;
+}
 
 /* keydata-specific styling */
 .data-impression .parameter.keydata {
