@@ -217,6 +217,9 @@ namespace IVLab.ABREngine
                 return DataTopology.Triangles;
         }
 
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleSurfaceDataImpression() { }
+
         public override void ComputeGeometry()
         {
             SimpleSurfaceRenderInfo renderInfo = null;

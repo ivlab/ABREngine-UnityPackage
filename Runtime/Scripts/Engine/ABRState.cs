@@ -253,8 +253,13 @@ namespace IVLab.ABREngine
                     MethodInfo createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
                     createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
 
-                    // args are: UUID, name, syncWithServer
-                    object[] impressionArgs = new object[] { new Guid(impression.Value.uuid), impression.Value.name, true };
+                    // args are: name, UUID, syncWithServer
+                    object[] impressionArgs = new object[]
+                    {
+                            impression.Value.name,
+                            new Guid(impression.Value.uuid),
+                            true
+                    };
                     DataImpression dataImpression = createMethod.Invoke(null, impressionArgs) as DataImpression;
                     ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 

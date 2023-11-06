@@ -200,6 +200,9 @@ namespace IVLab.ABREngine
         public override void SetKeyData(KeyData kd) => keyData = kd;
         public override DataTopology GetKeyDataTopology() => DataTopology.Points;
 
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleGlyphDataImpression() { }
+
         public override void ComputeGeometry()
         {
             //Debug.Log("ComputeGeometry " + this.name);

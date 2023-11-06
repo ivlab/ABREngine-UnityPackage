@@ -305,8 +305,7 @@ namespace IVLab.ABREngine
 
         /// <summary>
         /// Attempt to load the data described in `dataPath` from any available
-        /// resource, including a Resources folder, the <see
-        /// cref="media-folder.md"/>, or a HTTP web resource.
+        /// resource, including a Resources folder, the @media-folder.md, or a HTTP web resource.
         /// </summary>
         /// <param name="dataPath">Data path to load. If loading from the media
         /// directory, you can use the relative path inside that folder (but

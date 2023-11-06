@@ -38,7 +38,7 @@ namespace IVLab.ABREngine
     /// 
     /// > [!NOTE]
     /// > This data impression type is not supported by the ABR design
-    /// > interface, hence the lack of <see cref="ABRInput"/> annotations for its
+    /// > interface, hence the lack of <see cref="ABRInputAttribute"/> annotations for its
     /// > instance variables.
     /// </summary>
     [ABRPlateType("Instanced Surface")]
@@ -46,7 +46,7 @@ namespace IVLab.ABREngine
     {
         /// <summary>
         /// KeyData for InstancedSurfaceDataImpression is an "unofficial" 5th
-        /// type of <see cref="key-data.md"/> - instanced matrices. These key
+        /// type of @key-data.md - instanced matrices. These key
         /// data have no geometry, only a single variable that is a series of
         /// 4x4 matrices. Key data can be changed by modifying a <see
         /// cref="RawDataset"/>'s <see cref="RawDataset.matrixArrays"/> and <see
@@ -144,6 +144,9 @@ namespace IVLab.ABREngine
         public override KeyData GetKeyData() => keyData;
         public override void SetKeyData(KeyData kd) => keyData = kd;
         public override DataTopology GetKeyDataTopology() => DataTopology.Points;
+
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected InstancedSurfaceDataImpression() { }
 
         public override void ComputeGeometry()
         {

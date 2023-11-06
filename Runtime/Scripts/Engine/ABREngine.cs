@@ -37,128 +37,54 @@ namespace IVLab.ABREngine
     /// data listener, VisAssets and Data managers, etc.
     /// </summary>
     /// <example>
+    /// 
+    /// **Usage of `ABREngine.Instance`**
+    /// 
     /// Most methods of the ABREngine can be accessed through its singleton
     /// `Instance` without needing to do a `GetComponent`:
     /// <code>
     /// string mediaPath = ABREngine.Instance.MediaPath;
     /// </code>
     /// </example>
+    /// 
     /// <example>
+    /// **Example: Getting Started with Unity C# and ABR**
+    /// 
+    /// This example shows how to create an ABR visualization in code using one
+    /// data impression.
+    /// 
+    /// > [!NOTE]
+    /// > You can also import this example using the Unity Package Manager. In
+    /// > Unity, go to Window > Package Manager, find the ABREngine package, and
+    /// > import the "Documentation Examples" sample project.
+    /// 
+    /// The general process for making an ABR visualization in C# code is:
+    /// 
+    /// <ol>
+    ///     <li>Import data using <see cref="DataManager.LoadData"/></li>
+    ///     <li>Import VisAssets using <see cref="VisAssetManager.GetVisAsset"/>.</li>
+    ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together (using <see cref="DataImpression.Create{T}(string, Guid, bool)"/>).</li>
+    ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
+    ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
+    /// </ol>
+    /// 
+    /// [!code-csharp[](../../Samples~/Documentation Examples/ABREngineExample.cs)]
+    /// 
+    /// </example>
+    /// 
+    /// <example>
+    /// **Example: Using Custom Data**
+    /// 
     /// This example shows how to quickly get up and running with a
-    /// custom-defined dataset and building your own data impressions. The
-    /// general process for making a visualization programmatically with ABR is:
+    /// custom-defined dataset and building your own data impressions. Before the steps in the previous example, you will also need to:
     /// <ol>
     ///     <li>Define your data in some `List`s.</li>
     ///     <li>Use the <see cref="RawDatasetAdapter"/> to convert the `List` into an ABR <see cref="RawDataset"/>, or import an existing ABR RawDataset using <see cref="DataManager.LoadRawDataset"/>.</li>
     ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/> (optionally, giving the dataset a data path identifier for easier semantic access later).</li>
-    ///     <li>Optionally, import any <see cref="VisAsset"/>s you want to use using <see cref="VisAssetManager.GetVisAsset"/>.</li>
-    ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together.</li>
-    ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
-    ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
     /// </ol>
-    /// <code>
-    /// using System;
-    /// using System.Threading.Tasks;
-    /// using UnityEngine;
-    /// using IVLab.ABREngine;
-    /// using IVLab.Utilities;
-    ///
-    /// public class SimpleABRExample : MonoBehaviour
-    /// {
-    ///     void Start()
-    ///     {
-    ///         // STEP 1: Define data
-    ///         // 9 points in 3D space
-    ///         List&lt;Vector3&gt; vertices = new List&lt;Vector3&gt;
-    ///         {
-    ///             new Vector3(0.0f, 0.5f, 0.0f),
-    ///             new Vector3(0.0f, 0.6f, 0.1f),
-    ///             new Vector3(0.0f, 0.4f, 0.2f),
-    ///             new Vector3(0.1f, 0.3f, 0.0f),
-    ///             new Vector3(0.1f, 0.2f, 0.1f),
-    ///             new Vector3(0.1f, 0.3f, 0.2f),
-    ///             new Vector3(0.2f, 0.0f, 0.0f),
-    ///             new Vector3(0.2f, 0.3f, 0.1f),
-    ///             new Vector3(0.2f, 0.1f, 0.2f),
-    ///         };
-    ///
-    ///         // Data values for those points
-    ///         List&lt;float&gt; data = new List&lt;float&gt;();
-    ///         for (int i = 0; i &lt; vertices.Count; i++) data.Add(i);
-    ///
-    ///         // Named scalar variable
-    ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
-    ///
-    ///         // Define some generous bounds
-    ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
-    ///
-    ///         // STEP 2: Convert the point list into ABR Format
-    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, scalarVars, null);
-    ///
-    ///         // STEP 3: Import the point data into ABR so we can use it
-    ///         KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
-    ///
-    ///         // STEP 4: Import a colormap visasset
-    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
-    ///
-    ///         // STEP 5: Create a Data Impression (layer) for the points, and assign some key data and styling
-    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = pointsInfo;                               // Assign key data (point geometry)
-    ///         di.colorVariable = pointsInfo.GetScalarVariables()[0]; // Assign scalar variable "someData"
-    ///         di.colormap = cmap;                                    // Apply colormap
-    ///         di.glyphSize = 0.002f;                                 // Apply glyph size styling
-    ///
-    ///         // STEP 6: Register impression with the engine
-    ///         ABREngine.Instance.RegisterDataImpression(di);
-    ///
-    ///         // STEP 7: Render the visualization
-    ///         ABREngine.Instance.Render();
-    ///     }
-    /// }
-    /// </code>
-    /// </example>
-    /// <example>
-    /// You may also wish to create a data impression but place in a different
-    /// position than the original one (e.g., to create a side-by-side
-    /// visualization). This example shows how to use the <see
-    /// cref="ABREngine.CreateDataImpressionGroup(string, Vector3)"/> and the
-    /// <see cref="ABREngine.DuplicateDataImpression(DataImpression)"/> method
-    /// to create a side-by-side visualization.
-    /// <code>
-    /// public class ABREngineExample
-    /// {
-    ///     void Start()
-    ///     {
-    ///         // Let's say we've imported some fancy point data that we want to compare
-    ///         KeyData fancyData1 = // ... some import
-    ///         KeyData fancyData2 = // ... some import
     /// 
-    ///         // We can construct a data impression for the first data. Maybe we've
-    ///         // applied a bunch of styling to this that we want to copy...
-    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = fancyData1;
-    ///         di.colorVariable = fancyData1.GetScalarVariables()[0];
-    ///         di.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    ///         di.glyphSize = 0.002f;
+    /// [!code-csharp[](../../Samples~/Documentation Examples/CustomDataABRExample.cs)]
     /// 
-    ///         // Register the first impression
-    ///         ABREngine.Instance.RegisterDataImpression(di);
-    /// 
-    ///         // Then, duplicate the data impression:
-    ///         SimpleGlyphDataImpression other = ABREngine.Instance.DuplicateDataImpression(di) as SimpleGlyphDataImpression;
-    /// 
-    ///         // Change the data and a little styling
-    ///         other.keyData = fancyData2;
-    ///         other.glyphSize = 0.5f;
-    /// 
-    ///         // Create a new impression group centered just to the right of the first one
-    ///         DataImpressionGroup newGroup = ABREngine.Instance.CreateDataImpressionGroup("OffsetGroup", new Vector3(0.5f, 0.0f, 0.0f));
-    /// 
-    ///         // And, register the impression with the new group
-    ///         ABREngine.Instance.RegisterDataImpression(other, newGroup);
-    ///     }
-    /// }
-    /// </code>
     /// </example>
     public class ABREngine : Singleton<ABREngine>
     {

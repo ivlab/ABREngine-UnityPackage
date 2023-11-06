@@ -206,6 +206,8 @@ namespace IVLab.ABREngine
         //     }
         //     return -1;
         // }
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleLineDataImpression() { }
 
         public override void ComputeGeometry()
         {

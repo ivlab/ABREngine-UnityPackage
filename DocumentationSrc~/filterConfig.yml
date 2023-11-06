@@ -1,13 +1,3 @@
 apiRules:
 - include:
-    uidRegex: ^IVLab.ABREngine
-    type: Namespace
-- include:
-    uidRegex: ^IVLab.ABREngine.Examples
-    type: Namespace
-- include:
-    uidRegex: ^IVLab.ABREngine.Legends
-    type: Namespace
-- exclude:
     uidRegex: .*
-    type: Namespace

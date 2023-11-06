@@ -148,7 +148,7 @@ public class VisDriver : MonoBehaviour
 #endregion
 
 #region Create InstancedSurfaceDataImpression
-        di = new InstancedSurfaceDataImpression();
+        di = DataImpression.Create<InstancedSurfaceDataImpression>("Instanced Surface");
         di.keyData = kd;
         di.instanceMesh = capsuleMesh;
         di.colormap = cmap1;
@@ -201,7 +201,7 @@ public class VisDriver : MonoBehaviour
 
 
 #region Register Data Impression so ABR knows about it
-        di.RenderHints.DataChanged = true;
+        di.RenderHints.GeometryChanged = true;
         ABREngine.Instance.RegisterDataImpression(di);
 
         // 3.b. Render the visualization

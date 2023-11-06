@@ -75,6 +75,37 @@ simply delete the
 [packages-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html)
 file inside your project's Packages folder.
 
+
+Once you've set up the ABREngine package, there are a couple more steps to make
+sure your editor is set up correctly. We recommend using either Visual Studio
+Code or Visual Studio to develop, since they are both well-supported by Unity.
+
+
+### Editing with Visual Studio Code
+
+1. In Package Manager, uninstall the "Visual Studio Code Editor" package
+2. Install or update the "Visual Studio Editor" package to the latest version
+(you will likely need to periodically keep this up to date).
+3. In Unity preferences / External Tools, set the editor to "Visual Studio
+Code", and make sure Generate .csproj files is checked for at least "Embedded"
+and "Local" packages.
+4. In the Project tab, right-click anywhere in the open space and click "Open C#
+Project". If all is configured correctly, VS Code should now open.
+
+
+### Editing with Visual Studio
+
+1. In Package Manager, uninstall the "Visual Studio Code Editor" package
+2. Install or update the "Visual Studio Editor" package to the latest version
+(you will likely need to periodically keep this up to date).
+3. In Unity preferences / External Tools, set the editor to "Visual Studio", and
+make sure Generate .csproj files is checked for at least "Embedded"
+ and "Local" packages.
+4. In the Project tab, right-click anywhere in the open space and click "Open C#
+Project". If all is configured correctly, Visual Studio should now open.
+
+
+
 <!-- 
 To get started creating visualizations, one option is to create visualizations
 with ABR C# - follow the @creating-cs-abr-vis.md tutorial to get started.

@@ -143,13 +143,19 @@ namespace IVLab.ABREngine
         /// > have the given arguments. If you override this method, bad things
         /// > might happen.
         /// </summary>
-        /// <param name="uuid">Unique identifier for this data impression</param>
         /// <param name="name">Non-unique, human-readable identifier for this data impression</param>
+        /// <param name="uuid">Unique identifier for this data impression. If left empty, will create a new UUID.</param>
         /// <param name="saveToState">Should this data impression be saved when
         /// <see cref="ABREngine.SaveState{T}(string)"/> is called?</param>
-        public static T Create<T>(Guid uuid, string name, bool saveToState = false)
+        public static T Create<T>(string name, Guid uuid = new Guid(), bool saveToState = false)
         where T : DataImpression
         {
+            // accept empty
+            if (uuid == Guid.Empty)
+            {
+                uuid = Guid.NewGuid();
+            }
+
             // Check if a data impression with this UUID already exists in the
             // ABREngine
             GameObject go;
@@ -190,6 +196,9 @@ namespace IVLab.ABREngine
 
             return di;
         }
+
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected DataImpression() { }
 #endregion
 
 #region DataImpression methods

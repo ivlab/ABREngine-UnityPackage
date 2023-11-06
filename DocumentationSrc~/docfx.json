@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "cwd": "../../../",
+          "src": "../../../",
           "files": [
             "*.csproj"
           ]
@@ -19,7 +19,18 @@
       "_appFooter": "<a href=\"https://ivlab.cs.umn.edu\">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved",
       "_appLogoPath": "resources/logo.svg",
       "_appFaviconPath": "resources/favicon.ico",
-      "_enableSearch": true
+      "_enableSearch": true,
+
+      "_appTitle": "ABREngine",
+      "_gitUrlPattern": "github",
+      "newFileRepository": {
+        "branch": "master"
+      },
+      "_gitContribute": {
+        "repo": "https://github.com/ivlab/ABREngine-UnityPackage",
+        "branch": "master",
+        "apiSpecFolder": "Documentation~/apidocs-overrides"
+      }
     },
     "content": [
       {
@@ -55,7 +66,6 @@
       "https://xref.docs.microsoft.com/query?uid={uid}"
     ],
     "template": "templates/statictoc-with-github-umn-edu",
-    "globalMetadataFiles": "projectMetadata.json",
     "dest": "../Documentation~"
   }
 }

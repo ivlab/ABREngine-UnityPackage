@@ -50,9 +50,9 @@
             "path": "Samples~/Interactive filtering and querying"
         },
         {
-            "displayName": "Documentation GIF Generation",
-            "description": "Generate GIFs for documentation",
-            "path": "Samples~/Documentation GIF Generation"
+            "displayName": "Documentation Examples",
+            "description": "Examples for documentation, including GIF generator",
+            "path": "Samples~/Documentation Examples"
         }
     ]
 }

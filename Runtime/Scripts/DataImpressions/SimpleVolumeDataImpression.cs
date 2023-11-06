@@ -171,6 +171,9 @@ namespace IVLab.ABREngine
         public override void SetKeyData(KeyData kd) => keyData = kd;
         public override DataTopology GetKeyDataTopology() => DataTopology.Voxels;
 
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleVolumeDataImpression() { }
+
         public override void ComputeGeometry()
         {
             SimpleVolumeRenderInfo renderInfo = null;

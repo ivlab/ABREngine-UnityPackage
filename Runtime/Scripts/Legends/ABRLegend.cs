@@ -202,7 +202,7 @@ namespace IVLab.ABREngine.Legends
             ds.TryGetKeyData(glyphDataPath, out glyphKeyData);
 
             // Copy all inputs from the actual impression
-            SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
+            SimpleGlyphDataImpression gi = DataImpression.Create<SimpleGlyphDataImpression>("Legend Glyphs");
             gi.CopyFrom(i);
 
             // Apply legend-specific entries
@@ -237,7 +237,7 @@ namespace IVLab.ABREngine.Legends
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleLineDataImpression li = new SimpleLineDataImpression();
+            SimpleLineDataImpression li = DataImpression.Create<SimpleLineDataImpression>("Line Legend");
             li.CopyFrom(i);
 
             // Apply legend-specific entries
@@ -266,7 +266,7 @@ namespace IVLab.ABREngine.Legends
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleSurfaceDataImpression si = new SimpleSurfaceDataImpression();
+            SimpleSurfaceDataImpression si = DataImpression.Create<SimpleSurfaceDataImpression>("Surface Legend");
             si.CopyFrom(i);
 
             // Then, apply legend-specific entries
@@ -293,7 +293,7 @@ namespace IVLab.ABREngine.Legends
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleVolumeDataImpression si = new SimpleVolumeDataImpression();
+            SimpleVolumeDataImpression si = DataImpression.Create<SimpleVolumeDataImpression>("Volume Legend");
             si.CopyFrom(i);
 
             // Apply legend-specific entries

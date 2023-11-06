@@ -15,7 +15,7 @@ manner:
 
 - [ABREngine.Instance.VisAssets](xref:IVLab.ABREngine.VisAssetManager) - single instanceSingle instance of the VisAssetManager (you can load or get visassets with this object) 
 - [ABREngine.Instance.Data](xref:IVLab.ABREngine.DataManager) - Single instance of the DataManager (you can load or get data with this object)
-- [ABREngine.Instance.RegisterDataImpression()](xref:IVLab.ABREngine.ABREngine#IVLab_ABREngine_ABREngine_RegisterDataImpression_IVLab_ABREngine_IDataImpression_System_Boolean_) - Connect the data and visuals together in the engine
+- [ABREngine.Instance.RegisterDataImpression()](xref:IVLab.ABREngine.ABREngine#IVLab_ABREngine_ABREngine_RegisterDataImpression_IVLab_ABREngine_DataImpression_IVLab_ABREngine_DataImpressionGroup_System_Boolean_) - Connect the data and visuals together in the engine
 - [ABRengine.Instance.Render()](xref:IVLab.ABREngine.ABREngine#IVLab_ABREngine_ABREngine_Render) - Display the visualization
 
 

@@ -44,8 +44,7 @@ namespace IVLab.ABREngine
     public class ABRInputAttribute : System.Attribute
     {
         /// <summary>
-        /// Name of the input - should match the name in the ABR Schema (see <see
-        /// cref="abr-schema.md"/>).
+        /// Name of the input - should match the name in the ABR Schema (see @abr-schema.md).
         /// </summary>
         public string inputName;
 

@@ -12,7 +12,7 @@ building your first visualization.
 
 ## Part 1: Setup
 
-Before you begin, make sure you have [installed ABR and all its dependencies](install.md).
+Before you begin, make sure you have [installed ABR and all its dependencies](../install.md).
 
 First, import the ABR Vis App sample. You can do this by opening the package
 manager and navigating to the ABR package, twirling down "Samples", and clicking
@@ -35,7 +35,7 @@ interface and the ABR Engine!
 
 To design visualizations with the ABR design interface, you'll need to start the
 ABR server. In a perfect world, you'll be able to launch it directly from the
-editor, but that may not work so we will provide two sets ,questionnaire!of instructions for
+editor, but that may not work so we will provide two sets of instructions for
 this part.
 
 ### Option 1: Start ABR Server from Unity
