@@ -21,6 +21,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using IVLab.Utilities;
+using TMPro;
 using System;
 
 namespace IVLab.ABREngine.Legends
@@ -42,6 +43,12 @@ namespace IVLab.ABREngine.Legends
 
         [Tooltip("Force an update for the legend")]
         [SerializeField] private bool forceLegendUpdate;
+
+        [Tooltip("Color for the legend backgrounds")]
+        [SerializeField] private Color backgroundColor = Color.black;
+
+        [Tooltip("Color for the legend foreground text")]
+        [SerializeField] private Color textColor = Color.white;
 
         private const string defaultText = "[None]";
 
@@ -87,7 +94,7 @@ namespace IVLab.ABREngine.Legends
             legendEntryGameObjects.Clear();
 
             // Obtain background color from state
-            Color background = ABREngine.Instance.Config.DefaultCamera.backgroundColor;
+            Color background = backgroundColor;
 
             int entryIndex = 0;
             // Create legend clones of each data impression type, register them
@@ -175,10 +182,17 @@ namespace IVLab.ABREngine.Legends
             entryGo.name = di.Uuid.ToString();
             entryGo.transform.localPosition += entryOffset * entryIndex;
             legendEntryGameObjects.Add(entryGo);
+
             foreach (MeshRenderer r in entryGo.GetComponentsInChildren<MeshRenderer>())
             {
                 r.material.color = backgroundColor;
             }
+
+            foreach (TextMeshPro tmp in entryGo.GetComponentsInChildren<TextMeshPro>())
+            {
+                tmp.color = textColor;
+            }
+
             return entryGo.GetComponent<ABRLegendEntry>();
         }
 
