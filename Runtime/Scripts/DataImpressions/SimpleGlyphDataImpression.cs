@@ -207,7 +207,7 @@ namespace IVLab.ABREngine
 
         public override void ComputeGeometry()
         {
-            //Debug.Log("ComputeGeometry " + this.name);
+            // Debug.Log("ComputeGeometry " + this.name);
             if (keyData == null)
             {
                 RenderInfo = new SimpleGlyphRenderInfo

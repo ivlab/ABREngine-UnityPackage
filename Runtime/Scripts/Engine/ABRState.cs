@@ -332,10 +332,10 @@ namespace IVLab.ABREngine
                         }
                     }
 
-                    // Add any rendering hints
+                    // Add any rendering hints (only use visibility, others are internal-only)
                     if (impression.Value.renderHints != null)
                     {
-                        dataImpression.RenderHints = impression.Value.renderHints;
+                        dataImpression.RenderHints.Visible = impression.Value.renderHints.Visible;
                     }
 
                     // Attempt to find the previous version of the current impression in the previous abr state 
