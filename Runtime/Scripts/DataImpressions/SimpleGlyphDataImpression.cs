@@ -125,10 +125,12 @@ namespace IVLab.ABREngine
 
         /// <summary>
         /// Level of detail to use for glyph rendering (higher number = lower
-        /// level of detail; most glyphs have 3 LODs)
+        /// level of detail; most glyphs have 3 LODs). Default to using the
+        /// second-highest level of detail, but you may need to adjust for
+        /// performance reasons.
         /// </summary>
         [ABRInput("Glyph Level Of Detail", UpdateLevel.Geometry)]
-        public int glyphLod = 3;
+        public IntegerPrimitive glyphLod = 1;
 
         /// <summary>
         /// Use random forward/up directions when no Vector variables are
@@ -478,10 +480,10 @@ namespace IVLab.ABREngine
                 }
 
                 // Update the instanced mesh renderer to use the currently selected glyph
-                if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod) != null)
+                if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod.Value) != null)
                 {
-                    imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod);
-                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, glyphLod);
+                    imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod.Value);
+                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, glyphLod.Value);
                     if (normalMap != null)
                     {
                         block.SetTexture("_Normal", normalMap);
