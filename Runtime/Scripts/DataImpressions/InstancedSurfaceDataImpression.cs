@@ -57,6 +57,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/keyData.gif"/>
         /// </summary>
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -65,12 +66,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"/>
         /// </summary>
+        [ABRInput("Instance Mesh", UpdateLevel.Geometry)]
         public Mesh instanceMesh;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
         /// <summary>
@@ -80,6 +83,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/colorVariable.gif"/>
         /// </summary>
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -89,6 +93,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/colormap.gif"/>
         /// </summary>
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
@@ -96,6 +101,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/showOutline.gif"/>
         /// </summary>
+        [ABRInput("Show Outline", UpdateLevel.Style)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -103,6 +109,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
+        [ABRInput("Outline Width", UpdateLevel.Geometry)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -111,6 +118,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
+        [ABRInput("Outline Color", UpdateLevel.Geometry)]
         public Color outlineColor;
 
         /// <summary>
@@ -121,6 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"/>
         /// </summary>
+        [ABRInput("Force Outline Color", UpdateLevel.Geometry)]
         public BooleanPrimitive forceOutlineColor;
 
         /// <summary>
