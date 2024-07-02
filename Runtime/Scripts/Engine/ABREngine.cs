@@ -334,10 +334,12 @@ namespace IVLab.ABREngine
             ABREngine.CheckABRScene();
 
             // Start the server, if desired
-            if (Config.startServer)
-            {
-                ABRServer.StartServer(true);
-            }
+            // THIS DOES NOT WORK (pyinstaller builds are broken), commenting
+            // out
+            // if (Config.startServer)
+            // {
+            //     ABRServer.StartServer(true);
+            // }
 
             try
             {

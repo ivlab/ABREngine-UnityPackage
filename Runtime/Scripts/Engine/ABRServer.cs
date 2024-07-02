@@ -101,41 +101,54 @@ namespace IVLab.ABREngine
 
 // Editor convenience functions
 #if UNITY_EDITOR
-        [MenuItem("ABR/Server/Start Server")]
-        private static void StartServerLocal() => StartServer(false);
+        // The pre-built server doesn't really work. Just instructing folks to
+        // launch the server with the file explorer.
+        // [MenuItem("ABR/Server/Start Server")]
+        // private static void StartServerLocal() => StartServer(false);
 
-        [MenuItem("ABR/Server/Start Server - Broadcast (use this if you need to connect other devices over the network)")]
-        private static void StartServerBroadcast() => StartServer(true);
+        // [MenuItem("ABR/Server/Start Server - Broadcast (use this if you need to connect other devices over the network)")]
+        // private static void StartServerBroadcast() => StartServer(true);
+
+        [MenuItem("ABR/Open ABRServer~ Folder")]
+        private static void OpenServerFolderMenu() => OpenServerFolder();
 #endif
+
+        /// <summary>
+        /// Convenience function to open a file explorer in the ABRServer~ folder so users can easily get to the server.
+        /// </summary>
+        public static void OpenServerFolder()
+        {
+            System.Diagnostics.Process.Start(ServerRootFullPath);
+        }
 
         /// <summary>
         /// Convenience function to start the Python ABR server. Uses the
         /// pyinstaller executables.
         /// </summary>
-        public static void StartServer(bool broadcast)
-        {
-            try
-            {
-                Debug.Log("Attempting to start ABR Server at " + ServerPath);
-                var startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.FileName = ServerPath;
-                startInfo.Arguments = RunserverArg;
-                if (broadcast)
-                    startInfo.Arguments += " " + BroadcastArg;
-                startInfo.WorkingDirectory = ServerInternalPath;
+        // public static void StartServer(bool broadcast)
+        // {
+        //     try
+        //     {
+        //         Debug.Log("Attempting to start ABR Server at " + ServerPath);
+        //         var startInfo = new System.Diagnostics.ProcessStartInfo();
+        //         startInfo.FileName = ServerPath;
+        //         startInfo.Arguments = RunserverArg;
+        //         if (broadcast)
+        //             startInfo.Arguments += " " + BroadcastArg;
+        //         startInfo.WorkingDirectory = ServerInternalPath;
 
-                var serverProcess = new System.Diagnostics.Process();
-                serverProcess.StartInfo = startInfo;
-                bool started = serverProcess.Start();
-                if (started)
-                    Debug.Log("Started ABR Server " + ServerPath);
-                else
-                    Debug.Log("ABR Server already running");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Unable to start ABR Server. Is the ABRServer executable build for this platform? Details:\n" + e);
-            }
-        }
+        //         var serverProcess = new System.Diagnostics.Process();
+        //         serverProcess.StartInfo = startInfo;
+        //         bool started = serverProcess.Start();
+        //         if (started)
+        //             Debug.Log("Started ABR Server " + ServerPath);
+        //         else
+        //             Debug.Log("ABR Server already running");
+        //     }
+        //     catch (System.Exception e)
+        //     {
+        //         Debug.LogError("Unable to start ABR Server. Is the ABRServer executable build for this platform? Details:\n" + e);
+        //     }
+        // }
     }
 }
