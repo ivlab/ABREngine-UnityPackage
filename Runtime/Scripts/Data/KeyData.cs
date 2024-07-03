@@ -187,21 +187,25 @@ namespace IVLab.ABREngine
 
     public interface IKeyDataRenderInfo { }
 
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
     public class SurfaceKeyData : KeyData
     {
         public SurfaceKeyData(string path, DataTopology topology) : base(path, topology) { }
     }
 
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
     public class PointKeyData : KeyData
     {
         public PointKeyData(string path, DataTopology topology) : base(path, topology) { }
     }
 
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
     public class LineKeyData : KeyData
     {
         public LineKeyData(string path, DataTopology topology) : base(path, topology) { }
     }
 
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
     public class VolumeKeyData : KeyData
     {
         public VolumeKeyData(string path, DataTopology topology) : base(path, topology) { }

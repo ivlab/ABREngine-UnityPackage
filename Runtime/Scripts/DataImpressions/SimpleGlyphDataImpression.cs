@@ -479,11 +479,13 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                // Update the instanced mesh renderer to use the currently selected glyph
-                if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod.Value) != null)
+                // Update the instanced mesh renderer to use the currently
+                // selected glyph
+                int lod = glyphLod?.Value ?? config.GetInputValueDefault<IntegerPrimitive>(plateType, "Glyph Level Of Detail").Value;
+                if (glyph != null && glyph.GetMesh(glyphIndex, lod) != null)
                 {
-                    imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod.Value);
-                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, glyphLod.Value);
+                    imr.instanceMesh = glyph.GetMesh(glyphIndex, lod);
+                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, lod);
                     if (normalMap != null)
                     {
                         block.SetTexture("_Normal", normalMap);

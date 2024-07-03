@@ -252,10 +252,13 @@ namespace IVLab.ABREngine
                     var colorScalars = colorVariable.GetArray(keyData);
                     // Set the pixels of the 3D texture
 
+#if UNITY_2020_1_OR_NEWER
+                    var pixels = renderInfo.voxelTex.GetPixelData<Color>(0);
+#else
                     // Compatibility with Unity 2019 - Get a copy of the pixel
                     // data instead of retrieving a raw view of it.
-                    // var pixels = renderInfo.voxelTex.GetPixelData<Color>(0);
                     var pixels = renderInfo.voxelTex.GetPixels(0);
+#endif
 
                     for (int z = 0; z < dimensions.z; z++)
                     {
@@ -284,9 +287,11 @@ namespace IVLab.ABREngine
                         }
                     }
 
+#if !UNITY_2020_1_OR_NEWER
                     // Unity 2019 Compatibility: Since we made a copy of the
                     // pixel data, set it back to the texture.
                     renderInfo.voxelTex.SetPixels(pixels);
+#endif
 
                     // Apply changes to the 3D texture
                     renderInfo.voxelTex.Apply();
