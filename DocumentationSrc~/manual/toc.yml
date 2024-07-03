@@ -15,26 +15,19 @@
       href: concepts/terminology-starter.md
     - name: Media Folder
       href: concepts/media-folder.md
-- name: "Getting Started: ABR Vis App"
-  href: examples/abr-vis-app.md
+- name: "Getting Started Tutorials"
+  href: tutorials/tutorials.md
   items:
+    - name: Start Here - ABR Vis App
+      href: tutorials/abr-vis-app.md
     - name: ABR Design Interface
-      href: creating-design-interface-vis.md
+      href: tutorials/creating-design-interface-vis.md
     - name: ABR C# Visualization
-      href: examples/abr-cs.md
+      href: tutorials/abr-cs.md
     - name: Importing Data
-      href: importing-data.md
-- name: Examples
-  href: examples/examples.md
-  items:
-    - name: State Creation
-      href: examples/create-state.md
-    - name: Dataset Creation
-      href: examples/create-dataset.md
-    - name: Modify JSON State
-      href: examples/interactive-state.md
+      href: tutorials/importing-data.md
     - name: Advanced Usage
-      href: examples/advanced-usage.md
+      href: tutorials/advanced-usage.md
 - name: Troubleshooting
   href: troubleshooting.md
 - name: License

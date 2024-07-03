@@ -57,4 +57,4 @@ foreach (ScalarDataVariable s in kd.GetScalarVariables())
 // Would print out something like "Temperature, Salinity, ..."
 ```
 
-Check out the @IVLab.ABREngine.KeyData and @IVLab.ABREngine.DataManager classes for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](../examples/abr-cs.md) tutorial.
+Check out the @IVLab.ABREngine.KeyData and @IVLab.ABREngine.DataManager classes for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](../tutorials/abr-cs.md) tutorial.

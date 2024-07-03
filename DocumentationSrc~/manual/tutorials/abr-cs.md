@@ -237,11 +237,16 @@ applied.](../resources/cs-vis-data-colormap.png)
 > file in the same folder as the original VisDriver.cs file.
 
 
+> [!TIP]
+> You can use this script and example as a starting point anytime you make a C#
+> visualization in ABR!
+
 ## Next Steps
 
 Now that you're familiar with the basics of creating a C# Visualization with
-ABR, check out the following next steps:
+ABR, check out the following resources for working with ABR in Unity:
 
+- ABR Configuration
 - Advanced Editor Usage
     - placing data impression groups in your scene (handling data and world space)
     - simultaneously using ABR COmpose and C# scripting

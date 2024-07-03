@@ -65,7 +65,7 @@ make sure Generate .csproj files is checked for at least "Embedded"
 Project". If all is configured correctly, Visual Studio should now open.
 
 
-## Next steps: Get started creating a visualization
+# Next steps: Get started creating a visualization
 
 We recommend that you read the @intro.md before going any further, and also
 checking out the @core-concepts.md!
@@ -83,11 +83,13 @@ If you're looking to make additions or changes to the ABREngine package itself,
 head to [Development Mode](#development-mode) for more information.
 
 
+---
 
 
 [!INCLUDE [ABR Server](./ABRServer~/README.md)]
 
 
+---
 
 ## Development Mode
 Collectively, the lab now recommends a development process where you start by

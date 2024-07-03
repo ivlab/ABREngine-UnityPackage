@@ -68,7 +68,7 @@ namespace IVLab.ABREngine
     ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
     /// </ol>
     /// 
-    /// [!code-csharp[](../../Samples~/Documentation Examples/ABREngineExample.cs)]
+    /// [!code-csharp[](../../Samples~/Documentation examples/ABREngineExample.cs)]
     /// 
     /// </example>
     /// 
@@ -83,7 +83,7 @@ namespace IVLab.ABREngine
     ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/> (optionally, giving the dataset a data path identifier for easier semantic access later).</li>
     /// </ol>
     /// 
-    /// [!code-csharp[](../../Samples~/Documentation Examples/CustomDataABRExample.cs)]
+    /// [!code-csharp[](../../Samples~/Documentation examples/CustomDataABRExample.cs)]
     /// 
     /// </example>
     public class ABREngine : Singleton<ABREngine>

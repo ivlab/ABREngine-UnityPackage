@@ -58,4 +58,4 @@ visualization toolkit developed by [KitWare](https://www.kitware.com/).
 ABR-to-ParaView connector with ParaView version 5.9.
 2. Follow the EasyParaViewToABR directions below:
 
-[!include[EasyParaViewToABR Instructions](../../EasyParaViewToABR~/README.md)]
+[!include[EasyParaViewToABR Instructions](../../../EasyParaViewToABR~/README.md)]

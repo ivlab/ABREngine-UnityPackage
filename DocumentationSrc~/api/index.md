@@ -2,7 +2,7 @@
 
 Here are the most important classes start out making visualizations with C# and
 ABR. Check out the
-[Creating a C# ABR visualization tutorial](../manual/examples/abr-cs.md)
+[Creating a C# ABR visualization tutorial](../manual/tutorials/abr-cs.md)
 for more examples.
 
 ## ABREngine
