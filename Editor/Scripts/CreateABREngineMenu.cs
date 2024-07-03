@@ -38,6 +38,20 @@ namespace IVLab.ABREngine
 
             engine.AddComponent<ABREngine>();
         }
+
+        [MenuItem("GameObject/ABR/ABR Data Impression Group")]
+        public static void CreateDataContainer(MenuCommand cmd)
+        {
+            GameObject parent = cmd.context as GameObject;
+            GameObject container = new GameObject("Rename Me (ABR Data Container)");
+            if (parent != null)
+            {
+                container.transform.SetParent(parent.transform);
+            }
+
+            container.AddComponent<DataImpressionGroup>();
+            container.AddComponent<ABRDataContainer>();
+        }
     }
 }
 #endif

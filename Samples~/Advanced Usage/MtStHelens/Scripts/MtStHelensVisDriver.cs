@@ -14,7 +14,7 @@ namespace IVLab.ABREngine.Examples
     ///
     /// Data are sourced from the USGS.
     /// </summary>
-    public class AdvancedUsage : MonoBehaviour
+    public class MtStHelensVisDriver : MonoBehaviour
     {
         [SerializeField, Tooltip("Data container for Mount St. Helens Data. Must be assigned to start.")]
         private MtStHelensData data;
@@ -99,7 +99,7 @@ namespace IVLab.ABREngine.Examples
             KeyData beforeInfo = ABREngine.Instance.Data.ImportRawDataset(PointsPath, beforePointsRaw);
 
             // Create a layer for non-highlighted points
-            beforePoints = new SimpleGlyphDataImpression();
+            beforePoints = DataImpression.Create<SimpleGlyphDataImpression>("Before Points");
             beforePoints.useRandomOrientation = false;
             beforePoints.keyData = beforeInfo;
             beforePoints.glyph = ABREngine.Instance.VisAssets.GetDefault<GlyphVisAsset>() as GlyphVisAsset;
@@ -163,9 +163,9 @@ namespace IVLab.ABREngine.Examples
             KeyData afterSurfaceInfo = ABREngine.Instance.Data.ImportRawDataset(AfterSurfacePath, afterSurfaceData);
 
             // Create surface data impressions
-            afterSurface = new SimpleSurfaceDataImpression();
+            afterSurface = DataImpression.Create<SimpleSurfaceDataImpression>("After Surface");
             afterSurface.keyData = afterSurfaceInfo;
-            beforeSurface = new SimpleSurfaceDataImpression();
+            beforeSurface = DataImpression.Create<SimpleSurfaceDataImpression>("Before Surface");
             beforeSurface.keyData = beforeSurfaceInfo;
 
             // Get scalar variable by name
@@ -187,8 +187,14 @@ namespace IVLab.ABREngine.Examples
             // Point 2: Using DataImpressionGroups to move data impressions around
             // ********************************************************************************
 
-            // Create a data impression group for the "before" surface so we can move it off to the side
-            DataImpressionGroup beforeGroup = ABREngine.Instance.CreateDataImpressionGroup("Side by side vis", new Vector3(5.0f, 0.0f, 0.0f));
+            // Get the data impression group for the "before" surface (already
+            // exists in scene)
+            const string BeforeGroupName = Dataset + " Before";
+            DataImpressionGroup beforeGroup = ABREngine.Instance.GetDataImpressionGroup(BeforeGroupName);
+            if (beforeGroup == null)
+            {
+                beforeGroup = ABREngine.Instance.CreateDataImpressionGroup(BeforeGroupName);
+            }
 
             // Register impressions with the engine
             ABREngine.Instance.RegisterDataImpression(afterSurface);
