@@ -265,7 +265,7 @@ namespace IVLab.ABREngine
         {
             // Clone (create a new Data impression) and copy over all the fields that don't come
             // with (due to Unity Serialization)
-            object[] impressionArgs = new object[] { Guid.NewGuid(), this.name + " Copy", this.SaveToState };
+            object[] impressionArgs = new object[] { this.name + " Copy", Guid.NewGuid(), this.SaveToState };
             DataImpression newDi = createMethod.Invoke(null, impressionArgs) as DataImpression;
 
             // Copy over the fields that might have values
