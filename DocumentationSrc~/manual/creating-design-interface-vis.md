@@ -24,7 +24,7 @@ Package, design interface and visualization manager before continuing.
 Verify that the ABREngine GameObject is in your scene, and that the
 "ABRConfig_VisApp" is selected as the ABR Configuration:
 
-![](resources/abr-vis-app-1-scene.png)
+![A screenshot of the Unity Game Engine with ABR set up. The ABREngine GameObject is selected in the left Hierarchy panel, and that GameObject's options are shown in the right side Inspector. Under "Choose ABR Configuration", "ABRConfig_VisApp" is selected.](resources/abr-vis-app-1-scene.png)
 
 
 ## Part 2: Verifying the design interface connection
@@ -34,7 +34,7 @@ Verify that the ABREngine GameObject is in your scene, and that the
 2. In a browser, go to <http://localhost:8000> to open the Design Interface.
 
 3. In Unity, press the Play button. You should see the following output or similar:
-![](resources/di-vis_connect.png)
+![A Unity screenshot with the Console maximized, and the first few lines of output outlined in a red box. The key is that the output says "State subscriber notifier WebSocket listening." ](resources/di-vis_connect.png)
 
 
 ## Part 3: Next Steps
@@ -47,3 +47,7 @@ Verify that the ABREngine GameObject is in your scene, and that the
 > [!video https://www.youtube.com/embed/pmawi3QpxE8]
 
 > [!video https://www.youtube.com/embed/OBgYQBr20uE]
+
+> [!NOTE]
+> These videos were created with an older version of ABR so the interface looks
+> slightly different. However, the processes remain much the same!

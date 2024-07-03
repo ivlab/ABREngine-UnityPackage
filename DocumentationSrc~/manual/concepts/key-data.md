@@ -13,14 +13,14 @@ Key data are the "building blocks" upon which visualizations are created. ABR cu
 
 | Surfaces | Lines | Points | Volumes |
 | --- | --- | --- | --- |
-| ![](resources/surfaceData.png) | ![](resources/lineData.png) | ![](resources/pointData.png) | ![](resources/volumeData.png) |
+| ![](../resources/surfaceData.png) | ![](../resources/lineData.png) | ![](../resources/pointData.png) | ![](../resources/volumeData.png) |
 
 
 Every key data has its own geometric structure and variables applied to it. You can think of the Key Data as the "canvas" upon which the variables are painted, for example, this visualization of a wavelet is a surface key data object representing the wavy blob surface:
-![](resources/cs-vis-teaser-nocolor.png)
+![](../resources/cs-vis-teaser-nocolor.png)
 
 Then, we can "paint" a visualization on these geometric data by pairing one of the key data's scalar variables (in this case, the X Axis) with a colormap (in this case, a white to green linear map):
-![](resources/cs-vis-teaser.png)
+![](../resources/cs-vis-teaser.png)
 
 ## Key Data Identification
 
@@ -57,4 +57,4 @@ foreach (ScalarDataVariable s in kd.GetScalarVariables())
 // Would print out something like "Temperature, Salinity, ..."
 ```
 
-Check out the @IVLab.ABREngine.KeyData and @IVLab.ABREngine.DataManager classes for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](creating-cs-abr-vis.md) tutorial.
+Check out the @IVLab.ABREngine.KeyData and @IVLab.ABREngine.DataManager classes for more examples and further documentation, and be sure to also look at the [Creating a C# ABR Visualization](../examples/abr-cs.md) tutorial.

@@ -4,7 +4,8 @@ This package contains all the necessary components to run ABR, including:
 
 - ABREngine-UnityPackage
     - Scripts, Shaders, and other assets to work with the Artifact-Based Rendering Engine in Unity.
-    - This repo is a Unity Package.
+    - This repo is a Unity Package, and can be installed with the Unity Package
+    Manager (see [README_INSTALL.md](./README_INSTALL.md)).
 - ABR Server
     - The Python server that hosts the ABR Compose visualization design interface
     - Please see the [ABRServer~](./ABRServer~) folder

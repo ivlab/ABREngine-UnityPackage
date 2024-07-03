@@ -24,7 +24,7 @@ TMP Essential*.
 Once the sample has loaded, open the "Main" scene in the "Scenes" folder of "ABR
 Vis App". You should see a scene like the following:
 
-![](../resources/abr-vis-app-1-scene.png)
+![A screenshot of the Unity editor with the ABR vis app scene loaded. The ABREngine GameObject is selected in the left Hierarchy, and the ABRConfig_VisApp configuration is selected in the right Inspector.](../resources/abr-vis-app-1-scene.png)
 
 Lastly, we need some data to visualize! In Unity, click *ABR > Copy Example Data
 to Media Folder*. This will make some example data available to the ABR design
@@ -34,36 +34,34 @@ interface and the ABR Engine!
 ## Part 2: Running the server
 
 To design visualizations with the ABR design interface, you'll need to start the
-ABR server. In a perfect world, you'll be able to launch it directly from the
-editor, but that may not work so we will provide two sets of instructions for
-this part.
+ABR server. Instructions for this can be found in the [ABR Server
+README](../abr-server.md). Essentially, the ABR Compose design interface lives
+within the ABR Server, so you need to run that Python server first in order to
+design visualizations with ABR.
 
-### Option 1: Start ABR Server from Unity
+Once the server is installed, the only command you should need to run is:
 
-In the Unity editor, click *ABR > Server > Start Server*. Wait a few moments
-while the Python window pops up and logs some information - this window is the
-ABR server so don't close it!
+```
+python3 manage.py runserver
+```
 
-If there were errors in the Unity console or the server doesn't start for any
-reason, you'll need to try Option 2.
-
-
-### Option 2: Start ABR Server with Python
-
-There's a chance we may have not compiled the ABR server for your platform yet,
-so you'll need to use Python to run the server in the meantime.
-
-Information about how to run the Python server can be found in the [ABR Server
-Readme](../abr-server.md)
-
+> [!TIP]
+> Recall that this command is run in a terminal inside the ABRServer~ folder,
+> which can be opened from Unity by clicking *ABR > Open ABRServer~ Folder*. You
+> may also need to re-activate the pipenv if you've closed the terminal; do so
+> by running `python3 -m pipenv shell` in the ABRServer~ folder.
 
 After you've started the server, visit http://localhost:8000 in a
 web browser. You should now see the ABR design interface:
 
-![](../resources/abr-vis-app-2-interface.png)
+![A screenshot of the ABR design interface loaded in a web browser. The left side shows the test data we imported in Part 1, and the right side shows the available VisAssets to design a visualization with.](../resources/abr-vis-app-2-interface.png)
 
 
 ## Next steps
 
 At this point, you're ready to get started designing a visualization! Your next
 step is to follow along with the @creating-design-interface-vis.md tutorial.
+
+If you're interested in using your own data with ABR, check out @importing-data.md.
+
+If you'd like to design visualizations using C# scripting, check out @abr-cs.md.

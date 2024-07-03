@@ -1,3 +1,8 @@
+---
+uid: intro.md
+title: Introduction and Overview
+---
+
 # Artifact-Based Rendering Engine
 
 The purpose of the Artifact-Based Rendering Engine (ABR Engine) is to provide artists with tools and techniques to create high-fidelity visualizations of multivariate spatiotemporal data using their own traditional-media creations, such as:
@@ -31,20 +36,29 @@ The ABR Engine was created and is maintained by the [Sculpting Visualizations Co
 
 ## Getting Started with ABR
 
-ABR has two modes which have similar functionality. GUI mode is for rapidly
+<!-- ABR has two modes. GUI mode is for rapidly
 creating visualizations with no programming involved. C# mode is useful for
 creating programmatic visualizations, and this mode includes newer and
 experimental features of ABR that haven't yet been incorporated to the GUI mode.
 Before getting into specifics of either of these modes, it is important to
 understand a few concepts about ABR. Give each of these core concepts a read
+through before diving into creating with ABR: -->
+ABR can be used as both a programming-free visualization design tool (i.e., ABR
+Compose mode), and as a standalone visualization package in Unity (i.e., C# mode).
+Before getting into specifics of either of these modes, it is important to
+understand a few concepts about ABR. Give each of these core concepts a read
 through before diving into creating with ABR:
 
-[!INCLUDE [core-concepts.md](core-concepts.md)]
+[!INCLUDE [core-concepts.md](concepts/core-concepts.md)]
 
 ### Next steps
 
-Follow along with the @abr-vis-app.md tutorial to set up ABR to create your
-first visualization.
+1. Follow along with the @abr-vis-app.md tutorial to set up ABR to create your
+first visualization. This tutorial introduces ABR Compose mode.
+
+2. Follow along with the @abr-cs.md tutorial to set up ABR with C#. This
+tutorial introduces scripting with ABR, which enables you to develop deeply
+customized and interactive applications with ABR.
 
 
 <!-- ### Getting Started with ABR C#

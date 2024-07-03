@@ -1,5 +1,6 @@
 ---
 uid: importing-data.md
+title: Importing Data
 ---
 
 # Importing Data

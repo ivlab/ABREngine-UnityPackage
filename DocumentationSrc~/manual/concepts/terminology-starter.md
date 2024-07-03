@@ -1,3 +1,8 @@
+---
+uid: terminology-starter.md
+name: Basic ABREngine Terminology
+---
+
 # Basic ABREngine Terminology
 
 Beyond the key data, visasset, and data impression metaphors, there are also

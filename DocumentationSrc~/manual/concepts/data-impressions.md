@@ -2,13 +2,13 @@
 
 Every "layer" in the visualization is represented by a data impression. In the ABR design interface, each impression is shown by a "tower"; for example this data impression represents the ground's surface in the simulation, and we've applied some scalar data variables and styling to it.
 
-![](resources/groundTower.png)
+![](../resources/groundTower.png)
 
 ABR has four types of data impressions:
 
 | @IVLab.ABREngine.SimpleSurfaceDataImpression | @IVLab.ABREngine.SimpleLineDataImpression | @IVLab.ABREngine.SimpleGlyphDataImpression | @IVLab.ABREngine.SimpleVolumeDataImpression |
 | --- | --- | --- | --- |
-| ![](resources/data-impression-surface.png) | ![](resources/data-impression-lines.png) | ![](resources/data-impression-points.png) | ![](resources/data-impression-volume.png) |
+| ![](../resources/data-impression-surface.png) | ![](../resources/data-impression-lines.png) | ![](../resources/data-impression-points.png) | ![](../resources/data-impression-volume.png) |
 
 
 ## Using Data Impressions in Code
@@ -23,7 +23,7 @@ KeyData groundData = ABREngine.Instance.Data.ImportRawDataset(...);
 ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAsset>(...);
 
 // Create a new data impression for the ground
-SimpleSurfaceDataImpression ground = new SimpleSurfaceDataImpression();
+SimpleSurfaceDataImpression ground = DataImpression.Create<SimpleSurfaceDataImpression>("Ground");
 ground.keyData = groundData;
 ground.colormap = cmap;
 ground.colorVariable = groundData.GetScalarVariable(...);

@@ -1,14 +1,14 @@
 ---
-uid: creating-cs-abr-vis.md
-title: Creating your first C# ABR Visualization
+uid: abr-cs.md
+title: ABR C# Introduction
 ---
 
 # Creating your first C# ABR Visualization
 
-Before you begin, make sure you have Unity open and have followed the [ABR install instructions](install.md).
+Before you begin, make sure you have Unity open and have followed the [ABR install instructions](../install.md).
 
 During this tutorial, we'll make a visualization of some 3D surface data like this:
-![](resources/cs-vis-teaser.png)
+![A visualization of some test data (a bumpy wavelet surface) with a white-to-green colormap applied from left to right.](../resources/cs-vis-teaser.png)
 
 ## Part 0: Getting used to C# Syntax and the ABREngine
 
@@ -64,26 +64,31 @@ most frequently used function in Unity, like @UnityEngine.GameObject.GetComponen
 the same approach.
 
 
-## Part 1: Creating the ABREngine GameObject and configuration
 
-Every ABR visualization needs to have the ABREngine GameObject and configuration correctly set up.
+## Part 1: Setup
 
-In the Unity Editor "Project" tab, search for ABREngine "In Packages". Then, drag-and-drop the ABREngine prefab (blue cube icon) into the Hierarchy.
-![](resources/cs-vis_1-abrengine.png)
+### Part 1.1: Unity Setup
 
-If you click on the ABREngine GameObject you just created, you'll notice an error message in on the right Inspector panel:
-![](resources/cs-vis_2-config-error.png)
+First, import the ABR C# sample. You can do this by opening the package
+manager and navigating to the ABR package, twirling down "Samples", and clicking
+"Import" for the "ABR CSharp Starter" sample.
 
-To fix this, we need to create an ABR Configuration. In the Project tab, go to your Assets folder. Then, right/two-finger -click anywhere in the empty space and select *Create > ABR > ABR Configuration*.
-![](resources/cs-vis_3-config-create.png)
+Once the sample has loaded, open the "Main" scene in the "Scenes" folder. You
+should see a scene like the following:
 
-You may leave it named "ABRConfig". Inspect the ABRConfig object you just created to see what configuration options are available to you - but for now, we can leave these all at their defaults.
-![](resources/cs-vis_4-config-edit.png)
+![A screenshot of the Unity editor with the ABR CSharp Example scene loaded. The ABREngine GameObject is selected in the left Hierarchy, and the ABRConfig_CSharp configuration is selected in the right Inspector.](../resources/cs-vis-scene.png)
 
-Observe that now, when you click on the "ABREngine" GameObject, the ABRConfig you just created shows up under "Choose ABR Configuration".
-![](resources/cs-vis_5-config-check.png)
+Further, we need some data to visualize! In Unity, click *ABR > Copy Example Data
+to Media Folder*. This will make some example data available to the ABR design
+interface and the ABR Engine! (if you have already done this in the
+@abr-vis-app.md tutorial, you don't need to do it again.)
 
-Save your scene by pressing Ctrl+S or Cmd+S or navigating to *File > Save*.
+
+### Part 1.2: Scripting Setup
+
+You will need a code editing environment to complete this tutorial. Please refer
+to the @install.md instructions for information on how to set up C# scripting in
+Unity with your preferred code editor.
 
 
 ## Part 2: Creating a C# Script to drive your visualization
@@ -91,36 +96,52 @@ Save your scene by pressing Ctrl+S or Cmd+S or navigating to *File > Save*.
 Some ABR visualizations use the ABR design interface, but in this tutorial we
 will solely focus on making a visualization with C# code. We will have a single
 script, "VisDriver.cs", that creates our visualization by creating ABR [key
-data](key-data.md), [VisAssets](visassets.md) and telling ABR to render these
-with [data impressions](data-impressions.md).
+data](../concepts/key-data.md), [VisAssets](../concepts/visassets.md) and
+telling ABR to render these with [data
+impressions](../concepts/data-impressions.md).
 
-First, let's create a new Empty GameObject. In the Hierarchy, right/two-finger click anywhere in the open space and select *Create Empty*. Call this GameObject "VisDriverObject".
-![](resources/cs-vis_6-create-empty.png)
+In the starter template, we've already added the ABREngine GameObject, but if
+you wanted to create one yourself, you can click *GameObject > ABR > ABREngine*.
+Keep in mind there should only be *one* ABREngine GameObject in any scene.
 
-Now, create a new C# Script. In the Project tab, right/two-finger click anywhere in the open space an select *Create > C# Script". Name it "VisDriver".
-![](resources/cs-vis_7-create-script.png)
-
-Lastly, drag and drop this script onto the "VisDriverObject" GameObject you created earlier.
-![](resources/cs-vis_8-script-drag.png)
+In the starter template, we've already created the VisDriver.cs script, but if
+you wanted to create another one, you can click *Assets > Create > C# Script*.
 
 To edit the script, right/two-finger click the "VisDriver" script in the Project
-tab and click "Open C# Project". Before doing this, ensure that your
-[external script editor](https://learn.unity.com/tutorial/set-your-default-script-editor-ide)
-is set up correctly, and that under "Generate .csproj files for:", "Embedded
-Packages", "Local Packages", and "Local Tarball" are all checked.
+tab (in the Scripts folder) and click "Open C# Project". 
 
 
 ## Part 3: Making a visualization
+
+> [!NOTE]
+> If you have not already done so, please take a glance at the
+> @terminology-starter.md page to familiarize yourself with the technical terms
+> that are used below.
 
 After clicking "Open C# Project" and navigating to VisDriver.cs in your code
 editor, you should see that Unity has populated a new
 [MonoBehaviour Class](https://docs.unity3d.com/Manual/class-MonoBehaviour.html) named `VisDriver`.
 
-This part will walk you through the steps to create your first script-based visualization with ABR, which will end up looking like this:
+This part will walk you through the steps to create your first script-based
+visualization with ABR, which will end up looking like this:
+
+![A visualization of some test data (a bumpy wavelet surface) with a white-to-green colormap applied from left to right.](../resources/cs-vis-teaser.png)
+
+
+In general, the process for creating an ABR visualization follows this process:
+1. Import data using @IVLab.ABREngine.DataManager.LoadData(System.String)
+2. Import VisAssets using [VisAssetManager.GetVisAsset](xref:IVLab.ABREngine.VisAssetManager#IVLab_ABREngine_VisAssetManager_GetVisAsset__1_System_Guid_)
+3. Create a @IVLab.ABREngine.DataImpression to combine the data and visuals together (using [DataImpression.Create](xref:IVLab.ABREngine.DataImpression#IVLab_ABREngine_DataImpression_Create__1_System_String_System_Guid_System_Boolean_)).
+4. Use
+   [ABREngine.RegisterDataImpression](xref:IVLab.ABREngine.ABREngine#IVLab_ABREngine_ABREngine_RegisterDataImpression_IVLab_ABREngine_DataImpression_System_Boolean_) to add the impression to the engine.
+5. Render the data and visuals to the screen using @IVLab.ABREngine.ABREngine.Render
+
+
 
 ### Importing the ABREngine
 
-Add the following code to the header of the VisDriver file under `using UnityEngine`:
+Before we add any ABR code, we need to add the following code to the header of
+the VisDriver.cs file under `using UnityEngine`:
 
 ```cs
 using IVLab.ABREngine;
@@ -131,23 +152,28 @@ This line of code makes the power of ABR available to you in this script.
 
 ### 1. Import some data
 
-For simplicity, we're going to put all our visualization code in the `Start()` method, so you can delete the `Update()` method at this point.
+For simplicity, we're going to put all our visualization code in the `Start()`
+method, so you can delete the `Update()` method at this point.
 
-Now, in the `Start()` method, we'll begin by importing some example data that's available for you to use in ABR. Copy and past the following code into your `Start()` method:
+Now, in the `Start()` method, we'll begin by importing some example data that's
+available for you to use in ABR. Copy and past the following code into your
+`Start()` method:
 
 ```cs
 // 1. Load the dataset from disk (see ABREngine-UnityPackage/Runtime/Resources/media/datasets) for the raw data files
-string contourDataPath = "Demo/Wavelet/KeyData/Contour";
+// (this is the data that was loaded when you clicked *ABR > Copy Example Data to Media Folder* earlier!)
+string contourDataPath = "Demo/Wavelet/KeyData/RTData230";
 KeyData contour = ABREngine.Instance.Data.LoadData(contourDataPath);
 ```
 
 ### 2. Putting it together in a data impression
 
-Data impressions are the "layers" of the visualization. So, to combine data and VisAssets, we need to create a data impression and assign data to it:
+Data impressions are the "layers" of the visualization. So, to combine data and
+VisAssets, we need to create a data impression and assign data to it:
 
 ```cs
 // 2. Create surface data impression and assign key data
-SimpleSurfaceDataImpression surf = new SimpleSurfaceDataImpression();
+SimpleSurfaceDataImpression surf = DataImpression.Create<SimpleSurfaceDataImpression>("Contour Impression");
 surf.keyData = contour;
 ```
 
@@ -167,8 +193,12 @@ Then `Render()` the visualization. This needs to be done every time something ch
 ABREngine.Instance.Render();
 ```
 
-At this point, check your work. Go back to Unity and press the "Play" button triangle in the top toolbar. If everything is working correctly, you should see a small "blob-like" visualization in the center of your game view - this is the "Contour" data you imported in Step 1!
-![](resources/cs-vis_9-basic-vis.png)
+At this point, check your work. Go back to Unity and press the "Play" button
+triangle in the top toolbar. If everything is working correctly, you should see
+a gray/white blob-like visualization in the center of your game view - this is
+the "RTData230" surface data you imported in Step 1!
+![A screenshot of Unity, showing a white blob-like object in the Game View. This
+is the data!](../resources/cs-vis-data-loaded.png)
 
 
 ### 4. Import a colormap VisAsset
@@ -176,7 +206,7 @@ At this point, check your work. Go back to Unity and press the "Play" button tri
 To add some color to the visualization, we'll need a colormap. Add the following code to your `Start()` method. Copy/paste this code right after the existing Step 1 code:
 
 ```cs
-// 1.c. Import a Colormap VisAsset
+// 1.b. Import a Colormap VisAsset
 ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAsset>(new System.Guid("5a761a72-8bcb-11ea-9265-005056bae6d8"));
 ```
 
@@ -193,7 +223,28 @@ surf.colormap = cmap;
 surf.colorVariable = contour.GetScalarVariable("XAxis");
 ```
 
-This code will first link the colormap you imported in Step 4 to the data impression, then it will look in the "Contour" key data object and find a scalar variable "XAxis". See [Key Data](key-data.md) for more information on key data.
+This code will first link the colormap you imported in Step 4 to the data impression, then it will look in the "Contour" key data object and find a scalar variable "XAxis". See [Key Data](../concepts/key-data.md) for more information on key data.
 
-At this point, go back to Unity and try running the visualization again. After adjusting the camera to be closer to the center of the scene (camera position = (0, 0, -2)), your game view should look like this:
-![](resources/cs-vis_10-colormap.png)
+At this point, go back to Unity and try running the visualization again. Your
+game view should now look like this:
+![A screenshot of Unity with an ABR visualization in the Game View. The
+visualization shows a "blob" with a green-to-white colormap
+applied.](../resources/cs-vis-data-colormap.png)
+
+
+> [!NOTE]
+> You can see a completed version of the tutorial in the VisDriverTutorial.cs
+> file in the same folder as the original VisDriver.cs file.
+
+
+## Next Steps
+
+Now that you're familiar with the basics of creating a C# Visualization with
+ABR, check out the following next steps:
+
+- Advanced Editor Usage
+    - placing data impression groups in your scene (handling data and world space)
+    - simultaneously using ABR COmpose and C# scripting
+- Creating and loading datasets
+- Interactivity
+- Styling

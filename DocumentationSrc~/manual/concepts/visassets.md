@@ -4,7 +4,7 @@ VisAssets are visual building blocks or elements of a visualization sourced from
 
 | **Name** | Colormap | Line | Texture | Glyph |
 | --- | --- | --- | --- | --- |
-| **Example** | ![](resources/colormap.png) | ![](resources/lineva.png) | ![](resources/tex.png) | ![](resources/glyph.png) |
+| **Example** | ![](../resources/colormap.png) | ![](../resources/lineva.png) | ![](../resources/tex.png) | ![](../resources/glyph.png) |
 | **C# Class** | @IVLab.ABREngine.ColormapVisAsset | @IVLab.ABREngine.LineTextureVisAsset | @IVLab.ABREngine.SurfaceTextureVisAsset | @IVLab.ABREngine.GlyphVisAsset |
 
 ## Using VisAssets in code:

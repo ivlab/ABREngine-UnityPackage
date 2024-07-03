@@ -24,14 +24,68 @@ To use the package in a read-only mode, the same way you would for packages down
   - Installing all the dependencies will take some time.
   - If you get a permission denied error, try clicking "Import ABR Dependencies" again.
 
+Once you've set up the ABREngine package, there are a couple more steps to make
+sure your editor is set up correctly. We recommend using either Visual Studio
+Code or Visual Studio to develop, since they are both well-supported by Unity.
+
+> [!TIP]
+> Ensure that your
+> [external script editor](https://learn.unity.com/tutorial/set-your-default-script-editor-ide)
+> is set up correctly, and that under "Generate .csproj files for:", "Embedded
+> Packages", "Local Packages", and "Local Tarball" are all checked.
+>
+> Additionally, make sure you have the [latest .NET
+> SDK](https://dotnet.microsoft.com/en-us/download/dotnet) installed. Avoid
+> using dotnet versions installed from places besides this official installer,
+> e.g., homebrew on MacOS.
+
+
+### Editing with Visual Studio Code
+
+1. In Package Manager, uninstall the "Visual Studio Code Editor" package (it is
+   outdated, and now uses the same package as Visual Studio)
+2. Install or update the "Visual Studio Editor" package to the latest version
+(you will likely need to periodically keep this up to date).
+3. In Unity preferences / External Tools, set the editor to "Visual Studio
+Code", and make sure Generate .csproj files is checked for at least "Embedded"
+and "Local" packages.
+4. In the Project tab, right-click anywhere in the open space and click "Open C#
+Project". If all is configured correctly, VS Code should now open.
+
+
+### Editing with Visual Studio
+
+1. In Package Manager, uninstall the "Visual Studio Code Editor" package
+2. Install or update the "Visual Studio Editor" package to the latest version
+(you will likely need to periodically keep this up to date).
+3. In Unity preferences / External Tools, set the editor to "Visual Studio", and
+make sure Generate .csproj files is checked for at least "Embedded"
+ and "Local" packages.
+4. In the Project tab, right-click anywhere in the open space and click "Open C#
+Project". If all is configured correctly, Visual Studio should now open.
+
 
 ## Next steps: Get started creating a visualization
 
-To get started creating a visualization, we recommend that you begin by
-importing the ABR Vis App example. You can do this by opening the package
-manager and navigating to the ABR package, twirling down "Samples", and clicking
-"Import" for the "ABR Vis App" sample. Follow the @abr-vis-app.md tutorial to
-get started.
+We recommend that you read the @intro.md before going any further, and also
+checking out the @core-concepts.md!
+
+
+After you've read the introduction, to get started creating a visualization:
+
+1. Follow the instructions below to start the ABR server.
+2. Import the ABR Vis App example by opening the package manager and navigating
+to the ABR package, twirling down "Samples", and clicking "Import" for the "ABR
+Vis App" sample.
+3. Follow the @abr-vis-app.md tutorial.
+
+If you're looking to make additions or changes to the ABREngine package itself,
+head to [Development Mode](#development-mode) for more information.
+
+
+
+
+[!INCLUDE [ABR Server](./ABRServer~/README.md)]
 
 
 
@@ -74,55 +128,4 @@ pull in the new version of the package you just saved to github.  To do this,
 simply delete the
 [packages-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html)
 file inside your project's Packages folder.
-
-
-Once you've set up the ABREngine package, there are a couple more steps to make
-sure your editor is set up correctly. We recommend using either Visual Studio
-Code or Visual Studio to develop, since they are both well-supported by Unity.
-
-
-### Editing with Visual Studio Code
-
-1. In Package Manager, uninstall the "Visual Studio Code Editor" package
-2. Install or update the "Visual Studio Editor" package to the latest version
-(you will likely need to periodically keep this up to date).
-3. In Unity preferences / External Tools, set the editor to "Visual Studio
-Code", and make sure Generate .csproj files is checked for at least "Embedded"
-and "Local" packages.
-4. In the Project tab, right-click anywhere in the open space and click "Open C#
-Project". If all is configured correctly, VS Code should now open.
-
-
-### Editing with Visual Studio
-
-1. In Package Manager, uninstall the "Visual Studio Code Editor" package
-2. Install or update the "Visual Studio Editor" package to the latest version
-(you will likely need to periodically keep this up to date).
-3. In Unity preferences / External Tools, set the editor to "Visual Studio", and
-make sure Generate .csproj files is checked for at least "Embedded"
- and "Local" packages.
-4. In the Project tab, right-click anywhere in the open space and click "Open C#
-Project". If all is configured correctly, Visual Studio should now open.
-
-
-
-<!-- 
-To get started creating visualizations, one option is to create visualizations
-with ABR C# - follow the @creating-cs-abr-vis.md tutorial to get started.
-
-Another option is to create visualizations via the ABR Compose design interface.
-To use the design interface, you will need to run the ABR Server. Follow
-instructions in the [ABR Server](#abr-server) section to get started.
-After this, you can create a visualization by following along with the
-@creating-design-interface-vis.md tutorial. -->
-
-<!-- ## ABR Server
-
-The ABR server enables you to quickly create visualizations by dragging and
-dropping puzzle pieces of visual elements and data.
-
-![ABR Design Interface](/DocumentationSrc~/manual/resources/design-interface-fire-wide.png) -->
-
-[!INCLUDE [ABR Server](./ABRServer~/README.md)]
-
 

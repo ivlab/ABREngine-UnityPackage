@@ -10,7 +10,12 @@ for more information and reasoning behind the documentation structure.
 
 Step 1 is to install a recent stable release of DocFx by following [the instructions on their "getting started" page](https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html).  The instructions differ a bit depending upon your platform.  
 
-*Tip: As of summer 2022, the Apple M1 chipset is not yet supported, so M1 users be careful to follow the instructions to install with Rosetta support.*
+
+> [!TIP]
+> MacOS users can install docfx via homebrew:
+> ```
+> brew install docfx
+> ```
 
 ## Actually Running DocFx to Generate the Documentation!
 
