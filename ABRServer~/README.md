@@ -21,8 +21,10 @@ information. If you're on Windows, replace `python3` with `py`.
 > Run all these commands from a terminal in the `ABRServer~` folder (<Your >
 > Project>/Packages/ABREngine-UnityPackage/ABRServer~). If you have the read-only
 > Unity package (i.e., you just installed ABR from the Unity Package Manager), use
-> the menu option **ABR > Open ABRServer~ folder**, then open a terminal in this
-> folder.
+> the menu option **ABR > Open ABRServer~ folder** to open the ABRServer folder.
+> After you've opened the folder, follow the instructions for your operating
+> system to open a terminal.
+> 
 > # [Windows](#tab/windows)
 > - [Windows Terminal
 >   instructions](https://johnwargo.com/posts/2024/launch-windows-terminal/)
@@ -65,7 +67,7 @@ python3 -m pipenv shell
 ```
 
 > [!NOTE]
-> If you reboot or close the terminal, you may need to re-run the above command.
+> If you reboot or close the terminal, you will need to re-run the above command.
 
 
 ## Running the server
@@ -86,9 +88,10 @@ python manage.py runserver 0.0.0.0:8000
 
 ### Development with the server
 
-To enable live-reloading (automatically refresh browser when a file is
-changed), run these commands in separate terminals (the settings_dev 
-enables live-reloading to work):
+This step is optional, and only recommended if you are editing the Python or
+JavaScript files for the Server or Design Interface. To enable live-reloading
+(automatically refresh browser when a file is changed), run these commands in
+separate terminals (the settings_dev enables live-reloading to work):
 
 ```
 python manage.py livereload
