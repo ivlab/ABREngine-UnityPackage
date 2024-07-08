@@ -1,6 +1,5 @@
 {
-  "homepages": [],
-  "source_base_path": "C:/Users/scoot/dev/ABRSandbox2021/Packages/ABREngine-UnityPackage/DocumentationSrc~",
+  "source_base_path": "/Users/bridger/dev/ABRDocs/Packages/ABREngine-UnityPackage/DocumentationSrc~",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,19 +8,186 @@
         "resource": {
           "relative_path": "index.json"
         }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.ABRFilterExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.ABRFilterExample.html"
+        }
       },
-      "is_incremental": false
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.ABRQueryExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.ABRQueryExample.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.ABRSpaceConvertExample.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.ABRSpaceConvertExample.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.BackgroundColor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.BackgroundColor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.DebugDraw.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.DebugDraw.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.DisableABRLights.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.DisableABRLights.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.GenerateDataAndUseStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.GenerateDataAndUseStyle.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.Grabbable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.Grabbable.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.Grabber.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.Grabber.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.HideShowMenu.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.HideShowMenu.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.LightEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.LightEditor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.LightEditorTile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.LightEditorTile.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.PerformanceEnhancer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.PerformanceEnhancer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.SVScreenshot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.SVScreenshot.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.VisDriver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.VisDriver.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.VisDriverTutorial.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.VisDriverTutorial.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.html"
+        }
+      },
+      "version": ""
     },
     {
       "type": "ManagedReference",
       "source_relative_path": "api/IVLab.ABREngine.ABRConfig.Consts.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRConfig.Consts.html",
-          "hash": "O+UdARGpfelvKpVg85svYbVOZynBmxpSiGY4r377nFw="
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.Consts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -29,11 +195,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRConfig.GroupToDataMatrixOverrideFields.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRConfig.GroupToDataMatrixOverrideFields.html",
-          "hash": "j0fZBGQOXHlMHX05DLKIj5y9RlrcKCEhxuxTW6/iUaE="
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.GroupToDataMatrixOverrideFields.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -41,11 +205,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRConfig.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRConfig.html",
-          "hash": "oMADil6Y3Eb4GVaOBxr/etYrt9b1fpc1YUQupI/PHuA="
+          "relative_path": "api/IVLab.ABREngine.ABRConfig.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -53,11 +215,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRDataContainer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRDataContainer.html",
-          "hash": "0qUSVkKlsqzquyKkHNiuqIPKzkuFsWed3zE8XABlSoI="
+          "relative_path": "api/IVLab.ABREngine.ABRDataContainer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -65,11 +225,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABREngine.StateChangeDelegate.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABREngine.StateChangeDelegate.html",
-          "hash": "hV5Q9si57Khrht64lDB7aHyWBmvvh45Y+vjybh6aA8Y="
+          "relative_path": "api/IVLab.ABREngine.ABREngine.StateChangeDelegate.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -77,11 +235,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABREngine.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABREngine.html",
-          "hash": "0YnwzhadrjwDMH/7E34emKxx17orGjtv91VF8X8h2ck="
+          "relative_path": "api/IVLab.ABREngine.ABREngine.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -89,11 +245,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRInputAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRInputAttribute.html",
-          "hash": "66NzvEx0p/l4CgZd969Af16yDkaVptUhtrFk2HCsB8I="
+          "relative_path": "api/IVLab.ABREngine.ABRInputAttribute.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -101,11 +255,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRInputGenre.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRInputGenre.html",
-          "hash": "yLUADmdvxCkmbolCwZsVgWoTQykOyXPzoXkMXSiFdsY="
+          "relative_path": "api/IVLab.ABREngine.ABRInputGenre.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -113,11 +265,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRInputIndexerModule.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRInputIndexerModule.html",
-          "hash": "1J2wdfgAlJ6uAlzRmzZ9xgPUg21pwDFHLS5jBZfc8Zw="
+          "relative_path": "api/IVLab.ABREngine.ABRInputIndexerModule.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -125,11 +275,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRLight.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRLight.html",
-          "hash": "DvWBpLj4KJtY/lY5dwp63O8WVYvIFcJ+R8jKHUrKJjg="
+          "relative_path": "api/IVLab.ABREngine.ABRLight.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -137,11 +285,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRLightManager.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRLightManager.html",
-          "hash": "FcAj0c/iSmiURtEzD+oe5+wOoJZJMF7HS6IV88JfOGc="
+          "relative_path": "api/IVLab.ABREngine.ABRLightManager.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -149,11 +295,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRPlateType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRPlateType.html",
-          "hash": "nu0MGRac4HEQQbrcfvV99NiH5gTWp9BFkRzE4YFOQog="
+          "relative_path": "api/IVLab.ABREngine.ABRPlateType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -161,11 +305,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRServer.html",
-          "hash": "zaVGVjif/FSOecQ0Ku6zSIPrX8B+Yd2O3Hg7e/s6tKE="
+          "relative_path": "api/IVLab.ABREngine.ABRServer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -173,11 +315,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ABRStateParser.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ABRStateParser.html",
-          "hash": "AUQzgwy2q8ggk7EzdQMJgnRnm86N6+GhkOXCoQx1Ctw="
+          "relative_path": "api/IVLab.ABREngine.ABRStateParser.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -185,11 +325,9 @@
       "source_relative_path": "api/IVLab.ABREngine.AnglePrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.AnglePrimitive.html",
-          "hash": "uM7sT/Mwtv6vQWFE4heY4n5fbeX1wlMCOGUOn36Wnng="
+          "relative_path": "api/IVLab.ABREngine.AnglePrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -197,11 +335,9 @@
       "source_relative_path": "api/IVLab.ABREngine.BooleanPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.BooleanPrimitive.html",
-          "hash": "1v+ItUZmEkkaeUihMS/rhAmz2GGE5kuN5uoRY9MWdYc="
+          "relative_path": "api/IVLab.ABREngine.BooleanPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -209,11 +345,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ColormapVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ColormapVisAsset.html",
-          "hash": "VXhC/noK27q3/9m5Fa86xpvb4SpGksVKNjhIe3xDuiA="
+          "relative_path": "api/IVLab.ABREngine.ColormapVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -221,11 +355,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataImpression.html",
-          "hash": "0NtWKS+GfqGGnHxFcJqqXPpr8ig3XA1REWmt+RO6iu0="
+          "relative_path": "api/IVLab.ABREngine.DataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -233,11 +365,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataImpressionGroup.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataImpressionGroup.html",
-          "hash": "5UHI2C2LMPAGmbXTZS9JwsoVbnNwTGlbAeAcY0M8oMU="
+          "relative_path": "api/IVLab.ABREngine.DataImpressionGroup.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -245,11 +375,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataManager.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataManager.html",
-          "hash": "oh5Zhzx6ZjcQm0/I4uSNIIhAl/HPqFMoXH64H3ym0AQ="
+          "relative_path": "api/IVLab.ABREngine.DataManager.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -257,11 +385,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataPath.DataPathType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataPath.DataPathType.html",
-          "hash": "A3WXXdtUbfrUxp9T/TMbdhgfRqM7I8XN+1XKImPPrBg="
+          "relative_path": "api/IVLab.ABREngine.DataPath.DataPathType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -269,11 +395,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataPath.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataPath.html",
-          "hash": "Urdx92EJwPZ+Jf6vdtFIYHUNGTAUzt2eWdeDJxOduIw="
+          "relative_path": "api/IVLab.ABREngine.DataPath.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -281,11 +405,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataPoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataPoint.html",
-          "hash": "FD/PqHC9IeQESavqgPHn3UXiR7OvWtN3N9HikvUqz3U="
+          "relative_path": "api/IVLab.ABREngine.DataPoint.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -293,11 +415,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataRange-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataRange-1.html",
-          "hash": "risvYS5go6+S2Mwdlsr1AG1sv2kDlxneyzi76FG5qEY="
+          "relative_path": "api/IVLab.ABREngine.DataRange-1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -305,11 +425,9 @@
       "source_relative_path": "api/IVLab.ABREngine.DataTopology.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.DataTopology.html",
-          "hash": "4myY7uy6f1M7oCrMwq9llafgRFAoQhqfyLqkSi7qTHU="
+          "relative_path": "api/IVLab.ABREngine.DataTopology.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -317,11 +435,69 @@
       "source_relative_path": "api/IVLab.ABREngine.Dataset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Dataset.html",
-          "hash": "4P5EM8e9oHTH35ZhRR2KGctTxUQLVF4Mr7OW/gIeIaI="
+          "relative_path": "api/IVLab.ABREngine.Dataset.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.CSVToPoints.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.CSVToPoints.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.CreateDataset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.CreateDataset.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.InteractiveState.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.InteractiveState.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.MtStHelensData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.MtStHelensData.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.MtStHelensVisDriver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.MtStHelensVisDriver.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.Examples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.Examples.html"
+        }
+      },
       "version": ""
     },
     {
@@ -329,11 +505,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ExtensionMethods.ScriptableObjectExtensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ExtensionMethods.ScriptableObjectExtensions.html",
-          "hash": "jHTA/u3piahN5U+l3OfuU+MpFGGyHgeJmrBtqCEmghw="
+          "relative_path": "api/IVLab.ABREngine.ExtensionMethods.ScriptableObjectExtensions.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -341,11 +515,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ExtensionMethods.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ExtensionMethods.html",
-          "hash": "Ih5sTIJ2qlLpurgJ+qfkHTPlGWH0r2JTpo4+9PDdjRk="
+          "relative_path": "api/IVLab.ABREngine.ExtensionMethods.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -353,11 +525,9 @@
       "source_relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.html",
-          "hash": "/xcW9XuM77rJj4oDQrS7cjgupZQpFqds8uwfgizR+Wk="
+          "relative_path": "api/IVLab.ABREngine.FilePathVisAssetFetcher.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -365,11 +535,9 @@
       "source_relative_path": "api/IVLab.ABREngine.FloatPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.FloatPrimitive.html",
-          "hash": "IW3uD1dz2ntND/KAsry9KztfmjVcKEXuKOw0eMbBJ60="
+          "relative_path": "api/IVLab.ABREngine.FloatPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -377,11 +545,9 @@
       "source_relative_path": "api/IVLab.ABREngine.GlyphGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.GlyphGradient.html",
-          "hash": "o4AW37+BwG/hctyfGDLE16QKuXBmvyoPyMS4XOmWIuo="
+          "relative_path": "api/IVLab.ABREngine.GlyphGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -389,11 +555,9 @@
       "source_relative_path": "api/IVLab.ABREngine.GlyphVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.GlyphVisAsset.html",
-          "hash": "QsFgZ2Owdt8wwKA3lwnyEpk5qqP1rksoWw1my7Y9wH0="
+          "relative_path": "api/IVLab.ABREngine.GlyphVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -401,11 +565,9 @@
       "source_relative_path": "api/IVLab.ABREngine.GradientBlendMap.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.GradientBlendMap.html",
-          "hash": "HYKC9pRdMzhcWEKNp6ipmWKU+UQj4REznSj+IOluT5Y="
+          "relative_path": "api/IVLab.ABREngine.GradientBlendMap.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -413,11 +575,9 @@
       "source_relative_path": "api/IVLab.ABREngine.HttpDataLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.HttpDataLoader.html",
-          "hash": "i1DfPOeaSJ/LxoxDFt7J8QejrqOGzh0G+NvksB5jZVs="
+          "relative_path": "api/IVLab.ABREngine.HttpDataLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -425,11 +585,9 @@
       "source_relative_path": "api/IVLab.ABREngine.HttpStateFileLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.HttpStateFileLoader.html",
-          "hash": "aXMB4hXZ02tcIK3SQow9P5NtdfH7hL1FD//GZBzBF0s="
+          "relative_path": "api/IVLab.ABREngine.HttpStateFileLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -437,11 +595,9 @@
       "source_relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.html",
-          "hash": "iZRKxwWRFRDXoe+PR7Aq6it8/vZi9ETvDoSVHiEV3qE="
+          "relative_path": "api/IVLab.ABREngine.HttpVisAssetFetcher.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -449,11 +605,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IABRInput.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IABRInput.html",
-          "hash": "v8us/BqrP1RztNCTy1YfhC2HIHlQwoB1fTCHlrJxJOY="
+          "relative_path": "api/IVLab.ABREngine.IABRInput.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -461,11 +615,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IABRStateLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IABRStateLoader.html",
-          "hash": "BkxUXg9Q3C7HcZN4BOZmGQ2PL1qSMitvcnmdRQbkzZo="
+          "relative_path": "api/IVLab.ABREngine.IABRStateLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -473,11 +625,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IColormapVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IColormapVisAsset.html",
-          "hash": "VvsnEP+c/e+dLfyaiFOC2C+llHt8MLDjpzACOALluiQ="
+          "relative_path": "api/IVLab.ABREngine.IColormapVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -485,11 +635,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ICoordSpaceConverter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ICoordSpaceConverter.html",
-          "hash": "ScFkr6077IQgCF7IGxOdLDY+46/92nk8o0oup4K+cXk="
+          "relative_path": "api/IVLab.ABREngine.ICoordSpaceConverter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -497,11 +645,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IDataAccessor.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IDataAccessor.html",
-          "hash": "pZCxV8zv982Ge1VcAOPTIsnDVgNFfJ2f+o/pD2pyj7o="
+          "relative_path": "api/IVLab.ABREngine.IDataAccessor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -509,11 +655,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IDataImpressionRenderInfo.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IDataImpressionRenderInfo.html",
-          "hash": "nue4ce3Ns7GcOeSoNYQx75My8jMQJB/REg2gTNQCNaE="
+          "relative_path": "api/IVLab.ABREngine.IDataImpressionRenderInfo.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -521,11 +665,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IDataLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IDataLoader.html",
-          "hash": "IxDXVN3EYC+MvSArvipOL9Fqpg92SkRfTkdg53DKGdE="
+          "relative_path": "api/IVLab.ABREngine.IDataLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -533,11 +675,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IDataVariable-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IDataVariable-1.html",
-          "hash": "g2+M2NuUeSX2cG5M1Ijzd3hLN8w/DaExKVawztLK9nM="
+          "relative_path": "api/IVLab.ABREngine.IDataVariable-1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -545,11 +685,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IFloatPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IFloatPrimitive.html",
-          "hash": "7yipMRSOgyw8SoboanmVFK0l/XXiYhVLx1Pdj2/GDmc="
+          "relative_path": "api/IVLab.ABREngine.IFloatPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -557,11 +695,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.html",
-          "hash": "P3fkuHQS7Pmi48oR8cDyqukHVOHqaSxdBFvWwjUkIYk="
+          "relative_path": "api/IVLab.ABREngine.IGlyphVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -569,11 +705,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IHasDataset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IHasDataset.html",
-          "hash": "ZwzghS7K7w/7ufIzom+aWtBWYV1UNg8TAieov59Uu1g="
+          "relative_path": "api/IVLab.ABREngine.IHasDataset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -581,11 +715,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IHasKeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IHasKeyData.html",
-          "hash": "UJVfxchFzpw57qfgp9g9hbmb18p36uBi/ngAG0WWPnE="
+          "relative_path": "api/IVLab.ABREngine.IHasKeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -593,11 +725,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IIntegerPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IIntegerPrimitive.html",
-          "hash": "v8fIrWdpdFMpkpoJWfCkzDm3fn9toRTollYPBHuCSYc="
+          "relative_path": "api/IVLab.ABREngine.IIntegerPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -605,11 +735,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IKeyDataRenderInfo.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IKeyDataRenderInfo.html",
-          "hash": "T3cTmXmP+CVL0Ayy2E+kNRC4J630at1NZDfcdEsE1Z4="
+          "relative_path": "api/IVLab.ABREngine.IKeyDataRenderInfo.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -617,11 +745,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.html",
-          "hash": "/DWS92bX0j6U2o8ybAQ/yNOoozDeTllxYQma8SpxicM="
+          "relative_path": "api/IVLab.ABREngine.ILineTextureVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -629,11 +755,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IPrimitive.html",
-          "hash": "VazWYKwGl6zfvS6C32wo9LQOSKV5F4Dd0olYm4aKENg="
+          "relative_path": "api/IVLab.ABREngine.IPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -641,11 +765,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IPrimitiveGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IPrimitiveGradient.html",
-          "hash": "9tLgF8SK/ZPJ3yPI6yoNQ8ZlZgrFx+zY3amy26ZvPlk="
+          "relative_path": "api/IVLab.ABREngine.IPrimitiveGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -653,11 +775,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.html",
-          "hash": "AlfIzKZODeyKVrBXV5k0VnD3HeztoMAKPvYkDS/xJCY="
+          "relative_path": "api/IVLab.ABREngine.ISurfaceTextureVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -665,11 +785,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ITextureGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ITextureGradient.html",
-          "hash": "/oaw7uc6pRaRuGN5VKE5wHCqmsEdfUPJsMymt8pA3rE="
+          "relative_path": "api/IVLab.ABREngine.ITextureGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -677,11 +795,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IVisAsset.html",
-          "hash": "3Ir5yM3dynfI/g43wVf8ZGSsBghkf9iBuEbU9Y/c7YU="
+          "relative_path": "api/IVLab.ABREngine.IVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -689,11 +805,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IVisAssetFetcher.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IVisAssetFetcher.html",
-          "hash": "JJlfbCx2SN8T2QdGCnPI8G6i7SVCPEKlYAykYX7r+eI="
+          "relative_path": "api/IVLab.ABREngine.IVisAssetFetcher.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -701,11 +815,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IVisAssetGradient-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IVisAssetGradient-1.html",
-          "hash": "6h54rQ0jLudLBUh5ZAEWGE64rTWO9cWq41EgVSAW2d0="
+          "relative_path": "api/IVLab.ABREngine.IVisAssetGradient-1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -713,11 +825,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IVolumeCoordSpaceConverter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IVolumeCoordSpaceConverter.html",
-          "hash": "Yvzk+kX1jcWCPx1oPbNIVlo5SVynKqInRI1m6CFjnX8="
+          "relative_path": "api/IVLab.ABREngine.IVolumeCoordSpaceConverter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -725,11 +835,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IVolumeDataAccessor.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IVolumeDataAccessor.html",
-          "hash": "I2SKZNeax+HScQtoZsJ5oQtxL05Vq+eLEvJ/ODF/12Q="
+          "relative_path": "api/IVLab.ABREngine.IVolumeDataAccessor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -737,11 +845,9 @@
       "source_relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.html",
-          "hash": "R2Q67YFGUeM4q3rp2NsFK+Hz64OQn1pxZskhCbqBnks="
+          "relative_path": "api/IVLab.ABREngine.InstancedMeshRenderer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -749,11 +855,9 @@
       "source_relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.html",
-          "hash": "Ap7J7LPM3qrWJtC6SD/XPVqZT+A1sdiriOYkY3plIYM="
+          "relative_path": "api/IVLab.ABREngine.InstancedSurfaceDataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -761,11 +865,9 @@
       "source_relative_path": "api/IVLab.ABREngine.IntegerPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.IntegerPrimitive.html",
-          "hash": "YI/W4knny/NlIg4I4Ee6OrMFfdrQSPQ1F3SYrB2Jm/Y="
+          "relative_path": "api/IVLab.ABREngine.IntegerPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -773,11 +875,9 @@
       "source_relative_path": "api/IVLab.ABREngine.KeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.KeyData.html",
-          "hash": "cj/KVX6uNwpWpasMHnWlRZHxQ6iGUYXN+sn2nZfGzFY="
+          "relative_path": "api/IVLab.ABREngine.KeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -785,11 +885,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.html",
-          "hash": "cmBM1tX9CWZtZt8VyPKazbBC8snddOLnjd3PmyjhlI4="
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegend.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -797,11 +895,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.html",
-          "hash": "UQKdUZNbgDjzb71My1MltkhL2AhyihJ8e3oqvaK2I94="
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.Label.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -809,11 +905,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.html",
-          "hash": "6lAjYwJ5cUY9d3OooUAi2xVpiJGn7yAvFPFwL8KZn2I="
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendEntry.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -821,11 +915,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Legends.ABRLegendGeometry.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendGeometry.html",
-          "hash": "/IrHBDym0VkpW4Xuqs+MEAT5YW1iDpf1farGNV7TcP4="
+          "relative_path": "api/IVLab.ABREngine.Legends.ABRLegendGeometry.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -833,11 +925,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Legends.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Legends.html",
-          "hash": "0DNeNwXbZeGMVihJ6GpXlyEcEDcJZsSvRW6pwm5du7k="
+          "relative_path": "api/IVLab.ABREngine.Legends.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -845,11 +935,9 @@
       "source_relative_path": "api/IVLab.ABREngine.LengthPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.LengthPrimitive.html",
-          "hash": "fm98LBygEtpQYBoavxo31P4WP9Mxh3bhCZ9m9zvQ2q0="
+          "relative_path": "api/IVLab.ABREngine.LengthPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -857,11 +945,9 @@
       "source_relative_path": "api/IVLab.ABREngine.LineKeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.LineKeyData.html",
-          "hash": "BKRE2newHhdxY19yvi7Zicf+zbuKCj6olABc3l/eIKk="
+          "relative_path": "api/IVLab.ABREngine.LineKeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -869,11 +955,9 @@
       "source_relative_path": "api/IVLab.ABREngine.LineTextureGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.LineTextureGradient.html",
-          "hash": "N5jD4KL5zEkvbdKwESSQ+UIQSIGMBrwWLE0QcptRtPQ="
+          "relative_path": "api/IVLab.ABREngine.LineTextureGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -881,11 +965,9 @@
       "source_relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.html",
-          "hash": "rxWnS+YTFWVezi3PsXapn1KyRAKd3WGj7ICY2C3mL1k="
+          "relative_path": "api/IVLab.ABREngine.LineTextureVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -893,11 +975,9 @@
       "source_relative_path": "api/IVLab.ABREngine.MediaDataLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.MediaDataLoader.html",
-          "hash": "F6UMmV/0+kjXyPTASwm6PvkWFfVoWOeoPIyDzpbvoAQ="
+          "relative_path": "api/IVLab.ABREngine.MediaDataLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -905,11 +985,9 @@
       "source_relative_path": "api/IVLab.ABREngine.Notifier.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.Notifier.html",
-          "hash": "h6IP1IHLPDeuJnYeqFka651IWuN9n8GpDY/amp5tuWI="
+          "relative_path": "api/IVLab.ABREngine.Notifier.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -917,11 +995,9 @@
       "source_relative_path": "api/IVLab.ABREngine.PathStateFileLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.PathStateFileLoader.html",
-          "hash": "MwQNagqkCk8sLInvs3s88ax6ZpuhBTbSmijXxHvchj8="
+          "relative_path": "api/IVLab.ABREngine.PathStateFileLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -929,11 +1005,9 @@
       "source_relative_path": "api/IVLab.ABREngine.PercentPrimitive.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.PercentPrimitive.html",
-          "hash": "2pNadCc7IV26x3Z9wQCxDrvlDmn5l7PkiiY01E6ZIj8="
+          "relative_path": "api/IVLab.ABREngine.PercentPrimitive.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -941,11 +1015,9 @@
       "source_relative_path": "api/IVLab.ABREngine.PointKeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.PointKeyData.html",
-          "hash": "onyUKNGFJAAKsLUxM/G6xwKRIiUekXSoZxSedXXgBxI="
+          "relative_path": "api/IVLab.ABREngine.PointKeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -953,11 +1025,9 @@
       "source_relative_path": "api/IVLab.ABREngine.PrimitiveGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.PrimitiveGradient.html",
-          "hash": "OrOQkM4ARKjRaTT9TO04iFoF/29kn2IFXNyImP+seko="
+          "relative_path": "api/IVLab.ABREngine.PrimitiveGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -965,11 +1035,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawABRInput.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawABRInput.html",
-          "hash": "al6COe40U5Npl3rHKNUPYRWBNsTaoBe13Yi56YT+42Y="
+          "relative_path": "api/IVLab.ABREngine.RawABRInput.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -977,11 +1045,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawDataset.BinaryData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawDataset.BinaryData.html",
-          "hash": "hYhc6ZS3mS+2I827kLEF6lCrRJ7uuvUGvNoekjF7Ock="
+          "relative_path": "api/IVLab.ABREngine.RawDataset.BinaryData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -989,11 +1055,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawDataset.JsonHeader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawDataset.JsonHeader.html",
-          "hash": "vLrQQeghyIURGGiqnb4p4e8JlXIHIPPi5vbpo6rRmyE="
+          "relative_path": "api/IVLab.ABREngine.RawDataset.JsonHeader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1001,11 +1065,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawDataset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawDataset.html",
-          "hash": "fvHJu9BSQyp+KmC8hjcoL0SCVQ7OrFjW/qRrNlIvAVY="
+          "relative_path": "api/IVLab.ABREngine.RawDataset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1013,11 +1075,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawDatasetAdapter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawDatasetAdapter.html",
-          "hash": "k4evUUVV56dp0ENyEWfHeOxlT8Ai3laNc9PsGB5PEPs="
+          "relative_path": "api/IVLab.ABREngine.RawDatasetAdapter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1025,11 +1085,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawPrimitiveGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawPrimitiveGradient.html",
-          "hash": "l6hDn5NjKQ/f5cU3CJg8/vZqgTsoCH4Th4RF973m6Vw="
+          "relative_path": "api/IVLab.ABREngine.RawPrimitiveGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1037,11 +1095,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RawVisAssetGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RawVisAssetGradient.html",
-          "hash": "0N95hHy4loxAxcjWdG410Sj6boy+hhLHZOvJJ8sbS6I="
+          "relative_path": "api/IVLab.ABREngine.RawVisAssetGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1049,11 +1105,9 @@
       "source_relative_path": "api/IVLab.ABREngine.RenderHints.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.RenderHints.html",
-          "hash": "IeQgDCYg+89cWclh7W36Xwbvb3K3cDd09fUMIZqC/bM="
+          "relative_path": "api/IVLab.ABREngine.RenderHints.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1061,11 +1115,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ResourceStateFileLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ResourceStateFileLoader.html",
-          "hash": "EK5Hy8X5pozAn5Qj3ac0TMS70oTG6/QRn2WI7Gf5lR0="
+          "relative_path": "api/IVLab.ABREngine.ResourceStateFileLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1073,11 +1125,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.html",
-          "hash": "tNWc9b1IqWND6KztLChShDv7PQ9cuQmivOiKfdSah4I="
+          "relative_path": "api/IVLab.ABREngine.ResourceVisAssetFetcher.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1085,11 +1135,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ResourcesDataLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ResourcesDataLoader.html",
-          "hash": "9ECEfNX8GjmY5jnjJsPRLk3ctQG3gaqOVWt5ajhIMJE="
+          "relative_path": "api/IVLab.ABREngine.ResourcesDataLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1097,11 +1145,9 @@
       "source_relative_path": "api/IVLab.ABREngine.ScalarDataVariable.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.ScalarDataVariable.html",
-          "hash": "6XjSwky/f1DIxyQb4uHpoC3tbWfCPc2OUaFLMrbaCWQ="
+          "relative_path": "api/IVLab.ABREngine.ScalarDataVariable.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1109,11 +1155,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SerializableFloatArray.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SerializableFloatArray.html",
-          "hash": "X4yE/6e7iHseaYQjEwgySzKSgtqvmzEdhbrTyLxcLVA="
+          "relative_path": "api/IVLab.ABREngine.SerializableFloatArray.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1121,11 +1165,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SerializableVectorArray.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SerializableVectorArray.html",
-          "hash": "tOI5T2ZzwAuCyv1BPg1iew1z4wl1/7/AwxyM9l8iFnI="
+          "relative_path": "api/IVLab.ABREngine.SerializableVectorArray.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1133,11 +1175,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.html",
-          "hash": "noUytSqLqf5BwpHdegj36mBmnJ1y8gs/TgvntOaWrDM="
+          "relative_path": "api/IVLab.ABREngine.SimpleGlyphDataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1145,11 +1185,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.html",
-          "hash": "Xj9/7KjIB3zqiy+u5AntzmKj638JnZsaGrz2YGUB4Xw="
+          "relative_path": "api/IVLab.ABREngine.SimpleLineDataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1157,11 +1195,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleLineRenderInfo.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleLineRenderInfo.html",
-          "hash": "awAP1ZpOy5g+VpHm0G1I/Wd6UO9lN4X1GpXZHxdR50M="
+          "relative_path": "api/IVLab.ABREngine.SimpleLineRenderInfo.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1169,11 +1205,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.html",
-          "hash": "uYUopZ9LdYW1qw8IgMj9zucv4q/2OZK7WYXSOkPNUEU="
+          "relative_path": "api/IVLab.ABREngine.SimpleSurfaceDataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1181,11 +1215,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleSurfaceRenderInfo.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleSurfaceRenderInfo.html",
-          "hash": "4/2GGJNqcvpr+bkIZ/9PeqZWipPZ58NMbnPP0EUlxdc="
+          "relative_path": "api/IVLab.ABREngine.SimpleSurfaceRenderInfo.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1193,11 +1225,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.html",
-          "hash": "/BeKVL0KjNwCS8FMEgOBkmNVhqbEhAInFK+de7WvHjk="
+          "relative_path": "api/IVLab.ABREngine.SimpleVolumeDataImpression.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1205,11 +1235,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SocketDataListener.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SocketDataListener.html",
-          "hash": "CfP/gwcRfHa+3NnzFsonYQaRJGLfWW+lbpCzgufNeDc="
+          "relative_path": "api/IVLab.ABREngine.SocketDataListener.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1217,11 +1245,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SocketTextData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SocketTextData.html",
-          "hash": "FZGnYiaX+/QoQzCDsfYpGAHDTF9slrTj6DfEpk0Y/1U="
+          "relative_path": "api/IVLab.ABREngine.SocketTextData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1229,11 +1255,9 @@
       "source_relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.html",
-          "hash": "FJZzSlvBeZ2dhW4/1wo1APVrVrlV7GaESR8pWgbq88o="
+          "relative_path": "api/IVLab.ABREngine.StateLocalVisAssetFetcher.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1241,11 +1265,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SurfaceKeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SurfaceKeyData.html",
-          "hash": "+N116fh6fNVe9iyy9/D+aaniirt0uLQKGW3clipDtJ0="
+          "relative_path": "api/IVLab.ABREngine.SurfaceKeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1253,11 +1275,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.html",
-          "hash": "tFJ+UJGOz4UgUHyzFRtsFepRl9rWbFD+loMu7TKG/7w="
+          "relative_path": "api/IVLab.ABREngine.SurfaceTextureGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1265,11 +1285,9 @@
       "source_relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.html",
-          "hash": "pGKJEJhheGq6fQUsIm6ZA/+1GHtxs6KslzhB9iiJ7Rw="
+          "relative_path": "api/IVLab.ABREngine.SurfaceTextureVisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1277,11 +1295,9 @@
       "source_relative_path": "api/IVLab.ABREngine.TextStateFileLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.TextStateFileLoader.html",
-          "hash": "Tm5o8zUsUXT3FPivdHFzT1xXH7RI6dTFmK+Ch9d4uyU="
+          "relative_path": "api/IVLab.ABREngine.TextStateFileLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1289,11 +1305,9 @@
       "source_relative_path": "api/IVLab.ABREngine.TypeExtentions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.TypeExtentions.html",
-          "hash": "n+yeM26HgvFTFSav/cvO4idWZ+ZLEG1LeYwRIkq1JOk="
+          "relative_path": "api/IVLab.ABREngine.TypeExtentions.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1301,11 +1315,9 @@
       "source_relative_path": "api/IVLab.ABREngine.UnityObjectSerializer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.UnityObjectSerializer.html",
-          "hash": "S4XtLkn2CnFXmsT85vYmMmTtgRoLHME35c7qQsXRCwQ="
+          "relative_path": "api/IVLab.ABREngine.UnityObjectSerializer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1313,11 +1325,9 @@
       "source_relative_path": "api/IVLab.ABREngine.UpdateLevel.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.UpdateLevel.html",
-          "hash": "lzrCrGlYwL/D+BJovs9hb3y4+sRkLxdHzNrDH7ypWpQ="
+          "relative_path": "api/IVLab.ABREngine.UpdateLevel.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1325,11 +1335,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VectorDataVariable.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VectorDataVariable.html",
-          "hash": "XGPo/tXyGhbAbO02aV+YaLEUEdZusQN11TbwIZo8Ask="
+          "relative_path": "api/IVLab.ABREngine.VectorDataVariable.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1337,11 +1345,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VisAsset.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VisAsset.html",
-          "hash": "5o++1Ay21k5zaoO1so7zD/XOG6CeoOuxRD4c6RLmh68="
+          "relative_path": "api/IVLab.ABREngine.VisAsset.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1349,11 +1355,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VisAssetGradient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VisAssetGradient.html",
-          "hash": "p0PCJT+xY4EcfykTIk+iHB8gDSyae2ccWglOWW+XgZE="
+          "relative_path": "api/IVLab.ABREngine.VisAssetGradient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1361,11 +1365,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VisAssetLoader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VisAssetLoader.html",
-          "hash": "YFChisSnOOILB5pcfHSde183ds7Wsi04GRte62nrCgk="
+          "relative_path": "api/IVLab.ABREngine.VisAssetLoader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1373,11 +1375,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VisAssetManager.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VisAssetManager.html",
-          "hash": "Frex5f9xwE+JV2yanKlMLOA/18VR/BtrAmk2ekfK0HY="
+          "relative_path": "api/IVLab.ABREngine.VisAssetManager.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1385,11 +1385,9 @@
       "source_relative_path": "api/IVLab.ABREngine.VolumeKeyData.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.VolumeKeyData.html",
-          "hash": "F/xQcj1Navd4QrRYiaF4NRugbwlmr3oYkaULLHwQ2Rk="
+          "relative_path": "api/IVLab.ABREngine.VolumeKeyData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1397,11 +1395,9 @@
       "source_relative_path": "api/IVLab.ABREngine.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.ABREngine.html",
-          "hash": "A/RDTYH4L83W4fh1qib3CL7W9hN7VGXvHrMWGjqk/C0="
+          "relative_path": "api/IVLab.ABREngine.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1409,11 +1405,9 @@
       "source_relative_path": "api/index.md",
       "output": {
         ".html": {
-          "relative_path": "api/index.html",
-          "hash": "HumTi6+ttOZRZuh1J67kIL7vZ3Td2eIc5O55FdgNGX8="
+          "relative_path": "api/index.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1421,11 +1415,9 @@
       "source_relative_path": "index.md",
       "output": {
         ".html": {
-          "relative_path": "index.html",
-          "hash": "7yZbNhPatnZQBRjEdlsPcCRdCQOnCVikEV/TWcPhptU="
+          "relative_path": "index.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1433,11 +1425,9 @@
       "source_relative_path": "manual/abr-server.md",
       "output": {
         ".html": {
-          "relative_path": "manual/abr-server.html",
-          "hash": "toLigT5T72zc5cEKmHHbIUXKrihBuK7gxdZb+o2YNe0="
+          "relative_path": "manual/abr-server.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1445,149 +1435,69 @@
       "source_relative_path": "manual/changelog.md",
       "output": {
         ".html": {
-          "relative_path": "manual/changelog.html",
-          "hash": "KTJ1NBlLDVpMZxaVTvZCnfbix5iilo/JNp1elfRioiI="
+          "relative_path": "manual/changelog.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/core-concepts.md",
+      "source_relative_path": "manual/concepts/core-concepts.md",
       "output": {
         ".html": {
-          "relative_path": "manual/core-concepts.html",
-          "hash": "4SxAlzjvCRJiJHWEil0tJxpx+lwsxCEFXhrN5CWvDu4="
+          "relative_path": "manual/concepts/core-concepts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/creating-cs-abr-vis.md",
+      "source_relative_path": "manual/concepts/data-impressions.md",
       "output": {
         ".html": {
-          "relative_path": "manual/creating-cs-abr-vis.html",
-          "hash": "IiDo3vZpywXj01jGpZu9++7/N9FecMsZ3o2YJeiy9T4="
+          "relative_path": "manual/concepts/data-impressions.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "manual/creating-design-interface-vis.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/creating-design-interface-vis.html",
-          "hash": "gZTm+MYaYNBRNd5Ow48O1WCwyasJxKpdS21JPylzXac="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/data-impressions.md",
+      "source_relative_path": "manual/concepts/key-data.md",
       "output": {
         ".html": {
-          "relative_path": "manual/data-impressions.html",
-          "hash": "NTSEv/TgKL/uTRrRJjcwXanzTVCPWA4UBrbVf40hqXA="
+          "relative_path": "manual/concepts/key-data.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
-      "type": "Conceptual",
-      "source_relative_path": "manual/examples/abr-vis-app.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/examples/abr-vis-app.html",
-          "hash": "ChhbLQ/iBQX7TrAT4KbXlS0xzEMQleXesQgAxefxzMs="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/examples/advanced-usage.md",
+      "source_relative_path": "manual/concepts/media-folder.md",
       "output": {
         ".html": {
-          "relative_path": "manual/examples/advanced-usage.html",
-          "hash": "6JCctsR3Z8d54lHsTqnTh4IgURWwNCyScNizRxlY0zg="
+          "relative_path": "manual/concepts/media-folder.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/examples/create-dataset.md",
+      "source_relative_path": "manual/concepts/terminology-starter.md",
       "output": {
         ".html": {
-          "relative_path": "manual/examples/create-dataset.html",
-          "hash": "V4DFKCmBg6FLybSs0pQM81nhenV0HhfPQjcGxJqI9QM="
+          "relative_path": "manual/concepts/terminology-starter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/examples/create-state.md",
+      "source_relative_path": "manual/concepts/visassets.md",
       "output": {
         ".html": {
-          "relative_path": "manual/examples/create-state.html",
-          "hash": "h7EzlZElid6HgeMfV68IwKJrm5orVXkc/pw+hffBV0Q="
+          "relative_path": "manual/concepts/visassets.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "manual/examples/examples.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/examples/examples.html",
-          "hash": "GMR4PPT+Z7qDTCSFLvoaM+umXZa8dziKZc6QKUz3Cuw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "manual/examples/interactive-state.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/examples/interactive-state.html",
-          "hash": "K2FzNFHb9zfovy14Os93KEWsRRnOTiYYGTBKi279UzY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "manual/importing-data.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/importing-data.html",
-          "hash": "AptTrcpntqTvx4yulkpPFxe4Y7Bzmqyk4ghM6x2sqwg="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1595,11 +1505,9 @@
       "source_relative_path": "manual/install.md",
       "output": {
         ".html": {
-          "relative_path": "manual/install.html",
-          "hash": "k5eZE6G377SAekMYvqRrQr7taZIkURPACzCOQSSLxyg="
+          "relative_path": "manual/install.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1607,23 +1515,9 @@
       "source_relative_path": "manual/intro.md",
       "output": {
         ".html": {
-          "relative_path": "manual/intro.html",
-          "hash": "l0jvsjImPGCyocJLls6awfUYvecV1XWvMRoUFIpl468="
+          "relative_path": "manual/intro.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "manual/key-data.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/key-data.html",
-          "hash": "oXN21r10aI49tzmu9/gVGOiQZWLwCqRSSCOG0bMjwbc="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1631,23 +1525,9 @@
       "source_relative_path": "manual/license.md",
       "output": {
         ".html": {
-          "relative_path": "manual/license.html",
-          "hash": "BeC8AMlJis1Bgfc22asUZhJN8co/mO11mh5/T55Q1Gw="
+          "relative_path": "manual/license.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "manual/media-folder.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/media-folder.html",
-          "hash": "0EzIj6LD/TfzSEUFSsxetzG8LOJSnRE/ksyoywI/ZsM="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1658,7 +1538,6 @@
           "relative_path": "manual/resources/abr-vis-app-1-scene.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1669,7 +1548,6 @@
           "relative_path": "manual/resources/abr-vis-app-2-interface.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1680,7 +1558,6 @@
           "relative_path": "manual/resources/angled-semi-straight.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1691,7 +1568,6 @@
           "relative_path": "manual/resources/antarctic.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1702,7 +1578,6 @@
           "relative_path": "manual/resources/clayrice-point.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1713,7 +1588,36 @@
           "relative_path": "manual/resources/colormap.png"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-data-colormap.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-data-colormap.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-data-loaded.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-data-loaded.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/cs-vis-scene.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/cs-vis-scene.png"
+        }
+      },
       "version": ""
     },
     {
@@ -1724,7 +1628,6 @@
           "relative_path": "manual/resources/cs-vis-teaser-nocolor.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1735,117 +1638,6 @@
           "relative_path": "manual/resources/cs-vis-teaser.png"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_1-abrengine.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_1-abrengine.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_10-colormap.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_10-colormap.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_2-config-error.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_2-config-error.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_3-config-create.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_3-config-create.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_4-config-edit.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_4-config-edit.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_5-config-check.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_5-config-check.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_6-create-empty.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_6-create-empty.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_7-create-script.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_7-create-script.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_8-script-drag.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_8-script-drag.png"
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "manual/resources/cs-vis_9-basic-vis.png",
-      "output": {
-        "resource": {
-          "relative_path": "manual/resources/cs-vis_9-basic-vis.png"
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1856,7 +1648,6 @@
           "relative_path": "manual/resources/data-impression-lines.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1867,7 +1658,6 @@
           "relative_path": "manual/resources/data-impression-points.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1878,7 +1668,6 @@
           "relative_path": "manual/resources/data-impression-surface.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1889,7 +1678,6 @@
           "relative_path": "manual/resources/data-impression-volume.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1900,7 +1688,6 @@
           "relative_path": "manual/resources/desert.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1911,7 +1698,6 @@
           "relative_path": "manual/resources/design-interface-fire-wide.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1922,7 +1708,6 @@
           "relative_path": "manual/resources/di-vis_config.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1933,7 +1718,6 @@
           "relative_path": "manual/resources/di-vis_connect.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1944,7 +1728,46 @@
           "relative_path": "manual/resources/di-vis_server.png"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/example-filter-query.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/example-filter-query.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/example-interactivestate.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/example-interactivestate.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/example-loaddata.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/example-loaddata.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/example-mtsthelens.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/example-mtsthelens.png"
+        }
+      },
       "version": ""
     },
     {
@@ -1955,7 +1778,6 @@
           "relative_path": "manual/resources/glyph.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1966,7 +1788,6 @@
           "relative_path": "manual/resources/groundTower.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1977,7 +1798,6 @@
           "relative_path": "manual/resources/gulf.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1988,7 +1808,6 @@
           "relative_path": "manual/resources/lineData.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1999,7 +1818,6 @@
           "relative_path": "manual/resources/linear-brown.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2010,7 +1828,6 @@
           "relative_path": "manual/resources/lineva.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2021,7 +1838,6 @@
           "relative_path": "manual/resources/pointData.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2032,7 +1848,6 @@
           "relative_path": "manual/resources/surfaceData.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2043,7 +1858,6 @@
           "relative_path": "manual/resources/tex.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2054,31 +1868,76 @@
           "relative_path": "manual/resources/volumeData.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/terminology-starter.md",
+      "source_relative_path": "manual/troubleshooting.md",
       "output": {
         ".html": {
-          "relative_path": "manual/terminology-starter.html",
-          "hash": "+dF1mscOv8lT+fb6z6at27FIhC3pll8G9GI4G57jWek="
+          "relative_path": "manual/troubleshooting.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/visassets.md",
+      "source_relative_path": "manual/tutorials/abr-cs.md",
       "output": {
         ".html": {
-          "relative_path": "manual/visassets.html",
-          "hash": "b1T/VLZcqzWpsk51GX4mRC3/PeL1aRrEgWF1J5MWTr4="
+          "relative_path": "manual/tutorials/abr-cs.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorials/abr-vis-app.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorials/abr-vis-app.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorials/advanced-usage.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorials/advanced-usage.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorials/creating-design-interface-vis.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorials/creating-design-interface-vis.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorials/importing-data.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorials/importing-data.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorials/tutorials.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorials/tutorials.html"
+        }
+      },
       "version": ""
     },
     {
@@ -2089,7 +1948,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/colorVariable.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2100,7 +1958,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/colormap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2111,7 +1968,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/forceOutlineColor.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2122,7 +1978,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/instanceMesh.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2133,7 +1988,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/keyData.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2144,7 +1998,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineColor.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2155,7 +2008,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/outlineWidth.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2166,7 +2018,6 @@
           "relative_path": "resources/api/InstancedSurfaceDataImpression/showOutline.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2177,7 +2028,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/colorVariable.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2188,7 +2038,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/colormap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2199,7 +2048,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2210,7 +2058,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/glyph.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2221,7 +2068,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/glyphSize.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2232,7 +2078,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/outlineColor.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2243,7 +2088,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/outlineWidth.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2254,7 +2098,6 @@
           "relative_path": "resources/api/SimpleGlyphDataImpression/showOutline.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2265,7 +2108,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/averageCount.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2276,7 +2118,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/colorVariable.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2287,7 +2128,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/colormap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2298,7 +2138,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/defaultCurveDirection.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2309,7 +2148,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/lineTexture.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2320,7 +2158,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/lineWidth.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2331,7 +2168,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/ribbonBrightness.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2342,7 +2178,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2353,7 +2188,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2364,7 +2198,6 @@
           "relative_path": "resources/api/SimpleLineDataImpression/textureCutoff.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2375,7 +2208,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/colorVariable.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2386,7 +2218,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/colormap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2397,7 +2228,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2408,7 +2238,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/opacity.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2419,7 +2248,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineColor.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2430,7 +2258,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2441,7 +2268,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/pattern.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2452,7 +2278,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2463,7 +2288,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2474,7 +2298,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2485,7 +2308,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/patternSize.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2496,7 +2318,6 @@
           "relative_path": "resources/api/SimpleSurfaceDataImpression/showOutline.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2507,7 +2328,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/colormap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2518,7 +2338,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/opacitymap.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2529,7 +2348,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/transfer-fn.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2540,7 +2358,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2551,7 +2368,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/volumeLighting.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2562,7 +2378,6 @@
           "relative_path": "resources/api/SimpleVolumeDataImpression/volumeOpacityMultiplier.gif"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2573,7 +2388,6 @@
           "relative_path": "resources/blendmap-alpha.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2584,7 +2398,6 @@
           "relative_path": "resources/blendmap-combined.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2595,7 +2408,6 @@
           "relative_path": "resources/blendmap.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2606,7 +2418,6 @@
           "relative_path": "resources/favicon.ico"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2617,7 +2428,6 @@
           "relative_path": "resources/logo.svg"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2628,7 +2438,6 @@
           "relative_path": "resources/stopmap-alpha.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2639,7 +2448,6 @@
           "relative_path": "resources/stopmap-combined.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2650,7 +2458,6 @@
           "relative_path": "resources/stopmap.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2661,7 +2468,6 @@
           "relative_path": "resources/textures.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2672,59 +2478,9 @@
           "relative_path": "resources/xrefmap.yml"
         }
       },
-      "is_incremental": false,
       "version": ""
     }
   ],
-  "incremental_info": [
-    {
-      "status": {
-        "can_incremental": true,
-        "incrementalPhase": "build",
-        "total_file_count": 0,
-        "skipped_file_count": 0
-      },
-      "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 22,
-          "skipped_file_count": 21
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 116,
-          "skipped_file_count": 116
-        },
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        }
-      }
-    },
-    {
-      "status": {
-        "can_incremental": false,
-        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
-        "incrementalPhase": "postProcessing",
-        "total_file_count": 0,
-        "skipped_file_count": 0
-      },
-      "processors": {}
-    }
-  ],
-  "version_info": {},
   "groups": [
     {
       "xrefmap": "xrefmap.yml"
