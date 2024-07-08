@@ -26,6 +26,10 @@ Vis App". You should see a scene like the following:
 
 ![A screenshot of the Unity editor with the ABR vis app scene loaded. The ABREngine GameObject is selected in the left Hierarchy, and the ABRConfig_VisApp configuration is selected in the right Inspector.](../resources/abr-vis-app-1-scene.png)
 
+> [!TIP]
+> In the ABREngine GameObject, make sure the `ABRConfig_VisApp` configuration is
+> selected!
+
 Lastly, we need some data to visualize! In Unity, click *ABR > Copy Example Data
 to Media Folder*. This will make some example data available to the ABR design
 interface and the ABR Engine!

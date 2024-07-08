@@ -23,6 +23,20 @@ information. If you're on Windows, replace `python3` with `py`.
 > Unity package (i.e., you just installed ABR from the Unity Package Manager), use
 > the menu option **ABR > Open ABRServer~ folder**, then open a terminal in this
 > folder.
+> # [Windows](#tab/windows)
+> - [Windows Terminal
+>   instructions](https://johnwargo.com/posts/2024/launch-windows-terminal/)
+> - [Git Bash instructions](https://stackoverflow.com/questions/72100187/how-to-open-git-bash-from-specific-folder-in-windows-11)
+> - [Command Prompt (cmd)
+>   instructions](https://www.howtogeek.com/789662/how-to-open-a-cmd-window-in-a-folder-on-windows/)
+>
+> # [MacOS](#tab/mac)
+> - [Open Terminal from Finder
+>   instructions](https://ladedu.com/how-to-open-a-terminal-window-at-any-folder-from-finder-in-macos/)
+>
+> # [Linux](#tab/linux)
+> In most Linux distributions, you can click the "Open Folder in Terminal..." in the
+> right-click context menu.
 
 To get started, first make sure you have the `pipenv` package installed in Python.
 
