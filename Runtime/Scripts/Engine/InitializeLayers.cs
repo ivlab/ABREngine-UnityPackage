@@ -49,12 +49,9 @@ namespace IVLab.ABREngine
 
             foreach (Type plate in impressionTypes)
             {
-                PropertyInfo layerNameProp = plate.GetProperty("LayerName", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                // Construct a tmp instance to grab the layer name
-                ConstructorInfo ctor = plate.GetConstructor(new Type[] {});
-                object dataImpression = ctor.Invoke(new object[] {});
-                string layerNameString = layerNameProp.GetValue(dataImpression).ToString();
+                // Assumes that there's a field named "LayerName" in the data impression
+                FieldInfo layerNameProp = plate.GetField("LayerName", BindingFlags.NonPublic | BindingFlags.Static);
+                string layerNameString = layerNameProp?.GetValue(null).ToString() ?? "ABR_Layer";
                 layerNamesToAdd.Add(layerNameString);
             }
 
@@ -83,7 +80,8 @@ namespace IVLab.ABREngine
                 if (it.name == "layers")
                 {
                     int numLayers = it.arraySize;
-                    for (int i = 0; i < numLayers && actualLayer < 0; i++)
+                    // Unity 2019: Layers < 8 are not user-definable
+                    for (int i = 8; i < numLayers && actualLayer < 0; i++)
                     {
                         SerializedProperty element = it.GetArrayElementAtIndex(i);
                         // First empty element of layers list

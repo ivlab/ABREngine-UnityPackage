@@ -48,9 +48,9 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Surfaces")]
-    public class SimpleSurfaceDataImpression : DataImpression, IDataImpression
+    public class SimpleSurfaceDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -70,20 +70,21 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
 
         /// <summary>
         /// Scalar variable used to vary the pattern across the surface.
         /// </summary>
-        [ABRInput("Pattern Variable", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Variable", UpdateLevel.Style)]
         public ScalarDataVariable patternVariable;
 
         /// <summary>
@@ -91,13 +92,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/pattern.gif"/>
         /// </summary>
-        [ABRInput("Pattern", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset pattern;
 
         /// <summary>
         /// Override the pattern/texture used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanTexture"/>.
         /// </summary>
+        [ABRInput("NaN Pattern", UpdateLevel.Style)]
         public ISurfaceTextureVisAsset nanPattern;
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSize.gif"/>
         /// </summary>
-        [ABRInput("Pattern Size", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Size", UpdateLevel.Style)]
         public LengthPrimitive patternSize;
 
         /// <summary>
@@ -116,7 +118,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSeamBlend.gif"/>
         /// </summary>
-        [ABRInput("Pattern Seam Blend", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Seam Blend", UpdateLevel.Style)]
         public PercentPrimitive patternSeamBlend;
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternSaturation.gif"/>
         /// </summary>
-        [ABRInput("Pattern Saturation", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Saturation", UpdateLevel.Style)]
         public PercentPrimitive patternSaturation;
 
         /// <summary>
@@ -134,7 +136,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/patternIntensity.gif"/>
         /// </summary>
-        [ABRInput("Pattern Intensity", "Pattern", UpdateLevel.Style)]
+        [ABRInput("Pattern Intensity", UpdateLevel.Style)]
         public PercentPrimitive patternIntensity;
 
         // TODO: Integrate this with schema.
@@ -145,6 +147,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/opacity.gif"/>
         /// </summary>
+        [ABRInput("Opacity", UpdateLevel.Style)]
         public PercentPrimitive opacity;
 
         // TODO: There's not yet a good way to display a transparent surface
@@ -159,6 +162,7 @@ namespace IVLab.ABREngine
         /// NOTE: Outlines work best on convex objects. The wavelet in this
         /// example shows some artifacts due to its concavity.
         /// </remarks>
+        [ABRInput("Show Outline", UpdateLevel.Style)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -166,6 +170,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineWidth.gif"/>
         /// </summary>
+        [ABRInput("Outline Width", UpdateLevel.Style)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -173,39 +178,47 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/outlineColor.gif"/>
         /// </summary>
-        public Color outlineColor;
+        /// TODO: Support Primitive Color inputs
+        [ABRInput("Outline Color", UpdateLevel.Style)]
+        public IColormapVisAsset outlineColor;
 
         /// <summary>
         /// ONLY show the outline (don't show the actual surface)
         ///
         /// <img src="../resources/api/SimpleSurfaceDataImpression/onlyOutline.gif"/>
         /// </summary>
+        [ABRInput("Show Only Outline", UpdateLevel.Style)]
         public BooleanPrimitive onlyOutline;
 
         protected override string[] MaterialNames { get; } = { "ABR_SurfaceOpaque", "ABR_SurfaceTransparent", "ABR_SurfaceOutlineOnly", "ABR_SurfaceOutline" };
-        protected override string LayerName { get; } = "ABR_Surface";
+
+        /// <summary>
+        /// Define the layer name for this Data Impression
+        /// </summary>
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Surface";
 
 
         // Whether or not to render the back faces of the mesh
         private bool backFace = true;
 
-        /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
-        /// </summary>
-        public SimpleSurfaceDataImpression(string uuid) : base(uuid) { }
-        public SimpleSurfaceDataImpression() : base() { }
-
-        public override Dataset GetDataset()
+        public override Dataset GetDataset() => keyData?.GetDataset();
+        public override KeyData GetKeyData() => keyData;
+        public override void SetKeyData(KeyData kd) => keyData = kd;
+        public override DataTopology GetKeyDataTopology()
         {
-            return keyData?.GetDataset();
+            if (keyData != null)
+                return keyData.Topology;
+            else
+                return DataTopology.Triangles;
         }
 
-        public override KeyData GetKeyData()
-        {
-            return keyData;
-        }
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleSurfaceDataImpression() { }
 
         public override void ComputeGeometry()
         {
@@ -340,36 +353,36 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
+                // should never get here
                 return;
             }
 
             // Setup mesh renderer and mesh filter
             MeshFilter meshFilter = null;
             MeshRenderer meshRenderer = null;
-            if (!currentGameObject.TryGetComponent<MeshFilter>(out meshFilter))
+            if (!gameObject.TryGetComponent<MeshFilter>(out meshFilter))
             {
-                meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
+                meshFilter = gameObject.AddComponent<MeshFilter>();
             }
-            if (!currentGameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
+            if (!gameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
             {
-                meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
+                meshRenderer = gameObject.AddComponent<MeshRenderer>();
             }
 
             // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
-                currentGameObject.gameObject.layer = layerID;
+                gameObject.layer = layerID;
             }
             else
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleSurfaceDataImpression", LayerName);
             }
-            currentGameObject.name = this + " surface Mesh";
 
             // Populate surface mesh from calculated geometry
             var SSrenderData = RenderInfo as SimpleSurfaceRenderInfo;
@@ -399,15 +412,15 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Return immediately if the game object, mesh filter, or mesh renderer do not exist
             // (this should only really happen if the gameobject/renderers for this impression have not yet been initialized,
             // which equivalently indicates that KeyData has yet to be applied to this impression and therefore there 
             // is no point in styling it anyway)
-            MeshFilter meshFilter = currentGameObject?.GetComponent<MeshFilter>();
-            MeshRenderer meshRenderer = currentGameObject?.GetComponent<MeshRenderer>();
-            if (meshFilter == null || meshRenderer == null)
+            MeshFilter meshFilter = gameObject?.GetComponent<MeshFilter>();
+            MeshRenderer meshRenderer = gameObject?.GetComponent<MeshRenderer>();
+            if (keyData == null || meshFilter == null || meshRenderer == null)
             {
                 return;
             }
@@ -548,7 +561,7 @@ namespace IVLab.ABREngine
             MatPropBlock.SetFloat("_PatternBlendWidth", patternSeamBlendOut/2);
             MatPropBlock.SetFloat("_PatternSaturation", patternSaturationOut);
 
-            MatPropBlock.SetColor("_OutlineColor", outlineColor);
+            MatPropBlock.SetColor("_OutlineColor", outlineColor?.GetColorGradient()?.GetPixel(0, 0) ?? Color.black);
             MatPropBlock.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
 
             MatPropBlock.SetColor("_NaNColor", nanColor?.GetColorGradient().GetPixel(0, 0) ?? ABREngine.Instance.Config.defaultNanColor);
@@ -607,9 +620,9 @@ namespace IVLab.ABREngine
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            MeshRenderer mr = currentGameObject?.GetComponent<MeshRenderer>();
+            MeshRenderer mr = gameObject?.GetComponent<MeshRenderer>();
             if (mr != null)
             {
                 mr.enabled = RenderHints.Visible;

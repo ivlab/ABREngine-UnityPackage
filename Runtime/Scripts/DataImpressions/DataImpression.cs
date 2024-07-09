@@ -18,6 +18,8 @@
  */
 
 using System;
+using System.Reflection;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,91 +27,28 @@ using UnityEngine;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    ///     Public interface for a single ABR visualization layer
+    /// Main class for Data Impressions (layers) in an ABR visualization. Every
+    /// Data Impression is a GameObject in the scene.
     /// </summary>
-    public interface IDataImpression : IHasDataset, IHasKeyData
+    public abstract class DataImpression : MonoBehaviour, IHasDataset, IHasKeyData, ICoordSpaceConverter
     {
+#region Properties
         /// <summary>
         ///     Unique identifier for this Data Impression
         ///
         ///     Assigned on object creation
         /// </summary>
-        Guid Uuid { get; set; }
+        public Guid Uuid { get; set; }
 
         /// <summary>
         ///     Used for getting/setting ABRInputs on this DataImpression
         /// </summary>
-        ABRInputIndexerModule InputIndexer { get; }
-
-        /// <summary>
-        ///     1. Populate rendering information (Geometry) for the
-        ///     DataImpression. This is triggered by the `DataImpressionGroup`
-        ///     when an `UpdateLevel.Data` happens. This step is generally *expensive*.
-        /// </summary>
-        void ComputeGeometry();
-
-        /// <summary>
-        ///     2. Take geometric rendering information computed in
-        ///     `ComputeGeometry()` and sets up proper game object(s) and
-        ///     components for this Data Impression. Transfers geometry into
-        ///     Unity format (e.g. a `Mesh`). No geometric computations should
-        ///     happen in this method, and it should generally be *lightweight*.
-        /// </summary>
-        void SetupGameObject(EncodedGameObject currentGameObject);
-
-        /// <summary>
-        ///     3. Update the "styling" of an impression by sending each
-        ///     styling parameter to the shader. Occasionally will need to set
-        ///     per-vertex items like transforms. This method should generally be *lightweight*.
-        /// </summary>
-        void UpdateStyling(EncodedGameObject currentGameObject);
-
-        /// <summary>
-        ///     Update the visibility of an impression (hidden or shown)
-        /// </summary>
-        void UpdateVisibility(EncodedGameObject currentGameObject);
-
-        /// <summary>
-        ///     Copy a data impression, giving a new Uuid
-        /// </summary>
-        IDataImpression Copy();
-
-        /// <summary>
-        /// Update this data impression from an existing (possibly temporary) one.
-        /// </summary>
-        void CopyExisting(IDataImpression other);
-
-        /// <summary>
-        /// When this data impression is done being used, clean up after itself
-        /// if necessary. This method may need access to the GameObject the data
-        /// impression is applied to.
-        /// </summary>
-        void Cleanup(EncodedGameObject encodedGameObject);
-
-        /// <summary>
-        ///     Return if this data impression has a particular string tag (for
-        ///     external purposes only, the engine currently does nothing with tags)
-        /// </summary>
-        bool HasTag(string tagName);
+        public ABRInputIndexerModule InputIndexer { get; set; }
 
         /// <summary>
         ///     Any hints to provide the rendering engine, such as if the impression
         ///     should be hidden
         /// </summary>
-        RenderHints RenderHints { get; set; }
-    }
-
-    /// <summary>
-    ///     Private data for a single data impression
-    ///
-    ///     Should contain properties with attributes for all of the inputs
-    /// </summary>
-    public abstract class DataImpression : IDataImpression, IHasDataset
-    {
-        public Guid Uuid { get; set; }
-
-        public ABRInputIndexerModule InputIndexer { get; set; }
-
         public RenderHints RenderHints { get; set; } = new RenderHints();
 
         /// <summary>
@@ -126,7 +65,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Slot to load the material into at runtime
         /// </summary>
-        protected virtual Material[] ImpressionMaterials { get; }
+        protected virtual Material[] ImpressionMaterials { get; set; }
 
         /// <summary>
         ///     Storage for the rendering data to be sent to the shader
@@ -144,81 +83,255 @@ namespace IVLab.ABREngine
         protected virtual IKeyDataRenderInfo KeyDataRenderInfo { get; set; }
 
         /// <summary>
-        ///     The layer to put this data impression in
-        ///
-        ///     Warning: layer must exist in the Unity project!
+        /// Save this DataImpression to state. Sometimes, it's desireable to
+        /// create data impressions that *only* exist in the Unity Editor and
+        /// DON'T get saved to state. By default, this is `false`. For data
+        /// impressions created in <see cref="ABRStateParser"/>, it is `true`.
         /// </summary>
-        protected virtual string LayerName { get; } = "ABR";
+        public bool SaveToState { get; set; }
 
         /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID - if you override this
-        ///     constructor bad things might happen.
+        /// Genres of ABRInput that are "styles" - i.e., they can apply to
+        /// multiple data impressions
         /// </summary>
-        public DataImpression(string uuid)
+        private HashSet<ABRInputGenre> StyleGenres
         {
-            InputIndexer = new ABRInputIndexerModule(this);
-            Uuid = new Guid(uuid);
-            MatPropBlock = new MaterialPropertyBlock();
-
-            // Initialize material list
-            if (ImpressionMaterials == null)
+            get => new HashSet<ABRInputGenre>
             {
-                ImpressionMaterials = new Material[MaterialNames.Length];
-            }
-
-            for (int m = 0; m < MaterialNames.Length; m++)
-            {
-                // Load each material, if it's not already loaded
-                if (ImpressionMaterials[m] == null)
-                {
-                    ImpressionMaterials[m] = Resources.Load<Material>(MaterialNames[m]);
-                }
-
-                // If it's still null, that means we didn't find it
-                if (ImpressionMaterials[m] == null)
-                {
-                    Debug.LogErrorFormat("Material `{0}` not found for {1}", MaterialNames[m], this.GetType().ToString());
-                }
-            }
+                ABRInputGenre.VisAsset,
+                ABRInputGenre.Primitive,
+                ABRInputGenre.PrimitiveGradient,
+            };
         }
 
+        /// <summary>
+        /// Other data impressions that depend on this DI's style
+        /// </summary>
+        private HashSet<DataImpression> styleDependencies;
+
+        /// <summary>
+        /// Reflection: generic create method so it can be called/invoked with
+        /// the correct args. Can't just call regular create() method because
+        /// MonoBehaviours can't be abstract...
+        /// when cloning
+        /// </summary>
+        private MethodInfo createMethod;
+#endregion
+
+#region MonoBehaviour methods
+
+        void Awake()
+        {
+            Type impressionType = this.GetType();
+            createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
+            createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
+        }
+
+        void Update()
+        {
+            // Immediately enable/disable the GameObject based on if it has KeyData or not
+            this.gameObject.SetActive(GetKeyData() != null);
+        }
+#endregion
+
+#region Constructor (Create) method
+        /// <summary>
+        /// Construct a data impession with a given UUID and name.
+        ///     
+        /// > [!WARNING]
+        /// > This method will be called from <see cref="ABRStateParser"/> and MUST
+        /// > have the given arguments. If you override this method, bad things
+        /// > might happen.
+        /// </summary>
+        /// <param name="name">Non-unique, human-readable identifier for this data impression</param>
+        /// <param name="uuid">Unique identifier for this data impression. If left empty, will create a new UUID.</param>
+        /// <param name="saveToState">Should this data impression be saved when
+        /// <see cref="ABREngine.SaveState{T}(string)"/> is called?</param>
+        public static T Create<T>(string name, Guid uuid = new Guid(), bool saveToState = false)
+        where T : DataImpression
+        {
+            // accept empty
+            if (uuid == Guid.Empty)
+            {
+                uuid = Guid.NewGuid();
+            }
+
+            // Check if a data impression with this UUID already exists in the
+            // ABREngine
+            GameObject go;
+            T di = ABREngine.Instance.GetDataImpression<T>(d => d.Uuid == uuid);
+            if (di == null)
+            {
+                go = new GameObject();
+                di = go.AddComponent<T>();
+                go.name = name;
+
+                di.InputIndexer = new ABRInputIndexerModule(di);
+                di.Uuid = uuid;
+                di.MatPropBlock = new MaterialPropertyBlock();
+                di.SaveToState = saveToState;
+                di.styleDependencies = new HashSet<DataImpression>();
+
+                // Initialize material list
+                if (di.ImpressionMaterials == null)
+                {
+                    di.ImpressionMaterials = new Material[di.MaterialNames.Length];
+                }
+
+                for (int m = 0; m < di.MaterialNames.Length; m++)
+                {
+                    // Load each material, if it's not already loaded
+                    if (di.ImpressionMaterials[m] == null)
+                    {
+                        di.ImpressionMaterials[m] = Resources.Load<Material>(di.MaterialNames[m]);
+                    }
+
+                    // If it's still null, that means we didn't find it
+                    if (di.ImpressionMaterials[m] == null)
+                    {
+                        Debug.LogErrorFormat("Material `{0}` not found for {1}", di.MaterialNames[m], di.GetType().ToString());
+                    }
+                }
+            }
+
+            return di;
+        }
+
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected DataImpression() { }
+#endregion
+
+#region DataImpression methods
+        /// <summary>
+        /// Check if the DataImpression has a particular tag
+        /// </summary>
+        /// <param name="tag">The tag</param>
+        /// <returns>Returns <see langword="true"/> if the data impression's tag list contains the specified tag</returns>
         public bool HasTag(string tag)
         {
             return Tags.Contains(tag);
         }
 
-        public DataImpression() : this(Guid.NewGuid().ToString()) { }
-
-        public virtual void ComputeGeometry() { }
-
-        public virtual void SetupGameObject(EncodedGameObject currentGameObject) { }
-
-        public virtual void UpdateStyling(EncodedGameObject currentGameObject) { }
-
-        public virtual void UpdateVisibility(EncodedGameObject currentGameObject) { }
-
         /// <summary>
-        ///     Unknown why it's necessary to copy each input individually, but here
-        ///     we are.
+        /// Get the group that this <see cref="DataImpression"/> is a part of.
         /// </summary>
-        public virtual IDataImpression Copy()
+        /// <returns></returns>
+        public DataImpressionGroup GetDataImpressionGroup()
         {
-            DataImpression di = (DataImpression) this.MemberwiseClone();
-            di.InputIndexer = new ABRInputIndexerModule(di);
-            di.Tags = new List<string>(di.Tags);
-            di.Uuid = Guid.NewGuid();
-            di.RenderHints = this.RenderHints.Copy();
-            return di as IDataImpression;
+            return ABREngine.Instance.GetGroupFromImpression(this);
         }
 
         /// <summary>
-        /// Update this data impression from an existing (possibly temporary) one.
+        ///     RENDERING STEP 1. Populate rendering information (Geometry) for
+        ///     the DataImpression. This is triggered by the <see
+        ///     cref="DataImpressionGroup"/> when an <see
+        ///     cref="UpdateLevel.Geometry"/> happens. This step is generally
+        ///     *expensive*.
         /// </summary>
-        public virtual void CopyExisting(IDataImpression other)
+        public abstract void ComputeGeometry();
+
+        /// <summary>
+        ///     RENDERING STEP 2. Take geometric rendering information computed in
+        ///     <see cref="ComputeGeometry()"/> and sets up proper game object(s) and
+        ///     components for this Data Impression. Transfers geometry into
+        ///     Unity format (e.g. a <see cref="Mesh"/>). No geometric computations should
+        ///     happen in this method, and it should generally be *lightweight*.
+        /// </summary>
+        public abstract void SetupGameObject();
+
+
+        /// <summary>
+        ///     RENDERING STEP 3. Update the "styling" of an impression by sending each
+        ///     styling parameter to the shader. Occasionally will need to set
+        ///     per-vertex items like transforms. This method should generally be *lightweight*.
+        /// </summary>
+        public abstract void UpdateStyling();
+
+
+        /// <summary>
+        ///     RENDERING STEP 4. Update the visibility of an impression (hidden or shown)
+        /// </summary>
+        public abstract void UpdateVisibility();
+
+        /// <summary>
+        /// Get the index for the "packed" scalar variable in the <see cref="RenderInfo"/>
+        /// </summary>
+        // protected abstract int GetIndexForPackedScalarVariable(ScalarDataVariable variable);
+
+        /// <summary>
+        /// Create and return a copy of this data impression (with a new UUID)
+        /// </summary>
+        public DataImpression Clone()
         {
-            this.Tags = new List<string>((other as DataImpression).Tags);
+            // Clone (create a new Data impression) and copy over all the fields that don't come
+            // with (due to Unity Serialization)
+            object[] impressionArgs = new object[] { this.name + " Copy", Guid.NewGuid(), this.SaveToState };
+            DataImpression newDi = createMethod.Invoke(null, impressionArgs) as DataImpression;
+
+            // Copy over the fields that might have values
+            newDi.RenderHints = this.RenderHints.Copy();
+            newDi.Tags = new List<string>(this.Tags);
+
+            // Copy all style inputs
+            foreach (string inputName in this.InputIndexer.InputNames)
+            {
+                IABRInput thisInput = this.InputIndexer.GetInputValue(inputName);
+                newDi.InputIndexer.AssignInput(inputName, thisInput);
+            }
+
+            return newDi;
+        }
+
+        /// <summary>
+        /// Create a copy of this data impression, but only its "style" inputs.
+        /// </summary>
+        public DataImpression CloneStyle()
+        {
+            // Clone (create a new Data impression) and copy over all the fields that don't come
+            // with (due to Unity Serialization)
+            // Need to use reflection here because we can't create abstract MonoBehaviours
+            object[] impressionArgs = new object[] { this.name + " StyleCopy", Guid.NewGuid(), this.SaveToState };
+            DataImpression newDi = createMethod.Invoke(null, impressionArgs) as DataImpression;
+
+            // Copy over the fields that might have values
+            newDi.RenderHints = this.RenderHints.Copy();
+            newDi.Tags = new List<string>();
+
+            // Copy all style inputs
+            foreach (string inputName in this.InputIndexer.InputNames)
+            {
+                IABRInput thisInput = this.InputIndexer.GetInputValue(inputName);
+                if (thisInput != null && StyleGenres.Contains(thisInput.Genre))
+                {
+                    newDi.InputIndexer.AssignInput(inputName, thisInput);
+                }
+                else
+                {
+                    newDi.InputIndexer.AssignInput(inputName, null);
+                }
+            }
+
+            return newDi;
+        }
+
+        /// <summary>
+        /// Clone a data impression's style and link
+        /// </summary>
+        public DataImpression CloneStyleLinked()
+        {
+            DataImpression newDi = CloneStyle();
+            newDi.name = this.name + " StyleLink";
+            this.styleDependencies.Add(newDi);
+            return newDi;
+        }
+
+        /// <summary>
+        /// Update this data impression's fields from an existing data impression.
+        /// </summary>
+        public void CopyFrom(DataImpression other)
+        {
+            this.Tags = new List<string>(other.Tags);
+            this.name = other.name;
             this.RenderHints = other.RenderHints.Copy();
             foreach (string inputName in other.InputIndexer.InputNames)
             {
@@ -227,22 +340,153 @@ namespace IVLab.ABREngine
             }
         }
 
-        public virtual void Cleanup(EncodedGameObject encodedGameObject)
+        /// <summary>
+        /// Update the style of this data impression from another data impression's style
+        /// </summary>
+        public void CopyStyleFrom(DataImpression other)
+        {
+            foreach (string inputName in other.InputIndexer.InputNames)
+            {
+                IABRInput otherInput = other.InputIndexer.GetInputValue(inputName);
+
+                if (otherInput != null && StyleGenres.Contains(otherInput.Genre))
+                {
+                    this.InputIndexer.AssignInput(inputName, otherInput);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Copy the style from another data impression and link their styles so
+        /// this data impression updates all its style dependencies when it is
+        /// changed
+        /// </summary>
+        public void LinkStyleFrom(DataImpression other)
+        {
+            // Perform an initial copy
+            CopyStyleFrom(other);
+
+            // Add this as a dependency of `other`
+            other.styleDependencies.Add(this);
+        }
+
+        /// <summary>
+        /// Update all the style dependencies for this data impression - ensure
+        /// they have the same styling and render hints.
+        /// </summary>
+        public void UpdateStyleDependencies()
+        {
+            foreach (DataImpression dependent in styleDependencies)
+            {
+                dependent.CopyStyleFrom(this);
+                dependent.RenderHints = this.RenderHints.Copy();
+            }
+        }
+
+        /// <summary>
+        /// When this data impression is done being used, clean up after itself
+        /// if necessary. This method may need access to the GameObject the data
+        /// impression is applied to.
+        /// </summary>
+        public virtual void Cleanup()
         {
             RenderInfo = null;
         }
+#endregion
 
+#region IHasDataset implementation
         /// <summary>
         ///     By default, there's no dataset. DataImpressions should only have
         ///     one dataset, and it's up to them individually to enforce that
         ///     they correctly implement this.
         /// </summary>
-        public virtual Dataset GetDataset()
+        public abstract Dataset GetDataset();
+#endregion
+
+#region IHasKeyData implementation
+        /// <summary>
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
+        /// </summary>
+        public abstract KeyData GetKeyData();
+
+        /// <summary>
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
+        /// </summary>
+        public abstract void SetKeyData(KeyData kd);
+
+        /// <summary>
+        /// By default, there's no data. DataImpressions should only have
+        /// one <see cref="KeyData"/>, and it's up to them individually to enforce that
+        /// they correctly implement this.
+        /// </summary>
+        public abstract DataTopology GetKeyDataTopology();
+#endregion
+
+#region ICoordSpaceConverter implementation
+        public Bounds BoundsInWorldSpace
         {
-            return null;
+            get => new Bounds(
+                DataToWorldMatrix.MultiplyPoint3x4(BoundsInDataSpace.center),
+                DataToWorldMatrix.MultiplyVector(BoundsInDataSpace.size)
+            );
         }
 
-        public abstract KeyData GetKeyData();
+        public Bounds BoundsInDataSpace
+        {
+            get
+            {
+                RawDataset rds = this.GetKeyData()?.GetRawDataset();
+                if (rds != null)
+                    return rds.bounds;
+                else
+                    return new Bounds();
+            }
+        }
+
+        public Matrix4x4 WorldToDataMatrix { get => GetDataImpressionGroup().WorldToDataMatrix; }
+
+        public Matrix4x4 DataToWorldMatrix { get => GetDataImpressionGroup().DataToWorldMatrix; }
+
+        public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
+
+        public Vector3 DataSpacePointToWorldSpace(Vector3 dataSpacePoint) => DataToWorldMatrix.MultiplyPoint3x4(dataSpacePoint);
+
+        public Vector3 WorldSpaceVectorToDataSpace(Vector3 worldSpaceVector) => WorldToDataMatrix.MultiplyVector(worldSpaceVector);
+
+        public Vector3 DataSpaceVectorToWorldSpace(Vector3 dataSpaceVector) => DataToWorldMatrix.MultiplyVector(dataSpaceVector);
+
+        public bool ContainsWorldSpacePoint(Vector3 worldSpacePoint) => BoundsInWorldSpace.Contains(worldSpacePoint);
+
+        public bool ContainsDataSpacePoint(Vector3 dataSpacePoint) => BoundsInDataSpace.Contains(dataSpacePoint);
+#endregion
+
+#region IDataAccessor implementation
+        // public abstract DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
+
+        // public abstract DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
+
+        // public abstract List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
+
+        // public abstract List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
+
+        // public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public abstract float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public abstract Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public abstract float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
+#endregion
     }
 
 
@@ -256,7 +500,7 @@ namespace IVLab.ABREngine
         /// <summary>
         ///     Has the impression been changed since the last render (needs to be re-rendered?)
         /// </summary>
-        public bool DataChanged { get; set; } = true;
+        public bool GeometryChanged { get; set; } = true;
 
         /// <summary>
         ///     Has the style of the impression been changed

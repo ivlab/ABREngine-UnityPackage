@@ -1,7 +1,7 @@
 {
     "name": "edu.umn.cs.ivlab.abrengine",
     "displayName": "ABR Engine",
-    "version": "2023.3.0",
+    "version": "2024.7.0",
     "unity": "2021.3",
     "description": "Artifact-Based Rendering Engine",
     "author": { "name": "IVLab", "email": "ivlab-admin@umn.edu", "url": "https://ivlab.cs.umn.edu" },
@@ -10,38 +10,29 @@
     "licensesUrl": "https://ivlab.github.io/ABREngine-UnityPackage/manual/license.html",
     "hideInEditor": "false",
     "dependencies": {
-        "com.unity.textmeshpro": "2.1.6"
+        "com.unity.textmeshpro": "2.1.6",
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
     },
     "samples": [
         {
-            "displayName": "State Creation",
-            "description": "Contains a script to manually create a state using commands from the ABREngine.",
-            "path": "Samples~/CreateState"
+            "displayName": "ABR Vis App",
+            "description": "This is the main visualization app that should be used if you want to just connect to an ABR design interface. See 'Tutorials > ABR Vis App' in the documentation.",
+            "path": "Samples~/ABR Vis App"
         },
         {
-            "displayName": "Interactive state loading and modification",
-            "description": "Contains a script to load a state from a JSON file, then modify it interactively every frame (in essence creating an animation)",
-            "path": "Samples~/InteractiveState"
-        },
-        {
-            "displayName": "Dataset Creation",
-            "description": "Contains a script to manually create and load a raw ABR dataset",
-            "path": "Samples~/CreateDataset"
+            "displayName": "ABR CSharp Starter",
+            "description": "Contains a starter setup for creating an ABR visualization using C#. See 'Tutorials > ABR C# Visualization' in the Documentation.",
+            "path": "Samples~/ABR CSharp Starter"
         },
         {
             "displayName": "Advanced Usage",
-            "description": "Advanced usage of the ABREngine, including importing external data, moving data impressions around, per-index visibility, and VisAsset Gradients",
-            "path": "Samples~/AdvancedUsage"
+            "description": "Contains a series of scripts, states, and configurations to demonstrate advanced functionality in ABR, see 'Tutorials > Advanced Usage' in the Documentation.",
+            "path": "Samples~/Advanced Usage"
         },
         {
-            "displayName": "ABR Testing",
-            "description": "If you are contributing to the ABREngine, you may use this script as a framework to test your new features.",
-            "path": "Samples~/TestingABR"
-        },
-        {
-            "displayName": "Documentation GIF Generation",
-            "description": "Generate GIFs for documentation",
-            "path": "Samples~/Documentation GIF Generation"
+            "displayName": "Documentation Examples",
+            "description": "Examples for documentation, including GIF generator",
+            "path": "Samples~/Documentation Examples"
         }
     ]
 }

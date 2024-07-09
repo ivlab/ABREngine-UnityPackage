@@ -1,0 +1,60 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2@2.0.0/dist/spectrum.min.css">
+
+    <link rel="stylesheet" href="{% static 'compose/css/jquery.toast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/loadingSpinner.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/panels.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/Header.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/Plate.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/SwatchList.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/CollapsibleDiv.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/DataImpression.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/PuzzlePiece.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/colormapEditor.css' %}">
+    <link rel="stylesheet" href="{% static 'compose/css/components/gradientDialog.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
+    <title>ABR Compose</title>
+</head>
+<body>
+    <div id="compose-manager">
+        <!-- the compose UI will go in here -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="{% static 'common/touchToMouse.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsondiffpatch@0.4.1/dist/jsondiffpatch.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.3/ajv.min.js"></script>
+
+    <script src="//d3js.org/d3.v5.min.js"></script>
+    <script src="{% static 'common/spectrum.js' %}"></script>
+    <script src="{% static 'common/dragscroll.js' %}"></script>
+    <script src="{% static 'compose/js/jquery.toast.min.js' %}"></script>
+
+    <script src="{% static 'common/csrf.js' %}"></script>
+
+    <script>
+        // Get the static and media URL from Django and store it for JS use
+        // STATIC_URL is for static items (like puzzle piece svgs)
+        var STATIC_URL = "{% get_static_prefix %}";
+    </script>
+
+    <script src="{% static 'compose/js/index.js' %}" type="module"></script>
+</body>
+</html>

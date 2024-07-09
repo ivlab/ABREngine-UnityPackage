@@ -81,7 +81,6 @@ namespace IVLab.ABREngine
             return new RawABRInput {
                 inputType = this.GetType().ToString(),
                 inputValue = this.Uuid.ToString(),
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
         }

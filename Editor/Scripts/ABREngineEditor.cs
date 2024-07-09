@@ -20,10 +20,12 @@
 #if UNITY_EDITOR
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using IVLab.ABREngine.ExtensionMethods;
 
 namespace IVLab.ABREngine
 {
@@ -42,25 +44,15 @@ namespace IVLab.ABREngine
 
         private int configIndex = 0;
 
-        /// <summary>
-        /// Get all instances of scriptable objects with given type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        // http://answers.unity.com/answers/1878206/view.html
-        public static List<T> GetAllInstances<T>() where T : ScriptableObject
+        void OnEnable()
         {
-            return AssetDatabase.FindAssets($"t: {typeof(T).Name}").ToList()
-                        .Select(AssetDatabase.GUIDToAssetPath)
-                        .Select(AssetDatabase.LoadAssetAtPath<T>)
-                        .ToList();
-        }
-
-        void Awake()
-        {
-            var configs = GetAllInstances<ABRConfig>();
-            var configProp = serializedObject.FindProperty("configPrototype");
-            configIndex = configs.FindIndex(i => i.name == configProp.objectReferenceValue.name);
+            // "prime" the config - make sure the engine has loaded it
+            ABRConfig config = ABREngine.ConfigPrototype;
+            var configs = ABREngine.GetABRConfigs();
+            if (configs.Count > 0 && config != null)
+                configIndex = configs.FindIndex(cfg => cfg.name == config.name);
+            else
+                configIndex = 0;
         }
 
         public override void OnInspectorGUI()
@@ -73,7 +65,7 @@ namespace IVLab.ABREngine
             {
                 // Display and update ABREngine Configs
                 EditorGUILayout.LabelField("Choose ABR Configuration:");
-                var configs = GetAllInstances<ABRConfig>();
+                var configs = ABREngine.GetABRConfigs();
                 if (configs.Count == 0)
                 {
                     EditorGUILayout.HelpBox("No ABR configurations available! Please create one first. Assets/ABR/ABR Configuration.", MessageType.Error);
@@ -81,12 +73,10 @@ namespace IVLab.ABREngine
                 else
                 {
                     int newIndex = EditorGUILayout.Popup(configIndex, configs.Select(c => c.name).ToArray());
-                    var configProp = serializedObject.FindProperty("configPrototype");
-                    if (newIndex != configIndex || configProp.objectReferenceValue == null)
+                    if (newIndex != configIndex || ABREngine.ConfigPrototype == null)
                     {
-                        Debug.Log("Changed ABR Configuration to " + configs[newIndex].name);
                         configIndex = newIndex;
-                        configProp.objectReferenceValue = configs[newIndex];
+                        ABREngine.ConfigPrototype = configs[newIndex];
                         serializedObject.ApplyModifiedProperties();
                     }
                     if (GUILayout.Button("Open Current ABR Config..."))
@@ -145,9 +135,9 @@ namespace IVLab.ABREngine
                 {
                     EditorGUILayout.Separator();
                     EditorGUILayout.LabelField("----- " + ds.Path + " -----");
-                    Dictionary<string, IKeyData> allKeyData = ds.GetAllKeyData();
+                    Dictionary<string, KeyData> allKeyData = ds.GetAllKeyData();
                     EditorGUILayout.LabelField("Key Data:");
-                    foreach (IKeyData kd in allKeyData.Values)
+                    foreach (KeyData kd in allKeyData.Values)
                     {
                         string keyData = "    " + DataPath.GetName(kd.Path);
                         RawDataset rawDs = null;
@@ -182,13 +172,34 @@ namespace IVLab.ABREngine
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
 
+            EditorGUILayout.LabelField("Save State", EditorStyles.boldLabel);
 
-            if (ABREngine.Instance.Config.dataServerUrl.Length > 0)
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Save State to .json file"))
             {
-                if (GUILayout.Button("Save State"))
+                string path = EditorUtility.SaveFilePanel(
+                    "Save ABR state file as .json",
+                    "",
+                    "ABRState.json",
+                    "json"
+                );
+                ABREngine.Instance.SaveState<PathStateFileLoader>(path);
+                Debug.Log("Saved state JSON to " + path);
+            }
+
+            if (ABREngine.Instance.Config.serverUrl.Length > 0)
+            {
+                if (GUILayout.Button("Save State to Server"))
                 {
                     ABREngine.Instance.SaveState<HttpStateFileLoader>();
                 }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.LabelField("Options for ABREngine", EditorStyles.boldLabel);
+            if (GUILayout.Button("Render"))
+            {
+                ABREngine.Instance.Render();
             }
         }
     }

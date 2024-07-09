@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using IVLab.Utilities;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using IVLab.ABREngine.ExtensionMethods;
 
 namespace IVLab.ABREngine
 {
@@ -37,131 +37,81 @@ namespace IVLab.ABREngine
     /// data listener, VisAssets and Data managers, etc.
     /// </summary>
     /// <example>
+    /// 
+    /// **Usage of `ABREngine.Instance`**
+    /// 
     /// Most methods of the ABREngine can be accessed through its singleton
     /// `Instance` without needing to do a `GetComponent`:
     /// <code>
     /// string mediaPath = ABREngine.Instance.MediaPath;
     /// </code>
     /// </example>
+    /// 
     /// <example>
+    /// **Example: Getting Started with Unity C# and ABR**
+    /// 
+    /// This example shows how to create an ABR visualization in code using one
+    /// data impression.
+    /// 
+    /// > [!NOTE]
+    /// > You can also import this example using the Unity Package Manager. In
+    /// > Unity, go to Window > Package Manager, find the ABREngine package, and
+    /// > import the "Documentation Examples" sample project.
+    /// 
+    /// The general process for making an ABR visualization in C# code is:
+    /// 
+    /// <ol>
+    ///     <li>Import data using <see cref="DataManager.LoadData"/></li>
+    ///     <li>Import VisAssets using <see cref="VisAssetManager.GetVisAsset"/>.</li>
+    ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together (using <see cref="DataImpression.Create{T}(string, Guid, bool)"/>).</li>
+    ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
+    ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
+    /// </ol>
+    /// 
+    /// [!code-csharp[](../../Samples~/Documentation examples/ABREngineExample.cs)]
+    /// 
+    /// </example>
+    /// 
+    /// <example>
+    /// **Example: Using Custom Data**
+    /// 
     /// This example shows how to quickly get up and running with a
-    /// custom-defined dataset and building your own data impressions. The
-    /// general process for making a visualization programmatically with ABR is:
+    /// custom-defined dataset and building your own data impressions. Before the steps in the previous example, you will also need to:
     /// <ol>
     ///     <li>Define your data in some `List`s.</li>
     ///     <li>Use the <see cref="RawDatasetAdapter"/> to convert the `List` into an ABR <see cref="RawDataset"/>, or import an existing ABR RawDataset using <see cref="DataManager.LoadRawDataset"/>.</li>
     ///     <li>Import that <see cref="RawDataset"/> into ABR using <see cref="DataManager.ImportRawDataset"/> (optionally, giving the dataset a data path identifier for easier semantic access later).</li>
-    ///     <li>Optionally, import any <see cref="VisAsset"/>s you want to use using <see cref="VisAssetManager.GetVisAsset"/>.</li>
-    ///     <li>Create a <see cref="DataImpression"/> to combine the data and visuals together.</li>
-    ///     <li>Use <see cref="ABREngine.RegisterDataImpression"/> to add the impression to the engine.</li>
-    ///     <li>Render the data and visuals to the screen using <see cref="ABREngine.Render"/>.</li>
     /// </ol>
-    /// <code>
-    /// using System;
-    /// using System.Threading.Tasks;
-    /// using UnityEngine;
-    /// using IVLab.ABREngine;
-    /// using IVLab.Utilities;
-    ///
-    /// public class SimpleABRExample : MonoBehaviour
-    /// {
-    ///     void Start()
-    ///     {
-    ///         // STEP 1: Define data
-    ///         // 9 points in 3D space
-    ///         List&lt;Vector3&gt; vertices = new List&lt;Vector3&gt;
-    ///         {
-    ///             new Vector3(0.0f, 0.5f, 0.0f),
-    ///             new Vector3(0.0f, 0.6f, 0.1f),
-    ///             new Vector3(0.0f, 0.4f, 0.2f),
-    ///             new Vector3(0.1f, 0.3f, 0.0f),
-    ///             new Vector3(0.1f, 0.2f, 0.1f),
-    ///             new Vector3(0.1f, 0.3f, 0.2f),
-    ///             new Vector3(0.2f, 0.0f, 0.0f),
-    ///             new Vector3(0.2f, 0.3f, 0.1f),
-    ///             new Vector3(0.2f, 0.1f, 0.2f),
-    ///         };
-    ///
-    ///         // Data values for those points
-    ///         List&lt;float&gt; data = new List&lt;float&gt;();
-    ///         for (int i = 0; i &lt; vertices.Count; i++) data.Add(i);
-    ///
-    ///         // Named scalar variable
-    ///         Dictionary&lt;string, List&lt;float&gt;&gt; scalarVars = new Dictionary&lt;string, List&lt;float&gt;&gt; {{ "someData", data }};
-    ///
-    ///         // Define some generous bounds
-    ///         Bounds b = new Bounds(Vector3.zero, Vector3.one);
-    ///
-    ///         // STEP 2: Convert the point list into ABR Format
-    ///         RawDataset abrPoints = RawDatasetAdapter.PointsToPoints(vertices, b, scalarVars, null);
-    ///
-    ///         // STEP 3: Import the point data into ABR so we can use it
-    ///         KeyData pointsKD = ABREngine.Instance.Data.ImportRawDataset(abrPoints);
-    ///
-    ///         // STEP 4: Import a colormap visasset
-    ///         ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset&lt;ColormapVisAsset&gt;(new System.Guid("66b3cde4-034d-11eb-a7e6-005056bae6d8"));
-    ///
-    ///         // STEP 5: Create a Data Impression (layer) for the points, and assign some key data and styling
-    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = pointsInfo;                               // Assign key data (point geometry)
-    ///         di.colorVariable = pointsInfo.GetScalarVariables()[0]; // Assign scalar variable "someData"
-    ///         di.colormap = cmap;                                    // Apply colormap
-    ///         di.glyphSize = 0.002f;                                 // Apply glyph size styling
-    ///
-    ///         // STEP 6: Register impression with the engine
-    ///         ABREngine.Instance.RegisterDataImpression(di);
-    ///
-    ///         // STEP 7: Render the visualization
-    ///         ABREngine.Instance.Render();
-    ///     }
-    /// }
-    /// </code>
-    /// </example>
-    /// <example>
-    /// You may also wish to create a data impression but place in a different
-    /// position than the original one (e.g., to create a side-by-side
-    /// visualization). This example shows how to use the <see
-    /// cref="ABREngine.CreateDataImpressionGroup(string, Vector3)"/> and the
-    /// <see cref="ABREngine.DuplicateDataImpression(IDataImpression)"/> method
-    /// to create a side-by-side visualization.
-    /// <code>
-    /// public class ABREngineExample
-    /// {
-    ///     void Start()
-    ///     {
-    ///         // Let's say we've imported some fancy point data that we want to compare
-    ///         KeyData fancyData1 = // ... some import
-    ///         KeyData fancyData2 = // ... some import
     /// 
-    ///         // We can construct a data impression for the first data. Maybe we've
-    ///         // applied a bunch of styling to this that we want to copy...
-    ///         SimpleGlyphDataImpression di = new SimpleGlyphDataImpression();
-    ///         di.keyData = fancyData1;
-    ///         di.colorVariable = fancyData1.GetScalarVariables()[0];
-    ///         di.colormap = ABREngine.Instance.VisAssets.GetDefault&lt;ColormapVisAsset&gt;() as ColormapVisAsset;
-    ///         di.glyphSize = 0.002f;
+    /// [!code-csharp[](../../Samples~/Documentation examples/CustomDataABRExample.cs)]
     /// 
-    ///         // Register the first impression
-    ///         ABREngine.Instance.RegisterDataImpression(di);
-    /// 
-    ///         // Then, duplicate the data impression:
-    ///         SimpleGlyphDataImpression other = ABREngine.Instance.DuplicateDataImpression(di) as SimpleGlyphDataImpression;
-    /// 
-    ///         // Change the data and a little styling
-    ///         other.keyData = fancyData2;
-    ///         other.glyphSize = 0.5f;
-    /// 
-    ///         // Create a new impression group centered just to the right of the first one
-    ///         DataImpressionGroup newGroup = ABREngine.Instance.CreateDataImpressionGroup("OffsetGroup", new Vector3(0.5f, 0.0f, 0.0f));
-    /// 
-    ///         // And, register the impression with the new group
-    ///         ABREngine.Instance.RegisterDataImpression(other, newGroup);
-    ///     }
-    /// }
-    /// </code>
     /// </example>
     public class ABREngine : Singleton<ABREngine>
     {
+        /// <summary>
+        /// The package path defined in package.json.
+        /// 
+        /// > [!NOTE]
+        /// > With project builds, the PackagePath assumes that everything is
+        /// > located relative to the built executable. If the current working
+        /// > directory is something besides the directory ABR is located in,
+        /// > there may be problems.
+        /// 
+        /// > [!WARNING]
+        /// > If the package path changes for any reason, this will need to be updated!
+        /// </summary>
+        public const string PackagePath = "Packages/edu.umn.cs.ivlab.abrengine/";
+        
+        /// <summary>
+        /// Folder, relative to this package, where the ABR JSON schemas are located.
+        /// </summary>
+        public const string SchemasFolder = "ABRSchemas~";
+
+        /// <summary>
+        /// Full path where the ABR JSON schemas are located.
+        /// </summary>
+        public static string SchemasPath { get => Path.Combine(PackagePath, SchemasFolder); }
+
         private Dictionary<Guid, DataImpressionGroup> dataImpressionGroups = new Dictionary<Guid, DataImpressionGroup>();
 
         /// <summary>
@@ -178,8 +128,79 @@ namespace IVLab.ABREngine
 
         private Notifier _notifier;
 
+        private static string ConfigNamePath { get => Path.Combine(Application.streamingAssetsPath, "_ABRConfigNamePath.txt"); }
+        /// <summary>
+        /// Config "Prototype" to use for the current ABR configuration. This is
+        /// set in edit-mode and should NOT be changed at runtime. Instead, use
+        /// <see cref="Config"/>.
+        /// </summary>
+        public static ABRConfig ConfigPrototype
+        {
+            get
+            {
+                if (s_ConfigPrototype == null)
+                {
+                    // First, load the name of the current configuration from text file
+                    // This is a hack instead of using ScriptableSingleton with FilePathAttribute, which doesn't exist in Unity 2019.
+                    if (File.Exists(ConfigNamePath))
+                    {
+                        string configName = File.ReadAllText(ConfigNamePath);
+                        var configs = GetABRConfigs();
+                        int configIndex = configs.FindIndex(cfg => cfg.name == configName);
+                        if (configIndex >= 0)
+                        {
+                            ABRConfig config = configs[configIndex];
+                            s_ConfigPrototype = config;
+                            Debug.Log("Loaded ABR config " + config.name);
+                        }
+                        else
+                        {
+                            Debug.Log($"ABRConfig {configName} not found");
+                        }
+                    }
+                    else
+                    {
+                        // If nothing found, try to use the first available ABRConfig
+                        var configs = GetABRConfigs();
+                        if (configs.Count > 0)
+                            s_ConfigPrototype = configs[0];
+                    }
+                }
+                return s_ConfigPrototype;
+            }
+            set
+            {
+                if (Application.isPlaying)
+                {
+                    Debug.LogWarning(
+                        "ABREngine.ConfigPrototype should not be modified at runtime. Instead, use ABREngine.Instance.Config.\n" +
+                        "This ensures that any config changes made during runtime are temporary, mimicking the behaviour of Unity editor."
+                    );
+                    return;
+                }
+                s_ConfigPrototype = value;
+                var cnp = new FileInfo(ConfigNamePath);
+                if (!cnp.Directory.Exists)
+                {
+                    cnp.Directory.Create();
+                }
+                File.WriteAllText(ConfigNamePath, s_ConfigPrototype.name);
+                Debug.Log("Changed ABR Configuration to " + s_ConfigPrototype.name);
+            }
+        }
+        private static ABRConfig s_ConfigPrototype;
+
+        /// <summary>
+        /// Provides access to all of the <see cref="ABRConfig"/> options that
+        /// were loaded in at startup. You can safely change this config at
+        /// runtime without messing up the ScriptableObject representing the
+        /// underlying <see cref="ABRConfig"/>.
+        /// </summary>
+        public ABRConfig Config { get => config; private set => config = value; }
+
         [SerializeField]
-        public ABRConfig configPrototype;
+        private ABRConfig config;
+
 
         /// <summary>
         /// System-wide manager for VisAssets (visual elements used in the visualization)
@@ -253,7 +274,7 @@ namespace IVLab.ABREngine
         {
             get
             {
-                if (Config.mediaPath != null)
+                if (Config.mediaPath != null && Config.mediaPath.Length != 0)
                 {
                     return Path.GetFullPath(Config.mediaPath);
                 }
@@ -270,21 +291,12 @@ namespace IVLab.ABREngine
         public Transform ABRTransform { get; private set; }
 
         /// <summary>
-        /// Provides access to all of the ABRConfig options that were loaded in at startup
-        /// </summary>
-        public ABRConfig Config { get; private set; }
-
-        /// <summary>
         /// Client for internal application usage to make web requests.
         /// </summary>
         internal static readonly HttpClient httpClient = new HttpClient();
 
         protected override void Awake()
         {
-            // Enable depth texture write on main cam so that volume rendering
-            // functions correctly
-            Camera.main.depthTextureMode = DepthTextureMode.Depth;
-
             UnityThreadScheduler.GetInstance();
             persistentDataPath = Application.persistentDataPath;
             streamingAssetsPath = Application.streamingAssetsPath;
@@ -295,18 +307,39 @@ namespace IVLab.ABREngine
             stateParser = new ABRStateParser();
 
             // Initialize the configuration from ABRConfig.json
-            if (configPrototype != null)
+            if (ConfigPrototype != null)
             {
-                Config = Instantiate(configPrototype);
+                Config = Instantiate(ConfigPrototype);
             }
             else
             {
                 throw new Exception("ABR configuration not found, please create one first and select it in the ABREngine inspector.");
             }
 
+            // Don't destroy ABREngine on new scene loading, if desired
+            if (Config.persistBetweenScenes)
+            {
+                DontDestroyOnLoad(this);
+            }
+
             // Initialize the default DataImpressionGroup (where impressions go
             // when they have no dataset) - guid zeroed out
             _defaultGroup = CreateDataImpressionGroup("Default", new Guid());
+
+            // Enable depth texture write on main cam so that volume rendering
+            // functions correctly
+            Config.DefaultCamera.depthTextureMode = DepthTextureMode.Depth;
+
+            // Check the scene to ensure assumptions are met
+            ABREngine.CheckABRScene();
+
+            // Start the server, if desired
+            // THIS DOES NOT WORK (pyinstaller builds are broken), commenting
+            // out
+            // if (Config.startServer)
+            // {
+            //     ABRServer.StartServer(true);
+            // }
 
             try
             {
@@ -398,10 +431,53 @@ namespace IVLab.ABREngine
             }
         }
 
+        void OnEnable()
+        {
+            ABREngine.CheckABRScene();
+        }
+
         void OnDisable()
         {
             _notifier?.Stop();
             DataListener?.StopServer();
+        }
+
+        /// <summary>
+        /// Checks the ABR scene configuration and supplies warnings for each component that is not present
+        /// </summary>
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("ABR/Check ABR Scene")]
+#endif
+        private static void CheckABRScene()
+        {
+            // TODO: Finish adding warnings for assumptions ABR is making
+
+            var config = Application.isPlaying ? ABREngine.Instance.Config : ABREngine.ConfigPrototype;
+
+            // Obvious assumptions, should not get to either of these warnings.
+            if (MonoBehaviour.FindObjectOfType<ABREngine>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): ABREngine singleton not present in scene.");
+            if (MonoBehaviour.FindObjectsOfType<ABREngine>().Length > 1)
+                Debug.LogWarning("ABREngine.CheckABRScene(): Multiple ABREngines present in scene.");
+
+            // Light manager present somewhere in scene
+            if (MonoBehaviour.FindObjectOfType<ABRLightManager>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): ABR Light Manager not found in scene. Lights may not behave as expected, particularly with Volume layers.");
+            if (MonoBehaviour.FindObjectsOfType<ABREngine>().Length > 1)
+                Debug.LogWarning("ABREngine.CheckABRScene(): More than one ABR Light Manager found in scene. The first one found in the scene will be used.");
+
+            // Screenshot component on default camera
+            if (config.DefaultCamera.GetComponent<Screenshot>() == null)
+                Debug.LogWarning("ABREngine.CheckABRScene(): Screenshot component not found on ABR default camera. State thumbnails will not be saved.");
+        }
+
+        /// <summary>
+        /// Get all the configurations available to ABR
+        /// </summary>
+        /// <returns></returns>
+        public static List<ABRConfig> GetABRConfigs()
+        {
+            return Resources.LoadAll<ABRConfig>("ABRConfigs/").ToList();
         }
 
         /// <summary>
@@ -428,9 +504,9 @@ namespace IVLab.ABREngine
         /// <remarks>
         /// It is often more useful to use the <see
         /// cref="ABREngine.GetDataImpression{T}"/> method since it returns an
-        /// actual data impression instead of a <see cref="IDataImpression"/>.
+        /// actual data impression instead of a <see cref="DataImpression"/>.
         /// </remarks>
-        public IDataImpression GetDataImpression(Guid uuid)
+        public DataImpression GetDataImpression(Guid uuid)
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -444,7 +520,7 @@ namespace IVLab.ABREngine
         /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
         /// of the data impressions with the same keyDataPath.
         /// </summary>
-        public IDataImpression GetDataImpression(string keyDataPath)
+        public DataImpression GetDataImpression(string keyDataPath)
         {
             return GetDataImpressions(keyDataPath).FirstOrDefault();
         }
@@ -452,9 +528,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Returns all of the data impressions associated with the specified keyDataPath
         /// </summary>
-        public List<IDataImpression> GetDataImpressions(string keyDataPath)
+        public List<DataImpression> GetDataImpressions(string keyDataPath)
         {
-            return GetDataImpressions(di => { return di.GetKeyData().Path == keyDataPath; });
+            return GetDataImpressions(di => { return di.GetKeyData()?.Path == keyDataPath; });
         }
 
         /// <summary>
@@ -463,7 +539,7 @@ namespace IVLab.ABREngine
         /// this is not always the case.  GetDataImpressions(string keyDataPath) can be used to get all
         /// of the data impressions with the same keyDataPath.
         /// </summary>
-        public T GetDataImpression<T>(string keyDataPath) where T : IDataImpression
+        public T GetDataImpression<T>(string keyDataPath) where T : DataImpression
         {
             return GetDataImpressions<T>(keyDataPath).FirstOrDefault();
         }
@@ -471,7 +547,7 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Returns all of the data impressions associated with the specified keyDataPath
         /// </summary>
-        public List<T> GetDataImpressions<T>(string keyDataPath) where T : IDataImpression
+        public List<T> GetDataImpressions<T>(string keyDataPath) where T : DataImpression
         {
             return GetDataImpressions<T>(di => { return di.GetKeyData().Path == keyDataPath; });
         }
@@ -484,7 +560,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The first data impression of any type that matches criteria, null otherwise.
         /// </returns>
-        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        public DataImpression GetDataImpression(Func<DataImpression, bool> criteria)
         {
             return GetAllDataImpressions().FirstOrDefault(criteria);
         }
@@ -493,12 +569,12 @@ namespace IVLab.ABREngine
         /// Retreive the first data impression found with a particular type AND function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
         /// <param name="criteria">Function that takes each data impression matching type `T` and returns a boolean.</param>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// The first data impression of type `T` that matches criteria, null otherwise.
         /// </returns>
         public T GetDataImpression<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault(criteria);
         }
@@ -509,9 +585,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The first data impression of matching type `T`, null otherwise.
         /// </returns>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         public T GetDataImpression<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault();
         }
@@ -525,7 +601,7 @@ namespace IVLab.ABREngine
         /// </returns>
         [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -543,7 +619,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// A list of data impressions with a particular tag
         /// </returns>
-        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        public List<DataImpression> GetDataImpressionsWithTag(string tag)
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value)
@@ -558,7 +634,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// All data impressions of any type that matches criteria, null otherwise.
         /// </returns>
-        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        public List<DataImpression> GetDataImpressions(Func<DataImpression, bool> criteria)
         {
             return GetAllDataImpressions()?.Where(criteria).ToList();
         }
@@ -566,12 +642,12 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Retreive the all data impressions found of a particular type
         /// </summary>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// All data impressions of type `T`.
         /// </returns>
         public List<T> GetDataImpressions<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetAllDataImpressions()?
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
@@ -582,12 +658,12 @@ namespace IVLab.ABREngine
         /// Retreive the all data impressions found of a particular type matching function crieteria (similar to a "filter" or Linq-esque "where" operation).
         /// </summary>
         /// <param name="criteria">Function that takes each data impression of type `T` and returns a boolean.</param>
-        /// <typeparam name="T">Any data impression type implementing <see cref="IDataImpression"/></typeparam>
+        /// <typeparam name="T">Any data impression type implementing <see cref="DataImpression"/></typeparam>
         /// <returns>
         /// All data impressions of type `T` that match the criteria.
         /// </returns>
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>()?.Where(criteria).ToList();
         }
@@ -599,7 +675,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// All data impressions that exist in the ABREngine
         /// </returns>
-        public List<IDataImpression> GetAllDataImpressions()
+        public List<DataImpression> GetAllDataImpressions()
         {
             return dataImpressionGroups?
                 .Select((kv) => kv.Value.GetDataImpressions().Values.ToList())
@@ -607,27 +683,7 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// Retrieve the encoded game object in the Unity scene associated with
-        /// a particular data impression, identified by its guid.
-        /// </summary>
-        /// <param name="impressionGuid">Unique identifier (UUID) of the data impression to get the GameObject for</param>
-        /// <returns>
-        /// An <see cref="EncodedGameObject"/> (MonoBehaviour) of the Data Impression as it
-        /// exists in the Unity Scene, or null if no such impression exists.
-        /// </returns>
-        public EncodedGameObject GetEncodedGameObject(Guid impressionGuid)
-        {
-            return dataImpressionGroups?
-                .Select((kv) => kv.Value)
-                .FirstOrDefault((v) => v.HasEncodedGameObject(impressionGuid))?
-                .GetEncodedGameObject(impressionGuid);
-        }
-
-        /// <summary>
-        /// Add a bare data impression group into the ABR scene. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position/rotation default to
-        /// zero.
+        /// Add a new data impression group with a particular name
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <returns>
@@ -635,29 +691,11 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name)
         {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, Guid.NewGuid(), null, Matrix4x4.identity);
         }
 
         /// <summary>
-        /// Add a bare data impression group into the ABR scene. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position is defined by the user.
-        /// </summary>
-        /// <param name="name">Name of the new data impression group that will be created</param>
-        /// <param name="position">Where to place the data impression in space</param>
-        /// <returns>
-        /// The group that has been added.
-        /// </returns>
-        public DataImpressionGroup CreateDataImpressionGroup(string name, Vector3 position)
-        {
-            return CreateDataImpressionGroup(name, Guid.NewGuid(), Config.dataContainer, position, Quaternion.identity);
-        }
-
-        /// <summary>
-        /// Add a new data impression group with a particular UUID. The group
-        /// bounds defaults to the bounds found in
-        /// `ABRConfig.defaultBounds`, and the position/rotation default to
-        /// zero.
+        /// Add a new data impression group with a particular UUID
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <param name="uuid">UUID to use for the new data impression group</param>
@@ -666,24 +704,22 @@ namespace IVLab.ABREngine
         /// </returns>
         public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid)
         {
-            return CreateDataImpressionGroup(name, uuid, Config.dataContainer, Vector3.zero, Quaternion.identity);
+            return CreateDataImpressionGroup(name, uuid, null, Matrix4x4.identity);
         }
 
-
         /// <summary>
-        /// Add a new data impression group with a particular UUID, bounds, position, and rotation.
+        /// Add a new data impression group with a particular UUID, bounds, and transformation
         /// </summary>
         /// <param name="name">Name of the new data impression group that will be created</param>
         /// <param name="uuid">UUID to use for the new data impression group</param>
-        /// <param name="bounds">Default bounds to use for this data impression group. Data will be "squished" inside this bounding box.</param>
-        /// <param name="position">Default position (in Unity coordinates) to use for the data impression group.</param>
-        /// <param name="rotation">Default rotation (in Unity angles) to use for the data impression group.</param>
+        /// <param name="containerBounds">Default bounds to use for this data impression group. Data will be "squished" inside this bounding box.</param>
+        /// <param name="transformMatrix">Default position/rotation/scale (in Unity coordinates) to use for the data impression group.</param>
         /// <returns>
         /// The group that has been added.
         /// </returns>
-        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation)
+        public DataImpressionGroup CreateDataImpressionGroup(string name, Guid uuid, Bounds? containerBounds, Matrix4x4? transformMatrix)
         {
-            DataImpressionGroup group = new DataImpressionGroup(name, uuid, bounds, position, rotation, this.transform);
+            DataImpressionGroup group = DataImpressionGroup.Create(name, uuid, containerBounds, transformMatrix.GetValueOrDefault(Matrix4x4.identity));
             dataImpressionGroups[group.Uuid] = group;
             return group;
         }
@@ -696,7 +732,7 @@ namespace IVLab.ABREngine
         public void RemoveDataImpressionGroup(Guid uuid)
         {
             dataImpressionGroups[uuid].Clear();
-            Destroy(dataImpressionGroups[uuid].GroupRoot);
+            Destroy(dataImpressionGroups[uuid]);
             dataImpressionGroups.Remove(uuid);
         }
 
@@ -735,7 +771,7 @@ namespace IVLab.ABREngine
 
         public DataImpressionGroup GetDataImpressionGroup(string name)
         {
-            return dataImpressionGroups.Values.FirstOrDefault(g => g.Name == name);
+            return dataImpressionGroups.Values.FirstOrDefault(g => g.name == name);
         }
 
 
@@ -770,7 +806,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression group `dataImpression` belongs to, otherwise null.
         /// </returns>
-        public DataImpressionGroup GetGroupFromImpression(IDataImpression dataImpression)
+        public DataImpressionGroup GetGroupFromImpression(DataImpression dataImpression)
         {
             try
             {
@@ -791,7 +827,7 @@ namespace IVLab.ABREngine
         /// <param name="dataImpression">The data impression to register with the engine</param>
         /// <param name="newGroup">Group to add this data impression to</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
-        public void RegisterDataImpression(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        public void RegisterDataImpression(DataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // Create a new group if it doesn't exist
             // OR, if it's in the default group but now has a dataset, move it to its proper group
@@ -831,7 +867,7 @@ namespace IVLab.ABREngine
         /// </summary>
         /// <param name="dataImpression">The data impression to register with the engine</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions that have this UUID already?</param>
-        public void RegisterDataImpression(IDataImpression dataImpression, bool allowOverwrite = true)
+        public void RegisterDataImpression(DataImpression dataImpression, bool allowOverwrite = true)
         {
             Dataset ds = dataImpression.GetDataset();
             if (ds != null)
@@ -896,7 +932,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(Guid uuid)
+        public DataImpression DuplicateDataImpression(Guid uuid)
         {
             return DuplicateDataImpression(GetDataImpression(uuid));
         }
@@ -911,7 +947,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression impression)
+        public DataImpression DuplicateDataImpression(DataImpression impression)
         {
             return DuplicateDataImpression(impression, null);
         }
@@ -928,9 +964,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, DataImpressionGroup group)
+        public DataImpression DuplicateDataImpression(DataImpression dataImpression, DataImpressionGroup group)
         {
-            IDataImpression newDataImpression = dataImpression.Copy();
+            DataImpression newDataImpression = dataImpression.Clone();
             newDataImpression.Uuid = Guid.NewGuid();
 
             if (group == null)
@@ -957,7 +993,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The new data impression.
         /// </returns>
-        public IDataImpression DuplicateDataImpression(IDataImpression dataImpression, bool retainGroup = true)
+        public DataImpression DuplicateDataImpression(DataImpression dataImpression, bool retainGroup = true)
         {
             if (retainGroup)
             {
@@ -976,7 +1012,7 @@ namespace IVLab.ABREngine
         /// <param name="dataImpression">The data impression that should be moved.</param>
         /// <param name="newGroup">The group to place the data impression into.</param>
         /// <param name="allowOverwrite">Should we destroy any existing data impressions with this UUID within the `newGroup`?</param>
-        public void MoveImpressionToGroup(IDataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
+        public void MoveImpressionToGroup(DataImpression dataImpression, DataImpressionGroup newGroup, bool allowOverwrite = true)
         {
             // See if it's a part of a group already
             DataImpressionGroup oldGroup = GetGroupFromImpression(dataImpression);
@@ -999,11 +1035,11 @@ namespace IVLab.ABREngine
 
 
 
-        public IKeyData GetKeyData(string keyDataPath)
+        public KeyData GetKeyData(string keyDataPath)
         {
             List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
             foreach (var ds in allDatasets) {
-                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                Dictionary<string, KeyData> keyDatas = ds.GetAllKeyData();
                 foreach (var kd in keyDatas) {
                     if (kd.Key == keyDataPath) {
                         return kd.Value;
@@ -1015,12 +1051,12 @@ namespace IVLab.ABREngine
 
 
 
-        public Dictionary<string, IKeyData> GetKeyDataStartsWith(string keyDataPathStartsWith)
+        public Dictionary<string, KeyData> GetKeyDataStartsWith(string keyDataPathStartsWith)
         {
-            Dictionary<string, IKeyData> results = new Dictionary<string, IKeyData>();
+            Dictionary<string, KeyData> results = new Dictionary<string, KeyData>();
             List<Dataset> allDatasets = ABREngine.Instance.Data.GetDatasets();
             foreach (var ds in allDatasets) {
-                Dictionary<string, IKeyData> keyDatas = ds.GetAllKeyData();
+                Dictionary<string, KeyData> keyDatas = ds.GetAllKeyData();
                 foreach (var kd in keyDatas) {
                     if (kd.Key.StartsWith(keyDataPathStartsWith)) {
                         results.Add(kd.Key, kd.Value);
@@ -1102,7 +1138,7 @@ namespace IVLab.ABREngine
         /// ABREngine.Instance.LoadState&lt;PathStateFileLoader&gt;("C:/Users/VRDemo/Desktop/test.json");
         ///
         /// // A JSON string
-        /// ABREngine.Instance.LoadState&lt;ResourceStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
+        /// ABREngine.Instance.LoadState&lt;TextStateFileLoader&gt;("{\"version\": \"0.2.0\", \"name\": \"test\"}");
         ///
         /// // A web resource
         /// ABREngine.Instance.LoadState&lt;HttpStateFileLoader&gt;("http://localhost:8000/api/state");

@@ -17,6 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -134,7 +137,7 @@ namespace IVLab.ABREngine
             dataLoaders.Add(new ResourcesDataLoader());
 
             // Afterwards, if we're connected to a data server, look there...
-            if (ABREngine.Instance.Config.dataServerUrl?.Length > 0)
+            if (ABREngine.Instance?.Config?.dataServerUrl?.Length > 0)
             {
                 Debug.Log("Allowing loading of datasets from " + ABREngine.Instance.Config.dataServerUrl);
                 dataLoaders.Add(new HttpDataLoader());
@@ -176,6 +179,36 @@ namespace IVLab.ABREngine
         public List<Dataset> GetDatasets()
         {
             return datasets.Values.ToList();
+        }
+
+        /// <summary>
+        /// Gets ALL the key data that have been loaded into the ABREngine,
+        /// regardless of dataset.
+        /// </summary>
+        /// <returns>List of currently loaded KeyData</returns>
+        public List<KeyData> GetAllKeyData()
+        {
+            List<KeyData> allKeyData = new List<KeyData>();
+            foreach (var ds in datasets.Values)
+            {
+                allKeyData.AddRange(ds.GetKeyData());
+            }
+            return allKeyData;
+        }
+
+        /// <summary>
+        /// Gets key data with a particular path
+        /// </summary>
+        public KeyData GetKeyData(string keyDataPath)
+        {
+            foreach (var ds in datasets.Values)
+            {
+                if (ds.TryGetKeyData(keyDataPath, out KeyData kd))
+                {
+                    return kd;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -272,8 +305,7 @@ namespace IVLab.ABREngine
 
         /// <summary>
         /// Attempt to load the data described in `dataPath` from any available
-        /// resource, including a Resources folder, the <see
-        /// cref="media-folder.md"/>, or a HTTP web resource.
+        /// resource, including a Resources folder, the @media-folder.md, or a HTTP web resource.
         /// </summary>
         /// <param name="dataPath">Data path to load. If loading from the media
         /// directory, you can use the relative path inside that folder (but
@@ -341,7 +373,7 @@ namespace IVLab.ABREngine
                 Dataset dataset;
                 if (!TryGetDataset(datasetPath, out dataset))
                 {
-                    Bounds dataContainer = ABREngine.Instance.Config.dataContainer;
+                    Bounds dataContainer = ABREngine.Instance.Config.defaultDataContainer;
                     dataset = new Dataset(datasetPath, dataContainer, ABREngine.Instance.ABRTransform);
                 }
 
@@ -352,7 +384,7 @@ namespace IVLab.ABREngine
                 ImportKeyData(dataPath, importing, dataset);
 
                 // Retrieve the KeyData object that was just imported
-                IKeyData keyData;
+                KeyData keyData;
                 if (!dataset.TryGetKeyData(dataPath, out keyData))
                 {
                     Debug.LogError($"Failed to import Key Data for {dataPath} properly");
@@ -489,17 +521,40 @@ namespace IVLab.ABREngine
         // Build the key data associations
         private void ImportKeyData(string dataPath, RawDataset rawDataset, Dataset dataset)
         {
-            // Infer the type of data from the topology
-            Type dataType = KeyDataMapping.typeMap[rawDataset.dataTopology];
-
-            // Use reflection to construct the object (should only match one)
-            ConstructorInfo[] constructors = dataType.GetConstructors();
-
-            // Construct the object with the data path argument
-            string[] args = new string[] { dataPath };
-            IKeyData keyData = constructors[0].Invoke(args) as IKeyData;
+            // Build the key data from the given type
+            KeyData keyData = new KeyData(dataPath, rawDataset.dataTopology);
 
             dataset.AddKeyData(keyData);
         }
+
+// editor methods
+#if UNITY_EDITOR
+        // Copy the example data to the media folder
+        [MenuItem("ABR/Copy Example Data to Media Folder")]
+        private static void CopyExampleData()
+        {
+            var dataToCopy = new List<string>()
+            {
+                "Demo/Wavelet/KeyData/DensityRadius^5",
+                "Demo/Wavelet/KeyData/FullVolume",
+                "Demo/Wavelet/KeyData/InputFlow",
+                "Demo/Wavelet/KeyData/OutputFlow",
+                "Demo/Wavelet/KeyData/RTData100",
+                "Demo/Wavelet/KeyData/RTData230",
+            };
+
+            var dsPath = Path.Combine(ABREngine.ConfigPrototype.mediaPath, ABRConfig.Consts.DatasetFolder);
+            var tmpDataManager = new DataManager(dsPath);
+
+            foreach (string keyDataPath in dataToCopy)
+            {
+                // Load the data
+                RawDataset rds = tmpDataManager.LoadRawDataset(keyDataPath);
+
+                // Then save it back to disk in the media folder
+                tmpDataManager.CacheRawDataset(keyDataPath, rds);
+            }
+        }
+#endif
     }
 }

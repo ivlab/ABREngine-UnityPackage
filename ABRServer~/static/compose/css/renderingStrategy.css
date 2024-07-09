@@ -1,0 +1,114 @@
+.rendering-strategy-preview {
+    display: block;
+    width: 5rem;
+    height: 5rem; /* Match the keydata block size (plus padding on both sides) */
+    /* padding: 1rem; */
+    margin: auto;
+}
+
+.rendering-strategy {
+    font-size: 12px;
+    margin: 0;
+    width: 6rem;
+    color: #3d3d3d;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rendering-strategy .parameter-expander {
+    width: 90%;
+}
+
+.rendering-strategy .block-title {
+    width: 12rem;
+    display: flex;
+}
+
+.block-title input[type="text"] {
+    flex-grow: 2;
+}
+
+.block-title button {
+    flex-grow: 1;
+    color: #888;
+}
+
+.rendering-strategy .parameter-list {
+    width: 100%;
+}
+
+.rendering-strategy .parameter.keydata-parameter {
+    height: 5rem;
+    width: 12rem;
+    border-top: none;
+    background-color: white;
+}
+
+.rendering-strategy .parameter {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: 1px dotted #999;
+    padding: 0.5rem 0;
+}
+
+.rendering-strategy .parameter-title {
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.rendering-strategy .parameter .parameter-input {
+    min-width: 0;
+}
+
+.socket {
+    position: absolute;
+    width: 8rem; /* Same dimensions as puzzle-piece; in puzzlePieces.css */
+    height: 3rem;
+    background-color: #666;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.socket.highlighted {
+    animation-name: pulse;
+    animation-duration: 1.7s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+.socket.highlighted p {
+    filter: drop-shadow(0px 0px 0.5rem #000);
+}
+
+@keyframes pulse {
+    0% {background-color: #666;}
+    50% {background-color: #97aec1;}
+    100% {background-color: #666;}
+}
+
+.keydata-socket.socket {
+    left: -8rem; /* Position it to the left outside the parameter div */
+    width: 5rem; /* Same as total width of keydata puzzle piece; in puzzlePieces.css */
+    height: 5rem;
+    border-right: none;
+}
+.left-socket.socket {
+    left: -8rem; /* Position it to the left outside the parameter div */
+    border-right: none;
+}
+.right-socket.socket {
+    left: 100%; /* To the right outside the parameter div */
+    border-left: none;
+}
+
+.socket>p {
+    margin: 5px;
+    text-align: center;
+}

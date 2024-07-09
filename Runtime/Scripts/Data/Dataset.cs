@@ -32,7 +32,7 @@ namespace IVLab.ABREngine
     {
         // Dictionary of DataPath -> key data objects (paths will match those in
         // datasets dict)
-        private Dictionary<string, IKeyData> keyDataObjects = new Dictionary<string, IKeyData>();
+        private Dictionary<string, KeyData> keyDataObjects = new Dictionary<string, KeyData>();
 
         // Dictionaries of DataPath -> variables that manage min/max values and
         // point to the above datasets
@@ -54,7 +54,7 @@ namespace IVLab.ABREngine
         /// All <see cref="VectorDataVariable"/> objects within this dataset.
         /// NOTE: Not every VectorDataVariable applies to every KeyData object!
         /// </summary>
-        public VectorDataVariable[] GetVectorVariables(IKeyData associatedWith)
+        public VectorDataVariable[] GetVectorVariables(KeyData associatedWith)
         {
             if (associatedWith == null)
             {
@@ -75,7 +75,7 @@ namespace IVLab.ABREngine
         /// All <see cref="ScalarDataVariable"/> objects within this dataset.
         /// NOTE: Not every ScalarDataVariable applies to every KeyData object!
         /// </summary>
-        public ScalarDataVariable[] GetScalarVariables(IKeyData associatedWith)
+        public ScalarDataVariable[] GetScalarVariables(KeyData associatedWith)
         {
             if (associatedWith == null)
             {
@@ -93,9 +93,9 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        /// All <see cref="IKeyData"/> objects within this dataset
+        /// All <see cref="KeyData"/> objects within this dataset
         /// </summary>
-        public IKeyData[] GetKeyData()
+        public KeyData[] GetKeyData()
         {
             return keyDataObjects.Values.ToArray();
         }
@@ -105,7 +105,7 @@ namespace IVLab.ABREngine
             Path = dataPath;
         }
 
-        public void AddKeyData(IKeyData keyData)
+        public void AddKeyData(KeyData keyData)
         {
             RawDataset rawDataset;
             if (ABREngine.Instance.Data.TryGetRawDataset(keyData.Path, out rawDataset))
@@ -137,13 +137,13 @@ namespace IVLab.ABREngine
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.VectorVar);
             return vectorVariables.TryGetValue(dataPath, out vectorVar);
         }
-        public bool TryGetKeyData(string dataPath, out IKeyData keyData)
+        public bool TryGetKeyData(string dataPath, out KeyData keyData)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
             return keyDataObjects.TryGetValue(dataPath, out keyData);
         }
 
-        public Dictionary<string, IKeyData> GetAllKeyData()
+        public Dictionary<string, KeyData> GetAllKeyData()
         {
             return keyDataObjects;
         }

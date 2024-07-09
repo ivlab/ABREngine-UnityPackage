@@ -51,9 +51,9 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Ribbons")]
-    public class SimpleLineDataImpression : DataImpression, IDataImpression, IHasDataset
+    public class SimpleLineDataImpression : DataImpression, IHasDataset
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -73,20 +73,21 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
 
         /// <summary>
         /// Scalar variable used to vary the line texture across its length.
         /// </summary>
-        [ABRInput("Texture Variable", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture Variable", UpdateLevel.Style)]
         public ScalarDataVariable lineTextureVariable;
 
         /// <summary>
@@ -95,13 +96,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/lineTexture.gif"/>
         /// </summary>
-        [ABRInput("Texture", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset lineTexture;
 
         /// <summary>
         /// Override the line texture used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanLine"/>.
         /// </summary>
+        [ABRInput("NaN Texture", UpdateLevel.Style)]
         public ILineTextureVisAsset nanLineTexture;
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace IVLab.ABREngine
         /// cref="lineTexture"/> applied. It has the most effect on textures
         /// that are not fully black/white.
         /// </remarks>
-        [ABRInput("Texture Cutoff", "Texture", UpdateLevel.Style)]
+        [ABRInput("Texture Cutoff", UpdateLevel.Style)]
         public PercentPrimitive textureCutoff;
 
 
@@ -127,7 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/averageCount.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Smooth", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Smooth", UpdateLevel.Geometry)]
         public IntegerPrimitive averageCount;
 
         /// <summary>
@@ -135,7 +137,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/lineWidth.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Width", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Width", UpdateLevel.Geometry)]
         public LengthPrimitive lineWidth;
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonRotationAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Rotation", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Rotation", UpdateLevel.Geometry)]
         public AnglePrimitive ribbonRotationAngle;
 
         /// <summary>
@@ -151,7 +153,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonBrightness.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Brightness", "Ribbon", UpdateLevel.Style)]
+        [ABRInput("Ribbon Brightness", UpdateLevel.Style)]
         public PercentPrimitive ribbonBrightness;
 
         /// <summary>
@@ -159,7 +161,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleLineDataImpression/ribbonCurveAngle.gif"/>
         /// </summary>
-        [ABRInput("Ribbon Curve", "Ribbon", UpdateLevel.Data)]
+        [ABRInput("Ribbon Curve", UpdateLevel.Geometry)]
         public AnglePrimitive ribbonCurveAngle;
 
         /// <summary>
@@ -177,25 +179,35 @@ namespace IVLab.ABREngine
         public Vector3 defaultCurveDirection = Vector3.up;
 
         protected override string[] MaterialNames { get; } = { "ABR_Ribbon" };
-        protected override string LayerName { get; } = "ABR_Line";
 
         /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
+        /// Define the layer name for this Data Impression
         /// </summary>
-        public SimpleLineDataImpression(string uuid) : base(uuid) { }
-        public SimpleLineDataImpression() : base() { }
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Line";
 
-        public override Dataset GetDataset()
-        {
-            return keyData?.GetDataset();
-        }
+        public override Dataset GetDataset() => keyData?.GetDataset();
+        public override KeyData GetKeyData() => keyData;
+        public override void SetKeyData(KeyData kd) => keyData = kd;
+        public override DataTopology GetKeyDataTopology() => DataTopology.LineStrip;
 
-        public override KeyData GetKeyData()
-        {
-            return keyData;
-        }
+        // protected override int GetIndexForPackedScalarVariable(ScalarDataVariable variable)
+        // {
+        //     for (int i = 0; i < InputIndexer.InputCount; i++)
+        //     {
+        //         if (InputIndexer.GetInputValue(i) == variable)
+        //         {
+        //             return i;
+        //         }
+        //     }
+        //     return -1;
+        // }
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleLineDataImpression() { }
 
         public override void ComputeGeometry()
         {
@@ -434,10 +446,10 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
             var lineResources = RenderInfo as SimpleLineRenderInfo;
-            if (currentGameObject == null || lineResources == null)
+            if (gameObject == null || lineResources == null)
             {
                 return;
             }
@@ -451,28 +463,30 @@ namespace IVLab.ABREngine
 
             // Create a new GameObject for each line in the data, and return any unused ones to the pool
             int numLines = lineResources?.indices?.Length ?? 0;
-            while (currentGameObject.transform.childCount < numLines)
+            int lineIndex = 0;
+            while (gameObject.transform.childCount < numLines)
             {
-                GameObject renderObject = GenericObjectPool.Instance.GetObjectFromPool(this.GetType().Name + " meshRenderer", currentGameObject.transform, go =>
+                GameObject renderObject = GenericObjectPool.Instance.GetObjectFromPool(this.GetType().Name + " meshRenderer", gameObject.transform, go =>
                 {
-                    go.name = "Line Render Object";
+                    go.name = "Line Render Object " + lineIndex;
                 });
-                renderObject.transform.SetParent(currentGameObject.transform, false);
+                renderObject.transform.SetParent(gameObject.transform, false);
                 renderObject.transform.localPosition = Vector3.zero;
                 renderObject.transform.localScale = Vector3.one;
                 renderObject.transform.localRotation = Quaternion.identity;
+                lineIndex += 1;
             }
 
-            while (currentGameObject.transform.childCount > numLines)
+            while (gameObject.transform.childCount > numLines)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
 
             // Create mesh filters and renderers for each line
             for (int i = 0; i < numLines; i++)
             {
-                var renderObject = currentGameObject.transform.GetChild(i).gameObject;
+                var renderObject = gameObject.transform.GetChild(i).gameObject;
                 MeshFilter meshFilter = null;
                 MeshRenderer meshRenderer = null;
                 if (!renderObject.TryGetComponent<MeshFilter>(out meshFilter))
@@ -514,10 +528,10 @@ namespace IVLab.ABREngine
         // Updates line styling based on scalars, color, texture and ribbon brightness,
         // but none of the other ribbon attributes (width, rotation, curve, smooth)
         // since those involve actually rebuilding geometry
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Exit immediately if the game object or key data does not exist
-            if (currentGameObject == null || keyData == null)
+            if (gameObject == null || keyData == null)
             {
                 return;
             }
@@ -572,7 +586,7 @@ namespace IVLab.ABREngine
             for (int i = 0; i < numLines; i++)
             {
                 // Get the current line renderer gameobject
-                GameObject renderObject = currentGameObject.transform.GetChild(i).gameObject;
+                GameObject renderObject = gameObject.transform.GetChild(i).gameObject;
                 // Obtain its mesh renderer and filter components
                 MeshFilter meshFilter = renderObject?.GetComponent<MeshFilter>();
                 MeshRenderer meshRenderer = renderObject?.GetComponent<MeshRenderer>();
@@ -580,6 +594,7 @@ namespace IVLab.ABREngine
                 // fully initialized with KeyData yet
                 if (meshFilter == null || meshRenderer == null)
                 {
+                    Debug.LogError("SimpleLineDataImpression: GameObject not yet initialized " + i);
                     return;
                 }
 
@@ -689,15 +704,15 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
                 return;
             }
-            for (int i = 0; i < currentGameObject.transform.childCount; i++)
+            for (int i = 0; i < gameObject.transform.childCount; i++)
             {
-                MeshRenderer mr = currentGameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
+                MeshRenderer mr = gameObject.transform.GetChild(i).GetComponent<MeshRenderer>();
                 if (mr !=  null)
                 {
                     if (RenderHints.Visible)
@@ -714,5 +729,124 @@ namespace IVLab.ABREngine
                 }
             }
         }
+
+#region IDataAccessor implementation
+        // public override DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint)
+        // {
+        //     return GetClosestDataInDataSpace(WorldSpacePointToDataSpace(worldSpacePoint));
+        // }
+
+        // public override DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint)
+        // {
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     DataPoint closest = null;
+        //     if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
+        //     {
+        //         closest = new DataPoint()
+        //         {
+        //             cellIndex = 0,
+        //             dataSpacePoint = renderInfo.vertices[0][0],
+        //         };
+        //         // int closestLine = 0;
+        //         float closestDist = (dataSpacePoint - closest.dataSpacePoint).magnitude;
+        //         for (int l = 0; l < renderInfo.vertices.Length; l++)
+        //         {
+        //             for (int v = 0; v < renderInfo.vertices[l].Length; v++)
+        //             {
+        //                 float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
+        //                 if (dist < closestDist)
+        //                 {
+        //                     closest.cellIndex = l;
+        //                     closest.vertexIndex = v;
+        //                     closest.dataSpacePoint = renderInfo.vertices[l][v];
+        //                     closestDist = dist;
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     closest.worldSpacePoint = DataSpacePointToWorldSpace(closest.dataSpacePoint);
+        //     return closest;
+        // }
+
+        // public override List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace)
+        // {
+        //     Vector3 radiusVecWorld = new Vector3(radiusInWorldSpace, 0, 0);
+        //     Vector3 radiusVecData = WorldSpaceVectorToDataSpace(radiusVecWorld);
+
+        //     return GetNearbyDataInDataSpace(WorldSpacePointToDataSpace(worldSpacePoint), radiusVecData.magnitude);
+        // }
+
+        // public override List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace)
+        // {
+        //     List<DataPoint> nearbyPoints = new List<DataPoint>();
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     if ((renderInfo != null) && (renderInfo.vertices.Length > 0))
+        //     {
+        //         for (int l = 0; l < renderInfo.vertices.Length; l++)
+        //         {
+        //             for (int v = 0; v < renderInfo.vertices[l].Length; v++)
+        //             {
+        //                 float dist = (dataSpacePoint - renderInfo.vertices[l][v]).magnitude;
+        //                 if (dist < radiusInDataSpace)
+        //                 {
+        //                     DataPoint point = new DataPoint()
+        //                     {
+        //                         cellIndex = l,
+        //                         vertexIndex = v,
+        //                         dataSpacePoint = renderInfo.vertices[l][v],
+        //                         worldSpacePoint = DataSpacePointToWorldSpace(renderInfo.vertices[l][v]),
+        //                     };
+        //                     nearbyPoints.Add(point);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return nearbyPoints;
+        // / }
+
+        // public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
+        // {
+        //     // Vector3 closestPointInWorldSpace = GetClosestDataInWorldSpace(point).worldSpacePoint;
+        // }
+        // public override float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
+
+        // }
+
+        // public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null)
+        // {
+        //     DataPoint closestPointInWorldSpace = GetClosestDataInDataSpace(point);
+        //     SimpleLineRenderInfo renderInfo = RenderInfo as SimpleLineRenderInfo;
+        //     Color scalarsAtPoint = renderInfo.scalars[closestPointInWorldSpace.cellIndex][closestPointInWorldSpace.vertexIndex];
+        // }
+        // public override float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
+
+        // }
+
+        // public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
+        // {
+
+        // }
+        // public override Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // {
+
+        // }
+        // public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null)
+        // {
+
+        // }
+        // public override Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null)
+        // {
+
+        // }
+
+        // public override float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable)
+        // {
+
+        // }
+#endregion
     }
 }

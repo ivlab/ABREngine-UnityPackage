@@ -25,22 +25,6 @@ using System.Linq;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    /// Mapping between topologies / types of geometry and actual key data
-    /// </summary>
-    public static class KeyDataMapping
-    {
-        public static Dictionary<DataTopology, Type> typeMap = new Dictionary<DataTopology, Type>()
-        {
-            { DataTopology.Points, typeof(PointKeyData) },
-            { DataTopology.Triangles, typeof(SurfaceKeyData) },
-            { DataTopology.Quads, typeof(SurfaceKeyData) },
-            { DataTopology.Lines, typeof(LineKeyData) },
-            { DataTopology.LineStrip, typeof(LineKeyData) },
-            { DataTopology.Voxels, typeof(VolumeKeyData) }
-        };
-    }
-
-    /// <summary>
     /// Indicator that a particular object has some key data attached to it -
     /// useful for most <see cref="DataImpression"/>s.
     /// </summary>
@@ -50,14 +34,17 @@ namespace IVLab.ABREngine
         /// Get any key data object associated with this object
         /// </summary>
         KeyData GetKeyData();
-    }
 
-    public interface IKeyData : IABRInput
-    {
         /// <summary>
-        /// The <see cref="DataPath"/> that represents this KeyData
+        /// Set the Key Data for this object
         /// </summary>
-        string Path { get; }
+        /// <param name="kd"></param>
+        void SetKeyData(KeyData kd);
+
+        /// <summary>
+        /// Get the KeyData's expected topology
+        /// </summary>
+        DataTopology GetKeyDataTopology();
     }
 
     /// <summary>
@@ -92,14 +79,16 @@ namespace IVLab.ABREngine
     /// }
     /// </code>
     /// </example>
-    public class KeyData : IKeyData, IHasDataset
+    public class KeyData : IHasDataset, IABRInput
     {
         public ABRInputGenre Genre { get; } = ABRInputGenre.KeyData;
         public string Path { get; }
+        public DataTopology Topology { get; }
 
-        public KeyData(string path)
+        public KeyData(string path, DataTopology topology)
         {
             Path = path;
+            Topology = topology;
         }
 
         /// <summary>
@@ -174,36 +163,51 @@ namespace IVLab.ABREngine
             return dataset;
         }
 
+        public RawDataset GetRawDataset()
+        {
+            if (ABREngine.Instance.Data.TryGetRawDataset(this.Path, out RawDataset rds))
+            {
+                return rds;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public RawABRInput GetRawABRInput()
         {
             return new RawABRInput {
                 inputType = this.GetType().ToString(),
                 inputValue = this.Path,
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G"),
             };
         }
     }
 
-    public class SurfaceKeyData : KeyData, IKeyData
-    {
-        public SurfaceKeyData(string path) : base(path) { }
-    }
-
-    public class PointKeyData : KeyData, IKeyData
-    {
-        public PointKeyData(string path) : base (path) { }
-    }
-
-    public class LineKeyData : KeyData, IKeyData
-    {
-        public LineKeyData(string path) : base(path) { }
-    }
-
-    public class VolumeKeyData : KeyData, IKeyData
-    {
-        public VolumeKeyData(string path) : base(path) { }
-    }
-
     public interface IKeyDataRenderInfo { }
+
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
+    public class SurfaceKeyData : KeyData
+    {
+        public SurfaceKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
+    public class PointKeyData : KeyData
+    {
+        public PointKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
+    public class LineKeyData : KeyData
+    {
+        public LineKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
+
+    [Obsolete("Specific types of KeyData are obsolete and may not work correctly. Use KeyData class instead.")]
+    public class VolumeKeyData : KeyData
+    {
+        public VolumeKeyData(string path, DataTopology topology) : base(path, topology) { }
+    }
 }

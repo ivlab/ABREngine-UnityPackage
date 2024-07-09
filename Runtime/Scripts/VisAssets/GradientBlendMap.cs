@@ -28,7 +28,7 @@ namespace IVLab.ABREngine
     /// <summary>
     /// Collection of essential textures for making texture-based VisAsset
     /// gradients happen. The blend maps are controlled via the <see
-    /// cref="BlendMap"/> and <see cref="StopMap"/> texture arrays.
+    /// cref="BlendMaps"/> and <see cref="StopMaps"/> texture arrays.
     /// </summary>
     public class GradientBlendMap
     {

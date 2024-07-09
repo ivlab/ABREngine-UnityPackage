@@ -19,6 +19,7 @@
 
 using System;
 using UnityEngine;
+using IVLab.Utilities;
 
 namespace IVLab.ABREngine
 {
@@ -30,27 +31,63 @@ namespace IVLab.ABREngine
     public class ColormapVisAsset : VisAsset, IColormapVisAsset
     {
         public int VisAssetCount { get; } = 1;
-        public Texture2D Colormap { get; } = null;
+        public Texture2D ColormapTexture
+        {
+            get
+            {
+                if (changed || _texture == null)
+                {
+                    _texture = Colormap.ToTexture2D();
+                    changed = false;
+                }
+                return _texture;
+            }
+        }
+        private Texture2D _texture;
 
-        public ColormapVisAsset() : this(new Guid(), null) { }
-        public ColormapVisAsset(Texture2D colormap) : this(Guid.NewGuid(), colormap) { }
-        public ColormapVisAsset(Guid uuid, Texture2D colormap)
+        private bool changed = true;
+
+        public Colormap Colormap
+        {
+            get => _colormap;
+            private set
+            {
+                _colormap = value;
+                changed = true;
+            }
+        }
+        private Colormap _colormap;
+
+        public ColormapVisAsset() : this(new Guid(), (Colormap) null) { }
+
+        public ColormapVisAsset(Colormap colormap) : this(Guid.NewGuid(), colormap) { }
+        public ColormapVisAsset(Guid uuid, Colormap colormap)
         {
             Uuid = uuid;
             Colormap = colormap;
             ImportTime = DateTime.Now;
         }
 
-        public Color GetColorInterp(float interpAmount) => Colormap.GetPixelBilinear(interpAmount, 0.5f);
 
-        public Texture2D GetColorGradient() => Colormap;
+        [Obsolete("Constructing a ColormapVisAsset from Texture2D is no longer recommended; instead use an IVLab.Utilities.Colormap like `new ColormapVisAsset(..., Colormap)`.")]
+        public ColormapVisAsset(Texture2D colormap) : this(Guid.NewGuid(), colormap) { }
+        [Obsolete("Constructing a ColormapVisAsset from Texture2D is no longer recommended; instead use an IVLab.Utilities.Colormap like `new ColormapVisAsset(..., Colormap)`.")]
+        public ColormapVisAsset(Guid uuid, Texture2D colormap)
+        {
+            Uuid = uuid;
+            Colormap = Colormap.FromTexture2D(colormap);
+            Debug.LogWarning("Constructing a ColormapVisAsset from Texture2D is no longer recommended; instead use an IVLab.Utilities.Colormap like `new ColormapVisAsset(..., Colormap)`.");
+            ImportTime = DateTime.Now;
+        }
+        public Color GetColorInterp(float interpAmount) => ColormapTexture.GetPixelBilinear(interpAmount, 0.5f);
+
+        public Texture2D GetColorGradient() => ColormapTexture;
 
         public static ColormapVisAsset SolidColor(Color fillColor)
         {
-            Texture2D gradient = new Texture2D(2, 2);
-            gradient.SetPixels(new Color[] { fillColor, fillColor, fillColor, fillColor });
-            gradient.Apply();
-            ColormapVisAsset cmap = new ColormapVisAsset(gradient);
+            Colormap oneStop = new Colormap();
+            oneStop.AddControlPt(0, fillColor);
+            ColormapVisAsset cmap = new ColormapVisAsset(oneStop);
             return cmap;
         }
     }

@@ -1,6 +1,6 @@
-/* DataManager.cs
+/* DataImpressionGroup.cs
  *
- * Copyright (c) 2021 University of Minnesota
+ * Copyright (c) 2023 University of Minnesota
  * Authors: Bridger Herman <herma582@umn.edu>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,26 +27,22 @@ using IVLab.Utilities;
 namespace IVLab.ABREngine
 {
     /// <summary>
-    /// A DataImpressionGroup is, as the name suggests, a group of data
-    /// impressions within ABR. DataImpressionGroups are contained within a
-    /// defined bounding box, and automatically rescale all of their data to
-    /// stay within this container. Each time a new key data object is loaded
-    /// into a data impression in this group, the GroupToDataMatrix and
-    /// GroupBounds are updated.
+    /// A DataImpressionGroup is a group of data
+    /// impressions within ABR. DataImpressionGroups can be constrained within
+    /// a defined bounding box (see <see cref="ABRDataContainer"/>), and can
+    /// automatically rescale all of their data to stay within this container.
+    /// Each time a new <see cref="KeyData"/> object is loaded into a data impression in
+    /// this group, the GroupToDataMatrix and GroupBounds are updated.
     /// </summary>
     /// <remarks>
     /// DataImpressionGroups cannot be constructed directly, you MUST use the a
     /// variation of the <see cref="ABREngine.CreateDataImpressionGroup"/>
     /// method.
     /// </remarks>
-    public class DataImpressionGroup : IHasDataset
+    [AddComponentMenu("ABR/Data Impression Group")]
+    public class DataImpressionGroup : MonoBehaviour, IHasDataset, ICoordSpaceConverter
     {
-        /// <summary>
-        ///     Room-scale (Unity rendering space) bounds that all data should
-        ///     be contained within
-        /// </summary>
-        public Bounds GroupContainer { get; set; }
-
+#region Member variables
         /// <summary>
         ///     Transformation from the original data space into the room-scale
         ///     bounds. Multiply by a vector to go from group-space into data-space.
@@ -60,48 +56,82 @@ namespace IVLab.ABREngine
         public Bounds GroupBounds;
 
         /// <summary>
-        ///     GameObject to place all Data Impressions under
-        /// </summary>
-        public GameObject GroupRoot { get; }
-
-        /// <summary>
-        ///     Human-readable name for the data impression group
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
         ///     Unique identifier for this group
         /// </summary>
-        public Guid Uuid { get; }
+        public Guid Uuid { get; private set; }
 
 
-        private Dictionary<Guid, IDataImpression> _impressions = new Dictionary<Guid, IDataImpression>();
-        private Dictionary<Guid, EncodedGameObject> gameObjectMapping = new Dictionary<Guid, EncodedGameObject>();
+        private Dictionary<Guid, DataImpression> gameObjectMapping = new Dictionary<Guid, DataImpression>();
+#endregion
 
-        internal DataImpressionGroup(string name, Bounds bounds, Transform parent)
-            : this(name, Guid.NewGuid(), bounds, Vector3.zero, Quaternion.identity, parent) { }
-
-        internal DataImpressionGroup(string name, Guid uuid, Bounds bounds, Vector3 position, Quaternion rotation, Transform parent)
+#region Constructor (Create) methods
+        internal static DataImpressionGroup Create(string name)
         {
-            Uuid = uuid;
-            Name = name;
-
-            GroupContainer = bounds;
-
-            GroupRoot = new GameObject("DataImpressionGroup " + name);
-            GroupRoot.transform.SetParent(parent, false);
-            GroupRoot.transform.localPosition = position;
-            GroupRoot.transform.localRotation = rotation;
-
-            ResetBoundsAndTransformation();
+            return Create(name, Guid.NewGuid(), null, Matrix4x4.identity);
         }
 
+        internal static DataImpressionGroup Create(string name, Bounds? containerBounds)
+        {
+            return Create(name, Guid.NewGuid(), containerBounds, Matrix4x4.identity);
+        }
+
+        internal static DataImpressionGroup Create(string name, Guid uuid, Bounds? containerBounds, Matrix4x4 localMatrix)
+        {
+            // First, try to find any DataImpressionGroups that might exist in the scene already and see if any match name
+            DataImpressionGroup groupInScene = null;
+            foreach (DataImpressionGroup group in MonoBehaviour.FindObjectsOfType<DataImpressionGroup>())
+            {
+                if (group.name == name)
+                {
+                    groupInScene = group;
+                }
+            }
+
+            // If it was found, we just use the position/rotation/hierarchy of the already existing GameObject.
+            // If it wasn't found, create one under ABREngine. Use the defined position/rotation/parent.
+            if (groupInScene == null)
+            {
+                GameObject go = new GameObject(name);
+                go.transform.SetParent(ABREngine.Instance.transform);
+                groupInScene = go.AddComponent<DataImpressionGroup>();
+
+                go.transform.localPosition = localMatrix.ExtractPosition();
+                go.transform.localRotation = localMatrix.ExtractRotation();
+                go.transform.localScale = localMatrix.ExtractScale();
+            }
+
+            groupInScene.Uuid = uuid;
+            groupInScene.name = name;
+
+            // Set the bounds, if defined
+            if (containerBounds.HasValue)
+            {
+                ABRDataContainer container;
+                if (!groupInScene.TryGetComponent<ABRDataContainer>(out container))
+                {
+                    container = groupInScene.gameObject.AddComponent<ABRDataContainer>();
+                }
+                
+                // Check if we should use the bounds found in the state or the bounds defined in-editor
+                if (!container.overwriteStateBounds)
+                {
+                    container.bounds = containerBounds.Value;
+                }
+            }
+
+            groupInScene.ResetBoundsAndTransformation();
+
+            return groupInScene;
+        }
+#endregion
+
+#region Public member methods
         /// <summary>
         /// Add a data impression to this group. All data impressions in the
         /// same group NEED to have the same dataset, error will be displayed
         /// otherwise.
         /// </summary>
-        public void AddDataImpression(IDataImpression impression, bool allowOverwrite = true)
+        public void AddDataImpression(DataImpression impression, bool allowOverwrite = true)
         {
             // Make sure the new impression matches the rest of the impressions'
             // datasets. ImpressionsGroups MUST have only one dataset.
@@ -120,7 +150,7 @@ namespace IVLab.ABREngine
                     // Instead of actually assigning a completely new
                     // DataImpression, copy the temporary one's inputs and let
                     // the temp be GC'd.
-                    _impressions[impression.Uuid].CopyExisting(impression);
+                    gameObjectMapping[impression.Uuid].CopyFrom(impression);
                 }
                 else
                 {
@@ -130,13 +160,7 @@ namespace IVLab.ABREngine
             }
             else
             {
-                _impressions[impression.Uuid] = impression;
-                GameObject impressionGameObject = new GameObject();
-                impressionGameObject.transform.parent = GroupRoot.transform;
-                impressionGameObject.name = impression.GetType().ToString();
-
-                EncodedGameObject ego = impressionGameObject.AddComponent<EncodedGameObject>();
-                gameObjectMapping[impression.Uuid] = ego;
+                gameObjectMapping[impression.Uuid] = impression;
             }
 
             PrepareImpression(impression);
@@ -148,14 +172,14 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool RemoveDataImpression(Guid uuid)
         {
-            if (_impressions.ContainsKey(uuid))
+            if (gameObjectMapping.ContainsKey(uuid))
             {
-                _impressions[uuid].Cleanup(gameObjectMapping[uuid]);
-                _impressions.Remove(uuid);
-                GameObject.Destroy(gameObjectMapping[uuid].gameObject);
+                // gameObjectMapping[uuid].Cleanup();
+                // GameObject.Destroy(gameObjectMapping[uuid].gameObject);
+                gameObjectMapping[uuid].gameObject.SetActive(false);
                 gameObjectMapping.Remove(uuid);
             }
-            return _impressions.Count == 0;
+            return gameObjectMapping.Count == 0;
         }
 
         /// <summary>
@@ -164,10 +188,9 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression, if found, otherwise `null`
         /// </returns>
-        public IDataImpression GetDataImpression(Guid uuid)
+        public DataImpression GetDataImpression(Guid uuid)
         {
-            IDataImpression dataImpression = null;
-            _impressions.TryGetValue(uuid, out dataImpression);
+            gameObjectMapping.TryGetValue(uuid, out DataImpression dataImpression);
             return dataImpression;
         }
 
@@ -198,7 +221,7 @@ namespace IVLab.ABREngine
         /// <returns>
         /// The data impression, if found, otherwise `null`
         /// </returns>
-        public IDataImpression GetDataImpression(Func<IDataImpression, bool> criteria)
+        public DataImpression GetDataImpression(Func<DataImpression, bool> criteria)
         {
             return GetDataImpressions(criteria).FirstOrDefault();
         }
@@ -219,7 +242,7 @@ namespace IVLab.ABREngine
         /// </code>
         /// </example>
         public T GetDataImpression<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>(criteria).FirstOrDefault();
         }
@@ -228,7 +251,7 @@ namespace IVLab.ABREngine
         /// Get a data impression matching a type
         /// </summary>
         public T GetDataImpression<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().FirstOrDefault();
         }
@@ -238,17 +261,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public bool HasDataImpression(Guid uuid)
         {
-            return _impressions.ContainsKey(uuid);
-        }
-
-        /// <summary>
-        /// Return the Unity GameObject associated with this particular UUID.
-        /// </summary>
-        public EncodedGameObject GetEncodedGameObject(Guid uuid)
-        {
-            EncodedGameObject dataImpression = null;
-            gameObjectMapping.TryGetValue(uuid, out dataImpression);
-            return dataImpression;
+            return gameObjectMapping.ContainsKey(uuid);
         }
 
         /// <summary>
@@ -256,9 +269,9 @@ namespace IVLab.ABREngine
         /// </summary>
         [Obsolete("GetDataImpressionsOfType<T> is obsolete, use GetDataImpressions<T> instead")]
         public List<T> GetDataImpressionsOfType<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
                 .Select((imp) => (T) imp).ToList();
@@ -270,9 +283,9 @@ namespace IVLab.ABREngine
         /// useful for keeping track of data impressions in applications that
         /// use ABR.
         /// </summary>
-        public List<IDataImpression> GetDataImpressionsWithTag(string tag)
+        public List<DataImpression> GetDataImpressionsWithTag(string tag)
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.HasTag(tag)).ToList();
         }
@@ -289,26 +302,26 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Return all data impressions inside this data impression group
         /// </summary>
-        public Dictionary<Guid, IDataImpression> GetDataImpressions()
+        public Dictionary<Guid, DataImpression> GetDataImpressions()
         {
-            return _impressions;
+            return gameObjectMapping;
         }
 
         /// <summary>
         /// Return all data impressions that match a particular criteria
         /// </summary>
-        public List<IDataImpression> GetDataImpressions(Func<IDataImpression, bool> criteria)
+        public List<DataImpression> GetDataImpressions(Func<DataImpression, bool> criteria)
         {
-            return _impressions.Values.Where(criteria).ToList();
+            return gameObjectMapping.Values.Where(criteria).ToList();
         }
 
         /// <summary>
         /// Return all data impressions that have a particular type
         /// </summary>
         public List<T> GetDataImpressions<T>()
-        where T : IDataImpression
+        where T : DataImpression
         {
-            return _impressions
+            return gameObjectMapping
                 .Select((kv) => kv.Value)
                 .Where((imp) => imp.GetType().IsAssignableFrom(typeof(T)))
                 .Select((imp) => (T) imp).ToList();
@@ -318,7 +331,7 @@ namespace IVLab.ABREngine
         /// Return all data impressions that match a particular criteria AND have a particular type
         /// </summary>
         public List<T> GetDataImpressions<T>(Func<T, bool> criteria)
-        where T : IDataImpression
+        where T : DataImpression
         {
             return GetDataImpressions<T>().Where(criteria).ToList();
         }
@@ -328,7 +341,7 @@ namespace IVLab.ABREngine
         /// </summary>
         public void Clear()
         {
-            List<Guid> toRemove = _impressions.Keys.ToList();
+            List<Guid> toRemove = gameObjectMapping.Keys.ToList();
             foreach (var impressionUuid in toRemove)
             {
                 RemoveDataImpression(impressionUuid);
@@ -336,21 +349,46 @@ namespace IVLab.ABREngine
         }
 
         /// <summary>
-        ///     Get the dataset that all impressions in this DataImpressionGroup are
-        ///     associated with. All DataImpressionGroups MUST have only one dataset.
+        /// Get the bounds of the container containing all the data in this DataImpressionGroup
         /// </summary>
-        public Dataset GetDataset()
+        public bool TryGetContainerBoundsInGroupSpace(out Bounds container)
         {
-            foreach (var impression in _impressions)
+            // If we're using auto data containers, try to find one attached to
+            // the same object as the DataImpressionGroup:
+            ABRDataContainer containerInEditor = this.GetComponent<ABRDataContainer>();
+            Bounds groupContainer;
+            if (containerInEditor != null)
             {
-                Dataset impressionDs = impression.Value.GetDataset();
-                // Find the first one that exists and return it
-                if (impressionDs != null)
+                // ... if found, use it
+                groupContainer = containerInEditor.bounds;
+            }
+            else
+            {
+                // ... otherwise, use default data container if we're using auto data containers
+                if (ABREngine.Instance.Config.useAutoDataContainers)
                 {
-                    return impressionDs;
+                    groupContainer = ABREngine.Instance.Config.defaultDataContainer;
+                }
+                else
+                {
+                    container = new Bounds();
+                    return false;
                 }
             }
-            return null;
+            container = groupContainer;
+            return true;
+        }
+
+        public bool TryGetContainerBoundsInWorldSpace(out Bounds container)
+        {
+            if (TryGetContainerBoundsInGroupSpace(out container))
+            {
+                container.center = this.transform.localToWorldMatrix.MultiplyPoint3x4(container.center);
+                container.extents = this.transform.localToWorldMatrix.MultiplyVector(container.extents);
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -363,9 +401,11 @@ namespace IVLab.ABREngine
         /// </returns>
         public bool RecalculateBounds()
         {
-            // If user specified to not use data container, skip the rest and
-            // don't auto-calculate new bounds
-            if (!ABREngine.Instance.Config.useAutoDataContainer)
+            Bounds groupContainer;
+
+            // Skip recalculating bounds if there's not an ABRDataContainer on
+            // this group AND the ABRConfig has auto data containers disabled
+            if (!TryGetContainerBoundsInGroupSpace(out groupContainer))
             {
                 GroupToDataMatrix = Matrix4x4.identity;
                 return false;
@@ -377,21 +417,9 @@ namespace IVLab.ABREngine
             Dataset ds = GetDataset();
             if (ds != null)
             {
-                // Look to see if this group's unity to data matrix has been
-                // overwritten... if so, skip the rest and don't auto-calculate
-                // new bounds
-                var overrideMatrix = ABREngine.Instance.Config.overrideGroupToDataMatrices.Find(
-                    o => o.groupUuid == this.Uuid.ToString() || o.groupName == this.Name || o.datasetPath == ds.Path
-                );
-                if (overrideMatrix != null)
-                {
-                    GroupToDataMatrix = overrideMatrix.groupToDataMatrix;
-                    return false;
-                }
-
                 // Build a list of keydata that are actually being used
                 List<string> activeKeyDataPaths = new List<string>();
-                foreach (IDataImpression impression in GetDataImpressions().Values)
+                foreach (DataImpression impression in GetDataImpressions().Values)
                 {
                     string keyDataPath = impression.InputIndexer.GetInputValue("Key Data")?.GetRawABRInput().inputValue;
                     if (keyDataPath != null && DataPath.GetDatasetPath(keyDataPath) == ds.Path)
@@ -400,7 +428,7 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                foreach (IKeyData keyData in ds.GetAllKeyData().Values)
+                foreach (KeyData keyData in ds.GetAllKeyData().Values)
                 {
                     if (!activeKeyDataPaths.Contains(keyData.Path))
                     {
@@ -419,12 +447,12 @@ namespace IVLab.ABREngine
                         // bounds (make sure to not assume we're including (0, 0, 0) in
                         // the bounds)
                         ds.DataSpaceBounds = originalBounds;
-                        NormalizeWithinBounds.Normalize(GroupContainer, originalBounds, out GroupToDataMatrix, out GroupBounds);
+                        NormalizeWithinBounds.Normalize(groupContainer, originalBounds, out GroupToDataMatrix, out GroupBounds);
                     }
                     else
                     {
                         NormalizeWithinBounds.NormalizeAndExpand(
-                            GroupContainer,
+                            groupContainer,
                             originalBounds,
                             ref GroupBounds,
                             ref GroupToDataMatrix,
@@ -453,37 +481,42 @@ namespace IVLab.ABREngine
                 // Mostly matters if there's a live ParaView connection
                 bool boundsChanged = RecalculateBounds();
 
-                foreach (var impression in _impressions)
+                foreach (var impression in gameObjectMapping)
                 {
+                    // Update the style dependencies for this impression so the
+                    // RenderHints and inputs are synchronized
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
+                    {
+                        impression.Value.UpdateStyleDependencies();
+                    }
+
                     // Fully compute render info and apply it to the impression object
                     // if (key) data was changed
-                    if (boundsChanged || impression.Value.RenderHints.DataChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged)
                     {
                         PrepareImpression(impression.Value);
                         impression.Value.ComputeGeometry();
                         Guid uuid = impression.Key;
-                        impression.Value.SetupGameObject(gameObjectMapping[uuid]);
-                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
-                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
-                        impression.Value.RenderHints.DataChanged = false;
-                        impression.Value.RenderHints.StyleChanged = false;
+                        impression.Value.SetupGameObject();
                     }
                     // Compute and apply style info to the impression object if its
                     // styling has changed (but only if we haven't already performed 
                     // data changed computations since those inherently update styling)
-                    else if (impression.Value.RenderHints.StyleChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged)
                     {
                         Guid uuid = impression.Key;
-                        impression.Value.UpdateStyling(gameObjectMapping[uuid]);
-                        impression.Value.RenderHints.StyleChanged = false;
+                        impression.Value.UpdateStyling();
                     }
                     // Set the visibility of the impression if it has been changed
-                    if (impression.Value.RenderHints.VisibilityChanged)
+                    if (boundsChanged || impression.Value.RenderHints.GeometryChanged || impression.Value.RenderHints.StyleChanged || impression.Value.RenderHints.VisibilityChanged)
                     {
                         Guid uuid = impression.Key;
-                        impression.Value.UpdateVisibility(gameObjectMapping[uuid]);
-                        impression.Value.RenderHints.VisibilityChanged = false;
+                        impression.Value.UpdateVisibility();
                     }
+
+                    impression.Value.RenderHints.GeometryChanged = false;
+                    impression.Value.RenderHints.StyleChanged = false;
+                    impression.Value.RenderHints.VisibilityChanged = false;
                 }
             }
             catch (Exception e)
@@ -492,7 +525,9 @@ namespace IVLab.ABREngine
                 Debug.LogError(e);
             }
         }
+#endregion
 
+#region Private helper methods
         private void ResetBoundsAndTransformation()
         {
             GroupToDataMatrix = Matrix4x4.identity;
@@ -504,19 +539,117 @@ namespace IVLab.ABREngine
             }
         }
 
-        private void PrepareImpression(IDataImpression impression)
+        private void PrepareImpression(DataImpression impression)
         {
             // Make sure the parent is assigned properly
-            gameObjectMapping[impression.Uuid].gameObject.transform.SetParent(GroupRoot.transform, false);
+            impression.transform.SetParent(this.transform, false);
             
             // Unsure why this needs to be explicitly set but here it is,
             // zeroing position and rotation so each data impression encoded
             // game object is centered on the dataset...
-            gameObjectMapping[impression.Uuid].gameObject.transform.localPosition = Vector3.zero;
-            gameObjectMapping[impression.Uuid].gameObject.transform.localRotation = Quaternion.identity;
-
-            // Display the UUID in editor
-            gameObjectMapping[impression.Uuid].Uuid = impression.Uuid;
+            impression.transform.localPosition = Vector3.zero;
+            impression.transform.localRotation = Quaternion.identity;
         }
+#endregion
+
+#region IHasDataset implementation
+        /// <summary>
+        ///     Get the dataset that all impressions in this DataImpressionGroup are
+        ///     associated with. All DataImpressionGroups MUST have only one dataset.
+        /// </summary>
+        public Dataset GetDataset()
+        {
+            foreach (var impression in gameObjectMapping)
+            {
+                Dataset impressionDs = impression.Value.GetDataset();
+                // Find the first one that exists and return it
+                if (impressionDs != null)
+                {
+                    return impressionDs;
+                }
+            }
+            return null;
+        }
+#endregion
+
+#region ICoordSpaceConverter implementation
+        /// <summary>
+        /// Get the bounds of this data impression group in Unity world space.
+        /// </summary>
+        /// <remarks>
+        /// > [!INFO]
+        /// > If the data impression group has a transform applied, this returns
+        /// > different bounds than those specified by the <see cref="GroupBounds"/>.
+        /// </remarks>
+        public Bounds BoundsInWorldSpace
+        {
+            get
+            {
+                Vector3 dataCenter = transform.localToWorldMatrix.MultiplyPoint3x4(GroupBounds.center);
+                Vector3 dataSize = transform.localToWorldMatrix.MultiplyVector(GroupBounds.size);
+                return new Bounds(dataCenter, dataSize);
+            }
+        }
+
+        public Bounds BoundsInDataSpace
+        {
+            get
+            {
+                Vector3 dataCenter = GroupToDataMatrix.MultiplyPoint3x4(GroupBounds.center);
+                Vector3 dataSize = GroupToDataMatrix.MultiplyVector(GroupBounds.size);
+                return new Bounds(dataCenter, dataSize);
+            }
+        }
+
+        /// <summary>
+        /// Transforms from world space to data space (the Data Impression Group's dataset space)
+        ///
+        /// World Space ==(transform.worldToLocalMatrix)=> Group local space ==(GroupToDataMatrix)==> Data space
+        /// </summary>
+        public Matrix4x4 WorldToDataMatrix { get => GroupToDataMatrix.inverse * this.transform.worldToLocalMatrix; }
+
+        /// <summary>
+        /// Transforms from data space (Data Impression Group's data space) to world space
+        ///
+        /// Data Space ==(DataToGroupMatrix)=> Group local space ==(transform.localToWorldMatrix)==> World space
+        /// </summary>
+        public Matrix4x4 DataToWorldMatrix { get => this.transform.localToWorldMatrix * GroupToDataMatrix; }
+
+        public Vector3 WorldSpacePointToDataSpace(Vector3 worldSpacePoint) => WorldToDataMatrix.MultiplyPoint3x4(worldSpacePoint);
+
+        public Vector3 DataSpacePointToWorldSpace(Vector3 dataSpacePoint) => DataToWorldMatrix.MultiplyPoint3x4(dataSpacePoint);
+
+        public Vector3 WorldSpaceVectorToDataSpace(Vector3 worldSpaceVector) => WorldToDataMatrix.MultiplyVector(worldSpaceVector);
+
+        public Vector3 DataSpaceVectorToWorldSpace(Vector3 dataSpaceVector) => DataToWorldMatrix.MultiplyVector(dataSpaceVector);
+
+        public bool ContainsWorldSpacePoint(Vector3 worldSpacePoint) => BoundsInWorldSpace.Contains(worldSpacePoint);
+
+        public bool ContainsDataSpacePoint(Vector3 dataSpacePoint) => BoundsInDataSpace.Contains(dataSpacePoint);
+#endregion
+
+#region IDataAccessor implementation
+        // public DataPoint GetClosestDataInWorldSpace(Vector3 worldSpacePoint);
+
+        // public DataPoint GetClosestDataInDataSpace(Vector3 dataSpacePoint);
+
+        // public List<DataPoint> GetNearbyDataInWorldSpace(Vector3 worldSpacePoint, float radiusInWorldSpace);
+
+        // public List<DataPoint> GetNearbyDataInDataSpace(Vector3 dataSpacePoint, float radiusInDataSpace);
+
+        // public float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public float GetScalarValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public float GetScalarValueAtClosestDataSpacePoint(Vector3 point, ScalarDataVariable variable, KeyData keyData = null);
+        // public float GetScalarValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public Vector3 GetVectorValueAtClosestWorldSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, VectorDataVariable variable, KeyData keyData = null);
+        // public Vector3 GetVectorValueAtClosestDataSpacePoint(Vector3 point, string variableName, KeyData keyData = null);
+
+        // public float NormalizeScalarValue(float value, KeyData keyData, ScalarDataVariable variable);
+#endregion
     }
 }

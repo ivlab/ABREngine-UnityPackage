@@ -2,6 +2,7 @@
     "name": "IVLab.ABREngine.Editor",
     "references": [
         "IVLab.ABREngine.Runtime",
+        "IVLab.ABREngine.Importer",
         "IVLab.Utilities.Runtime"
     ],
     "includePlatforms": [],

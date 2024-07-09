@@ -53,11 +53,17 @@ namespace IVLab.ABREngine
         [Tooltip("Full URL of the ABR server / visualization manager that this app should connect to. Leave blank for no server.")]
         public string serverUrl;
 
+        [Tooltip("Should the ABREngine try to start the ABRServer when it is started? Use this option with caution. In most cases the ABR Server should be started externally.")]
+        public bool startServer;
+
         /// <summary>
         /// Load a state from resources on ABREngine startup
         /// </summary>
         [Tooltip("Load a state from Resources or StreamingAssets folder on ABREngine startup. Example: `testState.json` Leave blank for no startup state.")]
         public string loadStateOnStart;
+
+        [Tooltip("Should the ABREngine GameObject persist between scenes?")]
+        public bool persistBetweenScenes = true;
 
         [Header("Styling Defaults")]
 
@@ -86,6 +92,8 @@ namespace IVLab.ABREngine
         ///     ABR will assume that everything is in Unity's persistentData
         ///     path. If server is provided and resource doesn't exist in
         ///     persistentData, it will be downloaded. Default: null
+        ///     TODO: support library downloads as well. might work already out of the box
+        ///     (https://sculptingvis.tacc.utexas.edu/library/[uuid] )... not sure though
         /// </summary>
         [Tooltip("Server to load VisAssets from (e.g. `http://192.168.137.1:8000/media/visassets`")]
         public string visAssetServerUrl;
@@ -109,24 +117,28 @@ namespace IVLab.ABREngine
 
         [Header("Data Container Options")]
         /// <summary>
-        /// Controls whether or not the <see cref="dataContainer"/> is used.
+        /// Controls whether or not the <see cref="defaultDataContainer"/> is used.
         /// </summary>
-        [Tooltip("Use the automatic data container, or just import coordinates as-is")]
-        public bool useAutoDataContainer;
+        [Tooltip("Use the automatic data containers (defined in-scene with ABRDataBounds or the defaultDataBounds), or just import coordinates as-is")]
+        public bool useAutoDataContainers;
 
         /// <summary>
         ///     Default bounds for datasets when showing (in Unity world coordinates)
         /// </summary>
         [Tooltip("Unity world-space container to automatically 'squish' all data into to avoid overflowing Unity coordinates")]
-        public Bounds dataContainer;
+        public Bounds defaultDataContainer;
+
+        [SerializeField, Tooltip("Camera to use as ABR's main camera. If left blank, will assume Camera.main.")]
+        private Camera defaultCamera;
 
         /// <summary>
-        /// Override transform matrices for specific data impression groups.
-        /// This is useful to change the data-to-Unity mapping if you need more
-        /// fine-grained control than the auto-data-container gives you.
+        /// Camera to use as ABR's main camera. If left blank, will assume @Camera.main.
         /// </summary>
-        [Tooltip("Unity world-space container to 'squish' all data into to avoid overflowing Unity coordinates")]
-        public List<GroupToDataMatrixOverrideFields> overrideGroupToDataMatrices;
+        public Camera DefaultCamera
+        {
+            get => defaultCamera != null ? defaultCamera : Camera.main; 
+            set => defaultCamera = value;
+        }
 
 
         /// <summary>
@@ -144,18 +156,21 @@ namespace IVLab.ABREngine
         /// </summary>
         public Uri ServerUrl { get => new Uri(serverUrl); }
 
+        [Header("ABR Schema Configuration")]
         /// <summary>
         /// Where to find the Schema online
         /// </summary>
-        private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
-        private string schemaName = "ABRSchema_0-2-0.json";
+        // private const string SchemaUrl = "http://localhost:9000/";
+        // private const string SchemaUrl = "https://raw.githubusercontent.com/ivlab/abr-schema/master/";
+        [Tooltip("Name of the schema to use in ABRSchemas~ folder at root of this package")]
+        public string schemaName = "ABRSchema_2023-9-0.json";
 
         void Reset()
         {
             mediaPath = Application.persistentDataPath;
             serverUrl = "";
             loadStateOnStart = "";
-            dataContainer = new Bounds(Vector3.zero, Vector3.one * 2.0f);
+            defaultDataContainer = new Bounds(Vector3.zero, Vector3.one * 2.0f);
 
             defaultGlyph = Resources.Load<GameObject>("DefaultSphere");
             defaultGlyph.SetActive(false);
@@ -167,48 +182,20 @@ namespace IVLab.ABREngine
             visAssetServerUrl = "";
             dataServerUrl = "";
             dataListenerPort = 0;
-
-            overrideGroupToDataMatrices = new List<GroupToDataMatrixOverrideFields>();
         }
 
         void Awake()
         {
-            // Debug.Log("ABR Config Loaded");
+            LoadSchema();
+        }
 
-            // Check for a backed up schema
-            string backupSchemaDir = Path.Combine(Application.streamingAssetsPath, "schemas");
-            string backupSchema = null;
-            try
-            {
-                List<string> schemas = Directory.GetFiles(backupSchemaDir).Where(f => f.EndsWith(".json")).ToList();
-                schemas.Sort();
-                schemas.Reverse();
-                backupSchema = schemas[0];
-            }
-            catch
-            {
-                Debug.LogErrorFormat("Unable to find a backup schema in {0}", backupSchemaDir);
-            }
-
-            if (backupSchema != null)
-            {
-                backupSchema = Path.Combine(backupSchemaDir, backupSchema);
-            }
-
+        public void LoadSchema()
+        {
             // Load the schema
-            HttpResponseMessage resp = ABREngine.httpClient.GetAsync(SchemaUrl + schemaName).Result;
             string schemaContents = null;
-            if (!resp.IsSuccessStatusCode)
+            using (StreamReader reader = new StreamReader(Path.Combine(ABREngine.SchemasPath, schemaName)))
             {
-                Debug.LogErrorFormat("Unable to load schema from {0}, using backup schema {1}", SchemaUrl + schemaName, backupSchema);
-                using (StreamReader reader = new StreamReader(backupSchema))
-                {
-                    schemaContents = reader.ReadToEnd();
-                }
-            }
-            else
-            {
-                schemaContents = (resp.Content.ReadAsStringAsync().Result);
+                schemaContents = reader.ReadToEnd();
             }
 
             Schema = JSchema.Parse(schemaContents);
@@ -223,34 +210,6 @@ namespace IVLab.ABREngine
                 return;
             }
             SchemaJson = JObject.Parse(schemaContents);
-
-            // Save a copy if needed
-            bool needBackup = true;
-            if (backupSchema != null) {
-                using (StreamReader reader = new StreamReader(backupSchema))
-                {
-                    string bakContents = reader.ReadToEnd();
-                    if (bakContents == schemaContents)
-                    {
-                        needBackup = false;
-                    }
-                }
-            }
-            if (needBackup)
-            {
-                string schemaName = DateTime.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture).Replace(":", "_") + ".json";
-                if (!Directory.Exists(backupSchemaDir))
-                {
-                    Directory.CreateDirectory(backupSchemaDir);
-                }
-                string schemaBakPath = Path.Combine(backupSchemaDir, schemaName);
-                using (StreamWriter writer = new StreamWriter(schemaBakPath))
-                {
-                    writer.Write(schemaContents);
-                }
-                Debug.Log("Saved backup schema to " + schemaBakPath);
-            }
-
 
             Debug.LogFormat("Using ABR Schema, version {0}", SchemaJson["properties"]["version"]["default"]);
         }
@@ -298,6 +257,23 @@ namespace IVLab.ABREngine
             }
         }
 
+        public RawABRInput GetDefaultRawABRInput(string plateName, string inputName)
+        {
+            if (SchemaJson == null)
+            {
+                Debug.LogErrorFormat("Schema is null, cannot get input type for {0}", inputName);
+                return null;
+            }
+            RawABRInput input = new RawABRInput();
+            input.inputType = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputType"]["const"].ToString();
+            input.inputGenre = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputGenre"]["const"].ToString();
+            if ((SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"] as JObject).ContainsKey("default"))
+            {
+                input.inputValue = SchemaJson["definitions"]["Plates"][plateName]["properties"][inputName]["properties"]["inputValue"]["default"].ToString();
+            }
+            return input;
+        }
+
         /// <summary>
         ///     Obtain a full list of all inputs available to this plate
         /// </summary>
@@ -314,7 +290,8 @@ namespace IVLab.ABREngine
 
 
         /// <summary>
-        /// Global access to constants in the ABR Engine
+        /// Global access to constants in the ABR Engine. Sync this with
+        /// settings.py in the ABRServer~.
         /// </summary>
         public static class Consts
         {
@@ -327,6 +304,11 @@ namespace IVLab.ABREngine
             /// Dataset folder within media folder
             /// </summary>
             public const string DatasetFolder = "datasets";
+
+            /// <summary>
+            /// Folder to save thumbnail screenshots of state in
+            /// </summary>
+            public const string ThumbnailsFolder = "thumbnails";
 
             /// <summary>
             /// Default name for the media folder

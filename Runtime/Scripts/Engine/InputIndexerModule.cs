@@ -38,12 +38,13 @@ namespace IVLab.ABREngine
             if (type == destinationType)
                 return true;
 
-            return (from method in type.GetMethods(BindingFlags.Static |
+            bool result = (from method in type.GetMethods(BindingFlags.Static |
                                                 BindingFlags.Public)
                     where method.Name == "op_Implicit" &&
                         method.ReturnType == destinationType
                     select method
                     ).Count() > 0;
+            return result;
         }
     }
 
@@ -182,7 +183,11 @@ namespace IVLab.ABREngine
         public bool CanAssignInput(int inputIndex, IABRInput value)
         {
             Type fieldType = GetInputField(inputIndex)?.FieldType;
-            return fieldType != null && (fieldType.IsAssignableFrom(value.GetType()) || fieldType.ImplicitlyConvertsTo(value.GetType()));
+            if (fieldType == null)
+                return false;
+            bool isAssignableFrom = fieldType.IsAssignableFrom(value.GetType());
+            bool implicitlyConvertsTo = fieldType.ImplicitlyConvertsTo(value.GetType());
+            return isAssignableFrom || implicitlyConvertsTo;
         }
 
         public bool CanAssignInput(string inputName, IABRInput value)

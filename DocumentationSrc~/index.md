@@ -29,7 +29,7 @@ Rendering technique, as described by the
 [paper from VIS 2019](https://arxiv.org/pdf/1907.13178.pdf).
 
 ### Getting Started
-* Follow the [Installation Guide](manual/install.md) to incorporate the Template into your project.
-* [Package introduction / overview](manual/intro.md)
+* Follow the @install.md to incorporate the Template into your project.
+* @intro.md
 * [Key classes organized by theme / functionality](api/index.md)
-* [Core concepts](manual/core-concepts.md)
+* [Core concepts](manual/concepts/core-concepts.md)

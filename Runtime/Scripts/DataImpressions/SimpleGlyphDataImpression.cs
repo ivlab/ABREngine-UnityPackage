@@ -47,9 +47,9 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Glyphs")]
-    public class SimpleGlyphDataImpression : DataImpression, IDataImpression
+    public class SimpleGlyphDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/colorVariable.gif"/>
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Style)]
+        [ABRInput("Color Variable", UpdateLevel.Style)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -69,13 +69,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace IVLab.ABREngine
         /// values. This only has any effect if <see cref="glyph"/> is a <see
         /// cref="GlyphGradient"/>.
         /// </summary>
-        [ABRInput("Glyph Variable", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Variable", UpdateLevel.Style)]
         public ScalarDataVariable glyphVariable;
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/glyph.gif"/>
         /// </summary>
-        [ABRInput("Glyph", "Glyph", UpdateLevel.Data)]
+        [ABRInput("Glyph", UpdateLevel.Geometry)]
         public IGlyphVisAsset glyph;
 
         /// <summary>
@@ -101,44 +102,49 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/glyphSize.gif"/>
         /// </summary>
-        [ABRInput("Glyph Size", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Size", UpdateLevel.Style)]
         public LengthPrimitive glyphSize;
 
         /// <summary>
         /// Tweak the density of glyphs - subsamples the existing glyphs uniformly.
         /// </summary>
-        [ABRInput("Glyph Density", "Glyph", UpdateLevel.Style)]
+        [ABRInput("Glyph Density", UpdateLevel.Style)]
         public PercentPrimitive glyphDensity;
 
         /// <summary>
         /// "Forward" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Forward Variable", "Direction", UpdateLevel.Data)]
+        [ABRInput("Forward Variable", UpdateLevel.Geometry)]
         public VectorDataVariable forwardVariable;
 
         /// <summary>
         /// "Up" direction that glyphs should point in.
         /// </summary>
-        [ABRInput("Up Variable", "Direction", UpdateLevel.Data)]
+        [ABRInput("Up Variable", UpdateLevel.Geometry)]
         public VectorDataVariable upVariable;
 
         /// <summary>
         /// Level of detail to use for glyph rendering (higher number = lower
-        /// level of detail; most glyphs have 3 LODs)
+        /// level of detail; most glyphs have 3 LODs). Default to using the
+        /// second-highest level of detail, but you may need to adjust for
+        /// performance reasons.
         /// </summary>
-        public int glyphLod = 1;
+        [ABRInput("Glyph Level Of Detail", UpdateLevel.Geometry)]
+        public IntegerPrimitive glyphLod = 1;
 
         /// <summary>
         /// Use random forward/up directions when no Vector variables are
         /// applied for forward/up.
         /// </summary>
-        public bool useRandomOrientation = true;
+        [ABRInput("Use Random Orientation", UpdateLevel.Geometry)]
+        public BooleanPrimitive useRandomOrientation = true;
 
         /// <summary>
         /// Show/hide outline on this data impression
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/showOutline.gif"/>
         /// </summary>
+        [ABRInput("Show Outline", UpdateLevel.Geometry)]
         public BooleanPrimitive showOutline;
 
         /// <summary>
@@ -146,6 +152,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineWidth.gif"/>
         /// </summary>
+        [ABRInput("Outline Width", UpdateLevel.Geometry)]
         public LengthPrimitive outlineWidth;
 
         /// <summary>
@@ -153,7 +160,8 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/outlineColor.gif"/>
         /// </summary>
-        public Color outlineColor;
+        [ABRInput("Outline Color", UpdateLevel.Geometry)]
+        public IColormapVisAsset outlineColor;
 
         /// <summary>
         /// Force the use of <see cref="outlineColor"/> even if there's a
@@ -163,6 +171,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleGlyphDataImpression/forceOutlineColor.gif"/>
         /// </summary>
+        [ABRInput("Force Outline Color", UpdateLevel.Geometry)]
         public BooleanPrimitive forceOutlineColor;
 
         /// <summary>
@@ -170,29 +179,35 @@ namespace IVLab.ABREngine
         /// </summary>
         private ComputeBuffer perGlyphVisibilityBuffer;
 
+        /// <summary>
+        /// Random indices to draw from in <see cref="SampleGlyphs"/>. This
+        /// enables us to sample the glyphs consistently between frames.
+        /// </summary>
+        private int[] randomSelections;
+
         protected override string[] MaterialNames { get; } = { "ABR_Glyphs", "ABR_GlyphsOutline" };
-        protected override string LayerName { get; } = "ABR_Glyph";
 
         /// <summary>
-        ///     Construct a data impession with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
+        /// Define the layer name for this Data Impression
         /// </summary>
-        public SimpleGlyphDataImpression(string uuid) : base(uuid) { }
-        public SimpleGlyphDataImpression() : base() { }
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Glyph";
 
-        public override Dataset GetDataset()
-        {
-            return keyData?.GetDataset();
-        }
+        public override Dataset GetDataset() => keyData?.GetDataset();
+        public override KeyData GetKeyData() => keyData;
+        public override void SetKeyData(KeyData kd) => keyData = kd;
+        public override DataTopology GetKeyDataTopology() => DataTopology.Points;
 
-        public override KeyData GetKeyData()
-        {
-            return keyData;
-        }
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleGlyphDataImpression() { }
 
         public override void ComputeGeometry()
         {
+            // Debug.Log("ComputeGeometry " + this.name);
             if (keyData == null)
             {
                 RenderInfo = new SimpleGlyphRenderInfo
@@ -212,6 +227,11 @@ namespace IVLab.ABREngine
                 DataImpressionGroup group = ABREngine.Instance.GetGroupFromImpression(this);
 
                 int numPoints = dataset.vertexArray.Length;
+
+                ABRConfig config = ABREngine.Instance.Config;
+                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
+                bool randomOrientation = useRandomOrientation?.Value ??
+                    config.GetInputValueDefault<BooleanPrimitive>(plateType, "Use Random Orientation").Value;
 
                 // Compute positions for each point, in room (Unity) space
                 Vector3[] positions = new Vector3[numPoints];
@@ -233,7 +253,7 @@ namespace IVLab.ABREngine
                     dataForwards = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        if (useRandomOrientation)
+                        if (randomOrientation)
                             dataForwards[i] = new Vector3(
                                 (float)rand.NextDouble() * 2 - 1,
                                 (float)rand.NextDouble() * 2 - 1,
@@ -253,7 +273,7 @@ namespace IVLab.ABREngine
                     dataUp = new Vector3[numPoints];
                     for (int i = 0; i < numPoints; i++)
                     {
-                        if (useRandomOrientation)
+                        if (randomOrientation)
                             dataUp[i] = new Vector3(
                                 (float)rand.NextDouble() * 2 - 1,
                                 (float)rand.NextDouble() * 2 - 1,
@@ -299,8 +319,6 @@ namespace IVLab.ABREngine
                 };
 
                 // Get glyph scale and apply to instance mesh renderer transform
-                ABRConfig config = ABREngine.Instance.Config;
-                string plateType = this.GetType().GetCustomAttribute<ABRPlateType>().plateType;
                 float glyphScale = glyphSize?.Value ??
                     config.GetInputValueDefault<LengthPrimitive>(plateType, "Glyph Size").Value;
 
@@ -312,14 +330,24 @@ namespace IVLab.ABREngine
                 // Apply room-space bounds to renderer
                 encodingRenderInfo.bounds = group.GroupBounds;
                 RenderInfo = encodingRenderInfo;
+
+                // compute random values for SampleGlyphs
+                // for use as `j` in reservoir sampling... numbers go from 0 to the number of glyphs
+                randomSelections = new int[numPoints];
+                for (int i = 0; i < randomSelections.Length; i++)
+                {
+                    randomSelections[i] = UnityEngine.Random.Range(0, numPoints);
+                }
             }
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
+            //Debug.Log("SetupGameObject " + this.name);
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
+                // should never get here
                 return;
             }
 
@@ -327,7 +355,7 @@ namespace IVLab.ABREngine
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
-                currentGameObject.gameObject.layer = layerID;
+                gameObject.layer = layerID;
             }
             else
             {
@@ -335,17 +363,27 @@ namespace IVLab.ABREngine
             }
 
             // Return all previous renderers to pool
-            while (currentGameObject.transform.childCount > 0)
+            while (gameObject.transform.childCount > 0)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
-                GenericObjectPool.Instance.ReturnObjectToPool(child);
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
+                if (child.TryGetComponent<PooledObject>(out PooledObject po))
+                {
+                    if (po.PoolName != null)
+                    {
+                        GenericObjectPool.Instance.ReturnObjectToPool(child);
+                    }
+                    else
+                    {
+                        DestroyImmediate(child);
+                    }
+                }
             }
 
             // Create pooled game objects with mesh renderer and instanced mesh renderer
             int rendererCount = glyph?.VisAssetCount - 1 ?? 0;
             for (int stopIndex = -1; stopIndex < rendererCount; stopIndex++)
             {
-                GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", currentGameObject.transform, (go) =>
+                GameObject childRenderer = GenericObjectPool.Instance.GetObjectFromPool(this.GetType() + "GlyphRenderer", gameObject.transform, (go) =>
                 {
                     go.name = "Glyph Renderer Object " + stopIndex;
                 });
@@ -353,7 +391,7 @@ namespace IVLab.ABREngine
                 // Parent the glyph renderer to this Data Impression and ensure that it's centered correctly
                 // Unsure why necessary...
                 // See also: PrepareImpression method of DataImpressionGroup class
-                childRenderer.transform.SetParent(currentGameObject.transform, false);
+                childRenderer.transform.SetParent(gameObject.transform, false);
                 childRenderer.transform.localPosition = Vector3.zero;
                 childRenderer.transform.localRotation = Quaternion.identity;
 
@@ -383,17 +421,23 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
+            //Debug.Log("UpdateStyling " + this.name);
+            if (keyData == null)
+            {
+                return;
+            }
+
             // Default to using every transform in the data (re-populate and discard old transforms)
             var SSrenderData = RenderInfo as SimpleGlyphRenderInfo;
 
             // Go through each child glyph renderer and render it
-            for (int glyphIndex = 0; glyphIndex < currentGameObject.transform.childCount; glyphIndex++)
+            for (int glyphIndex = 0; glyphIndex < gameObject.transform.childCount; glyphIndex++)
             {
                 // Exit immediately if the game object or instanced mesh renderer relevant to this
                 // impression do not yet exist
-                InstancedMeshRenderer imr = currentGameObject?.transform.GetChild(glyphIndex).GetComponent<InstancedMeshRenderer>();
+                InstancedMeshRenderer imr = gameObject?.transform.GetChild(glyphIndex).GetComponent<InstancedMeshRenderer>();
                 if (imr == null)
                     continue;
 
@@ -435,11 +479,17 @@ namespace IVLab.ABREngine
                     }
                 }
 
-                // Update the instanced mesh renderer to use the currently selected glyph
-                if (glyph != null && glyph.GetMesh(glyphIndex, glyphLod) != null)
+                // Update the instanced mesh renderer to use the currently
+                // selected glyph
+                int lod = glyphLod?.Value ?? config.GetInputValueDefault<IntegerPrimitive>(plateType, "Glyph Level Of Detail").Value;
+                if (glyph != null && glyph.GetMesh(glyphIndex, lod) != null)
                 {
-                    imr.instanceMesh = glyph.GetMesh(glyphIndex, glyphLod);
-                    block.SetTexture("_Normal", glyph.GetNormalMap(glyphIndex, glyphLod));
+                    imr.instanceMesh = glyph.GetMesh(glyphIndex, lod);
+                    Texture2D normalMap = glyph.GetNormalMap(glyphIndex, lod);
+                    if (normalMap != null)
+                    {
+                        block.SetTexture("_Normal", normalMap);
+                    }
                 }
                 else
                 {
@@ -484,7 +534,14 @@ namespace IVLab.ABREngine
                 else
                 {
                     block.SetInt("_HasPerGlyphVisibility", 0);
+                    // Bridger 2023-07:
+                    // This line generates a warning about disposing of compute buffers... commenting out for now
+                    // 2023-08-29:
+                    // This line being commented out causes glyphs to not work on MacOS.
+                    // For now, we just check if we're on MacOS to do this line...
+#if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
                     block.SetBuffer("_PerGlyphVisibility", new ComputeBuffer(1, sizeof(int), ComputeBufferType.Default));
+#endif
                 }
 
                 // Get keydata-specific range, if there is one
@@ -574,7 +631,7 @@ namespace IVLab.ABREngine
                 block.SetFloat("_ColorDataMin", colorVariableMin);
                 block.SetFloat("_ColorDataMax", colorVariableMax);
                 block.SetColor("_Color", ABREngine.Instance.Config.defaultColor);
-                block.SetColor("_OutlineColor", outlineColor);
+                block.SetColor("_OutlineColor", outlineColor?.GetColorGradient()?.GetPixel(0, 0) ?? Color.black);
                 block.SetFloat("_OutlineWidth", outlineWidth?.Value ?? 0.0f);
                 block.SetInt("_ForceOutlineColor", (forceOutlineColor?.Value ?? false) ? 1 : 0);
 
@@ -596,9 +653,9 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            foreach (InstancedMeshRenderer imr in currentGameObject?.GetComponentsInChildren<InstancedMeshRenderer>())
+            foreach (InstancedMeshRenderer imr in gameObject?.GetComponentsInChildren<InstancedMeshRenderer>())
             {
                 if (imr != null)
                 {
@@ -607,13 +664,13 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void Cleanup(EncodedGameObject currentGameObject)
+        public override void Cleanup()
         {
-            base.Cleanup(currentGameObject);
+            base.Cleanup();
             // Return all previous renderers to pool
-            while (currentGameObject.transform.childCount > 0)
+            while (gameObject.transform.childCount > 0)
             {
-                GameObject child = currentGameObject.transform.GetChild(0).gameObject;
+                GameObject child = gameObject.transform.GetChild(0).gameObject;
                 GenericObjectPool.Instance.ReturnObjectToPool(child);
             }
             perGlyphVisibilityBuffer?.Release();
@@ -643,7 +700,14 @@ namespace IVLab.ABREngine
             // Iterate through the remaining glyphs
             for (; i < n; i++)
             {
-                int j = UnityEngine.Random.Range(0, i + 1);
+                // int j = UnityEngine.Random.Range(0, i + 1);
+                // int j = i + 1;
+                // Choose `j` based on earlier random selections
+                // Technically not quite correct since it's not uniformly from
+                // the same distribution as Random.Range(0, i+1). But, it looks
+                // decent so we're leaving it for now...
+                int j = randomSelections[i] % (i + 1);
+
                 // Replace previous selections if the randomly
                 // picked index is smaller than k
                 if (j < k)
@@ -660,7 +724,7 @@ namespace IVLab.ABREngine
             }
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             if (perGlyphVisibilityBuffer != null)
                 perGlyphVisibilityBuffer.Release();

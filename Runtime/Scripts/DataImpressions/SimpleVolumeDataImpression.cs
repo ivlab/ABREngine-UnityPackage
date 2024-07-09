@@ -50,9 +50,9 @@ namespace IVLab.ABREngine
     /// </code>
     /// </example>
     [ABRPlateType("Volumes")]
-    public class SimpleVolumeDataImpression : DataImpression, IDataImpression
+    public class SimpleVolumeDataImpression : DataImpression
     {
-        [ABRInput("Key Data", "Key Data", UpdateLevel.Data)]
+        [ABRInput("Key Data", UpdateLevel.Geometry)]
         public KeyData keyData;
 
 
@@ -61,7 +61,7 @@ namespace IVLab.ABREngine
         /// - affects both the <see cref="colormap"/> and the <see
         /// cref="opacitymap"/>.
         /// </summary>
-        [ABRInput("Color Variable", "Color", UpdateLevel.Data)]
+        [ABRInput("Color Variable", UpdateLevel.Geometry)]
         public ScalarDataVariable colorVariable;
 
         /// <summary>
@@ -71,13 +71,14 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/colormap.gif"/>
         /// </summary>
-        [ABRInput("Colormap", "Color", UpdateLevel.Style)]
+        [ABRInput("Colormap", UpdateLevel.Style)]
         public IColormapVisAsset colormap;
 
         /// <summary>
         /// Override the color used for NaN values in this data impression. If
         /// not supplied, will use the <see cref="ABRConfig.defaultNanColor"/>.
         /// </summary>
+        [ABRInput("NaN Color", UpdateLevel.Style)]
         public IColormapVisAsset nanColor;
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace IVLab.ABREngine
         ///     volumeDataImpression.opacitymap = pg;
         /// </code>
         /// </examples>
-        [ABRInput("Opacitymap", "Color", UpdateLevel.Style)]
+        [ABRInput("Opacitymap", UpdateLevel.Style)]
         public PrimitiveGradient opacitymap;
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
-        [ABRInput("Volume Brightness", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Brightness", UpdateLevel.Style)]
         public PercentPrimitive volumeBrightness;
 
         /// <summary>
@@ -128,7 +129,7 @@ namespace IVLab.ABREngine
         ///
         /// <img src="../resources/api/SimpleVolumeDataImpression/volumeBrightness.gif"/>
         /// </summary>
-        [ABRInput("Volume Opacity Multiplier", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Opacity Multiplier", UpdateLevel.Style)]
         public PercentPrimitive volumeOpacityMultiplier;
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace IVLab.ABREngine
         /// creating atmospheric effects, but may not be useful for nitty-gritty
         /// data interpretation.
         /// </remarks>
-        [ABRInput("Volume Lighting", "Volume", UpdateLevel.Style)]
+        [ABRInput("Volume Lighting", UpdateLevel.Style)]
         public BooleanPrimitive volumeLighting;
 
 
@@ -150,27 +151,28 @@ namespace IVLab.ABREngine
         /// </summary>
         private ComputeBuffer perVoxelVisibilityBuffer; 
 
+        private Texture2D opacityMapTexture;
+
 
         protected override string[] MaterialNames { get; } = { "ABR_Volume" };
-        protected override string LayerName { get; } = "ABR_Volume";
 
         /// <summary>
-        ///     Construct a data impression with a given UUID. Note that this
-        ///     will be called from ABRState and must assume that there's a
-        ///     single string argument with UUID.
+        /// Define the layer name for this Data Impression
         /// </summary>
-        public SimpleVolumeDataImpression(string uuid) : base(uuid) { }
-        public SimpleVolumeDataImpression() : base() { }
+        /// <remarks>
+        /// > [!WARNING]
+        /// > New Data Impressions should define a const string "LayerName"
+        /// which corresponds to a Layer in Unity's Layer manager.
+        /// </remarks>
+        protected const string LayerName = "ABR_Volume";
 
-        public override Dataset GetDataset()
-        {
-            return keyData?.GetDataset();
-        }
+        public override Dataset GetDataset() => keyData?.GetDataset();
+        public override KeyData GetKeyData() => keyData;
+        public override void SetKeyData(KeyData kd) => keyData = kd;
+        public override DataTopology GetKeyDataTopology() => DataTopology.Voxels;
 
-        public override KeyData GetKeyData()
-        {
-            return keyData;
-        }
+        // Users should NOT construct data impressions with `new DataImpression()`
+        protected SimpleVolumeDataImpression() { }
 
         public override void ComputeGeometry()
         {
@@ -250,10 +252,13 @@ namespace IVLab.ABREngine
                     var colorScalars = colorVariable.GetArray(keyData);
                     // Set the pixels of the 3D texture
 
+#if UNITY_2020_1_OR_NEWER
+                    var pixels = renderInfo.voxelTex.GetPixelData<Color>(0);
+#else
                     // Compatibility with Unity 2019 - Get a copy of the pixel
                     // data instead of retrieving a raw view of it.
-                    // var pixels = renderInfo.voxelTex.GetPixelData<Color>(0);
                     var pixels = renderInfo.voxelTex.GetPixels(0);
+#endif
 
                     for (int z = 0; z < dimensions.z; z++)
                     {
@@ -282,9 +287,11 @@ namespace IVLab.ABREngine
                         }
                     }
 
+#if !UNITY_2020_1_OR_NEWER
                     // Unity 2019 Compatibility: Since we made a copy of the
                     // pixel data, set it back to the texture.
                     renderInfo.voxelTex.SetPixels(pixels);
+#endif
 
                     // Apply changes to the 3D texture
                     renderInfo.voxelTex.Apply();
@@ -293,36 +300,36 @@ namespace IVLab.ABREngine
             RenderInfo = renderInfo;
         }
 
-        public override void SetupGameObject(EncodedGameObject currentGameObject)
+        public override void SetupGameObject()
         {
-            if (currentGameObject == null)
+            if (gameObject == null)
             {
+                // should never get here
                 return;
             }
 
             // Setup mesh renderer and mesh filter
             MeshFilter meshFilter = null;
             MeshRenderer meshRenderer = null;
-            if (!currentGameObject.TryGetComponent<MeshFilter>(out meshFilter))
+            if (!gameObject.TryGetComponent<MeshFilter>(out meshFilter))
             {
-                meshFilter = currentGameObject.gameObject.AddComponent<MeshFilter>();
+                meshFilter = gameObject.AddComponent<MeshFilter>();
             }
-            if (!currentGameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
+            if (!gameObject.TryGetComponent<MeshRenderer>(out meshRenderer))
             {
-                meshRenderer = currentGameObject.gameObject.AddComponent<MeshRenderer>();
+                meshRenderer = gameObject.AddComponent<MeshRenderer>();
             }
 
             // Ensure we have a layer to work with
             int layerID = LayerMask.NameToLayer(LayerName);
             if (layerID >= 0)
             {
-                currentGameObject.gameObject.layer = layerID;
+                gameObject.layer = layerID;
             }
             else
             {
                 Debug.LogWarningFormat("Could not find layer {0} for SimpleVolumeDataImpression", LayerName);
             }
-            currentGameObject.name = this + " volume";
 
             // Populate volume mesh from calculated geometry
             var volumeRenderData = RenderInfo as SimpleVolumeRenderInfo;
@@ -352,15 +359,15 @@ namespace IVLab.ABREngine
             }
         }
 
-        public override void UpdateStyling(EncodedGameObject currentGameObject)
+        public override void UpdateStyling()
         {
             // Return immediately if the game object, mesh filter, or mesh renderer do not exist
             // (this should only really happen if the gameobject/renderers for this impression have not yet been initialized,
             // which equivalently indicates that KeyData has yet to be applied to this impression and therefore there
             // is no point in styling it anyway)
-            MeshFilter meshFilter = currentGameObject?.GetComponent<MeshFilter>();
-            MeshRenderer meshRenderer = currentGameObject?.GetComponent<MeshRenderer>();
-            if (meshFilter == null || meshRenderer == null)
+            MeshFilter meshFilter = gameObject?.GetComponent<MeshFilter>();
+            MeshRenderer meshRenderer = gameObject?.GetComponent<MeshRenderer>();
+            if (keyData == null || meshFilter == null || meshRenderer == null)
             {
                 return;
             }
@@ -412,20 +419,19 @@ namespace IVLab.ABREngine
             else
             {
                 MatPropBlock.SetInt("_UseColorMap", 0);
-
             }
             if (opacitymap != null)
             {
                 MatPropBlock.SetInt("_UseOpacityMap", 1);
                 MatPropBlock.SetFloat("_NaNOpacity", nanOpacity?.Value ?? 0.0f);
-                if (MatPropBlock.GetTexture("_OpacityMap") == null)
+                if (opacityMapTexture == null)
                 {
-                    Texture2D opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
+                    opacityMapTexture = new Texture2D(1024, 1, TextureFormat.RGBA32, false);
                     opacityMapTexture.wrapMode = TextureWrapMode.Clamp;
                     opacityMapTexture.filterMode = FilterMode.Bilinear;
-                    MatPropBlock.SetTexture("_OpacityMap", opacityMapTexture);
                 }
-                UpdateOpacityMap((Texture2D)MatPropBlock.GetTexture("_OpacityMap"));
+                UpdateOpacityMap(opacityMapTexture);
+                MatPropBlock.SetTexture("_OpacityMap", opacityMapTexture);
             }
             else
             {
@@ -479,9 +485,9 @@ namespace IVLab.ABREngine
             meshRenderer.SetPropertyBlock(MatPropBlock);
         }
 
-        public override void UpdateVisibility(EncodedGameObject currentGameObject)
+        public override void UpdateVisibility()
         {
-            MeshRenderer mr = currentGameObject?.GetComponent<MeshRenderer>();
+            MeshRenderer mr = gameObject?.GetComponent<MeshRenderer>();
             if (mr != null)
             {
                 mr.enabled = RenderHints.Visible;
@@ -536,7 +542,7 @@ namespace IVLab.ABREngine
 
             // Apply updated pixels to texture
             opacityMapTexture.SetPixels(pixelColors);
-            opacityMapTexture.Apply(false);
+            opacityMapTexture.Apply();
         }
 
         void OnDisable()

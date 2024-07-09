@@ -17,7 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +26,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using JsonDiffPatchDotNet;
-using IVLab.Utilities;
+using UnityEditor;
+
 
 namespace IVLab.ABREngine
 {
@@ -48,7 +48,17 @@ namespace IVLab.ABREngine
         public JObject LoadState<T>(string stateText, JObject previousState)
         where T : IABRStateLoader, new()
         {
-            JObject stateJson = (new T()).GetState(stateText);
+            if (stateText == null)
+            {
+                return null;
+            }
+
+            JObject stateJson = new T().GetState(stateText);
+
+            if (stateJson == null)
+            {
+                return null;
+            }
 
             IList<ValidationError> errors;
             if (!stateJson.IsValid(ABREngine.Instance.Config.Schema, out errors))
@@ -238,11 +248,19 @@ namespace IVLab.ABREngine
                     }
 
                     // Make the data impression; should only match one type
+                    // use the generic `Create` method on the type.
                     Type impressionType = impressionTypes[foundIndex];
-                    ConstructorInfo impressionCtor =
-                        impressionType.GetConstructor(new Type[] { typeof(string) });
-                    string[] impressionArgs = new string[] { impression.Value.uuid };
-                    IDataImpression dataImpression = impressionCtor.Invoke(impressionArgs) as IDataImpression;
+                    MethodInfo createMethod = typeof(DataImpression).GetMethod("Create", BindingFlags.Static | BindingFlags.Public);
+                    createMethod = createMethod.MakeGenericMethod(new Type[] { impressionType });
+
+                    // args are: name, UUID, syncWithServer
+                    object[] impressionArgs = new object[]
+                    {
+                            impression.Value.name,
+                            new Guid(impression.Value.uuid),
+                            true
+                    };
+                    DataImpression dataImpression = createMethod.Invoke(null, impressionArgs) as DataImpression;
                     ABRInputIndexerModule impressionInputs = dataImpression.InputIndexer;
 
                     List<ABRInputAttribute> actualInputs = impressionType.GetFields()
@@ -258,87 +276,14 @@ namespace IVLab.ABREngine
                             {
                                 value = impression.Value.inputValues[inputName];
                             }
-                            IABRInput possibleInput = null;
-                            if (value?.inputGenre == ABRInputGenre.KeyData.ToString("G"))
-                            {
-                                string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                                Dataset dataset;
-                                ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset);
-                                if (dataset == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                                    continue;
-                                }
-                                IKeyData keyData;
-                                if (!dataset.TryGetKeyData(value.inputValue, out keyData))
-                                {
-                                    Debug.LogWarningFormat("Unable to find Key Data `{0}`", value.inputValue);
-                                    continue;
-                                }
-                                possibleInput = keyData as IABRInput;
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.Variable.ToString("G"))
-                            {
-                                string datasetPath = DataPath.GetDatasetPath(value.inputValue);
-                                Dataset dataset;
-                                if (!ABREngine.Instance.Data.TryGetDataset(datasetPath, out dataset))
-                                {
-                                    Debug.LogWarningFormat("Unable to find dataset `{0}`", datasetPath);
-                                    continue;
-                                }
 
-                                if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.ScalarVar))
-                                {
-                                    ScalarDataVariable variable;
-                                    dataset.TryGetScalarVar(value.inputValue, out variable);
-                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
-                                    possibleInput = variable as IABRInput;
-                                }
-                                else if (DataPath.FollowsConvention(value.inputValue, DataPath.DataPathType.VectorVar))
-                                {
-                                    VectorDataVariable variable;
-                                    dataset.TryGetVectorVar(value.inputValue, out variable);
-                                    variable?.SpecificRanges.Clear(); // Will be repopulated later in state
-                                    possibleInput = variable as IABRInput;
-                                }
+                            // Try to convert to ABR input
+                            IABRInput possibleInput = value?.ToABRInput();
 
-                                if (possibleInput == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find variable `{0}`", value.inputValue);
-                                }
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.VisAsset.ToString("G"))
-                            {
-                                IVisAsset visAsset = null;
-                                ABREngine.Instance.VisAssets.TryGetVisAsset(new Guid(value.inputValue), out visAsset);
-                                if (visAsset == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to find VisAsset `{0}`", value.inputValue);
-                                    continue;
-                                }
-                                possibleInput = visAsset as IABRInput;
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.Primitive.ToString("G"))
-                            {
-                                // Attempt to construct the primitive from the type
-                                // provided in the state file
-                                Type inputType = Type.GetType(value.inputType);
-                                ConstructorInfo inputCtor =
-                                    inputType.GetConstructor(
-                                        BindingFlags.Instance | BindingFlags.Public,
-                                        null,
-                                        CallingConventions.HasThis,
-                                        new Type[] { typeof(string) },
-                                        null
-                                );
-                                string[] args = new string[] { value.inputValue };
-                                possibleInput = inputCtor?.Invoke(args) as IABRInput;
-                                if (possibleInput == null)
-                                {
-                                    Debug.LogWarningFormat("Unable to create primitive `{0}`", value.inputValue);
-                                }
-                            }
-                            else if (value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
+                            // Special case: need to use values from State to
+                            // create PrimitiveGradients (in theory, the only
+                            // place we'll be doing this...)
+                            if (possibleInput == null && value?.inputGenre == ABRInputGenre.PrimitiveGradient.ToString("G"))
                             {
                                 // Attempt to construct a primitive gradient
                                 try
@@ -372,10 +317,8 @@ namespace IVLab.ABREngine
                             // Verify that we have something to put in the input
                             if (possibleInput != null)
                             {
-                                // Verify that the input matches with the parameter (to
-                                // avoid possible name collisions), and check that it's
-                                // assignable from the possibleInput
-                                var actualInput = actualInputs.First((i) => inputName == i.inputName && i.parameterName == value.parameterName);
+                                // Verify that the input is assignable from the possibleInput
+                                var actualInput = actualInputs.First((i) => inputName == i.inputName);
                                 if (impressionInputs.CanAssignInput(inputName, possibleInput) && actualInput != null)
                                 {
                                     impressionInputs.AssignInput(inputName, possibleInput);
@@ -389,10 +332,10 @@ namespace IVLab.ABREngine
                         }
                     }
 
-                    // Add any rendering hints
+                    // Add any rendering hints (only use visibility, others are internal-only)
                     if (impression.Value.renderHints != null)
                     {
-                        dataImpression.RenderHints = impression.Value.renderHints;
+                        dataImpression.RenderHints.Visible = impression.Value.renderHints.Visible;
                     }
 
                     // Attempt to find the previous version of the current impression in the previous abr state 
@@ -483,9 +426,9 @@ namespace IVLab.ABREngine
                                 Guid gradientUuid = new Guid(gradInput.inputValue);
                                 if (visAssetsToUpdate.Contains(gradientUuid))
                                 {
-                                    if (gradientInput.updateLevel == UpdateLevel.Data)
+                                    if (gradientInput.updateLevel == UpdateLevel.Geometry)
                                     {
-                                        dataImpression.RenderHints.DataChanged = true;
+                                        dataImpression.RenderHints.GeometryChanged = true;
                                     }
                                     else if (gradientInput.updateLevel == UpdateLevel.Style)
                                     {
@@ -514,9 +457,9 @@ namespace IVLab.ABREngine
                         if (currentInput?.inputValue != previousInput?.inputValue)
                         {
                             // Enable changed flags according to the input that was changed
-                            if (input.updateLevel == UpdateLevel.Data)
+                            if (input.updateLevel == UpdateLevel.Geometry)
                             {
-                                dataImpression.RenderHints.DataChanged = true;
+                                dataImpression.RenderHints.GeometryChanged = true;
                             }
                             else if (input.updateLevel == UpdateLevel.Style)
                             {
@@ -528,8 +471,11 @@ namespace IVLab.ABREngine
                     // Add any tags
                     if (impression.Value.tags != null)
                     {
-                        (dataImpression as DataImpression).Tags = impression.Value.tags;
+                        dataImpression.Tags = impression.Value.tags;
                     }
+
+                    // Hide/show the data impression in scene if it has data
+                    dataImpression.gameObject.SetActive(dataImpression.GetKeyData() != null);
 
                     // Put the impressions in their proper groups, if any
                     bool registered = false;
@@ -546,8 +492,7 @@ namespace IVLab.ABREngine
                                         group.Value.name,
                                         group.Value.uuid,
                                         group.Value.containerBounds,
-                                        group.Value.rootPosition,
-                                        group.Value.rootRotation
+                                        group.Value.transformMatrix
                                     );
                                 }
                                 ABREngine.Instance.RegisterDataImpression(dataImpression, g, true);
@@ -614,25 +559,29 @@ namespace IVLab.ABREngine
                 }
             }
 
-            // Create/update lights, carefully select/create by name
+            // Create/update lights, carefully select/create by name (anywhere in the scene)
             if (state?.scene?.lighting != null)
             {
-                GameObject lightParent = GameObject.Find("ABRLightParent");
-                if (lightParent == null)
-                {
-                    lightParent = new GameObject("ABRLightParent");
-                    lightParent.transform.parent = GameObject.Find("ABREngine").transform;
-                }
-                if (lightParent.GetComponent<VolumeLightManager>() == null)
-                    lightParent.AddComponent<VolumeLightManager>();
-
+                List<ABRLight> existingSceneLights = MonoBehaviour.FindObjectsOfType<ABRLight>().ToList();
+                ABRLightManager lightManager = MonoBehaviour.FindObjectOfType<ABRLightManager>();
                 foreach (var light in state.scene.lighting)
                 {
-                    GameObject existing = GameObject.Find(light.name);
+                    // Carefully select ABRLight by its name
+                    ABRLight existing = existingSceneLights.Find(l => l.name == light.name);
+
+                    // If not found, create a new one under ABREngine or ABRLightManager
                     if (existing == null)
                     {
-                        existing = new GameObject(light.name);
-                        existing.transform.parent = lightParent.transform;
+                        GameObject go = new GameObject(light.name);
+                        existing = go.AddComponent<ABRLight>();
+                        if (lightManager != null)
+                        {
+                            existing.transform.SetParent(lightManager.transform);
+                        }
+                        else
+                        {
+                            existing.transform.SetParent(ABREngine.Instance.transform);
+                        }
                     }
 
                     existing.transform.localPosition = light.position;
@@ -641,7 +590,7 @@ namespace IVLab.ABREngine
                     Light lightComponent;
                     if (!existing.TryGetComponent<Light>(out lightComponent))
                     {
-                        lightComponent = existing.AddComponent<Light>();
+                        lightComponent = existing.gameObject.AddComponent<Light>();
                     }
 
                     lightComponent.intensity = light.intensity;
@@ -651,7 +600,7 @@ namespace IVLab.ABREngine
 
                 List<string> lightsInState = state.scene.lighting.Select((l) => l.name).ToList();
 
-                foreach (Transform light in lightParent.transform)
+                foreach (ABRLight light in existingSceneLights)
                 {
                     if (!lightsInState.Contains(light.gameObject.name))
                     {
@@ -662,7 +611,7 @@ namespace IVLab.ABREngine
 
             if (state?.scene?.backgroundColor != null)
             {
-                Camera.main.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
+                ABREngine.Instance.Config.DefaultCamera.backgroundColor = IVLab.Utilities.ColorUtilities.HexToColor(state.scene.backgroundColor);
             }
 
             return stateJson;
@@ -700,19 +649,21 @@ namespace IVLab.ABREngine
                     RawImpressionGroup saveGroup = new RawImpressionGroup();
 
                     // Save the group info
-                    saveGroup.name = group.Name;
-                    saveGroup.rootPosition = group.GroupRoot.transform.localPosition;
-                    saveGroup.rootRotation = group.GroupRoot.transform.localRotation;
-                    saveGroup.containerBounds = group.GroupContainer;
+                    saveGroup.name = group.name;
+                    saveGroup.transformMatrix = Matrix4x4.TRS(group.transform.localPosition, group.transform.localRotation, group.transform.localScale);
+                    Bounds containerBounds;
+                    if (group.TryGetContainerBoundsInGroupSpace(out containerBounds))
+                        saveGroup.containerBounds = containerBounds;
+                    else
+                        saveGroup.containerBounds = null;
                     saveGroup.uuid = group.Uuid;
                     saveGroup.impressions = new List<Guid>();
 
                     // Go through each impression
                     foreach (var impression in group.GetDataImpressions().Values)
                     {
-                        // Skip serializing impressions that aren't inside the ABREngine GameObject
-                        GameObject child = group.GetEncodedGameObject(impression.Uuid).gameObject;
-                        if (child.GetComponentInParent<ABREngine>() == null)
+                        // if specified to not save it to state, skip it
+                        if (!impression.SaveToState)
                         {
                             continue;
                         }
@@ -722,14 +673,7 @@ namespace IVLab.ABREngine
                         // Retrieve easy values
                         string guid = impression.Uuid.ToString();
                         saveImpression.uuid = guid;
-                        if (previousState?["impressions"]?.ToObject<JObject>().ContainsKey(guid) ?? false)
-                        {
-                            saveImpression.name = previousState["impressions"][guid]["name"].ToString();
-                        }
-                        else
-                        {
-                            saveImpression.name = "DataImpression";
-                        }
+                        saveImpression.name = impression.name;
                         saveImpression.renderHints = impression.RenderHints;
                         saveImpression.tags = (impression as DataImpression).Tags;
 
@@ -755,8 +699,6 @@ namespace IVLab.ABREngine
                             if (input != null)
                             {
                                 RawABRInput saveInput = input.GetRawABRInput();
-                                saveInput.parameterName = actualInputs
-                                    .First((i) => i.inputName == inputName).parameterName;
                                 saveInputs[inputName] = saveInput;
 
                                 // If it's a variable, gather the custom min/max if
@@ -794,23 +736,20 @@ namespace IVLab.ABREngine
                 }
 
                 // Update the lights
-                GameObject lightParent = GameObject.Find("ABRLightParent");
-                if (lightParent != null)
+                ABRLight[] lightsInScene = MonoBehaviour.FindObjectsOfType<ABRLight>();
+                foreach (ABRLight light in lightsInScene)
                 {
-                    foreach (Transform light in lightParent.transform)
+                    Light l = light.GetComponent<Light>();
+                    saveScene.lighting.Add(new RawLight
                     {
-                        Light l = light.GetComponent<Light>();
-                        saveScene.lighting.Add(new RawLight
-                        {
-                            name = light.gameObject.name,
-                            intensity = l.intensity,
-                            position = light.localPosition,
-                            rotation = light.localRotation,
-                        });
-                    }
+                        name = light.gameObject.name,
+                        intensity = l.intensity,
+                        position = light.transform.localPosition,
+                        rotation = light.transform.localRotation,
+                    });
                 }
 
-                saveScene.backgroundColor = IVLab.Utilities.ColorUtilities.ColorToHex(Camera.main.backgroundColor);
+                saveScene.backgroundColor = IVLab.Utilities.ColorUtilities.ColorToHex(ABREngine.Instance.Config.DefaultCamera.backgroundColor);
 
                 saveState.scene = saveScene;
                 saveState.dataRanges = saveRanges;
@@ -879,8 +818,12 @@ namespace IVLab.ABREngine
         {
             _saveFields.Add(typeof(Vector3), new string[] {"x", "y", "z"});
             _saveFields.Add(typeof(Quaternion), new string[] {"x", "y", "z", "w"});
+            _saveFields.Add(typeof(Matrix4x4), new string[] {"m00", "m01", "m02", "m03", "m10", "m11", "m12", "m13","m20", "m21", "m22", "m23", "m30", "m31", "m32", "m33"});
+            _saveFields.Add(typeof(Matrix4x4?), new string[] {"m00", "m01", "m02", "m03", "m10", "m11", "m12", "m13","m20", "m21", "m22", "m23", "m30", "m31", "m32", "m33"});
             _saveFields.Add(typeof(Bounds), new string[] {"m_Center", "m_Extents"});
             _remapFieldNames.Add(typeof(Bounds), new string[] {"center", "extents"});
+            _saveFields.Add(typeof(Bounds?), new string[] {"m_Center", "m_Extents"});
+            _remapFieldNames.Add(typeof(Bounds?), new string[] {"center", "extents"});
         }
 
 
@@ -1001,9 +944,7 @@ namespace IVLab.ABREngine
         public List<Guid> impressions;
         public string name;
         public Guid uuid;
-        public Bounds containerBounds;
-        public Vector3 rootPosition;
-        public Quaternion rootRotation;
-        // Not including scale because that would mess with artifacts
+        public Bounds? containerBounds;
+        public Matrix4x4? transformMatrix;
     }
 }

@@ -82,12 +82,12 @@ namespace IVLab.ABREngine
                 this._client = new ClientWebSocket();
 
                 // Inspiration from:
-                // https://csharp.hotexamples.com/examples/-/ClientWebSocket/-/php-clientwebsocket-class-examples.html#0x5cb1281703a205e0b8dd236b8e8798505c77e14c91383f620be403f868cae48b-43,,96,
+                // https://csharp.hotexamples.com/tutorials/-/ClientWebSocket/-/php-clientwebsocket-class-examples.html#0x5cb1281703a205e0b8dd236b8e8798505c77e14c91383f620be403f868cae48b-43,,96,
                 this._client.ConnectAsync(this._subscriberWebSocket, cts.Token);
 
                 // Wait for a max of ~5s to see if the client can connect
                 int tries = 0;
-                while (this._client.State != WebSocketState.Open && tries < 50)
+                while (this._client.State != WebSocketState.Open && tries < 100)
                 {
                     tries++;
                     Thread.Sleep(100);
@@ -155,7 +155,7 @@ namespace IVLab.ABREngine
                     Screenshot scr = null;
                     await UnityThreadScheduler.Instance.RunMainThreadWork(() =>
                     {
-                        if (Camera.main.TryGetComponent<Screenshot>(out scr))
+                        if (ABREngine.Instance.Config.DefaultCamera.TryGetComponent<Screenshot>(out scr))
                         {
                             // 1. Capture the screen bytes in LateUpdate
                             thumbnail = scr.CaptureView(128, 128, false, -1);

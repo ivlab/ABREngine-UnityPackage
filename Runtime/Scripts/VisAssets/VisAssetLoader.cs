@@ -26,6 +26,7 @@ using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 using IVLab.Utilities;
+using UnityEditor;
 
 namespace IVLab.ABREngine
 {
@@ -36,9 +37,12 @@ namespace IVLab.ABREngine
     {
         string GetArtifactJsonPath(Guid uuid);
         JObject GetArtifactJson(Guid uuid);
+        [Obsolete("GetColormapTexture() is obsolete; use GetColormap() instead")]
         Texture2D GetColormapTexture(Guid uuid);
+        Colormap GetColormap(Guid uuid);
         GameObject GetGlyphGameObject(Guid uuid, JObject lodJson);
         Texture2D GetGlyphNormalMapTexture(Guid uuid, JObject lodJson);
+        Texture2D GetGlyphPreview(Guid uuid);
         Texture2D GetLineTexture(Guid uuid);
         Texture2D GetSurfaceTexture(Guid uuid);
         Texture2D GetSurfaceNormalMap(Guid uuid);
@@ -118,6 +122,12 @@ namespace IVLab.ABREngine
             return _fpFetcher.GetColormapTexture(uuid);
         }
 
+        public Colormap GetColormap(Guid uuid)
+        {
+            CheckExists(uuid);
+            return _fpFetcher.GetColormap(uuid);
+        }
+
         public GameObject GetGlyphGameObject(Guid uuid, JObject lodInfo)
         {
             CheckExists(uuid);
@@ -128,6 +138,12 @@ namespace IVLab.ABREngine
         {
             CheckExists(uuid);
             return _fpFetcher.GetGlyphNormalMapTexture(uuid, lodInfo);
+        }
+
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            CheckExists(uuid);
+            return _fpFetcher.GetGlyphPreview(uuid);
         }
 
         public Texture2D GetLineTexture(Guid uuid)
@@ -317,7 +333,20 @@ namespace IVLab.ABREngine
 
             if (File.Exists(colormapfilePath))
             {
-                return ColormapUtilities.ColormapFromFile(colormapfilePath, 1024, 100);
+                return Colormap.FromXMLFile(colormapfilePath).ToTexture2D(1024, 100);
+            }
+            return null;
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string relativeColormapPath = artifactJson["artifactData"]["colormap"].ToString();
+            string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), relativeColormapPath);
+
+            if (File.Exists(colormapfilePath))
+            {
+                return Colormap.FromXMLFile(colormapfilePath);
             }
             return null;
         }
@@ -338,6 +367,21 @@ namespace IVLab.ABREngine
             var normalMap = new Texture2D(2, 2, textureFormat: TextureFormat.RGBA32, mipChain: true, linear: true);
             normalMap.LoadImage(normalData);
             return normalMap;
+        }
+
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string artifactJsonPath = GetArtifactJsonPath(uuid);
+            string previewPath = VisAssetDataPath(artifactJsonPath, artifactJson["preview"].ToString());
+            if (File.Exists(previewPath))
+            {
+                byte[] pngBytes = File.ReadAllBytes(previewPath);
+                Texture2D preview = new Texture2D(2, 2);
+                preview.LoadImage(pngBytes);
+                return preview;
+            }
+            return null;
         }
 
         public Texture2D GetLineTexture(Guid uuid)
@@ -463,8 +507,15 @@ namespace IVLab.ABREngine
             JObject artifactJson = GetArtifactJson(uuid);
             string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["colormap"].ToString());
             TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
-            Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML.text, 1024, 100);
-            return texture;
+            return Colormap.FromXML(colormapXML.text).ToTexture2D(1024, 100);
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string colormapfilePath = VisAssetDataPath(GetArtifactJsonPath(uuid), artifactJson["artifactData"]["colormap"].ToString());
+            TextAsset colormapXML = Resources.Load<TextAsset>(colormapfilePath);
+            return Colormap.FromXML(colormapXML.text);
         }
 
         public GameObject GetGlyphGameObject(Guid uuid, JObject lodJson)
@@ -477,6 +528,14 @@ namespace IVLab.ABREngine
         {
             var normalPath = VisAssetDataPath(GetArtifactJsonPath(uuid), lodJson["normal"].ToString());
             return Resources.Load<Texture2D>(normalPath);
+        }
+
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            JObject artifactJson = GetArtifactJson(uuid);
+            string artifactJsonPath = GetArtifactJsonPath(uuid);
+            string previewPath = VisAssetDataPath(artifactJsonPath, artifactJson["preview"].ToString());
+            return Resources.Load<Texture2D>(previewPath);
         }
 
         public Texture2D GetLineTexture(Guid uuid)
@@ -544,8 +603,27 @@ namespace IVLab.ABREngine
                     return null;
                 }
                 string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
-                Texture2D texture = ColormapUtilities.ColormapFromXML(colormapXML, 1024, 100);
+                Texture2D texture = Colormap.FromXML(colormapXML).ToTexture2D(1024, 100);
                 return texture;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return null;
+            }
+        }
+
+        public Colormap GetColormap(Guid uuid)
+        {
+            try
+            {
+                JObject visAssets = ABREngine.Instance.VisAssets.LocalVisAssets;
+                if (!visAssets.ContainsKey(uuid.ToString()))
+                {
+                    return null;
+                }
+                string colormapXML = visAssets[uuid.ToString()][ARTIFACT_DATA]["colormap.xml"].ToString();
+                return Colormap.FromXML(colormapXML);
             }
             catch (Exception e)
             {
@@ -563,6 +641,12 @@ namespace IVLab.ABREngine
         {
             return null;
         }
+
+        public Texture2D GetGlyphPreview(Guid uuid)
+        {
+            return null;
+        }
+
 
         public Texture2D GetLineTexture(Guid uuid)
         {
@@ -641,8 +725,8 @@ namespace IVLab.ABREngine
 
             if (type == "colormap")
             {
-                Texture2D colormapTexture = _fetcher.GetColormapTexture(guid);
-                ColormapVisAsset visAsset = new ColormapVisAsset(guid, colormapTexture);
+                Colormap cmap = _fetcher.GetColormap(guid);
+                ColormapVisAsset visAsset = new ColormapVisAsset(guid, cmap);
                 return visAsset;
             }
 
@@ -652,6 +736,7 @@ namespace IVLab.ABREngine
                 List<JObject> lodsList = null;
                 List<Mesh> meshLods = new List<Mesh>();
                 List<Texture2D> normalMapLods = new List<Texture2D>();
+                Texture2D preview = null;
                 try
                 {
                     lodsList = artifactData["lods"].ToObject<List<JObject>>();
@@ -660,10 +745,11 @@ namespace IVLab.ABREngine
                 {
                     if (artifactData is JArray)
                     {
-                        Debug.LogWarning(string.Format(
-                            "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
-                            guid.ToString().Substring(0, 8)
-                        ));
+                        // Removing warning - just handle both cases silently
+                        // Debug.LogWarning(string.Format(
+                        //     "VisAsset {0}: Use of bare array in `artifactData` is deprecated. Put the array inside an object.",
+                        //     guid.ToString().Substring(0, 8)
+                        // ));
                         lodsList = artifactData.ToObject<List<JObject>>();
                     }
                 }
@@ -676,16 +762,36 @@ namespace IVLab.ABREngine
                     GameObject.Destroy(loadedObjGameObject);
                     try
                     {
-                        // Destroy doesn't work if we imported from resources.
-                        GameObject.Destroy(prefab);
+                        // Only destroy if not imported from Resources, and fail
+                        // silently if something goes wrong during destroying
+                        // the prefab. It'll just look weird in the scene.
+#if UNITY_EDITOR
+                        if (!AssetDatabase.Contains(prefab))
+#endif
+                        {
+                            GameObject.Destroy(prefab);
+                        }
                     }
                     catch (Exception) { }
                     meshLods.Add(loadedMesh);
 
-                    Texture2D normalMap = _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
-                    normalMapLods.Add(normalMap);
+                    try
+                    {
+                        // Normal maps are not critical to the operation of ABR;
+                        // so silently accept when they're not present
+                        Texture2D normalMap = _fetcher.GetGlyphNormalMapTexture(uuid, lodJson);
+                        normalMapLods.Add(normalMap);
+                    }
+                    catch (Exception) { }
+
+                    try
+                    {
+                        // previews also not critical, silently accept any errors
+                        preview = _fetcher.GetGlyphPreview(uuid);
+                    }
+                    catch { }
                 }
-                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods);
+                GlyphVisAsset visAsset = new GlyphVisAsset(guid, meshLods, normalMapLods, preview);
                 return visAsset;
             }
 

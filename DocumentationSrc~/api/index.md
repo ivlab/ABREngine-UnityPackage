@@ -2,7 +2,7 @@
 
 Here are the most important classes start out making visualizations with C# and
 ABR. Check out the
-[Creating a C# ABR visualization tutorial](../manual/creating-cs-abr-vis.md)
+[Creating a C# ABR visualization tutorial](../manual/tutorials/abr-cs.md)
 for more examples.
 
 ## ABREngine
@@ -21,10 +21,10 @@ for more examples.
 | Class | Importance |
 | ----- | ---------- |
 | @IVLab.ABREngine.DataManager | Main "manager" object where data are stored. Single instance of this class is [ABREngine.Instance.Data](xref:IVLab.ABREngine.ABREngine#IVLab_ABREngine_ABREngine_Data). |
-| @IVLab.ABREngine.KeyData | High-level representation of geometric data. See [Key Data](../manual/key-data.md). |
-| @IVLab.ABREngine.RawDataset | Low-level representation of geometric data. See [Basic Terminology](../manual/terminology-starter.md) |
+| @IVLab.ABREngine.KeyData | High-level representation of geometric data. See [Key Data](../manual/concepts/key-data.md). |
+| @IVLab.ABREngine.RawDataset | Low-level representation of geometric data. See [Basic Terminology](../manual/concepts/terminology-starter.md) |
 | @IVLab.ABREngine.RawDatasetAdapter | Factory used to create ABR-compatible raw datasets from existing data you have (e.g., creating a surface out of a bunch of @UnityEngine.Vector3 s) |
-| @IVLab.ABREngine.MediaDataLoader | Load data from the [media folder](../manual/media-folder.md) |
+| @IVLab.ABREngine.MediaDataLoader | Load data from the [media folder](../manual/concepts/media-folder.md) |
 | @IVLab.ABREngine.ResourcesDataLoader | Load data from any [Unity Resources folder](https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity6.html) - useful for bundling data with a project. |
 | @IVLab.ABREngine.HttpDataLoader | Load data from a network (http) source (must be set up with ABR data server) |
 

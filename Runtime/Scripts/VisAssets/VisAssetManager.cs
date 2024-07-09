@@ -382,9 +382,10 @@ namespace IVLab.ABREngine
             if (t.IsAssignableFrom(typeof(ColormapVisAsset)))
             {
                 // Define a black-to-white colormap
-                string colormXmlText = "<ColorMaps><ColorMap space=\"CIELAB\" indexedlookup=\"false\" name=\"ColorLoom\"><Point r=\"0\" g=\"0\" b=\"0\" x=\"0.0\"></Point><Point r=\"1\" g=\"1\" b=\"1\" x=\"1.0\"></Point></ColorMap></ColorMaps>";
-                Texture2D cmapTex = ColormapUtilities.ColormapFromXML(colormXmlText, 1024, 1);
-                return new ColormapVisAsset(cmapTex);
+                Colormap blackToWhite = new Colormap();
+                blackToWhite.AddControlPt(0, Color.black);
+                blackToWhite.AddControlPt(1, Color.white);
+                return new ColormapVisAsset(blackToWhite);
             }
             if (t.IsAssignableFrom(typeof(GlyphVisAsset)))
             {
@@ -393,7 +394,7 @@ namespace IVLab.ABREngine
                 List<Mesh> lods = new List<Mesh> { glyphMesh };
                 List<Texture2D> nrms = new List<Texture2D> { Texture2D.normalTexture };
                 GameObject.Destroy(cube);
-                return new GlyphVisAsset(lods, nrms);
+                return new GlyphVisAsset(lods, nrms, null);
             }
             else
             {

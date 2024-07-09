@@ -21,6 +21,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using IVLab.Utilities;
+using TMPro;
 using System;
 
 namespace IVLab.ABREngine.Legends
@@ -42,6 +43,12 @@ namespace IVLab.ABREngine.Legends
 
         [Tooltip("Force an update for the legend")]
         [SerializeField] private bool forceLegendUpdate;
+
+        [Tooltip("Color for the legend backgrounds")]
+        [SerializeField] private Color backgroundColor = Color.black;
+
+        [Tooltip("Color for the legend foreground text")]
+        [SerializeField] private Color textColor = Color.white;
 
         private const string defaultText = "[None]";
 
@@ -87,7 +94,7 @@ namespace IVLab.ABREngine.Legends
             legendEntryGameObjects.Clear();
 
             // Obtain background color from state
-            Color background = Camera.main.backgroundColor;
+            Color background = backgroundColor;
 
             int entryIndex = 0;
             // Create legend clones of each data impression type, register them
@@ -163,22 +170,29 @@ namespace IVLab.ABREngine.Legends
             // Move each Data Impression GameObject underneath the legend GameObject
             foreach (var go in legendEntryGameObjects)
             {
-                EncodedGameObject ego = ABREngine.Instance.GetEncodedGameObject(new Guid(go.name));
+                DataImpression ego = ABREngine.Instance.GetDataImpression(new Guid(go.name));
                 ego.gameObject.transform.SetParent(go.transform, false);
             }
         }
 
-        private ABRLegendEntry SetupLegendEntry(IDataImpression di, Color backgroundColor, int entryIndex)
+        private ABRLegendEntry SetupLegendEntry(DataImpression di, Color backgroundColor, int entryIndex)
         {
             GameObject entryGo = Instantiate(legendEntry2DPrefab);
             entryGo.transform.SetParent(this.transform, false);
             entryGo.name = di.Uuid.ToString();
             entryGo.transform.localPosition += entryOffset * entryIndex;
             legendEntryGameObjects.Add(entryGo);
+
             foreach (MeshRenderer r in entryGo.GetComponentsInChildren<MeshRenderer>())
             {
                 r.material.color = backgroundColor;
             }
+
+            foreach (TextMeshPro tmp in entryGo.GetComponentsInChildren<TextMeshPro>())
+            {
+                tmp.color = textColor;
+            }
+
             return entryGo.GetComponent<ABRLegendEntry>();
         }
 
@@ -196,17 +210,17 @@ namespace IVLab.ABREngine.Legends
             RawDataset rds = ABRLegendGeometry.Glyphs(numVars);
             ABREngine.Instance.Data.ImportRawDataset(glyphDataPath, rds);
 
-            IKeyData glyphKeyData = null;
+            KeyData glyphKeyData = null;
             Dataset ds = null;
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(glyphDataPath), out ds);
             ds.TryGetKeyData(glyphDataPath, out glyphKeyData);
 
             // Copy all inputs from the actual impression
-            SimpleGlyphDataImpression gi = new SimpleGlyphDataImpression();
-            gi.CopyExisting(i);
+            SimpleGlyphDataImpression gi = DataImpression.Create<SimpleGlyphDataImpression>("Legend Glyphs");
+            gi.CopyFrom(i);
 
             // Apply legend-specific entries
-            gi.keyData = glyphKeyData as PointKeyData;
+            gi.keyData = glyphKeyData;
             gi.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             gi.glyphVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
             gi.forwardVariable = ds.GetAllVectorVars().FirstOrDefault(v => v.Key.Contains("Forward")).Value;
@@ -231,18 +245,18 @@ namespace IVLab.ABREngine.Legends
             RawDataset rds = ABRLegendGeometry.Ribbons(numVars);
             ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
-            IKeyData kd = null;
+            KeyData kd = null;
             Dataset ds = null;
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleLineDataImpression li = new SimpleLineDataImpression();
-            li.CopyExisting(i);
+            SimpleLineDataImpression li = DataImpression.Create<SimpleLineDataImpression>("Line Legend");
+            li.CopyFrom(i);
 
             // Apply legend-specific entries
             li.defaultCurveDirection = Vector3.forward;
-            li.keyData = kd as LineKeyData;
+            li.keyData = kd;
             li.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             li.lineTextureVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
             li.lineWidth = new LengthPrimitive("0.3m");
@@ -260,17 +274,17 @@ namespace IVLab.ABREngine.Legends
             RawDataset rds = ABRLegendGeometry.Surface();
             ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
-            IKeyData kd = null;
+            KeyData kd = null;
             Dataset ds = null;
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleSurfaceDataImpression si = new SimpleSurfaceDataImpression();
-            si.CopyExisting(i);
+            SimpleSurfaceDataImpression si = DataImpression.Create<SimpleSurfaceDataImpression>("Surface Legend");
+            si.CopyFrom(i);
 
             // Then, apply legend-specific entries
-            si.keyData = kd as SurfaceKeyData;
+            si.keyData = kd;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
             si.patternVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("ZAxis")).Value;
 
@@ -287,17 +301,17 @@ namespace IVLab.ABREngine.Legends
             RawDataset rds = ABRLegendGeometry.Volume();
             ABREngine.Instance.Data.ImportRawDataset(dataPath, rds);
 
-            IKeyData kd = null;
+            KeyData kd = null;
             Dataset ds = null;
             ABREngine.Instance.Data.TryGetDataset(DataPath.GetDatasetPath(dataPath), out ds);
             ds.TryGetKeyData(dataPath, out kd);
 
             // Copy all inputs from the actual impression
-            SimpleVolumeDataImpression si = new SimpleVolumeDataImpression();
-            si.CopyExisting(i);
+            SimpleVolumeDataImpression si = DataImpression.Create<SimpleVolumeDataImpression>("Volume Legend");
+            si.CopyFrom(i);
 
             // Apply legend-specific entries
-            si.keyData = kd as VolumeKeyData;
+            si.keyData = kd;
             si.colorVariable = ds.GetAllScalarVars().FirstOrDefault(v => v.Key.Contains("XAxis")).Value;
 
             return si;

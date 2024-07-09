@@ -28,7 +28,7 @@ namespace IVLab.ABREngine
         /// Data updates generally need to address geometric information and/or
         /// populate data on a per-vertex basis, hence they are usually slow/expensive.
         /// </summary>
-        Data,
+        Geometry,
         /// <summary>
         /// Style updates are generally lightweight and only consist of updating
         /// uniforms on the GPU, for example changing the colormap or glyph size.
@@ -43,14 +43,19 @@ namespace IVLab.ABREngine
     [System.AttributeUsage(System.AttributeTargets.Field)]
     public class ABRInputAttribute : System.Attribute
     {
+        /// <summary>
+        /// Name of the input - should match the name in the ABR Schema (see @abr-schema.md).
+        /// </summary>
         public string inputName;
-        public string parameterName;
-        // Which level of update (e.g. data, style, etc) this input necessitates if changed.
+
+        /// <summary>
+        /// What <see cref="UpdateLevel"/> does this input necessitate when changed?
+        /// </summary>
         public UpdateLevel updateLevel;
-        public ABRInputAttribute(string inputName, string parameterName, UpdateLevel updateLevel)
+
+        public ABRInputAttribute(string inputName, UpdateLevel updateLevel)
         {
             this.inputName = inputName;
-            this.parameterName = parameterName;
             this.updateLevel = updateLevel;
         }
     }

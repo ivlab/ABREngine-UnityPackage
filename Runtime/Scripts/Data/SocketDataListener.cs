@@ -201,7 +201,7 @@ namespace IVLab.ABREngine
                             string dataPathUpdated;
                             if (updatedDataPaths.TryDequeue(out dataPathUpdated))
                             {
-                                ABREngine.Instance.GetDataImpression(di => di.GetKeyData()?.Path == dataPathUpdated).RenderHints.DataChanged = true;
+                                ABREngine.Instance.GetDataImpression(di => di.GetKeyData()?.Path == dataPathUpdated).RenderHints.GeometryChanged = true;
                             }
                         }
                         await UnityThreadScheduler.Instance.RunMainThreadWork(() => ABREngine.Instance.Render());

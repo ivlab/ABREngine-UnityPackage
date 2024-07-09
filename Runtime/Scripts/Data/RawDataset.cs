@@ -382,6 +382,9 @@ namespace IVLab.ABREngine
             scalarMins = jh.scalarMins;
             scalarMaxes = jh.scalarMaxes;
 
+            // Debug.Log("scalar array names: " + string.Join(", ", scalarArrayNames));
+            // Debug.Log("vector array names: " + string.Join(", ", vectorArrayNames));
+
             scalarArrays = new SerializableFloatArray[jh.scalarArrayNames.Count()];
             for (int i = 0; i < scalarArrayNames.Count(); i++)
             {
@@ -412,6 +415,14 @@ namespace IVLab.ABREngine
         /// </returns>
         public Tuple<string, byte[]> ToFilePair()
         {
+            // ensure things aren't null for ease of access later
+            if (this.vertexArray == null)
+                this.vertexArray = new Vector3[0];
+            if (this.cellIndexCounts == null)
+                this.cellIndexCounts = new int[0];
+            if (this.cellIndexOffsets == null)
+                this.cellIndexOffsets = new int[0];
+
             JsonHeader jh = new JsonHeader();
             jh.meshTopology = this.dataTopology;
             jh.num_points = this.vertexArray.Length;

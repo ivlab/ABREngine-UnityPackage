@@ -1,0 +1,311 @@
+
+html, body {
+    height: 100vh;
+    font-family: Futura,Trebuchet MS,Arial,sans-serif;
+    padding: 0;
+    margin: 0;
+    color: black;
+    background-color: #dae1e7;
+    font-size: 14px;
+    /* disable selection because the click-and-drag scrolling feature 
+       accidentally selects text. */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+* {
+    border-radius: 4px;
+}
+
+#action-headers {
+    display: flex;
+    background-color: #7fb8da;
+}
+
+.action-header {
+    flex-grow: 1;
+    padding: 0.25rem;
+    margin: auto;
+    display: flex;
+}
+
+#file-header {
+    justify-content: flex-start;
+}
+
+.action-header button {
+    margin: 0.25rem;
+    height: 1.5em;
+}
+
+#state-header {
+    justify-content: center;
+}
+
+#screenshot-header {
+    justify-content: flex-end;
+}
+
+.keep-font-size {
+    font-size: inherit;
+}
+
+.icon-space {
+    margin: 0 0.5em;
+}
+
+.design-panels-container {
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 4rem);
+    width: 100vw;
+    display: flex;
+    min-height: 0;
+    position: fixed;
+}
+
+.panel {
+    background-color: #928e89;
+    margin: 0;
+    padding: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.data-panel {
+    width: 16rem;
+}
+
+.library-panel {
+    width: 16rem;
+}
+
+.composition-panel {
+    width: calc(100% - 33rem);
+    margin: 0 0.5rem 0 0.5rem;
+}
+
+.composition-scrollbox {
+    overflow: hidden !important;
+    height: 100%;
+}
+
+#composition-loader {
+    /* make it a giant square for scrolling */
+    width: 200vw;
+    height: 200vw;
+
+    /* grid background for composition: https://stackoverflow.com/q/5218927 */
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, grey 1px, transparent 1px),
+        linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+
+.panel-header {
+    display: flex;
+    background-color: #c5c5c5;
+    width: 100%;
+    padding: 0.25rem 0;
+}
+
+.panel-header div {
+    flex-grow: 1;
+    font-variant: small-caps;
+    margin: 0;
+    font-size: 0.75rem;
+    text-align: center;
+    color: #3d3d3d;
+}
+
+.panel-header button {
+    padding: 0 0.75rem;
+}
+
+
+.scrollbox {
+    flex: 1;
+    width: 100%;
+    overflow: auto;
+}
+
+
+.section-header {
+    font-variant: small-caps;
+    margin: 0;
+    padding: 1rem 0 0 0.5rem;
+    top: 0;
+    display: block;
+    color: white;
+    text-align: left;
+    font-size: 1rem;
+}
+
+
+
+/* 
+ * Make all items that are dragging go on top of everything else on the page
+ */
+.ui-draggable-dragging {
+    z-index: 999;
+}
+
+.ui-draggable {
+    cursor: grab;
+}
+
+.state-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.state-centered input,.state-centered button {
+    padding: 0.5rem;
+    margin: 0 0.25rem;
+    background: #eee;
+}
+
+button.tiny-button {
+    font-size: 1.0rem;
+}
+
+.state-block {
+    display: flex;
+    justify-content: center;
+}
+
+.data-panel h2 {
+    margin: 0;
+}
+
+button.create-source {
+    display: block;
+    width: 70%;
+    height: 3em;
+    margin: 1rem auto;
+}
+
+button.centered {
+    display: block;
+    margin: 1rem auto;
+}
+
+input,button {
+    background: #eee;
+    border: none;
+    font-family: inherit;
+    z-index: 400;
+}
+
+input[type="file"] {
+    width: 100%;
+}
+
+*:disabled {
+    background-color: #fdd;
+}
+
+
+#connecting-header {
+    height: 4em;
+    line-height: 4em;
+    background-color: red;
+    text-align: center;
+    font-size: 30px;
+    transition: height 0.5s;
+}
+#connecting-header.connected {
+    height: 0em;
+}
+#connecting-header>* {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+#connecting-header.connected>* {
+    display: none;
+}
+
+.trash {
+    position: fixed;
+    bottom: 0;
+    height: 3rem;
+    width: 3rem;
+    margin: 1rem;
+    padding: 0.5rem;
+}
+
+.remapper {
+    background-color: #dedede;
+    padding: 0.5em;
+    width: 100%;
+}
+
+.data-remapping-slider .data-show {
+    display: block;
+}
+
+.data-remapping-slider .data-show {
+    margin: 1em 0;
+}
+
+.min-max-slider {
+    margin: 0.5em 0;
+}
+
+.slider-container input {
+    width: 30%;
+}
+
+.slider-inputs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.state-block-parent {
+    margin: 0.75em;
+    width: 10rem;
+}
+
+.state-block-parent p {
+    overflow-wrap: break-word;
+    margin-bottom: 0.25em;
+}
+
+.state-block-parent button {
+    font-family: 'Material Icons' !important;
+}
+
+.state-loader-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.state-thumbnail {
+    width: 100%;
+}
+
+#current-state {
+    font-variant: normal;
+}
+
+/* https://stackoverflow.com/a/12646655 */
+.outer-align {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.inner-align {
+    float: right;
+}

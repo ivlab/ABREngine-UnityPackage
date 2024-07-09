@@ -3,38 +3,32 @@
 - name: Introduction
   href: intro.md
 - name: Core Concepts
-  href: core-concepts.md
+  href: concepts/core-concepts.md
   items:
     - name: Key Data
-      href: key-data.md
+      href: concepts/key-data.md
     - name: VisAssets
-      href: visassets.md
+      href: concepts/visassets.md
     - name: Data Impressions
-      href: data-impressions.md
+      href: concepts/data-impressions.md
     - name: Basic Terminology
-      href: terminology-starter.md
+      href: concepts/terminology-starter.md
     - name: Media Folder
-      href: media-folder.md
-- name: Creating your first ABR Visualizations
+      href: concepts/media-folder.md
+- name: "Getting Started Tutorials"
+  href: tutorials/tutorials.md
   items:
-    - name: Importing Data
-      href: importing-data.md
+    - name: Start Here - ABR Vis App
+      href: tutorials/abr-vis-app.md
     - name: ABR Design Interface
-      href: creating-design-interface-vis.md
+      href: tutorials/creating-design-interface-vis.md
     - name: ABR C# Visualization
-      href: creating-cs-abr-vis.md
-- name: Examples
-  href: examples/examples.md
-  items:
-    - name: State Creation
-      href: examples/create-state.md
-    - name: Dataset Creation
-      href: examples/create-dataset.md
-    - name: Modify JSON State
-      href: examples/interactive-state.md
+      href: tutorials/abr-cs.md
+    - name: Importing Data
+      href: tutorials/importing-data.md
     - name: Advanced Usage
-      href: examples/advanced-usage.md
+      href: tutorials/advanced-usage.md
+- name: Troubleshooting
+  href: troubleshooting.md
 - name: License
   href: license.md
-- name: Change Log
-  href: changelog.md

@@ -72,7 +72,6 @@ namespace IVLab.ABREngine
             {
                 inputType = this.GetType().ToString(),
                 inputValue = InputValue.ToString(),
-                parameterName = "",// TODO
                 inputGenre = Genre.ToString("G")
             };
         }

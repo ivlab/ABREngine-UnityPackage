@@ -21,6 +21,8 @@ using System;
 using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
+using IVLab.Utilities;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace IVLab.ABREngine
 {
@@ -55,6 +57,11 @@ namespace IVLab.ABREngine
         /// Get the normal map at a particular percentage (t-value) through the gradient
         /// </summary>
         Texture2D GetNormalMap(float gradientT, int lod);
+
+        /// <summary>
+        /// Get a preview of the glyph as a Texture2D, if any
+        /// </summary>
+        Texture2D GetPreview();
     }
 
     public class GlyphVisAsset : VisAsset, IGlyphVisAsset
@@ -62,23 +69,39 @@ namespace IVLab.ABREngine
         public int VisAssetCount { get; } = 1;
         public List<Mesh> MeshLods { get; } = new List<Mesh>();
         public List<Texture2D> NormalMapLods { get; } = new List<Texture2D>();
+        private Texture2D preview;
 
-        public GlyphVisAsset() : this(new Guid(), null, null) { }
-        public GlyphVisAsset(List<Mesh> meshLods, List<Texture2D> normalMapLods) : this(Guid.NewGuid(), meshLods, normalMapLods) { }
-        public GlyphVisAsset(Guid uuid, List<Mesh> meshLods, List<Texture2D> normalMapLods)
+        public GlyphVisAsset() : this(new Guid(), null, null, null) { }
+        public GlyphVisAsset(List<Mesh> meshLods, List<Texture2D> normalMapLods, Texture2D preview) : this(Guid.NewGuid(), meshLods, normalMapLods, preview) { }
+        public GlyphVisAsset(List<Mesh> meshLods, List<Texture2D> normalMapLods) : this(Guid.NewGuid(), meshLods, normalMapLods, null) { }
+        public GlyphVisAsset(Guid uuid, List<Mesh> meshLods, List<Texture2D> normalMapLods, Texture2D preview)
         {
             Uuid = uuid;
             MeshLods = meshLods;
             NormalMapLods = normalMapLods;
             ImportTime = DateTime.Now;
+            this.preview = preview;
         }
 
-        public Mesh GetMesh(int lod) => MeshLods[Math.Min(lod, MeshLods.Count - 1)];
-        public Texture2D GetNormalMap(int lod) => NormalMapLods[Math.Min(lod, NormalMapLods.Count - 1)];
+        public Mesh GetMesh(int lod)
+        {
+            if (MeshLods?.Count > 0)
+                return MeshLods[Mathf.Clamp(lod, 0, MeshLods.Count - 1)];
+            else
+                return null;
+        }
+        public Texture2D GetNormalMap(int lod)
+        {
+            if (NormalMapLods?.Count > 0)
+                return NormalMapLods[Mathf.Clamp(lod, 0, NormalMapLods.Count - 1)];
+            else
+                return null;
+        }
         public Mesh GetMesh(int gradientIndex, int lod) => GetMesh(lod);
         public Texture2D GetNormalMap(int gradientIndex, int lod) => GetNormalMap(lod);
         public Mesh GetMesh(float gradientT, int lod) => GetMesh(lod);
         public Texture2D GetNormalMap(float gradientT, int lod) => GetNormalMap(lod);
+        public Texture2D GetPreview() => preview;
     }
 
     public class GlyphGradient : VisAssetGradient, IGlyphVisAsset, IVisAssetGradient<GlyphVisAsset>
@@ -119,6 +142,11 @@ namespace IVLab.ABREngine
                 }
             }
             return default;
+        }
+        public Texture2D GetPreview()
+        {
+            List<Texture2D> previews = VisAssets.Select(va => va.GetPreview()).ToList();
+            return TextureUtilities.MakeTextureGradient(previews);
         }
     }
 }

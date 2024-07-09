@@ -1,0 +1,74 @@
+/* components/Header.css
+ * 
+ * Copyright (c) 2020, University of Minnesota
+ * Author: Bridger Herman <herma582@umn.edu>
+ */
+ 
+#header {
+    background-color: #7fb8da;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+#header button {
+    margin: 0.3rem;
+    height: 1.5em;
+    font-size: 20px;
+}
+
+#state-header {
+    display: flex;
+}
+
+#state-header p {
+    margin: auto;
+}
+
+.state-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.state-list .state-selector {
+    border: 1px solid gray;
+    padding: 1rem;
+    margin: 0.5rem;
+    word-wrap: anywhere;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 8rem;
+}
+.state-list .state-selector.selected-state {
+    background-color: #ceedff;
+}
+.state-name {
+    margin: 0 0 1rem 0;
+}
+
+.abr-main-button>img {
+    height: 1.5rem;
+}
+#abr-menu {
+    position: absolute;
+    width: 15rem;
+    background-color: #eeeeee;
+}
+#abr-menu span {
+    padding: 0 0.5rem;
+}
+
+.save-animation {
+    visibility: hidden;
+    animation-iteration-count: 1;
+}
+.save-animation.animating {
+    animation: save-animation 2s ease;
+    visibility: visible !important;
+}
+
+@keyframes save-animation {
+    0% { transform: scale(0.0); }
+    50% { transform: scale(2.0); }
+    100% { transform: scale(0.0); }
+}

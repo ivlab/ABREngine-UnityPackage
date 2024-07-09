@@ -108,6 +108,9 @@ namespace IVLab.ABREngine
         public RawDataset LoadData(string dataPath)
         {
             DataPath.WarnOnDataPathFormat(dataPath, DataPath.DataPathType.KeyData);
+#if !UNITY_2020_OR_NEWER
+            Debug.LogWarning("Loading data from Resources folder may not work correctly in Unity < 2020");
+#endif
 
             // Fetch both files from resources
             TextAsset[] metadataData = Resources.LoadAll<TextAsset>("media/datasets/" + dataPath);
@@ -116,16 +119,24 @@ namespace IVLab.ABREngine
                 throw new Exception($"{dataPath} does not exist in Resources or is corrupted");
             }
 
-            string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
-            JObject metadata = JObject.Parse(metadataJson);
-            RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
+            try
+            {
+                string metadataJson = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[0].text : metadataData[1].text;
+                JObject metadata = JObject.Parse(metadataJson);
+                RawDataset.JsonHeader meta = metadata.ToObject<RawDataset.JsonHeader>();
 
-            byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
-            RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
-            Resources.UnloadAsset(metadataData[0]);
-            Resources.UnloadAsset(metadataData[1]);
-            
-            return new RawDataset(meta, data);
+                byte[] dataBytes = metadataData[0].bytes.Length < metadataData[1].bytes.Length ? metadataData[1].bytes : metadataData[0].bytes;
+                RawDataset.BinaryData data = new RawDataset.BinaryData(meta, dataBytes);
+                Resources.UnloadAsset(metadataData[0]);
+                Resources.UnloadAsset(metadataData[1]);
+                return new RawDataset(meta, data);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error loading dataset from Resources:");
+                Debug.LogError(e);
+            }
+            return null;
         }
     }
 }

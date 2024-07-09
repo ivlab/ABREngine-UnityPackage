@@ -55,10 +55,16 @@ namespace IVLab.ABREngine
         public JObject GetState(string fileName)
         {
             Debug.LogFormat("Loading state from resources: {0}", fileName);
-            TextAsset textAsset = null;
             string name = Path.GetFileNameWithoutExtension(fileName);
-            textAsset = Resources.Load<TextAsset>(name);
-            return JObject.Parse(textAsset?.text);
+            TextAsset textAsset = Resources.Load<TextAsset>(name);
+            if (textAsset != null)
+            {
+                return JObject.Parse(textAsset.text);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void SaveState(string name, string serializedState)
