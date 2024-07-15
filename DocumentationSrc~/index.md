@@ -1,7 +1,16 @@
+# Artifact-Based Rendering Engine
 
-### Artifact-Based Rendering Engine
+![Ocean currents underneath the Filchner-Ronne Ice Shelf in the antarctic](./manual/resources/antarctic.png)
 
-**Here for the ABREngine examples and C# documentation? Head over to the [API documentation](./api/index.md).** A good place to start is the main <xref:IVLab.ABREngine.ABREngine> class.
+
+## Getting Started
+* @install.md
+* @intro.md
+* [Key classes organized by theme / functionality](api/index.md)
+* [Core concepts](manual/concepts/core-concepts.md)
+
+
+## About ABR
 
 We introduce Artifact-Based Rendering (ABR), a framework of tools, algorithms,
 and processes that makes it possible to produce real, data-driven 3D scientific
@@ -27,9 +36,3 @@ utility of ABR for scientific discovery and public communication.
 This Unity package provides features and functionality for the Artifact-Based
 Rendering technique, as described by the
 [paper from VIS 2019](https://arxiv.org/pdf/1907.13178.pdf).
-
-### Getting Started
-* Follow the @install.md to incorporate the Template into your project.
-* @intro.md
-* [Key classes organized by theme / functionality](api/index.md)
-* [Core concepts](manual/concepts/core-concepts.md)

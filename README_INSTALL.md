@@ -105,23 +105,24 @@ In summary:
 0. Follow the read-only mode steps above.
 1. Navigate your terminal or Git tool into your Unity project's main folder and
 clone this repository into the packages folder, e.g., ```cd Packages; git clone
-git@github.com:ivlab/ABREngine-UnityPackage.git```.  This will create a
-ABREngine-UnityPackage folder that contains all the sourcecode in the package.
+git@github.com:ivlab/ABREngine-UnityPackage.git edu.umn.cs.ivlab.abrengine```.  This will create a
+folder that contains all the sourcecode in the package.
 2. Go for it.  Edit the source you just checked out; add files, etc.  However,
 BE VERY CAREFUL NOT TO ADD THE ABREngine-UnityPackage FOLDER TO YOUR PROJECT'S
 GIT REPO.  We are essentially cloning one git repo inside another here, but we
 do not want to add the package repo as a submodule or subdirectory of the
 project's repo, we just want to temporarily work with the source.
 3. When you are ready to commit and push changes to the package repo, go for it.
-JUST MAKE SURE YOU DO THIS FROM WITHIN THE Packages/ABREngine-UnityPackage
+JUST MAKE SURE YOU DO THIS FROM WITHIN THE Packages/edu.umn.cs.ivlab.abrengine
 DIRECTORY!  
 4. Once these changes are up on github, you can switch out of "development mode"
 by simply deleting the ABREngine-UnityPackage directory.  The presence of that
 directory is like a temporary override.  Once it is gone, Unity will revert back
 to using the cached version of ABREngine that it originally downloaded from git.
 5. The final step is to force a refresh of the package cache so that Unity will
-pull in the new version of the package you just saved to github.  To do this,
-simply delete the
+pull in the new version of the package you just saved to github.  In Unity
+2021+, you can open the Package Manager, select the ABREngine Package, and click
+"Update". In earlier versions of Unity, you must manually delete the
 [packages-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html)
-file inside your project's Packages folder.
+file inside your project's Packages folder to update the package.
 

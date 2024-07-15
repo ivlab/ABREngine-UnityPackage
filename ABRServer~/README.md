@@ -106,7 +106,7 @@ After this command is running, test it but opening <http://localhost:8000> in a
 web browser! You should see the ABR design interface appear:
 
 
-![A screenshot of the ABR design interface loaded in a web browser.](../resources/abr-vis-app-2-interface.png)
+![A screenshot of the ABR design interface loaded in a web browser.](/DocumentationSrc~/manual/resources/abr-vis-app-2-interface.png)
 
 
 ### Development with the server

@@ -1,5 +1,15 @@
 # ABREngine Main Package
 
+## Installation
+
+Please refer to [README_INSTALL.md](./README_INSTALL.md)
+
+## Documentation
+
+[Documentation for ABR is available online.](https://ivlab.github.io/ABREngine-UnityPackage)
+
+
+
 This package contains all the necessary components to run ABR, including:
 
 - ABREngine-UnityPackage
@@ -16,11 +26,3 @@ This package contains all the necessary components to run ABR, including:
 - ABR Schemas
     - Defines the JSON schemas necessary to create an artist-designed data visualization
     - Please see the [ABRSchemas~](./ABRSchemas~) folder
-
-## Installation
-
-Please refer to [README_INSTALL.md](./README_INSTALL.md)
-
-## Documentation
-
-[Documentation for ABR is available online.](https://ivlab.github.io/ABREngine-UnityPackage)
