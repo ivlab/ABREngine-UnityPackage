@@ -493,18 +493,6 @@ references:
   commentId: F:Global.SVScreenshot.widthText
   fullName: SVScreenshot.widthText
   nameWithType: SVScreenshot.widthText
-- uid: Global.VisDriver
-  name: VisDriver
-  href: api/Global.VisDriver.html
-  commentId: T:Global.VisDriver
-  fullName: VisDriver
-  nameWithType: VisDriver
-- uid: Global.VisDriverTutorial
-  name: VisDriverTutorial
-  href: api/Global.VisDriverTutorial.html
-  commentId: T:Global.VisDriverTutorial
-  fullName: VisDriverTutorial
-  nameWithType: VisDriverTutorial
 - uid: IVLab.ABREngine
   name: IVLab.ABREngine
   href: api/IVLab.ABREngine.html
@@ -4281,6 +4269,25 @@ references:
   commentId: N:IVLab.ABREngine.ExtensionMethods
   fullName: IVLab.ABREngine.ExtensionMethods
   nameWithType: IVLab.ABREngine.ExtensionMethods
+- uid: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions
+  name: DirectoryInfoExtensions
+  href: api/IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.html
+  commentId: T:IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions
+  fullName: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions
+  nameWithType: DirectoryInfoExtensions
+- uid: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll(System.IO.DirectoryInfo,System.IO.DirectoryInfo)
+  name: CopyAll(DirectoryInfo, DirectoryInfo)
+  href: api/IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.html#IVLab_ABREngine_ExtensionMethods_DirectoryInfoExtensions_CopyAll_System_IO_DirectoryInfo_System_IO_DirectoryInfo_
+  commentId: M:IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll(System.IO.DirectoryInfo,System.IO.DirectoryInfo)
+  fullName: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll(System.IO.DirectoryInfo, System.IO.DirectoryInfo)
+  nameWithType: DirectoryInfoExtensions.CopyAll(DirectoryInfo, DirectoryInfo)
+- uid: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll*
+  name: CopyAll
+  href: api/IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.html#IVLab_ABREngine_ExtensionMethods_DirectoryInfoExtensions_CopyAll_
+  commentId: Overload:IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll
+  isSpec: "True"
+  fullName: IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.CopyAll
+  nameWithType: DirectoryInfoExtensions.CopyAll
 - uid: IVLab.ABREngine.ExtensionMethods.ScriptableObjectExtensions
   name: ScriptableObjectExtensions
   href: api/IVLab.ABREngine.ExtensionMethods.ScriptableObjectExtensions.html

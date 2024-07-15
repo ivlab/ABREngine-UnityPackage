@@ -170,8 +170,7 @@ more, check out the <a href="https://docs.pipenv.org/">pipenv project</a> for mo
 information. If you're on Windows, replace <code>python3</code> with <code>py</code>.</p>
 <div class="TIP">
 <h5>Tip</h5>
-<p>Run all these commands from a terminal in the <code>ABRServer~</code> folder (<your>
-Project&gt;/Packages/ABREngine-UnityPackage/ABRServer~). If you have the read-only
+<p>Run all these commands from a terminal in the <code>ABRServer~</code> folder (<your project="">/Packages/ABREngine-UnityPackage/ABRServer~). If you have the read-only
 Unity package (i.e., you just installed ABR from the Unity Package Manager), use
 the menu option <strong>ABR &gt; Open ABRServer~ folder</strong> to open the ABRServer folder.
 After you've opened the folder, follow the instructions for your operating
@@ -200,10 +199,13 @@ instructions</a></li>
 </section>
 <section id="tabpanel_1_mac" role="tabpanel" data-tab="mac" aria-hidden="true" hidden="hidden">
 
-<ul>
-<li><a href="https://ladedu.com/how-to-open-a-terminal-window-at-any-folder-from-finder-in-macos/">Open Terminal from Finder
-instructions</a></li>
-</ul>
+<p>From Finder, the easiest way to open a terminal on a Mac is:</p>
+<ol>
+<li>Enable Path Bar (<em>View &gt; Show Path Bar</em>)</li>
+<li>Once you've opened Finder to the ABRServer~ folder, right/two-finger click
+on the rightmost folder in the newly enabled Path Bar</li>
+<li>Click &quot;Open in Terminal&quot;</li>
+</ol>
 </section>
 <section id="tabpanel_1_linux" role="tabpanel" data-tab="linux" aria-hidden="true" hidden="hidden">
 
@@ -212,7 +214,9 @@ right-click context menu.</p>
 </section>
 </div>
 </div>
-<p>To get started, first make sure you have the <code>pipenv</code> package installed in Python.</p>
+<p>To get started, first make sure you have the <code>pipenv</code> package installed in
+Python. We are using <code>python3 -m pip</code> instead of <code>pip</code> directly to ensure we
+have the correct pip/Python version pairing.</p>
 <pre><code>python3 -m pip install --user pipenv
 </code></pre>
 <p>Then, install the local dependencies:</p>
@@ -220,10 +224,36 @@ right-click context menu.</p>
 </code></pre>
 <div class="NOTE">
 <h5>Note</h5>
-<p>The first time you run this command, you may need to provide Python path:</p>
-<pre><code>python3 -m pipenv --python=/c/Python311/python.exe install
-python3 -m pipenv --python=/usr/bin/python3 install
+<p>The first time you run this command, you may need to provide Python path. You
+can usually get the Python path with a command like <code>which python3</code> or <code>where python3</code>. Again, on Windows, replace <code>python3</code> with <code>py</code>. For example:</p>
+<div class="tabGroup" id="tabgroup_2">
+<ul role="tablist">
+<li role="presentation">
+<a href="#tabpanel_2_windows" role="tab" aria-controls="tabpanel_2_windows" data-tab="windows" tabindex="0" aria-selected="true">Windows</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_2_mac" role="tab" aria-controls="tabpanel_2_mac" data-tab="mac" tabindex="-1">MacOS</a>
+</li>
+<li role="presentation">
+<a href="#tabpanel_2_linux" role="tab" aria-controls="tabpanel_2_linux" data-tab="linux" tabindex="-1">Linux</a>
+</li>
+</ul>
+<section id="tabpanel_2_windows" role="tabpanel" data-tab="windows">
+
+<pre><code>py -m pipenv --python=/c/Python311/python.exe install
 </code></pre>
+</section>
+<section id="tabpanel_2_mac" role="tabpanel" data-tab="mac" aria-hidden="true" hidden="hidden">
+
+<pre><code>python3 -m pipenv --python=/opt/homebrew/bin/python3 install
+</code></pre>
+</section>
+<section id="tabpanel_2_linux" role="tabpanel" data-tab="linux" aria-hidden="true" hidden="hidden">
+
+<pre><code>python3 -m pipenv --python=/usr/bin/python3 install
+</code></pre>
+</section>
+</div>
 </div>
 <p>Then, to get ready to run the server, &quot;activate&quot; the Pipenv by entering a shell:</p>
 <pre><code>python3 -m pipenv shell
@@ -240,6 +270,9 @@ python3 -m pipenv --python=/usr/bin/python3 install
 server on a desktop and use the design interface with a tablet):</p>
 <pre><code>python manage.py runserver 0.0.0.0:8000
 </code></pre>
+<p>After this command is running, test it but opening <a href="http://localhost:8000">http://localhost:8000</a> in a
+web browser! You should see the ABR design interface appear:</p>
+<p><img src="/DocumentationSrc%7E/manual/resources/abr-vis-app-2-interface.png" alt="A screenshot of the ABR design interface loaded in a web browser."></p>
 <h3 id="development-with-the-server">Development with the server</h3>
 <p>This step is optional, and only recommended if you are editing the Python or
 JavaScript files for the Server or Design Interface. To enable live-reloading

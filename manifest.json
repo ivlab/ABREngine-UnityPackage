@@ -1,5 +1,5 @@
 {
-  "source_base_path": "/Users/bridger/dev/ABRDocs/Packages/ABREngine-UnityPackage/DocumentationSrc~",
+  "source_base_path": "/Users/bridger/dev/ABRDocs/Packages/edu.umn.cs.ivlab.abrengine/DocumentationSrc~",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -146,26 +146,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Global.SVScreenshot.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.VisDriver.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.VisDriver.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.VisDriverTutorial.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.VisDriverTutorial.html"
         }
       },
       "version": ""
@@ -496,6 +476,16 @@
       "output": {
         ".html": {
           "relative_path": "api/IVLab.ABREngine.Examples.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.ABREngine.ExtensionMethods.DirectoryInfoExtensions.html"
         }
       },
       "version": ""
