@@ -69,11 +69,11 @@ namespace IVLab.ABREngine.Importer
             EditorApplication.update += Progress;
         }
 
-        [MenuItem("ABR/Reopen Unity Project")]
-        static void ReopenUnityProject()
-        {
-            EditorApplication.OpenProject(Directory.GetCurrentDirectory());
-        }
+        // [MenuItem("ABR/Reopen Unity Project")]
+        // static void ReopenUnityProject()
+        // {
+        //     EditorApplication.OpenProject(Directory.GetCurrentDirectory());
+        // }
 
         static void Progress()
         {

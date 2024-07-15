@@ -445,9 +445,9 @@ namespace IVLab.ABREngine
         /// <summary>
         /// Checks the ABR scene configuration and supplies warnings for each component that is not present
         /// </summary>
-#if UNITY_EDITOR
-        [UnityEditor.MenuItem("ABR/Check ABR Scene")]
-#endif
+// #if UNITY_EDITOR
+//         [UnityEditor.MenuItem("ABR/Check ABR Scene")]
+// #endif
         private static void CheckABRScene()
         {
             // TODO: Finish adding warnings for assumptions ABR is making

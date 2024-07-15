@@ -100,7 +100,7 @@ namespace IVLab.ABREngine
         }
 
 // Editor convenience functions
-#if UNITY_EDITOR
+// #if UNITY_EDITOR
         // The pre-built server doesn't really work. Just instructing folks to
         // launch the server with the file explorer.
         // [MenuItem("ABR/Server/Start Server")]
@@ -108,10 +108,7 @@ namespace IVLab.ABREngine
 
         // [MenuItem("ABR/Server/Start Server - Broadcast (use this if you need to connect other devices over the network)")]
         // private static void StartServerBroadcast() => StartServer(true);
-
-        [MenuItem("ABR/Open ABRServer~ Folder")]
-        private static void OpenServerFolderMenu() => OpenServerFolder();
-#endif
+// #endif
 
         /// <summary>
         /// Convenience function to open a file explorer in the ABRServer~ folder so users can easily get to the server.

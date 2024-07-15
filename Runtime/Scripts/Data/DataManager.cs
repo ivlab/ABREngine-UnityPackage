@@ -296,7 +296,7 @@ namespace IVLab.ABREngine
                 }
                 catch
                 {
-                    Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
+                    // Debug.LogWarning($"Dataset `{dataPath}` not found in " + loader.GetType().Name);
                 }
             }
             Debug.LogWarning($"Dataset `{dataPath}` not found in any data loader");
@@ -527,34 +527,5 @@ namespace IVLab.ABREngine
             dataset.AddKeyData(keyData);
         }
 
-// editor methods
-#if UNITY_EDITOR
-        // Copy the example data to the media folder
-        [MenuItem("ABR/Copy Example Data to Media Folder")]
-        private static void CopyExampleData()
-        {
-            var dataToCopy = new List<string>()
-            {
-                "Demo/Wavelet/KeyData/DensityRadius^5",
-                "Demo/Wavelet/KeyData/FullVolume",
-                "Demo/Wavelet/KeyData/InputFlow",
-                "Demo/Wavelet/KeyData/OutputFlow",
-                "Demo/Wavelet/KeyData/RTData100",
-                "Demo/Wavelet/KeyData/RTData230",
-            };
-
-            var dsPath = Path.Combine(ABREngine.ConfigPrototype.mediaPath, ABRConfig.Consts.DatasetFolder);
-            var tmpDataManager = new DataManager(dsPath);
-
-            foreach (string keyDataPath in dataToCopy)
-            {
-                // Load the data
-                RawDataset rds = tmpDataManager.LoadRawDataset(keyDataPath);
-
-                // Then save it back to disk in the media folder
-                tmpDataManager.CacheRawDataset(keyDataPath, rds);
-            }
-        }
-#endif
     }
 }
