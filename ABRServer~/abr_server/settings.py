@@ -155,7 +155,16 @@ STATICFILES_DIRS = [os.path.join('static')]
 
 # load the configuration
 config = configparser.ConfigParser()
-config.read(os.path.join(BASE_DIR, 'abr_server.cfg'))
+
+# check if in development mode (inside Packages folder)
+if "Packages" in BASE_DIR:
+    CONFIG_FILE = 'abr_server_dev.cfg'
+else:
+    CONFIG_FILE = 'abr_server.cfg'
+
+print('ABR Server Config File:', CONFIG_FILE)
+
+config.read(os.path.join(BASE_DIR, CONFIG_FILE))
 
 # Find the root ABRServer~ folder
 SERVER_PATH = None
