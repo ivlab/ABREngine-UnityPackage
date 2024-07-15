@@ -1,13 +1,7 @@
 # To install `ABREngine` in a Unity Project
 
-The first three sections refer to the ABREngine Unity Package. For install
+The first sections refer to the ABREngine Unity Package. For install
 instructions on the ABR Server, see the [ABR Server](#abr-server) section below.
-
-
-## Prereqs
-To install dependencies from github.com as described in the next section, you will need to either:
-1. Setup your account for SSH access to github.com by creating a [GitHub SSH key](https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) and using a [Git credential helper](https://git-scm.com/docs/gitcredentials) or a blank ssh key password.
-2. Alternatively, since this repo is publicly accessible, you should be able to replace the `ssh://git@github.com` in the commands below with the HTTPS equivalent `https://github.com`.
 
 
 ## Install via the Unity Package Manager
@@ -15,7 +9,7 @@ To use the package in a read-only mode, the same way you would for packages down
 1. In Unity, open Window -> Package Manager.
 2. Click the ```+``` button
 3. Select ```Add package from git URL```
-4. Paste ```git@github.com:ivlab/ABREngine-UnityPackage.git``` for the latest package
+4. Paste ```https://github.com/ivlab/ABREngine-UnityPackage.git``` for the latest package
 5. After ABREngine is installed, close and reopen your Unity project. Click
 "Ignore" when it prompts you about compile errors in the project.
 6. Now, there should be a new "ABR" menu tab that has appeared on the top bar

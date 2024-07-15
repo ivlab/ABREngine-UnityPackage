@@ -18,7 +18,7 @@ more, check out the [pipenv project](https://docs.pipenv.org/) for more
 information. If you're on Windows, replace `python3` with `py`.
 
 > [!TIP]
-> Run all these commands from a terminal in the `ABRServer~` folder (<Your >
+> Run all these commands from a terminal in the `ABRServer~` folder (<Your 
 > Project>/Packages/ABREngine-UnityPackage/ABRServer~). If you have the read-only
 > Unity package (i.e., you just installed ABR from the Unity Package Manager), use
 > the menu option **ABR > Open ABRServer~ folder** to open the ABRServer folder.
@@ -33,14 +33,19 @@ information. If you're on Windows, replace `python3` with `py`.
 >   instructions](https://www.howtogeek.com/789662/how-to-open-a-cmd-window-in-a-folder-on-windows/)
 >
 > # [MacOS](#tab/mac)
-> - [Open Terminal from Finder
->   instructions](https://ladedu.com/how-to-open-a-terminal-window-at-any-folder-from-finder-in-macos/)
+> From Finder, the easiest way to open a terminal on a Mac is:
+> 1. Enable Path Bar (*View > Show Path Bar*)
+> 2. Once you've opened Finder to the ABRServer~ folder, right/two-finger click
+>    on the rightmost folder in the newly enabled Path Bar
+> 3. Click "Open in Terminal"
 >
 > # [Linux](#tab/linux)
 > In most Linux distributions, you can click the "Open Folder in Terminal..." in the
 > right-click context menu.
 
-To get started, first make sure you have the `pipenv` package installed in Python.
+To get started, first make sure you have the `pipenv` package installed in
+Python. We are using `python3 -m pip` instead of `pip` directly to ensure we
+have the correct pip/Python version pairing.
 
 ```
 python3 -m pip install --user pipenv
@@ -53,10 +58,22 @@ python3 -m pipenv install
 ```
 
 > [!NOTE]
-> The first time you run this command, you may need to provide Python path:
+> The first time you run this command, you may need to provide Python path. You
+> can usually get the Python path with a command like `which python3` or `where
+> python3`. Again, on Windows, replace `python3` with `py`. For example:
 > 
+> # [Windows](#tab/windows)
 > ```
-> python3 -m pipenv --python=/c/Python311/python.exe install
+> py -m pipenv --python=/c/Python311/python.exe install
+> ```
+>
+> # [MacOS](#tab/mac)
+> ```
+> python3 -m pipenv --python=/opt/homebrew/bin/python3 install
+> ```
+>
+> # [Linux](#tab/linux)
+> ```
 > python3 -m pipenv --python=/usr/bin/python3 install
 > ```
 
@@ -84,6 +101,12 @@ server on a desktop and use the design interface with a tablet):
 ```
 python manage.py runserver 0.0.0.0:8000
 ```
+
+After this command is running, test it but opening <http://localhost:8000> in a
+web browser! You should see the ABR design interface appear:
+
+
+![A screenshot of the ABR design interface loaded in a web browser.](../resources/abr-vis-app-2-interface.png)
 
 
 ### Development with the server
