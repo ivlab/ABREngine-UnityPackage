@@ -23,9 +23,10 @@ import numpy as np
 from pathlib import Path
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpRequest
 
 from django.conf import settings
+from abr_data_format import DataPath
 
 from abr_server.state import state
 from abr_server.notifier import MessageTarget, NotifierMessage, notifier
@@ -343,3 +344,26 @@ def delete_state(request, name):
         return HttpResponse('Deleted state ' + name)
     except:
         return HttpResponse('State does not exist: ' + name, status=404)
+
+@csrf_exempt
+def import_keydata(request: HttpRequest, org_name, dataset_name, key_data_name):
+    # data_path = '/'.join([org_name, dataset_name, 'KeyData', key_data_name])
+    data_path = DataPath.make_path(org_name, dataset_name, DataPath.DataPathType.KeyData, key_data_name)
+    keydata_filename_stem: Path = settings.DATASET_PATH.joinpath(data_path)
+
+    if not keydata_filename_stem.parent.exists():
+        keydata_filename_stem.parent.mkdir(parents=True)
+        logger.info('Created directory', keydata_filename_stem.parent)
+
+    if request.content_type == 'application/json':
+        json_filename = str(keydata_filename_stem) + '.json'
+        with open(json_filename, 'wb') as fout:
+            fout.write(request.body)
+        logger.info('Imported JSON header to path ' + json_filename)
+    else:
+        bin_filename = str(keydata_filename_stem) + '.bin'
+        with open(bin_filename, 'wb') as fout:
+            fout.write(request.body)
+        logger.info('Imported binary data to path ' + bin_filename)
+
+    return HttpResponse(status=200, content=keydata_filename_stem)

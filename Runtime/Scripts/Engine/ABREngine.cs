@@ -213,11 +213,6 @@ namespace IVLab.ABREngine
         public DataManager Data { get; private set; }
 
         /// <summary>
-        /// A listener for data connections (e.g., Send2ABR from ParaView)
-        /// </summary>
-        public SocketDataListener DataListener { get; private set; }
-
-        /// <summary>
         /// Delegate callback that is called whenever the ABRState is updated.
         /// This is useful for applications that build on ABR and need to know
         /// when the state has been updated.
@@ -359,11 +354,6 @@ namespace IVLab.ABREngine
             {
                 VisAssets = new VisAssetManager(Path.Combine(MediaPath, ABRConfig.Consts.VisAssetFolder));
                 Data = new DataManager(Path.Combine(MediaPath, ABRConfig.Consts.DatasetFolder));
-                if (Config.dataListenerPort != 0)
-                {
-                    DataListener = new SocketDataListener(Config.dataListenerPort);
-                    DataListener.StartServer();
-                }
             }
             catch (Exception e)
             {
@@ -439,7 +429,6 @@ namespace IVLab.ABREngine
         void OnDisable()
         {
             _notifier?.Stop();
-            DataListener?.StopServer();
         }
 
         /// <summary>

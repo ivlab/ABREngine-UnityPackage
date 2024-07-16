@@ -107,14 +107,6 @@ namespace IVLab.ABREngine
         [Tooltip("Server to load VisAssets from (e.g. `http://192.168.137.1:8001/api`")]
         public string dataServerUrl;
 
-        /// <summary>
-        ///     Port to listen for data on, if any. Useful if, for instance, you want to
-        ///     have a live connection to ParaView that pushes data into ABR. Default:
-        ///     null
-        /// </summary>
-        [Tooltip("Port to listen for data connections (e.g. from ParaView on). A port `0` is assumed to mean no connection.")]
-        public int dataListenerPort;
-
         [Header("Data Container Options")]
         /// <summary>
         /// Controls whether or not the <see cref="defaultDataContainer"/> is used.
@@ -181,7 +173,6 @@ namespace IVLab.ABREngine
 
             visAssetServerUrl = "";
             dataServerUrl = "";
-            dataListenerPort = 0;
         }
 
         void Awake()

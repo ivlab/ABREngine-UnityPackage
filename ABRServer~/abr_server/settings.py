@@ -20,6 +20,10 @@ import configparser
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# import abr_data_format module
+data_format_path = os.path.join(BASE_DIR, '../EasyParaViewToABR~/EasyParaViewToABR/')
+sys.path.append(data_format_path)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

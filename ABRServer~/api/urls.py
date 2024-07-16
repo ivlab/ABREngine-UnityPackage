@@ -37,4 +37,5 @@ urlpatterns = [
     path('remove-visasset/<str:uuid>', views.remove_visasset),
     path('save-local-visasset/<str:uuid>', views.save_visasset),
     path('histogram/<str:org_name>/<str:dataset_name>/KeyData/<str:key_data_name>/<str:variable_label>', views.get_histogram),
+    path('import-keydata/<str:org_name>/<str:dataset_name>/KeyData/<str:key_data_name>', views.import_keydata),
 ]
