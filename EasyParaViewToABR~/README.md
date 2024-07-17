@@ -1,6 +1,10 @@
 # Easy ParaView to ABR data converter
 
-This ParaView plugin enables direct conversion between ParaView data and ABR data. **NOTE: this plugin assumes you're using at least ParaView 5.8.**
+This ParaView plugin enables direct conversion between ParaView data and ABR
+data.
+
+> [!NOTE]
+> This plugin assumes you're using at least ParaView 5.8.
 
 
 ## Installation
@@ -13,21 +17,16 @@ This ParaView plugin enables direct conversion between ParaView data and ABR dat
 3. Go to *Tools > Manage Plugins*
 4. Click *Load New...*
 5. Select the EasyParaViewToABR.py file in the folder you just downloaded
-6. (Optional) Twirl down the newly created EasyParaViewToABR menu item and check the "AutoLoad" box
+6. Twirl down the newly created EasyParaViewToABR menu item and check the
+   "AutoLoad" box - this will tell ParaView to load the plugin every time
+   ParaView opens.
 
 
 ## Usage
 
-### Part 1: Setting up ABR Config
+Use the following steps to get started with ABR.
 
-1. Open your Unity Project that uses ABR
-2. Click on the `ABREngine` GameObject in your scene and Open the Current ABR Config
-3. Under the "Network-Based VisAssets and Data Configuration" section, change the "Data Listener Port" to `1900` (should match [ParaView plugin below](#part-2-transferring-data-from-paraview-to-abr))
-
-
-### Part 2: Transferring Data from ParaView to ABR
-
-1. Make sure ABR is running!!
+1. Make sure the @abr-server.md is running
 2. In the ParaView pipeline browser, select the data you would like to transfer to ABR.
 3. Make sure your data are in the correct format. Look at the "Information" tab in ParaView to see the data's "Type". ABR will accept any of the following - if it's not in one of these formats you may need to convert (see [Converting data to ABR-acceptable format](#converting-data-to-abr-acceptable-format))
     - Polygonal mesh
@@ -38,10 +37,18 @@ This ParaView plugin enables direct conversion between ParaView data and ABR dat
     - **Dataset:** higher-level dataset this Key Data is a part of
     - **Key Data Name:** descriptive name for the key data you are sending to ABR
     - **Organization:** descriptive name for the organization that owns the data
-    - Host: (optional) IP address of the machine ABR is running on
-    - Port: (optional) Port that the ABR data listener is running on
+    - Host: IP address and port of ABR Server (leave unchanged unless you are running the ABR Server and ParaView on different computers)
 6. Click the green 'Apply' button to send your data to ABR!
-7. You may need to stop the Unity project and start it again for the data to show up.
+    - in the ABR Server logs, you should see messages like "Imported JSON header
+      to path....". These are where your ABR data files are located on your
+      computer (in the @media-folder.md).
+
+
+> [!TIP]
+> If something isn't working correctly, be sure to check out the ParaView logs
+> and ABR server logs. ParaView logs can be accessed by going to *View >
+> Output Messages*, and ABR server logs can be seen in the terminal that you
+> launched the @abr-server.md from.
 
 
 #### Converting data to ABR-acceptable format

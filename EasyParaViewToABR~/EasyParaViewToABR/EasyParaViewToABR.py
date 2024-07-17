@@ -1,6 +1,6 @@
 # SendToABR.py
 #
-# Copyright (c) 2021, Texas Advanced Computing Center and University of
+# Copyright (c) 2024, Texas Advanced Computing Center and University of
 # Minnesota
 #
 # Authors: Greg Abram <gda@tacc.utexas.edu> and Bridger Herman
@@ -10,8 +10,7 @@
 import sys
 import os
 from paraview.util.vtkAlgorithm import *
-# plugin_folder = os.path.abspath(os.path.expanduser('~/EasyParaViewToABR/'))
-plugin_folder = os.path.abspath(os.path.expanduser('C:/Users/scoot/dev/ABRStyleDependenciesExample/Packages/ABREngine-UnityPackage/EasyParaViewToABR~/EasyParaViewToABR'))
+plugin_folder = os.path.abspath(os.path.expanduser('~/EasyParaViewToABR/'))
 sys.path.append(plugin_folder)
 from abr_data_format import DataPath
 
@@ -79,8 +78,6 @@ class EasyParaViewToABR(VTKPythonAlgorithmBase):
         from abr_data_format import ABRDataFormat
         import requests
 
-        from paraview import servermanager as sm
-
         print('Key Data:', self.data_path)
         print('Host:', self.host)
 
@@ -106,6 +103,8 @@ class EasyParaViewToABR(VTKPythonAlgorithmBase):
         except ValueError as e:
             print(e)
             return 0
+
+        print(str(formatted_data))
 
         # give ParaView something to display at the end of this filter?
         outpt = vtk.vtkUnstructuredGrid.GetData(outInfoVec, 0)
