@@ -200,7 +200,12 @@ ABR-to-ParaView connector with ParaView version 5.9.</li>
 <li>Follow the EasyParaViewToABR directions below:</li>
 </ol>
 <h1 id="easy-paraview-to-abr-data-converter">Easy ParaView to ABR data converter</h1>
-<p>This ParaView plugin enables direct conversion between ParaView data and ABR data. <strong>NOTE: this plugin assumes you're using at least ParaView 5.8.</strong></p>
+<p>This ParaView plugin enables direct conversion between ParaView data and ABR
+data.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This plugin assumes you're using at least ParaView 5.8.</p>
+</div>
 <h2 id="installation">Installation</h2>
 <ol>
 <li>Copy the &lt;./EasyParaViewToABR&gt; folder to your user folder.
@@ -214,18 +219,14 @@ ABR-to-ParaView connector with ParaView version 5.9.</li>
 <li>Go to <em>Tools &gt; Manage Plugins</em></li>
 <li>Click <em>Load New...</em></li>
 <li>Select the EasyParaViewToABR.py file in the folder you just downloaded</li>
-<li>(Optional) Twirl down the newly created EasyParaViewToABR menu item and check the &quot;AutoLoad&quot; box</li>
+<li>Twirl down the newly created EasyParaViewToABR menu item and check the
+&quot;AutoLoad&quot; box - this will tell ParaView to load the plugin every time
+ParaView opens.</li>
 </ol>
 <h2 id="usage">Usage</h2>
-<h3 id="part-1-setting-up-abr-config">Part 1: Setting up ABR Config</h3>
+<p>Use the following steps to get started with ABR.</p>
 <ol>
-<li>Open your Unity Project that uses ABR</li>
-<li>Click on the <code>ABREngine</code> GameObject in your scene and Open the Current ABR Config</li>
-<li>Under the &quot;Network-Based VisAssets and Data Configuration&quot; section, change the &quot;Data Listener Port&quot; to <code>1900</code> (should match <a href="#part-2-transferring-data-from-paraview-to-abr">ParaView plugin below</a>)</li>
-</ol>
-<h3 id="part-2-transferring-data-from-paraview-to-abr">Part 2: Transferring Data from ParaView to ABR</h3>
-<ol>
-<li>Make sure ABR is running!!</li>
+<li>Make sure the <a class="xref" href="../abr-server.html">ABR Server</a> is running</li>
 <li>In the ParaView pipeline browser, select the data you would like to transfer to ABR.</li>
 <li>Make sure your data are in the correct format. Look at the &quot;Information&quot; tab in ParaView to see the data's &quot;Type&quot;. ABR will accept any of the following - if it's not in one of these formats you may need to convert (see <a href="#converting-data-to-abr-acceptable-format">Converting data to ABR-acceptable format</a>)
 <ul>
@@ -240,13 +241,24 @@ ABR-to-ParaView connector with ParaView version 5.9.</li>
 <li><strong>Dataset:</strong> higher-level dataset this Key Data is a part of</li>
 <li><strong>Key Data Name:</strong> descriptive name for the key data you are sending to ABR</li>
 <li><strong>Organization:</strong> descriptive name for the organization that owns the data</li>
-<li>Host: (optional) IP address of the machine ABR is running on</li>
-<li>Port: (optional) Port that the ABR data listener is running on</li>
+<li>Host: IP address and port of ABR Server (leave unchanged unless you are running the ABR Server and ParaView on different computers)</li>
 </ul>
 </li>
-<li>Click the green 'Apply' button to send your data to ABR!</li>
-<li>You may need to stop the Unity project and start it again for the data to show up.</li>
+<li>Click the green 'Apply' button to send your data to ABR!
+<ul>
+<li>in the ABR Server logs, you should see messages like &quot;Imported JSON header
+to path....&quot;. These are where your ABR data files are located on your
+computer (in the @media-folder.md).</li>
+</ul>
+</li>
 </ol>
+<div class="TIP">
+<h5>Tip</h5>
+<p>If something isn't working correctly, be sure to check out the ParaView logs
+and ABR server logs. ParaView logs can be accessed by going to <em>View &gt;
+Output Messages</em>, and ABR server logs can be seen in the terminal that you
+launched the <a class="xref" href="../abr-server.html">ABR Server</a> from.</p>
+</div>
 <h4 id="converting-data-to-abr-acceptable-format">Converting data to ABR-acceptable format</h4>
 <p>If you have VOLUME data, make sure it's a Uniform Rectilinear Grid by adding a 'Resample to Image' filter.</p>
 <p>If you have SURFACE data, make sure it's either a Polygonal Mesh or an Unstructured Grid by adding an 'Extract Surface' or 'Append Datasets' filter, respectively. Additionally, make sure that your surface is made up of triangles by performing a 'Triangulate' filter.</p>

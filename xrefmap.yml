@@ -697,12 +697,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABRConfig.ToString
   nameWithType: ABRConfig.ToString
-- uid: IVLab.ABREngine.ABRConfig.dataListenerPort
-  name: dataListenerPort
-  href: api/IVLab.ABREngine.ABRConfig.html#IVLab_ABREngine_ABRConfig_dataListenerPort
-  commentId: F:IVLab.ABREngine.ABRConfig.dataListenerPort
-  fullName: IVLab.ABREngine.ABRConfig.dataListenerPort
-  nameWithType: ABRConfig.dataListenerPort
 - uid: IVLab.ABREngine.ABRConfig.dataServerUrl
   name: dataServerUrl
   href: api/IVLab.ABREngine.ABRConfig.html#IVLab_ABREngine_ABRConfig_dataServerUrl
@@ -929,19 +923,6 @@ references:
   isSpec: "True"
   fullName: IVLab.ABREngine.ABREngine.Data
   nameWithType: ABREngine.Data
-- uid: IVLab.ABREngine.ABREngine.DataListener
-  name: DataListener
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DataListener
-  commentId: P:IVLab.ABREngine.ABREngine.DataListener
-  fullName: IVLab.ABREngine.ABREngine.DataListener
-  nameWithType: ABREngine.DataListener
-- uid: IVLab.ABREngine.ABREngine.DataListener*
-  name: DataListener
-  href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DataListener_
-  commentId: Overload:IVLab.ABREngine.ABREngine.DataListener
-  isSpec: "True"
-  fullName: IVLab.ABREngine.ABREngine.DataListener
-  nameWithType: ABREngine.DataListener
 - uid: IVLab.ABREngine.ABREngine.DuplicateDataImpression(IVLab.ABREngine.DataImpression)
   name: DuplicateDataImpression(DataImpression)
   href: api/IVLab.ABREngine.ABREngine.html#IVLab_ABREngine_ABREngine_DuplicateDataImpression_IVLab_ABREngine_DataImpression_
