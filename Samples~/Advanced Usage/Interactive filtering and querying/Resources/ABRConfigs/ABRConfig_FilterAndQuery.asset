@@ -15,7 +15,7 @@ MonoBehaviour:
   mediaPath: ../media
   serverUrl: 
   startServer: 0
-  loadStateOnStart: WaveletStyle.json
+  loadStateOnStart: WaveletStyle2.json
   persistBetweenScenes: 1
   defaultGlyph: {fileID: 6308255946298478577, guid: 713b972cbffad19a791a2bd818008481, type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
@@ -24,8 +24,7 @@ MonoBehaviour:
   defaultNanLine: {fileID: 0}
   visAssetServerUrl: 
   dataServerUrl: 
-  dataListenerPort: 1900
-  useAutoDataContainers: 1
+  useAutoDataContainers: 0
   defaultDataContainer:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 1, y: 1, z: 1}

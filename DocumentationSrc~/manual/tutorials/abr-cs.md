@@ -17,11 +17,12 @@ Even if you've done lots of C# Scripting previously, this part is still worth re
 ### Tip 1: Use of `.Instance`
 
 Like other object-oriented programming languages, C# uses classes, and you
-access the member variables and functions of those classes with a `.`  So, in
-the line above, @IVLab.ABREngine.ABREngine is a class (one of the most important in ABR), and
-`.Instance` refers to a member variable inside the ABREngine class.  Whenever
-you see a member variable named `Instance`, it's a good bet that this code is
-using a [Singleton Design Pattern](https://www.c-sharpcorner.com/UploadFile/8911c4/singleton-design-pattern-in-C-Sharp/).  In short, this means it is a class that is
+access the member variables and functions of those classes with a `.`  The
+`.Instance` attribute refers to a member variable inside the @IVLab.ABREngine.ABREngine class.
+Whenever you see a member variable named `Instance`, it's a good bet that this
+code is using a [Singleton Design
+Pattern](https://www.c-sharpcorner.com/UploadFile/8911c4/singleton-design-pattern-in-C-Sharp/).
+In short, this means it is a class that is
 used sort of like a global variable, where the code enforces that only one
 instance of this class can ever exist within the program.  In Unity programming,
 you will see this used a lot for classes that are "in charge" of coordinating or
@@ -46,10 +47,10 @@ stored internally in the class.
 
 Many ABREngine methods have a generic type parameter in angle brackets, for example `ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAsset>(new Guid("5a761a72-8bcb-11ea-9265-005056bae6d8"))` has a type parameter `ColormapVisAsset`.
 
-The method declaration for the generic method @IVLab.ABREngine.ABREngine.LoadVisAsset might look something like:
+The method declaration for the generic method @IVLab.ABREngine.VisAssetManager.LoadVisAsset might look something like:
 
 ```cs
-public class ABREngine
+public class VisAssetManager
 {
     public T LoadVisAsset<T>(Guid visAssetID) { ... }
 }
@@ -67,6 +68,8 @@ the same approach.
 
 ## Part 1: Setup
 
+Now, let's start building a visualization using C# scripting.
+
 ### Part 1.1: Unity Setup
 
 First, import the ABR C# sample. You can do this by opening the package
@@ -78,10 +81,7 @@ should see a scene like the following:
 
 ![A screenshot of the Unity editor with the ABR CSharp Example scene loaded. The ABREngine GameObject is selected in the left Hierarchy, and the ABRConfig_CSharp configuration is selected in the right Inspector.](../resources/cs-vis-scene.png)
 
-Further, we need some data to visualize! In Unity, click *ABR > Copy Example Data
-to Media Folder*. This will make some example data available to the ABR design
-interface and the ABR Engine! (if you have already done this in the
-@abr-vis-app.md tutorial, you don't need to do it again.)
+Further, we need some data to visualize! In Unity, click *ABR > Copy Example Data and VisAssets to media folder*. This will make some example data available to the ABR design interface and the ABR Engine! (if you have already done this in the @abr-vis-app.md tutorial, you don't need to do it again.)
 
 
 ### Part 1.2: Scripting Setup
@@ -94,9 +94,9 @@ Unity with your preferred code editor.
 ## Part 2: Creating a C# Script to drive your visualization
 
 Some ABR visualizations use the ABR design interface, but in this tutorial we
-will solely focus on making a visualization with C# code. We will have a single
-script, "VisDriver.cs", that creates our visualization by creating ABR [key
-data](../concepts/key-data.md), [VisAssets](../concepts/visassets.md) and
+will solely focus on making a visualization using only C# code. We will have a
+single script, "VisDriver.cs", that creates our visualization by creating ABR
+[key data](../concepts/key-data.md), [VisAssets](../concepts/visassets.md) and
 telling ABR to render these with [data
 impressions](../concepts/data-impressions.md).
 
@@ -104,31 +104,31 @@ In the starter template, we've already added the ABREngine GameObject, but if
 you wanted to create one yourself, you can click *GameObject > ABR > ABREngine*.
 Keep in mind there should only be *one* ABREngine GameObject in any scene.
 
-In the starter template, we've already created the VisDriver.cs script, but if
-you wanted to create another one, you can click *Assets > Create > C# Script*.
+In the starter template, we've already created the VisDriver.cs script too, but if you wanted to create another one, you can click *Assets > Create > C# Script*.
 
 To edit the script, right/two-finger click the "VisDriver" script in the Project
 tab (in the Scripts folder) and click "Open C# Project". 
 
 
-## Part 3: Making a visualization
+## Part 3: Making a visualization with a C# script
 
 > [!NOTE]
 > If you have not already done so, please take a glance at the
 > @terminology-starter.md page to familiarize yourself with the technical terms
 > that are used below.
 
-After clicking "Open C# Project" and navigating to VisDriver.cs in your code
-editor, you should see that Unity has populated a new
-[MonoBehaviour Class](https://docs.unity3d.com/Manual/class-MonoBehaviour.html) named `VisDriver`.
 
 This part will walk you through the steps to create your first script-based
-visualization with ABR, which will end up looking like this:
+visualization with ABR, which will end up looking something like this:
 
 ![A visualization of some test data (a bumpy wavelet surface) with a white-to-green colormap applied from left to right.](../resources/cs-vis-teaser.png)
 
 
-In general, the process for creating an ABR visualization follows this process:
+After clicking "Open C# Project" and navigating to VisDriver.cs in your code
+editor, you should see that Unity has populated a new
+[MonoBehaviour Class](https://docs.unity3d.com/Manual/class-MonoBehaviour.html) named `VisDriver`.
+
+In general, creating an ABR visualization follows this process:
 1. Import data using @IVLab.ABREngine.DataManager.LoadData(System.String)
 2. Import VisAssets using [VisAssetManager.GetVisAsset](xref:IVLab.ABREngine.VisAssetManager#IVLab_ABREngine_VisAssetManager_GetVisAsset__1_System_Guid_)
 3. Create a @IVLab.ABREngine.DataImpression to combine the data and visuals together (using [DataImpression.Create](xref:IVLab.ABREngine.DataImpression#IVLab_ABREngine_DataImpression_Create__1_System_String_System_Guid_System_Boolean_)).
@@ -197,13 +197,16 @@ At this point, check your work. Go back to Unity and press the "Play" button
 triangle in the top toolbar. If everything is working correctly, you should see
 a gray/white blob-like visualization in the center of your game view - this is
 the "RTData230" surface data you imported in Step 1!
+
 ![A screenshot of Unity, showing a white blob-like object in the Game View. This
 is the data!](../resources/cs-vis-data-loaded.png)
 
 
 ### 4. Import a colormap VisAsset
 
-To add some color to the visualization, we'll need a colormap. Add the following code to your `Start()` method. Copy/paste this code right after the existing Step 1 code:
+To add some color to the visualization, we'll need a colormap. Add the following
+code to your `Start()` method. Insert the following code right after the Step
+1.a. code (before Step 2):
 
 ```cs
 // 1.b. Import a Colormap VisAsset
@@ -213,7 +216,9 @@ ColormapVisAsset cmap = ABREngine.Instance.VisAssets.LoadVisAsset<ColormapVisAss
 
 ### 5. Assign colormap and color variable to data impression
 
-The data and the colormap visasset are linked together in the `surf` data impression created in Step 2. Let's add some more code between steps 2 and 3:
+The data and the colormap visasset are linked together in the `surf` data
+impression created in Step 2.a. Let's add some more code between after Step 2.a.
+(before Step 3):
 
 ```cs
 // 2.b. Assign colormap to data impression
@@ -223,7 +228,10 @@ surf.colormap = cmap;
 surf.colorVariable = contour.GetScalarVariable("XAxis");
 ```
 
-This code will first link the colormap you imported in Step 4 to the data impression, then it will look in the "Contour" key data object and find a scalar variable "XAxis". See [Key Data](../concepts/key-data.md) for more information on key data.
+This code first assigns the colormap you imported in Step 4 to the data
+impression (like dragging a colormap puzzle piece in the design UI). Then, it
+tells ABR to color the surface according to the "XAxis" scalar variable found in
+the "RTData230" key data object. See [Key Data](../concepts/key-data.md) for more information on key data.
 
 At this point, go back to Unity and try running the visualization again. Your
 game view should now look like this:
@@ -246,10 +254,10 @@ applied.](../resources/cs-vis-data-colormap.png)
 Now that you're familiar with the basics of creating a C# Visualization with
 ABR, check out the following resources for working with ABR in Unity:
 
-- ABR Configuration
 - Advanced Editor Usage
     - placing data impression groups in your scene (handling data and world space)
     - simultaneously using ABR COmpose and C# scripting
+- ABR Configuration
 - Creating and loading datasets
 - Interactivity
 - Styling

@@ -2,7 +2,7 @@
 
 ## Installation
 
-Please refer to [README_INSTALL.md](./README_INSTALL.md)
+Please refer to the [ABR Installation Guide](https://ivlab.github.io/ABREngine-UnityPackage/manual/install.html).
 
 ## Documentation
 

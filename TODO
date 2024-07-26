@@ -1,0 +1,33 @@
+## Well-defined tasks
+
+### Documentation Tasks
+
+- [ ] Update documentation for main classes (ABREngine, DataManager, VisAssetManager)
+- [ ] Test documentation instructions on a blank machine
+  - [ ] make sure we've handled cases where Python is set up weirdly
+- [ ] Document "advanced" examples
+  - [x] FilterAndQuery
+- [ ] ABR Configuration documentation
+- [x] Document Data Impression Groups in @data-impressions.md
+
+
+### Design UI Tasks
+
+- [ ] Add lighting controls
+- [ ] Add background color controls
+- [ ] Add screenshot tool and vis viewer
+- [ ] Add server configuration in browser
+- [ ] Add applets
+
+
+### Rendering Engine Tasks
+- [ ] add support for loading ABRConfigs from StreamingAssets again? we need this for deployed builds.
+- [ ] deprecate DuplicateDataImpression methods
+
+## Big picture ideas
+
+- ABR shader API - support some interactive operations (visibility, cutting
+  planes, etc.)
+- Revisit schema with respect to Vega, Vega-lite, etc. and an eye towards interactivity
+- Make it easier for people to load data!!
+- Make it easier for people to query data!!

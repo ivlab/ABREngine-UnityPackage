@@ -15,8 +15,23 @@ namespace IVLab.ABREngine
         [MenuItem("ABR/Open ABRServer~ Folder")]
         private static void OpenServerFolderMenu() => ABRServer.OpenServerFolder();
 
+        // Open the Media folder defined in the current config
+        [MenuItem("ABR/Open media folder")]
+        private static void OpenMediaFolder()
+        {
+            string mediaPath;
+            if (Application.isPlaying)
+                mediaPath = ABREngine.Instance.MediaPath;
+            else
+                mediaPath = ABREngine.ConfigPrototype.mediaPath;
+
+            mediaPath = Path.GetFullPath(mediaPath);
+            Debug.Log("Media path: " + mediaPath);
+            System.Diagnostics.Process.Start(mediaPath);
+        }
+
         // Copy the example data and VisAssets to the media folder
-        [MenuItem("ABR/Import Example Data and VisAssets")]
+        [MenuItem("ABR/Copy Example Data and VisAssets to media folder")]
         private static void CopyExampleData()
         {
             if (GameObject.FindAnyObjectByType<ABREngine>() == null)

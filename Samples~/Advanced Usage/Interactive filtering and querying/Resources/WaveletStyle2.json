@@ -26,41 +26,6 @@
                 "Visible": true
             }
         },
-        "ac5606d5-b65e-43e9-a0f8-18c49333d46c": {
-            "plateType": "Volumes",
-            "uuid": "ac5606d5-b65e-43e9-a0f8-18c49333d46c",
-            "name": "FullVolume",
-            "inputValues": {
-                "Key Data": {
-                    "inputType": "IVLab.ABREngine.VolumeKeyData",
-                    "inputGenre": "KeyData",
-                    "inputValue": "Demo/Wavelet/KeyData/FullVolume"
-                },
-                "Color Variable": {
-                    "inputType": "IVLab.ABREngine.ScalarDataVariable",
-                    "inputGenre": "Variable",
-                    "inputValue": "Demo/Wavelet/ScalarVar/RTData"
-                },
-                "Colormap": {
-                    "inputType": "IVLab.ABREngine.ColormapVisAsset",
-                    "inputGenre": "VisAsset",
-                    "inputValue": "6c2f7767-5a65-4814-bad2-501000923c30"
-                },
-                "Opacitymap": {
-                    "inputType": "IVLab.ABREngine.PrimitiveGradient",
-                    "inputGenre": "PrimitiveGradient",
-                    "inputValue": "8a62bc26-94e0-4453-bc32-b95cbd7cb209"
-                },
-                "Volume Opacity Multiplier": {
-                    "inputType": "IVLab.ABREngine.PercentPrimitive",
-                    "inputValue": "3%",
-                    "inputGenre": "Primitive"
-                }
-            },
-            "renderHints": {
-                "Visible": true
-            }
-        },
         "79d76352-ba43-472d-85e4-2d8bf953cf26": {
             "plateType": "Ribbons",
             "uuid": "79d76352-ba43-472d-85e4-2d8bf953cf26",
