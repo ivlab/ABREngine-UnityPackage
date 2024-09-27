@@ -1,0 +1,1 @@
+The ABR Server uses this media directory to organize vis assests and datasets, which are not typically stored on github.  The server breaks if the folder doesn't exist.  So, this README file is stored on github, so that the media folder will exist in any new clone of the project. 
