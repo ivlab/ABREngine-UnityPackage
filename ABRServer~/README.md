@@ -95,6 +95,10 @@ The server can be run local-only (on localhost:8000 by default):
 python3 manage.py runserver
 ```
 
+> [!NOTE]
+> If running the server fails with an error related to urllib3 (this happened on on at least one mac machine recently), the fix was to uninstall and reinstall this dependency with: pip uninstall urllib3; pip install urllib3
+
+
 The server can also be broadcast to other devices (i.e., if you want to run the
 server on a desktop and use the design interface with a tablet):
 
