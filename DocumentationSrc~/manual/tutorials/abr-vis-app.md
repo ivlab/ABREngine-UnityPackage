@@ -26,13 +26,14 @@ Vis App". You should see a scene like the following:
 
 ![A screenshot of the Unity editor with the ABR vis app scene loaded. The ABREngine GameObject is selected in the left Hierarchy, and the ABRConfig_VisApp configuration is selected in the right Inspector.](../resources/abr-vis-app-1-scene.png)
 
-> [!TIP]
-> In the ABREngine GameObject, make sure the `ABRConfig_VisApp` configuration is
-> selected!
+
+Now, verify that the ABREngine has the correct path to the ABRServer's media folder.  In the Scene Hierarchy, click on the ABREngine GameObject to select it.  Then, look in the Inspector view, and you will see an option for selecting the current ABREngine configuration.  Make sure the configuration named `ABRConfig_VisApp` is selected!  Then, click on `Open Current ABR Config..`.  Now, you need to check that the path under "Media Path" is the same path that the ABRServer is using for its media directory.  
+
+Note: There may be a bug in ABR here... do relative paths work in this Media Path field?  Had trouble with a relative path (Sept. 2024) but found everything worked fine if using an absolute path.
 
 Lastly, we need some data to visualize! In Unity, click *ABR > Copy Example Data
 to Media Folder*. This will make some example data available to the ABR design
-interface and the ABR Engine!
+interface and the ABR Engine!  Open the media folder to double-check that this worked, you should see files under: `media/datasets/Demo/*`.
 
 
 ## Part 2: Running the server
